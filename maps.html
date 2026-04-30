@@ -10,108 +10,113 @@
 <body class="bg-grain scanline">
   <div class="shell">
     <header class="masthead">
-      <div class="eyebrow">Mission Briefing</div>
+      <div class="eyebrow">Mission Briefing &middot; Tomb World</div>
       <h1 class="hard-shadow" style="font-size: clamp(36px, 6vw, 64px);">Select Battlefield</h1>
-      <div class="tagline">Choose your theatre of war</div>
+      <div class="tagline">Six tomb-world configurations</div>
       <div class="rule"></div>
     </header>
 
     <section class="panel" style="margin-top: 24px;">
-      <h2 class="section-title">Battlefields</h2>
+      <h2 class="section-title">Tomb World Battlefields</h2>
       <div class="grid-cards" id="map-grid"></div>
+    </section>
+
+    <section class="panel" id="custom-section" style="margin-top: 16px; display:none;">
+      <h2 class="section-title">Custom Maps</h2>
+      <div class="grid-cards" id="custom-grid"></div>
     </section>
 
     <div class="action-bar">
       <a href="./index.html" class="btn-ghost">Back</a>
+      <a href="./map-creator.html" class="btn-ghost">Map Creator</a>
       <button id="deploy-btn" type="button" class="btn-fire" disabled>Deploy Kill Team</button>
     </div>
 
     <p class="footer-note">For the Emperor</p>
   </div>
 
+  <script src="./maps-data.js"></script>
   <script>
-    const MAPS = [
-      {
-        id: 'gallowdark',
-        name: 'Gallowdark Hulk',
-        desc: 'Cramped corridors of a derelict space hulk. Tight sightlines, dense cover.',
-        cover: 0.18, theme: 'iron'
-      },
-      {
-        id: 'ash-wastes',
-        name: 'Ash Wastes',
-        desc: 'Open dunes broken by ruined transports. Long firing lanes; cover is scarce.',
-        cover: 0.08, theme: 'ochre'
-      },
-      {
-        id: 'manufactorum',
-        name: 'Manufactorum Ruins',
-        desc: 'Collapsed promethium works. Balanced cover and approach lanes.',
-        cover: 0.14, theme: 'rust'
-      },
-      {
-        id: 'hive-vault',
-        name: 'Hive Sub-Vault',
-        desc: 'Tight chokepoints around a central objective. Brutal close-quarters.',
-        cover: 0.20, theme: 'gloom'
-      }
-    ];
-
-    function renderPreview(map) {
-      const W = 12, H = 9;
-      let cells = '';
-      for (let y = 0; y < H; y++) {
-        for (let x = 0; x < W; x++) {
-          const isCover = pseudoRand(map.id + x + ',' + y) < map.cover;
-          const left = (x / W) * 100;
-          const top = (y / H) * 100;
-          const w = (1 / W) * 100;
-          const h = (1 / H) * 100;
-          if (isCover) {
-            cells += `<div style="position:absolute;left:${left}%;top:${top}%;width:${w}%;height:${h}%;background:var(--border-mid);border:1px solid #000;"></div>`;
-          }
-        }
-      }
-      const tint = ({
-        iron: 'rgba(120,120,140,0.05)',
-        ochre: 'rgba(201,167,77,0.08)',
-        rust: 'rgba(184,32,58,0.06)',
-        gloom: 'rgba(20,20,30,0.2)'
-      })[map.theme];
-      return `
-        <div style="position:absolute;inset:0;background:
-          repeating-linear-gradient(0deg, transparent 0, transparent 11.1%, rgba(255,255,255,0.04) 11.1%, rgba(255,255,255,0.04) calc(11.1% + 1px)),
-          repeating-linear-gradient(90deg, transparent 0, transparent 8.33%, rgba(255,255,255,0.04) 8.33%, rgba(255,255,255,0.04) calc(8.33% + 1px)),
-          ${tint};">
-        </div>
-        ${cells}
-      `;
-    }
-
-    function pseudoRand(str) {
-      let h = 2166136261;
-      for (let i = 0; i < str.length; i++) {
-        h ^= str.charCodeAt(i);
-        h = Math.imul(h, 16777619);
-      }
-      return ((h >>> 0) % 1000) / 1000;
-    }
-
     const grid = document.getElementById('map-grid');
+    const customGrid = document.getElementById('custom-grid');
+    const customSection = document.getElementById('custom-section');
     const deployBtn = document.getElementById('deploy-btn');
     let selected = null;
 
-    MAPS.forEach(map => {
+    function renderPreview(map) {
+      const W = window.KT.TOMB_BOARD.width;
+      const H = window.KT.TOMB_BOARD.height;
+      const SCALE = 8; // px per inch in preview
+      const w = W * SCALE, h = H * SCALE;
+      const aZone = window.KT.deployZone(map, 'A');
+      const bZone = window.KT.deployZone(map, 'B');
+
+      let svg = `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block;">`;
+      // Deployment fills (orange = A, grey = B)
+      svg += `<rect x="${aZone.x*SCALE}" y="${aZone.y*SCALE}" width="${aZone.w*SCALE}" height="${aZone.h*SCALE}" fill="#e9b07a" opacity="0.55"/>`;
+      svg += `<rect x="${bZone.x*SCALE}" y="${bZone.y*SCALE}" width="${bZone.w*SCALE}" height="${bZone.h*SCALE}" fill="#9da0a8" opacity="0.55"/>`;
+      // Grid lines (4")
+      const gs = window.KT.TOMB_BOARD.gridSize;
+      for (let x = 0; x <= W; x += gs) {
+        svg += `<line x1="${x*SCALE}" y1="0" x2="${x*SCALE}" y2="${h}" stroke="rgba(0,0,0,0.18)" stroke-width="0.5"/>`;
+      }
+      for (let y = 0; y <= H; y += gs) {
+        svg += `<line x1="0" y1="${y*SCALE}" x2="${w}" y2="${y*SCALE}" stroke="rgba(0,0,0,0.18)" stroke-width="0.5"/>`;
+      }
+      // Deployment divider (dashed)
+      if (map.split === 'vertical') {
+        svg += `<line x1="${(W/2)*SCALE}" y1="0" x2="${(W/2)*SCALE}" y2="${h}" stroke="#000" stroke-width="1" stroke-dasharray="4 4"/>`;
+      } else {
+        svg += `<line x1="0" y1="${(H/2)*SCALE}" x2="${w}" y2="${(H/2)*SCALE}" stroke="#000" stroke-width="1" stroke-dasharray="4 4"/>`;
+      }
+      // Walls
+      for (const wseg of map.walls || []) {
+        svg += `<line x1="${wseg.x1*SCALE}" y1="${wseg.y1*SCALE}" x2="${wseg.x2*SCALE}" y2="${wseg.y2*SCALE}" stroke="#0a0706" stroke-width="2.5" stroke-linecap="round"/>`;
+      }
+      // Terrain tokens
+      for (const t of map.terrain || []) {
+        if (t.type === 'octagon') {
+          const cx = t.x*SCALE, cy = t.y*SCALE, r = t.r*SCALE;
+          let pts = '';
+          for (let i = 0; i < 8; i++) {
+            const a = Math.PI / 8 + i * Math.PI / 4;
+            pts += `${cx + Math.cos(a)*r},${cy + Math.sin(a)*r} `;
+          }
+          svg += `<polygon points="${pts.trim()}" fill="#0a0706"/>`;
+        } else if (t.type === 'circle') {
+          svg += `<circle cx="${t.x*SCALE}" cy="${t.y*SCALE}" r="${t.r*SCALE}" fill="#0a0706"/>`;
+          svg += `<text x="${t.x*SCALE}" y="${t.y*SCALE+3}" font-size="8" fill="#fff" text-anchor="middle" font-family="monospace">${t.label||''}</text>`;
+        } else if (t.type === 'square') {
+          const s = (t.size||2)*SCALE;
+          svg += `<rect x="${t.x*SCALE - s/2}" y="${t.y*SCALE - s/2}" width="${s}" height="${s}" fill="#0a0706"/>`;
+          svg += `<text x="${t.x*SCALE}" y="${t.y*SCALE+3}" font-size="7" fill="#fff" text-anchor="middle" font-family="monospace">${t.label||''}</text>`;
+        } else if (t.type === 'barricade') {
+          svg += `<rect x="${t.x*SCALE}" y="${t.y*SCALE}" width="${t.w*SCALE}" height="${t.h*SCALE}" fill="none" stroke="#3a302a" stroke-width="1.5"/>`;
+        }
+      }
+      // Objectives (skulls as circles with tinted ring)
+      for (const o of map.objectives || []) {
+        const fill = o.owner === 'A' ? '#b8203a' : (o.owner === 'B' ? '#fff' : '#000');
+        const ring = o.owner === 'A' ? '#fff' : (o.owner === 'B' ? '#000' : '#fff');
+        svg += `<circle cx="${o.x*SCALE}" cy="${o.y*SCALE}" r="4" fill="${fill}" stroke="${ring}" stroke-width="1"/>`;
+      }
+      svg += '</svg>';
+      return svg;
+    }
+
+    function buildCard(map, isCustom) {
       const card = document.createElement('div');
       card.className = 'map-card panel corner-brackets';
       card.dataset.id = map.id;
+      const splitLabel = map.split === 'vertical' ? 'V-Split' : 'H-Split';
       card.innerHTML = `
-        <div class="preview">${renderPreview(map)}</div>
+        <div class="preview map-preview">${renderPreview(map)}</div>
         <h3>${map.name}</h3>
-        <p>${map.desc}</p>
+        <p>${map.desc || ''}</p>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          <span class="chip">Cover ${(map.cover * 100).toFixed(0)}%</span>
-          <span class="chip chip-dim">12 × 12</span>
+          <span class="chip">28&Prime; &times; 24&Prime;</span>
+          <span class="chip chip-dim">${splitLabel}</span>
+          ${isCustom ? '<span class="chip chip-warn">Custom</span>' : ''}
         </div>
       `;
       card.addEventListener('click', () => {
@@ -119,8 +124,19 @@
         document.querySelectorAll('.map-card').forEach(c => c.classList.toggle('selected', c.dataset.id === map.id));
         deployBtn.disabled = false;
       });
-      grid.appendChild(card);
+      return card;
+    }
+
+    Object.values(window.KT.TOMB_MAPS).forEach(map => {
+      grid.appendChild(buildCard(map, false));
     });
+
+    const customs = window.KT.loadCustomMaps();
+    const customIds = Object.keys(customs);
+    if (customIds.length) {
+      customSection.style.display = '';
+      customIds.forEach(id => customGrid.appendChild(buildCard(customs[id], true)));
+    }
 
     deployBtn.addEventListener('click', () => {
       if (!selected) return;

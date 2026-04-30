@@ -1,45 +1,37 @@
 (() => {
-  const GRID = 12;
+  const KT = window.KT;
+  const BOARD = KT.TOMB_BOARD;
+
+  // Inch-based mechanics
   const MAX_AP = 2;
-  const MOVE_RANGE = 4;
-  const SHOOT_RANGE = 7;
+  const MOVE_INCHES = 6;
+  const SHOOT_RANGE_INCHES = 14;
+  const UNIT_RADIUS = 0.6;
+  const COVER_RADIUS = 1.2;
   const BASE_HIT = 0.65;
   const COVER_PENALTY = 0.20;
 
-  const MAPS = {
-    'gallowdark':  { name: 'Gallowdark Hulk',     eyebrow: 'Derelict Hulk',     cover: 0.18, theme: 'iron'  },
-    'ash-wastes':  { name: 'Ash Wastes',          eyebrow: 'Open Dunes',        cover: 0.08, theme: 'ochre' },
-    'manufactorum':{ name: 'Manufactorum Ruins',  eyebrow: 'Promethium Works',  cover: 0.14, theme: 'rust'  },
-    'hive-vault':  { name: 'Hive Sub-Vault',      eyebrow: 'Subterranean',      cover: 0.20, theme: 'gloom' },
-  };
-
   const TEAM_A = {
-    id: 'A',
-    name: 'Imperium',
-    color: '#c9a74d',
-    accent: '#fff8e0',
+    id: 'A', name: 'Imperium', color: '#c9a74d', accent: '#fff8e0',
     units: [
-      { name: 'Sergeant',  hp: 10, dmg: 4 },
-      { name: 'Gunner',    hp: 8,  dmg: 5 },
-      { name: 'Trooper',   hp: 8,  dmg: 3 },
-    ]
+      { name: 'Sergeant', hp: 10, dmg: 4 },
+      { name: 'Gunner',   hp: 8,  dmg: 5 },
+      { name: 'Trooper',  hp: 8,  dmg: 3 },
+    ],
   };
   const TEAM_B = {
-    id: 'B',
-    name: 'Chaos',
-    color: '#b8203a',
-    accent: '#ffd9d9',
+    id: 'B', name: 'Chaos', color: '#b8203a', accent: '#ffd9d9',
     units: [
-      { name: 'Champion',  hp: 10, dmg: 4 },
-      { name: 'Heretic',   hp: 8,  dmg: 5 },
-      { name: 'Cultist',   hp: 8,  dmg: 3 },
-    ]
+      { name: 'Champion', hp: 10, dmg: 4 },
+      { name: 'Heretic',  hp: 8,  dmg: 5 },
+      { name: 'Cultist',  hp: 8,  dmg: 3 },
+    ],
   };
 
-  const mapId = sessionStorage.getItem('kt.mapId') || 'manufactorum';
-  const mapDef = MAPS[mapId] || MAPS['manufactorum'];
+  const mapId = sessionStorage.getItem('kt.mapId') || 'tomb-1';
+  const mapDef = KT.getMap(mapId) || KT.TOMB_MAPS['tomb-1'];
 
-  document.getElementById('map-eyebrow').textContent = mapDef.eyebrow;
+  document.getElementById('map-eyebrow').textContent = mapDef.eyebrow || 'Tomb World';
   document.getElementById('map-title').textContent = mapDef.name;
 
   const canvas = document.getElementById('board');
@@ -55,37 +47,33 @@
   const overlayTitle = document.getElementById('overlay-title');
   const overlayText = document.getElementById('overlay-text');
 
-  function pseudoRand(str) {
-    let h = 2166136261;
-    for (let i = 0; i < str.length; i++) {
-      h ^= str.charCodeAt(i);
-      h = Math.imul(h, 16777619);
-    }
-    return ((h >>> 0) % 1000) / 1000;
-  }
+  // --- Unit deployment (gridless) --------------------------------------
 
-  function buildTerrain() {
-    const cover = [];
-    for (let y = 0; y < GRID; y++) {
-      const row = [];
-      for (let x = 0; x < GRID; x++) {
-        const inDeployA = y < 2;
-        const inDeployB = y >= GRID - 2;
-        const isCover = !inDeployA && !inDeployB && pseudoRand(`${mapId}|${x}|${y}`) < mapDef.cover;
-        row.push(isCover ? 1 : 0);
+  function deployUnits() {
+    const aZone = KT.deployZone(mapDef, 'A');
+    const bZone = KT.deployZone(mapDef, 'B');
+    function spread(zone, count) {
+      const out = [];
+      const horizontal = zone.w >= zone.h;
+      for (let i = 0; i < count; i++) {
+        const t = (i + 1) / (count + 1);
+        if (horizontal) {
+          out.push({ x: zone.x + zone.w * t, y: zone.y + zone.h * 0.5 });
+        } else {
+          out.push({ x: zone.x + zone.w * 0.5, y: zone.y + zone.h * t });
+        }
       }
-      cover.push(row);
+      return out;
     }
-    return cover;
-  }
-
-  function buildUnits() {
-    const xs = [2, 5, 9];
+    const aPos = spread(aZone, TEAM_A.units.length);
+    const bPos = spread(bZone, TEAM_B.units.length);
     const a = TEAM_A.units.map((u, i) => ({
-      ...u, team: 'A', x: xs[i], y: 0, ap: MAX_AP, maxHp: u.hp, alive: true
+      ...u, team: 'A', x: aPos[i].x, y: aPos[i].y,
+      ap: MAX_AP, maxHp: u.hp, alive: true,
     }));
     const b = TEAM_B.units.map((u, i) => ({
-      ...u, team: 'B', x: xs[i], y: GRID - 1, ap: MAX_AP, maxHp: u.hp, alive: true
+      ...u, team: 'B', x: bPos[i].x, y: bPos[i].y,
+      ap: MAX_AP, maxHp: u.hp, alive: true,
     }));
     return [...a, ...b];
   }
@@ -93,88 +81,69 @@
   const state = {
     turn: 1,
     activeTeam: 'A',
-    cover: buildTerrain(),
-    units: buildUnits(),
+    units: deployUnits(),
     selectedId: null,
-    moveTargets: [],
-    shootTargets: [],
+    hoverPt: null,
     over: false,
   };
 
-  function unitAt(x, y) {
-    return state.units.find(u => u.alive && u.x === x && u.y === y) || null;
+  function teamOf(id) { return id === 'A' ? TEAM_A : TEAM_B; }
+  function selected() { return state.units.find(u => u === state.selectedId); }
+
+  function unitAtPoint(x, y) {
+    return state.units.find(u => u.alive && Math.hypot(u.x - x, u.y - y) <= UNIT_RADIUS + 0.4);
   }
 
-  function inBounds(x, y) {
-    return x >= 0 && y >= 0 && x < GRID && y < GRID;
+  function unitOccupiesCircle(x, y, r, ignore) {
+    return state.units.find(u => u.alive && u !== ignore &&
+      Math.hypot(u.x - x, u.y - y) < r + UNIT_RADIUS);
   }
 
-  function bfsReachable(unit) {
-    const dist = Array.from({ length: GRID }, () => Array(GRID).fill(-1));
-    dist[unit.y][unit.x] = 0;
-    const q = [[unit.x, unit.y]];
-    while (q.length) {
-      const [cx, cy] = q.shift();
-      if (dist[cy][cx] >= MOVE_RANGE) continue;
-      for (const [dx, dy] of [[1,0],[-1,0],[0,1],[0,-1]]) {
-        const nx = cx + dx, ny = cy + dy;
-        if (!inBounds(nx, ny)) continue;
-        if (dist[ny][nx] !== -1) continue;
-        if (state.cover[ny][nx] === 1) continue;
-        const occupant = unitAt(nx, ny);
-        if (occupant) continue;
-        dist[ny][nx] = dist[cy][cx] + 1;
-        q.push([nx, ny]);
+  // --- Movement & LOS ---------------------------------------------------
+
+  function moveCost(u, x, y) { return Math.hypot(x - u.x, y - u.y); }
+
+  function canMoveTo(u, x, y) {
+    if (x < UNIT_RADIUS || y < UNIT_RADIUS) return false;
+    if (x > BOARD.width - UNIT_RADIUS || y > BOARD.height - UNIT_RADIUS) return false;
+    if (moveCost(u, x, y) > MOVE_INCHES) return false;
+    if (KT.geom.losBlocked(mapDef, u.x, u.y, x, y)) return false;
+    if (unitOccupiesCircle(x, y, UNIT_RADIUS, u)) return false;
+    return true;
+  }
+
+  function shotCoverPenalty(x1, y1, x2, y2) {
+    let penalties = 0;
+    for (const t of mapDef.terrain || []) {
+      const tx = t.x, ty = t.y;
+      let r = COVER_RADIUS;
+      if (t.type === 'octagon') r = (t.r || 2);
+      else if (t.type === 'circle') r = (t.r || 1.5);
+      else if (t.type === 'square') r = (t.size || 2) * 0.5;
+      else if (t.type === 'barricade') {
+        const d = KT.geom.pointSegDist(tx, ty, x1, y1, x2, y2);
+        if (d < 0.6) penalties++;
+        continue;
       }
+      const d = KT.geom.pointSegDist(tx, ty, x1, y1, x2, y2);
+      if (d < r) penalties++;
     }
-    const cells = [];
-    for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) {
-      if (dist[y][x] > 0) cells.push({ x, y });
-    }
-    return cells;
+    return penalties;
   }
 
-  function losBlockedAndCover(x0, y0, x1, y1) {
-    const dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0);
-    const sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
-    let err = dx - dy;
-    let cx = x0, cy = y0;
-    let coverCount = 0;
-    while (true) {
-      if (!(cx === x0 && cy === y0) && !(cx === x1 && cy === y1)) {
-        if (state.cover[cy][cx] === 1) coverCount++;
-      }
-      if (cx === x1 && cy === y1) break;
-      const e2 = 2 * err;
-      if (e2 > -dy) { err -= dy; cx += sx; }
-      if (e2 < dx)  { err += dx; cy += sy; }
-    }
-    return { blocked: coverCount >= 2, cover: coverCount };
-  }
-
-  function shootTargetsFor(unit) {
+  function shootTargetsFor(u) {
     const out = [];
-    for (const u of state.units) {
-      if (!u.alive || u.team === unit.team) continue;
-      const dx = u.x - unit.x, dy = u.y - unit.y;
-      const dist = Math.max(Math.abs(dx), Math.abs(dy));
-      if (dist > SHOOT_RANGE) continue;
-      const los = losBlockedAndCover(unit.x, unit.y, u.x, u.y);
-      if (los.blocked) continue;
-      out.push({ x: u.x, y: u.y, id: u, cover: los.cover });
+    for (const o of state.units) {
+      if (!o.alive || o.team === u.team) continue;
+      const dist = Math.hypot(o.x - u.x, o.y - u.y);
+      if (dist > SHOOT_RANGE_INCHES) continue;
+      if (KT.geom.losBlocked(mapDef, u.x, u.y, o.x, o.y)) continue;
+      out.push({ target: o, cover: shotCoverPenalty(u.x, u.y, o.x, o.y) });
     }
     return out;
   }
 
-  function selected() {
-    return state.units.find(u => u === state.selectedId);
-  }
-
-  function recomputeOptions() {
-    const u = selected();
-    state.moveTargets = (u && u.alive && u.ap > 0) ? bfsReachable(u) : [];
-    state.shootTargets = (u && u.alive && u.ap > 0) ? shootTargetsFor(u) : [];
-  }
+  // --- Logging & sidebar ------------------------------------------------
 
   function log(msg, cls) {
     const p = document.createElement('p');
@@ -183,8 +152,6 @@
     logEl.appendChild(p);
     logEl.scrollTop = logEl.scrollHeight;
   }
-
-  function teamOf(id) { return id === 'A' ? TEAM_A : TEAM_B; }
 
   function renderSidebar() {
     function rowFor(u) {
@@ -196,15 +163,10 @@
         <div class="meta">
           <div class="name">${u.name}</div>
           <div class="stats">HP ${u.alive ? u.hp : 0}/${u.maxHp} &middot; AP ${u.alive ? u.ap : 0}/${MAX_AP} &middot; DMG ${u.dmg}</div>
-        </div>
-      `;
+        </div>`;
       if (u.alive && u.team === state.activeTeam) {
         div.style.cursor = 'pointer';
-        div.addEventListener('click', () => {
-          state.selectedId = u;
-          recomputeOptions();
-          render();
-        });
+        div.addEventListener('click', () => { state.selectedId = u; render(); });
       }
       return div;
     }
@@ -222,119 +184,205 @@
     turnBanner.style.color = teamOf(state.activeTeam).color;
   }
 
-  function drawBoard() {
-    const cs = canvas.clientWidth;
-    if (canvas.width !== cs * devicePixelRatio) {
-      canvas.width = cs * devicePixelRatio;
-      canvas.height = cs * devicePixelRatio;
+  // --- Rendering --------------------------------------------------------
+
+  function fitCanvas() {
+    const w = canvas.clientWidth;
+    const aspect = BOARD.width / BOARD.height;
+    canvas.style.height = (w / aspect) + 'px';
+    if (canvas.width !== w * devicePixelRatio) {
+      canvas.width = w * devicePixelRatio;
+      canvas.height = (w / aspect) * devicePixelRatio;
     }
-    const cell = canvas.width / GRID;
+  }
+
+  function scale() { return canvas.width / BOARD.width; }
+
+  function drawBoard() {
+    fitCanvas();
+    const W = canvas.width, H = canvas.height;
+    const s = W / BOARD.width;
 
     ctx.fillStyle = '#0f0b09';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, W, H);
 
+    // deployment fills
+    const aZone = KT.deployZone(mapDef, 'A');
+    const bZone = KT.deployZone(mapDef, 'B');
+    ctx.fillStyle = 'rgba(233, 176, 122, 0.20)';
+    ctx.fillRect(aZone.x * s, aZone.y * s, aZone.w * s, aZone.h * s);
+    ctx.fillStyle = 'rgba(157, 160, 168, 0.18)';
+    ctx.fillRect(bZone.x * s, bZone.y * s, bZone.w * s, bZone.h * s);
+
+    // grid
     ctx.strokeStyle = 'rgba(255,255,255,0.05)';
     ctx.lineWidth = 1;
-    for (let i = 0; i <= GRID; i++) {
+    for (let x = 0; x <= BOARD.width; x += BOARD.gridSize) {
+      ctx.beginPath(); ctx.moveTo(x * s, 0); ctx.lineTo(x * s, H); ctx.stroke();
+    }
+    for (let y = 0; y <= BOARD.height; y += BOARD.gridSize) {
+      ctx.beginPath(); ctx.moveTo(0, y * s); ctx.lineTo(W, y * s); ctx.stroke();
+    }
+
+    // dashed deployment divider
+    ctx.setLineDash([6, 6]);
+    ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    if (mapDef.split === 'vertical') {
+      ctx.moveTo((BOARD.width / 2) * s, 0);
+      ctx.lineTo((BOARD.width / 2) * s, H);
+    } else {
+      ctx.moveTo(0, (BOARD.height / 2) * s);
+      ctx.lineTo(W, (BOARD.height / 2) * s);
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // walls
+    ctx.strokeStyle = '#0a0706';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
+    for (const w of mapDef.walls || []) {
       ctx.beginPath();
-      ctx.moveTo(i * cell, 0); ctx.lineTo(i * cell, canvas.height);
-      ctx.moveTo(0, i * cell); ctx.lineTo(canvas.width, i * cell);
+      ctx.moveTo(w.x1 * s, w.y1 * s);
+      ctx.lineTo(w.x2 * s, w.y2 * s);
       ctx.stroke();
     }
 
-    for (let y = 0; y < GRID; y++) {
-      if (y < 2) {
-        ctx.fillStyle = 'rgba(201,167,77,0.04)';
-        ctx.fillRect(0, y * cell, canvas.width, cell);
-      } else if (y >= GRID - 2) {
-        ctx.fillStyle = 'rgba(184,32,58,0.05)';
-        ctx.fillRect(0, y * cell, canvas.width, cell);
+    // perimeter
+    ctx.strokeRect(2, 2, W - 4, H - 4);
+
+    // terrain
+    for (const t of mapDef.terrain || []) drawTerrain(t, s);
+
+    // objectives
+    for (const o of mapDef.objectives || []) {
+      const fill = o.owner === 'A' ? '#b8203a' : (o.owner === 'B' ? '#fff' : '#0a0706');
+      const ring = o.owner === 'A' ? '#fff' : (o.owner === 'B' ? '#0a0706' : '#fff');
+      ctx.fillStyle = fill;
+      ctx.strokeStyle = ring;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(o.x * s, o.y * s, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    // movement preview
+    const u = selected();
+    if (u && u.alive && u.ap > 0 && u.team === state.activeTeam) {
+      ctx.strokeStyle = 'rgba(201,167,77,0.45)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.arc(u.x * s, u.y * s, MOVE_INCHES * s, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      if (state.hoverPt) {
+        const ok = canMoveTo(u, state.hoverPt.x, state.hoverPt.y);
+        ctx.strokeStyle = ok ? 'rgba(201,167,77,0.95)' : 'rgba(184,32,58,0.85)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(u.x * s, u.y * s);
+        ctx.lineTo(state.hoverPt.x * s, state.hoverPt.y * s);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(state.hoverPt.x * s, state.hoverPt.y * s, UNIT_RADIUS * s, 0, Math.PI * 2);
+        ctx.stroke();
       }
     }
 
-    for (let y = 0; y < GRID; y++) {
-      for (let x = 0; x < GRID; x++) {
-        if (state.cover[y][x] === 1) {
-          ctx.fillStyle = '#3a302a';
-          ctx.fillRect(x * cell + 2, y * cell + 2, cell - 4, cell - 4);
-          ctx.strokeStyle = '#000';
-          ctx.strokeRect(x * cell + 2, y * cell + 2, cell - 4, cell - 4);
-        }
-      }
-    }
-
-    for (const t of state.moveTargets) {
-      ctx.fillStyle = 'rgba(201,167,77,0.18)';
-      ctx.fillRect(t.x * cell, t.y * cell, cell, cell);
-      ctx.strokeStyle = 'rgba(201,167,77,0.6)';
-      ctx.strokeRect(t.x * cell + 0.5, t.y * cell + 0.5, cell - 1, cell - 1);
-    }
-    for (const t of state.shootTargets) {
-      ctx.fillStyle = 'rgba(184,32,58,0.25)';
-      ctx.fillRect(t.x * cell, t.y * cell, cell, cell);
-      ctx.strokeStyle = '#b8203a';
-      ctx.strokeRect(t.x * cell + 0.5, t.y * cell + 0.5, cell - 1, cell - 1);
-    }
-
+    // units
     for (const u of state.units) {
       if (!u.alive) continue;
       const team = teamOf(u.team);
-      const cx = u.x * cell + cell / 2;
-      const cy = u.y * cell + cell / 2;
-      const r = cell * 0.32;
-
+      const cx = u.x * s, cy = u.y * s;
+      const r = UNIT_RADIUS * s;
       ctx.fillStyle = '#000';
       ctx.beginPath(); ctx.arc(cx + 1, cy + 2, r, 0, Math.PI * 2); ctx.fill();
-
       ctx.fillStyle = team.color;
       ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
-
       ctx.strokeStyle = team.accent;
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
+      ctx.lineWidth = 1.5; ctx.stroke();
       if (u === state.selectedId) {
         ctx.strokeStyle = '#fff8e0';
         ctx.lineWidth = 2;
         ctx.beginPath(); ctx.arc(cx, cy, r + 4, 0, Math.PI * 2); ctx.stroke();
       }
-
       const hpPct = u.hp / u.maxHp;
-      const barW = cell * 0.7;
-      const bx = cx - barW / 2, by = cy + r + 4;
-      ctx.fillStyle = '#000';
-      ctx.fillRect(bx - 1, by - 1, barW + 2, 5);
-      ctx.fillStyle = '#3a302a';
-      ctx.fillRect(bx, by, barW, 3);
+      const barW = r * 2.4, bx = cx - barW / 2, by = cy + r + 4;
+      ctx.fillStyle = '#000'; ctx.fillRect(bx - 1, by - 1, barW + 2, 5);
+      ctx.fillStyle = '#3a302a'; ctx.fillRect(bx, by, barW, 3);
       ctx.fillStyle = hpPct > 0.5 ? '#c9a74d' : (hpPct > 0.25 ? '#e68a6a' : '#b8203a');
       ctx.fillRect(bx, by, barW * hpPct, 3);
     }
   }
 
-  function render() {
-    drawBoard();
-    renderSidebar();
-    renderHud();
+  function drawTerrain(t, s) {
+    ctx.fillStyle = '#0a0706';
+    if (t.type === 'octagon') {
+      const cx = t.x * s, cy = t.y * s, r = (t.r || 2) * s;
+      ctx.beginPath();
+      for (let i = 0; i < 8; i++) {
+        const a = Math.PI / 8 + i * Math.PI / 4;
+        const px = cx + Math.cos(a) * r, py = cy + Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.closePath(); ctx.fill();
+    } else if (t.type === 'circle') {
+      ctx.beginPath();
+      ctx.arc(t.x * s, t.y * s, (t.r || 1.5) * s, 0, Math.PI * 2);
+      ctx.fill();
+      if (t.label) {
+        ctx.fillStyle = '#fff';
+        ctx.font = `${Math.round(0.7 * s)}px monospace`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(t.label, t.x * s, t.y * s);
+      }
+    } else if (t.type === 'square') {
+      const sz = (t.size || 2) * s;
+      ctx.fillRect(t.x * s - sz / 2, t.y * s - sz / 2, sz, sz);
+      if (t.label) {
+        ctx.fillStyle = '#fff';
+        ctx.font = `${Math.round(0.6 * s)}px monospace`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(t.label, t.x * s, t.y * s);
+      }
+    } else if (t.type === 'barricade') {
+      ctx.strokeStyle = '#3a302a';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(t.x * s, t.y * s, t.w * s, t.h * s);
+    }
   }
 
-  function getCell(evt) {
+  function render() { drawBoard(); renderSidebar(); renderHud(); }
+
+  // --- Input ------------------------------------------------------------
+
+  function eventToBoard(evt) {
     const rect = canvas.getBoundingClientRect();
-    const px = (evt.clientX - rect.left) / rect.width;
-    const py = (evt.clientY - rect.top) / rect.height;
-    return { x: Math.floor(px * GRID), y: Math.floor(py * GRID) };
+    return {
+      x: ((evt.clientX - rect.left) / rect.width) * BOARD.width,
+      y: ((evt.clientY - rect.top) / rect.height) * BOARD.height,
+    };
   }
+
+  canvas.addEventListener('mousemove', (evt) => {
+    state.hoverPt = eventToBoard(evt);
+    if (selected()) drawBoard();
+  });
+  canvas.addEventListener('mouseleave', () => { state.hoverPt = null; drawBoard(); });
 
   canvas.addEventListener('click', (evt) => {
     if (state.over) return;
-    const { x, y } = getCell(evt);
-    if (!inBounds(x, y)) return;
-
-    const clicked = unitAt(x, y);
+    const p = eventToBoard(evt);
+    const clicked = unitAtPoint(p.x, p.y);
     const u = selected();
 
-    if (clicked && clicked.team === state.activeTeam) {
+    if (clicked && clicked.team === state.activeTeam && clicked.alive) {
       state.selectedId = clicked;
-      recomputeOptions();
       render();
       return;
     }
@@ -342,23 +390,22 @@
     if (!u || u.team !== state.activeTeam || !u.alive || u.ap <= 0) return;
 
     if (clicked && clicked.team !== state.activeTeam) {
-      const target = state.shootTargets.find(t => t.x === x && t.y === y);
-      if (target) {
-        resolveShoot(u, clicked, target.cover);
+      const list = shootTargetsFor(u);
+      const t = list.find(t => t.target === clicked);
+      if (t) {
+        resolveShoot(u, clicked, t.cover);
         u.ap -= 1;
-        recomputeOptions();
         afterAction();
         render();
       }
       return;
     }
 
-    const moveTarget = state.moveTargets.find(t => t.x === x && t.y === y);
-    if (moveTarget) {
-      u.x = x; u.y = y;
+    if (canMoveTo(u, p.x, p.y)) {
+      const d = moveCost(u, p.x, p.y);
+      u.x = p.x; u.y = p.y;
       u.ap -= 1;
-      log(`${teamOf(u.team).name} ${u.name} repositions.`);
-      recomputeOptions();
+      log(`${teamOf(u.team).name} ${u.name} repositions ${d.toFixed(1)}".`);
       afterAction();
       render();
     }
@@ -366,8 +413,7 @@
 
   function resolveShoot(attacker, defender, coverCount) {
     const hitChance = Math.max(0.1, BASE_HIT - COVER_PENALTY * coverCount);
-    const roll = Math.random();
-    const hit = roll < hitChance;
+    const hit = Math.random() < hitChance;
     if (!hit) {
       log(`${teamOf(attacker.team).name} ${attacker.name} fires at ${defender.name} — miss.`);
       return;
@@ -375,8 +421,7 @@
     const dmg = attacker.dmg + (Math.random() < 0.2 ? 1 : 0);
     defender.hp -= dmg;
     if (defender.hp <= 0) {
-      defender.hp = 0;
-      defender.alive = false;
+      defender.hp = 0; defender.alive = false;
       log(`${defender.name} is slain by ${attacker.name}.`, 'kill');
     } else {
       log(`${attacker.name} hits ${defender.name} for ${dmg}.`, 'hit');
@@ -396,12 +441,10 @@
       overlay.style.display = 'flex';
       return;
     }
-
     const u = selected();
     if (u && u.ap <= 0) {
       const next = state.units.find(o => o.alive && o.team === state.activeTeam && o.ap > 0);
       state.selectedId = next || null;
-      recomputeOptions();
     }
   }
 
@@ -410,86 +453,74 @@
     state.activeTeam = state.activeTeam === 'A' ? 'B' : 'A';
     if (state.activeTeam === 'A') state.turn += 1;
     state.units.forEach(u => { if (u.alive) u.ap = MAX_AP; });
-    const next = state.units.find(u => u.alive && u.team === state.activeTeam);
-    state.selectedId = next || null;
-    recomputeOptions();
+    state.selectedId = state.units.find(u => u.alive && u.team === state.activeTeam) || null;
     log(`— ${teamOf(state.activeTeam).name} activation begins —`, 'turn');
-
-    if (state.activeTeam === 'B') {
-      setTimeout(runAITurn, 350);
-    }
+    if (state.activeTeam === 'B') setTimeout(runAITurn, 350);
     render();
   }
 
   endTurnBtn.addEventListener('click', endTurn);
 
   function runAITurn() {
-    if (state.over) return;
-    if (state.activeTeam !== 'B') return;
-
+    if (state.over || state.activeTeam !== 'B') return;
     const aiUnits = state.units.filter(u => u.alive && u.team === 'B');
-    let actedThisPass = true;
-
     function step() {
       if (state.over || state.activeTeam !== 'B') return;
       let didSomething = false;
       for (const u of aiUnits) {
         if (!u.alive || u.ap <= 0) continue;
         state.selectedId = u;
-        recomputeOptions();
-
         const targets = shootTargetsFor(u);
         if (targets.length) {
-          targets.sort((a, b) => a.id.hp - b.id.hp);
+          targets.sort((a, b) => a.target.hp - b.target.hp);
           const t = targets[0];
-          resolveShoot(u, t.id, t.cover);
-          u.ap -= 1;
-          didSomething = true;
-          afterAction();
-          render();
+          resolveShoot(u, t.target, t.cover);
+          u.ap -= 1; didSomething = true; afterAction(); render();
           if (state.over) return;
           break;
         }
-
         const enemies = state.units.filter(o => o.alive && o.team === 'A');
-        if (enemies.length === 0) break;
-        const reach = bfsReachable(u);
-        if (reach.length === 0) continue;
-        let best = reach[0], bestD = Infinity;
-        for (const c of reach) {
-          let d = Infinity;
-          for (const e of enemies) {
-            const dd = Math.abs(c.x - e.x) + Math.abs(c.y - e.y);
-            if (dd < d) d = dd;
-          }
-          if (d < bestD) { bestD = d; best = c; }
+        if (!enemies.length) break;
+        // Move toward closest enemy along clear path within MOVE_INCHES.
+        let target = enemies[0], best = Infinity;
+        for (const e of enemies) {
+          const d = Math.hypot(e.x - u.x, e.y - u.y);
+          if (d < best) { best = d; target = e; }
         }
-        u.x = best.x; u.y = best.y;
-        u.ap -= 1;
-        log(`${teamOf(u.team).name} ${u.name} advances.`);
-        didSomething = true;
-        afterAction();
-        render();
+        const dx = target.x - u.x, dy = target.y - u.y;
+        const dist = Math.hypot(dx, dy) || 1;
+        let stepDist = Math.min(MOVE_INCHES, dist - 1.5);
+        let nx = u.x + (dx / dist) * stepDist;
+        let ny = u.y + (dy / dist) * stepDist;
+        // Try to find a clear move; if blocked, jitter angle.
+        let tries = 0;
+        while ((!canMoveTo(u, nx, ny)) && tries < 8) {
+          const ang = Math.atan2(dy, dx) + (tries % 2 ? 1 : -1) * (Math.PI / 8) * Math.ceil(tries / 2);
+          stepDist = Math.min(MOVE_INCHES, dist - 1.5);
+          nx = u.x + Math.cos(ang) * stepDist;
+          ny = u.y + Math.sin(ang) * stepDist;
+          tries++;
+        }
+        if (canMoveTo(u, nx, ny)) {
+          u.x = nx; u.y = ny; u.ap -= 1;
+          log(`${teamOf(u.team).name} ${u.name} advances.`);
+          didSomething = true; afterAction(); render();
+        } else {
+          u.ap -= 1;
+        }
         break;
       }
-
-      if (didSomething) {
-        const stillActing = aiUnits.some(u => u.alive && u.ap > 0);
-        if (stillActing) {
-          setTimeout(step, 320);
-          return;
-        }
+      if (didSomething && aiUnits.some(u => u.alive && u.ap > 0)) {
+        setTimeout(step, 320); return;
       }
       setTimeout(endTurn, 400);
     }
-
     step();
   }
 
   log(`— Engagement begins on ${mapDef.name} —`, 'turn');
   log(`Imperium activation begins.`, 'turn');
   state.selectedId = state.units.find(u => u.team === 'A' && u.alive);
-  recomputeOptions();
   render();
 
   window.addEventListener('resize', render);
