@@ -29,10 +29,13 @@
   };
 
   const mapId = sessionStorage.getItem('kt.mapId') || 'tomb-1';
-  const mapDef = KT.getMap(mapId) || KT.TOMB_MAPS['tomb-1'];
+  const mapDefRaw = KT.getMap(mapId) || KT.TOMB_MAPS['tomb-1'];
+  // mapDef has piece-derived walls / terrain merged in for LOS and cover.
+  // mapDefRaw keeps the original pieces array for accurate visual rendering.
+  const mapDef = KT.compileMap(mapDefRaw);
 
-  document.getElementById('map-eyebrow').textContent = mapDef.eyebrow || 'Tomb World';
-  document.getElementById('map-title').textContent = mapDef.name;
+  document.getElementById('map-eyebrow').textContent = mapDefRaw.eyebrow || 'Tomb World';
+  document.getElementById('map-title').textContent = mapDefRaw.name;
 
   const canvas = document.getElementById('board');
   const ctx = canvas.getContext('2d');
@@ -120,7 +123,9 @@
       if (t.type === 'octagon') r = (t.r || 2);
       else if (t.type === 'circle') r = (t.r || 1.5);
       else if (t.type === 'square') r = (t.size || 2) * 0.5;
-      else if (t.type === 'barricade') {
+      else if (t.type === 'rect' || t.type === 'sarcophagus') {
+        r = Math.max(t.w || 1, t.h || 1) * 0.5;
+      } else if (t.type === 'barricade') {
         const d = KT.geom.pointSegDist(tx, ty, x1, y1, x2, y2);
         if (d < 0.6) penalties++;
         continue;
@@ -239,11 +244,11 @@
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // walls
+    // legacy walls (only the ones authored before the piece system)
     ctx.strokeStyle = '#0a0706';
     ctx.lineWidth = 5;
     ctx.lineCap = 'round';
-    for (const w of mapDef.walls || []) {
+    for (const w of mapDefRaw.walls || []) {
       ctx.beginPath();
       ctx.moveTo(w.x1 * s, w.y1 * s);
       ctx.lineTo(w.x2 * s, w.y2 * s);
@@ -253,8 +258,11 @@
     // perimeter
     ctx.strokeRect(2, 2, W - 4, H - 4);
 
-    // terrain
-    for (const t of mapDef.terrain || []) drawTerrain(t, s);
+    // legacy terrain
+    for (const t of mapDefRaw.terrain || []) drawTerrain(t, s);
+
+    // pieces (rendered with markers — breach hex, hatchway hex, necron warriors)
+    for (const p of mapDefRaw.pieces || []) KT.drawPieceCanvas(ctx, p, s, s);
 
     // objectives
     for (const o of mapDef.objectives || []) {

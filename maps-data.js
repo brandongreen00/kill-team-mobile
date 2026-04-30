@@ -320,6 +320,289 @@
     },
   };
 
+  // --- Piece registry -----------------------------------------------------
+  // Tomb-world board pieces (see Map Creator). Pieces are placed on a 4" grid
+  // and may carry visual markers (breach, hatchway, necron warriors). Only the
+  // physical wall segment / terrain footprint affects mechanics; markers are
+  // visual-only until breach / hatchway / PVE rules land.
+  //
+  // Coordinate model:
+  //   piece = { kind, x, y, rot, flip? }
+  //   - For walls: (x, y) is one endpoint; rot 0/1/2/3 = right/down/left/up
+  //     (the wall extends from the anchor in that direction).
+  //   - For wallend (X): (x, y) is the placed position; rot is facing dir.
+  //   - For terrain (T, C1..C5): (x, y) is the centre.
+  //   - rot is in 90° clockwise increments (0..3).
+  //   - flip toggles which end / side carries the marker (asymmetric pieces).
+
+  const PIECES = {
+    A1: { type: 'wall',        len: 8, asymm: 'half', marker: 'breach',   label: 'A1' },
+    A2: { type: 'wall',        len: 8, asymm: 'side', marker: 'necron',   label: 'A2' },
+    A3: { type: 'wall',        len: 8, asymm: 'side', marker: 'hatchway', label: 'A3' },
+    A4: { type: 'wall',        len: 8, asymm: 'side', marker: 'hatchway', label: 'A4' },
+    B1: { type: 'wall',        len: 4, asymm: 'none', marker: null,        label: 'B1' },
+    B2: { type: 'wall',        len: 4, asymm: 'none', marker: 'breach',   label: 'B2' },
+    B3: { type: 'wall',        len: 4, asymm: 'side', marker: 'hatchway', label: 'B3' },
+    B4: { type: 'wall',        len: 4, asymm: 'none', marker: null,        label: 'B4' },
+    X:  { type: 'wallend',                                                 label: 'X'  },
+    T:  { type: 'circle',      r: 1.0,                                     label: 'T'  },
+    C1: { type: 'sarcophagus', w: 3.0,  h: 2.0,    cover: 'light',         label: 'C1' },
+    C2: { type: 'rect',        w: 2.4,  h: 2.0,    cover: 'debris',        label: 'C2' },
+    C3: { type: 'rect',        w: 1.333, h: 1.333, cover: 'debris',        label: 'C3' },
+    C4: { type: 'rect',        w: 1.0,  h: 1.0,    cover: 'debris',        label: 'C4' },
+    C5: { type: 'rect',        w: 1.0,  h: 1.0,    cover: 'debris',        label: 'C5' },
+  };
+
+  const PIECE_KINDS = Object.keys(PIECES);
+
+  function rotDir(rot) {
+    return [[1, 0], [0, 1], [-1, 0], [0, -1]][((rot || 0) % 4 + 4) % 4];
+  }
+
+  function pieceWallSegment(p) {
+    const def = PIECES[p.kind];
+    if (!def || def.type !== 'wall') return null;
+    const [dx, dy] = rotDir(p.rot);
+    return { x1: p.x, y1: p.y, x2: p.x + dx * def.len, y2: p.y + dy * def.len };
+  }
+
+  function pieceTerrainShape(p) {
+    const def = PIECES[p.kind];
+    if (!def) return null;
+    if (def.type === 'circle') {
+      return { type: 'circle', x: p.x, y: p.y, r: def.r, label: def.label };
+    }
+    if (def.type === 'rect' || def.type === 'sarcophagus') {
+      const horiz = ((p.rot || 0) & 1) === 0;
+      const w = horiz ? def.w : def.h;
+      const h = horiz ? def.h : def.w;
+      return {
+        type: def.type === 'sarcophagus' ? 'sarcophagus' : 'rect',
+        x: p.x, y: p.y, w, h, label: def.label, cover: def.cover,
+      };
+    }
+    return null;
+  }
+
+  function compilePieces(pieces) {
+    const walls = [], terrain = [];
+    for (const p of pieces || []) {
+      const seg = pieceWallSegment(p);
+      if (seg) walls.push(seg);
+      const ter = pieceTerrainShape(p);
+      if (ter) terrain.push(ter);
+    }
+    return { walls, terrain };
+  }
+
+  // Returns a copy of map with piece-derived walls/terrain merged in.
+  function compileMap(map) {
+    if (!map) return map;
+    const c = compilePieces(map.pieces);
+    return {
+      ...map,
+      walls: [...(map.walls || []), ...c.walls],
+      terrain: [...(map.terrain || []), ...c.terrain],
+    };
+  }
+
+  // Hit-test a point against a piece (for the editor erase tool).
+  function pieceHit(p, px, py) {
+    const def = PIECES[p.kind];
+    if (!def) return false;
+    if (def.type === 'wall') {
+      const seg = pieceWallSegment(p);
+      return pointSegDist(px, py, seg.x1, seg.y1, seg.x2, seg.y2) <= 0.6;
+    }
+    if (def.type === 'wallend') {
+      return Math.hypot(px - p.x, py - p.y) <= 0.9;
+    }
+    if (def.type === 'circle') {
+      return Math.hypot(px - p.x, py - p.y) <= def.r;
+    }
+    const t = pieceTerrainShape(p);
+    return Math.abs(px - t.x) <= t.w / 2 && Math.abs(py - t.y) <= t.h / 2;
+  }
+
+  // --- Piece drawing ------------------------------------------------------
+  // Canvas renderer used by the editor and the game board. (sx, sy) are the
+  // px-per-inch scale factors for x and y.
+
+  const PIECE_COLORS = {
+    wall: '#0a0706',
+    breach: '#c97a3a',
+    hatchway: '#7a9c3e',
+    necron: '#48b04a',
+    wallend: '#1f4d36',
+    sarcophagus: '#0a0706',
+    rect: '#0a0706',
+    teleport: '#0a0706',
+    teleportRing: '#7a9c3e',
+  };
+
+  function squashedHexPath(ctx, cx, cy, w, h, axisRotRad) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(axisRotRad);
+    ctx.beginPath();
+    ctx.moveTo(-w / 2, 0);
+    ctx.lineTo(-w / 4, -h / 2);
+    ctx.lineTo(w / 4, -h / 2);
+    ctx.lineTo(w / 2, 0);
+    ctx.lineTo(w / 4, h / 2);
+    ctx.lineTo(-w / 4, h / 2);
+    ctx.closePath();
+    ctx.restore();
+  }
+
+  function drawWallPiece(ctx, p, def, sx, sy) {
+    const rot = ((p.rot || 0) % 4 + 4) % 4;
+    const flip = !!p.flip;
+    const [dx, dy] = rotDir(rot);
+    const x1 = p.x * sx, y1 = p.y * sy;
+    const x2 = (p.x + dx * def.len) * sx, y2 = (p.y + dy * def.len) * sy;
+
+    // Main wall line
+    ctx.strokeStyle = PIECE_COLORS.wall;
+    ctx.lineWidth = Math.max(3, Math.min(sx, sy) * 0.32);
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    if (!def.marker) return;
+
+    const angle = Math.atan2(y2 - y1, x2 - x1); // along-wall direction (radians)
+    const perp = angle + Math.PI / 2;
+    const inch = Math.min(sx, sy);
+
+    // Marker placement in inches along the wall (from anchor) and perp offset.
+    let alongIn = def.len / 2; // default centred
+    let perpIn = 0;
+    if (def.asymm === 'half') {
+      alongIn = flip ? def.len * 0.75 : def.len * 0.25;
+    } else if (def.asymm === 'side') {
+      alongIn = def.len / 2;
+      perpIn = flip ? -0.55 : 0.55;
+    }
+    const cx = (p.x + dx * alongIn) * sx + Math.cos(perp) * perpIn * inch;
+    const cy = (p.y + dy * alongIn) * sy + Math.sin(perp) * perpIn * inch;
+
+    if (def.marker === 'breach' || def.marker === 'hatchway') {
+      const fill = def.marker === 'breach' ? PIECE_COLORS.breach : PIECE_COLORS.hatchway;
+      const w = 1.2 * inch, h = 0.55 * inch;
+      squashedHexPath(ctx, cx, cy, w, h, angle);
+      ctx.fillStyle = fill;
+      ctx.fill();
+      ctx.strokeStyle = '#0a0706';
+      ctx.lineWidth = 1;
+      squashedHexPath(ctx, cx, cy, w, h, angle);
+      ctx.stroke();
+    } else if (def.marker === 'necron') {
+      // 3 small green squares along ONE side of the wall
+      const sideSign = flip ? -1 : 1;
+      const offset = 0.5 * inch * sideSign;
+      const sq = 0.35 * inch;
+      for (let i = 0; i < 3; i++) {
+        const t = (i + 1) / 4; // 1/4, 2/4, 3/4 along wall
+        const ax = (p.x + dx * def.len * t) * sx + Math.cos(perp) * offset;
+        const ay = (p.y + dy * def.len * t) * sy + Math.sin(perp) * offset;
+        ctx.fillStyle = PIECE_COLORS.necron;
+        ctx.fillRect(ax - sq / 2, ay - sq / 2, sq, sq);
+      }
+    }
+  }
+
+  function drawWallEndPiece(ctx, p, sx, sy) {
+    const inch = Math.min(sx, sy);
+    const cx = p.x * sx, cy = p.y * sy;
+    const r = 0.6 * inch;
+    ctx.fillStyle = PIECE_COLORS.wallend;
+    ctx.strokeStyle = '#0a0706';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    // small "X" cross in centre
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - r * 0.45, cy - r * 0.45);
+    ctx.lineTo(cx + r * 0.45, cy + r * 0.45);
+    ctx.moveTo(cx - r * 0.45, cy + r * 0.45);
+    ctx.lineTo(cx + r * 0.45, cy - r * 0.45);
+    ctx.stroke();
+  }
+
+  function drawCirclePiece(ctx, p, def, sx, sy) {
+    const inch = Math.min(sx, sy);
+    const cx = p.x * sx, cy = p.y * sy;
+    const r = def.r * inch;
+    ctx.fillStyle = PIECE_COLORS.teleport;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = PIECE_COLORS.teleportRing;
+    ctx.lineWidth = Math.max(1, inch * 0.08);
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * 0.78, 0, Math.PI * 2);
+    ctx.stroke();
+    if (def.label) {
+      ctx.fillStyle = '#fff';
+      ctx.font = `${Math.round(0.7 * inch)}px monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(def.label, cx, cy);
+    }
+  }
+
+  function drawRectPiece(ctx, p, def, sx, sy) {
+    const inch = Math.min(sx, sy);
+    const horiz = ((p.rot || 0) & 1) === 0;
+    const w = (horiz ? def.w : def.h) * sx;
+    const h = (horiz ? def.h : def.w) * sy;
+    const x = p.x * sx - w / 2;
+    const y = p.y * sy - h / 2;
+
+    if (def.type === 'sarcophagus') {
+      const r = Math.min(w, h) * 0.22; // shaved corners
+      ctx.fillStyle = PIECE_COLORS.sarcophagus;
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.lineTo(x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.lineTo(x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.lineTo(x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      ctx.fillStyle = PIECE_COLORS.rect;
+      ctx.fillRect(x, y, w, h);
+    }
+
+    if (def.label) {
+      ctx.fillStyle = '#fff';
+      ctx.font = `${Math.round(0.55 * inch)}px monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(def.label, p.x * sx, p.y * sy);
+    }
+  }
+
+  function drawPieceCanvas(ctx, p, sx, sy) {
+    const def = PIECES[p.kind];
+    if (!def) return;
+    if (def.type === 'wall')        drawWallPiece(ctx, p, def, sx, sy);
+    else if (def.type === 'wallend') drawWallEndPiece(ctx, p, sx, sy);
+    else if (def.type === 'circle')  drawCirclePiece(ctx, p, def, sx, sy);
+    else if (def.type === 'rect' || def.type === 'sarcophagus') drawRectPiece(ctx, p, def, sx, sy);
+  }
+
   function loadCustomMaps() {
     try {
       const raw = localStorage.getItem('kt.customMaps');
@@ -366,4 +649,13 @@
   root.KT.deleteCustomMap = deleteCustomMap;
   root.KT.getMap = getMap;
   root.KT.allMaps = allMaps;
+  root.KT.PIECES = PIECES;
+  root.KT.PIECE_KINDS = PIECE_KINDS;
+  root.KT.rotDir = rotDir;
+  root.KT.pieceWallSegment = pieceWallSegment;
+  root.KT.pieceTerrainShape = pieceTerrainShape;
+  root.KT.compilePieces = compilePieces;
+  root.KT.compileMap = compileMap;
+  root.KT.pieceHit = pieceHit;
+  root.KT.drawPieceCanvas = drawPieceCanvas;
 })(typeof window !== 'undefined' ? window : globalThis);
