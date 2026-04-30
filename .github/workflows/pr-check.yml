@@ -1,0 +1,44 @@
+name: PR Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  syntax:
+    name: JS / HTML syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check JavaScript syntax
+        run: |
+          set -e
+          shopt -s nullglob
+          fail=0
+          for f in $(git ls-files '*.js'); do
+            echo "checking $f"
+            if ! node --check "$f"; then fail=1; fi
+          done
+          if [ "$fail" -ne 0 ]; then
+            echo "::error::One or more JS files failed node --check"
+            exit 1
+          fi
+
+      - name: Check HTML files exist and are non-empty
+        run: |
+          set -e
+          missing=0
+          for f in $(git ls-files '*.html'); do
+            if [ ! -s "$f" ]; then
+              echo "::error file=$f::HTML file is empty"
+              missing=1
+            fi
+          done
+          exit "$missing"
