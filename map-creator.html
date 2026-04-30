@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Map Creator &middot; Kill Team</title>
+  <meta name="theme-color" content="#0a0706" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="bg-grain scanline">
+  <div class="shell" style="max-width: 1280px;">
+    <header class="masthead" style="padding: 16px 0 6px;">
+      <div class="eyebrow">Cartographer</div>
+      <h1 class="hard-shadow" style="font-size: clamp(32px, 5vw, 56px);">Map Creator</h1>
+      <div class="tagline">Tomb World board editor</div>
+      <div class="rule"></div>
+    </header>
+
+    <section class="panel" style="margin-top: 16px;">
+      <div class="creator-toolbar">
+        <div class="tool-group">
+          <label class="label-cap">Map</label>
+          <input id="map-name" class="text-input" type="text" placeholder="My Map" />
+          <select id="map-split" class="text-input">
+            <option value="vertical">Vertical Split</option>
+            <option value="horizontal">Horizontal Split</option>
+          </select>
+          <select id="map-size" class="text-input">
+            <option value="28x24">28&Prime; &times; 24&Prime; (7&times;6)</option>
+            <option value="22x30">22&Prime; &times; 30&Prime; (alt)</option>
+          </select>
+        </div>
+
+        <div class="tool-group">
+          <label class="label-cap">Tool</label>
+          <button class="btn-tool" data-tool="select">Select</button>
+          <button class="btn-tool" data-tool="wall">Wall</button>
+          <button class="btn-tool" data-tool="terrain">Terrain</button>
+          <button class="btn-tool" data-tool="objective">Objective</button>
+          <button class="btn-tool" data-tool="erase">Erase</button>
+        </div>
+
+        <div class="tool-group" id="terrain-tools" style="display:none;">
+          <label class="label-cap">Type</label>
+          <select id="terrain-type" class="text-input">
+            <option value="octagon">Octagon (C1)</option>
+            <option value="circle">Circle / T</option>
+            <option value="square">Square (C2-C5)</option>
+            <option value="barricade">Barricade</option>
+          </select>
+          <input id="terrain-label" class="text-input" type="text" placeholder="Label (e.g. C1, T)" />
+        </div>
+
+        <div class="tool-group" id="objective-tools" style="display:none;">
+          <label class="label-cap">Owner</label>
+          <select id="obj-owner" class="text-input">
+            <option value="neutral">Neutral</option>
+            <option value="A">Player 1 (Orange)</option>
+            <option value="B">Player 2 (Grey)</option>
+          </select>
+        </div>
+
+        <div class="tool-group">
+          <label class="label-cap">Snap</label>
+          <select id="snap" class="text-input">
+            <option value="0.5">0.5&Prime;</option>
+            <option value="1" selected>1&Prime;</option>
+            <option value="2">2&Prime;</option>
+            <option value="4">4&Prime; (grid)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="creator-layout">
+        <div class="creator-canvas-wrap">
+          <canvas id="creator" class="board"></canvas>
+          <div id="creator-help" class="creator-help"></div>
+        </div>
+
+        <aside class="sidebar creator-sidebar">
+          <div>
+            <div class="label-cap" style="margin-bottom:6px;">Load</div>
+            <select id="load-map" class="text-input" style="width:100%;">
+              <option value="">— New blank map —</option>
+            </select>
+          </div>
+
+          <div class="action-bar" style="justify-content: flex-start; margin-top:0;">
+            <button id="save-btn" class="btn-fire" type="button">Save</button>
+            <button id="export-btn" class="btn-ghost" type="button">Export JSON</button>
+            <button id="import-btn" class="btn-ghost" type="button">Import</button>
+            <button id="delete-btn" class="btn-ghost" type="button">Delete</button>
+          </div>
+
+          <div>
+            <div class="label-cap" style="margin-bottom:6px;">Layers</div>
+            <div id="layer-summary" class="log" style="height: 110px;"></div>
+          </div>
+
+          <div>
+            <div class="label-cap" style="margin-bottom:6px;">Notes</div>
+            <p style="font-size:11px;color:var(--text-muted);line-height:1.5;">
+              Click on the board to place items. Walls take two clicks (start &amp; end).
+              Walls snap to the chosen increment. Use the perimeter automatically — start
+              with the deployment split and add interior rooms.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="action-bar">
+      <a href="./maps.html" class="btn-ghost">Back to Maps</a>
+      <a href="./index.html" class="btn-ghost">Main Menu</a>
+    </div>
+
+    <p class="footer-note">Cogito, ergo aedifico</p>
+  </div>
+
+  <script src="./maps-data.js"></script>
+  <script src="./map-creator.js"></script>
+</body>
+</html>
