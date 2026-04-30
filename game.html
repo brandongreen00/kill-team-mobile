@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Engagement &middot; Kill Team</title>
+  <meta name="theme-color" content="#0a0706" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="bg-grain scanline">
+  <div class="shell">
+    <header class="masthead" style="padding: 12px 0 4px;">
+      <div class="eyebrow" id="map-eyebrow">Theatre</div>
+      <h1 class="hard-shadow" style="font-size: clamp(28px, 4.5vw, 44px);" id="map-title">Engagement</h1>
+      <div class="rule"></div>
+    </header>
+
+    <section class="panel" style="margin-top: 16px;">
+      <div class="hud">
+        <div class="left">
+          <span class="chip" id="turn-chip">Turn 1</span>
+          <span class="chip chip-dim" id="ap-chip">AP —</span>
+        </div>
+        <div class="turn-banner" id="turn-banner">Imperium Activation</div>
+        <div class="right">
+          <button class="btn-ghost" id="end-turn-btn" type="button">End Turn</button>
+        </div>
+      </div>
+
+      <div class="board-wrap">
+        <canvas id="board" class="board" width="720" height="720"></canvas>
+        <aside class="sidebar">
+          <div>
+            <div class="label-cap" style="margin-bottom:6px;">Imperium</div>
+            <div id="team-a"></div>
+          </div>
+          <div>
+            <div class="label-cap" style="margin-bottom:6px;">Chaos</div>
+            <div id="team-b"></div>
+          </div>
+          <div>
+            <div class="label-cap" style="margin-bottom:6px;">Battle Log</div>
+            <div class="log" id="log"></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="action-bar">
+      <a href="./maps.html" class="btn-ghost">Change Map</a>
+      <a href="./index.html" class="btn-ghost">Main Menu</a>
+    </div>
+
+    <p class="footer-note">In the grim darkness of the far future</p>
+  </div>
+
+  <div id="overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:50;align-items:center;justify-content:center;">
+    <div class="panel corner-brackets" style="max-width: 420px; text-align:center; padding: 32px;">
+      <h2 class="section-title" id="overlay-title" style="margin-bottom: 8px;">Victory</h2>
+      <p id="overlay-text" style="color: var(--text); margin: 0 0 20px;">The enemy is broken.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <a href="./game.html" class="btn-fire">Replay</a>
+        <a href="./maps.html" class="btn-ghost">New Map</a>
+        <a href="./index.html" class="btn-ghost">Main Menu</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="./game.js"></script>
+</body>
+</html>

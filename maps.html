@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Map Selection &middot; Kill Team</title>
+  <meta name="theme-color" content="#0a0706" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="bg-grain scanline">
+  <div class="shell">
+    <header class="masthead">
+      <div class="eyebrow">Mission Briefing</div>
+      <h1 class="hard-shadow" style="font-size: clamp(36px, 6vw, 64px);">Select Battlefield</h1>
+      <div class="tagline">Choose your theatre of war</div>
+      <div class="rule"></div>
+    </header>
+
+    <section class="panel" style="margin-top: 24px;">
+      <h2 class="section-title">Battlefields</h2>
+      <div class="grid-cards" id="map-grid"></div>
+    </section>
+
+    <div class="action-bar">
+      <a href="./index.html" class="btn-ghost">Back</a>
+      <button id="deploy-btn" type="button" class="btn-fire" disabled>Deploy Kill Team</button>
+    </div>
+
+    <p class="footer-note">For the Emperor</p>
+  </div>
+
+  <script>
+    const MAPS = [
+      {
+        id: 'gallowdark',
+        name: 'Gallowdark Hulk',
+        desc: 'Cramped corridors of a derelict space hulk. Tight sightlines, dense cover.',
+        cover: 0.18, theme: 'iron'
+      },
+      {
+        id: 'ash-wastes',
+        name: 'Ash Wastes',
+        desc: 'Open dunes broken by ruined transports. Long firing lanes; cover is scarce.',
+        cover: 0.08, theme: 'ochre'
+      },
+      {
+        id: 'manufactorum',
+        name: 'Manufactorum Ruins',
+        desc: 'Collapsed promethium works. Balanced cover and approach lanes.',
+        cover: 0.14, theme: 'rust'
+      },
+      {
+        id: 'hive-vault',
+        name: 'Hive Sub-Vault',
+        desc: 'Tight chokepoints around a central objective. Brutal close-quarters.',
+        cover: 0.20, theme: 'gloom'
+      }
+    ];
+
+    function renderPreview(map) {
+      const W = 12, H = 9;
+      let cells = '';
+      for (let y = 0; y < H; y++) {
+        for (let x = 0; x < W; x++) {
+          const isCover = pseudoRand(map.id + x + ',' + y) < map.cover;
+          const left = (x / W) * 100;
+          const top = (y / H) * 100;
+          const w = (1 / W) * 100;
+          const h = (1 / H) * 100;
+          if (isCover) {
+            cells += `<div style="position:absolute;left:${left}%;top:${top}%;width:${w}%;height:${h}%;background:var(--border-mid);border:1px solid #000;"></div>`;
+          }
+        }
+      }
+      const tint = ({
+        iron: 'rgba(120,120,140,0.05)',
+        ochre: 'rgba(201,167,77,0.08)',
+        rust: 'rgba(184,32,58,0.06)',
+        gloom: 'rgba(20,20,30,0.2)'
+      })[map.theme];
+      return `
+        <div style="position:absolute;inset:0;background:
+          repeating-linear-gradient(0deg, transparent 0, transparent 11.1%, rgba(255,255,255,0.04) 11.1%, rgba(255,255,255,0.04) calc(11.1% + 1px)),
+          repeating-linear-gradient(90deg, transparent 0, transparent 8.33%, rgba(255,255,255,0.04) 8.33%, rgba(255,255,255,0.04) calc(8.33% + 1px)),
+          ${tint};">
+        </div>
+        ${cells}
+      `;
+    }
+
+    function pseudoRand(str) {
+      let h = 2166136261;
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return ((h >>> 0) % 1000) / 1000;
+    }
+
+    const grid = document.getElementById('map-grid');
+    const deployBtn = document.getElementById('deploy-btn');
+    let selected = null;
+
+    MAPS.forEach(map => {
+      const card = document.createElement('div');
+      card.className = 'map-card panel corner-brackets';
+      card.dataset.id = map.id;
+      card.innerHTML = `
+        <div class="preview">${renderPreview(map)}</div>
+        <h3>${map.name}</h3>
+        <p>${map.desc}</p>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="chip">Cover ${(map.cover * 100).toFixed(0)}%</span>
+          <span class="chip chip-dim">12 × 12</span>
+        </div>
+      `;
+      card.addEventListener('click', () => {
+        selected = map.id;
+        document.querySelectorAll('.map-card').forEach(c => c.classList.toggle('selected', c.dataset.id === map.id));
+        deployBtn.disabled = false;
+      });
+      grid.appendChild(card);
+    });
+
+    deployBtn.addEventListener('click', () => {
+      if (!selected) return;
+      sessionStorage.setItem('kt.mapId', selected);
+      window.location.href = './game.html';
+    });
+  </script>
+</body>
+</html>
