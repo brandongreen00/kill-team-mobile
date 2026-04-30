@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roster &middot; Kill Team</title>
+  <meta name="theme-color" content="#0a0706" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="bg-grain scanline">
+  <div class="shell">
+    <header class="masthead" id="page-header">
+      <div class="eyebrow" id="page-eyebrow">Datavault</div>
+      <h1 class="hard-shadow" id="page-title" style="font-size: clamp(36px, 6vw, 64px);">Roster</h1>
+      <div class="tagline" id="page-tagline">Forge your kill team</div>
+      <div class="rule"></div>
+    </header>
+
+    <!-- View: roster index -->
+    <section class="panel" id="view-index" style="margin-top: 24px;">
+      <div class="roster-toolbar">
+        <h2 class="section-title" style="margin: 0;">Saved Rosters</h2>
+        <button id="new-roster-btn" type="button" class="btn-fire">+ New Roster</button>
+      </div>
+      <div id="roster-list"></div>
+    </section>
+
+    <!-- View: faction picker -->
+    <section class="panel" id="view-pick-faction" style="margin-top: 24px; display:none;">
+      <div class="roster-toolbar">
+        <h2 class="section-title" style="margin: 0;">Choose a Kill Team</h2>
+        <span class="roster-count" id="faction-count">— teams</span>
+      </div>
+      <div class="allegiance-tabs" id="allegiance-tabs"></div>
+      <div class="faction-grid" id="faction-grid"></div>
+    </section>
+
+    <!-- View: roster editor -->
+    <section class="panel" id="view-editor" style="margin-top: 24px; display:none;">
+      <div class="roster-toolbar">
+        <div style="flex:1; min-width:240px; display:flex; flex-direction:column; gap:6px;">
+          <span class="label-cap">Roster Name</span>
+          <input type="text" id="roster-name" class="input-text" placeholder="Untitled Kill Team" maxlength="48" />
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+          <span class="label-cap" id="editor-faction-label">Faction</span>
+          <span class="roster-count" id="editor-count">0 operatives</span>
+        </div>
+      </div>
+
+      <div class="editor-grid">
+        <div>
+          <h2 class="section-title">Available Operatives</h2>
+          <div class="operative-list" id="operative-list"></div>
+        </div>
+        <aside class="roster-side">
+          <h2 class="section-title" style="margin-bottom: 6px;">Current Roster</h2>
+          <div id="roster-side-body"></div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="action-bar" id="action-bar">
+      <a href="./index.html" class="btn-ghost" id="back-link">Back to Main Menu</a>
+    </div>
+
+    <p class="footer-note">Knowledge is power, guard it well</p>
+  </div>
+
+  <script src="./factions.js"></script>
+  <script>
+    'use strict';
+
+    // ── Allegiance grouping (data file has no allegiance field) ─────────
+    const ALLEGIANCE = {
+      Imperium: new Set([
+        'kasrkin', 'angels-of-death', 'battleclade', 'celestian-insidiants',
+        'death-korps', 'deathwatch', 'elucidian-starstrider', 'exaction-squad',
+        'hunter-clade', 'imperial-navy-breacher', 'inquisitorial-agent',
+        'novitiates', 'phobos-strike-team', 'ratlings', 'sanctifiers',
+        'scout-squad', 'tempestus-aquilons', 'wolf-scouts'
+      ]),
+      Chaos: new Set([
+        'blooded', 'chaos-cult', 'fellgor-ravager', 'gellerpox-infected',
+        'goremonger', 'legionary', 'murderwing', 'nemesis-claw',
+        'plague-marines', 'warpcoven'
+      ]),
+      Xenos: new Set([
+        'blades-of-khaine', 'brood-brother', 'canoptek-circle',
+        'corsair-voidscarred', 'farstalker-kinband', 'hand-of-the-archon',
+        'hernkyn-yaegir', 'hierotek-circle', 'kommandos', 'mandrakes',
+        'pathfinders', 'raveners', 'vespid-stingwings', 'void-dancer-troupe',
+        'wrecka-krew', 'wyrmblade', 'xv26-stealth-battlesuits'
+      ]),
+    };
+    const ALLEGIANCE_ORDER = ['All', 'Imperium', 'Chaos', 'Xenos'];
+    function allegianceOf(factionId) {
+      for (const key of Object.keys(ALLEGIANCE)) {
+        if (ALLEGIANCE[key].has(factionId)) return key;
+      }
+      return 'Other';
+    }
+
+    // ── Storage ─────────────────────────────────────────────────────────
+    const STORAGE_KEY = 'kt.rosters.v1';
+    function loadRosters() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        console.warn('Failed to load rosters', e);
+        return [];
+      }
+    }
+    function saveRosters(rosters) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(rosters));
+    }
+    function newRosterId() {
+      return 'r_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
+    }
+
+    // ── State ───────────────────────────────────────────────────────────
+    const FACTIONS_BY_ID = Object.fromEntries(FACTIONS.map(f => [f.id, f]));
+    function operativeOf(factionId, operativeId) {
+      const f = FACTIONS_BY_ID[factionId];
+      if (!f) return null;
+      return f.operatives.find(o => o.id === operativeId) || null;
+    }
+
+    let state = {
+      view: 'index',          // 'index' | 'pick' | 'editor'
+      allegianceTab: 'All',
+      activeRoster: null,     // { id, name, factionId, picks: [{ uid, operativeId }] }
+    };
+
+    // ── Views ───────────────────────────────────────────────────────────
+    const views = {
+      index:  document.getElementById('view-index'),
+      pick:   document.getElementById('view-pick-faction'),
+      editor: document.getElementById('view-editor'),
+    };
+    function setView(name) {
+      state.view = name;
+      Object.entries(views).forEach(([k, el]) => {
+        el.style.display = k === name ? '' : 'none';
+      });
+      const eyebrow = document.getElementById('page-eyebrow');
+      const title = document.getElementById('page-title');
+      const tagline = document.getElementById('page-tagline');
+      if (name === 'index')   { eyebrow.textContent = 'Datavault';        title.textContent = 'Roster';            tagline.textContent = 'Forge your kill team'; }
+      if (name === 'pick')    { eyebrow.textContent = 'Recruitment';      title.textContent = 'Select Faction';    tagline.textContent = 'Pledge your allegiance'; }
+      if (name === 'editor')  { eyebrow.textContent = 'Strike Force';     title.textContent = 'Build Roster';      tagline.textContent = 'Assemble the operatives'; }
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    // ── Render: index ───────────────────────────────────────────────────
+    function renderIndex() {
+      const list = document.getElementById('roster-list');
+      const rosters = loadRosters();
+      list.innerHTML = '';
+      if (rosters.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'roster-empty-state';
+        empty.textContent = 'No rosters yet. Create one to begin.';
+        list.appendChild(empty);
+        return;
+      }
+      const wrap = document.createElement('div');
+      wrap.style.display = 'flex';
+      wrap.style.flexDirection = 'column';
+      wrap.style.gap = '10px';
+      rosters.forEach(r => {
+        const faction = FACTIONS_BY_ID[r.factionId];
+        const factionName = faction ? faction.name : '(unknown faction)';
+        const row = document.createElement('div');
+        row.className = 'saved-roster';
+        row.innerHTML = `
+          <div class="saved-meta">
+            <div class="saved-name"></div>
+            <div class="saved-sub"></div>
+          </div>
+          <div class="saved-actions">
+            <button class="btn-add" data-act="edit">Edit</button>
+            <button class="btn-remove" data-act="delete">Delete</button>
+          </div>
+        `;
+        row.querySelector('.saved-name').textContent = r.name || 'Untitled Kill Team';
+        row.querySelector('.saved-sub').textContent =
+          factionName + ' · ' + r.picks.length + ' operative' + (r.picks.length === 1 ? '' : 's');
+        row.addEventListener('click', (ev) => {
+          const act = ev.target && ev.target.dataset && ev.target.dataset.act;
+          if (act === 'delete') {
+            ev.stopPropagation();
+            if (confirm('Delete roster "' + (r.name || 'Untitled') + '"?')) {
+              const next = loadRosters().filter(x => x.id !== r.id);
+              saveRosters(next);
+              renderIndex();
+            }
+            return;
+          }
+          openEditor(r);
+        });
+        wrap.appendChild(row);
+      });
+      list.appendChild(wrap);
+    }
+
+    // ── Render: faction picker ──────────────────────────────────────────
+    function renderFactionPicker() {
+      const tabs = document.getElementById('allegiance-tabs');
+      tabs.innerHTML = '';
+      ALLEGIANCE_ORDER.forEach(label => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'allegiance-tab' + (state.allegianceTab === label ? ' active' : '');
+        btn.textContent = label;
+        btn.addEventListener('click', () => {
+          state.allegianceTab = label;
+          renderFactionPicker();
+        });
+        tabs.appendChild(btn);
+      });
+
+      const grid = document.getElementById('faction-grid');
+      grid.innerHTML = '';
+      const factions = FACTIONS
+        .filter(f => state.allegianceTab === 'All' || allegianceOf(f.id) === state.allegianceTab)
+        .slice()
+        .sort((a, b) => a.name.localeCompare(b.name));
+
+      document.getElementById('faction-count').textContent =
+        factions.length + ' team' + (factions.length === 1 ? '' : 's');
+
+      factions.forEach(f => {
+        const card = document.createElement('div');
+        card.className = 'faction-card corner-brackets';
+        card.innerHTML = `
+          <div class="faction-name"></div>
+          <div class="faction-meta"></div>
+        `;
+        card.querySelector('.faction-name').textContent = f.name;
+        card.querySelector('.faction-meta').textContent =
+          allegianceOf(f.id) + ' · ' + f.operatives.length + ' operatives';
+        card.addEventListener('click', () => {
+          const draft = {
+            id: newRosterId(),
+            name: '',
+            factionId: f.id,
+            picks: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          };
+          openEditor(draft, /*isNew=*/true);
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    // ── Render: editor ──────────────────────────────────────────────────
+    function openEditor(roster, isNew) {
+      state.activeRoster = JSON.parse(JSON.stringify(roster));
+      state.activeRoster._isNew = !!isNew;
+      document.getElementById('roster-name').value = state.activeRoster.name || '';
+      const faction = FACTIONS_BY_ID[state.activeRoster.factionId];
+      document.getElementById('editor-faction-label').textContent = faction ? faction.name : 'Faction';
+      renderEditor();
+      renderActionBar();
+      setView('editor');
+    }
+
+    function renderEditor() {
+      const faction = FACTIONS_BY_ID[state.activeRoster.factionId];
+      const list = document.getElementById('operative-list');
+      list.innerHTML = '';
+      if (!faction) {
+        list.innerHTML = '<div class="roster-empty-state">Faction data missing.</div>';
+        return;
+      }
+      faction.operatives.forEach(op => {
+        list.appendChild(buildOperativeCard(op));
+      });
+      renderRosterSide();
+      const count = state.activeRoster.picks.length;
+      document.getElementById('editor-count').textContent =
+        count + ' operative' + (count === 1 ? '' : 's');
+    }
+
+    function buildOperativeCard(op) {
+      const card = document.createElement('div');
+      card.className = 'op-card';
+      if (!op.weapons || op.weapons.length === 0) card.classList.add('empty-weapons');
+
+      const head = document.createElement('div');
+      head.className = 'op-head';
+
+      const left = document.createElement('div');
+      left.style.display = 'flex';
+      left.style.flexDirection = 'column';
+      left.style.gap = '6px';
+      left.style.flex = '1';
+      left.style.minWidth = '0';
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'op-name';
+      nameEl.textContent = op.name;
+      left.appendChild(nameEl);
+
+      const stats = document.createElement('div');
+      stats.className = 'op-stats';
+      stats.appendChild(chip('SAVE ' + op.save + '+'));
+      stats.appendChild(chip('W ' + op.wounds));
+      stats.appendChild(chip('APL ' + op.apl));
+      stats.appendChild(chip('M ' + op.move, true));
+      left.appendChild(stats);
+
+      head.appendChild(left);
+
+      const actions = document.createElement('div');
+      actions.className = 'op-actions';
+      const addBtn = document.createElement('button');
+      addBtn.type = 'button';
+      addBtn.className = 'btn-add';
+      addBtn.textContent = '+ Add';
+      addBtn.addEventListener('click', () => {
+        state.activeRoster.picks.push({ uid: newRosterId(), operativeId: op.id });
+        renderEditor();
+      });
+      actions.appendChild(addBtn);
+      head.appendChild(actions);
+
+      card.appendChild(head);
+
+      const weapons = document.createElement('div');
+      weapons.className = 'op-weapons';
+      if (!op.weapons || op.weapons.length === 0) {
+        const empty = document.createElement('div');
+        empty.textContent = 'No ranged or melee profile.';
+        weapons.appendChild(empty);
+      } else {
+        op.weapons.forEach(w => {
+          const line = document.createElement('div');
+          line.className = 'weapon-line';
+          const nm = document.createElement('span');
+          nm.className = 'weapon-name';
+          nm.textContent = w.name + (w.is_pistol ? ' • pistol' : '');
+          line.appendChild(nm);
+          line.appendChild(chip('A' + w.atk));
+          line.appendChild(chip(w.hit + '+'));
+          line.appendChild(chip(w.normal_dmg + '/' + w.crit_dmg, true));
+          if (w.rules && w.rules.length) {
+            const rulesEl = document.createElement('span');
+            rulesEl.style.color = 'var(--text-muted)';
+            rulesEl.style.fontSize = '10px';
+            rulesEl.textContent = w.rules.join(' · ');
+            line.appendChild(rulesEl);
+          }
+          weapons.appendChild(line);
+        });
+      }
+      card.appendChild(weapons);
+
+      return card;
+    }
+
+    function chip(text, dim) {
+      const el = document.createElement('span');
+      el.className = 'chip' + (dim ? ' chip-dim' : '');
+      el.textContent = text;
+      return el;
+    }
+
+    function renderRosterSide() {
+      const body = document.getElementById('roster-side-body');
+      body.innerHTML = '';
+      const picks = state.activeRoster.picks;
+      if (picks.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'roster-empty';
+        empty.textContent = 'No operatives selected.';
+        body.appendChild(empty);
+        return;
+      }
+      picks.forEach((pick, idx) => {
+        const op = operativeOf(state.activeRoster.factionId, pick.operativeId);
+        if (!op) return;
+        const row = document.createElement('div');
+        row.className = 'roster-row';
+        const meta = document.createElement('div');
+        meta.style.display = 'flex';
+        meta.style.flexDirection = 'column';
+        meta.style.gap = '2px';
+        meta.style.flex = '1';
+        meta.style.minWidth = '0';
+        const nm = document.createElement('div');
+        nm.className = 'roster-row-name';
+        nm.textContent = (idx + 1) + '. ' + op.name;
+        const sub = document.createElement('div');
+        sub.className = 'roster-row-meta';
+        sub.textContent = 'Sv ' + op.save + '+ · W' + op.wounds + ' · APL' + op.apl;
+        meta.appendChild(nm);
+        meta.appendChild(sub);
+        row.appendChild(meta);
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'btn-remove';
+        remove.textContent = 'Remove';
+        remove.addEventListener('click', () => {
+          state.activeRoster.picks.splice(idx, 1);
+          renderEditor();
+        });
+        row.appendChild(remove);
+        body.appendChild(row);
+      });
+    }
+
+    // ── Action bar (per view) ───────────────────────────────────────────
+    function renderActionBar() {
+      const bar = document.getElementById('action-bar');
+      bar.innerHTML = '';
+      if (state.view === 'editor') {
+        const save = document.createElement('button');
+        save.type = 'button';
+        save.className = 'btn-fire';
+        save.textContent = 'Save Roster';
+        save.addEventListener('click', saveActiveRoster);
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.className = 'btn-ghost';
+        cancel.textContent = 'Cancel';
+        cancel.addEventListener('click', () => {
+          state.activeRoster = null;
+          renderIndex();
+          setView('index');
+          renderActionBar();
+        });
+        bar.appendChild(cancel);
+        bar.appendChild(save);
+        return;
+      }
+      if (state.view === 'pick') {
+        const back = document.createElement('button');
+        back.type = 'button';
+        back.className = 'btn-ghost';
+        back.textContent = 'Back';
+        back.addEventListener('click', () => {
+          renderIndex();
+          setView('index');
+          renderActionBar();
+        });
+        bar.appendChild(back);
+        return;
+      }
+      // index
+      const back = document.createElement('a');
+      back.href = './index.html';
+      back.className = 'btn-ghost';
+      back.textContent = 'Main Menu';
+      bar.appendChild(back);
+    }
+
+    function saveActiveRoster() {
+      const r = state.activeRoster;
+      const name = (document.getElementById('roster-name').value || '').trim();
+      if (!name) {
+        alert('Give your roster a name before saving.');
+        document.getElementById('roster-name').focus();
+        return;
+      }
+      r.name = name;
+      r.updatedAt = Date.now();
+      const all = loadRosters();
+      const existingIdx = all.findIndex(x => x.id === r.id);
+      const stripped = {
+        id: r.id,
+        name: r.name,
+        factionId: r.factionId,
+        picks: r.picks,
+        createdAt: r.createdAt || Date.now(),
+        updatedAt: r.updatedAt,
+      };
+      if (existingIdx >= 0) all[existingIdx] = stripped;
+      else all.unshift(stripped);
+      saveRosters(all);
+      state.activeRoster = null;
+      renderIndex();
+      setView('index');
+      renderActionBar();
+    }
+
+    // ── Wire-up ─────────────────────────────────────────────────────────
+    document.getElementById('new-roster-btn').addEventListener('click', () => {
+      state.allegianceTab = 'All';
+      renderFactionPicker();
+      setView('pick');
+      renderActionBar();
+    });
+
+    // Initial render
+    if (!Array.isArray(window.FACTIONS) || window.FACTIONS.length === 0) {
+      document.getElementById('roster-list').innerHTML =
+        '<div class="roster-empty-state">Faction data failed to load.</div>';
+    } else {
+      renderIndex();
+    }
+    setView('index');
+    renderActionBar();
+  </script>
+</body>
+</html>
