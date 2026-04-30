@@ -34,21 +34,10 @@
         <div class="tool-group">
           <label class="label-cap">Tool</label>
           <button class="btn-tool" data-tool="select">Select</button>
-          <button class="btn-tool" data-tool="wall">Wall</button>
-          <button class="btn-tool" data-tool="terrain">Terrain</button>
+          <button class="btn-tool" data-tool="piece">Pieces</button>
           <button class="btn-tool" data-tool="objective">Objective</button>
           <button class="btn-tool" data-tool="erase">Erase</button>
-        </div>
-
-        <div class="tool-group" id="terrain-tools" style="display:none;">
-          <label class="label-cap">Type</label>
-          <select id="terrain-type" class="text-input">
-            <option value="octagon">Octagon (C1)</option>
-            <option value="circle">Circle / T</option>
-            <option value="square">Square (C2-C5)</option>
-            <option value="barricade">Barricade</option>
-          </select>
-          <input id="terrain-label" class="text-input" type="text" placeholder="Label (e.g. C1, T)" />
+          <button class="btn-tool" data-tool="wall" data-advanced="1" style="display:none;">Wall (advanced)</button>
         </div>
 
         <div class="tool-group" id="objective-tools" style="display:none;">
@@ -64,10 +53,50 @@
           <label class="label-cap">Snap</label>
           <select id="snap" class="text-input">
             <option value="0.5">0.5&Prime;</option>
-            <option value="1" selected>1&Prime;</option>
+            <option value="1">1&Prime;</option>
             <option value="2">2&Prime;</option>
-            <option value="4">4&Prime; (grid)</option>
+            <option value="4" selected>4&Prime; (grid)</option>
           </select>
+        </div>
+
+        <div class="tool-group">
+          <label class="label-cap">
+            <input type="checkbox" id="advanced-toggle" />
+            Advanced
+          </label>
+        </div>
+      </div>
+
+      <div class="piece-picker" id="piece-picker" style="display:none;">
+        <div class="piece-picker-row">
+          <div class="piece-picker-label">Long walls (8&Prime;)</div>
+          <button class="piece-btn" data-kind="A1">A1</button>
+          <button class="piece-btn" data-kind="A2">A2</button>
+          <button class="piece-btn" data-kind="A3">A3</button>
+          <button class="piece-btn" data-kind="A4">A4</button>
+        </div>
+        <div class="piece-picker-row">
+          <div class="piece-picker-label">Short walls (4&Prime;)</div>
+          <button class="piece-btn" data-kind="B1">B1</button>
+          <button class="piece-btn" data-kind="B2">B2</button>
+          <button class="piece-btn" data-kind="B3">B3</button>
+          <button class="piece-btn" data-kind="B4">B4</button>
+        </div>
+        <div class="piece-picker-row">
+          <div class="piece-picker-label">Markers</div>
+          <button class="piece-btn" data-kind="X">X</button>
+          <button class="piece-btn" data-kind="T">T</button>
+        </div>
+        <div class="piece-picker-row">
+          <div class="piece-picker-label">Terrain</div>
+          <button class="piece-btn" data-kind="C1">C1</button>
+          <button class="piece-btn" data-kind="C2">C2</button>
+          <button class="piece-btn" data-kind="C3">C3</button>
+          <button class="piece-btn" data-kind="C4">C4</button>
+          <button class="piece-btn" data-kind="C5">C5</button>
+        </div>
+        <div class="piece-picker-tip">
+          Hover board to preview &middot; <strong>scroll</strong> to rotate &middot; <strong>right-click</strong> to flip side &middot; <strong>click</strong> to place
         </div>
       </div>
 
@@ -97,12 +126,15 @@
             <div id="layer-summary" class="log" style="height: 110px;"></div>
           </div>
 
+          <div id="save-notice" class="save-notice" style="display:none;"></div>
+
           <div>
             <div class="label-cap" style="margin-bottom:6px;">Notes</div>
             <p style="font-size:11px;color:var(--text-muted);line-height:1.5;">
-              Click on the board to place items. Walls take two clicks (start &amp; end).
-              Walls snap to the chosen increment. Use the perimeter automatically — start
-              with the deployment split and add interior rooms.
+              Pick a piece, hover the board to preview placement, scroll to rotate
+              (90&deg;), right-click to flip the decorated side, then click to place.
+              Default snap is 4&Prime; — every tomb-world piece sits along the major
+              grid. Each map should carry exactly two teleport pads (T).
             </p>
           </div>
         </aside>

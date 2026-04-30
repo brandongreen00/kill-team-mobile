@@ -8,19 +8,23 @@
   const splitInput = document.getElementById('map-split');
   const sizeInput = document.getElementById('map-size');
   const snapInput = document.getElementById('snap');
-  const terrainTools = document.getElementById('terrain-tools');
   const objectiveTools = document.getElementById('objective-tools');
-  const terrainTypeInput = document.getElementById('terrain-type');
-  const terrainLabelInput = document.getElementById('terrain-label');
   const objOwnerInput = document.getElementById('obj-owner');
   const layerSummary = document.getElementById('layer-summary');
   const loadSelect = document.getElementById('load-map');
+  const piecePicker = document.getElementById('piece-picker');
+  const advancedToggle = document.getElementById('advanced-toggle');
+  const saveNotice = document.getElementById('save-notice');
 
   let board = { width: 28, height: 24, gridSize: 4 };
   let map = blankMap();
-  let tool = 'select';
-  let pending = null; // first wall click
-  let hoverPt = null;
+  let tool = 'piece';
+  let pendingWall = null;        // legacy freeform wall tool first-click
+  let hoverPt = null;            // snapped board-space point under cursor
+  let pieceKind = 'A1';          // currently selected piece kind
+  let pieceRot = 0;              // 0..3
+  let pieceFlip = false;
+  let advanced = false;
 
   function blankMap() {
     return {
@@ -32,6 +36,7 @@
       doors: [],
       terrain: [],
       objectives: [],
+      pieces: [],
       custom: true,
     };
   }
@@ -43,10 +48,6 @@
 
   // --- Coordinate transforms --------------------------------------------
 
-  function pxPerInch() {
-    return canvas.width / board.width / devicePixelRatio;
-  }
-
   function eventToBoard(evt) {
     const rect = canvas.getBoundingClientRect();
     const x = ((evt.clientX - rect.left) / rect.width) * board.width;
@@ -54,9 +55,13 @@
     return { x, y };
   }
 
-  function snap(v) {
+  function snapVal(v) {
     const s = parseFloat(snapInput.value);
     return Math.round(v / s) * s;
+  }
+
+  function snapPoint(p) {
+    return { x: snapVal(p.x), y: snapVal(p.y) };
   }
 
   // --- Drawing ----------------------------------------------------------
@@ -89,8 +94,8 @@
     ctx.fillStyle = 'rgba(157, 160, 168, 0.30)';
     ctx.fillRect(bZone.x * sx, bZone.y * sy, bZone.w * sx, bZone.h * sy);
 
-    // grid lines
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    // major grid lines (4")
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
     ctx.lineWidth = 1;
     for (let x = 0; x <= board.width; x += board.gridSize) {
       ctx.beginPath();
@@ -103,19 +108,21 @@
       ctx.stroke();
     }
 
-    // sub-grid (1")
-    ctx.strokeStyle = 'rgba(255,255,255,0.025)';
-    for (let x = 0; x <= board.width; x++) {
-      if (x % board.gridSize === 0) continue;
-      ctx.beginPath();
-      ctx.moveTo(x * sx, 0); ctx.lineTo(x * sx, H);
-      ctx.stroke();
-    }
-    for (let y = 0; y <= board.height; y++) {
-      if (y % board.gridSize === 0) continue;
-      ctx.beginPath();
-      ctx.moveTo(0, y * sy); ctx.lineTo(W, y * sy);
-      ctx.stroke();
+    // sub-grid (1") — only if snap is finer than 4"
+    if (parseFloat(snapInput.value) < 4) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.025)';
+      for (let x = 0; x <= board.width; x++) {
+        if (x % board.gridSize === 0) continue;
+        ctx.beginPath();
+        ctx.moveTo(x * sx, 0); ctx.lineTo(x * sx, H);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= board.height; y++) {
+        if (y % board.gridSize === 0) continue;
+        ctx.beginPath();
+        ctx.moveTo(0, y * sy); ctx.lineTo(W, y * sy);
+        ctx.stroke();
+      }
     }
 
     // deployment divider dashed
@@ -138,8 +145,8 @@
     ctx.lineWidth = 4;
     ctx.strokeRect(0, 0, W, H);
 
-    // walls
-    for (const w of map.walls) {
+    // legacy walls (if any)
+    for (const w of map.walls || []) {
       ctx.strokeStyle = '#0a0706';
       ctx.lineWidth = 5;
       ctx.lineCap = 'round';
@@ -149,20 +156,31 @@
       ctx.stroke();
     }
 
-    // pending wall preview
-    if (pending && hoverPt) {
+    // legacy terrain
+    for (const t of map.terrain || []) drawLegacyTerrain(t, sx, sy);
+
+    // pieces
+    for (const p of map.pieces || []) KT.drawPieceCanvas(ctx, p, sx, sy);
+
+    // ghost preview (piece tool)
+    if (tool === 'piece' && hoverPt) {
+      ctx.save();
+      ctx.globalAlpha = 0.55;
+      KT.drawPieceCanvas(ctx, { kind: pieceKind, x: hoverPt.x, y: hoverPt.y, rot: pieceRot, flip: pieceFlip }, sx, sy);
+      ctx.restore();
+    }
+
+    // pending freeform wall preview
+    if (pendingWall && hoverPt) {
       ctx.setLineDash([4, 4]);
       ctx.strokeStyle = 'rgba(201,167,77,0.85)';
       ctx.lineWidth = 3;
       ctx.beginPath();
-      ctx.moveTo(pending.x * sx, pending.y * sy);
+      ctx.moveTo(pendingWall.x * sx, pendingWall.y * sy);
       ctx.lineTo(hoverPt.x * sx, hoverPt.y * sy);
       ctx.stroke();
       ctx.setLineDash([]);
     }
-
-    // terrain
-    for (const t of map.terrain) drawTerrain(t, sx, sy);
 
     // objectives
     for (const o of map.objectives) {
@@ -177,8 +195,8 @@
       ctx.stroke();
     }
 
-    // hover crosshair
-    if (hoverPt) {
+    // hover crosshair (when not piece-mode, since piece-mode shows ghost)
+    if (hoverPt && tool !== 'piece') {
       const hx = hoverPt.x * sx, hy = hoverPt.y * sy;
       ctx.strokeStyle = 'rgba(201,167,77,0.5)';
       ctx.lineWidth = 1;
@@ -189,7 +207,7 @@
     }
   }
 
-  function drawTerrain(t, sx, sy) {
+  function drawLegacyTerrain(t, sx, sy) {
     ctx.fillStyle = '#0a0706';
     ctx.strokeStyle = '#3a302a';
     if (t.type === 'octagon') {
@@ -226,6 +244,16 @@
     } else if (t.type === 'barricade') {
       ctx.lineWidth = 2;
       ctx.strokeRect(t.x * sx, t.y * sy, t.w * sx, t.h * sy);
+    } else if (t.type === 'rect' || t.type === 'sarcophagus') {
+      const w = t.w * sx, h = t.h * sy;
+      ctx.fillRect(t.x * sx - w / 2, t.y * sy - h / 2, w, h);
+      if (t.label) {
+        ctx.fillStyle = '#fff';
+        ctx.font = `${Math.round(0.55 * Math.min(sx, sy))}px monospace`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(t.label, t.x * sx, t.y * sy);
+      }
     }
   }
 
@@ -233,28 +261,47 @@
 
   function setTool(t) {
     tool = t;
-    pending = null;
+    pendingWall = null;
     document.querySelectorAll('.btn-tool').forEach(b => {
       b.classList.toggle('active', b.dataset.tool === t);
     });
-    terrainTools.style.display = (t === 'terrain') ? '' : 'none';
+    piecePicker.style.display = (t === 'piece') ? '' : 'none';
     objectiveTools.style.display = (t === 'objective') ? '' : 'none';
     updateHelp();
+    draw();
   }
 
   function updateHelp() {
     const tips = {
       select: 'Select tool — click to inspect. (No-op)',
-      wall: 'Wall tool — click two points to place a wall segment. Snaps to ' + snapInput.value + '".',
-      terrain: 'Terrain tool — click to place a ' + terrainTypeInput.value + '.',
+      piece: `Pieces — placing ${pieceKind}. Scroll to rotate (${pieceRot * 90}°), right-click to flip side${pieceFlip ? ' (flipped)' : ''}, click to place. Snap ${snapInput.value}".`,
+      wall: 'Wall tool (advanced) — click two points to place a freeform wall segment. Snaps to ' + snapInput.value + '".',
       objective: 'Objective tool — click to place an objective marker.',
-      erase: 'Erase tool — click on a wall, terrain piece or objective to remove it.',
+      erase: 'Erase tool — click on a piece, wall, terrain, or objective to remove it.',
     };
     help.textContent = tips[tool] || '';
   }
 
+  function setPieceKind(kind) {
+    pieceKind = kind;
+    document.querySelectorAll('.piece-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.kind === kind);
+    });
+    updateHelp();
+    draw();
+  }
+
+  function rotatePiece(delta) {
+    pieceRot = ((pieceRot + delta) % 4 + 4) % 4;
+    updateHelp();
+    draw();
+  }
+
   function nearestErase(p) {
-    // Walls (within 0.6")
+    // Pieces (highest priority — drawn on top)
+    for (let i = (map.pieces || []).length - 1; i >= 0; i--) {
+      if (KT.pieceHit(map.pieces[i], p.x, p.y)) return { kind: 'piece', index: i };
+    }
     for (let i = map.walls.length - 1; i >= 0; i--) {
       const w = map.walls[i];
       const d = KT.geom.pointSegDist(p.x, p.y, w.x1, w.y1, w.x2, w.y2);
@@ -265,6 +312,8 @@
       let d;
       if (t.type === 'barricade') {
         d = KT.geom.pointSegDist(p.x, p.y, t.x, t.y, t.x + t.w, t.y + t.h);
+      } else if (t.type === 'rect' || t.type === 'sarcophagus') {
+        d = Math.max(Math.abs(p.x - t.x) - t.w / 2, Math.abs(p.y - t.y) - t.h / 2, 0);
       } else {
         d = Math.hypot(p.x - t.x, p.y - t.y);
       }
@@ -278,39 +327,54 @@
     return null;
   }
 
+  // --- Canvas events ----------------------------------------------------
+
   canvas.addEventListener('mousemove', (evt) => {
     const p = eventToBoard(evt);
-    hoverPt = { x: snap(p.x), y: snap(p.y) };
+    hoverPt = snapPoint(p);
     draw();
   });
 
   canvas.addEventListener('mouseleave', () => { hoverPt = null; draw(); });
 
+  // Disable native context menu so right-click can flip pieces.
+  canvas.addEventListener('contextmenu', (evt) => {
+    evt.preventDefault();
+    if (tool === 'piece') {
+      pieceFlip = !pieceFlip;
+      updateHelp();
+      draw();
+    }
+  });
+
+  canvas.addEventListener('wheel', (evt) => {
+    if (tool !== 'piece') return;
+    evt.preventDefault();
+    rotatePiece(evt.deltaY > 0 ? 1 : -1);
+  }, { passive: false });
+
   canvas.addEventListener('click', (evt) => {
     const p = eventToBoard(evt);
-    const sp = { x: snap(p.x), y: snap(p.y) };
-    if (tool === 'wall') {
-      if (!pending) {
-        pending = sp;
+    const sp = snapPoint(p);
+    if (tool === 'piece') {
+      map.pieces = map.pieces || [];
+      map.pieces.push({ kind: pieceKind, x: sp.x, y: sp.y, rot: pieceRot, flip: pieceFlip });
+    } else if (tool === 'wall') {
+      if (!pendingWall) {
+        pendingWall = sp;
       } else {
-        if (sp.x !== pending.x || sp.y !== pending.y) {
-          map.walls.push({ x1: pending.x, y1: pending.y, x2: sp.x, y2: sp.y });
+        if (sp.x !== pendingWall.x || sp.y !== pendingWall.y) {
+          map.walls.push({ x1: pendingWall.x, y1: pendingWall.y, x2: sp.x, y2: sp.y });
         }
-        pending = null;
+        pendingWall = null;
       }
-    } else if (tool === 'terrain') {
-      const t = { type: terrainTypeInput.value, x: sp.x, y: sp.y, label: terrainLabelInput.value };
-      if (t.type === 'octagon') t.r = 2;
-      else if (t.type === 'circle') t.r = 1.5;
-      else if (t.type === 'square') t.size = 2;
-      else if (t.type === 'barricade') { t.w = 2; t.h = 1; }
-      map.terrain.push(t);
     } else if (tool === 'objective') {
       map.objectives.push({ x: sp.x, y: sp.y, owner: objOwnerInput.value });
     } else if (tool === 'erase') {
       const hit = nearestErase(p);
       if (hit) {
-        if (hit.kind === 'wall') map.walls.splice(hit.index, 1);
+        if (hit.kind === 'piece') map.pieces.splice(hit.index, 1);
+        else if (hit.kind === 'wall') map.walls.splice(hit.index, 1);
         else if (hit.kind === 'terrain') map.terrain.splice(hit.index, 1);
         else if (hit.kind === 'objective') map.objectives.splice(hit.index, 1);
       }
@@ -329,8 +393,12 @@
       p.textContent = `${label}: ${n}`;
       layerSummary.appendChild(p);
     }
-    row('Walls', map.walls.length);
-    row('Terrain', map.terrain.length);
+    const pieceCount = (map.pieces || []).length;
+    const tCount = (map.pieces || []).filter(p => p.kind === 'T').length;
+    row('Pieces', pieceCount);
+    row('Teleport pads', tCount);
+    if ((map.walls || []).length) row('Legacy walls', map.walls.length);
+    if ((map.terrain || []).length) row('Legacy terrain', map.terrain.length);
     row('Objectives', map.objectives.length);
   }
 
@@ -354,6 +422,18 @@
     sizeInput.value = (board.width === 22) ? '22x30' : '28x24';
   }
 
+  function showNotice(msg, kind = 'warn') {
+    saveNotice.textContent = msg;
+    saveNotice.style.display = '';
+    saveNotice.style.borderColor = kind === 'ok' ? '#3a5a2a' : 'var(--warn-border)';
+    saveNotice.style.color = kind === 'ok' ? '#a4d68b' : 'var(--warn)';
+    saveNotice.style.background = kind === 'ok' ? 'rgba(120, 200, 120, 0.06)' : 'rgba(230, 138, 106, 0.08)';
+  }
+
+  function clearNoticeSoon() {
+    setTimeout(() => { saveNotice.style.display = 'none'; }, 4000);
+  }
+
   loadSelect.addEventListener('change', () => {
     const id = loadSelect.value;
     if (!id) {
@@ -362,12 +442,12 @@
       const found = KT.getMap(id);
       if (found) {
         map = JSON.parse(JSON.stringify(found));
-        if (!map.id.startsWith('custom-')) {
-          // forking a built-in map: change id so save creates a new entry
+        if (!map.id || !map.id.startsWith('custom-')) {
           map.id = 'custom-' + Date.now().toString(36);
           map.name = (map.name || 'Map') + ' (copy)';
           map.custom = true;
         }
+        map.pieces = map.pieces || [];
       }
     }
     applyMapToInputs();
@@ -383,7 +463,14 @@
     KT.saveCustomMap(map);
     refreshLoadList();
     loadSelect.value = map.id;
-    alert('Saved "' + map.name + '"');
+
+    const tCount = (map.pieces || []).filter(p => p.kind === 'T').length;
+    if (tCount !== 2) {
+      showNotice(`Saved "${map.name}". Note: this map has ${tCount} teleport pad${tCount === 1 ? '' : 's'} — every tomb-world map should carry exactly 2 (T).`, 'warn');
+    } else {
+      showNotice(`Saved "${map.name}".`, 'ok');
+      clearNoticeSoon();
+    }
   });
 
   document.getElementById('export-btn').addEventListener('click', () => {
@@ -402,6 +489,7 @@
       const parsed = JSON.parse(raw);
       map = parsed;
       map.custom = true;
+      map.pieces = map.pieces || [];
       if (!map.id) map.id = 'custom-' + Date.now().toString(36);
       applyMapToInputs();
       refreshSummary();
@@ -426,15 +514,28 @@
     b.addEventListener('click', () => setTool(b.dataset.tool));
   });
 
+  // Piece picker buttons
+  document.querySelectorAll('.piece-btn').forEach(b => {
+    b.addEventListener('click', () => setPieceKind(b.dataset.kind));
+  });
+
+  advancedToggle.addEventListener('change', () => {
+    advanced = advancedToggle.checked;
+    document.querySelectorAll('.btn-tool[data-advanced="1"]').forEach(b => {
+      b.style.display = advanced ? '' : 'none';
+    });
+    if (!advanced && tool === 'wall') setTool('piece');
+  });
+
   splitInput.addEventListener('change', () => { map.split = splitInput.value; draw(); });
   nameInput.addEventListener('change', () => { map.name = nameInput.value; });
   sizeInput.addEventListener('change', () => { setBoardFromSize(sizeInput.value); draw(); });
-  snapInput.addEventListener('change', updateHelp);
-  terrainTypeInput.addEventListener('change', updateHelp);
+  snapInput.addEventListener('change', () => { updateHelp(); draw(); });
 
   // Init
   setBoardFromSize(sizeInput.value);
-  setTool('wall');
+  setPieceKind('A1');
+  setTool('piece');
   applyMapToInputs();
   refreshSummary();
   refreshLoadList();

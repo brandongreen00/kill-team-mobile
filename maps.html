@@ -43,7 +43,11 @@
     const deployBtn = document.getElementById('deploy-btn');
     let selected = null;
 
-    function renderPreview(map) {
+    function renderPreview(rawMap) {
+      // Expand pieces into the wall/terrain arrays so the preview can use a
+      // single render path. Marker decorations (breach/hatchway/necron) are
+      // omitted at thumbnail scale.
+      const map = window.KT.compileMap(rawMap);
       const W = window.KT.TOMB_BOARD.width;
       const H = window.KT.TOMB_BOARD.height;
       const SCALE = 8; // px per inch in preview
@@ -92,6 +96,16 @@
           svg += `<text x="${t.x*SCALE}" y="${t.y*SCALE+3}" font-size="7" fill="#fff" text-anchor="middle" font-family="monospace">${t.label||''}</text>`;
         } else if (t.type === 'barricade') {
           svg += `<rect x="${t.x*SCALE}" y="${t.y*SCALE}" width="${t.w*SCALE}" height="${t.h*SCALE}" fill="none" stroke="#3a302a" stroke-width="1.5"/>`;
+        } else if (t.type === 'rect') {
+          const tw = t.w*SCALE, th = t.h*SCALE;
+          svg += `<rect x="${t.x*SCALE - tw/2}" y="${t.y*SCALE - th/2}" width="${tw}" height="${th}" fill="#0a0706"/>`;
+          svg += `<text x="${t.x*SCALE}" y="${t.y*SCALE+3}" font-size="7" fill="#fff" text-anchor="middle" font-family="monospace">${t.label||''}</text>`;
+        } else if (t.type === 'sarcophagus') {
+          const tw = t.w*SCALE, th = t.h*SCALE;
+          const r = Math.min(tw, th) * 0.22;
+          const x0 = t.x*SCALE - tw/2, y0 = t.y*SCALE - th/2;
+          svg += `<polygon points="${x0+r},${y0} ${x0+tw-r},${y0} ${x0+tw},${y0+r} ${x0+tw},${y0+th-r} ${x0+tw-r},${y0+th} ${x0+r},${y0+th} ${x0},${y0+th-r} ${x0},${y0+r}" fill="#0a0706"/>`;
+          svg += `<text x="${t.x*SCALE}" y="${t.y*SCALE+3}" font-size="7" fill="#fff" text-anchor="middle" font-family="monospace">${t.label||''}</text>`;
         }
       }
       // Objectives (skulls as circles with tinted ring)
