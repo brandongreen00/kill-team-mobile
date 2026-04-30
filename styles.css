@@ -365,3 +365,278 @@ a:hover { color: var(--text-bright); }
 .log .entry.hit { color: var(--warn); }
 .log .entry.kill { color: var(--accent-action); }
 .log .entry.turn { color: var(--accent-primary); text-transform: uppercase; letter-spacing: 0.18em; font-family: var(--section-font); }
+
+/* ── Roster ─────────────────────────────────────────────────────────── */
+
+.roster-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.roster-toolbar .roster-count {
+  font-family: var(--section-font);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.allegiance-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.allegiance-tab {
+  padding: 6px 14px;
+  font-family: var(--section-font);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.allegiance-tab:hover { color: var(--text-bright); border-color: var(--border-hover); }
+.allegiance-tab.active {
+  color: var(--text-button);
+  border-color: var(--accent-primary);
+  background: var(--accent-action-soft);
+}
+
+.faction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+.faction-card {
+  cursor: pointer;
+  user-select: none;
+  padding: 14px 16px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.faction-card:hover { border-color: var(--accent-primary); background: var(--chip-on-bg); }
+.faction-card .faction-name {
+  font-family: var(--subtitle-font);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: var(--text-bright);
+}
+.faction-card .faction-meta {
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  align-items: flex-start;
+}
+@media (max-width: 880px) {
+  .editor-grid { grid-template-columns: 1fr; }
+}
+
+.operative-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.op-card {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.op-card .op-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.op-card .op-name {
+  font-family: var(--subtitle-font);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: var(--text-bright);
+}
+.op-card .op-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.op-card .op-weapons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.op-card .op-weapons .weapon-name {
+  color: var(--text);
+  font-weight: 600;
+}
+.op-card .op-weapons .weapon-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+}
+.op-card .op-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.op-card.empty-weapons .op-weapons { font-style: italic; color: var(--text-footer); }
+
+.btn-add {
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--accent-primary);
+  border: 1px solid var(--border-mid);
+  font-family: var(--section-font);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.btn-add:hover { border-color: var(--accent-primary); color: var(--text-bright); background: var(--accent-action-soft); }
+
+.btn-remove {
+  padding: 4px 10px;
+  background: transparent;
+  color: var(--warn);
+  border: 1px solid var(--warn-border);
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.btn-remove:hover { border-color: var(--warn); color: var(--text-bright); background: rgba(184, 32, 58, 0.08); }
+
+.roster-side {
+  position: sticky;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.roster-side .roster-empty {
+  padding: 10px;
+  background: var(--input-bg);
+  border: 1px dashed var(--border-mid);
+  color: var(--text-footer);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+.roster-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+}
+.roster-row .roster-row-name {
+  font-family: var(--subtitle-font);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-bright);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.roster-row .roster-row-meta {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.input-text {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--border-mid);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+.input-text:focus { outline: none; border-color: var(--accent-primary); }
+
+.saved-roster {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.saved-roster:hover { border-color: var(--accent-primary); }
+.saved-roster .saved-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.saved-roster .saved-name {
+  font-family: var(--subtitle-font);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-bright);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.saved-roster .saved-sub {
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.saved-roster .saved-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.roster-empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  border: 1px dashed var(--border-mid);
+}
