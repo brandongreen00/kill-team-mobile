@@ -48,6 +48,19 @@
     return x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h;
   }
 
+  // Explicit deployment squares (the deeper-shaded zones). When a map carries
+  // any squares for a team they are the strict deployment area; otherwise the
+  // whole half remains the implicit deployment zone (legacy behaviour).
+  function deploySquares(map, team) {
+    return (map && map.deployZones || []).filter(z => z.team === team);
+  }
+
+  function inDeploySquare(map, team, x, y) {
+    const squares = deploySquares(map, team);
+    if (!squares.length) return inDeployZone(map, team, x, y);
+    return squares.some(z => x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h);
+  }
+
   function deployZone(map, team) {
     const W = TOMB_BOARD.width, H = TOMB_BOARD.height;
     if (map.split === 'vertical') {
@@ -349,8 +362,8 @@
     C1: { type: 'sarcophagus', w: 3.0,  h: 2.0,    cover: 'light',         label: 'C1' },
     C2: { type: 'rect',        w: 2.4,  h: 2.0,    cover: 'debris',        label: 'C2' },
     C3: { type: 'rect',        w: 1.333, h: 1.333, cover: 'debris',        label: 'C3' },
-    C4: { type: 'rect',        w: 1.0,  h: 1.0,    cover: 'debris',        label: 'C4' },
-    C5: { type: 'rect',        w: 1.0,  h: 1.0,    cover: 'debris',        label: 'C5' },
+    C4: { type: 'rect',        w: 1.333, h: 1.333, cover: 'debris',        label: 'C4' },
+    C5: { type: 'rect',        w: 1.333, h: 1.333, cover: 'debris',        label: 'C5' },
   };
 
   const PIECE_KINDS = Object.keys(PIECES);
@@ -649,6 +662,8 @@
   root.KT.geom = { dist, segIntersect, pointSegDist, losBlocked, moveBlocked };
   root.KT.deployZone = deployZone;
   root.KT.inDeployZone = inDeployZone;
+  root.KT.deploySquares = deploySquares;
+  root.KT.inDeploySquare = inDeploySquare;
   root.KT.perimeter = perimeter;
   root.KT.room = room;
   root.KT.loadCustomMaps = loadCustomMaps;

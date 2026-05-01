@@ -219,6 +219,12 @@
     ctx.fillStyle = 'rgba(157, 160, 168, 0.18)';
     ctx.fillRect(bZone.x * s, bZone.y * s, bZone.w * s, bZone.h * s);
 
+    // deeper deployment-square overlays (where operatives must deploy)
+    for (const z of mapDef.deployZones || []) {
+      ctx.fillStyle = z.team === 'A' ? 'rgba(214, 116, 64, 0.45)' : 'rgba(90, 95, 105, 0.45)';
+      ctx.fillRect(z.x * s, z.y * s, z.w * s, z.h * s);
+    }
+
     // grid
     ctx.strokeStyle = 'rgba(255,255,255,0.05)';
     ctx.lineWidth = 1;

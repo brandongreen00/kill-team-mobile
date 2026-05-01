@@ -37,6 +37,7 @@
             <button class="btn-tool" data-tool="select">Select</button>
             <button class="btn-tool" data-tool="piece">Pieces</button>
             <button class="btn-tool" data-tool="objective">Objective</button>
+            <button class="btn-tool" data-tool="deploy">Deploy Zone</button>
             <button class="btn-tool" data-tool="erase">Erase</button>
             <button class="btn-tool" data-tool="wall" data-advanced="1" style="display:none;">Wall (advanced)</button>
           </div>
@@ -46,6 +47,14 @@
           <label class="label-cap">Owner</label>
           <select id="obj-owner" class="text-input">
             <option value="neutral">Neutral</option>
+            <option value="A">Player 1 (Orange)</option>
+            <option value="B">Player 2 (Grey)</option>
+          </select>
+        </div>
+
+        <div class="tool-group" id="deploy-tools" style="display:none;">
+          <label class="label-cap">Team</label>
+          <select id="deploy-team" class="text-input">
             <option value="A">Player 1 (Orange)</option>
             <option value="B">Player 2 (Grey)</option>
           </select>
@@ -154,6 +163,8 @@
               (90&deg;), right-click to flip the decorated side, then click to place.
               Default snap is 4&Prime; — every tomb-world piece sits along the major
               grid. Each map should carry exactly two teleport pads (T).
+              Use <strong>Deploy Zone</strong> to toggle the deeper-shaded 4&Prime;
+              squares where each team's operatives must be deployed.
             </p>
           </div>
         </aside>
