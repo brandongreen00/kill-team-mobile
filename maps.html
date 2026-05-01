@@ -59,6 +59,11 @@
       // Deployment fills (orange = A, grey = B)
       svg += `<rect x="${aZone.x*SCALE}" y="${aZone.y*SCALE}" width="${aZone.w*SCALE}" height="${aZone.h*SCALE}" fill="#e9b07a" opacity="0.55"/>`;
       svg += `<rect x="${bZone.x*SCALE}" y="${bZone.y*SCALE}" width="${bZone.w*SCALE}" height="${bZone.h*SCALE}" fill="#9da0a8" opacity="0.55"/>`;
+      // Deeper deployment squares
+      for (const z of map.deployZones || []) {
+        const fill = z.team === 'A' ? '#d67440' : '#5a5f69';
+        svg += `<rect x="${z.x*SCALE}" y="${z.y*SCALE}" width="${z.w*SCALE}" height="${z.h*SCALE}" fill="${fill}" opacity="0.7"/>`;
+      }
       // Grid lines (4")
       const gs = window.KT.TOMB_BOARD.gridSize;
       for (let x = 0; x <= W; x += gs) {

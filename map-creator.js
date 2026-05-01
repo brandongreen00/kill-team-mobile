@@ -10,6 +10,8 @@
   const snapInput = document.getElementById('snap');
   const objectiveTools = document.getElementById('objective-tools');
   const objOwnerInput = document.getElementById('obj-owner');
+  const deployTools = document.getElementById('deploy-tools');
+  const deployTeamInput = document.getElementById('deploy-team');
   const layerSummary = document.getElementById('layer-summary');
   const loadSelect = document.getElementById('load-map');
   const piecePicker = document.getElementById('piece-picker');
@@ -45,6 +47,7 @@
       terrain: [],
       objectives: [],
       pieces: [],
+      deployZones: [],
       custom: true,
     };
   }
@@ -94,13 +97,18 @@
     ctx.fillStyle = '#1a1714';
     ctx.fillRect(0, 0, W, H);
 
-    // deployment fills
+    // deployment fills (light = team half, deep = explicit deployment squares)
     const aZone = KT.deployZone(map, 'A');
     const bZone = KT.deployZone(map, 'B');
     ctx.fillStyle = 'rgba(233, 176, 122, 0.35)';
     ctx.fillRect(aZone.x * sx, aZone.y * sy, aZone.w * sx, aZone.h * sy);
     ctx.fillStyle = 'rgba(157, 160, 168, 0.30)';
     ctx.fillRect(bZone.x * sx, bZone.y * sy, bZone.w * sx, bZone.h * sy);
+
+    for (const z of map.deployZones || []) {
+      ctx.fillStyle = z.team === 'A' ? 'rgba(214, 116, 64, 0.55)' : 'rgba(90, 95, 105, 0.55)';
+      ctx.fillRect(z.x * sx, z.y * sy, z.w * sx, z.h * sy);
+    }
 
     // major grid lines (4")
     ctx.strokeStyle = 'rgba(255,255,255,0.1)';
@@ -289,6 +297,7 @@
     });
     piecePicker.style.display = (t === 'piece') ? '' : 'none';
     objectiveTools.style.display = (t === 'objective') ? '' : 'none';
+    deployTools.style.display = (t === 'deploy') ? '' : 'none';
     placementActions.style.display = (t === 'piece') ? '' : 'none';
     // Mobile CSS adds bottom padding to body so the fixed action bar
     // never covers the Save / Back buttons. Only apply it when the bar
@@ -305,7 +314,8 @@
       piece: `Pieces — placing ${pieceKind}. Scroll to rotate (${pieceRot * 90}°), right-click to flip side${pieceFlip ? ' (flipped)' : ''}, click to place. Snap ${snapInput.value}".`,
       wall: 'Wall tool (advanced) — click two points to place a freeform wall segment. Snaps to ' + snapInput.value + '".',
       objective: 'Objective tool — click to place an objective marker.',
-      erase: 'Erase tool — click on a piece, wall, terrain, or objective to remove it.',
+      deploy: 'Deploy Zone tool — click a 4" square to toggle it as the active team\'s deployment zone.',
+      erase: 'Erase tool — click on a piece, wall, terrain, objective, or deploy zone to remove it.',
     };
     help.textContent = tips[tool] || '';
   }
@@ -373,6 +383,36 @@
     }
   }
 
+  function deployCellAt(p) {
+    const cell = board.gridSize;
+    const x = Math.max(0, Math.min(board.width - cell, Math.floor(p.x / cell) * cell));
+    const y = Math.max(0, Math.min(board.height - cell, Math.floor(p.y / cell) * cell));
+    return { x, y, w: cell, h: cell };
+  }
+
+  function toggleDeployCell(p) {
+    map.deployZones = map.deployZones || [];
+    const team = deployTeamInput.value;
+    const cell = deployCellAt(p);
+    const idx = map.deployZones.findIndex(z =>
+      z.team === team && z.x === cell.x && z.y === cell.y && z.w === cell.w && z.h === cell.h);
+    if (idx >= 0) {
+      map.deployZones.splice(idx, 1);
+    } else {
+      map.deployZones.push({ team, x: cell.x, y: cell.y, w: cell.w, h: cell.h });
+    }
+  }
+
+  function deployZoneAt(p) {
+    for (let i = (map.deployZones || []).length - 1; i >= 0; i--) {
+      const z = map.deployZones[i];
+      if (p.x >= z.x && p.x <= z.x + z.w && p.y >= z.y && p.y <= z.y + z.h) {
+        return { kind: 'deploy', index: i };
+      }
+    }
+    return null;
+  }
+
   function nearestErase(p) {
     // Pieces (highest priority — drawn on top)
     for (let i = (map.pieces || []).length - 1; i >= 0; i--) {
@@ -400,6 +440,8 @@
       const d = Math.hypot(p.x - o.x, p.y - o.y);
       if (d <= 1.0) return { kind: 'objective', index: i };
     }
+    const dz = deployZoneAt(p);
+    if (dz) return dz;
     return null;
   }
 
@@ -447,6 +489,8 @@
       }
     } else if (tool === 'objective') {
       map.objectives.push({ x: sp.x, y: sp.y, owner: objOwnerInput.value });
+    } else if (tool === 'deploy') {
+      toggleDeployCell(p);
     } else if (tool === 'erase') {
       const hit = nearestErase(p);
       if (hit) {
@@ -454,6 +498,7 @@
         else if (hit.kind === 'wall') map.walls.splice(hit.index, 1);
         else if (hit.kind === 'terrain') map.terrain.splice(hit.index, 1);
         else if (hit.kind === 'objective') map.objectives.splice(hit.index, 1);
+        else if (hit.kind === 'deploy') map.deployZones.splice(hit.index, 1);
       }
     }
     refreshSummary();
@@ -490,6 +535,9 @@
     } else if (tool === 'objective') {
       map.objectives.push({ x: sp.x, y: sp.y, owner: objOwnerInput.value });
       refreshSummary();
+    } else if (tool === 'deploy') {
+      toggleDeployCell(p);
+      refreshSummary();
     } else if (tool === 'erase') {
       const hit = nearestErase(p);
       if (hit) {
@@ -497,6 +545,7 @@
         else if (hit.kind === 'wall') map.walls.splice(hit.index, 1);
         else if (hit.kind === 'terrain') map.terrain.splice(hit.index, 1);
         else if (hit.kind === 'objective') map.objectives.splice(hit.index, 1);
+        else if (hit.kind === 'deploy') map.deployZones.splice(hit.index, 1);
         refreshSummary();
       }
     } else if (tool === 'wall') {
@@ -565,6 +614,12 @@
     if ((map.walls || []).length) row('Legacy walls', map.walls.length);
     if ((map.terrain || []).length) row('Legacy terrain', map.terrain.length);
     row('Objectives', map.objectives.length);
+    const dz = map.deployZones || [];
+    if (dz.length) {
+      const a = dz.filter(z => z.team === 'A').length;
+      const b = dz.filter(z => z.team === 'B').length;
+      row('Deploy zones', `${dz.length} (A:${a} B:${b})`);
+    }
   }
 
   function refreshLoadList() {
@@ -613,6 +668,7 @@
           map.custom = true;
         }
         map.pieces = map.pieces || [];
+        map.deployZones = map.deployZones || [];
       }
     }
     applyMapToInputs();
@@ -655,6 +711,7 @@
       map = parsed;
       map.custom = true;
       map.pieces = map.pieces || [];
+      map.deployZones = map.deployZones || [];
       if (!map.id) map.id = 'custom-' + Date.now().toString(36);
       applyMapToInputs();
       refreshSummary();
