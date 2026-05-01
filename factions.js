@@ -43,6 +43,9 @@ const FACTIONS = [
           { name: "Hot-shot laspistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Chainsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Gun butt", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -54,6 +57,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot lasgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -65,6 +69,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot laspistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -83,6 +88,7 @@ const FACTIONS = [
           { name: "Meltagun", atk: 4, hit: 3, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Plasma gun (standard)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -94,6 +100,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot lasgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -107,6 +114,7 @@ const FACTIONS = [
           { name: "Hot-shot marksman rifle (concealed)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy", "Silent", "Concealed Position*"], is_pistol: false },
           { name: "Hot-shot marksman rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Hot-shot marksman rifle (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -118,6 +126,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot lasgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -129,6 +138,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot lasgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -297,6 +307,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Eradication pistol", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 2, rules: ["Range 8\"", "Devastating 3", "Lethal 5+"], is_pistol: true },
+          { name: "Servo-arc claw", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Severe", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -308,6 +319,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Master-crafted radium pistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Balanced", "Rending"], is_pistol: true },
+          { name: "Dataspikes", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -317,7 +329,9 @@ const FACTIONS = [
         save: 4, wounds: 8, apl: 2, move: "5\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Taser goad", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Shock"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "battleclade-breacher-servitor",
@@ -328,6 +342,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lascutter (short range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 6\"", "Lethal 5+"], is_pistol: false },
+          { name: "Hydraulic pincer & lascutter", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -341,6 +356,7 @@ const FACTIONS = [
           { name: "Incendine igniter", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\"", "Saturate", "Torrent 1\""], is_pistol: false },
           { name: "Meltagun", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Phosphor blaster", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Blast 1\"", "Severe"], is_pistol: false },
+          { name: "Servo-claw", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -354,6 +370,7 @@ const FACTIONS = [
           { name: "Heavy arc rifle", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 6, rules: ["Heavy (Dash only)", "Piercing 1", "Stun"], is_pistol: false },
           { name: "Heavy bolter (focused)", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Dash only)", "Piercing Crits 1"], is_pistol: false },
           { name: "Heavy bolter (sweeping)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Dash only)", "Piercing Crits 1", "Torrent 1\""], is_pistol: false },
+          { name: "Augmetic claw", atk: 3, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -363,7 +380,9 @@ const FACTIONS = [
         save: 4, wounds: 8, apl: 2, move: "5\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Servo-chirurgic claw", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false, is_melee: true },
+        ],
       },
     ],
   },
@@ -386,6 +405,7 @@ const FACTIONS = [
           { name: "Inferno pistol", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 2, rules: ["Range 3\"", "Devastating 3", "Piercing 2"], is_pistol: true },
           { name: "Relic bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
           { name: "Relic condemnor stakethrower", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 2, rules: ["Devastating 2", "Lethal 5+", "Piercing Crits 1", "Silent", "Anti-PSYKER"], is_pistol: false },
+          { name: "Null mace", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Shock", "Anti-PSYKER"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -395,7 +415,10 @@ const FACTIONS = [
         save: 2, wounds: 11, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Blessed sword & praesidium protectiva (defensive)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Shield"], is_pistol: false, is_melee: true },
+          { name: "Blessed sword & praesidium protectiva (offensive)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "insidiant-censor",
@@ -404,7 +427,9 @@ const FACTIONS = [
         save: 3, wounds: 9, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Virge of admonition", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 5, rules: ["Brutal", "Shock", "Anti-PSYKER"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "insidiant-cremator",
@@ -416,6 +441,7 @@ const FACTIONS = [
         weapons: [
           { name: "Hand flamer (standard)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Saturate", "Torrent 1\""], is_pistol: false },
           { name: "Hand flamer (deluge)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 4\"", "Saturate", "Seek Light", "Torrent 0\""], is_pistol: false },
+          { name: "Null mace", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Shock", "Anti-PSYKER"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -427,6 +453,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Voice of condemnation", atk: 5, hit: 3, normal_dmg: 1, crit_dmg: 1, rules: ["Range 6\"", "Seek", "Stun"], is_pistol: false },
+          { name: "Staff of declamation", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -436,7 +463,9 @@ const FACTIONS = [
         save: 3, wounds: 9, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Blessed broadsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+", "Brutal"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "insidiant-reliquarius",
@@ -448,6 +477,7 @@ const FACTIONS = [
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Condemnor stakethrower", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 2, rules: ["Devastating 1", "Piercing Crits 1", "Silent", "Anti-PSYKER"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -460,6 +490,7 @@ const FACTIONS = [
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Condemnor stakethrower", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 2, rules: ["Devastating 1", "Piercing Crits 1", "Silent", "Anti-PSYKER"], is_pistol: false },
+          { name: "Null mace", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Shock", "Anti-PSYKER"], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -485,6 +516,9 @@ const FACTIONS = [
           { name: "Plasma pistol (standard)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
           { name: "Relic laspistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
+          { name: "Bayonet", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+          { name: "Chainsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -496,6 +530,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Trench club", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -510,6 +545,8 @@ const FACTIONS = [
           { name: "Boltgun", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Relic laspistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+          { name: "Chainsword", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -526,6 +563,7 @@ const FACTIONS = [
           { name: "Meltagun", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Plasma gun (standard)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -537,6 +575,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -549,6 +588,7 @@ const FACTIONS = [
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Remote detonator", atk: 4, hit: 2, normal_dmg: 5, crit_dmg: 6, rules: ["Heavy (Dash only)", "Limited", "Piercing 1", "Silent"], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -562,6 +602,7 @@ const FACTIONS = [
           { name: "Long-las (concealed)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy", "Silent", "Concealed Position"], is_pistol: false },
           { name: "Long-las (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Long-las (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -574,6 +615,7 @@ const FACTIONS = [
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Mortar barrage", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Blast 2\"", "Heavy (Dash only)", "Silent"], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -585,6 +627,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -596,6 +639,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bionic arm", atk: 3, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -607,6 +651,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -618,6 +663,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -640,6 +686,7 @@ const FACTIONS = [
         weapons: [
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -651,6 +698,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Power maul & storm shield", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Shock", "Shield"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -662,6 +710,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Special issue bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
+          { name: "Xenophase blade (duel)", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Brutal", "Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Xenophase blade (phase sweep)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Brutal", "Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -675,6 +725,7 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Frag cannon (shell)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 7, rules: ["Piercing 1"], is_pistol: false },
           { name: "Frag cannon (shrapnel)", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Torrent 2\""], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -689,6 +740,7 @@ const FACTIONS = [
           { name: "Auxiliary grenade launcher (krak)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1"], is_pistol: false },
           { name: "Hellstorm bolt rifle", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Torrent 1\""], is_pistol: false },
           { name: "Melta bomb", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 3, rules: ["Range 3\"", "Devastating 3", "Heavy", "Limited", "Piercing 2"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -700,6 +752,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Heavy thunder hammer", atk: 5, hit: 4, normal_dmg: 6, crit_dmg: 7, rules: ["Shock", "Stun"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -711,6 +764,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Marksman bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -724,6 +778,7 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Heavy plasma incinerator (standard)", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Heavy plasma incinerator (supercharge)", atk: 5, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -735,6 +790,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Special issue bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
+          { name: "Combat knives", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -749,6 +805,7 @@ const FACTIONS = [
           { name: "Infernus heavy bolter (flame)", atk: 5, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 8\"", "Saturate", "Torrent 2\""], is_pistol: false },
           { name: "Infernus heavy bolter (focused bolt)", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing Crits 1"], is_pistol: false },
           { name: "Infernus heavy bolter (sweeping bolt)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing Crits 1", "Torrent 1\""], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -761,6 +818,7 @@ const FACTIONS = [
         weapons: [
           { name: "Stalker bolt rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Stalker bolt rifle (heavy)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 5, rules: ["Heavy (Dash only)", "Lethal 5+", "Piercing Crits 1"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -782,6 +840,7 @@ const FACTIONS = [
         attacker_effects: ["merciless"],
         weapons: [
           { name: "Heirloom relic pistol", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Piercing Crits 1", "Seek Light"], is_pistol: true },
+          { name: "Monomolecular cane-rapier", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -791,7 +850,9 @@ const FACTIONS = [
         save: 5, wounds: 7, apl: 2, move: "8\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Vicious bite", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "starstrider-death-cult-executioner",
@@ -802,6 +863,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Dartmask", atk: 4, hit: 3, normal_dmg: 1, crit_dmg: 1, rules: ["Range 6\"", "Lethal 5+", "Silent", "Stun"], is_pistol: false },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -813,6 +875,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Voltaic pistol", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 8\"", "Devastating 1", "Rending"], is_pistol: true },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -824,6 +887,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Laspistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Scalpel claw", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -837,6 +901,7 @@ const FACTIONS = [
           { name: "Artificer shotgun (close range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Artificer shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
           { name: "Relic laspistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -850,6 +915,7 @@ const FACTIONS = [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Rotor cannon (focused)", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Dash only)", "Rending"], is_pistol: false },
           { name: "Rotor cannon (sweeping)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Dash only)", "Rending", "Torrent 1\""], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -873,6 +939,8 @@ const FACTIONS = [
           { name: "Combat shotgun (close range)", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Combat shotgun (long range)", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
           { name: "Shotpistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Dominator maul & assault shield", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Lethal 5+", "Shock", "Repress"], is_pistol: false, is_melee: true },
+          { name: "Repression baton", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -885,6 +953,7 @@ const FACTIONS = [
         weapons: [
           { name: "Combat shotgun (close range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Combat shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Excruciator maul", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 5, rules: ["Rending", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -897,6 +966,7 @@ const FACTIONS = [
         weapons: [
           { name: "Combat shotgun (close range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Combat shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Repression baton", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -911,6 +981,7 @@ const FACTIONS = [
           { name: "Heavy stubber (focused)", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Dash only)"], is_pistol: false },
           { name: "Heavy stubber (sweeping)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Dash only)", "Torrent 1\""], is_pistol: false },
           { name: "Webber", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 12\"", "Severe", "Stun"], is_pistol: false },
+          { name: "Repression baton", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -924,6 +995,7 @@ const FACTIONS = [
           { name: "Combat shotgun (close range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Combat shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
           { name: "Shotpistol", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Repression baton", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -933,7 +1005,9 @@ const FACTIONS = [
         save: 4, wounds: 8, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Mechanical bite", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "arbites-malocator",
@@ -945,6 +1019,7 @@ const FACTIONS = [
         weapons: [
           { name: "Combat shotgun (close range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Combat shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Repression baton", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -958,6 +1033,7 @@ const FACTIONS = [
           { name: "Executioner shotgun (concealed)", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Devastating 4", "Heavy", "Silent", "Concealed Position"], is_pistol: false },
           { name: "Executioner shotgun (mobile)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Executioner shotgun (stationary)", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Devastating 4", "Heavy"], is_pistol: false },
+          { name: "Repression baton", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -970,6 +1046,7 @@ const FACTIONS = [
         weapons: [
           { name: "Scoped shotpistol (short)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
           { name: "Scoped shotpistol (long)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Repression baton", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -981,6 +1058,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Shotpistol", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Shock maul & assault shield", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 4, rules: ["Shock", "Repress"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -993,6 +1071,7 @@ const FACTIONS = [
         weapons: [
           { name: "Combat shotgun (close range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Combat shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Repression baton", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1005,6 +1084,7 @@ const FACTIONS = [
         weapons: [
           { name: "Combat shotgun (close range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Combat shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Repression baton", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -1024,7 +1104,9 @@ const FACTIONS = [
         save: 4, wounds: 11, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Chordclaw & transonic blades", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Balanced", "Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "hc-infiltrator-princeps",
@@ -1036,6 +1118,8 @@ const FACTIONS = [
         weapons: [
           { name: "Flechette blaster", atk: 5, hit: 3, normal_dmg: 2, crit_dmg: 2, rules: ["Range 8\"", "Saturate", "Silent"], is_pistol: false },
           { name: "Stubcarbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless"], is_pistol: false },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Taser goad", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1050,6 +1134,10 @@ const FACTIONS = [
           { name: "Galvanic rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Heavy (Reposition only)", "Piercing Crits 1"], is_pistol: false },
           { name: "Master-crafted radium pistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Balanced", "Rending"], is_pistol: true },
           { name: "Phosphor blast pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Blast 1\"", "Severe"], is_pistol: true },
+          { name: "Arc maul", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Shock"], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Taser goad", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Shock"], is_pistol: false, is_melee: true },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1064,6 +1152,10 @@ const FACTIONS = [
           { name: "Master-crafted radium pistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Balanced", "Rending"], is_pistol: true },
           { name: "Phosphor blast pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Blast 1\"", "Severe"], is_pistol: true },
           { name: "Radium carbine", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Rending"], is_pistol: false },
+          { name: "Arc maul", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Shock"], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Taser goad", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Shock"], is_pistol: false, is_melee: true },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1076,6 +1168,8 @@ const FACTIONS = [
         weapons: [
           { name: "Flechette blaster", atk: 5, hit: 3, normal_dmg: 2, crit_dmg: 2, rules: ["Range 8\"", "Saturate", "Silent"], is_pistol: false },
           { name: "Stubcarbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless"], is_pistol: false },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Taser goad", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1085,7 +1179,10 @@ const FACTIONS = [
         save: 4, wounds: 10, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Chordclaw & transonic razor", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Balanced"], is_pistol: false, is_melee: true },
+          { name: "Transonic blades", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "hc-ranger-diktat",
@@ -1096,6 +1193,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Galvanic rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Heavy (Reposition only)", "Piercing Crits 1"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1111,6 +1209,7 @@ const FACTIONS = [
           { name: "Plasma caliver (supercharge)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
           { name: "Transuranic arquebus (mobile)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 3, rules: ["Devastating 2", "Heavy (Dash only)", "Piercing 1"], is_pistol: false },
           { name: "Transuranic arquebus (stationary)", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 3, rules: ["Devastating 3", "Heavy", "Piercing 1", "Severe"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1122,6 +1221,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Galvanic rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Heavy (Reposition only)", "Piercing Crits 1"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1133,6 +1233,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Galvanic rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Heavy (Reposition only)", "Piercing Crits 1"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1144,6 +1245,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Radium carbine", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Rending"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1159,6 +1261,7 @@ const FACTIONS = [
           { name: "Plasma caliver (supercharge)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
           { name: "Transuranic arquebus (mobile)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 3, rules: ["Devastating 2", "Heavy (Dash only)", "Piercing 1"], is_pistol: false },
           { name: "Transuranic arquebus (stationary)", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 3, rules: ["Devastating 3", "Heavy", "Piercing 1", "Severe"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1170,6 +1273,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Radium carbine", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Rending"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1181,6 +1285,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Radium carbine", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Rending"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -1203,6 +1308,9 @@ const FACTIONS = [
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Heirloom autopistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
+          { name: "Chainsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Navis hatchet", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1215,6 +1323,7 @@ const FACTIONS = [
         weapons: [
           { name: "Navis shotgun (close range)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
           { name: "Navis shotgun (long range)", atk: 4, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Navis hatchet", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1226,6 +1335,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1247,6 +1357,7 @@ const FACTIONS = [
         weapons: [
           { name: "Navis heavy shotgun (close range)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Relentless"], is_pistol: false },
           { name: "Navis heavy shotgun (long range)", atk: 4, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: ["Relentless"], is_pistol: false },
+          { name: "Shield bash", atk: 3, hit: 4, normal_dmg: 1, crit_dmg: 2, rules: ["Brutal", "Shield*"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1269,6 +1380,7 @@ const FACTIONS = [
           { name: "Demolition charge", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Range 3\"", "Blast 2\"", "Heavy", "Limited", "Piercing 1", "Saturate"], is_pistol: false },
           { name: "Navis shotgun (close range)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
           { name: "Navis shotgun (long range)", atk: 4, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Navis hatchet", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1284,6 +1396,7 @@ const FACTIONS = [
           { name: "Navis las-volley (sweeping)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Dash only)", "Rending", "Torrent 1\""], is_pistol: false },
           { name: "Plasma gun (standard)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1295,6 +1408,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Chainfist", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Brutal", "Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1307,6 +1421,7 @@ const FACTIONS = [
         weapons: [
           { name: "Navis shotgun (close range)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
           { name: "Navis shotgun (long range)", atk: 4, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Navis hatchet", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1320,6 +1435,7 @@ const FACTIONS = [
           { name: "Gheistskull detonator", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Blast 1\"", "Lethal 4+", "Limited", "Silent", "Stun"], is_pistol: false },
           { name: "Navis shotgun (close range)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
           { name: "Navis shotgun (long range)", atk: 4, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Navis hatchet", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -1341,6 +1457,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Extended stock relic autopistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 12\"", "Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1359,7 +1476,9 @@ const FACTIONS = [
         save: 4, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Mechanical appendages", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "ia-death-world-veteran",
@@ -1370,6 +1489,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Knife", atk: 1, hit: 2, normal_dmg: 5, crit_dmg: 7, rules: [], is_pistol: false, is_melee: true },
+          { name: "Polearm", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1381,6 +1502,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Paired blades", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Balanced", "Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1392,6 +1514,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Shotgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1403,6 +1526,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 2, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\"", "Seek"], is_pistol: true },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1414,6 +1538,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hand flamer", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Saturate", "Torrent 1\""], is_pistol: false },
+          { name: "Chainsword", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1427,6 +1552,7 @@ const FACTIONS = [
           { name: "Scoped plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 12\"", "Piercing 1"], is_pistol: true },
           { name: "Scoped plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 12\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
           { name: "Suppressed autopistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\"", "Silent"], is_pistol: true },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1438,6 +1564,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Eviscerator", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1453,6 +1580,7 @@ const FACTIONS = [
           { name: "Multi-melta", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 3, rules: ["Devastating 4", "Heavy (Dash only)", "Piercing 2"], is_pistol: false },
           { name: "Plasma cannon (standard)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 6, rules: ["Blast 2\"", "Heavy (Dash only)", "Piercing 1"], is_pistol: false },
           { name: "Plasma cannon (supercharge)", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Blast 2\"", "Heavy (Dash only)", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Servo claw", atk: 3, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1464,6 +1592,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1473,7 +1602,9 @@ const FACTIONS = [
         save: 3, wounds: 8, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Executioner greatblade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "ia-sos-witchseeker",
@@ -1484,6 +1615,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Flamer", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 8\"", "Saturate", "Torrent 2\""], is_pistol: false },
+          { name: "Gun butt", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1502,6 +1634,7 @@ const FACTIONS = [
           { name: "Meltagun", atk: 4, hit: 3, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Plasma gun (standard)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1513,6 +1646,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot lasgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1524,6 +1658,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot lasgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1535,6 +1670,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot lasgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -1559,6 +1695,7 @@ const FACTIONS = [
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
           { name: "Relic bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
           { name: "Relic boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1570,6 +1707,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Condemnor stakethrower", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 2", "Piercing Crits 1", "Silent", "Anti-PSYKER"], is_pistol: false },
+          { name: "Null rod", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 3, rules: ["Shock", "Anti-PSYKER"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1581,6 +1719,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Dialogus stave", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 3, rules: ["Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1592,6 +1731,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Duelling blades", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless", "Riposte"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1603,6 +1743,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Neural whips (ranged)", atk: 5, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["Range 3\"", "Lethal 5+", "Stun"], is_pistol: false },
+          { name: "Neural whips", atk: 5, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["Lethal 5+", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1614,6 +1755,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Surgical saw", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Lethal 5+", "Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1626,6 +1768,7 @@ const FACTIONS = [
         weapons: [
           { name: "Autogun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Novitiate blade", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1637,6 +1780,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Penitent eviscerator", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Brutal", "Zealous Rage"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1646,7 +1790,9 @@ const FACTIONS = [
         save: 4, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Mace of the Righteous", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 5, rules: ["Brutal", "Severe"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "nov-pronatus",
@@ -1657,6 +1803,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1668,6 +1815,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Ministorum flamer", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Range 8\"", "Saturate", "Torrent 2\""], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1679,6 +1827,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -1700,6 +1849,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Marksman bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1711,6 +1861,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Marksman bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1722,6 +1873,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Marksman bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1734,6 +1886,7 @@ const FACTIONS = [
         weapons: [
           { name: "Marksman bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
           { name: "Remote detonator", atk: 4, hit: 2, normal_dmg: 5, crit_dmg: 6, rules: ["Heavy (Dash only)", "Limited", "Piercing 1", "Silent"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1747,6 +1900,7 @@ const FACTIONS = [
           { name: "Custom bolt carbine (Lethal 5+ / Piercing Crits 1)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Piercing Crits 1"], is_pistol: false },
           { name: "Custom bolt carbine (Balanced / Rending)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Balanced", "Rending"], is_pistol: false },
           { name: "Custom bolt carbine (Saturate / Lethal 5+)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Saturate", "Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1758,6 +1912,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Marksman bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1769,6 +1924,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Marksman bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1780,6 +1936,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Marksman bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1791,6 +1948,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Stalker marksman bolt carbine", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1802,6 +1960,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Occulus bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Saturate"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1813,6 +1972,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Occulus bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Saturate"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1825,6 +1985,8 @@ const FACTIONS = [
         weapons: [
           { name: "Bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Accurate 1"], is_pistol: false },
           { name: "Special issue bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
+          { name: "Combat knife", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1837,6 +1999,8 @@ const FACTIONS = [
         weapons: [
           { name: "Bolt carbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Accurate 1"], is_pistol: false },
           { name: "Special issue bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
+          { name: "Combat knife", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -1860,6 +2024,7 @@ const FACTIONS = [
           { name: "Battle rifle", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sniper rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sniper rifle (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1869,7 +2034,9 @@ const FACTIONS = [
         save: 5, wounds: 4, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Bite", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "rat-bullgryn",
@@ -1880,6 +2047,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Grenadier gauntlet", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Blast 2\""], is_pistol: false },
+          { name: "Grenadier gauntlet", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Blast 2\""], is_pistol: false, is_melee: true },
+          { name: "Power maul", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1891,6 +2060,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Ripper gun", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Punishing"], is_pistol: false },
+          { name: "Bayonet", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1903,6 +2073,7 @@ const FACTIONS = [
         weapons: [
           { name: "Tankstopper rifle (mobile)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Devastating 1", "Heavy (Dash only)", "Piercing 1"], is_pistol: false },
           { name: "Tankstopper rifle (stationary)", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 2, rules: ["Devastating 4", "Heavy", "Piercing 1", "Severe"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1916,6 +2087,7 @@ const FACTIONS = [
           { name: "Explosive arsenal", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 3\"", "Blast 1\"", "Heavy", "Limited", "Piercing 1", "Saturate"], is_pistol: false },
           { name: "Sniper rifle (mobile)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sniper rifle (stationary)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Bionic arm", atk: 3, hit: 5, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1927,6 +2099,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Battle rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Combat knife", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Balanced"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1939,6 +2112,7 @@ const FACTIONS = [
         weapons: [
           { name: "Suppressed sniper rifle (mobile)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Silent"], is_pistol: false },
           { name: "Suppressed sniper rifle (stationary)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 2", "Heavy", "Silent"], is_pistol: false },
+          { name: "Dagger", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1951,6 +2125,7 @@ const FACTIONS = [
         weapons: [
           { name: "Suppressed sniper rifle (mobile)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Silent"], is_pistol: false },
           { name: "Suppressed sniper rifle (stationary)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 2", "Heavy", "Silent"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1963,6 +2138,7 @@ const FACTIONS = [
         weapons: [
           { name: "Sniper rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sniper rifle (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1975,6 +2151,7 @@ const FACTIONS = [
         weapons: [
           { name: "Sniper rifle (mobile)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sniper rifle (stationary)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1987,6 +2164,7 @@ const FACTIONS = [
         weapons: [
           { name: "Sniper rifle (mobile)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sniper rifle (stationary)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -1999,6 +2177,7 @@ const FACTIONS = [
         weapons: [
           { name: "Sniper rifle (mobile)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sniper rifle (stationary)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -2018,7 +2197,9 @@ const FACTIONS = [
         save: 5, wounds: 10, apl: 2, move: "6\"",
         defender_abilities: ["sermon_dmg_reduction"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Mace of Censure", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 5, rules: ["Brutal", "Shock"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "sanc-cherub",
@@ -2039,6 +2220,7 @@ const FACTIONS = [
         weapons: [
           { name: "Twin hand flamers (focused)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Saturate", "Torrent 2\"", "Blaze"], is_pistol: false },
           { name: "Twin hand flamers (twin torrent)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Saturate", "Torrent 0\"", "Blaze"], is_pistol: false },
+          { name: "Gun butts", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2050,6 +2232,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Throwing knives", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 5, rules: ["Range 6\"", "Silent"], is_pistol: false },
+          { name: "Ritual blades", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 6, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2059,7 +2242,9 @@ const FACTIONS = [
         save: 5, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Great hammer", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 4, rules: ["Brutal", "Shock"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "sanc-persecutor",
@@ -2070,6 +2255,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hand flamer", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Saturate", "Torrent 1\"", "Blaze"], is_pistol: false },
+          { name: "Eviscerator", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2082,6 +2268,8 @@ const FACTIONS = [
         weapons: [
           { name: "Holy light", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 3, rules: ["Range 8\"", "Devastating 3", "Limited", "Piercing 1", "Saturate", "Blaze"], is_pistol: false },
           { name: "Wreathe in fire", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Blast 1\"", "Limited", "Blaze"], is_pistol: false },
+          { name: "Burning hands", atk: 1, hit: 2, normal_dmg: 7, crit_dmg: 8, rules: ["Brutal", "Limited 1", "Blaze"], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 2, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2097,6 +2285,8 @@ const FACTIONS = [
           { name: "Ministorum flamer", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Range 8\"", "Saturate", "Torrent 2\"", "Blaze"], is_pistol: false },
           { name: "Plasma gun (standard)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Chainsword", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2108,6 +2298,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hand flamer", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Saturate", "Torrent 1\"", "Blaze"], is_pistol: false },
+          { name: "Chainsword", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2119,6 +2310,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hand flamer", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Saturate", "Torrent 1\"", "Blaze"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2128,7 +2320,9 @@ const FACTIONS = [
         save: 5, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Soulstave", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
     ],
   },
@@ -2151,6 +2345,8 @@ const FACTIONS = [
           { name: "Astartes shotgun", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2166,6 +2362,7 @@ const FACTIONS = [
           { name: "Heavy bolter (sweeping)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Dash only)", "Piercing Crits 1", "Torrent 1\""], is_pistol: false },
           { name: "Missile launcher (frag)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Blast 2\"", "Heavy (Dash only)"], is_pistol: false },
           { name: "Missile launcher (krak)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 7, rules: ["Heavy (Dash only)", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2177,6 +2374,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Combat blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2190,6 +2388,7 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Sniper rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sniper rifle (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy (Dash only)", "Silent"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2201,6 +2400,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2214,6 +2414,8 @@ const FACTIONS = [
           { name: "Astartes shotgun", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Combat blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -2237,6 +2439,9 @@ const FACTIONS = [
           { name: "Hot-shot lascarbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Hot-shot laspistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Relic bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
+          { name: "Chainsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2264,6 +2469,7 @@ const FACTIONS = [
         weapons: [
           { name: "Hot-shot laspistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Melta bomb", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 3, rules: ["Range 3\"", "Devastating 3", "Heavy", "Limited", "Piercing 2"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2290,6 +2496,7 @@ const FACTIONS = [
           { name: "Melta carbine", atk: 4, hit: 3, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Plasma carbine (standard)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma carbine (supercharge)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2303,6 +2510,7 @@ const FACTIONS = [
           { name: "Hot-shot long-las (concealed)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy", "Silent", "Concealed Position"], is_pistol: false },
           { name: "Hot-shot long-las (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Hot-shot long-las (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2314,6 +2522,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot laspistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Tempestus dagger", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2325,6 +2534,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Hot-shot lascarbine", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -2347,6 +2557,7 @@ const FACTIONS = [
         weapons: [
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2358,6 +2569,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Absolvor bolt pistol", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 9\"", "Piercing Crits 1"], is_pistol: true },
+          { name: "Combat blade", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2370,6 +2582,7 @@ const FACTIONS = [
         weapons: [
           { name: "Instigator bolt carbine (heavy)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 4, rules: ["Heavy (Dash only)", "Piercing Crits 1", "Silent"], is_pistol: false },
           { name: "Instigator bolt carbine (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Piercing Crits 1", "Silent"], is_pistol: false },
+          { name: "Combat blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2382,6 +2595,7 @@ const FACTIONS = [
         weapons: [
           { name: "Plasma gun (standard)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Combat blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2394,6 +2608,7 @@ const FACTIONS = [
         weapons: [
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Combat blade", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2408,6 +2623,7 @@ const FACTIONS = [
           { name: "Jaws of the World Wolf", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["PSYCHIC", "Blast 2\"", "Severe"], is_pistol: false },
           { name: "Thunderclap", atk: 5, hit: 2, normal_dmg: 2, crit_dmg: 2, rules: ["PSYCHIC", "Range 6\"", "Saturate", "Seek Light", "Stun", "Torrent 2\""], is_pistol: false },
           { name: "Runic stave", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["PSYCHIC", "Shock"], is_pistol: false },
+          { name: "Runic stave", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["PSYCHIC", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2420,6 +2636,7 @@ const FACTIONS = [
         weapons: [
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Combat blade", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2429,7 +2646,9 @@ const FACTIONS = [
         save: 5, wounds: 9, apl: 2, move: "8\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Fangs", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
+        ],
       },
     ],
   },
@@ -2455,6 +2674,10 @@ const FACTIONS = [
           { name: "Laspistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Bayonet", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+          { name: "Chainsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Improvised blade", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2467,6 +2690,7 @@ const FACTIONS = [
         weapons: [
           { name: "Diabolyk bomb", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 3, rules: ["Range 6\"", "Blast 2\"", "Devastating 2", "Limited", "Heavy", "Piercing 1", "Saturate"], is_pistol: false },
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2476,7 +2700,9 @@ const FACTIONS = [
         save: 5, wounds: 8, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Power weapon & cleaver", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Ceaseless", "Lethal 5+", "Blood Offering"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "bl-commsman",
@@ -2487,6 +2713,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2499,6 +2726,7 @@ const FACTIONS = [
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Stimm needle", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2510,6 +2738,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Power fist", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2519,7 +2748,9 @@ const FACTIONS = [
         save: 5, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Skinning blades", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Stalk"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "bl-gunner",
@@ -2535,6 +2766,7 @@ const FACTIONS = [
           { name: "Meltagun", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Plasma gun (standard)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2544,7 +2776,9 @@ const FACTIONS = [
         save: 5, wounds: 16, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Power maul & mutant claw", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Rending", "Shock"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "bl-sharpshooter",
@@ -2556,6 +2790,7 @@ const FACTIONS = [
         weapons: [
           { name: "Long-las (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Long-las (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 1", "Heavy (Dash only)", "Silent"], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2565,7 +2800,9 @@ const FACTIONS = [
         save: 4, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: ["traitor_thug_tough"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Heavy club", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Brutal"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "bl-trench-sweeper",
@@ -2576,6 +2813,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Shotgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
+          { name: "Bayonet & shield", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["Shield"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2587,6 +2825,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -2609,6 +2848,7 @@ const FACTIONS = [
         weapons: [
           { name: "Diabolical stave (ranged)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 6, rules: ["Range 2\"", "Stun"], is_pistol: false },
           { name: "Pistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Diabolical stave (melee)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 6, rules: ["Shock", "Stun"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2618,7 +2858,9 @@ const FACTIONS = [
         save: 5, wounds: 8, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Commune blade", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "cc-iconarch",
@@ -2630,6 +2872,7 @@ const FACTIONS = [
         weapons: [
           { name: "Burning censer", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Range 5\"", "Saturate", "Torrent 2\""], is_pistol: false },
           { name: "Pistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Crude melee weapon", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2641,6 +2884,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Infernal gaze", atk: 5, hit: 3, normal_dmg: 0, crit_dmg: 0, rules: ["PSYCHIC", "Range 6\"", "Devastating 2", "Lethal 3+"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2652,6 +2896,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Pistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Crude melee weapon", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2661,7 +2906,9 @@ const FACTIONS = [
         save: 5, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: ["vanguard_aura"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Blasphemous appendages", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "cc-torment",
@@ -2670,7 +2917,9 @@ const FACTIONS = [
         save: 5, wounds: 13, apl: 2, move: "6\"",
         defender_abilities: ["vanguard_aura"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Hideous mutations", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless", "Rending"], is_pistol: false, is_melee: true },
+        ],
       },
     ],
   },
@@ -2693,6 +2942,8 @@ const FACTIONS = [
           { name: "Corrupted pistol", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Rending"], is_pistol: true },
           { name: "Plasma pistol (standard)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Bludgeon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Brutal"], is_pistol: false, is_melee: true },
+          { name: "Corrupted chainsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2704,6 +2955,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Bludgeon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2713,7 +2965,9 @@ const FACTIONS = [
         save: 5, wounds: 10, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Triple cleavers", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "fg-gnarlscar",
@@ -2724,6 +2978,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Bionic fist", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2735,6 +2990,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Skullcleaver", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+", "Headtaker"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2747,6 +3003,7 @@ const FACTIONS = [
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
           { name: "Crackthorn whip (ranged)", atk: 4, hit: 2, normal_dmg: 2, crit_dmg: 3, rules: ["Range 3\"", "Lethal 4+", "Stun"], is_pistol: false },
+          { name: "Crackthorn whip (melee)", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["Lethal 4+", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2756,7 +3013,9 @@ const FACTIONS = [
         save: 5, wounds: 10, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Vicious claws", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Ceaseless", "Tactual Hunter"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "fg-shaman",
@@ -2768,6 +3027,7 @@ const FACTIONS = [
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
           { name: "Tech-curse", atk: 4, hit: 3, normal_dmg: 1, crit_dmg: 3, rules: ["PSYCHIC", "Rending", "Saturate", "Seek Light"], is_pistol: false },
+          { name: "Braystave", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2779,6 +3039,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Cleaver", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2788,7 +3049,9 @@ const FACTIONS = [
         save: 5, wounds: 10, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Mancrusher", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 5, rules: ["Brutal", "Vicious Blows"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "fg-warrior",
@@ -2799,6 +3062,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Bludgeon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Brutal"], is_pistol: false, is_melee: true },
+          { name: "Cleaver", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -2821,6 +3086,7 @@ const FACTIONS = [
         weapons: [
           { name: "Pyregut (standard)", atk: 5, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Saturate", "Torrent 2\""], is_pistol: false },
           { name: "Pyregut (deluge)", atk: 5, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 4\"", "Saturate", "Seek Light"], is_pistol: false },
+          { name: "Fleshmelded weapons", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Engineered"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2832,6 +3098,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Mutant tentacles", atk: 5, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Range 3\"", "Torrent 1\""], is_pistol: false },
+          { name: "Mutant claw & tentacles (slashing)", atk: 6, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
+          { name: "Mutant claw & tentacles (swiping)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Swipe"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2841,7 +3109,10 @@ const FACTIONS = [
         save: 5, wounds: 20, apl: 2, move: "5\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Mutant fist and cleaver (lopping blow)", atk: 1, hit: 3, normal_dmg: 8, crit_dmg: 9, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Mutant fist and cleaver (slashing)", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "gx-lumberghast",
@@ -2850,7 +3121,9 @@ const FACTIONS = [
         save: 5, wounds: 20, apl: 2, move: "5\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Mutant claw", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 7, rules: ["Brutal"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "gx-mutant",
@@ -2861,6 +3134,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Frag grenade", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 4, rules: ["Range 6\"", "Blast 2\"", "Limited", "Saturate"], is_pistol: false },
+          { name: "Heavy axe", atk: 3, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Brutal"], is_pistol: false, is_melee: true },
+          { name: "Improvised weapon", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2872,6 +3147,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Diseased effluence", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 2, rules: ["Range 6\""], is_pistol: false },
+          { name: "Diseased nippers", atk: 3, hit: 4, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2881,7 +3157,9 @@ const FACTIONS = [
         save: 6, wounds: 2, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Bloodsucking proboscis", atk: 2, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Rending", "Feast"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "gx-eyestinger-swarm",
@@ -2892,6 +3170,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Swarm", atk: 5, hit: 6, normal_dmg: 0, crit_dmg: 0, rules: ["Range 6\"", "Stun"], is_pistol: false },
+          { name: "Sting", atk: 5, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: ["Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2903,6 +3182,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Acid spit", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 2, rules: ["Range 6\"", "Devastating 1", "Piercing 1"], is_pistol: false },
+          { name: "Fanged maw", atk: 2, hit: 4, normal_dmg: 1, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -2924,6 +3204,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Icon of Khorne", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Range 8\"", "Saturate"], is_pistol: false },
+          { name: "Chainblade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2935,6 +3216,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Chainglaive", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2946,6 +3228,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Ritual blade", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Ritual"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2958,6 +3241,7 @@ const FACTIONS = [
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
           { name: "Fleshskewer (ranged)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Stun"], is_pistol: false },
+          { name: "Fleshskewer (stab)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2981,6 +3265,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Great chainaxe", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -2992,6 +3277,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Pickrippers", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -3015,6 +3301,10 @@ const FACTIONS = [
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
           { name: "Tainted bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Power fist", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal"], is_pistol: false, is_melee: true },
+          { name: "Power maul", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Shock"], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Tainted chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3028,6 +3318,7 @@ const FACTIONS = [
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
           { name: "Tainted bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Daemon blade", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 7, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3039,6 +3330,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Daemonic claw", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3052,6 +3344,7 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Fireblast", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["PSYCHIC", "Blast 2\"", "Devastating 1", "Saturate"], is_pistol: false },
           { name: "Life siphon", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["PSYCHIC", "Saturate"], is_pistol: false },
+          { name: "Fell dagger", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Psychic", "Rending", "Siphon Life"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3063,6 +3356,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Double-handed chainaxe", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3078,6 +3372,7 @@ const FACTIONS = [
           { name: "Meltagun", atk: 4, hit: 3, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Plasma gun (standard)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3095,6 +3390,7 @@ const FACTIONS = [
           { name: "Missile launcher (krak)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 7, rules: ["Heavy (Reposition only)", "Piercing 1"], is_pistol: false },
           { name: "Reaper chaincannon (focused)", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Heavy (Reposition only)", "Punishing"], is_pistol: false },
           { name: "Reaper chaincannon (sweeping)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Heavy (Reposition only)", "Punishing", "Torrent 2\""], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3107,6 +3403,8 @@ const FACTIONS = [
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3118,6 +3416,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Flensing blades", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3130,6 +3429,8 @@ const FACTIONS = [
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -3153,6 +3454,10 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Lightning claw", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+", "Rending"], is_pistol: false, is_melee: true },
+          { name: "Power fist", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal", "Shock"], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Relic lightning claws", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Ceaseless", "Lethal 5+", "Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3166,6 +3471,8 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Power fist", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal", "Shock"], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3177,6 +3484,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Mutated claws", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3188,6 +3496,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Great chainaxe", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3199,6 +3508,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3212,6 +3522,7 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3223,6 +3534,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3238,6 +3550,7 @@ const FACTIONS = [
           { name: "Meltagun", atk: 4, hit: 3, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Plasma gun (standard)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3247,7 +3560,9 @@ const FACTIONS = [
         save: 3, wounds: 14, apl: 3, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Lightning claws", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless", "Lethal 5+", "Rending"], is_pistol: false, is_melee: true },
+        ],
       },
     ],
   },
@@ -3270,6 +3585,10 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Nostraman chainblade", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
+          { name: "Power fist", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal"], is_pistol: false, is_melee: true },
+          { name: "Power maul", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Shock"], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3283,6 +3602,7 @@ const FACTIONS = [
           { name: "Scoped bolt pistol (short range)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
           { name: "Scoped bolt pistol (long range)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Terrorchem vial", atk: 5, hit: 3, normal_dmg: 2, crit_dmg: 0, rules: ["Range 6\"", "Blast 2\"", "Devastating 3", "Limited", "Saturate"], is_pistol: false },
+          { name: "Tainted blade", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Terrorchem"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3298,6 +3618,7 @@ const FACTIONS = [
           { name: "Meltagun", atk: 4, hit: 3, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Plasma gun (standard)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Piercing 1"], is_pistol: false },
           { name: "Plasma gun (supercharge)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3313,6 +3634,7 @@ const FACTIONS = [
           { name: "Heavy bolter (sweeping)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Reposition only)", "Piercing Crits 1", "Torrent 1\""], is_pistol: false },
           { name: "Missile launcher (frag)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Blast 2\"", "Heavy (Reposition only)"], is_pistol: false },
           { name: "Missile launcher (krak)", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 7, rules: ["Heavy (Reposition only)", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3322,7 +3644,9 @@ const FACTIONS = [
         save: 3, wounds: 14, apl: 3, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Lightning claws", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless", "Lethal 5+"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "nc-skinthief",
@@ -3333,6 +3657,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Nostraman chainglaive", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3344,6 +3669,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3356,6 +3682,8 @@ const FACTIONS = [
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -3378,6 +3706,7 @@ const FACTIONS = [
         weapons: [
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Plague sword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Severe", "Poison", "Toxic"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3389,6 +3718,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3398,7 +3728,9 @@ const FACTIONS = [
         save: 3, wounds: 14, apl: 3, move: "5\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Flail of Corruption", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Brutal", "Severe", "Shock", "Poison"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "pm-heavy-gunner",
@@ -3409,6 +3741,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Plague spewer", atk: 5, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 7\"", "Saturate", "Severe", "Torrent 2\""], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3420,6 +3753,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Plague knife", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Severe", "Poison"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3432,6 +3766,7 @@ const FACTIONS = [
         weapons: [
           { name: "Entropy", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 7, rules: ["PSYCHIC", "Range 7\"", "Saturate", "Severe"], is_pistol: false },
           { name: "Plague wind", atk: 6, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["PSYCHIC", "Saturate", "Severe", "Torrent 1\""], is_pistol: false },
+          { name: "Corrupted staff", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Psychic", "Severe", "Shock", "Stun", "Poison"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3443,6 +3778,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Plague knife", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Severe", "Poison"], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -3466,6 +3802,8 @@ const FACTIONS = [
           { name: "Doombolt", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 2, rules: ["PSYCHIC", "Devastating 2", "Lethal 5+"], is_pistol: false },
           { name: "Inferno bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Warpflame pistol", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Piercing 1", "Torrent 1\""], is_pistol: true },
+          { name: "Force stave", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["PSYCHIC", "Shock"], is_pistol: false, is_melee: true },
+          { name: "Prosperine khopesh", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3479,6 +3817,8 @@ const FACTIONS = [
           { name: "Fluxblast", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["PSYCHIC", "Blast 2\"", "Rending"], is_pistol: false },
           { name: "Inferno bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Warpflame pistol", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Piercing 1", "Torrent 1\""], is_pistol: true },
+          { name: "Force stave", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["PSYCHIC", "Shock"], is_pistol: false, is_melee: true },
+          { name: "Prosperine khopesh", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3493,6 +3833,8 @@ const FACTIONS = [
           { name: "Inferno bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Mindburn", atk: 5, hit: 4, normal_dmg: 1, crit_dmg: 1, rules: ["PSYCHIC", "Lethal 5+", "Saturate", "Seek Light"], is_pistol: false },
           { name: "Warpflame pistol", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Piercing 1", "Torrent 1\""], is_pistol: true },
+          { name: "Force stave", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["PSYCHIC", "Shock"], is_pistol: false, is_melee: true },
+          { name: "Prosperine khopesh", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3506,6 +3848,7 @@ const FACTIONS = [
           { name: "Soulreaper cannon (focused)", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1"], is_pistol: false },
           { name: "Soulreaper cannon (sweeping)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1", "Torrent 1\""], is_pistol: false },
           { name: "Warpflamer", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 4, rules: ["Range 8\"", "Saturate", "Piercing 1", "Torrent 2\""], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3517,6 +3860,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Inferno boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3528,6 +3872,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Inferno boltgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3537,7 +3882,10 @@ const FACTIONS = [
         save: 5, wounds: 10, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Greataxe", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Brutal", "Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Greatblade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+", "Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "wc-tzaangor-horn-bearer",
@@ -3546,7 +3894,9 @@ const FACTIONS = [
         save: 5, wounds: 9, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Dagger", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "wc-tzaangor-icon-bearer",
@@ -3555,7 +3905,9 @@ const FACTIONS = [
         save: 5, wounds: 9, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Dagger", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "wc-tzaangor-warrior",
@@ -3566,6 +3918,9 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Tzaangor blades", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Balanced"], is_pistol: false, is_melee: true },
+          { name: "Tzaangor blade & shield", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Shield"], is_pistol: false, is_melee: true },
+          { name: "Chainsword", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -3589,6 +3944,10 @@ const FACTIONS = [
           { name: "Shuriken catapult", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
           { name: "Twin shuriken catapult", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Rending"], is_pistol: false },
+          { name: "Diresword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+", "Rending"], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
+          { name: "Gun butts", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3600,6 +3959,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Shuriken catapult", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3612,6 +3972,10 @@ const FACTIONS = [
         weapons: [
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
           { name: "Triskele (throw)", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\"", "Rending", "Torrent 2\""], is_pistol: false },
+          { name: "Executioner", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 7, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Mirrorswords", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Ceaseless", "Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Triskele (slice)", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3623,6 +3987,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3635,6 +4000,9 @@ const FACTIONS = [
         weapons: [
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
           { name: "Twin shuriken pistols", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Ceaseless", "Rending"], is_pistol: true },
+          { name: "Biting blade", atk: 5, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Rending"], is_pistol: false, is_melee: true },
+          { name: "Scorpion's claw and chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Brutal", "Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Twin chainswords", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless", "Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3646,6 +4014,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Chainsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -3669,6 +4038,9 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Drum-fed autogun", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["Ceaseless"], is_pistol: false },
           { name: "Laspistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Bayonet", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+          { name: "Chainsword & claw", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Balanced", "Rending"], is_pistol: false, is_melee: true },
+          { name: "Power weapon & claw", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Balanced", "Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3678,7 +4050,9 @@ const FACTIONS = [
         save: 5, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Shock maul", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 4, rules: ["Shock"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "bb-gunner",
@@ -3703,7 +4077,9 @@ const FACTIONS = [
         save: 5, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Large knife", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "bb-knife-fighter",
@@ -3712,7 +4088,9 @@ const FACTIONS = [
         save: 5, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Poisoned fighting knives", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Lethal 5+"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "bb-medic",
@@ -3724,6 +4102,7 @@ const FACTIONS = [
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Gene-needler", atk: 1, hit: 4, normal_dmg: 5, crit_dmg: 7, rules: ["Lethal 5+", "Limited"], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3735,6 +4114,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Demolition charge", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Range 3\"", "Blast 2\"", "Heavy", "Limited", "Piercing 1", "Saturate"], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3748,6 +4128,7 @@ const FACTIONS = [
           { name: "Sniper rifle (concealed)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy", "Silent", "Concealed Position"], is_pistol: false },
           { name: "Sniper rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sniper rifle (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3759,6 +4140,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3771,6 +4153,7 @@ const FACTIONS = [
         weapons: [
           { name: "Combat shotgun (close range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Combat shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Bayonet & claw", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Balanced"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3782,6 +4165,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Lasgun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
+          { name: "Bayonet", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3791,7 +4175,9 @@ const FACTIONS = [
         save: 5, wounds: 3, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Claws", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "bb-magus",
@@ -3802,6 +4188,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Autopistol", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 8\""], is_pistol: true },
+          { name: "Bio dagger", atk: 2, hit: 4, normal_dmg: 3, crit_dmg: 6, rules: ["Lethal 4+"], is_pistol: false, is_melee: true },
+          { name: "Force stave", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 6, rules: ["Psychic", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3811,7 +4199,9 @@ const FACTIONS = [
         save: 4, wounds: 21, apl: 4, move: "6\"",
         defender_abilities: ["disruption_field"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Claws", atk: 5, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Relentless", "Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "bb-primus",
@@ -3823,6 +4213,7 @@ const FACTIONS = [
         weapons: [
           { name: "Scoped needle pistol (short range)", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Lethal 5+", "Silent"], is_pistol: true },
           { name: "Scoped needle pistol (long range)", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Silent"], is_pistol: true },
+          { name: "Bonesword & toxin injector claw", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+", "Rending"], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -3845,6 +4236,7 @@ const FACTIONS = [
         weapons: [
           { name: "Tremorglaive (part matter)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1", "Piercing Crits 2"], is_pistol: false },
           { name: "Tremorglaive (quake)", atk: 5, hit: 3, normal_dmg: 1, crit_dmg: 2, rules: ["Blast 2\"", "Seek Light", "Stun"], is_pistol: false },
+          { name: "Tremorglaive (sweep)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Severe", "Shock", "Stun"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3856,6 +4248,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Spark", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 4\"", "Piercing 1"], is_pistol: false },
+          { name: "Claws & spark", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Stun"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3867,6 +4260,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Atomiser beam", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Range 6\"", "Lethal 5+"], is_pistol: false },
+          { name: "Claws & tail", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3880,6 +4274,7 @@ const FACTIONS = [
           { name: "Gauss scalpel", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Piercing 1"], is_pistol: false },
           { name: "Tesla caster (focused)", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Tesla caster (living lightning)", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Blast 2\""], is_pistol: false },
+          { name: "Claws & tail", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3893,6 +4288,7 @@ const FACTIONS = [
           { name: "Transdimensional isolator", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: [], is_pistol: false },
           { name: "Twin gauss reapers (focused)", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1", "Severe"], is_pistol: false },
           { name: "Twin gauss reapers (sweeping)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1", "Severe", "Torrent 1\""], is_pistol: false },
+          { name: "Claws", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -3916,6 +4312,7 @@ const FACTIONS = [
           { name: "Neuro disruptor", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1", "Stun"], is_pistol: false },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
           { name: "Shuriken rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3929,6 +4326,7 @@ const FACTIONS = [
           { name: "Ranger long rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Ranger long rifle (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy", "Silent"], is_pistol: false },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3942,6 +4340,7 @@ const FACTIONS = [
           { name: "Blaster", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 2"], is_pistol: false },
           { name: "Shredder", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending", "Torrent 2\""], is_pistol: false },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3956,6 +4355,7 @@ const FACTIONS = [
           { name: "Shuriken cannon (sweeping)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Dash only)", "Rending", "Torrent 1\""], is_pistol: false },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
           { name: "Wraithcannon", atk: 4, hit: 3, normal_dmg: 6, crit_dmg: 3, rules: ["Devastating 4", "Heavy (Dash only)", "Piercing 2"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3967,6 +4367,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Dual power weapons", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Ceaseless", "Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3979,6 +4380,7 @@ const FACTIONS = [
         weapons: [
           { name: "Faolchú", atk: 4, hit: 3, normal_dmg: 1, crit_dmg: 2, rules: ["Rending", "Saturate", "Seek Light", "Silent"], is_pistol: false },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -3991,6 +4393,7 @@ const FACTIONS = [
         weapons: [
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
           { name: "Throwing blades", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 6\"", "Silent"], is_pistol: false },
+          { name: "Hekatarii blades", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Ceaseless", "Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4002,6 +4405,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4014,6 +4418,7 @@ const FACTIONS = [
         weapons: [
           { name: "Fusion pistol", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 3, rules: ["Range 3\"", "Devastating 3", "Piercing 2"], is_pistol: true },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4026,6 +4431,8 @@ const FACTIONS = [
         weapons: [
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
           { name: "Shuriken rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4039,6 +4446,7 @@ const FACTIONS = [
           { name: "Freezing grasp", atk: 4, hit: 3, normal_dmg: 1, crit_dmg: 2, rules: ["PSYCHIC", "Severe", "Silent", "Stun"], is_pistol: false },
           { name: "Lightning strike", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 3, rules: ["PSYCHIC", "Devastating 2"], is_pistol: false },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Witch staff", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["PSYCHIC", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -4061,6 +4469,7 @@ const FACTIONS = [
         weapons: [
           { name: "Kroot rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Pulse weapon", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false },
+          { name: "Ritual blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4074,6 +4483,7 @@ const FACTIONS = [
           { name: "Accelerator bow (fused arrow)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1"], is_pistol: false },
           { name: "Accelerator bow (glide arrow)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Silent"], is_pistol: false },
           { name: "Accelerator bow (voltaic arrow)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Blast 1\""], is_pistol: false },
+          { name: "Blade", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4085,6 +4495,7 @@ const FACTIONS = [
         attacker_effects: ["cruel_tormenter"],
         weapons: [
           { name: "Kroot rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Blade", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4094,7 +4505,9 @@ const FACTIONS = [
         save: 5, wounds: 8, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Cut-skin's blades", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Ceaseless", "Lethal 5+"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "fk-heavy-gunner",
@@ -4106,6 +4519,7 @@ const FACTIONS = [
         weapons: [
           { name: "Dvorgite skinner", atk: 5, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Piercing 2", "Torrent 2\"", "Heavy (Reposition only)"], is_pistol: false },
           { name: "Londaxi tribalest", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1", "Rending", "Heavy (Reposition only)"], is_pistol: false },
+          { name: "Blade", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4115,7 +4529,9 @@ const FACTIONS = [
         save: 5, wounds: 7, apl: 2, move: "8\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Ripping fangs", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "fk-long-sight",
@@ -4128,6 +4544,7 @@ const FACTIONS = [
           { name: "Kroot hunting rifle (concealed)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Heavy", "Devastating 3", "Silent", "Concealed Position"], is_pistol: false },
           { name: "Kroot hunting rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Kroot hunting rifle (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Heavy", "Devastating 3"], is_pistol: false },
+          { name: "Blade", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4140,6 +4557,7 @@ const FACTIONS = [
         weapons: [
           { name: "Dual Kroot pistols (focused)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Ceaseless", "Lethal 5+"], is_pistol: true },
           { name: "Dual Kroot pistols (salvo)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\""], is_pistol: true },
+          { name: "Blade", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4151,6 +4569,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Kroot scattergun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
+          { name: "Stalker's blade", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Balanced", "Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4162,6 +4581,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Kroot rifle", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Stalker's blade", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Balanced", "Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4174,6 +4594,7 @@ const FACTIONS = [
         weapons: [
           { name: "Kroot rifle", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Kroot scattergun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
+          { name: "Stalker's blade", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Balanced", "Rending"], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -4197,6 +4618,10 @@ const FACTIONS = [
           { name: "Blast pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing 2"], is_pistol: true },
           { name: "Splinter pistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
           { name: "Splinter rifle", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Agoniser", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Brutal", "Lethal 5+", "Shock"], is_pistol: false, is_melee: true },
+          { name: "Array of blades", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Venom blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 4+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4208,6 +4633,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Splinter rifle", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
+          { name: "Array of blades", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4219,6 +4645,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Splinter pistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
+          { name: "Razorflail", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 5, rules: ["Brutal", "Tangle"], is_pistol: false, is_melee: true },
+          { name: "Array of blades", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4230,6 +4658,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Stinger pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
+          { name: "Array of blades", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4242,6 +4671,7 @@ const FACTIONS = [
         weapons: [
           { name: "Splinter rifle", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Lethal 5+"], is_pistol: false },
           { name: "Stim-needler", atk: 4, hit: 3, normal_dmg: 0, crit_dmg: 0, rules: ["Range 3\"", "Lethal 3+", "Stun"], is_pistol: false },
+          { name: "Array of blades", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4251,7 +4681,9 @@ const FACTIONS = [
         save: 4, wounds: 8, apl: 2, move: "7\"",
         defender_abilities: ["aggressive_force"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Pain sculptors", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless", "Flay"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "ha-gunner",
@@ -4263,6 +4695,7 @@ const FACTIONS = [
         weapons: [
           { name: "Blaster", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 2"], is_pistol: false },
           { name: "Shredder", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending", "Torrent 2\""], is_pistol: false },
+          { name: "Array of blades", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4276,6 +4709,7 @@ const FACTIONS = [
           { name: "Dark lance", atk: 4, hit: 3, normal_dmg: 6, crit_dmg: 7, rules: ["Heavy (Dash only)", "Piercing 2"], is_pistol: false },
           { name: "Splinter cannon (focused)", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Heavy (Dash only)", "Lethal 5+"], is_pistol: false },
           { name: "Splinter cannon (sweeping)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Heavy (Dash only)", "Lethal 5+", "Torrent 1\""], is_pistol: false },
+          { name: "Array of blades", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4288,6 +4722,7 @@ const FACTIONS = [
         weapons: [
           { name: "Razorwing", atk: 4, hit: 4, normal_dmg: 1, crit_dmg: 2, rules: ["Saturate", "Seek", "Silent"], is_pistol: false },
           { name: "Shardcarbine", atk: 4, hit: 2, normal_dmg: 2, crit_dmg: 2, rules: ["Devastating 2", "Lethal 5+"], is_pistol: false },
+          { name: "Array of blades", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -4311,6 +4746,7 @@ const FACTIONS = [
           { name: "Bolt revolver", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\""], is_pistol: false },
           { name: "Bolt shotgun (short range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Bolt shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Plasma knife", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4322,6 +4758,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Throwing plasma knife", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 6\"", "Lethal 5+", "Limited", "Silent"], is_pistol: false },
+          { name: "Dual plasma knives", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Ceaseless", "Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4333,6 +4770,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Wroughtlock revolvers", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 9\"", "Ceaseless", "Lethal 5+"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4346,6 +4784,7 @@ const FACTIONS = [
           { name: "APM launcher (armour piercing)", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Heavy (Reposition only)", "Piercing 1"], is_pistol: false },
           { name: "APM launcher (breaching)", atk: 5, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Blast 2\"", "Heavy (Reposition only)"], is_pistol: false },
           { name: "APM launcher (high explosive)", atk: 5, hit: 4, normal_dmg: 2, crit_dmg: 4, rules: ["Blast 3\"", "Heavy (Reposition only)"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4357,6 +4796,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Bolt revolver", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\""], is_pistol: false },
+          { name: "Entrencher", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4370,6 +4810,7 @@ const FACTIONS = [
           { name: "Magna-coil rifle (concealed)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy", "Piercing 1", "Silent", "Concealed Position"], is_pistol: false },
           { name: "Magna-coil rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Heavy (Reposition only)", "Piercing 1"], is_pistol: false },
           { name: "Magna-coil rifle (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4382,6 +4823,7 @@ const FACTIONS = [
         weapons: [
           { name: "SiNR handbow", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Silent"], is_pistol: false },
           { name: "Throwing hatchet", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 6\"", "Limited", "Rending", "Silent"], is_pistol: false },
+          { name: "Hatchet", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4395,6 +4837,8 @@ const FACTIONS = [
           { name: "Bolt revolver", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\""], is_pistol: false },
           { name: "Bolt shotgun (short range)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\""], is_pistol: false },
           { name: "Bolt shotgun (long range)", atk: 4, hit: 5, normal_dmg: 2, crit_dmg: 2, rules: [], is_pistol: false },
+          { name: "Plasma knife", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -4417,6 +4861,8 @@ const FACTIONS = [
         weapons: [
           { name: "Aeonstave", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Blast 2\"", "Lethal 5+", "Stun"], is_pistol: false },
           { name: "Entropic lance", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 3, rules: ["Devastating 3", "Piercing 1"], is_pistol: false },
+          { name: "Aeonstave (melee)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Shock"], is_pistol: false, is_melee: true },
+          { name: "Entropic lance (melee)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 6, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4428,6 +4874,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Abyssal lance", atk: 5, hit: 3, normal_dmg: 2, crit_dmg: 2, rules: ["Blast 2\"", "Devastating 1", "Piercing 2"], is_pistol: false },
+          { name: "Abyssal lance (melee)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 4, rules: ["Devastating 1"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4439,6 +4886,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Staff of light", atk: 6, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false },
+          { name: "Staff of light (melee)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4450,6 +4898,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Spark", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: ["Range 4\"", "Piercing 1"], is_pistol: false },
+          { name: "Claws", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4461,6 +4910,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Atomiser beam", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Range 6\"", "Lethal 5+"], is_pistol: false },
+          { name: "Claws", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4472,6 +4922,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Arcane conduit", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1"], is_pistol: false },
+          { name: "Arcane conduit (melee)", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4483,6 +4934,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Synaptic disintegrator", atk: 4, hit: 2, normal_dmg: 4, crit_dmg: 3, rules: ["Devastating 2", "Heavy (Dash only)", "Piercing 1", "Severe"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4495,6 +4947,7 @@ const FACTIONS = [
         weapons: [
           { name: "Gauss blaster", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1"], is_pistol: false },
           { name: "Tesla carbine", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 1"], is_pistol: false },
+          { name: "Bayonet", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4507,6 +4960,7 @@ const FACTIONS = [
         weapons: [
           { name: "Gauss blaster", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1"], is_pistol: false },
           { name: "Tesla carbine", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 1"], is_pistol: false },
+          { name: "Bayonet", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -4528,6 +4982,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Slugga", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Big Choppa", atk: 5, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power Klaw", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4539,6 +4995,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Explosives", atk: 6, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Blast 1\"", "Limited"], is_pistol: false },
+          { name: "Bite", atk: 3, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4550,6 +5007,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Slugga", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Choppa", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4561,6 +5019,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Slugga", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
+          { name: "Breacha Ram", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 5, rules: ["Brutal", "Severe", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4573,6 +5032,7 @@ const FACTIONS = [
         weapons: [
           { name: "Burna (standard)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 8\"", "Saturate", "Torrent 2\""], is_pistol: false },
           { name: "Burna (deluge)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 4\"", "Saturate", "Seek Light", "Torrent 0\""], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4584,6 +5044,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Shokka pistol", atk: 6, hit: 4, normal_dmg: 1, crit_dmg: 0, rules: ["Range 8\"", "Devastating 2", "Severe", "Stun"], is_pistol: true },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4596,6 +5057,7 @@ const FACTIONS = [
         weapons: [
           { name: "Dakka shoota (short range)", atk: 5, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Range 9\"", "Ceaseless"], is_pistol: false },
           { name: "Dakka shoota (long range)", atk: 5, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4605,7 +5067,9 @@ const FACTIONS = [
         save: 5, wounds: 5, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Grot Choppa", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "ko-rokkit-boy",
@@ -4617,6 +5081,7 @@ const FACTIONS = [
         weapons: [
           { name: "Rokkit launcha (aimed)", atk: 6, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Blast 1\"", "Ceaseless", "Heavy (Dash only)"], is_pistol: false },
           { name: "Rokkit launcha (mobile)", atk: 6, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Blast 1\""], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4628,6 +5093,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Throwing knives", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 5, rules: ["Range 6\"", "Silent"], is_pistol: false },
+          { name: "Twin Choppas", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless", "Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4641,6 +5107,7 @@ const FACTIONS = [
           { name: "Scoped big shoota (concealed)", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 2", "Heavy", "Silent", "Concealed Position"], is_pistol: false },
           { name: "Scoped big shoota (stationary)", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 2", "Heavy"], is_pistol: false },
           { name: "Scoped big shoota (sweeping)", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Heavy (Dash only)", "Torrent 1\""], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -4662,6 +5129,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Baleblast", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Soulstrike"], is_pistol: false },
+          { name: "Huskblade", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+", "Shock"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4674,6 +5142,7 @@ const FACTIONS = [
         weapons: [
           { name: "Balesurge (blast)", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Blast 2\"", "Soulstrike"], is_pistol: false },
           { name: "Balesurge (burn)", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Lethal 5+", "Soulstrike"], is_pistol: false },
+          { name: "Glimmersteel blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4685,6 +5154,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Baleblast", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Soulstrike"], is_pistol: false },
+          { name: "Baleblade", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Brutal", "Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4697,6 +5167,7 @@ const FACTIONS = [
         weapons: [
           { name: "Baleblast", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Soulstrike"], is_pistol: false },
           { name: "Horrifying scream", atk: 5, hit: 2, normal_dmg: 2, crit_dmg: 2, rules: ["Range 6\"", "Devastating 2", "Seek Light", "Stun", "Soulstrike"], is_pistol: false },
+          { name: "Glimmersteel blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4708,6 +5179,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Baleblast", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Soulstrike"], is_pistol: false },
+          { name: "Glimmersteel blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4719,6 +5191,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Baleblast", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Soulstrike"], is_pistol: false },
+          { name: "Glimmersteel blade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -4740,6 +5213,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Pulse carbine", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4751,6 +5225,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Pulse carbine", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4762,6 +5237,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Suppressed pulse carbine", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Silent"], is_pistol: false },
+          { name: "Bionic arm", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4773,6 +5249,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Pulse carbine", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4784,6 +5261,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Pulse carbine", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4796,6 +5274,7 @@ const FACTIONS = [
         weapons: [
           { name: "Fusion grenade", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 3, rules: ["Range 6\"", "Devastating 2", "Limited", "Piercing 2", "Saturate"], is_pistol: false },
           { name: "Pulse carbine", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4807,6 +5286,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Pulse carbine", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4818,6 +5298,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Pulse carbine", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4831,6 +5312,7 @@ const FACTIONS = [
           { name: "Ion rifle (standard)", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing Crits 1"], is_pistol: false },
           { name: "Ion rifle (overcharge)", atk: 5, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Hot", "Lethal 5+", "Piercing 1"], is_pistol: false },
           { name: "Rail rifle", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 4, rules: ["Devastating 2", "Lethal 5+", "Piercing 1"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4843,6 +5325,7 @@ const FACTIONS = [
         weapons: [
           { name: "Marksman rail rifle (standard)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Devastating 2", "Lethal 5+", "Piercing 1"], is_pistol: false },
           { name: "Marksman rail rifle (dart round)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Piercing 1", "Silent"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4855,6 +5338,7 @@ const FACTIONS = [
         weapons: [
           { name: "Burst cannon (focused)", atk: 5, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Heavy (Reposition only)", "Punishing"], is_pistol: false },
           { name: "Burst cannon (sweeping)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Heavy (Reposition only)", "Punishing", "Torrent 1\""], is_pistol: false },
+          { name: "Ram", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4866,6 +5350,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Twin pulse carbine", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless"], is_pistol: false },
+          { name: "Ram", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4875,7 +5360,9 @@ const FACTIONS = [
         save: 4, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: ["disruption_field", "hardy"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Ram", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "pf-mv7-marker-drone",
@@ -4884,7 +5371,9 @@ const FACTIONS = [
         save: 4, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Ram", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "pf-mv31-pulse-accelerator",
@@ -4893,7 +5382,9 @@ const FACTIONS = [
         save: 4, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Ram", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "pf-mv33-grav-inhibitor",
@@ -4902,7 +5393,9 @@ const FACTIONS = [
         save: 4, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Ram", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
     ],
   },
@@ -4921,7 +5414,10 @@ const FACTIONS = [
         save: 5, wounds: 21, apl: 3, move: "7\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Tail blade", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Rending", "Silent"], is_pistol: false, is_melee: true },
+          { name: "Scything talons & rending claws", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "rv-felltalon",
@@ -4932,6 +5428,8 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Toxic glands", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 6\"", "Silent"], is_pistol: false },
+          { name: "Pincer tail", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Silent"], is_pistol: false, is_melee: true },
+          { name: "Toxic scythes", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Lethal 5+", "Shock", "Poison"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4941,7 +5439,10 @@ const FACTIONS = [
         save: 5, wounds: 20, apl: 3, move: "7\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Pincer tail", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Silent"], is_pistol: false, is_melee: true },
+          { name: "Scything talons & rending claws", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "rv-venomspitter",
@@ -4953,6 +5454,8 @@ const FACTIONS = [
         weapons: [
           { name: "Venom bolt (blast)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Blast 2\""], is_pistol: false },
           { name: "Venom bolt (focused)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: false },
+          { name: "Pincer tail", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Silent"], is_pistol: false, is_melee: true },
+          { name: "Scything talons", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -4962,7 +5465,10 @@ const FACTIONS = [
         save: 5, wounds: 20, apl: 3, move: "7\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Pincer tail", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Silent"], is_pistol: false, is_melee: true },
+          { name: "Scything talons", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "rv-wrecker",
@@ -4971,7 +5477,10 @@ const FACTIONS = [
         save: 4, wounds: 20, apl: 3, move: "7\"",
         defender_abilities: ["sermon_dmg_reduction"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Bone mace", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Piercing 1", "Silent"], is_pistol: false, is_melee: true },
+          { name: "Scything talons & crushing claws", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Crush"], is_pistol: false, is_melee: true },
+        ],
       },
     ],
   },
@@ -4992,6 +5501,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Neutron blaster", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 2"], is_pistol: false },
+          { name: "Claws", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5001,7 +5511,9 @@ const FACTIONS = [
         save: 2, wounds: 5, apl: 2, move: "8\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Ram", atk: 3, hit: 5, normal_dmg: 1, crit_dmg: 2, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "vp-longsting",
@@ -5013,6 +5525,7 @@ const FACTIONS = [
         weapons: [
           { name: "Neutron rail rifle (standard)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 4, rules: ["Devastating 2"], is_pistol: false },
           { name: "Neutron rail rifle (aimed)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Devastating 2", "Heavy (Dash only)", "Lethal 5+"], is_pistol: false },
+          { name: "Claws", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5025,6 +5538,7 @@ const FACTIONS = [
         weapons: [
           { name: "Neutron sting", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 3, rules: ["Range 8\"", "Devastating 2"], is_pistol: false },
           { name: "Neutron grenade", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\"", "Blast 2\"", "Devastating 2", "Limited", "Saturate"], is_pistol: false },
+          { name: "Claws", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5036,6 +5550,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Neutron grenade launcher", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 3, rules: ["Blast 2\"", "Devastating 2"], is_pistol: false },
+          { name: "Claws", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5048,6 +5563,7 @@ const FACTIONS = [
         weapons: [
           { name: "Flamer (standard)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 8\"", "Saturate", "Torrent 2\""], is_pistol: false },
           { name: "Flamer (skytorch)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Saturate", "Torrent 0\""], is_pistol: false },
+          { name: "Claws", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5059,6 +5575,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Neutron blaster", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 2"], is_pistol: false },
+          { name: "Claws", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -5082,6 +5599,11 @@ const FACTIONS = [
           { name: "Fusion pistol", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 3, rules: ["Range 3\"", "Devastating 3", "Piercing 2"], is_pistol: true },
           { name: "Neuro disruptor", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1", "Stun"], is_pistol: true },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Blade", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: [], is_pistol: false, is_melee: true },
+          { name: "Caress", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
+          { name: "Embrace", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Brutal"], is_pistol: false, is_melee: true },
+          { name: "Kiss", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 7, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5094,6 +5616,7 @@ const FACTIONS = [
         weapons: [
           { name: "Shrieker cannon (focused)", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending", "Heavy (Reposition only)"], is_pistol: false },
           { name: "Shrieker cannon (sweeping)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending", "Heavy (Dash only)", "Torrent 2\""], is_pistol: false },
+          { name: "Shrieker blade", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5107,6 +5630,10 @@ const FACTIONS = [
           { name: "Fusion pistol", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 3, rules: ["Range 3\"", "Devastating 3", "Piercing 2"], is_pistol: true },
           { name: "Neuro disruptor", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1", "Stun"], is_pistol: true },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Blade", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: [], is_pistol: false, is_melee: true },
+          { name: "Caress", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
+          { name: "Embrace", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Brutal"], is_pistol: false, is_melee: true },
+          { name: "Kiss", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 7, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5120,6 +5647,7 @@ const FACTIONS = [
           { name: "Hallucinogen grenade", atk: 4, hit: 3, normal_dmg: 1, crit_dmg: 1, rules: ["Range 6\"", "Blast 2\"", "Lethal 5+", "Seek Light", "Silent", "Stun"], is_pistol: false },
           { name: "Neuro disruptor", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1", "Stun"], is_pistol: true },
           { name: "Shuriken pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Rending"], is_pistol: true },
+          { name: "Miststave", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Shock"], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -5143,6 +5671,8 @@ const FACTIONS = [
           { name: "Rokkit pistol", atk: 6, hit: 5, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Blast 1\""], is_pistol: true },
           { name: "Two rokkit pistols (focused)", atk: 6, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Blast 1\"", "Ceaseless"], is_pistol: true },
           { name: "Two rokkit pistols (salvo)", atk: 6, hit: 5, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Blast 1\""], is_pistol: true },
+          { name: "Choppa", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Smash hammer", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5154,6 +5684,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Explosives", atk: 6, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Blast 1\"", "Limited"], is_pistol: false },
+          { name: "Bite", atk: 3, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5163,7 +5694,10 @@ const FACTIONS = [
         save: 4, wounds: 12, apl: 2, move: "6\"",
         defender_abilities: ["sermon_dmg_reduction"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Tankhammer (bash)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Tankhammer (detonate)", atk: 4, hit: 3, normal_dmg: 0, crit_dmg: 0, rules: ["Lethal 5+", "Limited 1", "Detonate"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "wk-breaka-fighter",
@@ -5172,7 +5706,9 @@ const FACTIONS = [
         save: 4, wounds: 12, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Smash hammer", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Brutal"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "wk-breaka-krusha",
@@ -5181,7 +5717,9 @@ const FACTIONS = [
         save: 4, wounds: 12, apl: 2, move: "6\"",
         defender_abilities: ["armoured_up"],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Knucklebustas", atk: 4, hit: 3, normal_dmg: 5, crit_dmg: 6, rules: ["Brutal", "Shock", "Smash"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "wk-tankbusta-gunner",
@@ -5193,6 +5731,7 @@ const FACTIONS = [
         weapons: [
           { name: "'Eavy rokkit launcha", atk: 6, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Blast 1\"", "Heavy (Dash only)"], is_pistol: false },
           { name: "Rokkit launcha", atk: 6, hit: 5, normal_dmg: 4, crit_dmg: 5, rules: ["Blast 1\""], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5205,6 +5744,7 @@ const FACTIONS = [
         weapons: [
           { name: "Rokkit launcha", atk: 6, hit: 5, normal_dmg: 4, crit_dmg: 5, rules: ["Blast 1\""], is_pistol: false },
           { name: "Rokkit rack", atk: 6, hit: 5, normal_dmg: 4, crit_dmg: 5, rules: ["Blast 2\"", "Heavy (Reposition only)", "Limited", "Relentless"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -5230,6 +5770,10 @@ const FACTIONS = [
           { name: "Master-crafted autopistol", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: ["Range 8\"", "Lethal 5+"], is_pistol: true },
           { name: "Shotgun", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
           { name: "Web pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 6\"", "Severe", "Stun"], is_pistol: true },
+          { name: "Chainsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power maul", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Shock"], is_pistol: false, is_melee: true },
+          { name: "Power pick", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5243,6 +5787,7 @@ const FACTIONS = [
           { name: "Liberator autostubs (hypersense)", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 6\"", "Saturate", "Seek Light"], is_pistol: false },
           { name: "Liberator autostubs (long range)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Piercing Crits 1", "Rending"], is_pistol: false },
           { name: "Liberator autostubs (short range)", atk: 5, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing 1", "Rending"], is_pistol: false },
+          { name: "Kelermorph knife", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Rending"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5254,6 +5799,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Barbed tail", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 3\"", "Silent"], is_pistol: false },
+          { name: "Locus blades", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5268,6 +5814,7 @@ const FACTIONS = [
           { name: "Grenade launcher (frag)", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 4, rules: ["Blast 2\""], is_pistol: false },
           { name: "Grenade launcher (krak)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing 1"], is_pistol: false },
           { name: "Webber", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 12\"", "Severe", "Stun"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5283,6 +5830,7 @@ const FACTIONS = [
           { name: "Mining laser", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Heavy (Dash only)", "Piercing 1"], is_pistol: false },
           { name: "Seismic cannon (long-wave)", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Blast 1\"", "Heavy (Dash only)", "Stun"], is_pistol: false },
           { name: "Seismic cannon (short-wave)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 4, rules: ["Range 6\"", "Heavy (Dash only)", "Piercing Crits 1", "Stun"], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5295,6 +5843,7 @@ const FACTIONS = [
         weapons: [
           { name: "Autogun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Shotgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5307,6 +5856,7 @@ const FACTIONS = [
         weapons: [
           { name: "Sanctus sniper rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
           { name: "Sanctus sniper rifle (stationary)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy (Dash only)", "Silent"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 2, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5316,7 +5866,9 @@ const FACTIONS = [
         save: 4, wounds: 9, apl: 3, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Sanctus bio-dagger", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 6, rules: ["Lethal 4+", "Shock"], is_pistol: false, is_melee: true },
+        ],
       },
       {
         id: "wb-neophyte-warrior",
@@ -5328,6 +5880,7 @@ const FACTIONS = [
         weapons: [
           { name: "Autogun", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false },
           { name: "Shotgun", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 3, rules: ["Range 6\""], is_pistol: false },
+          { name: "Gun butt", atk: 3, hit: 4, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
@@ -5354,6 +5907,7 @@ const FACTIONS = [
           { name: "Fusion blaster (long range)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 12\"", "Piercing 1"], is_pistol: false },
           { name: "Pulse pistol (ranged)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\""], is_pistol: true },
           { name: "Pulse pistol (point-blank)", atk: 3, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Accurate 1"], is_pistol: true },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5368,6 +5922,7 @@ const FACTIONS = [
           { name: "Burst cannon (sweeping)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Torrent 1\""], is_pistol: false },
           { name: "Fusion blaster (short range)", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Fusion blaster (long range)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 12\"", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5382,6 +5937,7 @@ const FACTIONS = [
           { name: "Burst cannon (sweeping)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Torrent 1\""], is_pistol: false },
           { name: "Fusion blaster (short range)", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Fusion blaster (long range)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 12\"", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5397,6 +5953,7 @@ const FACTIONS = [
           { name: "EMP bomb", atk: 5, hit: 3, normal_dmg: 2, crit_dmg: 2, rules: ["Range 4\"", "Blast 2\"", "Devastating 1", "Heavy (Reposition only)", "Lethal 4+", "Limited", "Saturate"], is_pistol: false },
           { name: "Fusion blaster (short range)", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Fusion blaster (long range)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 12\"", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5411,6 +5968,7 @@ const FACTIONS = [
           { name: "Burst cannon (sweeping)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Torrent 1\""], is_pistol: false },
           { name: "Fusion blaster (short range)", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Fusion blaster (long range)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 12\"", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5425,6 +5983,7 @@ const FACTIONS = [
           { name: "Burst cannon (sweeping)", atk: 4, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: ["Ceaseless", "Torrent 1\""], is_pistol: false },
           { name: "Fusion blaster (short range)", atk: 4, hit: 4, normal_dmg: 6, crit_dmg: 3, rules: ["Range 6\"", "Devastating 4", "Piercing 2"], is_pistol: false },
           { name: "Fusion blaster (long range)", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 12\"", "Piercing 1"], is_pistol: false },
+          { name: "Fists", atk: 3, hit: 4, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5436,6 +5995,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Twin pulse carbine", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Ceaseless"], is_pistol: false },
+          { name: "Ram", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -5445,7 +6005,9 @@ const FACTIONS = [
         save: 4, wounds: 7, apl: 2, move: "6\"",
         defender_abilities: [],
         attacker_effects: [],
-        weapons: [],
+        weapons: [
+          { name: "Ram", atk: 3, hit: 5, normal_dmg: 2, crit_dmg: 3, rules: [], is_pistol: false, is_melee: true },
+        ],
       },
     ],
   },
