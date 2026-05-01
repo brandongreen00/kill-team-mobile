@@ -129,6 +129,30 @@
       return f.operatives.find(o => o.id === operativeId) || null;
     }
 
+    // ── Weapon loadout helpers ──────────────────────────────────────────
+    // Strip a trailing parenthesised clarifier so firing modes share a base.
+    // e.g. "Hot-shot volley gun (focused)" -> "Hot-shot volley gun"
+    function weaponBaseName(name) {
+      return String(name || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+    }
+    function uniqueWeaponBases(weapons) {
+      const seen = new Set();
+      const out = [];
+      (weapons || []).forEach(w => {
+        const base = weaponBaseName(w.name);
+        if (!seen.has(base)) { seen.add(base); out.push(base); }
+      });
+      return out;
+    }
+    function operativeRequiresChoice(op) {
+      return uniqueWeaponBases(op && op.weapons).length > 1;
+    }
+    function weaponsForChoice(op, choice) {
+      if (!op || !op.weapons) return [];
+      if (!choice) return op.weapons;
+      return op.weapons.filter(w => weaponBaseName(w.name) === choice);
+    }
+
     let state = {
       view: 'index',          // 'index' | 'pick' | 'editor'
       allegianceTab: 'All',
@@ -287,6 +311,15 @@
         count + ' operative' + (count === 1 ? '' : 's');
     }
 
+    function addPick(op, weaponChoice) {
+      state.activeRoster.picks.push({
+        uid: newRosterId(),
+        operativeId: op.id,
+        weaponChoice: weaponChoice || null,
+      });
+      renderEditor();
+    }
+
     function buildOperativeCard(op) {
       const card = document.createElement('div');
       card.className = 'op-card';
@@ -304,7 +337,7 @@
 
       const nameEl = document.createElement('div');
       nameEl.className = 'op-name';
-      nameEl.textContent = op.name;
+      nameEl.textContent = op.full_name || op.name;
       left.appendChild(nameEl);
 
       const stats = document.createElement('div');
@@ -317,16 +350,13 @@
 
       head.appendChild(left);
 
+      const requiresChoice = operativeRequiresChoice(op);
       const actions = document.createElement('div');
       actions.className = 'op-actions';
       const addBtn = document.createElement('button');
       addBtn.type = 'button';
       addBtn.className = 'btn-add';
-      addBtn.textContent = '+ Add';
-      addBtn.addEventListener('click', () => {
-        state.activeRoster.picks.push({ uid: newRosterId(), operativeId: op.id });
-        renderEditor();
-      });
+      addBtn.textContent = requiresChoice ? '+ Add…' : '+ Add';
       actions.appendChild(addBtn);
       head.appendChild(actions);
 
@@ -339,29 +369,79 @@
         empty.textContent = 'No ranged or melee profile.';
         weapons.appendChild(empty);
       } else {
-        op.weapons.forEach(w => {
-          const line = document.createElement('div');
-          line.className = 'weapon-line';
-          const nm = document.createElement('span');
-          nm.className = 'weapon-name';
-          nm.textContent = w.name + (w.is_pistol ? ' • pistol' : '');
-          line.appendChild(nm);
-          line.appendChild(chip('A' + w.atk));
-          line.appendChild(chip(w.hit + '+'));
-          line.appendChild(chip(w.normal_dmg + '/' + w.crit_dmg, true));
-          if (w.rules && w.rules.length) {
-            const rulesEl = document.createElement('span');
-            rulesEl.style.color = 'var(--text-muted)';
-            rulesEl.style.fontSize = '10px';
-            rulesEl.textContent = w.rules.join(' · ');
-            line.appendChild(rulesEl);
-          }
-          weapons.appendChild(line);
-        });
+        op.weapons.forEach(w => weapons.appendChild(buildWeaponLine(w)));
       }
       card.appendChild(weapons);
 
+      // Inline loadout chooser: collapsed by default; expanded when + Add… is
+      // clicked on an operative whose weapon list spans more than one unique
+      // base name (firing-mode variants in brackets count as one).
+      let chooser = null;
+      if (requiresChoice) {
+        chooser = buildLoadoutChooser(op, () => {
+          chooser.style.display = 'none';
+          addBtn.textContent = '+ Add…';
+        });
+        chooser.style.display = 'none';
+        card.appendChild(chooser);
+      }
+
+      addBtn.addEventListener('click', () => {
+        if (!requiresChoice) {
+          addPick(op, null);
+          return;
+        }
+        const open = chooser.style.display !== 'none';
+        chooser.style.display = open ? 'none' : '';
+        addBtn.textContent = open ? '+ Add…' : 'Cancel';
+      });
+
       return card;
+    }
+
+    function buildWeaponLine(w) {
+      const line = document.createElement('div');
+      line.className = 'weapon-line';
+      const nm = document.createElement('span');
+      nm.className = 'weapon-name';
+      const tag = w.is_melee ? ' • melee' : (w.is_pistol ? ' • pistol' : '');
+      nm.textContent = w.name + tag;
+      line.appendChild(nm);
+      line.appendChild(chip('A' + w.atk));
+      line.appendChild(chip(w.hit + '+'));
+      line.appendChild(chip(w.normal_dmg + '/' + w.crit_dmg, true));
+      if (w.rules && w.rules.length) {
+        const rulesEl = document.createElement('span');
+        rulesEl.style.color = 'var(--text-muted)';
+        rulesEl.style.fontSize = '10px';
+        rulesEl.textContent = w.rules.join(' · ');
+        line.appendChild(rulesEl);
+      }
+      return line;
+    }
+
+    function buildLoadoutChooser(op, onPick) {
+      const wrap = document.createElement('div');
+      wrap.className = 'loadout-chooser';
+
+      const label = document.createElement('div');
+      label.className = 'loadout-label';
+      label.textContent = 'Choose loadout';
+      wrap.appendChild(label);
+
+      uniqueWeaponBases(op.weapons).forEach(base => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-add loadout-option';
+        btn.textContent = base;
+        btn.addEventListener('click', () => {
+          addPick(op, base);
+          if (onPick) onPick();
+        });
+        wrap.appendChild(btn);
+      });
+
+      return wrap;
     }
 
     function chip(text, dim) {
@@ -395,12 +475,20 @@
         meta.style.minWidth = '0';
         const nm = document.createElement('div');
         nm.className = 'roster-row-name';
-        nm.textContent = (idx + 1) + '. ' + op.name;
+        nm.textContent = (idx + 1) + '. ' + (op.full_name || op.name);
         const sub = document.createElement('div');
         sub.className = 'roster-row-meta';
         sub.textContent = 'Sv ' + op.save + '+ · W' + op.wounds + ' · APL' + op.apl;
         meta.appendChild(nm);
         meta.appendChild(sub);
+
+        if (pick.weaponChoice) {
+          const loadout = document.createElement('div');
+          loadout.className = 'roster-row-loadout';
+          loadout.textContent = pick.weaponChoice;
+          meta.appendChild(loadout);
+        }
+
         row.appendChild(meta);
         const remove = document.createElement('button');
         remove.type = 'button';

@@ -16,7 +16,7 @@
          defender_abilities: [effect_id, ...],  // operative-specific
          attacker_effects:    [effect_id, ...], // operative-specific
          weapons: [{
-           name, atk, hit, normal_dmg, crit_dmg, rules, is_pistol,
+           name, atk, hit, normal_dmg, crit_dmg, rules, is_pistol, is_melee,
          }],
        }],
      }
@@ -151,6 +151,7 @@ const FACTIONS = [
         weapons: [
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Power fist", atk: 5, hit: 3, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -165,6 +166,10 @@ const FACTIONS = [
           { name: "Heavy bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing Crits 1"], is_pistol: true },
           { name: "Plasma pistol (standard)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Range 8\"", "Piercing 1"], is_pistol: true },
           { name: "Plasma pistol (supercharge)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Range 8\"", "Hot", "Lethal 5+", "Piercing 1"], is_pistol: true },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power fist", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal"], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Thunder hammer", atk: 5, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Shock", "Stun"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -179,6 +184,11 @@ const FACTIONS = [
           { name: "Bolt rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Piercing Crits 1"], is_pistol: false },
           { name: "Stalker bolt rifle (heavy)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Heavy (Dash only)", "Lethal 5+", "Piercing Crits 1"], is_pistol: false },
           { name: "Stalker bolt rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Chainsword", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
+          { name: "Power fist", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 7, rules: ["Brutal"], is_pistol: false, is_melee: true },
+          { name: "Power weapon", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 6, rules: ["Lethal 5+"], is_pistol: false, is_melee: true },
+          { name: "Thunder hammer", atk: 4, hit: 4, normal_dmg: 5, crit_dmg: 6, rules: ["Shock", "Stun"], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -190,6 +200,9 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Heavy bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing Crits 1"], is_pistol: true },
+          { name: "Frag grenade", atk: 4, hit: 4, normal_dmg: 2, crit_dmg: 4, rules: ["Range 6\"", "Blast 2\"", "Saturate"], is_pistol: false },
+          { name: "Krak grenade", atk: 4, hit: 4, normal_dmg: 4, crit_dmg: 5, rules: ["Range 6\"", "Piercing 1", "Saturate"], is_pistol: false },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -201,6 +214,7 @@ const FACTIONS = [
         attacker_effects: [],
         weapons: [
           { name: "Heavy bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\"", "Piercing Crits 1"], is_pistol: true },
+          { name: "Chainsword", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -214,6 +228,7 @@ const FACTIONS = [
           { name: "Bolt pistol", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Range 8\""], is_pistol: true },
           { name: "Heavy bolter (focused)", atk: 5, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing Crits 1"], is_pistol: false },
           { name: "Heavy bolter (sweeping)", atk: 4, hit: 3, normal_dmg: 4, crit_dmg: 5, rules: ["Piercing Crits 1", "Torrent 1\""], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -230,6 +245,7 @@ const FACTIONS = [
           { name: "Bolt rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Piercing Crits 1"], is_pistol: false },
           { name: "Stalker bolt rifle (heavy)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Heavy (Dash only)", "Lethal 5+", "Piercing Crits 1"], is_pistol: false },
           { name: "Stalker bolt rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -244,6 +260,7 @@ const FACTIONS = [
           { name: "Bolt rifle", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: ["Piercing Crits 1"], is_pistol: false },
           { name: "Stalker bolt rifle (heavy)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 5, rules: ["Heavy (Dash only)", "Lethal 5+", "Piercing Crits 1"], is_pistol: false },
           { name: "Stalker bolt rifle (mobile)", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
       {
@@ -258,6 +275,7 @@ const FACTIONS = [
           { name: "Bolt sniper rifle (executioner)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 4, rules: ["Heavy (Dash only)", "Saturate", "Seek Light", "Silent"], is_pistol: false },
           { name: "Bolt sniper rifle (hyperfrag)", atk: 4, hit: 2, normal_dmg: 2, crit_dmg: 4, rules: ["Blast 1\"", "Heavy (Dash only)", "Silent"], is_pistol: false },
           { name: "Bolt sniper rifle (mortis)", atk: 4, hit: 2, normal_dmg: 3, crit_dmg: 3, rules: ["Devastating 3", "Heavy (Dash only)", "Piercing 1", "Silent"], is_pistol: false },
+          { name: "Fists", atk: 4, hit: 3, normal_dmg: 3, crit_dmg: 4, rules: [], is_pistol: false, is_melee: true },
         ],
       },
     ],
