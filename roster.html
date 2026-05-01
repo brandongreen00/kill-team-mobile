@@ -266,8 +266,8 @@
       const faction = FACTIONS_BY_ID[state.activeRoster.factionId];
       document.getElementById('editor-faction-label').textContent = faction ? faction.name : 'Faction';
       renderEditor();
-      renderActionBar();
       setView('editor');
+      renderActionBar();
     }
 
     function renderEditor() {
