@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="bg-grain scanline">
-  <div class="shell" style="max-width: 1280px;">
+  <div class="shell creator-shell">
     <header class="masthead" style="padding: 16px 0 6px;">
       <div class="eyebrow">Cartographer</div>
       <h1 class="hard-shadow" style="font-size: clamp(32px, 5vw, 56px);">Map Creator</h1>
@@ -18,7 +18,7 @@
 
     <section class="panel" style="margin-top: 16px;">
       <div class="creator-toolbar">
-        <div class="tool-group">
+        <div class="tool-group tool-group-map">
           <label class="label-cap">Map</label>
           <input id="map-name" class="text-input" type="text" placeholder="My Map" />
           <select id="map-split" class="text-input">
@@ -31,13 +31,15 @@
           </select>
         </div>
 
-        <div class="tool-group">
+        <div class="tool-group tool-group-tools">
           <label class="label-cap">Tool</label>
-          <button class="btn-tool" data-tool="select">Select</button>
-          <button class="btn-tool" data-tool="piece">Pieces</button>
-          <button class="btn-tool" data-tool="objective">Objective</button>
-          <button class="btn-tool" data-tool="erase">Erase</button>
-          <button class="btn-tool" data-tool="wall" data-advanced="1" style="display:none;">Wall (advanced)</button>
+          <div class="tool-btn-row">
+            <button class="btn-tool" data-tool="select">Select</button>
+            <button class="btn-tool" data-tool="piece">Pieces</button>
+            <button class="btn-tool" data-tool="objective">Objective</button>
+            <button class="btn-tool" data-tool="erase">Erase</button>
+            <button class="btn-tool" data-tool="wall" data-advanced="1" style="display:none;">Wall (advanced)</button>
+          </div>
         </div>
 
         <div class="tool-group" id="objective-tools" style="display:none;">
@@ -49,7 +51,7 @@
           </select>
         </div>
 
-        <div class="tool-group">
+        <div class="tool-group tool-group-options">
           <label class="label-cap">Snap</label>
           <select id="snap" class="text-input">
             <option value="0.5">0.5&Prime;</option>
@@ -57,10 +59,7 @@
             <option value="2">2&Prime;</option>
             <option value="4" selected>4&Prime; (grid)</option>
           </select>
-        </div>
-
-        <div class="tool-group">
-          <label class="label-cap">
+          <label class="label-cap advanced-check">
             <input type="checkbox" id="advanced-toggle" />
             Advanced
           </label>
@@ -70,33 +69,53 @@
       <div class="piece-picker" id="piece-picker" style="display:none;">
         <div class="piece-picker-row">
           <div class="piece-picker-label">Long walls (8&Prime;)</div>
-          <button class="piece-btn" data-kind="A1">A1</button>
-          <button class="piece-btn" data-kind="A2">A2</button>
-          <button class="piece-btn" data-kind="A3">A3</button>
-          <button class="piece-btn" data-kind="A4">A4</button>
+          <div class="piece-btn-row">
+            <button class="piece-btn" data-kind="A1">A1</button>
+            <button class="piece-btn" data-kind="A2">A2</button>
+            <button class="piece-btn" data-kind="A3">A3</button>
+            <button class="piece-btn" data-kind="A4">A4</button>
+          </div>
         </div>
         <div class="piece-picker-row">
           <div class="piece-picker-label">Short walls (4&Prime;)</div>
-          <button class="piece-btn" data-kind="B1">B1</button>
-          <button class="piece-btn" data-kind="B2">B2</button>
-          <button class="piece-btn" data-kind="B3">B3</button>
-          <button class="piece-btn" data-kind="B4">B4</button>
+          <div class="piece-btn-row">
+            <button class="piece-btn" data-kind="B1">B1</button>
+            <button class="piece-btn" data-kind="B2">B2</button>
+            <button class="piece-btn" data-kind="B3">B3</button>
+            <button class="piece-btn" data-kind="B4">B4</button>
+          </div>
         </div>
         <div class="piece-picker-row">
           <div class="piece-picker-label">Markers</div>
-          <button class="piece-btn" data-kind="X">X</button>
-          <button class="piece-btn" data-kind="T">T</button>
+          <div class="piece-btn-row">
+            <button class="piece-btn" data-kind="X">X</button>
+            <button class="piece-btn" data-kind="T">T</button>
+          </div>
         </div>
         <div class="piece-picker-row">
           <div class="piece-picker-label">Terrain</div>
-          <button class="piece-btn" data-kind="C1">C1</button>
-          <button class="piece-btn" data-kind="C2">C2</button>
-          <button class="piece-btn" data-kind="C3">C3</button>
-          <button class="piece-btn" data-kind="C4">C4</button>
-          <button class="piece-btn" data-kind="C5">C5</button>
+          <div class="piece-btn-row">
+            <button class="piece-btn" data-kind="C1">C1</button>
+            <button class="piece-btn" data-kind="C2">C2</button>
+            <button class="piece-btn" data-kind="C3">C3</button>
+            <button class="piece-btn" data-kind="C4">C4</button>
+            <button class="piece-btn" data-kind="C5">C5</button>
+          </div>
         </div>
         <div class="piece-picker-tip">
-          Hover board to preview &middot; <strong>scroll</strong> to rotate &middot; <strong>right-click</strong> to flip side &middot; <strong>click</strong> to place
+          <span class="tip-desktop"><strong>Hover</strong> board to preview &middot; <strong>scroll</strong> to rotate &middot; <strong>right-click</strong> to flip side &middot; <strong>click</strong> to place</span>
+          <span class="tip-touch"><strong>Tap</strong> board to position &middot; <strong>drag</strong> to fine-tune &middot; use the controls below to rotate, flip, and place</span>
+        </div>
+      </div>
+
+      <div class="placement-actions" id="placement-actions" style="display:none;">
+        <div class="placement-status" id="placement-status">Tap board to position piece</div>
+        <div class="placement-buttons">
+          <button id="rot-ccw-btn" class="btn-tool placement-btn" data-rotate="ccw" type="button" title="Rotate counter-clockwise">&#x21BA;</button>
+          <button id="rot-cw-btn" class="btn-tool placement-btn" data-rotate="cw" type="button" title="Rotate clockwise">&#x21BB;</button>
+          <button id="flip-btn" class="btn-tool placement-btn" type="button" title="Flip decorated side">Flip</button>
+          <button id="cancel-place-btn" class="btn-tool placement-btn" type="button" disabled>Cancel</button>
+          <button id="place-btn" class="btn-fire placement-btn" type="button" disabled>Place</button>
         </div>
       </div>
 
