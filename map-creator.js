@@ -15,12 +15,20 @@
   const piecePicker = document.getElementById('piece-picker');
   const advancedToggle = document.getElementById('advanced-toggle');
   const saveNotice = document.getElementById('save-notice');
+  const placementActions = document.getElementById('placement-actions');
+  const placementStatus = document.getElementById('placement-status');
+  const placeBtn = document.getElementById('place-btn');
+  const cancelPlaceBtn = document.getElementById('cancel-place-btn');
+  const flipBtn = document.getElementById('flip-btn');
+  const rotCwBtn = document.getElementById('rot-cw-btn');
+  const rotCcwBtn = document.getElementById('rot-ccw-btn');
 
   let board = { width: 28, height: 24, gridSize: 4 };
   let map = blankMap();
   let tool = 'piece';
   let pendingWall = null;        // legacy freeform wall tool first-click
-  let hoverPt = null;            // snapped board-space point under cursor
+  let hoverPt = null;            // snapped board-space point under cursor (mouse)
+  let tentativePt = null;        // touch-friendly explicit ghost position
   let pieceKind = 'A1';          // currently selected piece kind
   let pieceRot = 0;              // 0..3
   let pieceFlip = false;
@@ -162,12 +170,24 @@
     // pieces
     for (const p of map.pieces || []) KT.drawPieceCanvas(ctx, p, sx, sy);
 
-    // ghost preview (piece tool)
-    if (tool === 'piece' && hoverPt) {
-      ctx.save();
-      ctx.globalAlpha = 0.55;
-      KT.drawPieceCanvas(ctx, { kind: pieceKind, x: hoverPt.x, y: hoverPt.y, rot: pieceRot, flip: pieceFlip }, sx, sy);
-      ctx.restore();
+    // ghost preview (piece tool) — tentative point wins over hover
+    if (tool === 'piece') {
+      const previewPt = tentativePt || hoverPt;
+      if (previewPt) {
+        ctx.save();
+        ctx.globalAlpha = tentativePt ? 0.8 : 0.55;
+        KT.drawPieceCanvas(ctx, { kind: pieceKind, x: previewPt.x, y: previewPt.y, rot: pieceRot, flip: pieceFlip }, sx, sy);
+        ctx.restore();
+        if (tentativePt) {
+          ctx.strokeStyle = 'rgba(201,167,77,0.9)';
+          ctx.setLineDash([5, 4]);
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(tentativePt.x * sx, tentativePt.y * sy, Math.max(sx, sy) * 1.6, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
     }
 
     // pending freeform wall preview
@@ -262,12 +282,16 @@
   function setTool(t) {
     tool = t;
     pendingWall = null;
+    tentativePt = null;
     document.querySelectorAll('.btn-tool').forEach(b => {
+      if (!b.dataset.tool) return;
       b.classList.toggle('active', b.dataset.tool === t);
     });
     piecePicker.style.display = (t === 'piece') ? '' : 'none';
     objectiveTools.style.display = (t === 'objective') ? '' : 'none';
+    placementActions.style.display = (t === 'piece') ? '' : 'none';
     updateHelp();
+    updatePlacementStatus();
     draw();
   }
 
@@ -288,13 +312,61 @@
       b.classList.toggle('active', b.dataset.kind === kind);
     });
     updateHelp();
+    updatePlacementStatus();
     draw();
   }
 
   function rotatePiece(delta) {
     pieceRot = ((pieceRot + delta) % 4 + 4) % 4;
     updateHelp();
+    updatePlacementStatus();
     draw();
+  }
+
+  function flipPiece() {
+    pieceFlip = !pieceFlip;
+    updateHelp();
+    updatePlacementStatus();
+    draw();
+  }
+
+  function commitTentativePiece() {
+    if (!tentativePt) return;
+    map.pieces = map.pieces || [];
+    map.pieces.push({
+      kind: pieceKind,
+      x: tentativePt.x,
+      y: tentativePt.y,
+      rot: pieceRot,
+      flip: pieceFlip,
+    });
+    tentativePt = null;
+    refreshSummary();
+    updatePlacementStatus();
+    draw();
+  }
+
+  function clearTentativePiece() {
+    tentativePt = null;
+    updatePlacementStatus();
+    draw();
+  }
+
+  function updatePlacementStatus() {
+    if (tool !== 'piece') return;
+    const has = !!tentativePt;
+    placeBtn.disabled = !has;
+    cancelPlaceBtn.disabled = !has;
+    placementStatus.classList.toggle('has-tentative', has);
+    const rotDeg = pieceRot * 90;
+    const flipNote = pieceFlip ? ' · flipped' : '';
+    if (has) {
+      placementStatus.textContent =
+        `${pieceKind} @ ${tentativePt.x.toFixed(1)}″, ${tentativePt.y.toFixed(1)}″ · ${rotDeg}°${flipNote}`;
+    } else {
+      placementStatus.textContent =
+        `${pieceKind} · ${rotDeg}°${flipNote} — tap board to position, then Place`;
+    }
   }
 
   function nearestErase(p) {
@@ -340,11 +412,7 @@
   // Disable native context menu so right-click can flip pieces.
   canvas.addEventListener('contextmenu', (evt) => {
     evt.preventDefault();
-    if (tool === 'piece') {
-      pieceFlip = !pieceFlip;
-      updateHelp();
-      draw();
-    }
+    if (tool === 'piece') flipPiece();
   });
 
   canvas.addEventListener('wheel', (evt) => {
@@ -354,11 +422,16 @@
   }, { passive: false });
 
   canvas.addEventListener('click', (evt) => {
+    // Touch generates a synthetic click on tap-end — ignore it so we don't
+    // double-place the piece on phones (the touch handler already managed it).
+    if (lastTouchHandledAt && (Date.now() - lastTouchHandledAt) < 500) return;
     const p = eventToBoard(evt);
     const sp = snapPoint(p);
     if (tool === 'piece') {
       map.pieces = map.pieces || [];
       map.pieces.push({ kind: pieceKind, x: sp.x, y: sp.y, rot: pieceRot, flip: pieceFlip });
+      tentativePt = null;
+      updatePlacementStatus();
     } else if (tool === 'wall') {
       if (!pendingWall) {
         pendingWall = sp;
@@ -382,6 +455,94 @@
     refreshSummary();
     draw();
   });
+
+  // --- Touch input ------------------------------------------------------
+  // On phones there is no hover, scroll wheel, or right-click. Touching the
+  // board sets a *tentative* placement that the user then commits with the
+  // explicit Place button (and adjusts via Rotate / Flip).
+
+  let lastTouchHandledAt = 0;
+  let touchActive = false;
+
+  function touchToBoard(touch) {
+    const rect = canvas.getBoundingClientRect();
+    const x = ((touch.clientX - rect.left) / rect.width) * board.width;
+    const y = ((touch.clientY - rect.top) / rect.height) * board.height;
+    return { x, y };
+  }
+
+  canvas.addEventListener('touchstart', (evt) => {
+    if (evt.touches.length !== 1) return;
+    evt.preventDefault();
+    touchActive = true;
+    lastTouchHandledAt = Date.now();
+    const t = evt.touches[0];
+    const p = touchToBoard(t);
+    const sp = snapPoint(p);
+    if (tool === 'piece') {
+      tentativePt = sp;
+      hoverPt = sp;
+      updatePlacementStatus();
+    } else if (tool === 'objective') {
+      map.objectives.push({ x: sp.x, y: sp.y, owner: objOwnerInput.value });
+      refreshSummary();
+    } else if (tool === 'erase') {
+      const hit = nearestErase(p);
+      if (hit) {
+        if (hit.kind === 'piece') map.pieces.splice(hit.index, 1);
+        else if (hit.kind === 'wall') map.walls.splice(hit.index, 1);
+        else if (hit.kind === 'terrain') map.terrain.splice(hit.index, 1);
+        else if (hit.kind === 'objective') map.objectives.splice(hit.index, 1);
+        refreshSummary();
+      }
+    } else if (tool === 'wall') {
+      if (!pendingWall) {
+        pendingWall = sp;
+      } else {
+        if (sp.x !== pendingWall.x || sp.y !== pendingWall.y) {
+          map.walls.push({ x1: pendingWall.x, y1: pendingWall.y, x2: sp.x, y2: sp.y });
+        }
+        pendingWall = null;
+      }
+    }
+    draw();
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', (evt) => {
+    if (!touchActive || evt.touches.length !== 1) return;
+    evt.preventDefault();
+    lastTouchHandledAt = Date.now();
+    if (tool !== 'piece') return;
+    const sp = snapPoint(touchToBoard(evt.touches[0]));
+    tentativePt = sp;
+    hoverPt = sp;
+    updatePlacementStatus();
+    draw();
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', (evt) => {
+    if (!touchActive) return;
+    evt.preventDefault();
+    touchActive = false;
+    lastTouchHandledAt = Date.now();
+    // Drop the lingering hoverPt so we don't render a phantom desktop ghost.
+    hoverPt = null;
+    draw();
+  }, { passive: false });
+
+  canvas.addEventListener('touchcancel', () => {
+    touchActive = false;
+    hoverPt = null;
+    draw();
+  });
+
+  // --- Placement action buttons ---------------------------------------
+
+  rotCcwBtn.addEventListener('click', () => rotatePiece(-1));
+  rotCwBtn.addEventListener('click', () => rotatePiece(1));
+  flipBtn.addEventListener('click', flipPiece);
+  placeBtn.addEventListener('click', commitTentativePiece);
+  cancelPlaceBtn.addEventListener('click', clearTentativePiece);
 
   // --- Sidebar / persistence -------------------------------------------
 
