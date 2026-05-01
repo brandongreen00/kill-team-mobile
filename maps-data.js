@@ -338,11 +338,11 @@
   const PIECES = {
     A1: { type: 'wall',        len: 8, asymm: 'half', marker: 'breach',   label: 'A1' },
     A2: { type: 'wall',        len: 8, asymm: 'side', marker: 'necron',   label: 'A2' },
-    A3: { type: 'wall',        len: 8, asymm: 'side', marker: 'hatchway', label: 'A3' },
-    A4: { type: 'wall',        len: 8, asymm: 'side', marker: 'hatchway', label: 'A4' },
+    A3: { type: 'wall',        len: 8, asymm: 'half', marker: 'hatchway', label: 'A3' },
+    A4: { type: 'wall',        len: 8, asymm: 'half', marker: 'hatchway', label: 'A4' },
     B1: { type: 'wall',        len: 4, asymm: 'none', marker: null,        label: 'B1' },
     B2: { type: 'wall',        len: 4, asymm: 'none', marker: 'breach',   label: 'B2' },
-    B3: { type: 'wall',        len: 4, asymm: 'side', marker: 'hatchway', label: 'B3' },
+    B3: { type: 'wall',        len: 4, asymm: 'none', marker: 'hatchway', label: 'B3' },
     B4: { type: 'wall',        len: 4, asymm: 'none', marker: null,        label: 'B4' },
     X:  { type: 'wallend',                                                 label: 'X'  },
     T:  { type: 'circle',      r: 1.0,                                     label: 'T'  },
@@ -471,6 +471,12 @@
     ctx.lineTo(x2, y2);
     ctx.stroke();
 
+    // End caps — 1" filled squares (same size as C4/C5) at each endpoint.
+    const capX = 1.0 * sx, capY = 1.0 * sy;
+    ctx.fillStyle = PIECE_COLORS.wall;
+    ctx.fillRect(x1 - capX / 2, y1 - capY / 2, capX, capY);
+    ctx.fillRect(x2 - capX / 2, y2 - capY / 2, capX, capY);
+
     if (!def.marker) return;
 
     const angle = Math.atan2(y2 - y1, x2 - x1); // along-wall direction (radians)
@@ -491,7 +497,8 @@
 
     if (def.marker === 'breach' || def.marker === 'hatchway') {
       const fill = def.marker === 'breach' ? PIECE_COLORS.breach : PIECE_COLORS.hatchway;
-      const w = 1.2 * inch, h = 0.55 * inch;
+      // Squashed hex marker — ~3/4 of a 4" grid square long.
+      const w = 3.0 * inch, h = 0.8 * inch;
       squashedHexPath(ctx, cx, cy, w, h, angle);
       ctx.fillStyle = fill;
       ctx.fill();
