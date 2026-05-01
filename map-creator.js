@@ -670,8 +670,10 @@
     draw();
   });
 
-  // Tool buttons
-  document.querySelectorAll('.btn-tool').forEach(b => {
+  // Tool buttons — only the toolbar entries (Select / Pieces / Objective /
+  // Erase / Wall) carry data-tool. The placement-action buttons share the
+  // .btn-tool class for styling but must NOT swap tool, so scope by attribute.
+  document.querySelectorAll('.btn-tool[data-tool]').forEach(b => {
     b.addEventListener('click', () => setTool(b.dataset.tool));
   });
 
