@@ -820,6 +820,7 @@ a:hover { color: var(--text-bright); }
 .placement-btn {
   min-height: 36px;
   padding: 6px 12px;
+  touch-action: manipulation;
 }
 .placement-btn[data-rotate] {
   font-size: 18px;
@@ -832,6 +833,12 @@ a:hover { color: var(--text-bright); }
   font-size: 12px;
   letter-spacing: 0.18em;
 }
+
+/* Disable iOS double-tap-zoom delay on every tappable map-creator
+   control. Without this the browser holds clicks for ~300ms while it
+   listens for a second tap, and any tiny finger movement during that
+   window gets interpreted as a scroll instead of a button press. */
+.btn-tool, .piece-btn, .btn-fire, .btn-ghost { touch-action: manipulation; }
 
 .save-notice {
   font-size: 11px;
@@ -920,22 +927,45 @@ a:hover { color: var(--text-bright); }
   .piece-picker-tip .tip-desktop { display: none; }
   .piece-picker-tip .tip-touch { display: inline; }
 
+  /* Place the action bar in the natural document flow on phones,
+     anchored to the bottom of the viewport with position: fixed. Sticky
+     positioning was causing two issues on iOS Safari: the bar's height
+     changed when status text wrapped to a different number of lines,
+     reflowing the page and shifting the user's scroll position; and
+     tapping a button so close to the iOS home indicator was triggering
+     the system swipe-up zone, which in turn brought the URL bar back
+     and scrolled the page. Fixed positioning takes the bar out of flow
+     entirely, and env(safe-area-inset-bottom) keeps it clear of the
+     home indicator. */
   .placement-actions {
-    position: sticky;
+    position: fixed;
+    left: 0;
+    right: 0;
     bottom: 0;
-    z-index: 10;
-    margin: 0 -12px 14px;
-    padding: 10px 12px;
+    z-index: 100;
+    margin: 0;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
     background: var(--panel-bg);
-    border-left: 0;
-    border-right: 0;
+    border: 0;
+    border-top: 1px solid var(--border-accent);
     box-shadow: 0 -6px 16px rgba(0,0,0,0.55);
+    /* Stops touches in the bar from bubbling into the page's scroll
+       container, which on iOS could otherwise nudge the page. */
+    overscroll-behavior: contain;
   }
   .placement-status {
     flex: 1 1 100%;
     text-align: center;
     font-size: 12px;
     order: -1;
+    /* Reserve room for two lines so the bar stays the same height
+       whether or not a tentative piece has been positioned. Without
+       this the bar grows/shrinks between "tap board to position" and
+       "A2 @ x, y · 90° · flipped" and shifts page layout. */
+    min-height: 2.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .placement-buttons {
     width: 100%;
@@ -949,6 +979,14 @@ a:hover { color: var(--text-bright); }
     font-size: 11px;
   }
   .placement-btn[data-rotate] { font-size: 20px; padding: 6px; }
+
+  /* Reserve space at the bottom of the page so the fixed bar doesn't
+     cover the sidebar / Save / Back buttons when the user scrolls all
+     the way down. Roughly: 2.8em status + 44px buttons + paddings +
+     safe-area inset. 160px is a comfortable upper bound. */
+  body.has-fixed-placement {
+    padding-bottom: calc(160px + env(safe-area-inset-bottom, 0px));
+  }
 
   .creator-layout { gap: 12px; }
   .creator-help {
