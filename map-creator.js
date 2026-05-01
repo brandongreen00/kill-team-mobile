@@ -290,6 +290,10 @@
     piecePicker.style.display = (t === 'piece') ? '' : 'none';
     objectiveTools.style.display = (t === 'objective') ? '' : 'none';
     placementActions.style.display = (t === 'piece') ? '' : 'none';
+    // Mobile CSS adds bottom padding to body so the fixed action bar
+    // never covers the Save / Back buttons. Only apply it when the bar
+    // is actually showing.
+    document.body.classList.toggle('has-fixed-placement', t === 'piece');
     updateHelp();
     updatePlacementStatus();
     draw();
