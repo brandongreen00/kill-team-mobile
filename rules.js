@@ -17,7 +17,9 @@
   const KT_RULES = root.KT_RULES = root.KT_RULES || {};
 
   // ── Constants ───────────────────────────────────────────────────────
-  const ENGAGEMENT_RANGE = 1.0;            // "control range"
+  const ENGAGEMENT_RANGE = 1.0;            // "control range" — measured base-edge to base-edge
+  const MM_PER_INCH = 25.4;
+  const DEFAULT_BASE_MM = 28;
   const COVER_FAR_THRESHOLD = 2.0;          // cover only counts if >2" from shooter
   const VANTAGE_HEIGHT_THRESHOLD = 2.0;
   const DASH_INCHES = 3;
@@ -202,6 +204,55 @@
     const eps = 1e-6;
     return ua > eps && ua < 1 - eps && ub > eps && ub < 1 - eps;
   }
+  // Inclusive intersection — true if segments touch at endpoints too. Used by
+  // segment-to-segment distance.
+  function segIntersectInclusive(a, b, c, d) {
+    const den = (d.y - c.y) * (b.x - a.x) - (d.x - c.x) * (b.y - a.y);
+    if (Math.abs(den) < 1e-9) return false;
+    const ua = ((d.x - c.x) * (a.y - c.y) - (d.y - c.y) * (a.x - c.x)) / den;
+    const ub = ((b.x - a.x) * (a.y - c.y) - (b.y - a.y) * (a.x - c.x)) / den;
+    return ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1;
+  }
+  // Minimum distance between two segments. Returns 0 if they touch / cross.
+  function segSegDist(x1, y1, x2, y2, x3, y3, x4, y4) {
+    const a = { x: x1, y: y1 }, b = { x: x2, y: y2 };
+    const c = { x: x3, y: y3 }, d = { x: x4, y: y4 };
+    if (segIntersectInclusive(a, b, c, d)) return 0;
+    return Math.min(
+      pointSegDist(x1, y1, x3, y3, x4, y4),
+      pointSegDist(x2, y2, x3, y3, x4, y4),
+      pointSegDist(x3, y3, x1, y1, x2, y2),
+      pointSegDist(x4, y4, x1, y1, x2, y2),
+    );
+  }
+
+  // ── Operative base helpers ─────────────────────────────────────────
+  // Operatives carry `base` (mm) — round bases as { d } and oval bases as
+  // { w, h }. Engagement range is measured base-edge to base-edge, and wall
+  // collision must respect the full footprint. We use the *max* axis as a
+  // conservative circular envelope for ovals (we render them long-axis-
+  // horizontal regardless of facing).
+  function unitBaseRadius(unit) {
+    const b = unit && unit.base;
+    if (!b) return (DEFAULT_BASE_MM / 2) / MM_PER_INCH;
+    if (b.d != null) return (b.d / 2) / MM_PER_INCH;
+    if (b.w != null && b.h != null) return Math.max(b.w, b.h) / 2 / MM_PER_INCH;
+    return (DEFAULT_BASE_MM / 2) / MM_PER_INCH;
+  }
+  KT_RULES.unitBaseRadius = unitBaseRadius;
+
+  // Edge-to-edge distance between two operatives (or 0 if their bases overlap).
+  function edgeDist(a, b) {
+    return Math.max(0, dist(a.x, a.y, b.x, b.y) - unitBaseRadius(a) - unitBaseRadius(b));
+  }
+  KT_RULES.edgeDist = edgeDist;
+
+  // Edge-to-point distance between an operative and a fixed point (objective,
+  // hatch midpoint, etc.). Negative is clamped to 0.
+  function edgeDistToPoint(unit, px, py) {
+    return Math.max(0, dist(unit.x, unit.y, px, py) - unitBaseRadius(unit));
+  }
+  KT_RULES.edgeDistToPoint = edgeDistToPoint;
 
   // Effective walls for the current piece state. Each compiled wall carries
   // an optional `pieceIndex`; if that piece is currently open we drop the
@@ -222,6 +273,21 @@
     return false;
   }
   KT_RULES.losBlockedByWalls = losBlockedByWalls;
+
+  // Does the swept base of radius `r` along p1..p2 overlap any (non-open)
+  // wall? A leg is illegal if the operative's base would intersect a wall
+  // anywhere along the path — including at the endpoint. Equivalent to
+  // segment-to-segment distance < r.
+  function moveBlockedByWalls(map, openPieces, x1, y1, x2, y2, r) {
+    if (r == null) r = 0;
+    const eps = 1e-6;
+    for (const w of effectiveWalls(map, openPieces)) {
+      const d = segSegDist(x1, y1, x2, y2, w.x1, w.y1, w.x2, w.y2);
+      if (d < r - eps) return true;
+    }
+    return false;
+  }
+  KT_RULES.moveBlockedByWalls = moveBlockedByWalls;
 
   // ── Cover / visibility ──────────────────────────────────────────────
   // Tomb World: walls = full cover (block LoS); debris (C1-C5), barricade,
@@ -276,15 +342,28 @@
 
   // ── Action validation ──────────────────────────────────────────────
   // Returns null if valid; otherwise reason string.
+  // Engagement / control range is measured BASE-EDGE to BASE-EDGE: an enemy
+  // is in control range when the gap between their two bases is ≤ 1".
   function controlRangeOf(unit, units) {
+    const eps = 1e-3;
+    const rU = unitBaseRadius(unit);
     return units.filter(o => o.alive && o.deployed && o.team !== unit.team
-      && Math.hypot(o.x - unit.x, o.y - unit.y) <= ENGAGEMENT_RANGE);
+      && Math.hypot(o.x - unit.x, o.y - unit.y) - rU - unitBaseRadius(o) <= ENGAGEMENT_RANGE + eps);
   }
   KT_RULES.controlRangeOf = controlRangeOf;
   function inEnemyControlRange(unit, units) {
     return controlRangeOf(unit, units).length > 0;
   }
   KT_RULES.inEnemyControlRange = inEnemyControlRange;
+  // Same edge-to-edge test against a hypothetical position (x, y) for `unit`
+  // — used by movement validation when the unit hasn't yet committed.
+  function inEnemyControlRangeAt(unit, units, x, y) {
+    const eps = 1e-3;
+    const rU = unitBaseRadius(unit);
+    return units.some(o => o.alive && o.deployed && o.team !== unit.team
+      && Math.hypot(o.x - x, o.y - y) - rU - unitBaseRadius(o) <= ENGAGEMENT_RANGE + eps);
+  }
+  KT_RULES.inEnemyControlRangeAt = inEnemyControlRangeAt;
 
   function validateReposition(unit, activation) {
     if (activation.hasCharged) return 'Cannot Reposition after Charge.';

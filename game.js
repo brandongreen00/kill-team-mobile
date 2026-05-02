@@ -265,12 +265,13 @@
   }
 
   // Returns 'A' | 'B' | 'neutral' depending on which team's combined APL
-  // among operatives within 1" of the marker is greater. Ties are neutral.
+  // among operatives within 1" of the marker is greater. Distance is
+  // measured from the operative's BASE EDGE, not its centre. Ties are neutral.
   function objectiveControl(obj) {
     let aSum = 0, bSum = 0;
     for (const u of state.units) {
       if (!u.alive || !u.deployed) continue;
-      const d = Math.hypot(u.x - obj.x, u.y - obj.y);
+      const d = Math.hypot(u.x - obj.x, u.y - obj.y) - KTR.unitBaseRadius(u);
       if (d <= RC.ENGAGEMENT_RANGE + 1e-3) {
         if (u.team === 'A') aSum += (u.apl || 0);
         else                bSum += (u.apl || 0);
@@ -986,13 +987,20 @@
     if (pm.used + segDist > pm.maxInches + 1e-3) {
       return `Beyond move budget (${(pm.used + segDist).toFixed(1)}" > ${pm.maxInches.toFixed(1)}").`;
     }
-    if (losBlocked(last.x, last.y, toX, toY)) return 'Leg crosses a wall.';
+    // The whole base must clear the wall along the leg, not just the centre
+    // line — segment-to-segment distance from the path to every wall must be
+    // at least the operative's base radius.
+    if (KTR.moveBlockedByWalls(mapDef, state.combat.pieceState.open, last.x, last.y, toX, toY, r)) {
+      return 'Base clips a wall along this leg.';
+    }
     if (unitOccupiesCircle(toX, toY, r, u)) return 'Waypoint occupied.';
-    // Enemy control range along the leg.
+    // Enemy control range along the leg — measured base-edge to base-edge.
     if (pm.kind === 'reposition' || pm.kind === 'dash') {
       for (const e of pathEnemyList(u)) {
+        const enemyR = KTR.unitBaseRadius(e);
+        const reach = RC.ENGAGEMENT_RANGE + r + enemyR;
         const d = KTR.pointSegDist(e.x, e.y, last.x, last.y, toX, toY);
-        if (d < RC.ENGAGEMENT_RANGE - 1e-3) {
+        if (d < reach - 1e-3) {
           return 'Leg crosses an enemy control range.';
         }
       }
@@ -1004,7 +1012,11 @@
   function endpointReason(u, pm) {
     const last = pm.waypoints[pm.waypoints.length - 1];
     const enemies = pathEnemyList(u);
-    const inCR = enemies.some(e => Math.hypot(e.x - last.x, e.y - last.y) <= RC.ENGAGEMENT_RANGE + 1e-3);
+    const r = unitRadiusMax(u);
+    const inCR = enemies.some(e => {
+      const reach = RC.ENGAGEMENT_RANGE + r + KTR.unitBaseRadius(e);
+      return Math.hypot(e.x - last.x, e.y - last.y) <= reach + 1e-3;
+    });
     if (pm.kind === 'charge') {
       if (!inCR) return 'Charge must end within 1" of an enemy.';
     } else if (pm.kind === 'fallBack') {
@@ -1156,10 +1168,14 @@
     return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
   }
   function openableDistance(o, u) {
+    // Reach to a hatch/breach is measured base-edge to closest point on the
+    // openable span — never to the midpoint of the wall (which can be far if
+    // the wall is long).
     const w = (mapDef.walls || []).find(w => w.pieceIndex === o.pieceIndex);
-    return w
+    const base = w
       ? pointSegDist(u.x, u.y, w.x1, w.y1, w.x2, w.y2)
       : Math.hypot(o.x - u.x, o.y - u.y);
+    return Math.max(0, base - KTR.unitBaseRadius(u));
   }
   function nearestOpenable(u, kindFilter) {
     const list = mapDef.openable || [];
@@ -1169,7 +1185,7 @@
       const d = openableDistance(o, u);
       if (d < bestD) { bestD = d; best = o; }
     }
-    if (!best || bestD > RC.ENGAGEMENT_RANGE) return null;
+    if (!best || bestD > RC.ENGAGEMENT_RANGE + 1e-3) return null;
     return best;
   }
 
@@ -1917,9 +1933,11 @@
   // ── Fight flow ──────────────────────────────────────────────────────
   function fightCandidates(attacker) {
     const out = [];
+    const rA = KTR.unitBaseRadius(attacker);
     for (const o of state.units) {
       if (!o.alive || !o.deployed || o.team === attacker.team) continue;
-      if (Math.hypot(o.x - attacker.x, o.y - attacker.y) <= RC.ENGAGEMENT_RANGE) out.push(o);
+      const reach = RC.ENGAGEMENT_RANGE + rA + KTR.unitBaseRadius(o);
+      if (Math.hypot(o.x - attacker.x, o.y - attacker.y) <= reach + 1e-3) out.push(o);
     }
     return out;
   }
@@ -2682,8 +2700,13 @@
     // Legacy terrain
     for (const t of mapDefRaw.terrain || []) drawTerrain(t, s);
 
-    // Pieces (walls + decorations + terrain)
-    for (const p of mapDefRaw.pieces || []) KT.drawPieceCanvas(ctx, p, s, s);
+    // Pieces (walls + decorations + terrain). When an openable wall has been
+    // hatched / breached we tell the renderer so the gap is visible.
+    const openSet = (state.combat && state.combat.pieceState && state.combat.pieceState.open) || null;
+    (mapDefRaw.pieces || []).forEach((p, idx) => {
+      const isOpen = !!(openSet && openSet.has(idx));
+      KT.drawPieceCanvas(ctx, p, s, s, { isOpen });
+    });
 
     // Objectives — during combat the marker shows live control (combined APL
     // within 1") as a halo, while still rendering the map's authored owner
@@ -2691,9 +2714,16 @@
     const inCombat = (state.phase === 'combat' || state.phase === 'over');
     for (const o of mapDef.objectives || []) {
       const ctrl = inCombat ? objectiveControl(o) : null;
-      // 1" control radius (only shown in combat).
+      // 1" control radius (only shown in combat). The outline is drawn at the
+      // engagement range plus the active operative's base radius (or the
+      // selected unit, or a default 28mm base) so that the bubble matches the
+      // edge-to-edge measurement we actually use.
       if (inCombat) {
-        const rad = RC.ENGAGEMENT_RANGE * s;
+        const refUnit = (state.combat.activation && state.combat.activation.unit)
+          || state.combat.selectedId
+          || null;
+        const refR = refUnit ? KTR.unitBaseRadius(refUnit) : (DEFAULT_BASE_MM / 2) / MM_PER_INCH;
+        const rad = (RC.ENGAGEMENT_RANGE + refR) * s;
         if (ctrl === 'A' || ctrl === 'B') {
           const tinted = ctrl === 'A' ? '58, 109, 184' : '184, 32, 58';
           ctx.fillStyle = `rgba(${tinted}, 0.18)`;
@@ -2745,8 +2775,11 @@
         const last = pm.waypoints[pm.waypoints.length - 1];
         const remaining = Math.max(0, pm.maxInches - pm.used);
 
-        // Enemy control-range bubbles (1") so the user can see the no-go
-        // zones for Reposition / Dash and the must-end-in zone for Charge.
+        // Enemy control-range bubbles so the user can see the no-go zones for
+        // Reposition / Dash and the must-end-in zone for Charge. Drawn at
+        // (1" + active unit's base radius + enemy's base radius) — the
+        // distance at which the active operative's CENTRE may not approach,
+        // matching the edge-to-edge engagement-range rule.
         const enemies = state.units.filter(o => o.alive && o.deployed && o.team !== u.team);
         const showCRColor = (pm.kind === 'reposition' || pm.kind === 'dash')
           ? 'rgba(184,32,58,0.18)'
@@ -2754,12 +2787,14 @@
         const showCRStroke = (pm.kind === 'reposition' || pm.kind === 'dash')
           ? 'rgba(184,32,58,0.55)'
           : (pm.kind === 'charge' ? 'rgba(122,156,62,0.65)' : 'rgba(122,156,62,0.40)');
+        const activeR = unitRadiusMax(u);
         for (const e of enemies) {
+          const reach = RC.ENGAGEMENT_RANGE + activeR + KTR.unitBaseRadius(e);
           ctx.fillStyle = showCRColor;
           ctx.strokeStyle = showCRStroke;
           ctx.lineWidth = 1;
           ctx.beginPath();
-          ctx.arc(e.x * s, e.y * s, RC.ENGAGEMENT_RANGE * s, 0, Math.PI * 2);
+          ctx.arc(e.x * s, e.y * s, reach * s, 0, Math.PI * 2);
           ctx.fill();
           ctx.stroke();
         }
