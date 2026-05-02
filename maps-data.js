@@ -399,16 +399,33 @@
 
   function compilePieces(pieces) {
     const walls = [], terrain = [];
-    for (const p of pieces || []) {
+    const openable = []; // indices of pieces that can toggle (hatchway / breach)
+    const teleporters = []; // T pads
+    (pieces || []).forEach((p, idx) => {
+      const def = PIECES[p.kind];
+      if (!def) return;
       const seg = pieceWallSegment(p);
-      if (seg) walls.push(seg);
+      if (seg) {
+        walls.push({ ...seg, pieceIndex: idx, marker: def.marker || null });
+        if (def.marker === 'hatchway' || def.marker === 'breach') {
+          openable.push({ pieceIndex: idx, kind: def.marker, label: def.label, x: (seg.x1 + seg.x2) / 2, y: (seg.y1 + seg.y2) / 2 });
+        }
+      }
       const ter = pieceTerrainShape(p);
-      if (ter) terrain.push(ter);
-    }
-    return { walls, terrain };
+      if (ter) terrain.push({ ...ter, pieceIndex: idx });
+      if (def.type === 'circle' && def.label === 'T') {
+        teleporters.push({ pieceIndex: idx, x: p.x, y: p.y, r: def.r });
+      }
+    });
+    return { walls, terrain, openable, teleporters };
   }
 
-  // Returns a copy of map with piece-derived walls/terrain merged in.
+  // Returns a copy of map with piece-derived walls/terrain merged in. The
+  // resulting object exposes:
+  //   walls       — all blocking segments (each tagged with pieceIndex if any)
+  //   terrain     — light/heavy cover and decorative pieces
+  //   openable    — list of hatchway/breach pieces (with pieceIndex)
+  //   teleporters — list of T pads (with pieceIndex)
   function compileMap(map) {
     if (!map) return map;
     const c = compilePieces(map.pieces);
@@ -416,6 +433,8 @@
       ...map,
       walls: [...(map.walls || []), ...c.walls],
       terrain: [...(map.terrain || []), ...c.terrain],
+      openable: c.openable,
+      teleporters: c.teleporters,
     };
   }
 
