@@ -144,11 +144,17 @@
       });
       return out;
     }
+    // "Limited" weapons (e.g. demolition charges) are one-shot extras — they
+    // come along with whichever primary weapon the user picks rather than
+    // competing for the slot. Match "Limited" and "Limited N".
+    function isLimitedWeapon(w) {
+      return Array.isArray(w && w.rules) && w.rules.some(r => /^Limited\b/i.test(String(r || '')));
+    }
     function uniqueRangedBases(weapons) {
-      return uniqueWeaponBases((weapons || []).filter(w => !w.is_melee));
+      return uniqueWeaponBases((weapons || []).filter(w => !w.is_melee && !isLimitedWeapon(w)));
     }
     function uniqueMeleeBases(weapons) {
-      return uniqueWeaponBases((weapons || []).filter(w => w.is_melee));
+      return uniqueWeaponBases((weapons || []).filter(w => w.is_melee && !isLimitedWeapon(w)));
     }
     function requiresRangedChoice(op) {
       return uniqueRangedBases(op && op.weapons).length > 1;
@@ -158,6 +164,14 @@
     }
     function operativeRequiresChoice(op) {
       return requiresRangedChoice(op) || requiresMeleeChoice(op);
+    }
+    function autoChoicesFor(op) {
+      const r = uniqueRangedBases(op && op.weapons);
+      const m = uniqueMeleeBases(op && op.weapons);
+      return {
+        ranged: r.length === 1 ? r[0] : null,
+        melee:  m.length === 1 ? m[0] : null,
+      };
     }
 
     let state = {
@@ -397,7 +411,7 @@
 
       addBtn.addEventListener('click', () => {
         if (!requiresChoice) {
-          addPick(op, null);
+          addPick(op, autoChoicesFor(op));
           return;
         }
         const open = chooser.style.display !== 'none';
@@ -459,8 +473,14 @@
       const meleeBases = uniqueMeleeBases(op.weapons);
       const needRanged = rangedBases.length > 1;
       const needMelee = meleeBases.length > 1;
+      const auto = autoChoicesFor(op);
 
-      const selection = { ranged: null, melee: null };
+      // Side(s) that don't need a pick are seeded with the lone option so the
+      // saved pick still records what's equipped.
+      const selection = {
+        ranged: needRanged ? null : auto.ranged,
+        melee:  needMelee  ? null : auto.melee,
+      };
 
       const confirm = document.createElement('button');
       confirm.type = 'button';
