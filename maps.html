@@ -44,9 +44,9 @@
     let selected = null;
 
     function renderPreview(rawMap) {
-      // Expand pieces into the wall/terrain arrays so the preview can use a
-      // single render path. Marker decorations (breach/hatchway/necron) are
-      // omitted at thumbnail scale.
+      // Expand pieces into the wall/terrain arrays so the preview can share a
+      // single render path. Piece-specific decorations (end caps, wallends,
+      // breach/hatchway/necron markers) are drawn from rawMap.pieces below.
       const map = window.KT.compileMap(rawMap);
       const W = window.KT.TOMB_BOARD.width;
       const H = window.KT.TOMB_BOARD.height;
@@ -54,6 +54,8 @@
       const w = W * SCALE, h = H * SCALE;
       const aZone = window.KT.deployZone(map, 'A');
       const bZone = window.KT.deployZone(map, 'B');
+      const PIECES = window.KT.PIECES;
+      const rotDir = window.KT.rotDir;
 
       let svg = `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block;">`;
       // Deployment fills (orange = A, grey = B)
@@ -81,6 +83,53 @@
       // Walls
       for (const wseg of map.walls || []) {
         svg += `<line x1="${wseg.x1*SCALE}" y1="${wseg.y1*SCALE}" x2="${wseg.x2*SCALE}" y2="${wseg.y2*SCALE}" stroke="#0a0706" stroke-width="2.5" stroke-linecap="round"/>`;
+      }
+      // Wall-piece end caps, wallend (X) pieces, and breach/hatchway markers.
+      for (const p of map.pieces || []) {
+        const def = PIECES && PIECES[p.kind];
+        if (!def) continue;
+        if (def.type === 'wall') {
+          const [dx, dy] = rotDir(p.rot);
+          const x1 = p.x * SCALE, y1 = p.y * SCALE;
+          const x2 = (p.x + dx * def.len) * SCALE, y2 = (p.y + dy * def.len) * SCALE;
+          const cap = 1.0 * SCALE;
+          svg += `<rect x="${x1 - cap/2}" y="${y1 - cap/2}" width="${cap}" height="${cap}" fill="#0a0706"/>`;
+          svg += `<rect x="${x2 - cap/2}" y="${y2 - cap/2}" width="${cap}" height="${cap}" fill="#0a0706"/>`;
+          if (def.marker) {
+            const flip = !!p.flip;
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            const perp = angle + Math.PI / 2;
+            let alongIn = def.len / 2;
+            let perpIn = 0;
+            if (def.asymm === 'half') alongIn = flip ? def.len * 0.75 : def.len * 0.25;
+            else if (def.asymm === 'side') perpIn = flip ? -0.55 : 0.55;
+            const cx = (p.x + dx * alongIn) * SCALE + Math.cos(perp) * perpIn * SCALE;
+            const cy = (p.y + dy * alongIn) * SCALE + Math.sin(perp) * perpIn * SCALE;
+            if (def.marker === 'breach' || def.marker === 'hatchway') {
+              const fill = def.marker === 'breach' ? '#c97a3a' : '#7a9c3e';
+              const mw = 3.0 * SCALE, mh = 0.8 * SCALE;
+              const pts = `${-mw/2},0 ${-mw/4},${-mh/2} ${mw/4},${-mh/2} ${mw/2},0 ${mw/4},${mh/2} ${-mw/4},${mh/2}`;
+              const angDeg = angle * 180 / Math.PI;
+              svg += `<polygon points="${pts}" fill="${fill}" stroke="#0a0706" stroke-width="0.5" transform="translate(${cx} ${cy}) rotate(${angDeg})"/>`;
+            } else if (def.marker === 'necron') {
+              const sideSign = flip ? -1 : 1;
+              const offset = 0.5 * SCALE * sideSign;
+              const sq = 0.35 * SCALE;
+              for (let i = 0; i < 3; i++) {
+                const t = (i + 1) / 4;
+                const ax = (p.x + dx * def.len * t) * SCALE + Math.cos(perp) * offset;
+                const ay = (p.y + dy * def.len * t) * SCALE + Math.sin(perp) * offset;
+                svg += `<rect x="${ax - sq/2}" y="${ay - sq/2}" width="${sq}" height="${sq}" fill="#48b04a"/>`;
+              }
+            }
+          }
+        } else if (def.type === 'wallend') {
+          const cx = p.x * SCALE, cy = p.y * SCALE;
+          const r = 0.6 * SCALE;
+          svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#1f4d36" stroke="#0a0706" stroke-width="0.5"/>`;
+          svg += `<line x1="${cx - r*0.45}" y1="${cy - r*0.45}" x2="${cx + r*0.45}" y2="${cy + r*0.45}" stroke="#fff" stroke-width="1"/>`;
+          svg += `<line x1="${cx - r*0.45}" y1="${cy + r*0.45}" x2="${cx + r*0.45}" y2="${cy - r*0.45}" stroke="#fff" stroke-width="1"/>`;
+        }
       }
       // Terrain tokens
       for (const t of map.terrain || []) {
