@@ -1143,8 +1143,7 @@
 
   // ── Hatchway / breach actions ──────────────────────────────────────
   // Each openable piece has a wall segment endpoint at its midpoint. The
-  // operative must be within ~1.5" of that midpoint to interact (a generous
-  // approximation of "in base contact / within control range of access").
+  // operative must be within 1" of that midpoint to interact (control range).
   function nearestOpenable(u, kindFilter) {
     const list = mapDef.openable || [];
     let best = null, bestD = Infinity;
@@ -1153,7 +1152,7 @@
       const d = Math.hypot(o.x - u.x, o.y - u.y);
       if (d < bestD) { bestD = d; best = o; }
     }
-    if (!best || bestD > 2.5) return null;
+    if (!best || bestD > 1) return null;
     return best;
   }
 
@@ -2812,7 +2811,7 @@
           const d = Math.hypot(o.x - u.x, o.y - u.y);
           if (d > 4) continue;
           const isOpen = state.combat.pieceState.open.has(o.pieceIndex);
-          ctx.strokeStyle = d <= 2.5
+          ctx.strokeStyle = d <= 1
             ? (o.kind === 'hatchway' ? 'rgba(122,156,62,0.85)' : 'rgba(201,122,58,0.85)')
             : 'rgba(255,255,255,0.18)';
           ctx.lineWidth = 2;
