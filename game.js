@@ -342,9 +342,21 @@
   const activationOrders = document.getElementById('activation-orders');
   const activationActions = document.getElementById('activation-actions');
   const actionGrid = document.getElementById('action-grid');
+  const actionGridMore = document.getElementById('action-grid-more');
+  const actionMoreToggle = document.getElementById('action-more-toggle');
   const undoBtn = document.getElementById('undo-btn');
   const endActivationBtn = document.getElementById('end-activation-btn');
   const activationHint = document.getElementById('activation-hint');
+  const activationCollapse = document.getElementById('activation-collapse');
+  const miniHud = document.getElementById('board-mini-hud');
+  const miniHudLetter = document.getElementById('mh-letter');
+  const miniHudName = document.getElementById('mh-name');
+  const miniHudAp = document.getElementById('mh-ap');
+  const miniHudOrder = document.getElementById('mh-order');
+  const miniHudHp = document.getElementById('mh-hp');
+  const sidebarEl = document.getElementById('sidebar');
+  const rosterToggle = document.getElementById('roster-toggle');
+  const sidebarClose = document.getElementById('sidebar-close');
   const shootModal = document.getElementById('shoot-modal');
   const shootBody = document.getElementById('shoot-body');
   const shootCancel = document.getElementById('shoot-cancel');
@@ -1185,13 +1197,32 @@
   }
 
   // ── Activation panel ────────────────────────────────────────────────
+  let lastActivationUnit = null;
   function syncActivationPanel() {
     if (state.phase !== 'combat' || state.combat.over) {
       activationPanel.style.display = 'none';
+      document.body.classList.remove('has-activation-dock', 'dock-collapsed', 'dock-orders');
+      activationPanel.classList.remove('collapsed');
+      document.body.style.removeProperty('--dock-h');
+      syncMiniHud(null);
       return;
     }
     activationPanel.style.display = '';
+    document.body.classList.add('has-activation-dock');
     const a = activation();
+
+    // When the active unit changes, reset disclosure state so each new
+    // activation starts with the primary actions visible and the dock
+    // expanded. (We don't auto-collapse mid-activation.)
+    const unitNow = a ? a.unit : null;
+    if (unitNow !== lastActivationUnit) {
+      lastActivationUnit = unitNow;
+      moreActionsOpen = false;
+      applyMoreActionsOpen();
+      activationPanel.classList.remove('collapsed');
+      document.body.classList.remove('dock-collapsed');
+    }
+
     if (!a) {
       // Pre-activation: prompt to pick a ready operative.
       const team = activeTeam();
@@ -1204,19 +1235,24 @@
       activationHint.textContent = ready.length
         ? 'Tap one of your ready operatives on the board or in the sidebar to activate them.'
         : 'No ready operatives. Press End Turning Point.';
+      document.body.classList.remove('dock-orders');
+      syncMiniHud(null);
       return;
     }
     const u = a.unit;
     activationWho.textContent = `${u.letter} · ${u._displayName}`;
     const orderTxt = a.order ? (a.order === 'engage' ? 'Engage' : 'Conceal') : '— no order';
     activationMeta.textContent = `AP ${a.ap}/${a.apMax} · ${orderTxt} · TP ${state.combat.turningPoint}`;
+    syncMiniHud(a);
     if (!a.order) {
       activationOrders.style.display = '';
       activationActions.style.display = 'none';
       activationHint.classList.remove('warn');
       activationHint.textContent = '';
+      document.body.classList.add('dock-orders');
       return;
     }
+    document.body.classList.remove('dock-orders');
     activationOrders.style.display = 'none';
     activationActions.style.display = '';
     renderActionGrid();
@@ -1236,15 +1272,36 @@
     undoBtn.disabled = a.undoStack.length === 0;
   }
 
+  function buildActionButton(it, onClick) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'action-btn';
+    const reason = it.reason;
+    btn.disabled = !!reason;
+    const costHtml = it.cost === '·'
+      ? `<span class="ab-cost">${escapeHtml(it.info)}</span>`
+      : `<span class="ab-cost"><strong>${it.cost} AP</strong> · ${escapeHtml(it.info)}</span>`;
+    btn.innerHTML = `
+      <span class="ab-name">${escapeHtml(it.name)}</span>
+      ${costHtml}
+      ${reason ? `<span class="ab-reason">${escapeHtml(reason)}</span>` : ''}
+    `;
+    btn.addEventListener('click', onClick);
+    return btn;
+  }
+
   function renderActionGrid() {
     actionGrid.innerHTML = '';
+    if (actionGridMore) actionGridMore.innerHTML = '';
+    if (actionMoreToggle) actionMoreToggle.style.display = 'none';
     const a = activation();
     if (!a) return;
     const u = a.unit;
     const pm = state.combat.pendingMove;
 
     // While a move is being plotted, swap the grid for path controls so the
-    // user is funnelled toward Confirm / Undo Waypoint / Cancel.
+    // user is funnelled toward Confirm / Undo Waypoint / Cancel. The "More"
+    // tray stays empty during this phase.
     if (pm) {
       const legs = pm.waypoints.length - 1;
       const endpointBlocked = legs > 0 ? endpointReason(u, pm) : null;
@@ -1254,51 +1311,87 @@
         { id: '_cancel',   name: 'Cancel Move', info: 'Disarm this action', cost: '·', reason: null },
       ];
       for (const it of items) {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'action-btn';
-        if (it.id === '_confirm' && !it.reason) btn.classList.add('armed');
-        btn.disabled = !!it.reason;
-        btn.innerHTML = `
-          <span class="ab-name">${it.name}</span>
-          <span class="ab-cost"><strong>${it.cost === '·' ? '' : it.cost + ' AP · '}</strong>${escapeHtml(it.info)}</span>
-          ${it.reason ? `<span class="ab-reason">${escapeHtml(it.reason)}</span>` : ''}
-        `;
-        btn.addEventListener('click', () => {
+        const btn = buildActionButton(it, () => {
           if (it.id === '_confirm') commitPath();
           else if (it.id === '_undo_wp') undoWaypoint();
           else if (it.id === '_cancel') cancelPath();
         });
+        if (it.id === '_confirm' && !it.reason) btn.classList.add('armed');
         actionGrid.appendChild(btn);
       }
       return;
     }
 
     const v = KTR.validate;
-    const items = [
+    const hatchAvailable = !!nearestOpenable(u, 'hatchway');
+    const breachAvailable = !!nearestOpenable(u, 'breach');
+    // Primary actions are the four every operative considers most turns:
+    // a movement choice, plus their attacks. We always show these, even if
+    // they're not legal right now, so the player gets feedback on *why*
+    // they can't (e.g. "out of AP", "no enemy in range").
+    const primary = [
       { id: 'reposition', name: 'Reposition', cost: RC.REPOSITION_AP, info: `Move ${u.moveInches}"`, reason: v.reposition(u, a) },
       { id: 'dash',       name: 'Dash',       cost: RC.DASH_AP,        info: `Move ${RC.DASH_INCHES}"`,                  reason: v.dash(u, a) },
-      { id: 'charge',     name: 'Charge',     cost: RC.CHARGE_AP,      info: `Move ${u.moveInches + RC.CHARGE_BONUS}", end in CR`, reason: v.charge(u, a, state.units) },
-      { id: 'fallBack',   name: 'Fall Back',  cost: RC.FALL_BACK_AP,   info: `Move ${u.moveInches}"`,                    reason: v.fallBack(u, a, state.units) },
       { id: 'shoot',      name: 'Shoot',      cost: RC.SHOOT_AP,       info: 'Ranged attack',                             reason: v.shoot(u, a, state.units) },
       { id: 'fight',      name: 'Fight',      cost: RC.FIGHT_AP,       info: 'Melee attack',                              reason: v.fight(u, a, state.units) },
-      { id: 'openHatch',  name: 'Operate Hatch', cost: RC.OPEN_HATCH_AP, info: 'Open / close', reason: nearestOpenable(u, 'hatchway') ? v.openHatchway(u, a) : 'No hatchway nearby.' },
-      { id: 'breach',     name: 'Breach',     cost: KTR.breachAPCost(u), info: 'Open a breach point', reason: nearestOpenable(u, 'breach') ? v.breach(u, a) : 'No breach point nearby.' },
     ];
-    for (const it of items) {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'action-btn';
-      const reason = it.reason;
-      btn.disabled = !!reason;
-      btn.innerHTML = `
-        <span class="ab-name">${it.name}</span>
-        <span class="ab-cost"><strong>${it.cost} AP</strong> · ${escapeHtml(it.info)}</span>
-        ${reason ? `<span class="ab-reason">${escapeHtml(reason)}</span>` : ''}
-      `;
-      btn.addEventListener('click', () => onActionClick(it.id));
-      actionGrid.appendChild(btn);
+    // Secondary actions: charge/fall back are situational; hatchway/breach
+    // are entirely irrelevant unless one is nearby. Filter the latter out
+    // completely instead of greying them out — there's no "fix" that turns
+    // a missing hatchway into a present one.
+    const secondary = [
+      { id: 'charge',    name: 'Charge',     cost: RC.CHARGE_AP,    info: `Move ${u.moveInches + RC.CHARGE_BONUS}", end in CR`, reason: v.charge(u, a, state.units) },
+      { id: 'fallBack',  name: 'Fall Back',  cost: RC.FALL_BACK_AP, info: `Move ${u.moveInches}"`,                              reason: v.fallBack(u, a, state.units) },
+    ];
+    if (hatchAvailable) secondary.push({ id: 'openHatch', name: 'Operate Hatch', cost: RC.OPEN_HATCH_AP, info: 'Open / close', reason: v.openHatchway(u, a) });
+    if (breachAvailable) secondary.push({ id: 'breach', name: 'Breach', cost: KTR.breachAPCost(u), info: 'Open a breach point', reason: v.breach(u, a) });
+
+    // Promote any secondary action that's currently legal to the primary
+    // grid so the most relevant choice for *this* situation is always one
+    // tap away. (e.g. if the unit is in CR, Fall Back jumps to primary.)
+    const promoted = [];
+    for (let i = secondary.length - 1; i >= 0; i--) {
+      if (!secondary[i].reason) {
+        promoted.unshift(secondary[i]);
+        secondary.splice(i, 1);
+      }
     }
+    const primaryRendered = primary.concat(promoted);
+
+    for (const it of primaryRendered) {
+      actionGrid.appendChild(buildActionButton(it, () => onActionClick(it.id)));
+    }
+    if (actionGridMore && secondary.length) {
+      for (const it of secondary) {
+        actionGridMore.appendChild(buildActionButton(it, () => onActionClick(it.id)));
+      }
+      if (actionMoreToggle) {
+        actionMoreToggle.style.display = '';
+        applyMoreActionsOpen();
+      }
+    }
+  }
+
+  // ── Mini-HUD on canvas (combat) ──────────────────────────────────────
+  // Mirrors the active operative summary onto a small overlay anchored to
+  // the top-left of the board, so phone players can see whose turn / AP /
+  // order without scrolling to the bottom dock.
+  function syncMiniHud(a) {
+    if (!miniHud) return;
+    if (!a || state.phase !== 'combat' || state.combat.over) {
+      miniHud.style.display = 'none';
+      return;
+    }
+    const u = a.unit;
+    miniHud.style.display = '';
+    miniHudLetter.textContent = u.letter;
+    miniHudLetter.dataset.team = u.team;
+    miniHudName.textContent = u._displayName;
+    const pips = '●'.repeat(a.ap) + '○'.repeat(Math.max(0, a.apMax - a.ap));
+    miniHudAp.innerHTML = `<span class="mh-ap-pips">${pips}</span>`;
+    miniHudOrder.className = 'mh-order' + (a.order ? ' ' + a.order : '');
+    miniHudOrder.textContent = a.order ? (a.order === 'engage' ? 'ENGAGE' : 'CONCEAL') : '— no order';
+    miniHudHp.textContent = `HP ${u.hp}/${u.maxHp}`;
   }
 
   function actionAPCost(kind, unit) {
@@ -2153,6 +2246,71 @@
   shootCancel.addEventListener('click', closeShootModal);
   fightCancel.addEventListener('click', closeFightModal);
 
+  // The "More actions" disclosure inside the dock. Persists for the current
+  // activation; reset on each new activation in syncActivationPanel.
+  let moreActionsOpen = false;
+  if (actionMoreToggle) {
+    actionMoreToggle.addEventListener('click', () => {
+      moreActionsOpen = !moreActionsOpen;
+      applyMoreActionsOpen();
+    });
+  }
+  function applyMoreActionsOpen() {
+    if (!actionGridMore) return;
+    actionGridMore.style.display = moreActionsOpen ? '' : 'none';
+    if (actionMoreToggle) {
+      actionMoreToggle.setAttribute('aria-expanded', moreActionsOpen ? 'true' : 'false');
+      actionMoreToggle.textContent = moreActionsOpen ? 'Fewer actions ▴' : 'More actions ▾';
+    }
+  }
+
+  // Collapse / expand the bottom dock so the player can peek at the board
+  // beneath it. The button is only visible on mobile (CSS) but its handler
+  // is harmless on desktop.
+  if (activationCollapse) {
+    activationCollapse.addEventListener('click', () => {
+      const collapsed = activationPanel.classList.toggle('collapsed');
+      document.body.classList.toggle('dock-collapsed', collapsed);
+      activationCollapse.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    });
+  }
+
+  // Sidebar drawer (mobile). The toggle floats on the canvas; tapping
+  // outside, the close button, or any of the in-drawer nav links closes it.
+  function openSidebar() {
+    sidebarEl.classList.add('open');
+    document.body.classList.add('sidebar-open');
+  }
+  function closeSidebar() {
+    sidebarEl.classList.remove('open');
+    document.body.classList.remove('sidebar-open');
+  }
+  if (rosterToggle) rosterToggle.addEventListener('click', openSidebar);
+  if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+
+  // Keep body padding-bottom in sync with the live dock height. Without
+  // this the bottom of the canvas / log can be hidden behind the dock
+  // when its content changes (orders → actions → move-plot controls).
+  function updateDockHeight() {
+    if (activationPanel.style.display === 'none') {
+      document.body.style.removeProperty('--dock-h');
+      return;
+    }
+    const h = activationPanel.offsetHeight || 0;
+    document.body.style.setProperty('--dock-h', h + 'px');
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(updateDockHeight).observe(activationPanel);
+  }
+  window.addEventListener('resize', updateDockHeight);
+  // Tap on the dimmed page outside the sidebar to dismiss.
+  document.addEventListener('click', (e) => {
+    if (!document.body.classList.contains('sidebar-open')) return;
+    if (sidebarEl.contains(e.target)) return;
+    if (rosterToggle && rosterToggle.contains(e.target)) return;
+    closeSidebar();
+  });
+
   // ── Logging & sidebar ────────────────────────────────────────────────
   function log(msg, cls) {
     if (!logEl) return;
@@ -2210,11 +2368,13 @@
       if (state.phase === 'deploy' && u.team === state.deploy.currentTeam) {
         if (u.deployed) undeployUnit(u);
         else selectPendingUnit(u);
+        closeSidebar();
         return;
       }
       // Combat: tap an active-team ready unit to start its activation.
       if (state.phase === 'combat' && u.alive && u.team === activeTeam() && !activation() && u.unitState === 'ready') {
         startActivation(u);
+        closeSidebar();
         return;
       }
       // Combat: tap an enemy in CR while activating to fight; tap an enemy
@@ -2399,10 +2559,15 @@
     sb.style.top = '0px';
     const sw = sb.offsetWidth || 280;
     const sh = sb.offsetHeight || 200;
+    // Avoid hiding the popup behind the bottom action dock on mobile.
+    const dockRect = (document.body.classList.contains('has-activation-dock') && activationPanel.style.display !== 'none')
+      ? activationPanel.getBoundingClientRect()
+      : null;
+    const bottomLimit = dockRect ? dockRect.top : window.innerHeight;
     let left = cx + margin;
     let top  = cy + margin;
     if (left + sw + 8 > window.innerWidth)  left = Math.max(8, cx - sw - margin);
-    if (top  + sh + 8 > window.innerHeight) top  = Math.max(8, cy - sh - margin);
+    if (top  + sh + 8 > bottomLimit)        top  = Math.max(8, bottomLimit - sh - 8);
     sb.style.left = left + 'px';
     sb.style.top  = top  + 'px';
   }

@@ -116,8 +116,33 @@
       </div>
 
       <div class="board-wrap">
-        <canvas id="board" class="board" width="720" height="720"></canvas>
-        <aside class="sidebar">
+        <div class="board-stage">
+          <canvas id="board" class="board" width="720" height="720"></canvas>
+          <!-- Mini-HUD overlay: floats over the top-left of the canvas during
+               combat so the active operative, AP, and order are always visible
+               without scrolling. Hidden when there is no activation. -->
+          <div class="board-mini-hud" id="board-mini-hud" style="display:none;">
+            <div class="mh-row">
+              <span class="mh-letter" id="mh-letter">—</span>
+              <div class="mh-meta">
+                <div class="mh-name" id="mh-name">—</div>
+                <div class="mh-stats">
+                  <span class="mh-ap" id="mh-ap"></span>
+                  <span class="mh-order" id="mh-order"></span>
+                  <span class="mh-hp" id="mh-hp"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Floating "Roster" toggle so the unit/log drawer can be opened
+               from the board on mobile without scrolling past it. -->
+          <button class="board-roster-toggle" id="roster-toggle" type="button" aria-label="Open roster">
+            <span class="brt-icon">≡</span>
+            <span class="brt-label">Roster</span>
+          </button>
+        </div>
+        <aside class="sidebar" id="sidebar">
+          <button class="sidebar-close" id="sidebar-close" type="button" aria-label="Close roster">×</button>
           <div>
             <div class="label-cap" style="margin-bottom:6px;" id="sidebar-A-label">Player Blue</div>
             <div id="team-a"></div>
@@ -133,43 +158,48 @@
         </aside>
       </div>
 
-      <div class="action-bar">
+      <div class="action-bar action-bar-secondary">
         <button class="btn-ghost" id="restart-btn" type="button">Restart Setup</button>
         <a href="./maps.html" class="btn-ghost">Change Map</a>
         <a href="./index.html" class="btn-ghost">Main Menu</a>
       </div>
     </section>
 
-    <!-- Activation control panel: shown during combat once an operative has
-         been picked. Contains the order picker, the action menu, undo /
-         end-activation buttons, and a hint line. Mobile lays this out
-         beneath the canvas; desktop lets it dock alongside the sidebar. -->
+    <!-- Activation control panel: docks to the bottom of the viewport on
+         mobile so the player's available actions are always visible without
+         scrolling. On desktop it sits beneath the canvas. Layout:
+         head → orders/actions → controls → hint. -->
     <section id="activation-panel" class="activation-panel" style="display:none;">
       <div class="activation-head">
         <div class="activation-who" id="activation-who">—</div>
         <div class="activation-meta" id="activation-meta"></div>
+        <button class="activation-collapse" id="activation-collapse" type="button" aria-label="Collapse actions" aria-expanded="true">▾</button>
       </div>
-      <div class="activation-orders" id="activation-orders" style="display:none;">
-        <p class="phase-hint">Choose an order for this activation:</p>
-        <div class="order-buttons">
-          <button class="btn-ghost order-btn" data-order="engage" type="button">
-            <span class="order-name">Engage</span>
-            <span class="order-desc">Free to Shoot, Charge, Counteract.</span>
-          </button>
-          <button class="btn-ghost order-btn" data-order="conceal" type="button">
-            <span class="order-name">Conceal</span>
-            <span class="order-desc">Cannot Shoot, Charge or Counteract. Cover hides you.</span>
-          </button>
+      <div class="activation-body" id="activation-body">
+        <div class="activation-orders" id="activation-orders" style="display:none;">
+          <p class="phase-hint">Choose an order for this activation:</p>
+          <div class="order-buttons">
+            <button class="btn-ghost order-btn" data-order="engage" type="button">
+              <span class="order-name">Engage</span>
+              <span class="order-desc">Free to Shoot, Charge, Counteract.</span>
+            </button>
+            <button class="btn-ghost order-btn" data-order="conceal" type="button">
+              <span class="order-name">Conceal</span>
+              <span class="order-desc">Cannot Shoot, Charge or Counteract. Cover hides you.</span>
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="activation-actions" id="activation-actions" style="display:none;">
-        <div class="action-grid" id="action-grid"></div>
-        <div class="activation-controls">
-          <button class="btn-ghost" id="undo-btn" type="button">Undo</button>
-          <button class="btn-fire" id="end-activation-btn" type="button">End Activation</button>
+        <div class="activation-actions" id="activation-actions" style="display:none;">
+          <div class="action-grid" id="action-grid"></div>
+          <div class="action-grid action-grid-more" id="action-grid-more" style="display:none;"></div>
+          <button class="action-more-toggle" id="action-more-toggle" type="button" style="display:none;" aria-expanded="false">More actions ▾</button>
+          <div class="activation-controls">
+            <button class="btn-ghost" id="undo-btn" type="button">Undo</button>
+            <button class="btn-fire" id="end-activation-btn" type="button">End Activation</button>
+          </div>
         </div>
+        <p class="activation-hint" id="activation-hint"></p>
       </div>
-      <p class="activation-hint" id="activation-hint"></p>
     </section>
 
     <!-- Stat block popup (hover/tap) -->
