@@ -209,9 +209,109 @@
       over: false,
     },
 
+    // ── VP scoring ──
+    // Two ops are tracked:
+    //  • Kill Op   — cumulative VP (max 5) looked up from KILL_GRADE_TABLE
+    //                using the number of enemy operatives a team has
+    //                incapacitated vs. the enemy's starting roster size.
+    //  • Crit Op   — 1 VP per objective whose combined APL of operatives
+    //                within 1" exceeds the opposing team's, scored at the
+    //                end of every turning point. Cumulative across the game.
+    score: {
+      killOp:    { A: 0, B: 0 },
+      critOp:    { A: 0, B: 0 },
+      kills:     { A: 0, B: 0 },     // # enemies this team has incapacitated
+      startSize: { A: 0, B: 0 },     // enemy starting size at game start
+      lastScoredTP: 0,               // guards crit-op against double-scoring
+    },
+
     hoverUnit: null,                 // for the stat block popup
     pinnedStatUnit: null,            // tap-pinned (mobile)
   };
+
+  // ── Kill Op lookup table (per the official Approved Ops chart) ─────
+  // KILL_GRADE_TABLE[startingSize] = thresholds for kill grades 1..5.
+  // Example: starting size 10, you need 2/4/6/8/10 kills for VP 1/2/3/4/5.
+  const KILL_GRADE_TABLE = {
+    5:  [1, 2, 3, 4, 5],
+    6:  [1, 2, 4, 5, 6],
+    7:  [1, 3, 4, 6, 7],
+    8:  [2, 3, 5, 6, 8],
+    9:  [2, 4, 5, 7, 9],
+    10: [2, 4, 6, 8, 10],
+    11: [2, 4, 7, 9, 11],
+    12: [2, 5, 7, 10, 12],
+    13: [3, 5, 8, 10, 13],
+    14: [3, 6, 8, 11, 14],
+  };
+
+  function killOpVP(kills, startingSize) {
+    if (kills <= 0 || startingSize <= 0) return 0;
+    // Clamp to the table range — rosters of <5 use the 5-row, >14 use the 14-row.
+    const N = Math.min(14, Math.max(5, startingSize));
+    const thresholds = KILL_GRADE_TABLE[N];
+    let vp = 0;
+    for (let i = 0; i < 5; i++) {
+      if (kills >= thresholds[i]) vp = i + 1;
+    }
+    return vp;
+  }
+
+  function recomputeKillOp() {
+    ['A', 'B'].forEach(team => {
+      const enemy = team === 'A' ? 'B' : 'A';
+      state.score.killOp[team] = killOpVP(state.score.kills[team], state.score.startSize[enemy]);
+    });
+  }
+
+  // Returns 'A' | 'B' | 'neutral' depending on which team's combined APL
+  // among operatives within 1" of the marker is greater. Ties are neutral.
+  function objectiveControl(obj) {
+    let aSum = 0, bSum = 0;
+    for (const u of state.units) {
+      if (!u.alive || !u.deployed) continue;
+      const d = Math.hypot(u.x - obj.x, u.y - obj.y);
+      if (d <= RC.ENGAGEMENT_RANGE + 1e-3) {
+        if (u.team === 'A') aSum += (u.apl || 0);
+        else                bSum += (u.apl || 0);
+      }
+    }
+    if (aSum > bSum) return 'A';
+    if (bSum > aSum) return 'B';
+    return 'neutral';
+  }
+
+  // Score the round that just ended. Awards 1 VP per controlled objective.
+  // Guarded so a single TP can never score twice (covers the case where the
+  // game ends mid-TP via elimination).
+  function scoreCritOpEndOfTurn() {
+    const tp = state.combat.turningPoint;
+    if (state.score.lastScoredTP >= tp) return;
+    state.score.lastScoredTP = tp;
+    let aGained = 0, bGained = 0;
+    for (const o of (mapDef.objectives || [])) {
+      const c = objectiveControl(o);
+      if (c === 'A') aGained++;
+      else if (c === 'B') bGained++;
+    }
+    state.score.critOp.A += aGained;
+    state.score.critOp.B += bGained;
+    if (aGained || bGained) {
+      log(`— TP ${tp} crit op: Blue +${aGained}, Red +${bGained} —`, 'turn');
+    }
+  }
+
+  function totalVP(team) {
+    return (state.score.killOp[team] || 0) + (state.score.critOp[team] || 0);
+  }
+
+  // Called whenever an enemy is incapacitated. `killerTeam` is the team that
+  // scored the kill (i.e. the opposing side from the operative who fell).
+  function registerKill(killerTeam) {
+    if (killerTeam !== 'A' && killerTeam !== 'B') return;
+    state.score.kills[killerTeam] = (state.score.kills[killerTeam] || 0) + 1;
+    recomputeKillOp();
+  }
 
   // ── DOM refs ─────────────────────────────────────────────────────────
   const phasePanels = {
@@ -231,6 +331,7 @@
   const sidebarALabel = document.getElementById('sidebar-A-label');
   const sidebarBLabel = document.getElementById('sidebar-B-label');
   const deployStatus = document.getElementById('deploy-status');
+  const vpBoardEl = document.getElementById('vp-board');
   const overlay = document.getElementById('overlay');
   const overlayTitle = document.getElementById('overlay-title');
   const overlayText = document.getElementById('overlay-text');
@@ -668,6 +769,17 @@
     state.combat.pendingMove = null;
     state.combat.shoot = null;
     state.combat.fight = null;
+    // Snapshot starting roster sizes for Kill Op lookups.
+    state.score = {
+      killOp: { A: 0, B: 0 },
+      critOp: { A: 0, B: 0 },
+      kills:  { A: 0, B: 0 },
+      startSize: {
+        A: state.units.filter(u => u.team === 'A').length,
+        B: state.units.filter(u => u.team === 'B').length,
+      },
+      lastScoredTP: 0,
+    };
     // For now initiative carries forward from deployment.
     state.combat.initiativeTeam = state.deploy.first;
     state.combat.activeTeam = state.deploy.first;
@@ -799,6 +911,8 @@
   }
 
   function nextTurningPoint() {
+    // Score the round that just ended before advancing the turning point.
+    scoreCritOpEndOfTurn();
     state.combat.turningPoint++;
     const tp = state.combat.turningPoint;
     log(`— Turning Point ${tp} begins —`, 'turn');
@@ -816,16 +930,23 @@
     const aAlive = state.units.some(u => u.team === 'A' && u.alive);
     const bAlive = state.units.some(u => u.team === 'B' && u.alive);
     if (aAlive && bAlive) return false;
+    // Score crit op for the in-progress round before the game closes out.
+    scoreCritOpEndOfTurn();
     state.combat.over = true;
     state.phase = 'over';
     state.combat.activation = null;
-    const winner = aAlive ? 'A' : 'B';
+    const aVP = totalVP('A'), bVP = totalVP('B');
+    let winner;
+    if (!aAlive && !bAlive) winner = aVP >= bVP ? 'A' : 'B';
+    else winner = aAlive ? 'A' : 'B';
     overlayTitle.textContent = `${teamName(winner)} Victorious`;
-    overlayText.textContent = aAlive
+    const fieldLine = aAlive
       ? 'Blue holds the field; Red lies broken.'
-      : 'Red holds the field; Blue lies broken.';
+      : (bAlive ? 'Red holds the field; Blue lies broken.' : 'Both forces are broken.');
+    overlayText.textContent = `${fieldLine} Final VP — Blue ${aVP} · Red ${bVP}.`;
     overlay.style.display = 'flex';
     syncActivationPanel();
+    render();
     return true;
   }
 
@@ -1674,6 +1795,7 @@
       s.target.unitState = 'incapacitated';
       log(`${s.target.letter} (${s.target._displayName}) is incapacitated by ${s.attacker.letter} (${s.damage} dmg).`, 'kill');
       s.killed = true;
+      registerKill(s.attacker.team);
     } else {
       log(`${s.attacker.letter} hits ${s.target.letter} for ${s.damage}.`, 'hit');
     }
@@ -2008,10 +2130,12 @@
     if (f.attacker.hp <= 0) {
       f.attacker.alive = false; f.attacker.unitState = 'incapacitated';
       log(`${f.attacker.letter} is slain in melee.`, 'kill');
+      registerKill(f.target.team);
     }
     if (f.target.hp <= 0) {
       f.target.alive = false; f.target.unitState = 'incapacitated';
       log(`${f.target.letter} is slain in melee.`, 'kill');
+      registerKill(f.attacker.team);
     }
     a.history.push({ type: 'fight', target: f.target.letter, dmg: f.damageT, taken: f.damageA });
     closeFightModal();
@@ -2119,6 +2243,46 @@
       : 'Player Red';
     sidebarALabel.textContent = labelA;
     sidebarBLabel.textContent = labelB;
+  }
+
+  function renderVpBoard() {
+    if (!vpBoardEl) return;
+    if (state.phase !== 'combat' && state.phase !== 'over') {
+      vpBoardEl.style.display = 'none';
+      return;
+    }
+    vpBoardEl.style.display = '';
+    const labelFor = (team) => state.rosters[team]
+      ? (state.rosters[team].name || TEAM_INFO[team].name)
+      : TEAM_INFO[team].name;
+    document.getElementById('vp-name-A').textContent = labelFor('A');
+    document.getElementById('vp-name-B').textContent = labelFor('B');
+    document.getElementById('vp-total-A').textContent = totalVP('A');
+    document.getElementById('vp-total-B').textContent = totalVP('B');
+    document.getElementById('vp-kill-A').textContent  = state.score.killOp.A;
+    document.getElementById('vp-kill-B').textContent  = state.score.killOp.B;
+    document.getElementById('vp-crit-A').textContent  = state.score.critOp.A;
+    document.getElementById('vp-crit-B').textContent  = state.score.critOp.B;
+    document.getElementById('vp-kills-A').textContent = state.score.kills.A;
+    document.getElementById('vp-kills-B').textContent = state.score.kills.B;
+    document.getElementById('vp-size-A').textContent  = state.score.startSize.B;
+    document.getElementById('vp-size-B').textContent  = state.score.startSize.A;
+    // Highlight which side currently leads in projected crit-op control.
+    const live = liveObjectiveTally();
+    const aSide = vpBoardEl.querySelector('.vp-side[data-team="A"]');
+    const bSide = vpBoardEl.querySelector('.vp-side[data-team="B"]');
+    aSide.classList.toggle('controlling', live.A > live.B && live.A > 0);
+    bSide.classList.toggle('controlling', live.B > live.A && live.B > 0);
+  }
+
+  // How many objectives each team is currently projected to score this TP
+  // if the round were to end now. Used purely for live HUD feedback.
+  function liveObjectiveTally() {
+    const tally = { A: 0, B: 0, neutral: 0 };
+    for (const o of (mapDef.objectives || [])) {
+      tally[objectiveControl(o)]++;
+    }
+    return tally;
   }
 
   function renderHud() {
@@ -2340,8 +2504,38 @@
     // Pieces (walls + decorations + terrain)
     for (const p of mapDefRaw.pieces || []) KT.drawPieceCanvas(ctx, p, s, s);
 
-    // Objectives
+    // Objectives — during combat the marker shows live control (combined APL
+    // within 1") as a halo, while still rendering the map's authored owner
+    // on the inner disc.
+    const inCombat = (state.phase === 'combat' || state.phase === 'over');
     for (const o of mapDef.objectives || []) {
+      const ctrl = inCombat ? objectiveControl(o) : null;
+      // 1" control radius (only shown in combat).
+      if (inCombat) {
+        const rad = RC.ENGAGEMENT_RANGE * s;
+        if (ctrl === 'A' || ctrl === 'B') {
+          const tinted = ctrl === 'A' ? '58, 109, 184' : '184, 32, 58';
+          ctx.fillStyle = `rgba(${tinted}, 0.18)`;
+          ctx.beginPath();
+          ctx.arc(o.x * s, o.y * s, rad, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = `rgba(${tinted}, 0.8)`;
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([4, 3]);
+          ctx.beginPath();
+          ctx.arc(o.x * s, o.y * s, rad, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else {
+          ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([3, 4]);
+          ctx.beginPath();
+          ctx.arc(o.x * s, o.y * s, rad, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
       const fill = o.owner === 'A' ? '#3a6db8' : (o.owner === 'B' ? '#b8203a' : '#d6c8a4');
       const ring = o.owner === 'A' ? '#fff' : (o.owner === 'B' ? '#fff' : '#0a0706');
       ctx.fillStyle = fill;
@@ -2579,6 +2773,7 @@
     }
     renderSidebar();
     renderHud();
+    renderVpBoard();
   }
 
   // ── Input ────────────────────────────────────────────────────────────
@@ -2703,6 +2898,11 @@
       selectedId: null, activation: null, pendingMove: null,
       shoot: null, fight: null, pieceState: { open: new Set() },
       hoverPt: null, over: false,
+    };
+    state.score = {
+      killOp: { A: 0, B: 0 }, critOp: { A: 0, B: 0 },
+      kills:  { A: 0, B: 0 }, startSize: { A: 0, B: 0 },
+      lastScoredTP: 0,
     };
     state.phase = 'teams';
     document.getElementById('confirm-teams').disabled = true;
