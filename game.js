@@ -830,83 +830,133 @@
   }
 
   // ── Movement validation ───────────────────────────────────────────
-  // canMoveTo returns null if a straight-line move from the unit's current
-  // position to (x,y) is legal under the supplied move budget; otherwise a
-  // string reason. We do not yet path-find around walls — players should
-  // open hatchways or path through the map manually using multiple actions.
-  function canMoveToReason(u, x, y, maxInches, opts) {
-    opts = opts || {};
+  // Movement actions consume a budget of inches across one-or-more legs of a
+  // path. The active player traces the path waypoint-by-waypoint; each leg
+  // must clear walls and respect the action-specific control-range rules:
+  //   * Reposition / Dash: no leg may pass within 1" of an enemy operative.
+  //   * Charge: legs may enter enemy CR; the END must be in CR of an enemy.
+  //   * Fall Back: legs may enter / leave enemy CR; the END must NOT be in CR.
+
+  function pathEnemyList(u) {
+    return state.units.filter(o => o.alive && o.deployed && o.team !== u.team);
+  }
+
+  // Reason a fresh leg from (fromX, fromY) → (toX, toY) is invalid for the
+  // currently armed move, or null if it's allowed.
+  function canExtendPathReason(u, pm, toX, toY) {
     const r = unitRadiusMax(u);
-    if (x < r || y < r) return 'Off-board.';
-    if (x > BOARD.width - r || y > BOARD.height - r) return 'Off-board.';
-    const dist = Math.hypot(x - u.x, y - u.y);
-    if (dist > maxInches + 1e-3) return 'Beyond move (' + dist.toFixed(1) + '" > ' + maxInches.toFixed(1) + '").';
-    if (losBlocked(u.x, u.y, x, y)) return 'Path blocked by terrain.';
-    if (unitOccupiesCircle(x, y, r, u)) return 'Square occupied.';
-    // Fall Back is the only move that may cross / start in enemy CR.
-    if (!opts.allowEnemyCR) {
-      const enemies = state.units.filter(o => o.alive && o.deployed && o.team !== u.team);
-      for (const e of enemies) {
-        if (Math.hypot(e.x - x, e.y - y) <= RC.ENGAGEMENT_RANGE && !opts.endInCROK) {
-          return 'Cannot end move in enemy control range.';
-        }
-      }
-    } else {
-      // Fall Back may not END within enemy CR.
-      const enemies = state.units.filter(o => o.alive && o.deployed && o.team !== u.team);
-      for (const e of enemies) {
-        if (Math.hypot(e.x - x, e.y - y) <= RC.ENGAGEMENT_RANGE) {
-          return 'Fall Back must end outside enemy control range.';
+    if (toX < r || toY < r || toX > BOARD.width - r || toY > BOARD.height - r) {
+      return 'Off-board.';
+    }
+    const last = pm.waypoints[pm.waypoints.length - 1];
+    const segDist = Math.hypot(toX - last.x, toY - last.y);
+    if (pm.used + segDist > pm.maxInches + 1e-3) {
+      return `Beyond move budget (${(pm.used + segDist).toFixed(1)}" > ${pm.maxInches.toFixed(1)}").`;
+    }
+    if (losBlocked(last.x, last.y, toX, toY)) return 'Leg crosses a wall.';
+    if (unitOccupiesCircle(toX, toY, r, u)) return 'Waypoint occupied.';
+    // Enemy control range along the leg.
+    if (pm.kind === 'reposition' || pm.kind === 'dash') {
+      for (const e of pathEnemyList(u)) {
+        const d = KTR.pointSegDist(e.x, e.y, last.x, last.y, toX, toY);
+        if (d < RC.ENGAGEMENT_RANGE - 1e-3) {
+          return 'Leg crosses an enemy control range.';
         }
       }
     }
     return null;
   }
-  function canMoveTo(u, x, y, maxInches, opts) {
-    return canMoveToReason(u, x, y, maxInches, opts) === null;
+
+  // Reason the path's current endpoint is illegal for the action; null if OK.
+  function endpointReason(u, pm) {
+    const last = pm.waypoints[pm.waypoints.length - 1];
+    const enemies = pathEnemyList(u);
+    const inCR = enemies.some(e => Math.hypot(e.x - last.x, e.y - last.y) <= RC.ENGAGEMENT_RANGE + 1e-3);
+    if (pm.kind === 'charge') {
+      if (!inCR) return 'Charge must end within 1" of an enemy.';
+    } else if (pm.kind === 'fallBack') {
+      if (inCR) return 'Fall Back must end outside enemy control range.';
+    } else {
+      if (inCR) return 'Cannot end move in enemy control range.';
+    }
+    return null;
   }
 
   // ── Action execution helpers ──────────────────────────────────────
-  function performMove(kind, x, y) {
+  function addWaypoint(x, y) {
     const a = activation();
     if (!a) return;
+    const pm = state.combat.pendingMove;
+    if (!pm) return;
     const u = a.unit;
-    let cost, max;
-    let opts = {};
-    let label;
-    if (kind === 'reposition') {
-      cost = RC.REPOSITION_AP; max = u.moveInches; label = 'repositions';
-    } else if (kind === 'dash') {
-      cost = RC.DASH_AP; max = RC.DASH_INCHES; label = 'dashes';
-    } else if (kind === 'charge') {
-      cost = RC.CHARGE_AP; max = u.moveInches + RC.CHARGE_BONUS; label = 'charges';
-      opts = { endInCROK: true };
-    } else if (kind === 'fallBack') {
-      cost = RC.FALL_BACK_AP; max = u.moveInches; label = 'falls back';
-      opts = { allowEnemyCR: true };
-    } else return;
-
-    // Charge requires ending in enemy CR
-    if (kind === 'charge') {
-      const enemies = state.units.filter(o => o.alive && o.deployed && o.team !== u.team);
-      const inCR = enemies.some(e => Math.hypot(e.x - x, e.y - y) <= RC.ENGAGEMENT_RANGE);
-      if (!inCR) { activationHint.textContent = 'Charge must finish within 1" of an enemy.'; activationHint.classList.add('warn'); return; }
+    const reason = canExtendPathReason(u, pm, x, y);
+    if (reason) {
+      activationHint.textContent = reason;
+      activationHint.classList.add('warn');
+      syncActivationPanel();
+      render();
+      return;
     }
+    const last = pm.waypoints[pm.waypoints.length - 1];
+    pm.used += Math.hypot(x - last.x, y - last.y);
+    pm.waypoints.push({ x, y });
+    activationHint.classList.remove('warn');
+    activationHint.textContent = '';
+    syncActivationPanel();
+    render();
+  }
 
-    const reason = canMoveToReason(u, x, y, max, opts);
-    if (reason) { activationHint.textContent = reason; activationHint.classList.add('warn'); return; }
+  function undoWaypoint() {
+    const pm = state.combat.pendingMove;
+    if (!pm || pm.waypoints.length <= 1) return;
+    const last = pm.waypoints.pop();
+    const prev = pm.waypoints[pm.waypoints.length - 1];
+    pm.used = Math.max(0, pm.used - Math.hypot(last.x - prev.x, last.y - prev.y));
+    activationHint.classList.remove('warn');
+    activationHint.textContent = '';
+    syncActivationPanel();
+    render();
+  }
 
-    pushUndo();
-    const dist = Math.hypot(x - u.x, y - u.y);
-    u.x = x; u.y = y;
-    a.ap -= cost;
-    if (kind === 'reposition') a.hasReposition = true;
-    if (kind === 'dash') a.hasDashed = true;
-    if (kind === 'charge') a.hasCharged = true;
-    if (kind === 'fallBack') a.hasFallenBack = true;
-    a.history.push({ type: kind, dist });
-    log(`${u.letter} ${label} ${dist.toFixed(1)}".`);
+  function cancelPath() {
     state.combat.pendingMove = null;
+    activationHint.classList.remove('warn');
+    activationHint.textContent = '';
+    syncActivationPanel();
+    render();
+  }
+
+  function commitPath() {
+    const a = activation();
+    if (!a) return;
+    const pm = state.combat.pendingMove;
+    if (!pm || pm.waypoints.length < 2) {
+      activationHint.textContent = 'Tap on the board to set the destination first.';
+      activationHint.classList.add('warn');
+      return;
+    }
+    const u = a.unit;
+    const reason = endpointReason(u, pm);
+    if (reason) {
+      activationHint.textContent = reason;
+      activationHint.classList.add('warn');
+      return;
+    }
+    pushUndo();
+    const last = pm.waypoints[pm.waypoints.length - 1];
+    u.x = last.x; u.y = last.y;
+    let cost, label;
+    if (pm.kind === 'reposition') { a.hasReposition = true; cost = RC.REPOSITION_AP; label = 'repositions'; }
+    else if (pm.kind === 'dash')  { a.hasDashed = true;     cost = RC.DASH_AP;       label = 'dashes'; }
+    else if (pm.kind === 'charge'){ a.hasCharged = true;    cost = RC.CHARGE_AP;     label = 'charges'; }
+    else                          { a.hasFallenBack = true; cost = RC.FALL_BACK_AP;  label = 'falls back'; }
+    a.ap -= cost;
+    const legs = pm.waypoints.length - 1;
+    a.history.push({ type: pm.kind, dist: pm.used, legs });
+    log(`${u.letter} ${label} ${pm.used.toFixed(1)}"${legs > 1 ? ` (${legs} legs)` : ''}.`);
+    state.combat.pendingMove = null;
+    activationHint.classList.remove('warn');
+    activationHint.textContent = '';
     syncActivationPanel();
     render();
   }
@@ -1049,9 +1099,15 @@
     activationOrders.style.display = 'none';
     activationActions.style.display = '';
     renderActionGrid();
-    if (state.combat.pendingMove) {
-      activationHint.classList.remove('warn');
-      activationHint.textContent = `Tap on the board to ${state.combat.pendingMove.label} (max ${state.combat.pendingMove.maxInches.toFixed(1)}").`;
+    const pm = state.combat.pendingMove;
+    if (pm) {
+      const remaining = Math.max(0, pm.maxInches - pm.used);
+      const legs = pm.waypoints.length - 1;
+      if (!activationHint.classList.contains('warn')) {
+        activationHint.textContent = legs === 0
+          ? `${pm.label}: tap on the board to set waypoints. Budget ${pm.maxInches.toFixed(1)}".`
+          : `${pm.label}: ${pm.used.toFixed(1)}" used · ${remaining.toFixed(1)}" left · ${legs} leg${legs === 1 ? '' : 's'}. Add more waypoints to route around walls/CR; press Confirm to commit.`;
+      }
     } else if (!a.history.length) {
       activationHint.classList.remove('warn');
       activationHint.textContent = 'Choose an action. Press Undo to revert any choice until you End Activation.';
@@ -1064,6 +1120,39 @@
     const a = activation();
     if (!a) return;
     const u = a.unit;
+    const pm = state.combat.pendingMove;
+
+    // While a move is being plotted, swap the grid for path controls so the
+    // user is funnelled toward Confirm / Undo Waypoint / Cancel.
+    if (pm) {
+      const legs = pm.waypoints.length - 1;
+      const endpointBlocked = legs > 0 ? endpointReason(u, pm) : null;
+      const items = [
+        { id: '_confirm',  name: 'Confirm Move', info: legs ? `Spend ${pm.used.toFixed(1)}" / ${pm.maxInches.toFixed(1)}"` : 'Add a waypoint first', cost: actionAPCost(pm.kind, u), reason: legs ? endpointBlocked : 'Tap on the board to set a waypoint.' },
+        { id: '_undo_wp',  name: 'Undo Waypoint', info: legs ? `Remove last leg` : 'No legs yet', cost: '·', reason: legs ? null : 'No waypoints to undo.' },
+        { id: '_cancel',   name: 'Cancel Move', info: 'Disarm this action', cost: '·', reason: null },
+      ];
+      for (const it of items) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'action-btn';
+        if (it.id === '_confirm' && !it.reason) btn.classList.add('armed');
+        btn.disabled = !!it.reason;
+        btn.innerHTML = `
+          <span class="ab-name">${it.name}</span>
+          <span class="ab-cost"><strong>${it.cost === '·' ? '' : it.cost + ' AP · '}</strong>${escapeHtml(it.info)}</span>
+          ${it.reason ? `<span class="ab-reason">${escapeHtml(it.reason)}</span>` : ''}
+        `;
+        btn.addEventListener('click', () => {
+          if (it.id === '_confirm') commitPath();
+          else if (it.id === '_undo_wp') undoWaypoint();
+          else if (it.id === '_cancel') cancelPath();
+        });
+        actionGrid.appendChild(btn);
+      }
+      return;
+    }
+
     const v = KTR.validate;
     const items = [
       { id: 'reposition', name: 'Reposition', cost: RC.REPOSITION_AP, info: `Move ${u.moveInches}"`, reason: v.reposition(u, a) },
@@ -1080,8 +1169,6 @@
       btn.type = 'button';
       btn.className = 'action-btn';
       const reason = it.reason;
-      const armed = state.combat.pendingMove && state.combat.pendingMove.actionId === it.id;
-      if (armed) btn.classList.add('armed');
       btn.disabled = !!reason;
       btn.innerHTML = `
         <span class="ab-name">${it.name}</span>
@@ -1091,6 +1178,14 @@
       btn.addEventListener('click', () => onActionClick(it.id));
       actionGrid.appendChild(btn);
     }
+  }
+
+  function actionAPCost(kind, unit) {
+    if (kind === 'reposition') return RC.REPOSITION_AP;
+    if (kind === 'dash') return RC.DASH_AP;
+    if (kind === 'charge') return RC.CHARGE_AP;
+    if (kind === 'fallBack') return RC.FALL_BACK_AP;
+    return 1;
   }
 
   function onActionClick(id) {
@@ -1105,16 +1200,20 @@
         id === 'dash' ? RC.DASH_INCHES :
         id === 'charge' ? u.moveInches + RC.CHARGE_BONUS :
         u.moveInches;
+      const labels = { reposition: 'Reposition', dash: 'Dash', charge: 'Charge', fallBack: 'Fall Back' };
       state.combat.pendingMove = {
-        actionId: id, kind: id, label: id === 'fallBack' ? 'Fall Back' : id, maxInches: max,
+        actionId: id, kind: id, label: labels[id], maxInches: max,
+        // The unit's current position is the path's first (locked) waypoint.
+        // Each subsequent click adds a leg.
+        waypoints: [{ x: u.x, y: u.y }],
+        used: 0,
       };
-      // If on a teleport pad and TP >= 2, surface a teleport prompt.
+      // If on a teleport pad and TP >= 2, also surface a teleport prompt so
+      // the player can choose to swap pads instead of pathing.
       const pad = padAt(u.x, u.y);
       if (pad && state.combat.turningPoint >= 2) {
         const others = otherPads(pad);
-        if (others.length) {
-          showTeleportPicker(others, id);
-        }
+        if (others.length) showTeleportPicker(others, id);
       }
       syncActivationPanel();
       render();
@@ -2268,27 +2367,82 @@
       const pm = state.combat.pendingMove;
       if (a && pm) {
         const u = a.unit;
+        const last = pm.waypoints[pm.waypoints.length - 1];
+        const remaining = Math.max(0, pm.maxInches - pm.used);
+
+        // Enemy control-range bubbles (1") so the user can see the no-go
+        // zones for Reposition / Dash and the must-end-in zone for Charge.
+        const enemies = state.units.filter(o => o.alive && o.deployed && o.team !== u.team);
+        const showCRColor = (pm.kind === 'reposition' || pm.kind === 'dash')
+          ? 'rgba(184,32,58,0.18)'
+          : (pm.kind === 'charge' ? 'rgba(122,156,62,0.18)' : 'rgba(122,156,62,0.10)');
+        const showCRStroke = (pm.kind === 'reposition' || pm.kind === 'dash')
+          ? 'rgba(184,32,58,0.55)'
+          : (pm.kind === 'charge' ? 'rgba(122,156,62,0.65)' : 'rgba(122,156,62,0.40)');
+        for (const e of enemies) {
+          ctx.fillStyle = showCRColor;
+          ctx.strokeStyle = showCRStroke;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.arc(e.x * s, e.y * s, RC.ENGAGEMENT_RANGE * s, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        // Remaining-budget circle around the last committed waypoint.
         ctx.strokeStyle = 'rgba(201,167,77,0.45)';
         ctx.lineWidth = 1;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
-        ctx.arc(u.x * s, u.y * s, pm.maxInches * s, 0, Math.PI * 2);
+        ctx.arc(last.x * s, last.y * s, remaining * s, 0, Math.PI * 2);
         ctx.stroke();
         ctx.setLineDash([]);
+
+        // Path so far — solid gold polyline.
+        ctx.strokeStyle = 'rgba(201,167,77,0.95)';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(pm.waypoints[0].x * s, pm.waypoints[0].y * s);
+        for (let i = 1; i < pm.waypoints.length; i++) {
+          ctx.lineTo(pm.waypoints[i].x * s, pm.waypoints[i].y * s);
+        }
+        ctx.stroke();
+        // Waypoint markers.
+        for (let i = 1; i < pm.waypoints.length; i++) {
+          ctx.fillStyle = '#fff8e0';
+          ctx.beginPath();
+          ctx.arc(pm.waypoints[i].x * s, pm.waypoints[i].y * s, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // In-progress leg from the last waypoint to the cursor.
         if (state.combat.hoverPt) {
-          const opts = pm.kind === 'fallBack' ? { allowEnemyCR: true }
-            : pm.kind === 'charge' ? { endInCROK: true } : {};
-          const reason = canMoveToReason(u, state.combat.hoverPt.x, state.combat.hoverPt.y, pm.maxInches, opts);
+          const reason = canExtendPathReason(u, pm, state.combat.hoverPt.x, state.combat.hoverPt.y);
           ctx.strokeStyle = reason ? 'rgba(184,32,58,0.85)' : 'rgba(201,167,77,0.95)';
           ctx.lineWidth = 2;
+          ctx.setLineDash([6, 4]);
           ctx.beginPath();
-          ctx.moveTo(u.x * s, u.y * s);
+          ctx.moveTo(last.x * s, last.y * s);
           ctx.lineTo(state.combat.hoverPt.x * s, state.combat.hoverPt.y * s);
           ctx.stroke();
+          ctx.setLineDash([]);
           const { rx, ry } = unitRadii(u);
           ctx.beginPath();
           ctx.ellipse(state.combat.hoverPt.x * s, state.combat.hoverPt.y * s, rx * s, ry * s, 0, 0, Math.PI * 2);
           ctx.stroke();
+        }
+
+        // Ghost outline at the path's current endpoint so you can see the
+        // unit's footprint at the proposed final position.
+        if (pm.waypoints.length > 1) {
+          const { rx, ry } = unitRadii(u);
+          ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([3, 3]);
+          ctx.beginPath();
+          ctx.ellipse(last.x * s, last.y * s, rx * s, ry * s, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.setLineDash([]);
         }
       }
 
@@ -2501,19 +2655,20 @@
       }
 
       // During an activation:
-      // 1. If a move action is armed (pendingMove), the click is the
-      //    destination point.
+      // 1. If a move action is armed (pendingMove), each click extends the
+      //    path by one waypoint. The user presses Confirm in the activation
+      //    panel to commit the move and pay AP.
       // 2. Otherwise, tapping our own unit re-pins selection; tapping an
       //    enemy reveals their stat block.
       const pm = state.combat.pendingMove;
       if (pm) {
         if (clicked && clicked.alive) {
-          // Allow shoot/fight pre-empts via tapping an enemy when armed —
-          // simplest: ignore enemy taps while a move is armed.
+          // Don't try to add a waypoint on top of an operative — show its
+          // stat block instead so taps feel responsive.
           showStatBlock(clicked, evt, true);
           return;
         }
-        performMove(pm.kind, p.x, p.y);
+        addWaypoint(p.x, p.y);
         return;
       }
 
