@@ -511,6 +511,36 @@ a:hover { color: var(--text-bright); }
 }
 .op-card.empty-weapons .op-weapons { font-style: italic; color: var(--text-footer); }
 
+.op-card .loadout-chooser {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  margin-top: 4px;
+  background: var(--chip-on-bg);
+  border: 1px dashed var(--border-mid);
+}
+.op-card .loadout-chooser .loadout-label {
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.op-card .loadout-chooser .loadout-option {
+  text-align: left;
+  letter-spacing: 0.08em;
+}
+
+.roster-row .roster-row-loadout {
+  font-size: 10px;
+  color: var(--accent-primary);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .btn-add {
   padding: 6px 14px;
   background: transparent;
