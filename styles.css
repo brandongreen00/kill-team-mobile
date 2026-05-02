@@ -527,9 +527,25 @@ a:hover { color: var(--text-bright); }
   text-transform: uppercase;
   color: var(--text-muted);
 }
+.op-card .loadout-chooser .loadout-label + .loadout-label {
+  margin-top: 6px;
+}
 .op-card .loadout-chooser .loadout-option {
   text-align: left;
   letter-spacing: 0.08em;
+}
+.op-card .loadout-chooser .loadout-option.active {
+  border-color: var(--accent-primary);
+  color: var(--text-bright);
+  background: var(--chip-bg);
+}
+.op-card .loadout-chooser .loadout-confirm {
+  margin-top: 6px;
+  align-self: flex-start;
+}
+.op-card .loadout-chooser .loadout-confirm[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .roster-row .roster-row-loadout {

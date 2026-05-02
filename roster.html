@@ -144,13 +144,20 @@
       });
       return out;
     }
-    function operativeRequiresChoice(op) {
-      return uniqueWeaponBases(op && op.weapons).length > 1;
+    function uniqueRangedBases(weapons) {
+      return uniqueWeaponBases((weapons || []).filter(w => !w.is_melee));
     }
-    function weaponsForChoice(op, choice) {
-      if (!op || !op.weapons) return [];
-      if (!choice) return op.weapons;
-      return op.weapons.filter(w => weaponBaseName(w.name) === choice);
+    function uniqueMeleeBases(weapons) {
+      return uniqueWeaponBases((weapons || []).filter(w => w.is_melee));
+    }
+    function requiresRangedChoice(op) {
+      return uniqueRangedBases(op && op.weapons).length > 1;
+    }
+    function requiresMeleeChoice(op) {
+      return uniqueMeleeBases(op && op.weapons).length > 1;
+    }
+    function operativeRequiresChoice(op) {
+      return requiresRangedChoice(op) || requiresMeleeChoice(op);
     }
 
     let state = {
@@ -311,11 +318,13 @@
         count + ' operative' + (count === 1 ? '' : 's');
     }
 
-    function addPick(op, weaponChoice) {
+    function addPick(op, choices) {
+      const c = choices || {};
       state.activeRoster.picks.push({
         uid: newRosterId(),
         operativeId: op.id,
-        weaponChoice: weaponChoice || null,
+        rangedChoice: c.ranged || null,
+        meleeChoice: c.melee || null,
       });
       renderEditor();
     }
@@ -399,6 +408,28 @@
       return card;
     }
 
+    function buildLoadoutSection(titleText, bases, onSelect) {
+      const frag = document.createDocumentFragment();
+      const label = document.createElement('div');
+      label.className = 'loadout-label';
+      label.textContent = titleText;
+      frag.appendChild(label);
+      const buttons = [];
+      bases.forEach(base => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-add loadout-option';
+        btn.textContent = base;
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.toggle('active', b === btn));
+          onSelect(base);
+        });
+        buttons.push(btn);
+        frag.appendChild(btn);
+      });
+      return frag;
+    }
+
     function buildWeaponLine(w) {
       const line = document.createElement('div');
       line.className = 'weapon-line';
@@ -424,22 +455,43 @@
       const wrap = document.createElement('div');
       wrap.className = 'loadout-chooser';
 
-      const label = document.createElement('div');
-      label.className = 'loadout-label';
-      label.textContent = 'Choose loadout';
-      wrap.appendChild(label);
+      const rangedBases = uniqueRangedBases(op.weapons);
+      const meleeBases = uniqueMeleeBases(op.weapons);
+      const needRanged = rangedBases.length > 1;
+      const needMelee = meleeBases.length > 1;
 
-      uniqueWeaponBases(op.weapons).forEach(base => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'btn-add loadout-option';
-        btn.textContent = base;
-        btn.addEventListener('click', () => {
-          addPick(op, base);
-          if (onPick) onPick();
-        });
-        wrap.appendChild(btn);
+      const selection = { ranged: null, melee: null };
+
+      const confirm = document.createElement('button');
+      confirm.type = 'button';
+      confirm.className = 'btn-fire loadout-confirm';
+      confirm.textContent = '+ Add to Roster';
+      confirm.disabled = true;
+
+      function updateConfirm() {
+        const ok = (!needRanged || selection.ranged) && (!needMelee || selection.melee);
+        confirm.disabled = !ok;
+      }
+
+      if (needRanged) {
+        wrap.appendChild(buildLoadoutSection('Choose ranged weapon', rangedBases, base => {
+          selection.ranged = base;
+          updateConfirm();
+        }));
+      }
+      if (needMelee) {
+        wrap.appendChild(buildLoadoutSection('Choose melee weapon', meleeBases, base => {
+          selection.melee = base;
+          updateConfirm();
+        }));
+      }
+
+      confirm.addEventListener('click', () => {
+        if (confirm.disabled) return;
+        addPick(op, selection);
+        if (onPick) onPick();
       });
+      wrap.appendChild(confirm);
 
       return wrap;
     }
@@ -482,10 +534,14 @@
         meta.appendChild(nm);
         meta.appendChild(sub);
 
-        if (pick.weaponChoice) {
+        const loadoutParts = [];
+        if (pick.rangedChoice) loadoutParts.push('Ranged: ' + pick.rangedChoice);
+        if (pick.meleeChoice) loadoutParts.push('Melee: ' + pick.meleeChoice);
+        if (!loadoutParts.length && pick.weaponChoice) loadoutParts.push(pick.weaponChoice);
+        if (loadoutParts.length) {
           const loadout = document.createElement('div');
           loadout.className = 'roster-row-loadout';
-          loadout.textContent = pick.weaponChoice;
+          loadout.textContent = loadoutParts.join(' · ');
           meta.appendChild(loadout);
         }
 
