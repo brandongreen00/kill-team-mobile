@@ -15,27 +15,90 @@
       <div class="rule"></div>
     </header>
 
-    <section class="panel" style="margin-top: 16px;">
-      <div class="hud">
-        <div class="left">
-          <span class="chip" id="turn-chip">Turn 1</span>
-          <span class="chip chip-dim" id="ap-chip">AP —</span>
+    <!-- Phase 1: Team Selection -->
+    <section class="panel corner-brackets" id="phase-teams" style="margin-top: 16px;">
+      <h2 class="section-title">Select Kill Teams</h2>
+      <p class="phase-hint">Choose a saved roster for each commander. Build new rosters from the Roster screen.</p>
+      <div class="team-pick-grid">
+        <div class="team-pick-side">
+          <div class="team-pick-header">
+            <span class="team-dot" data-team="A"></span>
+            <span class="team-pick-label" id="team-pick-label-A">Player Blue</span>
+          </div>
+          <div class="team-pick-roster" id="roster-list-A"></div>
+          <div class="team-pick-summary" id="roster-summary-A">No team chosen.</div>
         </div>
-        <div class="turn-banner" id="turn-banner">Imperium Activation</div>
-        <div class="right">
-          <button class="btn-ghost" id="end-turn-btn" type="button">End Turn</button>
+        <div class="team-pick-side">
+          <div class="team-pick-header">
+            <span class="team-dot" data-team="B"></span>
+            <span class="team-pick-label" id="team-pick-label-B">Player Red</span>
+          </div>
+          <div class="team-pick-roster" id="roster-list-B"></div>
+          <div class="team-pick-summary" id="roster-summary-B">No team chosen.</div>
         </div>
       </div>
+      <div class="phase-actions">
+        <a href="./maps.html" class="btn-ghost">Change Map</a>
+        <a href="./roster.html" class="btn-ghost">Manage Rosters</a>
+        <button class="btn-fire" id="confirm-teams" type="button" disabled>Confirm Teams</button>
+      </div>
+    </section>
+
+    <!-- Phase 2: Initiative -->
+    <section class="panel corner-brackets" id="phase-initiative" style="margin-top: 16px; display:none;">
+      <h2 class="section-title">Roll for Initiative</h2>
+      <p class="phase-hint">Highest single d6 wins; ties re-roll. Initiative winner picks who deploys first.</p>
+      <div class="dice-grid">
+        <div class="dice-cell">
+          <div class="dice-team-name" id="dice-name-A">Player Blue</div>
+          <div class="dice-stage" id="dice-stage-A"></div>
+          <div class="dice-roll-value" id="dice-roll-A">—</div>
+        </div>
+        <div class="dice-vs">VS</div>
+        <div class="dice-cell">
+          <div class="dice-team-name" id="dice-name-B">Player Red</div>
+          <div class="dice-stage" id="dice-stage-B"></div>
+          <div class="dice-roll-value" id="dice-roll-B">—</div>
+        </div>
+      </div>
+      <div class="initiative-result" id="initiative-result"></div>
+      <div class="initiative-choose" id="initiative-choose" style="display:none;">
+        <p class="phase-hint" id="initiative-choose-prompt" style="text-align:center;">Choose who deploys first:</p>
+        <div class="initiative-choose-buttons">
+          <button class="btn-ghost" type="button" data-first="A" id="first-A-btn">Blue Deploys First</button>
+          <button class="btn-ghost" type="button" data-first="B" id="first-B-btn">Red Deploys First</button>
+        </div>
+      </div>
+      <div class="phase-actions">
+        <button class="btn-ghost" id="roll-back-btn" type="button">Back</button>
+        <button class="btn-fire" id="roll-btn" type="button">Roll Dice</button>
+      </div>
+    </section>
+
+    <!-- Phase 3 + 4: Board (Deployment + Combat) -->
+    <section class="panel" id="phase-board" style="margin-top: 16px; display:none;">
+      <div class="hud">
+        <div class="left">
+          <span class="chip" id="phase-chip">Deployment</span>
+          <span class="chip chip-dim" id="batch-chip">Batch 1 of 3</span>
+        </div>
+        <div class="turn-banner" id="turn-banner">Activation</div>
+        <div class="right">
+          <button class="btn-ghost" id="end-turn-btn" type="button" style="display:none;">End Turn</button>
+        </div>
+      </div>
+
+      <div class="deploy-status" id="deploy-status"></div>
 
       <div class="board-wrap">
         <canvas id="board" class="board" width="720" height="720"></canvas>
         <aside class="sidebar">
           <div>
-            <div class="label-cap" style="margin-bottom:6px;">Imperium</div>
+            <div class="label-cap" style="margin-bottom:6px;" id="sidebar-A-label">Player Blue</div>
             <div id="team-a"></div>
           </div>
           <div>
-            <div class="label-cap" style="margin-bottom:6px;">Chaos</div>
+            <div class="label-cap" style="margin-bottom:6px;" id="sidebar-B-label">Player Red</div>
             <div id="team-b"></div>
           </div>
           <div>
@@ -44,12 +107,16 @@
           </div>
         </aside>
       </div>
+
+      <div class="action-bar">
+        <button class="btn-ghost" id="restart-btn" type="button">Restart Setup</button>
+        <a href="./maps.html" class="btn-ghost">Change Map</a>
+        <a href="./index.html" class="btn-ghost">Main Menu</a>
+      </div>
     </section>
 
-    <div class="action-bar">
-      <a href="./maps.html" class="btn-ghost">Change Map</a>
-      <a href="./index.html" class="btn-ghost">Main Menu</a>
-    </div>
+    <!-- Stat block popup (hover/tap) -->
+    <div id="stat-block" class="stat-block" style="display:none;"></div>
 
     <p class="footer-note">In the grim darkness of the far future</p>
   </div>
@@ -66,6 +133,8 @@
     </div>
   </div>
 
+  <script src="./factions.js"></script>
+  <script src="./maps-data.js"></script>
   <script src="./game.js"></script>
 </body>
 </html>
