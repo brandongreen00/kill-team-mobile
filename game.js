@@ -3030,9 +3030,7 @@
     if (state.phase === 'deploy' || state.phase === 'combat') drawBoard();
   });
 
-  canvas.addEventListener('click', (evt) => {
-    const p = eventToBoard(evt);
-
+  function handleBoardTap(p, evt) {
     if (state.phase === 'deploy') {
       const clicked = unitAtPoint(p.x, p.y);
       if (clicked) {
@@ -3100,7 +3098,171 @@
         showStatBlock(clicked, evt, true);
       }
     }
+  }
+
+  let suppressNextCanvasClick = false;
+
+  canvas.addEventListener('click', (evt) => {
+    if (suppressNextCanvasClick) { suppressNextCanvasClick = false; return; }
+    handleBoardTap(eventToBoard(evt), evt);
   });
+
+  // ── Hold-and-drag with magnifier (mobile precision tap) ──────────────
+  // Press-and-hold on the board for ~220ms to summon a circular magnifier
+  // offset above the finger; drag to fine-tune the target, then lift to
+  // commit the tap at the crosshair. Quick taps still flow through the
+  // regular click handler. Mouse input is left untouched.
+  const HOLD_MS              = 220;
+  const HOLD_MOVE_CANCEL_PX  = 12;
+  const MAG_SIZE_PX          = 140;
+  const MAG_ZOOM             = 2.5;
+  const MAG_OFFSET_PX        = 110;
+
+  const boardStage = canvas.parentElement;
+  const magEl = document.createElement('div');
+  magEl.className = 'tap-magnifier';
+  magEl.style.display = 'none';
+  const magCanvas = document.createElement('canvas');
+  magEl.appendChild(magCanvas);
+  const magCross = document.createElement('div');
+  magCross.className = 'tap-magnifier-cross';
+  magEl.appendChild(magCross);
+  boardStage.appendChild(magEl);
+  const magCtx = magCanvas.getContext('2d');
+
+  let holdDrag = null;
+
+  function clientToBoard(cx, cy) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: ((cx - rect.left) / rect.width)  * BOARD.width,
+      y: ((cy - rect.top)  / rect.height) * BOARD.height,
+    };
+  }
+
+  function activateHoldDrag() {
+    if (!holdDrag) return;
+    holdDrag.active = true;
+    try { canvas.setPointerCapture(holdDrag.pointerId); } catch (_) {}
+    if (navigator.vibrate) { try { navigator.vibrate(10); } catch (_) {} }
+    // Hide the stat block so the magnifier is the focal element while
+    // the user is fine-tuning their tap.
+    hideStatBlock(true);
+    magEl.style.display = 'block';
+    drawHoldMagnifier();
+  }
+
+  function cancelHoldDrag() {
+    if (!holdDrag) return;
+    if (holdDrag.timer) clearTimeout(holdDrag.timer);
+    if (holdDrag.active) {
+      try { canvas.releasePointerCapture(holdDrag.pointerId); } catch (_) {}
+    }
+    magEl.style.display = 'none';
+    holdDrag = null;
+  }
+
+  function drawHoldMagnifier() {
+    if (!holdDrag || !holdDrag.active) return;
+    const stageRect = boardStage.getBoundingClientRect();
+    const canRect   = canvas.getBoundingClientRect();
+
+    // Update hoverPt so the existing on-board previews (deploy ghost,
+    // move-path next leg) follow the finger as it drags.
+    state.combat.hoverPt = clientToBoard(holdDrag.currentCx, holdDrag.currentCy);
+    if (state.phase === 'deploy' || state.phase === 'combat') drawBoard();
+
+    // Magnifier center, in CSS px relative to .board-stage. Default to
+    // above the finger; flip below when too close to the top edge.
+    let mx = holdDrag.currentCx - stageRect.left;
+    let my = holdDrag.currentCy - stageRect.top - MAG_OFFSET_PX;
+    if (my < MAG_SIZE_PX / 2 + 6) {
+      my = holdDrag.currentCy - stageRect.top + MAG_OFFSET_PX;
+    }
+    const halfW = MAG_SIZE_PX / 2 + 4;
+    const halfH = MAG_SIZE_PX / 2 + 4;
+    mx = Math.max(halfW, Math.min(stageRect.width  - halfW, mx));
+    my = Math.max(halfH, Math.min(stageRect.height - halfH, my));
+    magEl.style.left = mx + 'px';
+    magEl.style.top  = my + 'px';
+
+    // Source rectangle on the main canvas, in backing-store px.
+    const scaleX = canvas.width  / canRect.width;
+    const scaleY = canvas.height / canRect.height;
+    const srcCx  = (holdDrag.currentCx - canRect.left) * scaleX;
+    const srcCy  = (holdDrag.currentCy - canRect.top)  * scaleY;
+    const sw = (MAG_SIZE_PX / MAG_ZOOM) * scaleX;
+    const sh = (MAG_SIZE_PX / MAG_ZOOM) * scaleY;
+
+    const target = Math.round(MAG_SIZE_PX * (window.devicePixelRatio || 1));
+    if (magCanvas.width !== target) {
+      magCanvas.width  = target;
+      magCanvas.height = target;
+      magCanvas.style.width  = MAG_SIZE_PX + 'px';
+      magCanvas.style.height = MAG_SIZE_PX + 'px';
+    }
+    magCtx.imageSmoothingEnabled = true;
+    magCtx.fillStyle = '#0f0b09';
+    magCtx.fillRect(0, 0, magCanvas.width, magCanvas.height);
+    magCtx.drawImage(
+      canvas,
+      srcCx - sw / 2, srcCy - sh / 2, sw, sh,
+      0, 0, magCanvas.width, magCanvas.height,
+    );
+  }
+
+  canvas.addEventListener('pointerdown', (evt) => {
+    if (evt.pointerType === 'mouse') return;
+    if (holdDrag) cancelHoldDrag();
+    holdDrag = {
+      pointerId: evt.pointerId,
+      startCx:   evt.clientX,
+      startCy:   evt.clientY,
+      currentCx: evt.clientX,
+      currentCy: evt.clientY,
+      active:    false,
+      timer:     null,
+    };
+    holdDrag.timer = setTimeout(activateHoldDrag, HOLD_MS);
+  });
+
+  canvas.addEventListener('pointermove', (evt) => {
+    if (!holdDrag || evt.pointerId !== holdDrag.pointerId) return;
+    holdDrag.currentCx = evt.clientX;
+    holdDrag.currentCy = evt.clientY;
+    if (holdDrag.active) {
+      drawHoldMagnifier();
+    } else {
+      const dx = holdDrag.currentCx - holdDrag.startCx;
+      const dy = holdDrag.currentCy - holdDrag.startCy;
+      if (dx * dx + dy * dy > HOLD_MOVE_CANCEL_PX * HOLD_MOVE_CANCEL_PX) {
+        cancelHoldDrag();
+      }
+    }
+  });
+
+  function endHoldDrag(evt, commit) {
+    if (!holdDrag || evt.pointerId !== holdDrag.pointerId) return;
+    const wasActive = holdDrag.active;
+    if (commit && wasActive) {
+      const p = clientToBoard(holdDrag.currentCx, holdDrag.currentCy);
+      // The browser fires a synthetic click after pointerup on a tap; we
+      // already delivered the tap via handleBoardTap, so swallow that one.
+      suppressNextCanvasClick = true;
+      setTimeout(() => { suppressNextCanvasClick = false; }, 700);
+      cancelHoldDrag();
+      handleBoardTap(p, evt);
+    } else {
+      cancelHoldDrag();
+      if (wasActive) {
+        // Drag was abandoned — clear the lingering hover preview.
+        state.combat.hoverPt = null;
+        if (state.phase === 'deploy' || state.phase === 'combat') drawBoard();
+      }
+    }
+  }
+  canvas.addEventListener('pointerup',     (evt) => endHoldDrag(evt, true));
+  canvas.addEventListener('pointercancel', (evt) => endHoldDrag(evt, false));
 
   // Tap outside the stat block dismisses it (mobile).
   document.addEventListener('click', (evt) => {
