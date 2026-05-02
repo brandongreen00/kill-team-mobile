@@ -457,6 +457,49 @@ a:hover { color: var(--text-bright); }
 .board-mini-hud .mh-order.conceal { color: #cfdfff; }
 .board-mini-hud .mh-hp { color: var(--warn); }
 
+/* Precision-tap magnifier: a circular zoomed preview that floats above the
+   user's finger during a hold-and-drag on the board, so the targeted tap
+   spot is visible even when the finger covers it. Positioned absolutely
+   within .board-stage by JS; pointer-events:none so it never eats events. */
+.tap-magnifier {
+  position: absolute;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-primary);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.65);
+  background: #0f0b09;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 20;
+  transform: translate(-50%, -50%);
+}
+.tap-magnifier canvas { display: block; width: 100%; height: 100%; }
+.tap-magnifier-cross {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 22px; height: 22px;
+  margin: -11px 0 0 -11px;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+.tap-magnifier-cross::before,
+.tap-magnifier-cross::after {
+  content: '';
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+.tap-magnifier-cross::before {
+  top: 50%; left: -8px; right: -8px; height: 1px;
+  transform: translateY(-50%);
+}
+.tap-magnifier-cross::after {
+  left: 50%; top: -8px; bottom: -8px; width: 1px;
+  transform: translateX(-50%);
+}
+
 /* Floating "Roster" toggle pinned to the top-right of the canvas; on mobile
    this opens the sidebar as a slide-in drawer. Hidden on desktop where the
    sidebar is always visible alongside the board. */
