@@ -24,13 +24,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # GitHub Pages serves the entire uploaded artifact, so we strip the test
+      # harness (tests/, package.json, node_modules, etc.) before uploading.
+      # Everything not on the deny-list ships as-is.
+      - name: Stage deployable site
+        run: |
+          set -e
+          mkdir -p _site
+          rsync -a \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'tests' \
+            --exclude 'node_modules' \
+            --exclude 'package.json' \
+            --exclude 'package-lock.json' \
+            --exclude '_site' \
+            --exclude '.gitignore' \
+            ./ _site/
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
       - name: Deploy to Pages
         id: deployment

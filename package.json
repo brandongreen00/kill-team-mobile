@@ -1,0 +1,14 @@
+{
+  "name": "kill-team-mobile-tests",
+  "private": true,
+  "description": "Test harness for kill-team-mobile. The deployed site is the repo root; this package.json only exists for the test suite (tests/) and is excluded from the GitHub Pages artifact.",
+  "scripts": {
+    "test:unit": "node --test tests/unit/*.test.js",
+    "test:e2e": "playwright test --config tests/e2e/playwright.config.js",
+    "test:e2e:install": "playwright install --with-deps chromium",
+    "test": "npm run test:unit && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  }
+}

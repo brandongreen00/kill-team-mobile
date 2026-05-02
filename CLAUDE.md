@@ -4,14 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-A static, client-only web app for playing Warhammer 40K Kill Team on a phone. Pure HTML/CSS/JS — no framework, no bundler, no package manager. The repo IS the deployable site: `.github/workflows/deploy-pages.yml` uploads the repo root to GitHub Pages on every push to `main`.
+A static, client-only web app for playing Warhammer 40K Kill Team on a phone. Pure HTML/CSS/JS — no framework, no bundler, no package manager for the app itself. The repo IS the deployable site: `.github/workflows/deploy-pages.yml` stages the deployable files (excluding `tests/`, `node_modules/`, `package*.json`) and uploads them to GitHub Pages on every push to `main`. Test tooling lives under `tests/` with its own `package.json` and never ships.
 
 ## Commands
 
-There is no build, install, or test runner. To work on the app:
+The deployable site has no build step. Tests are split between Node's built-in test runner (unit) and Playwright (E2E):
 
 - **Run locally**: open `index.html` in a browser, or serve the repo root with any static server (e.g. `python3 -m http.server`). Opening `game.html` directly via `file://` works but `sessionStorage` is unavailable in some headless contexts — `game.js` already falls back to the default `tomb-1` map in that case.
-- **Lint / CI check**: `.github/workflows/pr-check.yml` runs `node --check` on every tracked `*.js` file and verifies tracked `*.html` files are non-empty. Reproduce locally with `for f in $(git ls-files '*.js'); do node --check "$f" || echo "FAIL $f"; done`. That is the entire test suite.
+- **Lint / syntax check**: `.github/workflows/pr-check.yml` runs `node --check` on every tracked `*.js` file and verifies tracked `*.html` files are non-empty. Reproduce locally with `for f in $(git ls-files '*.js'); do node --check "$f" || echo "FAIL $f"; done`.
+- **Unit tests**: `npm install && npm run test:unit`. Pure-function tests for `rules.js`, `maps-data.js`, and `factions.js` shape — run via `node --test` with a small browser-API shim in `tests/unit/load.js`.
+- **E2E tests**: `npm run test:e2e:install` (one-time, downloads Chromium) then `npm run test:e2e`. Playwright drives the static site via `python3 -m http.server`; specs live in `tests/e2e/*.spec.js` and cover navigation, the map picker, the roster builder, and the team-pick → initiative → deploy flow.
 - **Deploy**: automatic on push to `main`. There is no staging.
 
 ## Architecture
