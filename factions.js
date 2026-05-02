@@ -8,6 +8,10 @@
    Schema:
      {
        id, name, short,
+       faction_rules:    [{ name, text }],            // passive team rules
+       strategic_ploys:  [{ name, cp, text }],        // CP, played at start of TP
+       firefight_ploys:  [{ name, cp, text }],        // CP, played during TP
+       equipment:        [{ name, ep, text }],        // EP, picked at list-build
        attacker_effects: [effect_id, ...],   // selectable for any operative
        defender_effects: [effect_id, ...],   // selectable when targeting any
        operatives: [{
@@ -27,6 +31,28 @@ const FACTIONS = [
     id: "kasrkin",
     name: "KASRKIN",
     short: "KASRKIN",
+    faction_rules: [
+      { name: "Skill at Arms", text: "STRATEGIC GAMBIT. Select a SKILL AT ARMS for friendly KASRKIN operatives to have until the Ready step of the next Strategy phase.\n\nLight 'Em Up\nEstablishing overlapping fields of fire as they advance, the Kasrkin react to any enemy movement with a lethal volley of fire.\nFriendly KASRKIN operatives' ranged weapons have the Severe weapon rule.\n\nStrike Fast\nKasrkin pride themselves upon their physical fitness and can cover ground swiftly, even when carrying heavy combat gear.\nWhenever a friendly KASRKIN operative is performing the Reposition action, add 1\" to its Move stat.\n\nIce In Your Veins\nAll Cadians are subjected to a lifetime of war. Those chosen to join the ranks of the elite Kasrkin are amongst the hardiest.\nWhenever a friendly KASRKIN operative is fighting or retaliating, or an operative is shooting it, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.\n\nFor Cadia!\nAll Kasrkin strive to uphold the honour of their dead homeworld.\nAdd 1 to the Atk stat of friendly KASRKIN operatives' melee weapons (to a maximum of 4). Whenever a friendly KASRKIN operative is fighting, the first time you strike during that sequence, inflict 1 additional damage." },
+      { name: "Rapid Fire", text: "Each friendly KASRKIN operative that doesn't perform an action in which it moves during its activation can perform two Shoot actions (excluding Guard) during that activation, but a bolt pistol, hot-shot lasgun or hot-shot laspistol must be selected for both of those actions." },
+    ],
+    strategic_ploys: [
+      { name: "Elimination Pattern", cp: 1, text: "Whenever a friendly KASRKIN operative is shooting with a hot-shot weapon against an operative that cannot retain any cover saves or is being scanned (see RECON-TROOPER), that weapon has the Piercing Crits 1 weapon rule, or Piercing 1 instead if it's a hot-shot volley gun." },
+      { name: "Engage from Cover", cp: 1, text: "Whenever an operative is shooting a friendly KASRKIN operative that's in cover, you can re-roll one of your defence dice." },
+      { name: "Clearance Sweep", cp: 1, text: "Place your Clearance Sweep marker in the killzone. Whenever a friendly KASRKIN operative within 5\" horizontally of that marker is shooting an operative also within 5\" horizontally of that marker, that friendly operative's weapons have the Ceaseless weapon rule. In the Ready step of the next Strategy phase, remove that marker." },
+      { name: "Relocate", cp: 1, text: "Select one friendly KASRKIN operative that's more than 3\" from enemy operatives. That operative, and each other friendly KASRKIN operative that's both within 3\" of that operative and more than 3\" from enemy operatives, can immediately perform a free Dash action in an order of your choice. You cannot use this ploy during the first turning point." },
+    ],
+    firefight_ploys: [
+      { name: "Seize the Initiative", cp: 1, text: "Use this firefight ploy at the start of the Firefight phase. One friendly KASRKIN operative can immediately perform a 1AP action for free, but it cannot move during that action. You cannot use this ploy if you're the player with initiative." },
+      { name: "Neutralise Target", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly KASRKIN operative, if it's shooting an operative that either cannot retain any cover saves or is being scanned (see RECON-TROOPER). You can re-roll any of your attack dice." },
+      { name: "Cover Retreat", cp: 1, text: "Use this firefight ploy when a friendly KASRKIN operative performs the Fall Back action while visible to and within 6\" of another friendly KASRKIN operative that's not within control range of enemy operatives. After that friendly operative has finished moving, but before that Fall Back action ends, that other friendly operative can immediately perform a free Shoot action (you can change its order to Engage to do so)." },
+      { name: "Give No Ground", cp: 1, text: "Use this firefight ploy during a friendly KASRKIN operative's activation, or at the end of the Firefight phase. Select one of your mission markers or an objective marker. Until the end of that activation or until the start of the next turning point respectively, if the total APL of friendly KASRKIN operatives that contest that marker is 2, and the total APL of enemy operatives that contest it is the same, friendly KASRKIN operatives control that marker." },
+    ],
+    equipment: [
+      { name: "Foregrip", ep: 1, text: "Whenever a friendly KASRKIN operative is shooting an operative within 3\" of it, ranged weapons on its datacard (excluding weapons that include 'pistol' in their name, e.g. hot-shot laspistol, all profiles of a plasma pistol, etc.) have the Accurate 1 weapon rule." },
+      { name: "Relics of Cadia", ep: 1, text: "Once per turning point, when a friendly KASRKIN operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead." },
+      { name: "Long-Range Scope", ep: 1, text: "Whenever a friendly KASRKIN operative is shooting an operative more than 6\" from it, that friendly operative's hot-shot weapons have the Saturate weapon rule." },
+      { name: "Combat Daggers", ep: 1, text: "Friendly KASRKIN operatives have the following melee weapon\nCombat dagger - ATK 3, HIT 4+, DMG 3/4" },
+    ],
     attacker_effects: ["foregrip", "elimination_pattern", "clearance_sweep_ceaseless", "neutralise_target_balanced", "long_range_scope_saturate"],
     defender_effects: [],
     operatives: [
@@ -148,6 +174,28 @@ const FACTIONS = [
     id: "angels-of-death",
     name: "ANGELS OF DEATH",
     short: "ANGELS",
+    faction_rules: [
+      { name: "Chapter Tactics", text: "When selecting your kill team, select a primary and secondary CHAPTER TACTIC for friendly ANGEL OF DEATH operatives to gain for the battle. Multiple instances of the same CHAPTER TACTIC aren't cumulative.\n\nDesigner's Note: If you're playing a series of games, i.e. a campaign or tournament, you must select the same primary and secondary CHAPTER TACTIC for every battle (you can still change the secondary with the Adaptive Tactics strategy ploy).\n1. AGGRESSIVE\nThis operative's melee weapons have the Rending weapon rule.\n\n2. DUELLER\nWhenever this operative is fighting or retaliating, each of your normal successes can block one unresolved critical success (unless the enemy operative's weapon has the Brutal weapon rule).\n\n3. RESOLUTE\nYou can ignore any changes to this operative's APL stat. and it isn't affected by enemy operatives' Shock weapon rule.\n\n4. STEALTHY\nWhenever an operative is shooting this operative, if you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn't cumulative with improved cover saves from Vantage terrain.\n\n5. MOBILE\nThis operative can perform the Fall Back action for 1 less AP.This operative can perform the Charge action while within control range of an enemy operative, and can leave that operative's control range to do so (but then normal requirements for that move apply).\n\n6. HARDY\nWhenever an operative is shooting this operative, defence dice results of 5+ are critical successes. Whenever this operative is retaliating, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.\n\n7. SHARPSHOOTER\nWhenever this operative is shooting during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, its bolt weapons have the Accurate 1 and Severe weapon rules\n\n8. SIEGE SPECIALIST\nThis operative's ranged weapons have the Saturate weapon rule. Whenever this operative is fighting or retaliating, enemy operatives cannot assist." },
+      { name: "Astartes", text: "During each friendly ANGEL OF DEATH operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, a bolt weapon must be selected for at least one of them, and if it's a bolt sniper rifle or heavy bolter, 1 additional AP must be spent for the second action if both actions are using that weapon.\n\nEach friendly ANGEL OF DEATH operative can counteract regardless of its order." },
+    ],
+    strategic_ploys: [
+      { name: "Combat Doctrine", cp: 1, text: "Select one COMBAT DOCTRINE from those presented below. Whenever a friendly ANGEL OF DEATH operative is x, its weapons have the Balanced weapon rule. X is the COMBAT DOCTRINE you selected.\nDevastator Doctrine: Shooting an operative more than 6\" from it.Tactical Doctrine: Shooting an operative within 6\" of it.Assault Doctrine: Fighting or retaliating." },
+      { name: "And They Shall Know No Fear", cp: 1, text: "You can ignore any changes to the stats of friendly ANGEL OF DEATH operatives from being injured (including their weapons' stats)." },
+      { name: "Adaptive Tactics", cp: 1, text: "Change your secondary CHAPTER TACTIC. Note this ploy only lasts until the end of the turning point, at which point your original secondary CHAPTER TACTIC returns." },
+      { name: "Indomitus", cp: 1, text: "Whenever an operative is shooting a friendly ANGEL OF DEATH operative, if you roll two or more fails, you can discard one of them to retain another as a normal success instead." },
+    ],
+    firefight_ploys: [
+      { name: "Adjust Doctrine", cp: 1, text: "Use this firefight ploy during a friendly ANGEL OF DEATH operative's activation, before or after it performs an action. If you've used the COMBAT DOCTRINE strategy ploy during this turning point, change the COMBAT DOCTRINE you selected." },
+      { name: "Transhuman Physiology", cp: 1, text: "Use this firefight ploy when an operative is shooting a friendly ANGEL OF DEATH operative, in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead." },
+      { name: "Shock Assault", cp: 1, text: "Use this firefight ploy when a friendly ANGEL OF DEATH operative is performing the Fight action during an activation in which it performed the Charge action, at the start of the Resolve Attack Dice step. Until the end of that action:\nIts melee weapon has the Shock weapon rule. The first time you strike during that sequence, inflict 1 additional damage (to a maximum of 7)." },
+      { name: "Wrath of Vengeance", cp: 1, text: "Use this firefight ploy when a friendly ANGEL OF DEATH operative is counteracting. It can perform an additional 1AP action for free during that counteraction, but both actions must be different." },
+    ],
+    equipment: [
+      { name: "Purity Seals", ep: 1, text: "Once per turning point, when a friendly ANGEL OF DEATH operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead." },
+      { name: "Chapter Reliquaries", ep: 1, text: "You can use the Wrath of Vengeance firefight ploy for 0CP if the specified friendly operative has an Engage order." },
+      { name: "Tilting Shields", ep: 1, text: "Once per turning point, when a friendly ANGEL OF DEATH operative is fighting or retaliating, after your opponent rolls their attack dice, but before re-rolls, you can use this rule. If you do, your opponent cannot retain attack dice results of less than 6 as critical successes during that sequence (e.g. as a result of the Lethal, Rending or Severe weapon rules)." },
+      { name: "Auspex", ep: 1, text: "Once per turning point, when a friendly ANGEL OF DEATH operative performs the Shoot action and you're selecting a valid target, you can use this rule. If you do, until the end of the activation/counteraction, enemy operatives within 8\" of that friendly operative cannot be obscured." },
+    ],
     attacker_effects: [],
     defender_effects: ["transhuman", "indomitus"],
     operatives: [
@@ -295,6 +343,27 @@ const FACTIONS = [
     id: "battleclade",
     name: "BATTLECLADE",
     short: "BATTLECLADE",
+    faction_rules: [
+      { name: "Noospheric Network", text: "Once during each friendly BATTLECLADE SERVITOR operative's activation, before or after it performs an action, you can spend 1AP to TRANSFER POWER.\n\nAfter that activation, you can NETWORK COUNTERACT with one other friendly BATTLECLADE SERVITOR operative before your opponent activates. Whenever you NETWORK COUNTERACT with a friendly operative, first select its order. It can then perform a 1AP action for free, but cannot move more than 2\" during that action. Once it's done so, your opponent then activates as normal.\n\nAn operative cannot TRANSFER POWER or NETWORK COUNTERACT if it has an APL stat of less than 2 (e.g. if the stat has been changed to less than 2 by a rule). NETWORK COUNTERACT is a counteraction, but the operative doesn't need to be expended with an Engage order to do it. That means if they're ready when they NETWORK COUNTERACT, they can still be activated as normal later in the turning point. An operative that does NETWORK COUNTERACT cannot do so again, or counteract, during the same turning point." },
+    ],
+    strategic_ploys: [
+      { name: "Noospheric Possession", cp: 1, text: "SUPPORT. Whenever a friendly BATTLECLADE SERVITOR operative is within 6\" of a friendly BATTLECLADE AUTO-PROXY or BATTLECLADE SERVITOR UNDERSEER operative, that friendly SERVITOR operative's weapons have the Accurate 1 weapon rule.\n\nFor the purposes of the Comms Device universal equipment, the operative the distance is being determined from must control your Comms Device marker to add 3\" to its distance requirement for this rule." },
+      { name: "Duty of Reclamation", cp: 1, text: "Once per action, you can use the Command Re-roll firefight ploy for 0CP if the attack or defence dice was rolled for a friendly BATTLECLADE operative that contests an objective marker or one of your mission markers." },
+      { name: "Incantation of the Iron Soul", cp: 1, text: "Whenever an attack dice inflicts damage of 3 or more on a friendly BATTLECLADE operative, roll one D6: on a 4+, subtract 1 from that inflicted damage." },
+      { name: "Prioritised Acquisition", cp: 1, text: "Select one objective marker or one of your mission markers.\nWhenever determining control of that marker, treat the total APL stat of friendly BATTLECLADE operatives that contest it as 1 higher if at least one friendly BATTLECLADE operative contests that marker. Note this isn't a change to the APL stat, so any changes are cumulative with this.Whenever a friendly BATTLECLADE operative is within 3\" of that marker, add 1 to the Atk stat of its melee weapons (to a maximum of 4)." },
+    ],
+    firefight_ploys: [
+      { name: "System Exorcism", cp: 1, text: "Use this firefight ploy when you would activate a friendly BATTLECLADE operative. Remove one rules effect or stat change your opponent has applied to it (e.g. Poison token, -1APL, cannot be activated or perform actions, etc.), then activate it. This ploy cannot allow it to regain lost wounds or ignore the effects of being injured, remove mission pack rules." },
+      { name: "Remote Access", cp: 1, text: "Use this firefight ploy during a friendly BATTLECLADE TECH-PRIEST operative's activation. Once during that activation, you can use one of the following rules:\nThat operative doesn't require a marker to be within its control range to perform a mission action that usually requires this (this takes precedence over that action's conditions). Instead, the marker must be within 4\" of it and no enemy operatives can contest that marker. However, you can ignore enemy operatives within control range of other friendly BATTLECLADE operatives when determining this.That operative doesn't require a hatchway's access point to be within its control range to perform an Operate Hatch action. Instead, that access point must be within 4\" of it." },
+      { name: "Auto-Ferric Supplication", cp: 1, text: "Use this firefight ploy when an operative is shooting a friendly BATTLECLADE TECH-PRIEST operative, at the start of the Roll Attack Dice step. Until the end of the sequence, ignore the Piercing weapon rule." },
+      { name: "Servile Surrogacy", cp: 1, text: "Use this firefight ploy when a friendly BATTLECLADE TECH-PRIEST operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one friendly BATTLECLADE SERVITOR operative visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn't normally be valid for this). If it's the Fight action, treat that SERVITOR operative as being within the fighting operative's control range for the duration of that action. If it's the Shoot action, that SERVITOR operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it's the Shoot action and the ranged weapon has the Blast or Torrent weapon rule." },
+    ],
+    equipment: [
+      { name: "Covert Guises", ep: 1, text: "After revealing this equipment option, roll one D3. As a STRATEGIC GAMBIT in the first turning point, a number of friendly BATTLECLADE operatives equal to the result that are wholly within your drop zone can immediately perform a free Reposition action, but must end that move wholly within 3\" of your drop zone. Your TECHNOARCHEOLOGIST operative cannot perform more than one Reposition action in the Strategy phase of the first turning point (i.e. as a result of the Seeker of Divine Arcana rule as well)." },
+      { name: "Electromantic Capacitors", ep: 1, text: "Friendly BATTLECLADE operatives' melee weapons have the Shock weapon rule. Whenever a friendly BATTLECLADE operative is retaliating, its melee weapons also have the Severe weapon rule." },
+      { name: "Concealed Apparatus", ep: 1, text: "Once per battle, one COMBAT SERVITOR or GUN SERVITOR operative can use another weapon option on its datacard it didn't select for the battle." },
+      { name: "Neurocyclic Reserve Cells", ep: 1, text: "Once per turning point whenever you TRANSFER POWER, you can use this rule. If you do, you can TRANSFER POWER for 0AP (this takes precedence over the normal Noospheric Network rules)." },
+    ],
     attacker_effects: [],
     defender_effects: [],
     operatives: [
@@ -391,6 +460,30 @@ const FACTIONS = [
     id: "celestian-insidiants",
     name: "CELESTIAN INSIDIANTS",
     short: "INSIDIANTS",
+    faction_rules: [
+      { name: "Martyrdom", text: "Whenever an INSPIRING friendly CELESTIAN INSIDIANT operative is incapacitated, before it's removed from the killzone, select one other friendly CELESTIAN INSIDIANT operative that operative is visible to or within 6\" of.\n\nThen, that selected operative gains one BENEDICTION (incapacitated operatives cannot be selected for a BENEDICTION)." },
+      { name: "Benedictions", text: "BENEDICTION | EFFECT\nArdour | Until the end of the battle, add 1 to that operative's APL stat. You cannot select this BENEDICTION for a SUPERIOR operative.\nWrath | Until the end of the battle, weapons on that operative's datacard have the Ceaseless weapon rule\nRestoration | That operative regains up to D3+2 lost wounds.\nExigence | That operative can immediately perform a free Charge or Dash action (for the former, it cannot move more than 3\"), but must end that move closer to that incapacitated INSPIRING operative." },
+      { name: "Weapons of the Witch Hunters", text: "PSYCHIC ranged weapons cannot inflict damage on friendly CELESTIAN INSIDIANT operatives. For the effects of PSYCHIC actions, friendly CELESTIAN INSIDIANT operatives cannot be selected and are never treated as being within those actions' required distances. Whenever an operative is within 3\" of a friendly CELESTIAN INSIDIANT operative:\nThat operative cannot perform PSYCHIC actions or use PSYCHIC additional rules.That operative cannot use PSYCHIC ranged weapons.PSYCHIC melee weapons have no weapon rules and cannot have Dmg stats higher than 3/4.Some weapons in this team's rules have the Anti-PSYKER weapon rule below.\n\n*Anti-PSYKER: Whenever this weapon is being used against an operative that has the PSYKER keyword, it has the Lethal 5+ weapon rule." },
+      { name: "Inspiration", text: "Whenever a friendly CELESTIAN INSIDIANT operative:\nIncapacitates an enemy operative that has a Wounds stat of 6 or more, that friendly operative becomes INSPIRING.Performs the Charge action, before it moves, it becomes INSPIRING.Whenever a friendly CELESTIAN INSIDIANT operative is INSPIRING, weapons on its datacard have the Severe weapon rule." },
+    ],
+    strategic_ploys: [
+      { name: "Suspect & Eliminate", cp: 1, text: "Select one enemy operative or marker. If you select an enemy operative, that operative and each other enemy operative visible to and within 2\" of it gains one of your Suspicion tokens until the end of the turning point. If you selected a marker, each enemy operative contesting that marker gains one of your Suspicion tokens until the end of the turning point.\n\nWhenever a friendly CELESTIAN INSIDIANT operative is shooting against or fighting against an operative that has one of your Suspicion tokens, that friendly operative's weapons have the Punishing weapon rule." },
+      { name: "Suffering & Sacrifice", cp: 1, text: "Whenever a wounded friendly CELESTIAN INSIDIANT operative is shooting against, fighting against or retaliating against an enemy operative, its weapons have the Balanced weapon rule." },
+      { name: "Wrathful Determination", cp: 1, text: "Whenever an operative is shooting a friendly CELESTIAN INSIDIANT operative that has an Engage order, you can re-roll one of your defence dice." },
+      { name: "Holy Resilience", cp: 1, text: "Whenever an INSPIRING friendly CELESTIAN INSIDIANT operative is fighting or retaliating, Normal and Critical Dmg of 4 or more inflicts 1 less damage on that friendly operative." },
+    ],
+    firefight_ploys: [
+      { name: "Glory to the Martyrs", cp: 1, text: "Use this firefight ploy when a friendly CELESTIAN INSIDIANT operative is incapacitated while fighting or retaliating. You can strike the enemy operative in that sequence with one of your unresolved successes before it's removed from the killzone. If that enemy operative is incapacitated as a result, that friendly operative becomes INSPIRING before it's removed from the killzone and you can resolve the Martyrdom faction rule." },
+      { name: "Unshakeable Pursuit", cp: 1, text: "Use this firefight ploy during a friendly CELESTIAN INSIDIANT operative's activation, before or after it performs an action. Until the end of that operative's activation, you can ignore any changes to its Move stat. If that operative is INSPIRING, add 1\" to its Move stat until the end of that activation. If that operative becomes INSPIRING by performing the Charge action, you can use this ploy before it moves to gain the additional movement (this takes precedence over stats not changing during an action)." },
+      { name: "Faith & Fury", cp: 1, text: "Use this firefight ploy when a friendly CELESTIAN INSIDIANT operative is fighting and you strike the enemy operative in that sequence with a critical success. After resolving that strike, also inflict D3 damage on each other enemy operative visible to and within 2\" of that friendly operative in an order of your choice (roll separately for each). Note that the friendly operative would become INSPIRING if any enemy operatives with a Wounds stat of 6 or more are incapacitated as a result of this damage." },
+      { name: "Fervent Hate", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly CELESTIAN INSIDIANT operative, if it's shooting against, fighting against or retaliating against an enemy operative that doesn't have the IMPERIUM keyword. That friendly operative's weapons have the Ceaseless weapon rule until the end of that sequence; if that enemy operative also has the CHAOS and/or PSYKER keyword, that friendly operative's weapons have the Relentless weapon rule until the end of that sequence instead." },
+    ],
+    equipment: [
+      { name: "Psyk-Out Grenades", ep: 1, text: "This equipment allows you to select two utility grenades from the utility grenades equipment (see universal equipment) and they must all be stun grenades. If you also select that equipment as normal, you cannot select any stun grenades (i.e. to give you more than two). Whenever an operative takes a stun test as a result of a friendly CELESTIAN INSIDIANT operative performing the Stun Grenade action, if the result is a 3+, also inflict damage on it equal to the dice result halved (rounding up). If that first operative has the PSYKER keyword, inflict damage on it equal to the dice result instead." },
+      { name: "Saintly Relics", ep: 1, text: "Whenever an attack dice would inflict damage on a friendly CELESTIAN INSIDIANT operative, you can use this rule. If you do, roll one D6, or two D6 if that operative is INSPIRING: if any result is a 6, ignore the damage inflicted from that attack dice. You cannot ignore more than one attack dice per action and two attack dice per battle this way." },
+      { name: "Vocifera Mortis", ep: 1, text: "Once per battle, when an INSPIRING friendly CELESTIAN INSIDIANT operative is incapacitated, you can use this rule. If you do, for the Martyrdom faction rule, the other friendly CELESTIAN INSIDIANT operative you select can be one that isn't visible to or within 6\" of that operative." },
+      { name: "Auto-Flagellator", ep: 1, text: "Whenever a friendly CELESTIAN INSIDIANT operative is activated, you can use this rule. If you do, roll one D6 and inflict damage on that operative equal to half the result (rounding up); on a 4+, that operative also becomes INSPIRING. You cannot make more than one friendly operative INSPIRING using this rule per turning point." },
+    ],
     attacker_effects: ["inspiration_severe"],
     defender_effects: [],
     operatives: [
@@ -500,6 +593,27 @@ const FACTIONS = [
     id: "death-korps",
     name: "DEATH KORPS",
     short: "DKoK",
+    faction_rules: [
+      { name: "Guardsmen Orders", text: "STRATEGIC GAMBIT and SUPPORT. A friendly DEATH KORPS WATCHMASTER operative can issue a GUARDSMAN ORDER. Whenever it does, select one GUARDSMAN ORDER for all friendly DEATH KORPS operatives within 6\" of it to receive.\n\nWhenever a friendly operative receives a GUARDSMAN ORDER, apply its rules until the end of the turning point. Operatives cannot benefit from more than one GUARDSMAN ORDER at once; they only benefit from the most recent order they received during the turning point.\nTake Aim!\nOutfitted and trained for attritional infantry combat, the soldiers of Krieg have undertaken endless hours of lasgun drills.\nRanged weapons of operatives that received this order (excluding mortar barrage and remote detonator) have the Ceaseless weapon rule.\n\nFix Bayonets!\nThe kind of warfare undertaken by the Death Korps of Krieg requires their troopers to be well versed in close-quarters fighting and trench clearance.\nMelee weapons of operatives that received this order have the Ceaseless weapon rule.\n\nDig In!\nObstinate to the last, the soldiers of Krieg establish defensive positions and hold them with grim determination.\nWhenever an operative is shooting a friendly operative that's received this order, if you can retain any cover saves, you can re-roll any of your defence dice results of one result (e.g. results of 2).\n\nMove! Move! Move!\nResponding to a barked order from their Watchmaster, the soldiers of Krieg pick up the pace and hustle towards their next objective.\nWhenever an operative that's received this order is performing the Reposition action, add 1\" to its Move stat." },
+    ],
+    strategic_ploys: [
+      { name: "Siege Warfare", cp: 1, text: "Friendly DEATH KORPS operatives' ranged weapons have the Saturate and Accurate 1 weapon rules." },
+      { name: "Take Cover", cp: 1, text: "Whenever an operative is shooting a friendly DEATH KORPS operative, if you can retain any cover saves, improve that friendly operative's Save stat by 1." },
+      { name: "Clear the Line", cp: 1, text: "Friendly DEATH KORPS operatives' melee weapons have the Accurate 1 weapon rule. Whenever a friendly DEATH KORPS operative is fighting wholly within your territory, or whenever it's retaliating, its melee weapons also have the Severe weapon rule." },
+      { name: "Regroup", cp: 1, text: "SUPPORT. Select one friendly DEATH KORPS operative that's more than 3\" from enemy operatives. Each other friendly DEATH KORPS operative within 5\" of that operative and not within control range of enemy operatives can immediately perform a free Dash action in an order of your choice, but each that does so must end that move closer to that operative. Note that a Comms Device from universal equipment only affects the second distance of this rule.\n\nYou cannot use this ploy and the Chronometer faction equipment STRATEGIC GAMBIT during the same turning point." },
+    ],
+    firefight_ploys: [
+      { name: "Inspirational Leadership", cp: 1, text: "SUPPORT. Use this firefight ploy during a friendly DEATH KORPS WATCHMASTER or DEATH KORPS CONFIDANT operative's activation, before or after it performs an action. It issues a GUARDSMAN ORDER." },
+      { name: "Combined Arms", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly DEATH KORPS operative, if it's shooting an enemy operative that's been shot by another friendly DEATH KORPS operative during this turning point. You can re-roll any of your attack dice." },
+      { name: "In Life, Shame", cp: 1, text: "Use this firefight ploy when a friendly DEATH KORPS operative is activated and given an Engage order. It receives every GUARDSMAN ORDER. This takes precedence over the normal rule that operatives cannot benefit from more than one GUARDSMAN ORDER at once." },
+      { name: "In Death, Atonement", cp: 1, text: "Use this firefight ploy when a ready friendly DEATH KORPS operative is incapacitated, if it isn't within control range of enemy operatives. Before it's removed from the killzone, it can immediately perform one free action and you can change its order to do so. Note that friendly operative is injured for the duration of that action." },
+    ],
+    equipment: [
+      { name: "Chronometer", ep: 1, text: "Once per battle STRATEGIC GAMBIT in the first or second turning point. Each friendly DEATH KORPS operative wholly within your territory can immediately perform a free Dash action in an order of your choice, but each that does so must end that move closer to an opponent's drop zone or killzone edge.\n\nYou cannot use this STRATEGIC GAMBIT and the Regroup strategy ploy during the same turning point." },
+      { name: "Comm-Beads", ep: 1, text: "Whenever a friendly DEATH KORPS WATCHMASTER or friendly DEATH KORPS CONFIDANT operative issues a GUARDSMAN ORDER, you can use this rule. If you do, instead of each friendly DEATH KORPS operative within 6\" of it receiving that order, you can select one friendly DEATH KORPS operative to receive that order." },
+      { name: "Hand Axes", ep: 1, text: "Friendly DEATH KORPS operatives have the following melee weapon\nHand axe - ATK 3, HIT 4+, DMG 3/4" },
+      { name: "Gas Bombardment", ep: 1, text: "Once per battle STRATEGIC GAMBIT. Place your Gas marker in the killzone; it cannot be placed underneath Vantage terrain. Whenever an operative is within 3\" of that marker, subtract 1 from its APL stat. In the Ready step of the next Strategy phase, remove that marker. Note that an operative's APL stat is only changed while it's within 3\" of that marker. If it moves more than 3\" from that marker, its APL stat is no longer changed by this rule." },
+    ],
     attacker_effects: ["siege_warfare", "take_aim_ceaseless"],
     defender_effects: ["take_cover"],
     operatives: [
@@ -673,6 +787,28 @@ const FACTIONS = [
     id: "deathwatch",
     name: "DEATHWATCH",
     short: "DEATHWATCH",
+    faction_rules: [
+      { name: "Veteran Astartes", text: "During each friendly DEATHWATCH operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions and an auxiliary grenade launcher, frag cannon, heavy plasma incinerator, infernus heavy bolter, plasma pistol or stalker bolt rifle is selected for both, or if a melta bomb is selected for either, 1 additional AP must be spent for the second action.\n\nEach friendly DEATHWATCH operative can counteract regardless of its order. Whenever it does, it can perform an additional 1AP action for free during that counteraction, but both actions must be different and you cannot perform a Fight and Shoot action during the same counteraction." },
+      { name: "Special Issue Ammunition", text: "Once per turning point, when a friendly DEATHWATCH operative is performing the Shoot action, in the Select Weapon step, you can use this rule. If you do, select one of the following weapon rules for that operative's ranged weapons to have until the end of the action. This rule cannot be used with explosive grenades (see universal equipment) or melta bombs.\nBlast 1\" (you cannot select this if the weapon profile being used has the Torrent weapon rule)Devastating 1Lethal 5+Piercing Crits 1SaturateSevere" },
+    ],
+    strategic_ploys: [
+      { name: "Mission Tactics", cp: 1, text: "Select Conceal or Engage. Whenever a friendly DEATHWATCH operative is shooting against or fighting against an enemy operative that has that order, that friendly operative's weapons have the Balanced weapon rule." },
+      { name: "The Shield That Slays", cp: 1, text: "Whenever a friendly DEATHWATCH operative is wholly within your opponent's territory, Normal Dmg of 4 or more inflicts 1 less damage on it." },
+      { name: "The Long Vigil", cp: 1, text: "Whenever an operative is shooting a friendly DEATHWATCH operative that's wholly within your territory, you can re-roll one of your defence dice." },
+      { name: "And They Shall Know No Fear", cp: 1, text: "You can ignore any changes to the stats of friendly DEATHWATCH operatives from being injured (including their weapons' stats)." },
+    ],
+    firefight_ploys: [
+      { name: "Suffer Not the Alien", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly DEATHWATCH operative, if it's shooting against or fighting against an operative that doesn't have the CHAOS or IMPERIUM keyword. You can re-roll any of your attack dice." },
+      { name: "Advanced Auspex Scan", cp: 1, text: "Use this firefight ploy when a friendly DEATHWATCH operative performs the Shoot action. Until the end of the activation/counteraction, its ranged weapons have the Saturate weapon rule and enemy operatives cannot be obscured." },
+      { name: "Auspicator Tracking", cp: 1, text: "Use this firefight ploy when a friendly DEATHWATCH operative is counteracting, before it performs any actions. You can change its order." },
+      { name: "Transhuman Physiology", cp: 1, text: "Use this firefight ploy when an operative is shooting a friendly DEATHWATCH operative, in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead." },
+    ],
+    equipment: [
+      { name: "Digital Weapons", ep: 1, text: "Once per turning point, when a friendly DEATHWATCH operative performs the Fight action, at the start of the Roll Attack Dice step, you can use this rule. If you do, inflict 1 damage on the enemy operative in that sequence." },
+      { name: "Sanctus-V Bioscryer Cuffs", ep: 1, text: "Once during each friendly DEATHWATCH operative's activation, before or after it performs an action, if it's not within control range of enemy operatives, you can use this rule. If you do, select one of the following:\nThat friendly operative regains up to D3 lost wounds.Remove any changes to that friendly operative's APL stat.Remove one of the following tokens that friendly operative has (before that token's activation effects are resolved, if relevant): Neutron Fragment, Poison, Terrorchem." },
+      { name: "Scrutavore Servo-Thrall", ep: 1, text: "Once per turning point, during a friendly DEATHWATCH operative's activation, you can use this rule. If you do, during that activation, that operative can perform a mission action for 1 less AP.\n\nHaving an enemy operative within its control range doesn't prevent that friendly operative from performing that mission action. However, in such an instance, after it does so, you and your opponent roll-off. If your opponent wins, you cannot use this equipment for the rest of the battle." },
+      { name: "Ammunition Reserve", ep: 1, text: "Once per battle, you can use the Special Issue Ammunition faction rule for up to two Shoot actions during one turning point, but you must select different weapon rules for both uses. This takes precedence over the normal Special Issue Ammunition rules." },
+    ],
     attacker_effects: ["mission_tactics_balanced", "suffer_not_the_alien", "advanced_auspex_scan"],
     defender_effects: ["transhuman", "shield_that_slays", "long_vigil"],
     operatives: [
@@ -828,6 +964,35 @@ const FACTIONS = [
     id: "elucidian-starstrider",
     name: "ELUCIDIAN STARSTRIDER",
     short: "STARSTRIDER",
+    faction_rules: [
+      { name: "Warrant of Trade", text: "Up to four times per battle, you can use a WARRANT OF TRADE rule (below). Each one specifies when it can be used, and you cannot use the same WARRANT OF TRADE rule more than once per battle." },
+      { name: "Consideration", text: "When: In the Select Operatives step, after revealing your equipment options.\n\nEffect: Select one additional equipment option. It cannot be an option you have previously selected." },
+      { name: "Coordinate", text: "When: At the end of the Select Operatives step.\n\nEffect: You gain 1 additional CP." },
+      { name: "Coerce", text: "When: At the start of the Set Up Operatives step.\n\nEffect: Your opponent must set up all of their operatives before you set up any. Additionally, select one of the following options:\nYour opponent must set up all of their equipment before you set up any.You can set up all of your equipment before your opponent sets up any." },
+      { name: "Explore", text: "When: STRATEGIC GAMBIT in the first turning point.\n\nEffect: Perform a free Reposition action with D3 friendly ELUCIDIAN STARSTRIDER operatives that are wholly within your drop zone. Each that does so must end that move wholly within 4\" of your drop zone." },
+      { name: "Bribe", text: "When: It's your turn to activate an operative.\n\nEffect: You can skip that activation." },
+      { name: "Seize", text: "When: In the Strategy phase, after rolling off to decide initiative.\n\nEffect: You can re-roll your dice." },
+      { name: "Adaptable Terms (Approved Ops only)", text: "When: At the end of the second turning point.\n\nEffect: Select a new tac op or a new primary op. If you select a new tac op, any points scored from the previous tac op are discarded." },
+      { name: "Privateer Support Assets", text: "Once per Firefight phase, when a friendly ELUCIDIAN STARSTRIDER NAVIS or ELUCIDIAN STARSTRIDER ELUCIA VHANE operative performs the Shoot action, you can select one of the following PRIVATEER SUPPORT ASSET ranged weapons for it to use. You cannot use each PRIVATEER SUPPORT ASSET more than once per battle.\n\nWhenever a friendly ELUCIDIAN STARSTRIDER operative is using a PRIVATEER SUPPORT ASSET, determine cover saves differently. Instead, the target has a cover save if any part of its base is underneath Vantage terrain. Note that while this can affect the target's cover save, you must still select a valid target as normal. In other words, the shot is guided by an operative in the killzone, but it comes from above." },
+    ],
+    strategic_ploys: [
+      { name: "Lethal Proximity", cp: 1, text: "Whenever a friendly ELUCIDIAN STARSTRIDER operative is shooting an operative within 6\" of it, that friendly operative's ranged weapons (excluding PRIVATEER SUPPORT ASSET weapons) have the Balanced weapon rule." },
+      { name: "Stake Claim", cp: 1, text: "Place your Claim marker in the killzone. Whenever a friendly ELUCIDIAN STARSTRIDER operative is shooting against, fighting against or retaliating against an enemy operative that's within 3\" of that marker, in the Roll Attack Dice step, you can retain one of your fails as a normal success instead of discarding it, or retain one of your normal successes as a critical success instead. At the end of the turning point, remove your Claim marker from the killzone." },
+      { name: "Undaunted Explorers", cp: 1, text: "The first time an attack dice inflicts damage on each friendly ELUCIDIAN STARSTRIDER operative during the turning point in the Resolve Attack Dice step, you can halve that inflicted damage (rounding up, to a minimum of 2)." },
+      { name: "Quick March", cp: 1, text: "Whenever a friendly ELUCIDIAN STARSTRIDER operative performs the Reposition action during its activation, you can use this rule. If you do, add 1\" to its Move stat until the end of that activation, but it must end that move closer to your opponent's drop zone and cannot use a PRIVATEER SUPPORT ASSET during that activation." },
+    ],
+    firefight_ploys: [
+      { name: "Combined Arms", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly ELUCIDIAN STARSTRIDER operative, if it's shooting an enemy operative that's been shot by another friendly ELUCIDIAN STARSTRIDER operative during this turning point. You can re-roll any of your attack dice. You cannot use this ploy while shooting with a PRIVATEER SUPPORT ASSET." },
+      { name: "Survivalist", cp: 1, text: "Use this firefight ploy when a friendly ELUCIDIAN STARSTRIDER operative is activated. That friendly operative regains up to D3+2 lost wounds and during that activation you can ignore any changes to its APL stat." },
+      { name: "Great Endurance", cp: 1, text: "Use this firefight ploy during a friendly ELUCIDIAN STARSTRIDER NAVIS operative's activation. Until the end of the activation, add 1 to its APL stat." },
+      { name: "Well-Drilled", cp: 1, text: "Use this firefight ploy when a friendly ELUCIDIAN STARSTRIDER NAVIS operative is activated. Select one other ready friendly ELUCIDIAN STARSTRIDER NAVIS operative visible to and within 3\" of that operative. When that first friendly operative is expended, you can activate that other friendly operative before your opponent activates. When that other operative is expended, your opponent then activates as normal." },
+    ],
+    equipment: [
+      { name: "Armoured Undersuit", ep: 1, text: "Whenever an operative is shooting a friendly ELUCIDIAN STARSTRIDER operative (excluding CANID) that has a 5+ Save stat, you can retain one of your defence dice results of 4 as a normal success." },
+      { name: "Hot Shot Capacitor Packs", ep: 1, text: "Up to twice per turning point, whenever a friendly ELUCIDIAN STARSTRIDER operative is performing the Shoot action and you select a laspistol, lasgun or relic laspistol, you can use this rule. If you do, until the end of the turning point, add 1 to both Dmg stats of that weapon and it has the Hot and Piercing Crits 1 weapon rules." },
+      { name: "Improved Coordinates Uplink", ep: 1, text: "Whenever a friendly ELUCIDIAN STARSTRIDER operative is using a PRIVATEER SUPPORT ASSET, if the target is within 6\" of a friendly ELUCIDIAN STARSTRIDER NAVIS operative, the target cannot be obscured and that weapon has the Saturate weapon rule." },
+      { name: "Rapid Gunnery", ep: 1, text: "Once per battle, when selecting a PRIVATEER SUPPORT ASSET, you can select one that's already been used during the battle. This takes precedence over the normal PRIVATEER SUPPORT ASSET rules." },
+    ],
     attacker_effects: ["lethal_proximity"],
     defender_effects: [],
     operatives: [
@@ -925,6 +1090,29 @@ const FACTIONS = [
     id: "exaction-squad",
     name: "EXACTION SQUAD",
     short: "ARBITES",
+    faction_rules: [
+      { name: "Ruthless Efficiency", text: "Whenever a friendly EXACTION SQUAD operative is shooting (excluding with frag or krak grenades) and you're selecting a valid target, you can use this rule. If you do, having other friendly EXACTION SQUAD operatives within an enemy operative's control range doesn't prevent that enemy operative from being selected." },
+      { name: "Marked for Justice", text: "STRATEGIC GAMBIT. Select one enemy operative to be your mark for the turning point. Whenever a friendly EXACTION SQUAD operative is shooting against, fighting against or retaliating against your mark, that friendly operative's weapons have the Punishing weapon rule. Whenever your mark is incapacitated, you can select a new enemy operative to be your mark for the turning point (and can continue to do so during this turning point)." },
+      { name: "Repress", text: "Some weapons in this team's rules have the Repress weapon rule below.\n\n*Repress: Whenever this operative is using this weapon:\nEach of your blocks can be allocated to block two unresolved successes (instead of one).If this operative is retaliating, you resolve the first attack dice (i.e. defender instead of attacker)." },
+    ],
+    strategic_ploys: [
+      { name: "Guilt Reveals Itself", cp: 1, text: "Whenever you're selecting a valid target for a friendly EXACTION SQUAD operative, enemy operatives within 4\" of it cannot be in cover (instead of 2\"). While this can allow such operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any), unless the friendly EXACTION SQUAD operative is within 2\" as normal." },
+      { name: "Inviolate Jurisdiction", cp: 1, text: "Whenever an operative is shooting a friendly EXACTION SQUAD operative that's within 2\" of an objective marker or an enemy operative, you can re-roll one of your defence dice." },
+      { name: "Dispense Justice", cp: 1, text: "Whenever a friendly EXACTION SQUAD operative is fighting or retaliating, if it hasn't moved more than its Move stat during the activation, or if it's a counteraction, its melee weapons have the Ceaseless weapon rule." },
+      { name: "Terminal Decree", cp: 1, text: "Whenever a friendly EXACTION SQUAD operative is shooting an enemy operative within 6\" of it, or whenever a friendly EXACTION SQUAD GUNNER operative is shooting, that friendly operative's ranged weapons have the Balanced weapon rule." },
+    ],
+    firefight_ploys: [
+      { name: "Long Arm of the Emperor's Law", cp: 1, text: "Use this firefight ploy when a friendly EXACTION SQUAD operative is performing the Shoot action and you select a weapon with the Range x weapon rule (excluding frag or krak grenade). Until the end of that action, add 3\" to x." },
+      { name: "Exact Punishment", cp: 1, text: "Use this firefight ploy after an enemy operative shoots against or fights against a friendly EXACTION SQUAD operative within 6\" of it, and that friendly operative isn't incapacitated as a result. That friendly operative can immediately perform either a free Shoot or a free Fight action, but you cannot select any other enemy operative as a valid target or to fight against during that action (note that secondary targets from the Blast weapon rule can still be targeted)." },
+      { name: "Brutal Backup", cp: 1, text: "Use this firefight ploy during a friendly EXACTION SQUAD operative's activation, before or after it performs an action. Select one enemy operative within its control range. One other friendly EXACTION SQUAD operative can immediately perform a free Fight action, but you cannot select any other enemy operative to fight against during that action." },
+      { name: "Execution Order", cp: 1, text: "Use this firefight ploy when an enemy operative performs a mission action (excluding Operate Hatch). Alternatively, use it at the end of the Firefight phase and select one enemy operative that controls an objective marker.\n\nIn either case, the next time your opponent would activate that enemy operative, you can interrupt that activation and activate a ready friendly EXACTION SQUAD operative. If you do, during that activation, that friendly operative must shoot against or fight against that enemy operative, and cannot do so against any other enemy operatives until it does (if this isn't possible, that friendly operative's activation is cancelled).\n\nAfter completing that friendly operative's activation, continue that enemy operative's activation (if possible). You cannot use this ploy again until that enemy operative is activated or incapacitated." },
+    ],
+    equipment: [
+      { name: "Reinforced Mirror-Visor", ep: 1, text: "You can ignore any changes to the APL stat of friendly EXACTION SQUAD operatives, and they aren't affected by enemy operatives' Shock weapon rule." },
+      { name: "Manacles", ep: 1, text: "Whenever an enemy operative would perform the Fall Back action while within control range of a friendly EXACTION SQUAD operative, if no other enemy operatives are within that friendly operative's control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.." },
+      { name: "Strobing Phosphor-Lumen", ep: 1, text: "Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly EXACTION SQUAD operative within 2\" of it, your opponent cannot re-roll their attack dice results of 1." },
+      { name: "Special Issue Shells", ep: 1, text: "Up to twice per turning point, when a friendly EXACTION SQUAD operative is performing the Shoot action and you select a combat shotgun, executioner shotgun, scoped shotpistol or shotpistol, you can use this rule. If you do, select one of the following weapon rules for that weapon to have until the end of that action:\nSaturate.Piercing 1, but only if the target has a Save stat of 3+ or better.Torrent 1\", but you cannot select more than one secondary target." },
+    ],
     attacker_effects: ["terminal_decree"],
     defender_effects: [],
     operatives: [
@@ -1094,6 +1282,27 @@ const FACTIONS = [
     id: "hunter-clade",
     name: "HUNTER CLADE",
     short: "HUNTER CLADE",
+    faction_rules: [
+      { name: "Doctrina Imperatives", text: "At the end of the Select Operatives step, select one DOCTRINA IMPERATIVE to be a Primary Mode for your kill team until the end of the battle (note that selecting a Primary Mode doesn't automatically give you the effects of that DOCTRINA IMPERATIVE for the battle; you must still select it as a STRATEGIC GAMBIT, as below).\n\nSTRATEGIC GAMBIT. Select one DOCTRINA IMPERATIVE for friendly HUNTER CLADE operatives to have until the Ready step of the next Strategy phase. Each DOCTRINA IMPERATIVE has both an Optimisation and a Deprecation rule. Both are in effect while your kill team has that DOCTRINA IMPERATIVE. Once per battle, when you select the DOCTRINA IMPERATIVE that's your kill team's Primary Mode, you can ignore its Deprecation rule.\n\nProtector Imperative\nOptimisation: Friendly HUNTER CLADE operatives' ranged weapons have the Ceaseless weapon rule.\n\nDeprecation: Worsen the Hit stat of friendly HUNTER CLADE operatives' melee weapons by 1. This isn't cumulative with being injured.\n\nConqueror Imperative\nOptimisation: Friendly HUNTER CLADE operatives' melee weapons have the Ceaseless weapon rule.\n\nDeprecation: Worsen the Hit stat of friendly HUNTER CLADE operatives' ranged weapons by 1. This isn't cumulative with being injured.\n\nBulwark Imperative\nOptimisation: Normal Dmg of 3 or more inflicts 1 less damage on friendly HUNTER CLADE operatives.\n\nDeprecation: Subtract 1\" from the Move stat of friendly HUNTER CLADE operatives.\n\nAggressor Imperative\nOptimisation: Add 1\" to the Move stat of friendly HUNTER CLADE operatives.\n\nDeprecation: Worsen the Save stat of friendly HUNTER CLADE operatives by 1.\n\nNeutral Imperative\nOptimisation: None.\n\nDeprecation: None." },
+    ],
+    strategic_ploys: [
+      { name: "Debilitating Irradiation", cp: 1, text: "Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly HUNTER CLADE VANGUARD operative, if that enemy operative is under the effects of the Rad-Saturation rule (see VANGUARD operatives), subtract 1 from the Normal Dmg stat of its weapons (to a minimum of 3)." },
+      { name: "Neurostatic Interference", cp: 1, text: "Whenever an enemy operative within 6\" of a friendly HUNTER CLADE INFILTRATOR operative is shooting, fighting or retaliating, your opponent cannot re-roll their attack dice." },
+      { name: "Scouting Protocol", cp: 1, text: "Each friendly HUNTER CLADE RANGER operative that has a Conceal order and is more than 6\" from enemy operatives can immediately perform a free Dash action in an order of your choice. You cannot use this ploy during the first turning point." },
+      { name: "Accelerant Agents", cp: 1, text: "During each friendly HUNTER CLADE RUSTSTALKER operative's activation, it can perform two Fight actions, and one of them can be free." },
+    ],
+    firefight_ploys: [
+      { name: "Control Edict", cp: 1, text: "Use this firefight ploy when it's your turn to activate a friendly operative. Select one friendly HUNTER CLADE LEADER operative and one other ready friendly HUNTER CLADE operative visible to and within 3\" of that LEADER operative; activate one of them as normal. When that first friendly operative you activate is expended, you can activate the other friendly operative before your opponent activates. When that other operative is expended, your opponent then activates as normal. Whenever you use this ploy, you cannot select more than one HUNTER CLADE SICARIAN operative." },
+      { name: "Scrapcode Overload", cp: 1, text: "Use this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative is activated. Alternatively, use this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative, or an enemy operative within 3\" of that friendly operative, would perform the Pick Up Marker or a mission action (excluding Operate Hatch). Until the start of that friendly operative's next activation, whenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of that friendly operative. Note this isn't a change to the APL stat, so any changes are cumulative with this, and this can change control of a marker before performing the action." },
+      { name: "Command Override", cp: 1, text: "Use this firefight ploy when you activate a friendly HUNTER CLADE operative. Select a DOCTRINA IMPERATIVE for that operative to have instead of its current one (if any) until the Ready step of the next Strategy phase." },
+      { name: "Omnissiah's Imperative", cp: 1, text: "Use this firefight ploy during a friendly HUNTER CLADE operative's activation. Alternatively, use it when an enemy operative is shooting a friendly HUNTER CLADE operative, at the end of the Roll Attack Dice step. Until the Ready step of the next Strategy phase, that friendly operative has an additional rule determined by its current DOCTRINA IMPERATIVE as follows:\nProtector: This operative's ranged weapons have the Severe weapon rule. Conqueror: Whenever this operative is fighting, after resolving your first attack dice during that sequence, you can immediately resolve another (before your opponent).Bulwark: Improve this operative's Save stat by 1. In addition, whenever an operative is shooting this operative, you can collect and roll one additional defence dice. If you use this ploy during a Shoot action, this operative's Save stat is changed immediately (this takes precedence over the core rules).Aggressor: You can ignore the first vertical distance of 2\" this operative moves during one climb up.Neutral: None.Note that you can use this ploy after rolling attack or defence dice for this operative, or before or after retaining or re-rolling those dice." },
+    ],
+    equipment: [
+      { name: "Rad Bombardment", ep: 1, text: "Once per battle STRATEGIC GAMBIT in any turning point after the first. Select one objective marker or your opponent's drop zone. Roll one D6 separately for each enemy operative within control range of that selected objective marker or within that drop zone, and subtract 1 if any part of that enemy operative's base is underneath Vantage terrain: on a 4+, subtract 1 from that operative's APL stat until the end of its next activation; on a 6, also inflict D3 damage on it (roll separately for each)." },
+      { name: "Redundancy Systems", ep: 1, text: "Once per turning point, when a friendly HUNTER CLADE operative is activated, if it's not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+2 lost wounds." },
+      { name: "Refractor Field", ep: 1, text: "Once per turning point, when an operative is shooting a friendly HUNTER CLADE operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored." },
+      { name: "Extremis Mind-Link", ep: 1, text: "Once per battle, you can use the Control Edict firefight ploy for 0CP, but instead of activating the selected friendly operatives in succession, activate them at the same time. Complete their activations action by action in any order." },
+    ],
     attacker_effects: [],
     defender_effects: [],
     operatives: [
@@ -1295,6 +1504,28 @@ const FACTIONS = [
     id: "imperial-navy-breacher",
     name: "IMPERIAL NAVY BREACHER",
     short: "BREACHER",
+    faction_rules: [
+      { name: "Void Armour", text: "Whenever an operative is shooting a friendly IMPERIAL NAVY BREACHER operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule (excluding weapons that have a sweeping profile), you can re-roll one of your defence dice, or up to two of your defence dice if that friendly operative is a GRENADIER.\n\nFriendly IMPERIAL NAVY BREACHER operatives aren't affected by the x\" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence." },
+      { name: "Breach and Clear", text: "Once per turning point, when a ready friendly IMPERIAL NAVY BREACHER operative is activated, you can use this rule. If you do, select one other ready friendly IMPERIAL NAVY BREACHER operative visible to and within 3\" of that operative. When that first friendly operative is expended, you can activate that other friendly operative before your opponent activates. When that other operative is expended, your opponent then activates as normal." },
+    ],
+    strategic_ploys: [
+      { name: "Attack Order", cp: 1, text: "Place your Attack Order marker in the killzone. Whenever a friendly IMPERIAL NAVY BREACHER operative within 3\" of that marker is shooting, fighting or retaliating, its weapons have the Ceaseless weapon rule. In the Ready step of the next Strategy phase, remove that marker. You cannot use this ploy and the Defence Order strategy ploy during the same Strategy phase" },
+      { name: "Defence Order", cp: 1, text: "Place your Defence Order marker in the killzone. Whenever an operative is shooting a friendly IMPERIAL NAVY BREACHER operative that's within 3\" of that marker, you can re-roll any of your defence dice results of one result (e.g. results of 2). In the Ready step of the next Strategy phase, remove that marker. You cannot use this ploy and the Attack Order strategy ploy during the same Strategy phase." },
+      { name: "Close Assault", cp: 1, text: "Whenever a friendly IMPERIAL NAVY BREACHER operative is fighting or shooting an operative within 3\" of it:\nAdd 1 to both Dmg stats of all profiles of its Navis shotguns or Navis heavy shotguns (if any).If you roll two or more fails, you can discard one of them to retain another as a normal success instead." },
+      { name: "Brace for Counterattack", cp: 1, text: "Whenever an operative is shooting against, fighting against or retaliating against a friendly IMPERIAL NAVY BREACHER operative that's within your territory or that hasn't performed the Charge, Fall Back or Reposition action during this turning point, Normal and Critical Dmg of 3 or more inflicts 1 less damage on that friendly operative." },
+    ],
+    firefight_ploys: [
+      { name: "Overwhelm Target", cp: 1, text: "Use this firefight ploy when you activate either friendly IMPERIAL NAVY BREACHER operative while using the Breach and Clear faction rule. Until the end of that operative's activation, add 1 to its APL stat." },
+      { name: "Blitz", cp: 1, text: "Use this firefight ploy when a friendly IMPERIAL NAVY BREACHER operative performs the Shoot or Fight action, and you select an enemy operative within 6\" of it as a valid target or to fight against. If it's the first friendly operative to perform either of those actions during this turning point, its weapons have the Accurate 1 weapon rule for that action. If it's the first friendly operative to be activated during this turning point, its weapons also have the Severe weapon rule for that action." },
+      { name: "Lock It Down", cp: 1, text: "Use this firefight ploy when a friendly IMPERIAL NAVY BREACHER operative is activated. Select one objective marker. Until the end of the battle or until you use this ploy again (whichever comes first), when determining control of that objective marker, treat that friendly operative's APL stat as 1 higher. Note this isn't a change to the APL stat, so any changes are cumulative with this." },
+      { name: "Deck Hand", cp: 1, text: "Use this firefight ploy during a friendly IMPERIAL NAVY BREACHER operative's activation, before or after it performs an action. That operative can move through one Accessible terrain feature without it counting as an additional 1\" and/or perform a free Operate Hatch action during its activation, and can do so during the Charge or Fall Back action. You cannot use this ploy if the access point has been welded shut (see HATCHCUTTER) unless it's a friendly HATCHCUTTER operative's activation." },
+    ],
+    equipment: [
+      { name: "Rebreathers", ep: 1, text: "You can ignore any changes to the APL stat of friendly IMPERIAL NAVY BREACHER operatives, and they aren't affected by enemy operatives' Shock weapon rule." },
+      { name: "Slugs", ep: 1, text: "Up to three times per turning point, whenever a friendly IMPERIAL NAVY BREACHER operative is performing the Shoot action and you select a Navis shotgun (long range), you can use this rule. If you do, until the end of that action, improve the Hit stat of that weapon by 1 and add 1 to both of its Dmg stats." },
+      { name: "Combat Stimms", ep: 1, text: "You can ignore any changes to the Move stat of friendly IMPERIAL NAVY BREACHER operatives from being injured." },
+      { name: "System Override Device", ep: 1, text: "Once per turning point, one friendly IMPERIAL NAVY BREACHER operative can perform the Operate Hatch action for 1 less AP." },
+    ],
     attacker_effects: ["attack_order_ceaseless"],
     defender_effects: ["brace_for_counterattack"],
     operatives: [
@@ -1445,6 +1676,27 @@ const FACTIONS = [
     id: "inquisitorial-agent",
     name: "INQUISITORIAL AGENT",
     short: "INQUISITION",
+    faction_rules: [
+      { name: "Inquisitorial Requisition", text: "REQUISITIONED operatives can be taken from one of the following groups to supplement an INQUISITORIAL AGENT kill team, as specified in this kill team's selection rules:\nDEATH KORPSEXACTION SQUADIMPERIAL NAVY BREACHERKASRKINSISTER OF SILENCETEMPESTUS SCIONThese operatives have their faction keyword replaced in all instances on their datacards with INQUISITORIAL AGENT (unless they already have it). You cannot use ploys and equipment associated with a REQUISITIONED operative's former faction keyword, and you cannot use a REQUISITIONED operative's former faction rules unless specified on their Inquisitorial Requisition card (it only applies to those REQUISITIONED operatives). Note that with their new faction keyword, REQUISITIONED operatives can interact with the INQUISITORIAL AGENT rules.\n\nFor example, a REQUISITIONED VOX-OPERATOR operative from the DEATH KORPS group would have its DEATH KORPS keyword replaced in all instances on its datacard with INQUISITORIAL AGENT. This allows you to select any other friendly INQUISITORIAL AGENT operative for its Signal unique action. However, the Guardsman Orders faction rule isn't permitted, so its Relay Orders additional rule would be ignored. It would now also be a valid operative for the INQUISITORIAL AGENT MYSTIC operative's Scry unique action." },
+    ],
+    strategic_ploys: [
+      { name: "Denounce", cp: 1, text: "Select one enemy operative and roll one D3. In the Firefight phase of this turning point, that enemy operative cannot be activated or perform actions until it's the last enemy operative to be activated, or your opponent has activated a number of enemy operatives equal to the result of the D3 (whichever comes first). This ploy costs you 1 additional CP for each previous time you've used it during the battle (e.g. 1CP the first time you would use it, 2CP the second time, etc.)." },
+      { name: "Intense Scrutiny", cp: 1, text: "Whenever you're selecting a valid target for a friendly INQUISITORIAL AGENT operative, enemy operatives within 4\" of it cannot be in cover (instead of 2\"). While this can allow such operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any), unless the friendly INQUISITORIAL AGENT operative is within 2\" as normal." },
+      { name: "Quarry", cp: 1, text: "Select one enemy operative to be your quarry for the turning point. Whenever a friendly INQUISITORIAL AGENT operative is shooting against, fighting against or retaliating against your quarry, that friendly operative's weapons have the Ceaseless weapon rule. Whenever your quarry is incapacitated, you can select a new enemy operative to be your quarry (and can continue to do so during this turning point)." },
+      { name: "Irrefutable Jurisdiction", cp: 1, text: "Whenever an operative is shooting a friendly INQUISITORIAL AGENT operative that's within 3\" of an objective marker, you can re-roll one of your defence dice. If that friendly operative contests that marker, you can re-roll any of your defence dice results of one result instead (e.g. results of 2)." },
+    ],
+    firefight_ploys: [
+      { name: "Absolute Authority", cp: 1, text: "Use this firefight ploy during the battle, when an opponent uses a strategy or firefight ploy (excluding Command Re-roll or one that costs 0CP). Their ploy isn't used, the CP spent on it is refunded and they cannot use that ploy again during this turning point. This ploy cannot be used to stop the same ploy more than once per battle." },
+      { name: "Relentless in Pursuit", cp: 1, text: "Use this firefight ploy when an enemy operative within 2\" of a ready friendly INQUISITORIAL AGENT operative performs an action in which it moves. After it moves, that friendly INQUISITORIAL AGENT operative can either perform a free Reposition action, but must end that move within 2\" of that enemy operative, or a free Charge action, but must end that move within control range of that enemy operative. If neither is possible, that friendly operative cannot perform those actions, this ploy isn't used and the CP spent on it is refunded." },
+      { name: "The Emperor's Will", cp: 1, text: "Use this firefight ploy when a friendly INQUISITORIAL AGENT operative is activated. Until the end of that operative's activation, you can ignore any changes to its stats (including its weapons' stats)." },
+      { name: "Intimidating Presence", cp: 1, text: "Use this firefight ploy when an enemy operative visible to and within 3\" of a friendly INQUISITORIAL AGENT operative, or visible to and within 6\" of a friendly MYSTIC operative, performs the Pick Up Marker or a mission action (excluding Operate Hatch). Your opponent must spend 1 additional AP for that enemy operative to perform that action (if they cannot or choose not to, the AP spent on it is refunded)." },
+    ],
+    equipment: [
+      { name: "Inquisitorial Rosette", ep: 1, text: "Once per battle, when a friendly INQUISITORIAL AGENT operative is activated, if you've used the Quarry strategy ploy during this turning point, you can use this rule. If you do, you can select a new enemy operative to be your quarry until the end of the turning point." },
+      { name: "Combat Daggers", ep: 1, text: "Friendly INQUISITORIAL AGENT operatives have the following melee weapon. Whenever a friendly SISTER OF SILENCE operative is using it, add 1 to its Atk stat.:\nCombat dagger - ATK 3, HIT 4+, DMG 3/4" },
+      { name: "Armoured Bodysuits", ep: 1, text: "Whenever an operative is shooting a friendly INQUISITORIAL AGENT operative (excluding TOME-SKULL) that has a 5+ Save stat, you can retain one of your defence dice results of 4 as a normal success." },
+      { name: "Servo-Skull", ep: 1, text: "Once per battle, one friendly INQUISITORIAL AGENT operative can perform a mission action for 1 less AP." },
+    ],
     attacker_effects: ["quarry_ceaseless"],
     defender_effects: [],
     operatives: [
@@ -1680,6 +1932,27 @@ const FACTIONS = [
     id: "novitiates",
     name: "NOVITIATES",
     short: "NOVITIATES",
+    faction_rules: [
+        { name: "Acts of Faith", text: "In the Ready step of each Strategy phase, you gain a number of Faith points equal to half the number of friendly NOVITIATE operatives that haven't been incapacitated (rounding up). Whenever a friendly NOVITIATE operative is shooting, fighting or retaliating, or an operative is shooting it, in the Roll Attack Dice (or Roll Defence Dice step if an operative is shooting it), you can spend your Faith points to use one ACT OF FAITH. You cannot use more than one ACT OF FAITH per sequence, and their costs and effects are as follows: GUIDANCE 1 FAITH POINT You can re-roll one of your dice. BLESSING 2 FAITH POINTS You can retain one of your normal successes as a critical success instead. INTERVENTION 3 FAITH POINTS You can retain one of your fails as a normal success instead of discarding it." }
+    ],
+    strategic_ploys: [
+        { name: "Ardent Vengeance", cp: 1, text: "Whenever a friendly NOVITIATE operative is shooting against, fighting against or retaliating against an expended enemy operative, that friendly operative's weapons have the Punishing weapon rule." },
+        { name: "Defenders of the Faith", cp: 1, text: "Whenever an operative is shooting against, fighting against or retaliating against a friendly NOVITIATE operative that contests an objective marker, in the Resolve Attack Dice step of that sequence, you can halve the damage inflicted (rounding up and to a minimum of 2) on that friendly operative from one success." },
+        { name: "Blessed Rejuvenation", cp: 1, text: "Whenever you spend Faith points, at the end of that action, the friendly operative you spent them on can regain up to D3 lost wounds. Note this ploy has no effect if that friendly operative was incapacitated during that action, or if the ACT OF FAITH doesn't cost any Faith points, e.g. Auto-chastisers equipment." },
+        { name: "Righteous Advance", cp: 1, text: "Up to one third of the friendly NOVITIATE operatives in the killzone (rounding down, to a minimum of 1) can immediately perform a free Dash action in an order of your choice, but each that does so must end that move closer to its closest enemy operative, its closest objective marker or your opponent's drop zone (you can choose separately for each). You cannot use this ploy during the first turning point." }
+    ],
+    firefight_ploys: [
+        { name: "Glorious Martyrdom", cp: 1, text: "Use this firefight ploy when a friendly NOVITIATE operative is incapacitated, before it's removed from the killzone. For each enemy operative visible to and within 2\" of it, you gain 1 Faith point and inflict D3 damage on that enemy operative (roll separately for each)." },
+        { name: "Blazing Inferno", cp: 1, text: "Use this firefight ploy when a friendly NOVITIATE operative is shooting with a Ministorum flamer and you inflict damage with any critical successes. The target gains one of your Blaze tokens (if it doesn't already have one). Whenever an operative that has one of your Blaze tokens is activated: Inflict D3 damage on it. Its controlling player can subtract 1 from that operative's APL stat until the end of that activation to remove that token. Note that this must be done before that operative performs any actions during that activation." },
+        { name: "Blinding Aura", cp: 1, text: "Use this firefight ploy when an enemy operative is performing the Shoot action and selects a friendly NOVITIATE operative as the valid target. Until the end of that activation/counteraction, while that friendly operative is more than 2\" from that enemy operative, your opponent cannot select it as a valid target. If there are no other valid targets that your opponent can select, that action ends (it's not cancelled, so that operative has still performed it). Note this ploy has no effect if it's not the selected operative, e.g. if it's a secondary target from the Blast weapon rule." },
+        { name: "Guided by Faith", cp: 1, text: "Use this firefight ploy when a friendly NOVITIATE operative is performing the Shoot action and you're selecting a ranged weapon. Until the end of that action, whenever that operative is shooting an operative within 6\" of it, that weapon has the Seek Light weapon rule." }
+    ],
+    equipment: [
+        { name: "Icon of Faith", ep: 1, text: "Once per turning point, you can use up to two ACTS OF FAITH during a sequence, but each one must be different. This takes precedence over the normal ACTS OF FAITH rules." },
+        { name: "Sanctified Rounds", ep: 1, text: "Whenever a friendly NOVITIATE operative is shooting with an autogun, autopistol, relic bolt pistol or relic boltgun, if you spend a Faith point, that weapon has the Piercing Crits 1 weapon rule until the end of that sequence." },
+        { name: "Auto-Chastisers", ep: 1, text: "Once per turning point, when a friendly NOVITIATE operative is shooting, fighting or retaliating, in the Roll Attack Dice step, you can inflict 1-3 damage on that friendly operative (but not enough to incapacitate it). If you do, you can use one ACT OF FAITH for free during that sequence with a Faith points cost no more than the damage you inflicted from this rule." },
+        { name: "Holy Embrocations", ep: 1, text: "You can ignore any changes to the Move stat of friendly NOVITIATE operatives from being injured." }
+    ],
     attacker_effects: ["ardent_vengeance", "guided_by_faith"],
     defender_effects: [],
     operatives: [
@@ -1837,6 +2110,30 @@ const FACTIONS = [
     id: "phobos-strike-team",
     name: "PHOBOS STRIKE TEAM",
     short: "PHOBOS",
+    faction_rules: [
+        { name: "Omni-Scrambler", text: "STRATEGIC GAMBIT if a friendly INFILTRATOR operative is in the killzone. Select one enemy operative visible to a friendly INFILTRATOR operative, or within 6\" of a friendly VOXBREAKER operative. In the following Firefight phase, that enemy operative cannot be activated or perform actions until one of the following is true: Your opponent has activated a number of enemy operatives equal to the number of friendly INFILTRATOR operatives in the killzone when this STRATEGIC GAMBIT was used. It's the last enemy operative to be activated." },
+        { name: "Terror", text: "Whenever an enemy operative is within 3\" of friendly REIVER operatives, your opponent must spend 1 additional AP for that enemy operative to perform the Pick Up Marker and mission actions. Whenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of friendly REIVER operatives. Note this isn't a change to the APL stat, so any changes are cumulative with this." },
+        { name: "Astartes", text: "During each friendly PHOBOS STRIKE TEAM operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, a bolt weapon must be selected for at least one of them. A bolt weapon is any ranged weapon that includes 'bolt' in its name, e.g. marksman bolt carbine, special issue bolt pistol, etc. Each friendly PHOBOS STRIKE TEAM operative can counteract regardless of its order." },
+        { name: "Multi-Spectrum Array", text: "Whenever a friendly INCURSOR operative is shooting, enemy operatives cannot be obscured." }
+    ],
+    strategic_ploys: [
+        { name: "Guerrilla Warfare", cp: 1, text: "Friendly PHOBOS STRIKE TEAM operatives can perform the following unique action: GUERRILLA WARFARE 1AP Change this operative's order. An operative cannot perform this action while within control range of an enemy operative." },
+        { name: "And They Shall Know No Fear", cp: 1, text: "You can ignore any changes to the stats of friendly PHOBOS STRIKE TEAM operatives from being injured (including their weapons' stats)." },
+        { name: "Deadly Shots", cp: 1, text: "Whenever a friendly PHOBOS STRIKE TEAM operative is shooting during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, or against an operative that isn't in cover and is more than 6\" from it, that friendly operative's ranged weapons have the Balanced weapon rule. Note that for the first requirement, that operative isn't restricted from performing those actions after shooting." },
+        { name: "Lethal Assaults", cp: 1, text: "Whenever a friendly PHOBOS STRIKE TEAM operative is fighting, its melee weapons have the Balanced weapon rule. If that friendly operative is doing so during an activation in which it performed the Charge action, its melee weapons also have the Lethal 5+ weapon rule." }
+    ],
+    firefight_ploys: [
+        { name: "Patient Ambush", cp: 1, text: "Use this firefight ploy when it's your turn to activate a friendly operative. You can skip that activation." },
+        { name: "Critical Shot", cp: 1, text: "Use this firefight ploy when you resolve a critical success for a friendly PHOBOS STRIKE TEAM operative that's shooting with a bolt weapon. Inflict D3 additional damage." },
+        { name: "Transhuman Physiology", cp: 1, text: "Use this firefight ploy when an operative is shooting a friendly PHOBOS STRIKE TEAM operative, in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead." },
+        { name: "Stealth Assault", cp: 1, text: "Use this firefight ploy when a friendly PHOBOS STRIKE TEAM operative that has a Conceal order is activated, is given an Engage order, performs the Charge and then the Fight action, and you're resolving your first attack dice from this activation. After doing so, you can immediately resolve another of your attack dice (before your opponent). The operative cannot have performed any other actions during this activation (but can do so after resolving this ploy)." }
+    ],
+    equipment: [
+        { name: "Purity Seals", ep: 1, text: "Once per turning point, when a friendly PHOBOS STRIKE TEAM operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead." },
+        { name: "Additional Utility Grenades", ep: 1, text: "This equipment allows you to select four utility grenades from the utility grenades equipment (see universal equipment). You cannot also select that equipment as normal (i.e. to give you six)." },
+        { name: "Combat Blades", ep: 1, text: "Friendly PHOBOS STRIKE TEAM operatives have the following melee weapon: Combat blade (Atk 5, Hit 3+, Dmg 3/4)." },
+        { name: "Special Issue Ammunition", ep: 1, text: "Once per turning point, when a friendly PHOBOS STRIKE TEAM operative is performing the Shoot action and you select a bolt carbine, marksman bolt carbine or occulus bolt carbine, you can use this rule. If you do, until the end of the turning point, that weapon has the Piercing 1 weapon rule." }
+    ],
     attacker_effects: [],
     defender_effects: ["transhuman"],
     operatives: [
@@ -2010,6 +2307,27 @@ const FACTIONS = [
     id: "ratlings",
     name: "RATLINGS",
     short: "RATLINGS",
+    faction_rules: [
+        { name: "Scarper", text: "After each enemy operative's activation, before the next operative is activated, you can perform a free Dash action with one friendly RATLING operative (excluding BULLGRYN, OGRYN and SNEAK), but it cannot end that move within 3\" of an enemy operative unless it's not visible to every enemy operative when it ends that move. Each friendly operative can only do this once per turning point, and cannot do so after the final activation of the turning point." }
+    ],
+    strategic_ploys: [
+        { name: "Sniper Positions", cp: 1, text: "Whenever a friendly RATLING operative is more than 6\" from enemy operatives and within 1\" of Heavy terrain, the stationary profile of its rifle (if any) has the Silent weapon rule." },
+        { name: "Shifty", cp: 1, text: "Whenever a friendly RATLING operative (excluding OGRYN or BULLGRYN) has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"." },
+        { name: "Crack Shots", cp: 1, text: "Whenever a friendly RATLING operative is shooting an enemy operative more than 6\" from it, if that friendly operative hasn't performed the Charge, Fall Back or Reposition action during the activation, or if it's a counteraction, its rifle (if any) has the Balanced weapon rule. Note that operative isn't restricted from performing those actions after shooting." },
+        { name: "Frontline Assault", cp: 1, text: "Whenever a friendly RATLING BULLGRYN or friendly RATLING OGRYN operative within your opponent's territory or within 3\" of an objective marker is shooting, fighting or retaliating, its weapons have the Balanced weapon rule." }
+    ],
+    firefight_ploys: [
+        { name: "Survival Instincts", cp: 1, text: "Use this firefight ploy when an enemy operative is shooting against or fighting against a friendly RATLING operative (excluding OGRYN or BULLGRYN) and you're allocating a dice to block. If it's a normal success, it can block one unresolved critical success; if it's a critical success, it can block two unresolved successes (normal or critical)." },
+        { name: "Larcenous", cp: 1, text: "Use this firefight ploy during a friendly RATLING operative's activation (excluding OGRYN or BULLGRYN). Until the end of that activation, that operative doesn't have to control a marker to perform the Pick Up Marker or mission actions that usually require this (taking precedence over that action's conditions - it only needs to contest the marker), and having an enemy operative within its control range doesn't prevent it from doing so." },
+        { name: "Sharpshot", cp: 1, text: "Use this firefight ploy when a friendly RATLING operative is performing the Shoot action with a rifle and you're selecting a valid target. Having other friendly RATLING operatives within an enemy operative's control range doesn't prevent that enemy operative from being selected." },
+        { name: "Shoot and Hide", cp: 1, text: "Use this firefight ploy after a friendly RATLING operative that has an Engage order performs the Shoot action with a rifle. If it's more than 3\" from enemy operatives, or not visible to every enemy operative, you can change its order to Conceal." }
+    ],
+    equipment: [
+        { name: "Purloined Rations", ep: 1, text: "Once per turning point, when a friendly RATLING operative is shooting with a rifle and you've rolled your attack dice, you can use this rule. If you do, improve the Hit stat of its rifle by 1 until the end of that sequence. This can allow you to apply the Hit stat change during an action (this takes precedence over the core rules)." },
+        { name: "Stolen Goods", ep: 1, text: "At the end of the Select Operatives step, roll one D3. If the result is: 1, you lose 1CP. 2, you gain 1CP. 3, your opponent loses 1CP." },
+        { name: "Lucky Round", ep: 1, text: "Once per turning point, when a friendly RATLING operative is shooting with a rifle and you've rolled your attack dice, you can use this rule. If you do, that weapon has the Severe weapon rule until the end of that sequence." },
+        { name: "Improvised Armour", ep: 1, text: "Whenever an operative is shooting a friendly RATLING BULLGRYN or friendly RATLING OGRYN operative, defence dice results of 5+ are critical successes." }
+    ],
     attacker_effects: ["crack_shots"],
     defender_effects: [],
     operatives: [
@@ -2187,6 +2505,28 @@ const FACTIONS = [
     id: "sanctifiers",
     name: "SANCTIFIERS",
     short: "SANCTIFIERS",
+    faction_rules: [
+        { name: "Blaze", text: "Some weapons in this team's rules have the Blaze weapon rule below. * Blaze: If you inflict damage with any critical successes, the operative this weapon is being used against gains one of your Blaze tokens (if it doesn't already have one). Whenever an operative that has one of your Blaze tokens is activated, inflict D3 damage on it. Then that operative's controlling player selects one of the following: Roll one D6: on a 3+, remove that token. Subtract 1 from the operative's APL stat until the end of that activation to remove that token." },
+        { name: "Ministorum Sermon", text: "STRATEGIC GAMBIT. Select one friendly SANCTIFIER operative. If a friendly CONFESSOR operative hasn't been incapacitated, you must select it. Until you use this STRATEGIC GAMBIT again during the battle, that operative has the ORATOR keyword. Whenever a friendly SANCTIFIER operative is within 3\" of a friendly ORATOR operative (or 6\" if the ORATOR is a CONFESSOR), that friendly SANCTIFIER operative is benefitting from the SERMON. Whenever a friendly SANCTIFIER operative is activated within 3\" of a friendly ORATOR operative (or 6\" if the ORATOR is a CONFESSOR), that friendly SANCTIFIER operative is benefitting from the SERMON until the end of that activation (i.e. even if it then moves more than the distance requirement from the ORATOR operative). Whenever a friendly SANCTIFIER operative is benefitting from the SERMON, Normal and Critical Dmg of 4 or more inflicts 1 less damage on it." }
+    ],
+    strategic_ploys: [
+        { name: "The Emperor Protects", cp: 1, text: "Whenever an operative is shooting a friendly SANCTIFIER operative that's benefitting from the SERMON, you can re-roll any of your defence dice results of one result (e.g. results of 2)." },
+        { name: "Fervent Brawl", cp: 1, text: "Whenever a friendly SANCTIFIER operative that's benefitting from the SERMON is fighting or retaliating, its melee weapons have the Ceaseless weapon rule." },
+        { name: "Zealous Persecution", cp: 1, text: "Whenever a friendly SANCTIFIER operative is fighting during an activation in which it performed the Charge action, its melee weapons have the Lethal 5+ weapon rule." },
+        { name: "Rally the Flock", cp: 1, text: "Each friendly SANCTIFIER operative (excluding ORATOR) that's benefitting from the SERMON can immediately perform a free Dash or Fall Back action in an order of your choice (choose separately for each and, for the latter, it cannot move more than 3\"). Each that does so must end that move closer and visible to (or vice versa) to a friendly ORATOR operative. You cannot use this ploy during the first turning point." }
+    ],
+    firefight_ploys: [
+        { name: "Rosarius", cp: 1, text: "Use this firefight ploy when an attack dice inflicts Normal Dmg on a friendly SANCTIFIER operative. Ignore that inflicted damage." },
+        { name: "Ardent Eradication", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly SANCTIFIER operative, if it's shooting against or fighting against an enemy operative that's within 3\" of a friendly ORATOR operative (or 6\" if the ORATOR is a CONFESSOR). You can re-roll any of your attack dice." },
+        { name: "Redeemed Through Fire", cp: 1, text: "Use this firefight ploy when a friendly SANCTIFIER operative that has a weapon with the Blaze weapon rule is incapacitated, before it's removed from the killzone. Each enemy operative visible to and within 2\" of it gains one of your Blaze tokens (if it doesn't already have one)." },
+        { name: "Unwavering Devotion", cp: 1, text: "Use this firefight ploy when a friendly SANCTIFIER ORATOR or SANCTIFIER MIRACULIST operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly SANCTIFIER operative (excluding CONFESSOR, MIRACULIST and ORATOR) visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn't normally be valid for this). If it's the Fight action, treat that other operative as being within the fighting operative's control range for the duration of that action. If it's the Shoot action, that other operative is only in cover or obscured if the original target was. This ploy has no effect if it's the Shoot action and the ranged weapon has the Blast or Torrent weapon rule." }
+    ],
+    equipment: [
+        { name: "Sanctification Orbs", ep: 1, text: "Once per turning point, one friendly SANCTIFIER operative (excluding CHERUB, DEATH CULT ASSASSIN and MIRACULIST) can perform the following unique action: SANCTIFICATION ORB 1AP Select one enemy operative visible to and within 6\" of this operative. That operative and each other enemy operative within 1\" of it takes a doused test. For an operative to take a doused test, roll one D6: on a 3+, it gains one of your Doused tokens. Whenever a friendly SANCTIFIER operative is shooting an operative that has one of your Doused tokens with a weapon that has the Blaze weapon rule, that weapon also has the Seek weapon rule. After a friendly SANCTIFIER operative uses a weapon that has the Blaze weapon rule against an enemy operative that has one of your Doused tokens, remove that token (even if the Seek weapon rule wasn't used). This operative cannot perform this action while within control range of an enemy operative." },
+        { name: "Purity Seals", ep: 1, text: "Once per turning point, when a friendly SANCTIFIER operative is shooting or fighting, if you roll two or more fails, you can discard one of them to retain another as a normal success instead." },
+        { name: "Ecclesiarchy Texts", ep: 1, text: "In the Ready step of each Strategy phase, roll 3D6: if the result is less than the remaining wounds of a friendly ORATOR operative, you gain 1CP. Note that this is done before the Gambit step, so if there isn't a valid ORATOR operative, you cannot use this rule during that turning point (e.g. during the first turning point)." },
+        { name: "Imperial Cult Symbols", ep: 1, text: "Once per turning point, when an operative is shooting a friendly SANCTIFIER operative that's benefitting from the SERMON, when you collect your defence dice, you can use this rule. If you do, change one of the attacker's retained critical successes to a normal success (any weapon rules they've already resolved aren't affected, e.g. Piercing Crits)." }
+    ],
     attacker_effects: ["ardent_eradication"],
     defender_effects: ["rosarius"],
     operatives: [
@@ -2331,6 +2671,36 @@ const FACTIONS = [
     id: "scout-squad",
     name: "SCOUT SQUAD",
     short: "SCOUTS",
+    faction_rules: [
+        { name: "Forward Scouting", text: "At the end of the Set Up Operatives step, you can select and resolve up to six Forward Scouting options. Each option has a number in brackets, which is the maximum number of times you can select and resolve it for the battle. For example, your six selections could be Reposition (2), Trip Alarm (1), Booby Trap (1) and Diversion (1). If both players have this rule, alternate resolving selection by selection, starting with the player with initiative." },
+        { name: "Redeploy (1)", text: "Change the set up of one third of your operatives (rounding up)." },
+        { name: "Reposition (2)", text: "Perform a free Reposition action with one friendly operative that's wholly within your drop zone. It must end that move wholly within 3\" of your drop zone." },
+        { name: "Trip Alarm (2)", text: "Place one of your Trip Alarm markers more than 6\" from your opponent's drop zone. During the first and second turning point, whenever a friendly SCOUT SQUAD operative is shooting an enemy operative that's within 2\" of that marker, that friendly operative's ranged weapons have the Seek weapon rule. In the Ready step of the third Strategy phase, remove that marker." },
+        { name: "Booby Trap (1)", text: "Place one of your Booby Trap markers more than 6\" from your opponent's drop zone and more than 2\" from other markers, access points and Accessible terrain. The first time your Booby Trap marker is within an enemy operative's control range, remove that marker and inflict 2D3 damage on that operative; if it isn't incapacitated, end its action (if any), even if that action's effects aren't fulfilled. If it cannot be placed, move it the minimum amount to do so." },
+        { name: "Tactical Manoeuvre (1)", text: "Twice per battle STRATEGIC GAMBIT. Select one friendly operative. Until the end of that operative's next activation, add 1 to its APL stat." },
+        { name: "Diversion (1)", text: "Once per battle STRATEGIC GAMBIT. Select one enemy operative within 6\" of a killzone edge. Until the end of that operative's next activation, subtract 1 from its APL stat." },
+        { name: "Devise Plan (1)", text: "You gain 1CP." },
+        { name: "Designate Target (1)", text: "Select one enemy operative to gain one of your Target tokens. Whenever a friendly SCOUT SQUAD operative is shooting against, fighting against or retaliating against an enemy operative that has one of your Target tokens, you can re-roll one of your attack dice." },
+        { name: "Spy (1)", text: "Approved Ops only. Your opponent must reveal their selected tac op." }
+    ],
+    strategic_ploys: [
+        { name: "Guerrilla Engagement", cp: 1, text: "Whenever an enemy operative is shooting a friendly SCOUT SQUAD operative, if that friendly operative is in cover and more than 6\" from enemy operatives it's visible to, you can re-roll one of your defence dice." },
+        { name: "Ambush", cp: 1, text: "Whenever a friendly SCOUT SQUAD operative is shooting or fighting during its activation, if its order was changed from Conceal to Engage at the start of that activation, or it wasn't visible to enemy operatives at the start of that activation: That friendly operative's weapons have the Balanced weapon rule. If the target is expended, that friendly operative's weapons have the Ceaseless weapon rule instead." },
+        { name: "Adaptable Training", cp: 1, text: "You can change the order of up to D3 friendly SCOUT SQUAD operatives that are more than 4\" from enemy operatives." },
+        { name: "Stealth Relocation", cp: 1, text: "Up to D3 friendly SCOUT SQUAD operatives that have a Conceal order and are more than 4\" from enemy operatives can immediately perform a free Dash action. You cannot use this ploy during the first turning point." }
+    ],
+    firefight_ploys: [
+        { name: "Astartes Training", cp: 1, text: "Use this firefight ploy during a friendly SCOUT SQUAD operative's activation. Until the end of that activation, that operative can do one of the following: Perform two Fight actions. Perform two Shoot actions if an Astartes shotgun, bolt pistol or boltgun is selected for at least one of them. Perform two Shoot actions with a heavy bolter, missile launcher or sniper rifle, but 1 additional AP must be spent for the second action." },
+        { name: "Raw Physiology", cp: 1, text: "Use this firefight ploy during a friendly SCOUT SQUAD operative's activation, before or after it performs an action. Until the start of its next activation, add 1\" to its Move stat and you can ignore any changes to that operative's stats from being injured (including its weapons' stats)." },
+        { name: "Emboldened Aspirant", cp: 1, text: "Use this firefight ploy when a friendly SCOUT SQUAD operative performs the Shoot or Fight action, after any re-rolls. If it's the first friendly operative to perform either of those actions during this turning point, or if the enemy operative in that action (primary target, if relevant) has a higher Wounds stat than that friendly SCOUT SQUAD operative, you can retain one of your normal successes as a critical success instead." },
+        { name: "Covert Position", cp: 1, text: "Use this firefight ploy during a friendly SCOUT SQUAD operative's activation. Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"." }
+    ],
+    equipment: [
+        { name: "Camo Cloak", ep: 1, text: "Whenever an operative is shooting a friendly SCOUT SQUAD operative (excluding SNIPER), if you can retain any cover saves, you can retain one additional cover save. This isn't cumulative with improved cover saves from Vantage terrain." },
+        { name: "Targeting Oculars", ep: 1, text: "Up to twice per turning point, when a friendly SCOUT SQUAD operative is performing the Shoot action and you're selecting a valid target, you can use this rule. If you do, until the end of that action, that friendly operative's ranged weapons have the Lethal 5+ and Saturate weapon rules." },
+        { name: "Combat Blade", ep: 1, text: "Friendly SCOUT SQUAD operatives have the following melee weapon. Note that some operatives already have this weapon but with better stats; in that instance, use the better version. Combat blade (Atk 3, Hit 3+, Dmg 4/5)." },
+        { name: "Tactical Vox-Link", ep: 1, text: "Once per turning point, you can use the Astartes Training or Emboldened Aspirant firefight ploy for 0CP if a friendly SERGEANT operative is in the killzone." }
+    ],
     attacker_effects: ["ambush_balanced"],
     defender_effects: ["guerrilla_engagement"],
     operatives: [
@@ -2425,6 +2795,28 @@ const FACTIONS = [
     id: "tempestus-aquilons",
     name: "TEMPESTUS AQUILONS",
     short: "AQUILONS",
+    faction_rules: [
+        { name: "Drop Insertion", text: "When setting up a TEMPESTUS AQUILON kill team before the battle, the first third of your kill team must be set up as normal. Each third thereafter can be set up above: place them to one side instead of in the killzone. For each third that's set up above, you must set up the whole third in this way (not some of them), then place one of your Drop markers wholly within your drop zone. As a STRATEGIC GAMBIT in the first and second turning point, you can move your Drop markers up to 4\" horizontally. In a killzone that uses the close quarters rules (e.g. Killzone: Gallowdark), this can be measured and moved through Wall terrain. In the Firefight phase, friendly TEMPESTUS AQUILON operatives set up above are activated as normal. When you do, you can either expend or land that operative. If it lands, set it up in the killzone in a location it can be placed as follows (it's no longer set up above): Within 3\" horizontally of one of your Drop markers, or wholly within your drop zone. Not within control range of enemy operatives (unless you're setting up a PRECURSOR operative, which can be set up within control range of an enemy operative). With no part of its base underneath Vantage terrain. With an order of your choice. The operative is treated as performing the Reposition action (spend the AP accordingly), then continue its activation as normal. It's obscured until the end of the next activation or the end of the turning point (whichever comes first). Less than half of your operatives can be set up above by the end of the first turning point. In other words, by the end of the first turning point, more than half of your operatives must have been set up in the killzone during the battle. When readying your operatives during the second and third turning points, remove one of your Drop markers. This means operatives still set up above are incapacitated at the end of the second turning point." },
+        { name: "Grav-Chute", text: "Whenever a friendly TEMPESTUS AQUILON operative is dropping, ignore the vertical distance." }
+    ],
+    strategic_ploys: [
+        { name: "Sudden Offensive", cp: 1, text: "Count the number of friendly TEMPESTUS AQUILON operatives that aren't incapacitated, then halve the result (rounding up) to give you x. Until the end of their activation, friendly TEMPESTUS AQUILON operatives' weapons have the Balanced weapon rule if they are the first friendly operatives activated this turning point equal to x. For example, if you have five operatives, the first three friendly operatives activated will benefit." },
+        { name: "Maintain Momentum", cp: 1, text: "Whenever a friendly TEMPESTUS AQUILON operative is shooting against or fighting against a ready enemy operative, that friendly operative's weapons have the Severe weapon rule." },
+        { name: "Eye Above", cp: 1, text: "Select one enemy operative. That operative and each other enemy operative within 3\" of it gains one of your Detected tokens until the end of the turning point. Whenever an enemy operative that has one of your Detected tokens: Is shooting a friendly TEMPESTUS AQUILON operative, you can re-roll one of your defence dice. Is fighting or retaliating against a friendly TEMPESTUS AQUILON operative, one of your blocks can be allocated to block two unresolved successes (instead of one)." },
+        { name: "Drop and Secure", cp: 1, text: "Select one marker. Until the Ready step of the next Strategy phase, when determining control of that marker, treat the total APL stat of friendly TEMPESTUS AQUILON operatives that contest it as 1 higher if at least one friendly TEMPESTUS AQUILON operative contests that marker. Note this isn't a change to the APL stat, so any changes are cumulative with this. Whenever a friendly TEMPESTUS AQUILON operative is within 3\" of that marker, add 1 to the Atk stat of its melee weapons (to a maximum of 4)." }
+    ],
+    firefight_ploys: [
+        { name: "Hot Drop", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly TEMPESTUS AQUILON operative that's wholly within your opponent's territory, or either landed or dropped from Vantage terrain at least 2\" higher than the killzone floor during this activation. If the target is within 6\" of it, you can re-roll any of your attack dice." },
+        { name: "Adjust Coordinates", cp: 1, text: "Use this firefight ploy when a friendly TEMPESTUS AQUILON operative lands. You can set it up within 5\" horizontally of one of your Drop markers, taking precedence over the normal distance requirement. It cannot perform the Dash, Shoot or Fight actions during this turning point." },
+        { name: "Tempestus Exemplars", cp: 1, text: "Use this firefight ploy during a friendly TEMPESTUS AQUILON operative's activation (excluding SERVO-SENTRY and any operative that has an APL stat higher than 2). During that activation, that operative can perform the Pick Up Marker, Place Marker or a mission action for 1 less AP." },
+        { name: "Progena", cp: 1, text: "Use this firefight ploy when a friendly TEMPESTUS AQUILON operative (excluding SERVO-SENTRY) is activated. It regains up to 2D3 lost wounds, and during that activation you can ignore any changes to its APL stat." }
+    ],
+    equipment: [
+        { name: "Tempestus Daggers", ep: 1, text: "Friendly TEMPESTUS AQUILON operatives (excluding SERVO-SENTRY) have the following melee weapon: Tempestus dagger (Atk 3, Hit 4+, Dmg 3/4)." },
+        { name: "Combat Stimms", ep: 1, text: "You can ignore any changes to the Move stat of friendly TEMPESTUS AQUILON operatives from being injured." },
+        { name: "Drop Augury", ep: 1, text: "Once per battle, when a friendly TEMPESTUS AQUILON operative that's set up above is activated, before expending or landing that operative, you can move one of your Drop markers again. However, it cannot be moved closer to your opponent's drop zone." },
+        { name: "Remote Overseer", ep: 1, text: "Once per battle, after rolling off to decide initiative, you can re-roll your dice." }
+    ],
     attacker_effects: ["maintain_momentum_severe"],
     defender_effects: [],
     operatives: [
@@ -2544,6 +2936,28 @@ const FACTIONS = [
     id: "wolf-scouts",
     name: "WOLF SCOUTS",
     short: "WOLF SCOUTS",
+    faction_rules: [
+        { name: "Elemental Storm", text: "STRATEGIC GAMBIT. Remove your Storm marker from the killzone (if any), then place it in the killzone. Whenever an operative is within 6\" horizontally of your Storm marker, it's within your STORM. Each friendly WOLF SCOUT operative can perform the Charge action while it has a Conceal order if it ends that action within your STORM." },
+        { name: "Hunting Astartes", text: "During each friendly WOLF SCOUT operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions: 1 additional AP must be spent for the second action if both actions are using a plasma gun or plasma pistol. You cannot select two PSYCHIC ranged weapons. Each friendly WOLF SCOUT operative can counteract regardless of its order. Whenever it does so within your STORM, you can change its order first, or change its order instead of performing an action (for the latter, still treat it as having counteracted this turning point)." }
+    ],
+    strategic_ploys: [
+        { name: "Cloaked by the Storm", cp: 1, text: "Whenever an operative is shooting a friendly WOLF SCOUT operative that's within your STORM, you can re-roll one of your defence dice." },
+        { name: "Storm's Bite", cp: 1, text: "Whenever a friendly WOLF SCOUT operative is fighting against an enemy operative that's within your STORM, subtract 1 from the Atk stat of that enemy operative's melee weapons (to a minimum of 3)." },
+        { name: "Tempestuous Wrath", cp: 1, text: "Whenever a friendly WOLF SCOUT operative is fighting or retaliating, if it's within your STORM or was within your STORM at the start of the activation, its melee weapons have the Balanced weapon rule." },
+        { name: "Savage Fighters", cp: 1, text: "Whenever a friendly WOLF SCOUT operative finishes retaliating, if it wasn't incapacitated, you can inflict D3+1 damage on the enemy operative in that sequence." }
+    ],
+    firefight_ploys: [
+        { name: "Acute Senses", cp: 1, text: "Use this firefight ploy when a friendly WOLF SCOUT operative performs the Shoot action and you're selecting a valid target. Until the end of that action, that friendly operative's ranged weapons have the Range 6\" and Seek Light weapon rules and enemy operatives cannot be obscured." },
+        { name: "Touched by Lokyar", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly WOLF SCOUT operative (excluding FENRISIAN WOLF), if it's fighting more than 5\" from other friendly operatives. You can re-roll any of your attack dice." },
+        { name: "Counterattack", cp: 1, text: "Use this firefight ploy at the end of an enemy operative's activation, or after an enemy operative performs the Fight action. One friendly WOLF SCOUT operative can immediately perform a free Fight action, but you cannot select any other enemy operative to fight against during that action." },
+        { name: "Transhuman Physiology", cp: 1, text: "Use this firefight ploy when an operative is shooting a friendly WOLF SCOUT operative (excluding FENRISIAN WOLF), in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead." }
+    ],
+    equipment: [
+        { name: "Frost Weapons", ep: 1, text: "Whenever a friendly WOLF SCOUT operative is wholly within your STORM, its combat blade (if any) has the Lethal 5+ weapon rule." },
+        { name: "Wolfteeth Necklaces", ep: 1, text: "Once per turning point, when a friendly WOLF SCOUT operative (excluding FENRISIAN WOLF) is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead." },
+        { name: "Runic Charms", ep: 1, text: "Once per turning point, when an operative is shooting a friendly WOLF SCOUT operative (excluding FENRISIAN WOLF) that's wholly within your STORM, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored." },
+        { name: "Talismanic Trophies", ep: 1, text: "Whenever a friendly WOLF SCOUT operative (excluding FENRISIAN WOLF) that's wholly within your STORM is fighting or retaliating, in the Resolve Attack Dice step, you can subtract 1 from the damage inflicted on it from one normal success." }
+    ],
     attacker_effects: [],
     defender_effects: ["transhuman", "cloaked_by_storm"],
     operatives: [
@@ -2657,6 +3071,27 @@ const FACTIONS = [
     id: "blooded",
     name: "BLOODED",
     short: "BLOODED",
+    faction_rules: [
+        { name: "Blooded", text: "You gain one Blooded token: In the Ready step of each Strategy phase. The first time an enemy operative is incapacitated during each turning point. The first time a friendly operative is incapacitated within 6\" of an enemy operative during each turning point. As a STRATEGIC GAMBIT, you can assign any of your unassigned Blooded tokens to friendly BLOODED operatives. Each operative cannot have more than one of your Blooded tokens. Then, if four or more friendly operatives in the killzone have one of your Blooded tokens, you can select one of them to be under the GAZE OF THE GODS until the end of the turning point. Whenever a friendly BLOODED operative has one of your Blooded tokens, its weapons have the Accurate 1 weapon rule. If that friendly BLOODED operative is under the GAZE OF THE GODS, you can retain one of your normal successes as a result of the Accurate 1 weapon rule as a critical success instead." }
+    ],
+    strategic_ploys: [
+        { name: "Glory Kill", cp: 1, text: "Select one enemy operative. Until the end of the turning point, whenever a friendly BLOODED operative is shooting against, fighting against or retaliating against that enemy operative, that shooting, fighting or retaliating operative's weapons have the Ceaseless weapon rule, or Relentless if it has one of your Blooded tokens." },
+        { name: "Reckless Aspirant", cp: 1, text: "Whenever a friendly BLOODED operative that's wholly within your opponent's territory and doesn't have one of your Blooded tokens is shooting or fighting, its weapons have the Accurate 1 weapon rule. Whenever a friendly BLOODED operative that has one of your Blooded tokens is wholly within your opponent's territory, its weapons have the Punishing weapon rule." },
+        { name: "Malevolent Grit", cp: 1, text: "Whenever an operative is shooting a friendly BLOODED operative that has one of your Blooded tokens or is wholly within your opponent's territory, you can re-roll one of your defence dice." },
+        { name: "Bitter Demise", cp: 1, text: "Whenever a friendly BLOODED operative is incapacitated, before it's removed from the killzone, roll one D3: on a 3 (or 2+ if that friendly operative has one of your Blooded tokens), inflict damage equal to the result on one enemy operative visible to and within 2\" of that friendly operative." }
+    ],
+    firefight_ploys: [
+        { name: "Callous Disregard", cp: 1, text: "Use this firefight ploy when a friendly BLOODED operative performs the Shoot action and you're selecting a valid target. Having other friendly BLOODED operatives within an enemy operative's control range doesn't prevent that enemy operative from being selected. Until the end of that action, whenever you discard an attack dice as a fail, inflict damage equal to the dice result on one friendly operative of your choice within control range of the target." },
+        { name: "Moment of Repute", cp: 1, text: "Use this firefight ploy during the activation of a friendly BLOODED operative that's under the GAZE OF THE GODS, before or after it performs an action. Until the end of that operative's activation, add 1 to its APL stat." },
+        { name: "Reward Earned", cp: 1, text: "Use this firefight ploy when an enemy operative is incapacitated by a friendly BLOODED operative within 2\" of it that has one of your Blooded tokens. You gain one Blooded token." },
+        { name: "Dark Favour", cp: 1, text: "Use this firefight ploy when a friendly BLOODED operative that has one of your Blooded tokens is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly BLOODED operative visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn't normally be valid for this). If it's the Fight action, treat that other operative as being within the fighting operative's control range for the duration of that action. If it's the Shoot action, that other operative is only in cover or obscured if the original target was. This ploy has no effect if it's the Shoot action and the ranged weapon has the Blast or Torrent weapon rule." }
+    ],
+    equipment: [
+        { name: "Chaos Sigil", ep: 1, text: "The Reward Earned firefight ploy costs you 0CP." },
+        { name: "Sinister Trophies", ep: 1, text: "Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly BLOODED operative that has one of your Blooded tokens and is within 2\" of it, your opponent cannot re-roll their attack dice results of 1." },
+        { name: "Symbols of Bloody Worship", ep: 1, text: "Whenever a friendly BLOODED operative ends an action, if it wasn't incapacitated but inflicted damage on any enemy operatives during that action, it regains 1 lost wound." },
+        { name: "Wicked Blades", ep: 1, text: "Add 1 to both Dmg stats of each friendly BLOODED operative's bayonet, bayonet & shield and improvised blade for the battle." }
+    ],
     attacker_effects: ["glory_kill_ceaseless", "reckless_aspirant"],
     defender_effects: ["malevolent_grit"],
     operatives: [
@@ -2835,6 +3270,28 @@ const FACTIONS = [
     id: "chaos-cult",
     name: "CHAOS CULT",
     short: "CHAOS CULT",
+    faction_rules: [
+        { name: "Accursed Gifts", text: "ACCURSED GIFTS are rules that friendly CHAOS CULT operatives gain when they turn into another operative type (see Mutation faction rule). The first time a friendly DEVOTEE operative turns into a MUTANT operative during the battle, select your primary ACCURSED GIFT. The first time a friendly MUTANT operative turns into a TORMENT operative during the battle, select your secondary ACCURSED GIFT. All friendly MUTANT operatives have your primary ACCURSED GIFT, and all friendly TORMENT operatives have your primary and secondary ACCURSED GIFTS. You cannot select the same ACCURSED GIFT more than once per battle. 1. Deformed Wings: Whenever this operative is climbing up, you can treat the vertical distance as 2\" (regardless of how far the operative actually moves vertically). Whenever this operative is dropping, ignore the vertical distance. 2. Fleet: Add 1\" to this operative's Move stat. 3. Chitinous: Improve this operative's Save stat by 1. 4. Horned: Whenever this operative ends its move during the Charge action, you can inflict 1 damage on one enemy operative within its control range, or D3 damage instead if this operative is a TORMENT. 5. Sinewed: You can ignore any changes to the Hit stat of this operative's melee weapons from being injured. This operative's melee weapons have the Brutal weapon rule. 6. Barbed: Whenever this operative is fighting or retaliating: Enemy operatives cannot assist. The first time you strike during that sequence, also inflict 1 damage on each other enemy operative within this operative's control range, or D3 damage instead if this operative is a TORMENT." },
+        { name: "Mutation", text: "During the battle, friendly CHAOS CULT operatives can MUTATE as follows: As a STRATEGIC GAMBIT, you can MUTATE a number of friendly CHAOS CULT operatives based on the turning point as follows: TP1 = 2, TP2 = 2, TP3 = 3, TP4+ = 4. Whenever a friendly DEVOTEE operative incapacitates an enemy operative within its control range, it can MUTATE. Each operative cannot MUTATE more than once per turning point. Whenever a friendly operative MUTATES, select one of the following: If it's a DEVOTEE operative, turn it into a MUTANT operative. If it's a MUTANT operative, turn it into a TORMENT operative (max twice per turning point). It can regain up to D3+1 lost wounds. You cannot have more than five MUTANT operatives and three TORMENT operatives at once. Whenever a friendly operative turns into a new operative: Swap the miniatures, ensuring the centre of the new miniature's base is as close as possible to where the centre of the old miniature's base was. This can put it within control range of enemy operatives, and if the old miniature was, the new miniature must be if possible. The new operative type loses a number of wounds equal to the lost wounds of its preceding operative type. It's still the same operative for any rules it's already been selected for. The operative is simply a new operative type and will use that new type's miniature and datacard rules." }
+    ],
+    strategic_ploys: [
+        { name: "Exaltation in Pain", cp: 1, text: "You can ignore any changes to the Hit stat of friendly CHAOS CULT operatives' weapons from being injured. Whenever an operative is shooting a friendly CHAOS CULT operative that's wounded, you can re-roll one of your defence dice." },
+        { name: "Fervent Onslaught", cp: 1, text: "Friendly CHAOS CULT operatives' melee weapons have the Accurate 1 weapon rule, or the Accurate 2 weapon rule if that friendly operative is a MUTANT or TORMENT operative." },
+        { name: "Creatures of Nightmare", cp: 1, text: "Whenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 2\" of friendly CHAOS CULT MUTANT or CHAOS CULT TORMENT operatives. Note this isn't a change to the APL stat, so any changes are cumulative with this." },
+        { name: "Sickening Aura", cp: 1, text: "Whenever an enemy operative is within 2\" of friendly CHAOS CULT MUTANT or CHAOS CULT TORMENT operatives, worsen the Hit stat of that enemy operative's weapons by 1. This isn't cumulative with being injured." }
+    ],
+    firefight_ploys: [
+        { name: "Faithful Follower", cp: 1, text: "Use this firefight ploy when a friendly CHAOS CULT DARK COMMUNE operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly CHAOS CULT operative (excluding DARK COMMUNE) visible to and within 3\" of that DARK COMMUNE operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn't normally be valid for this). If it's the Fight action, treat that other operative as being within the fighting operative's control range for the duration of that action. If it's the Shoot action, that other operative is only in cover or obscured if the original target was. This ploy has no effect if it's the Shoot action and the ranged weapon has the Blast or Torrent weapon rule." },
+        { name: "Abhorrent Mutation", cp: 1, text: "Use this firefight ploy when a friendly CHAOS CULT operative (excluding DARK COMMUNE) is activated. Select an ACCURSED GIFT for that operative to gain. This is in addition to any ACCURSED GIFTS it already has. Each friendly operative cannot be selected for this ploy more than once per battle, and if that operative turns into a different one (see Mutation faction rule), it still has that ACCURSED GIFT." },
+        { name: "Frenzied Demise", cp: 1, text: "Use this firefight ploy when a friendly CHAOS CULT MUTANT or CHAOS CULT TORMENT operative is incapacitated, before it's removed from the killzone. Inflict D3 damage (or D6 damage instead if that friendly operative is a TORMENT) on one enemy operative visible to and within 2\" of that friendly operative." },
+        { name: "Unleash the Daemon", cp: 1, text: "Use this firefight ploy during a friendly CHAOS CULT MUTANT or CHAOS CULT TORMENT operative's activation, before or after it performs an action. During that activation, that operative can perform two Fight actions, and one of them can be free." }
+    ],
+    equipment: [
+        { name: "Baleful Script", ep: 1, text: "Once per battle STRATEGIC GAMBIT. Change one of your ACCURSED GIFTS. Note that if it's an ACCURSED GIFT an operative has from the Abhorrent Mutation firefight ploy, only that operative benefits from this." },
+        { name: "Covert Guises", ep: 1, text: "After revealing this equipment option, roll one D3. As a STRATEGIC GAMBIT in the first turning point, a number of friendly CHAOS CULT DEVOTEE operatives equal to the result that are wholly within your drop zone can immediately perform a free Reposition action, but must end that move wholly within 3\" of your drop zone." },
+        { name: "Unholy Talisman", ep: 1, text: "Once per turning point, when an operative is shooting a friendly CHAOS CULT operative, in the Roll Defence Dice step, you can retain one of your normal successes as a critical success instead." },
+        { name: "Vile Blessing", ep: 1, text: "Once per battle, when an attack dice inflicts Normal Dmg on a friendly CHAOS CULT operative (excluding DEVOTEE), you can ignore that inflicted damage. If that friendly operative is a MUTANT or TORMENT operative, you cannot roll for the Unnatural Regeneration rule for that attack dice then decide to use this rule on the same dice - you must use one or the other." }
+    ],
     attacker_effects: [],
     defender_effects: [],
     operatives: [
@@ -2928,6 +3385,27 @@ const FACTIONS = [
     id: "fellgor-ravager",
     name: "FELLGOR RAVAGER",
     short: "FELLGOR",
+    faction_rules: [
+        { name: "Frenzy", text: "Whenever a friendly FELLGOR RAVAGER operative that doesn't have one of your Frenzy tokens would be incapacitated during the battle, it's not incapacitated and it gains one of your Frenzy tokens. All remaining attack dice are discarded (including yours if this operative is fighting or retaliating). If it has a Conceal order, change it to Engage. Whenever a friendly FELLGOR RAVAGER operative has one of your Frenzy tokens: It's only incapacitated as detailed overleaf. It cannot have a Conceal order. It's injured. It cannot perform the Pick Up Marker, unique (excluding Sweeping Blow, see VANDAL) or mission actions (excluding Operate Hatch). For the purpose of determining control of markers and areas of the killzone, treat its APL stat as 1. This takes precedence over any stat changes. A friendly FELLGOR RAVAGER operative that has one of your Frenzy tokens is incapacitated when one of the following is met: Its activation or counteraction ends. An enemy operative is fighting against or retaliating against it and your opponent strikes with a critical success. An enemy operative is fighting against or retaliating against it and your opponent strikes it for a second time with a normal success. Note this can be strikes from two different Fight actions. An enemy operative is shooting it and Critical Dmg is inflicted on it. The battle ends (resolve this before any victory conditions that resolve at the end of the battle). Your opponent treats a FELLGOR RAVAGER operative as being incapacitated (instead of when it would be incapacitated normally) when it gains one of your Frenzy tokens for the purposes of scoring VPs (e.g. kill op) and faction rules that require it to be incapacitated (e.g. HAND OF THE ARCHON Power From Pain, CHAOS CULT Mutation, etc.)." }
+    ],
+    strategic_ploys: [
+        { name: "Violent Temperament", cp: 1, text: "Whenever a friendly FELLGOR RAVAGER operative is fighting or retaliating, after rolling your attack dice, you can use this rule. If you do, you must re-roll all of your attack dice (you cannot only re-roll some)." },
+        { name: "Ambush", cp: 1, text: "Whenever a friendly FELLGOR RAVAGER operative is activated, if its order is changed from Conceal to Engage, it's ambushing for that activation. Whenever a friendly FELLGOR RAVAGER operative that's ambushing is fighting, you can retain one of your normal successes as a critical success instead. Note that an operative that has one of your Frenzy tokens cannot ambush." },
+        { name: "Pelting Firepower", cp: 1, text: "Whenever a friendly FELLGOR RAVAGER operative is shooting an enemy operative that's been shot by another friendly FELLGOR RAVAGER operative during this turning point, that first friendly operative's ranged weapons have the Ceaseless weapon rule; if the enemy operative has been shot by more than one other friendly FELLGOR RAVAGER operative during this turning point, that first friendly operative's ranged weapons have the Relentless weapon rule instead." },
+        { name: "Reckless Determination", cp: 1, text: "Whenever an enemy operative is shooting an expended friendly FELLGOR RAVAGER operative, if you cannot retain any cover saves, you can retain one of your defence dice as a normal success without rolling it." }
+    ],
+    firefight_ploys: [
+        { name: "Ruthless Rampage", cp: 1, text: "Use this firefight ploy after a friendly FELLGOR RAVAGER operative performs the Fight action, if it's no longer within control range of enemy operatives. That friendly operative can immediately perform a free Charge action (even if it's already performed the Charge action during that activation), but cannot move more than 3\" during that action." },
+        { name: "Wild Rage", cp: 1, text: "Use this firefight ploy when a friendly FELLGOR RAVAGER operative is activated. Until the end of that operative's activation, add 1\" to its Move stat." },
+        { name: "Animalistic Fury", cp: 1, text: "Use this firefight ploy when a friendly FELLGOR RAVAGER operative is fighting or retaliating and you strike with a critical success. Inflict 1 additional damage with that strike." },
+        { name: "Bloodsense", cp: 1, text: "Use this firefight ploy during a friendly FELLGOR RAVAGER operative's activation, when it incapacitates an enemy operative within its control range. Select one other ready friendly FELLGOR RAVAGER operative that's visible to and within 3\" of the incapacitated enemy operative. When that first friendly operative is expended, you can activate that other friendly operative before your opponent activates. When that other operative is expended, your opponent then activates as normal." }
+    ],
+    equipment: [
+        { name: "Brass Adornments", ep: 1, text: "Once per battle, you can use the Animalistic Fury and Wild Rage firefight ploys for 0CP each." },
+        { name: "Gore Marks", ep: 1, text: "Once per turning point, when a friendly FELLGOR RAVAGER operative is fighting or retaliating, you can use this rule. If you do, inflict 1 damage on that friendly operative and re-roll one of your attack dice. If the result is a fail, inflict 1 additional damage on that friendly operative." },
+        { name: "Chaos Sigil", ep: 1, text: "Once per turning point, when an operative is shooting a friendly FELLGOR RAVAGER operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored." },
+        { name: "War Paint", ep: 1, text: "You can ignore any changes to the Move stat of friendly FELLGOR RAVAGER operatives from being injured." }
+    ],
     attacker_effects: ["pelting_firepower_ceaseless", "pelting_firepower_relentless"],
     defender_effects: [],
     operatives: [
@@ -3073,6 +3551,33 @@ const FACTIONS = [
     id: "gellerpox-infected",
     name: "GELLERPOX INFECTED",
     short: "GELLERPOX",
+    faction_rules: [
+        { name: "Techno-Curse", text: "At the end of the Select Operatives step, select one TECHNO-CURSE for friendly GELLERPOX INFECTED operatives to gain for the battle. Whenever an enemy operative is within your selected TECHNO-CURSE's infection range, that enemy operative is affected by the symptom of the selected TECHNO-CURSE. Each TECHNO-CURSE, its infection range and its symptom is listed below:" },
+        { name: "Barrelwarp", text: "Infection Range: Within 2\" of a friendly GELLERPOX INFECTED operative (excluding MUTOID VERMIN), or within 3\" of a friendly GELLERPOX INFECTED GLITCHLING operative. Symptom: Subtract 1 from the Atk stat of that enemy operative's ranged weapons." },
+        { name: "Screaming Rustspikes", text: "Infection Range: Within control range of a friendly GELLERPOX INFECTED operative (excluding MUTOID VERMIN). Symptom: Whenever that enemy operative is fighting or retaliating against a friendly GELLERPOX INFECTED operative, if your opponent discards any attack dice as a fail, inflict 1 damage on that enemy operative." },
+        { name: "Viral Vox-Static", text: "Infection Range: Within 3\" of a friendly GELLERPOX INFECTED operative (excluding MUTOID VERMIN), or within 4\" of a friendly GELLERPOX INFECTED GLITCHLING operative. Symptom: That enemy operative's APL stat cannot be added to (remove all positive APL stat changes it has)." },
+        { name: "Mutoid Vermin", text: "MUTOID VERMIN operatives cannot perform any actions other than Charge, Dash, Fall Back, Fight, Reposition and Shoot, or use any weapons that aren't on their datacard. They can perform the Fall Back action for 1 less AP. MUTOID VERMIN operatives cannot contest markers or areas of the killzone, and are ignored for your opponent's kill / elimination op (when they're incapacitated, and when determining your starting number of operatives). They're also ignored for victory conditions and scoring VPs if either require operatives to 'escape', 'survive' or be incapacitated by enemy operatives (if they escape/survive/are incapacitated, determining how many operatives must escape/survive/be incapacitated, etc.). Operatives can move through MUTOID VERMIN operatives, and enemy operatives can move within control range of them. Having only MUTOID VERMIN operatives within their control range doesn't prevent enemy operatives from performing the Charge, Dash and Reposition action, and enemy operatives can leave MUTOID VERMIN operatives' control range when performing the Charge action." },
+        { name: "Nightmare Hulks", text: "Whenever your opponent is selecting a valid target, friendly GELLERPOX INFECTED NIGHTMARE HULK operatives cannot use Light terrain for cover. While this can allow such operatives to be targeted (assuming they're visible), it doesn't remove their cover save (if any). Friendly GELLERPOX INFECTED NIGHTMARE HULK operatives cannot perform unique actions. You must spend 1 additional AP for friendly GELLERPOX INFECTED NIGHTMARE HULK operatives (excluding VULGRAR THRICE-CURSED) to perform the Pick Up Marker and mission actions (excluding Operate Hatch)." },
+        { name: "Revoltingly Resilient", text: "Whenever an attack dice inflicts damage of 3 or more on a friendly GELLERPOX INFECTED NIGHTMARE HULK or GELLERPOX INFECTED MUTANT operative, roll one D6: on a 4+, subtract 1 from that inflicted damage." }
+    ],
+    strategic_ploys: [
+        { name: "Plagueridden Determination", cp: 1, text: "Whenever an operative is shooting a friendly GELLERPOX INFECTED operative (excluding MUTOID VERMIN) that has an Engage order, you can re-roll one of your defence dice." },
+        { name: "Drawn to the Hum", cp: 1, text: "Select one objective marker. Whenever a friendly GELLERPOX INFECTED operative performs the Reposition or Charge action during its activation, you can use this rule. If you do, add 1\" to its Move stat until the end of that activation, but it must end that move within 2\" of that objective marker." },
+        { name: "Blessings of Infection", cp: 1, text: "Whenever a friendly GELLERPOX INFECTED operative is fighting or retaliating, you can do one of the following: If you roll three or more fails, you can discard one of them to retain another as a normal success instead. If you roll three or more successes, you can discard one of your fails to retain one of your normal successes as a critical success instead." },
+        { name: "Rust Emanations", cp: 1, text: "Whenever a friendly GELLERPOX INFECTED NIGHTMARE HULK operative is fighting, your opponent cannot retain results of 3 as successes." }
+    ],
+    firefight_ploys: [
+        { name: "Revolting Technology", cp: 1, text: "Use this firefight ploy when an enemy operative is shooting a friendly GELLERPOX INFECTED operative. That operative's ranged weapons have the Hot weapon rule until the end of that sequence; if the weapon already has that weapon rule, when your opponent rolls one D6 for that weapon rule, you can add or subtract 1 from the result. Note that for the latter you can see the result of your opponent's roll for the Hot weapon rule before deciding to use this ploy." },
+        { name: "Putrescent Demise", cp: 1, text: "Use this firefight ploy when a friendly GELLERPOX INFECTED operative (excluding MUTOID VERMIN) is incapacitated, before it's removed from the killzone. Inflict 1 damage (or D3 damage instead if that friendly operative is a NIGHTMARE HULK) on each enemy operative visible to and within 2\" of that friendly operative." },
+        { name: "Barge", cp: 1, text: "Use this firefight ploy during a friendly GELLERPOX INFECTED NIGHTMARE HULK operative's activation or counteraction, before or after it performs an action. During that activation/counteraction: It can move through enemy operatives and within control range of them. It can perform the Charge and Reposition actions while within control range of an enemy operative, and can leave that operative's control range to do so (but then normal requirements for that move apply)." },
+        { name: "Frightening Onslaught", cp: 1, text: "Use this firefight ploy after a friendly GELLERPOX INFECTED NIGHTMARE HULK operative performs the Fight action, if it isn't incapacitated. It can immediately perform a free Fight action (you don't have to select the same enemy operative to fight against). This takes precedence over action restrictions." }
+    ],
+    equipment: [
+        { name: "Mutoid Vermin", ep: 1, text: "After revealing this equipment option, add four GELLERPOX INFECTED MUTOID VERMIN operatives to your kill team for the battle." },
+        { name: "Mutated Symptoms", ep: 1, text: "Once per battle, when you activate a friendly GELLERPOX INFECTED operative, you can select one additional TECHNO-CURSE for that operative to gain until the end of the turning point (it must be different from your existing TECHNO-CURSE). Note that if a rule refers to an enemy operative being affected by your selected TECHNO-CURSE rule (e.g. VULGRAR THRICE-CURSED operative's Spread the Glorious Gifts rule), it's affected by your additional TECHNO-CURSE rule too." },
+        { name: "Polluted Stockpile", ep: 1, text: "After revealing this equipment option, roll 2D6: on a 7+, remove one of your opponent's selected equipment options; otherwise, that player removes one of their own selected equipment options. They cannot select that equipment again during the game sequence (e.g. in the Scouting step of Approved Ops). You cannot select this equipment option after the Select Operatives step." },
+        { name: "Plague Bellows", ep: 1, text: "Whenever an operative is shooting a friendly GELLERPOX INFECTED NIGHTMARE HULK operative that's more than 6\" from it, you can retain one of your defence dice results of 3 as a normal success instead of discarding it." }
+    ],
     attacker_effects: [],
     defender_effects: ["plagueridden_determination"],
     operatives: [
@@ -3192,6 +3697,29 @@ const FACTIONS = [
     id: "goremonger",
     name: "GOREMONGER",
     short: "GOREMONGER",
+    faction_rules: [
+      { name: "Runes of Khorne", text: "Each friendly GOREMONGER operative cannot lose more than 8 wounds per Shoot action." },
+      { name: "Gore Tanks", text: "Each friendly GOREMONGER operative has a GORE TANK that has three levels: full, half and empty. They start the battle at half. Whenever a GORE TANK increases, it goes up one level; whenever it decreases, it goes down one level. A GORE TANK cannot increase when it's already full, or decrease when it's already empty. Whenever a friendly GOREMONGER operative incapacitates an operative within its control range, or visible to and within 2\" of it, you can increase its GORE TANK. Whenever a friendly GOREMONGER operative uses a SANGUAVITAE rule, you must decrease its GORE TANK." },
+      { name: "Sanguavitae", text: "Each SANGUAVITAE rule specifies when it can be used, and you must decrease the operative's GORE TANK to do so. You cannot use the same SANGUAVITAE rule more than once per activation or counteraction, and you cannot use more than two SANGUAVITAE rules per activation or counteraction. You cannot use Mania and Fury during the same activation." },
+    ],
+    strategic_ploys: [
+      { name: "Enhanced Violence", cp: 1, text: "Whenever a friendly GOREMONGER operative's GORE TANK is: Half, its melee weapons have the Balanced weapon rule. Full, its melee weapons have the Relentless weapon rule." },
+      { name: "Augmented Endurance", cp: 1, text: "Whenever an operative is shooting a friendly GOREMONGER operative, if that friendly operative's GORE TANK is: Half, you can re-roll one of your defence dice. Full, you can re-roll any of your defence dice." },
+      { name: "Gory Tenacity", cp: 1, text: "Whenever a friendly GOREMONGER operative is fighting or retaliating, the first time your opponent strikes it during that sequence, halve the damage inflicted (rounding up and to a minimum of 2)." },
+      { name: "Hunt for Blood", cp: 1, text: "Select one friendly GOREMONGER operative. If it has a Conceal order, change it to Engage. Then it can immediately perform a free Charge action, but cannot move more than 3\" during that action." },
+    ],
+    firefight_ploys: [
+      { name: "Unbridled Aggression", cp: 1, text: "Use this firefight ploy when a friendly GOREMONGER operative is fighting during an activation in which it performed the Charge action, at the end of the Roll Attack Dice step. Until the end of that sequence, that operative's melee weapons have the Severe weapon rule." },
+      { name: "Gorethirst", cp: 1, text: "Use this firefight ploy when you would counteract. You can do so with one friendly GOREMONGER operative that has a Conceal order, but before it counteracts, you must change its order to Engage and it cannot perform any actions other than Charge, Shoot or Fight during that counteraction." },
+      { name: "Destructive Demise", cp: 1, text: "Use this firefight ploy when a friendly GOREMONGER operative is incapacitated, before it's removed from the killzone. Inflict damage determined by that friendly operative's GORE TANK on one enemy operative within that friendly operative's control range. Inflict: D3 if empty. D3+1 if half. D3+2 if full." },
+      { name: "Lacerate Flesh", cp: 1, text: "Use this firefight ploy when a friendly GOREMONGER operative with an empty GORE TANK is activated or counteracts. Increase that operative's GORE TANK. At the end of that activation/counteraction, decrease its GORE TANK (you cannot use this decrease to use a SANGUAVITAE rule); if you cannot decrease its GORE TANK, inflict D3 damage on it." },
+    ],
+    equipment: [
+      { name: "Gory Totem", ep: 1, text: "Before the battle, you can set up one of your Gory Totem markers wholly within your territory and more than 2\" from other markers (excluding your Bloody Cadaver marker). Whenever an enemy operative within 3\" of your Gory Totem marker is shooting, fighting or retaliating, your opponent cannot re-roll their attack dice." },
+      { name: "Bloody Cadaver", ep: 1, text: "Before the battle, you can set up one of your Bloody Cadaver markers wholly within your territory and more than 2\" from other markers (excluding your Gory Totem marker). Friendly GOREMONGER operatives can perform the Pick Up Marker action on that marker. In the Ready step of each Strategy phase, you can increase the GORE TANK of one friendly GOREMONGER operative that controls that marker, unless that friendly operative is within control range of an enemy operative." },
+      { name: "Chaos Sigil", ep: 1, text: "Once per turning point, when an operative is shooting a friendly GOREMONGER operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored." },
+      { name: "Wrist Chains", ep: 1, text: "Once per turning point, when a friendly GOREMONGER operative performs the Shoot action and you're selecting a ranged weapon, you can use this rule. If you do, until the end of that action, the following melee weapons are treated as ranged weapons with the Range 2\" weapon rule: chainblade, chainglaive, great chainaxe (ignore its Brutal weapon rule), pickrippers." },
+    ],
     attacker_effects: [],
     defender_effects: ["augmented_endurance_half", "augmented_endurance_full"],
     operatives: [
@@ -3287,6 +3815,28 @@ const FACTIONS = [
     id: "legionary",
     name: "LEGIONARY",
     short: "LEGIONARY",
+    faction_rules: [
+      { name: "Marks of Chaos", text: "Whenever you select a LEGIONARY operative for the battle, you must select one of the following keywords for it to have for that battle: KHORNE, NURGLE, SLAANESH, TZEENTCH, UNDIVIDED.\nKHORNE - Wrathful Onslaught: This operative's melee weapons have the Severe weapon rule.\nNURGLE - Disgusting Vigour: Whenever Normal Dmg of 3 or more is inflicted on this operative, roll one D6: on a 5+, subtract 1 from that inflicted damage.\nSLAANESH - Unnatural Agility: Add 1\" to this operative's Move stat.\nTZEENTCH - Empyreal Guidance: This operative's ranged weapons have the Severe weapon rule.\nUNDIVIDED - Vicious Reavers: Whenever this operative is shooting against, fighting against or retaliating against an enemy operative within 6\" of it, this operative's weapons have the Ceaseless weapon rule." },
+      { name: "Astartes", text: "During each friendly LEGIONARY operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, a bolt pistol, boltgun or tainted bolt pistol must be selected for at least one of them. Each friendly LEGIONARY operative can counteract regardless of its order." },
+    ],
+    strategic_ploys: [
+      { name: "Implacable", cp: 1, text: "Whenever an operative is shooting a friendly LEGIONARY operative, weapons with the Piercing 1 weapon rule have the Piercing Crits 1 weapon rule instead. You can ignore any changes to the stats of friendly LEGIONARY NURGLE operatives from being injured (including their weapons' stats)." },
+      { name: "Quicksilver Speed", cp: 1, text: "Whenever a friendly LEGIONARY operative that performed an action in which it moved during this turning point is fighting, worsen the Hit stat of the enemy operative's melee weapons by 1. Whenever an operative is shooting a friendly LEGIONARY SLAANESH operative more than 6\" from it that performed an action in which it moved during this turning point, worsen the Hit stat of the enemy operative's weapons by 1." },
+      { name: "Fickle Fates", cp: 1, text: "Whenever a friendly LEGIONARY operative is shooting a ready enemy operative, that friendly operative's ranged weapons have the Balanced weapon rule. Whenever an operative is shooting a ready friendly LEGIONARY TZEENTCH operative, in the Roll Defence Dice step, if you retain any critical successes, you can retain one of your fails as a normal success instead of discarding it." },
+      { name: "Blood for the Blood God", cp: 1, text: "Whenever a friendly LEGIONARY operative (excluding KHORNE) is fighting, the first time you strike during that sequence, inflict 1 additional damage (to a maximum of 7). Add 1 to both Dmg stats of friendly LEGIONARY KHORNE operatives' melee weapons (to a maximum of 7)." },
+    ],
+    firefight_ploys: [
+      { name: "Unending Bloodshed", cp: 1, text: "Use this firefight ploy when a friendly LEGIONARY KHORNE operative is incapacitated while fighting or retaliating. You can strike the enemy operative in that sequence with one of your unresolved successes before it's removed from the killzone." },
+      { name: "Malignant Aura", cp: 1, text: "Use this firefight ploy when a friendly LEGIONARY NURGLE operative is performing the Shoot action, when you select a valid target. Until the end of that action, whenever that friendly operative is shooting an enemy operative within 3\" of it (i.e. including secondary targets, if any), that friendly operative's ranged weapons have the Piercing 1 weapon rule." },
+      { name: "Sickening Captivation", cp: 1, text: "Use this firefight ploy during a friendly LEGIONARY SLAANESH operative's activation, before or after it performs an action. Select one enemy operative visible to and within 4\" of that friendly operative. Until the end of that enemy operative's next activation, subtract 1 from its APL stat." },
+      { name: "Mutability and Change", cp: 1, text: "Use this firefight ploy when a friendly LEGIONARY TZEENTCH operative is activated. Until the end of that operative's activation, add 1 to its APL stat, but it cannot perform the same action more than once during that activation." },
+    ],
+    equipment: [
+      { name: "Warded Armour", ep: 1, text: "Select one friendly LEGIONARY operative. Until the Ready step of the next Strategy phase, change that operative's Save stat to 2+." },
+      { name: "Malefic Blades", ep: 1, text: "Friendly LEGIONARY operatives have the following melee weapon for the battle: Malefic blade - ATK 5, HIT 3+, DMG 3/4." },
+      { name: "Tainted Rounds", ep: 1, text: "Once per turning point, when a friendly LEGIONARY operative is performing the Shoot action and you select a bolt pistol or boltgun, you can use this rule. If you do, until the end of that action, that weapon has the Rending weapon rule." },
+      { name: "Chaos Talismans", ep: 1, text: "Select one Marks of Chaos keyword. Once during each of their activations, when a friendly LEGIONARY operative that has that keyword is shooting, fighting or retaliating, if you roll two or more fails, you can inflict D3 damage on that friendly operative to discard one of them and retain the other as a normal success instead." },
+    ],
     attacker_effects: ["fickle_fates_balanced"],
     defender_effects: [],
     operatives: [
@@ -3440,6 +3990,29 @@ const FACTIONS = [
     id: "murderwing",
     name: "MURDERWING",
     short: "MURDERWING",
+    faction_rules: [
+      { name: "Jump Pack", text: "Whenever a friendly MURDERWING operative performs the Charge, Fall Back or Reposition action, at the start of any straight-line increment (if no part of its base is underneath Vantage terrain), it can BOOST. If it does, don't move it for that increment. Instead, remove it from the killzone and set it back up wholly within x\" horizontally of its original location. X is a distance of your choice (rounded up to the nearest inch), but is added to the total move distance (move plus BOOST cannot exceed the action's allowance). If BOOSTing during a Charge, don't add the additional 2\". It must be set up in a valid location, cannot be under Vantage terrain, and unless it's a Charge action, cannot be set up within control range of an enemy operative. It can continue moving after BOOST if move distance remains and the action allows." },
+      { name: "Boost Actions", text: "Some actions are BOOST actions, performed during other actions when BOOST is used. Each operative cannot perform more than one BOOST action per activation. Most BOOST actions affect enemy operatives within the friendly MURDERWING operative's BOOST ZONE (the horizontal area between the operative's current location and the location from which it used BOOST). Enemy operatives with any part of their base under Vantage terrain are not within BOOST ZONEs." },
+      { name: "Astartes", text: "During each friendly MURDERWING operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, a bolt pistol must be selected for at least one of them. Each friendly MURDERWING operative can counteract regardless of its order." },
+    ],
+    strategic_ploys: [
+      { name: "Predators Above", cp: 1, text: "Whenever a friendly MURDERWING operative is at least 2\" higher than the killzone floor, its weapons have the Balanced weapon rule. Whenever a friendly MURDERWING operative does BOOST, its weapons have the Balanced weapon rule until the end of that activation." },
+      { name: "Cull the Weak", cp: 1, text: "Whenever a friendly MURDERWING operative is shooting or fighting, its weapons have the Punishing weapon rule if any of the following are true for the operative it's shooting/fighting against: it's at least 2\" lower than that friendly operative; its APL stat is less than normal; it was wounded at the start of the activation/counteraction." },
+      { name: "Nightmare on High", cp: 1, text: "Whenever an operative is shooting a friendly MURDERWING operative that's at least 2\" higher than the killzone floor, or that did BOOST during this turning point, you can re-roll one of your defence dice." },
+      { name: "Instil Fear", cp: 1, text: "Whenever a friendly MURDERWING operative is fighting, Normal Dmg of 3 or more inflicts 1 less damage on it." },
+    ],
+    firefight_ploys: [
+      { name: "Malicious Narcissism", cp: 1, text: "Use this firefight ploy when it's your turn to activate a friendly operative, if only one friendly MURDERWING operative is ready. Until the end of the turning point, whenever you have less ready friendly operatives than your opponent, you can skip your activations (delay that operative's activation until your opponent has only one ready operative). It cannot counteract until that operative is expended." },
+      { name: "Murderous Descent", cp: 1, text: "Use this firefight ploy when an enemy operative ends a Charge, Dash, Fall Back or Reposition action within 3\" horizontally of and more than 2\" lower than a friendly MURDERWING operative (or in close quarters, within 2\" and in a different room). Interrupt that activation/counteraction and immediately perform a free Charge action with that friendly operative. It must end within control range of that enemy operative." },
+      { name: "Long Forgotten Honour", cp: 1, text: "Use this firefight ploy when a friendly MURDERWING operative is fighting/retaliating, when you resolve a critical success. Instead of striking/blocking, end that sequence and immediately perform a free Fall Back action up to 3\" (then the Fight ends). It can do so even if it performed an action preventing Fall Back." },
+      { name: "Wings of Darkness", cp: 1, text: "Use this firefight ploy when a friendly MURDERWING operative is performing a Fall Back or Reposition action, when it does BOOST. The operative can be set up an additional 3\" away during BOOST (adding to the permitted move distance), but it cannot perform a Shoot, Fight or Carving Blow action until the next turning point. Cannot use during the first turning point." },
+    ],
+    equipment: [
+      { name: "Bladefins", ep: 1, text: "Friendly MURDERWING operatives can perform the following BOOST action: Slice From Above (1AP) - Inflict D3+1 damage on one enemy operative within this operative's BOOST ZONE. It cannot perform this action normally; it performs it during a Fall Back/Reposition after BOOST setup." },
+      { name: "Clawed Armour", ep: 1, text: "Friendly MURDERWING operatives can perform the following BOOST action: Clawed Charge (0AP) - Inflict 1 damage on one enemy operative within control range, then the Charge ends. It cannot perform this action normally; it performs it during a Charge after BOOST setup." },
+      { name: "Warp Fuel", ep: 1, text: "Once per turning point, when an enemy operative ends a Fall Back action during its activation, if at least one friendly MURDERWING operative was within its control range at the start of that action, one of those operatives can immediately perform a free Reposition or Charge action (cannot use more than 3\" move distance)." },
+      { name: "Vox-Casters", ep: 1, text: "Friendly MURDERWING operatives can perform the following action: Vox-Cry (1AP) - Each enemy operative within 2\" takes a stun test: roll one D6, on a 3+, subtract 1 from its APL stat until the end of its next activation. It cannot perform this action while it has a Conceal order." },
+    ],
     attacker_effects: ["predators_above", "cull_the_weak"],
     defender_effects: ["nightmare_on_high"],
     operatives: [
@@ -3571,6 +4144,28 @@ const FACTIONS = [
     id: "nemesis-claw",
     name: "NEMESIS CLAW",
     short: "NEMESIS CLAW",
+    faction_rules: [
+      { name: "Astartes", text: "During each friendly NEMESIS CLAW operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, a bolt pistol, boltgun or scoped bolt pistol must be selected for at least one of them. Each friendly NEMESIS CLAW operative can counteract regardless of its order." },
+      { name: "In Midnight Clad", text: "Whenever an enemy operative is shooting a friendly NEMESIS CLAW operative, that friendly operative is obscured if both of the following are true: it's more than 8\" from enemy operatives it's visible to; it's within 1\" of Heavy terrain that's not lower than it, or any part of its base is underneath Vantage terrain." },
+    ],
+    strategic_ploys: [
+      { name: "We Have Come for You", cp: 1, text: "Whenever a friendly NEMESIS CLAW operative is activated, if the first action it performs during that activation is the Charge action, when it ends its move during that action, you can inflict D3 damage on one enemy operative within its control range." },
+      { name: "The Black Hunt", cp: 1, text: "Whenever a friendly NEMESIS CLAW operative is shooting against, fighting against or retaliating against a wounded enemy operative, you can re-roll one of your attack dice." },
+      { name: "Preysight", cp: 1, text: "Whenever a friendly NEMESIS CLAW operative performs the Shoot action, you can use this rule. If you do, until the end of that action, that friendly operative's ranged weapons have the Range 6\" and Seek Light weapon rules." },
+      { name: "Return to Darkness", cp: 1, text: "One friendly NEMESIS CLAW operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4\" during that action and it cannot end that move closer to enemy operatives." },
+    ],
+    firefight_ploys: [
+      { name: "Vox Scream", cp: 1, text: "Use this firefight ploy when your opponent would activate an enemy operative that's visible to a friendly NEMESIS CLAW operative. Roll one D6; if the result is higher than that enemy operative's APL stat, your opponent cannot activate it during this activation." },
+      { name: "Death to the False Emperor", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly NEMESIS CLAW operative, if it's shooting against, fighting against or retaliating against an enemy operative that has the IMPERIUM keyword. That friendly operative's weapons have the Ceaseless weapon rule until the end of that sequence; if that enemy operative also has the IMPERIUM ADEPTUS ASTARTES keyword, that friendly operative's weapons have the Relentless weapon rule instead." },
+      { name: "Proclivity for Murder", cp: 1, text: "Use this firefight ploy after a friendly NEMESIS CLAW operative incapacitates an enemy operative within its control range. That friendly operative can immediately perform a free Charge or Dash action, even if it's performed an action that prevents it from performing those actions." },
+      { name: "Dirty Fighter", cp: 1, text: "Use this firefight ploy when a friendly NEMESIS CLAW operative is retaliating, at the start of the Resolve Attack Dice step. You can resolve one of your successes before the normal order. If you do, you cannot resolve any other successes during that sequence." },
+    ],
+    equipment: [
+      { name: "Flayed Skin", ep: 1, text: "Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly NEMESIS CLAW operative within 2\" of it, your opponent cannot re-roll their attack dice results of 1." },
+      { name: "Chain Snare", ep: 1, text: "Whenever an enemy operative would perform the Fall Back action while within control range of a friendly NEMESIS CLAW operative, if no other enemy operatives are within that friendly operative's control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action." },
+      { name: "Grisly Trophy", ep: 1, text: "Once per battle, when a friendly NEMESIS CLAW operative incapacitates an enemy operative within 2\" of it, you can use this rule. If you do, that friendly operative gains one of your Grisly Trophy tokens. Whenever a friendly NEMESIS CLAW operative that has one of your Grisly Trophy tokens is visible to and within 2\" of an enemy operative, subtract 1 from the Atk stat of that enemy operative's weapons." },
+      { name: "Comms Jammers", ep: 1, text: "Whenever an enemy operative is within 3\" of a friendly NEMESIS CLAW operative, that enemy operative's APL stat cannot be added to." },
+    ],
     attacker_effects: ["black_hunt"],
     defender_effects: [],
     operatives: [
@@ -3693,6 +4288,29 @@ const FACTIONS = [
     id: "plague-marines",
     name: "PLAGUE MARINES",
     short: "PLAGUE MARINES",
+    faction_rules: [
+      { name: "Astartes", text: "During each friendly PLAGUE MARINE operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, a bolt pistol, boltgun or PSYCHIC weapon must be selected for at least one of them. You cannot select the same PSYCHIC ranged weapon more than once per activation. Each friendly PLAGUE MARINE operative can counteract regardless of its order." },
+      { name: "Poison", text: "Some weapons in this team's rules have the Poison weapon rule. Poison: In the Resolve Attack Dice step, if you inflict damage with any successes, the operative this weapon is being used against (excluding friendly PLAGUE MARINE operatives) gains one of your Poison tokens (if it doesn't already have one). Whenever an operative that has one of your Poison tokens is activated, inflict 1 damage on it." },
+      { name: "Disgustingly Resilient", text: "Whenever an attack dice inflicts damage of 3 or more on a friendly PLAGUE MARINE operative, roll one D6: on a 4+, subtract 1 from that inflicted damage." },
+    ],
+    strategic_ploys: [
+      { name: "Contagion", cp: 1, text: "Subtract 2\" from the Move stat of an enemy operative and worsen the Hit stat of its weapons by 1 (this isn't cumulative with being injured) whenever any of the following are true: it has one of your Poison tokens and is visible to (or vice versa) and within 3\" of friendly PLAGUE MARINE operatives; it's visible to (or vice versa) and within 3\" of a friendly PLAGUE MARINE ICON BEARER operative." },
+      { name: "Lumbering Death", cp: 1, text: "Whenever a friendly PLAGUE MARINE operative is shooting or fighting during an activation in which it hasn't moved more than 3\", or whenever it's retaliating, its weapons have the Ceaseless weapon rule." },
+      { name: "Cloud of Flies", cp: 1, text: "Place one of your Cloud of Flies markers in the killzone. Whenever an operative is shooting a friendly PLAGUE MARINE operative that's more than 3\" from it, if that friendly operative is wholly within 1\" of that marker, that friendly operative is obscured. In the Ready step of the next Strategy phase, remove that marker." },
+      { name: "Nurglings", cp: 1, text: "Select one enemy operative within 3\" of a friendly PLAGUE MARINE operative, or one enemy operative that has one of your Poison tokens and is within 7\" of a friendly PLAGUE MARINE operative. Until the end of the selected operative's next activation, subtract 1 from its APL stat." },
+    ],
+    firefight_ploys: [
+      { name: "Virulent Poison", cp: 1, text: "Use this firefight ploy during a friendly PLAGUE MARINE operative's activation or counteraction, before or after it performs an action. One enemy operative within 3\" of, or visible to and within 7\" of, that operative gains one of your Poison tokens (if it doesn't already have one)." },
+      { name: "Sickening Resilience", cp: 1, text: "Use this firefight ploy when an attack dice inflicts damage on a friendly PLAGUE MARINE operative. Until the end of the activation or counteraction, for the purposes of the Disgustingly Resilient rule for that operative, always subtract 1 from the damage inflicted (to a minimum of 2) - you don't need to roll." },
+      { name: "Poisonous Demise", cp: 1, text: "Use this firefight ploy when a friendly PLAGUE MARINE operative is incapacitated, before it's removed from the killzone. Each enemy operative visible to and within 3\" of that operative gains one of your Poison tokens (if they don't already have one); for each of those enemy operatives that already has one of your Poison tokens (including if they gained one during this action), inflict 1 damage on them instead." },
+      { name: "Curse of Rot", cp: 1, text: "Use this firefight ploy when a friendly PLAGUE MARINE operative is shooting against or fighting against an enemy operative within 3\" of it (or within 7\" of it if that enemy operative has one of your Poison tokens), after your opponent rolls their attack or defence dice. For each result of 3 they roll, inflict 1 damage on that enemy operative, that result cannot be retained as a success and they cannot re-roll it." },
+    ],
+    equipment: [
+      { name: "Plague Bells", ep: 1, text: "You can ignore any changes to the stats of friendly PLAGUE MARINE operatives from being injured (including their weapons' stats)." },
+      { name: "Plague Rounds", ep: 1, text: "Friendly PLAGUE MARINE operatives' boltguns and bolt pistols have the Poison and Severe weapon rules." },
+      { name: "Blight Grenades", ep: 1, text: "Friendly PLAGUE MARINE operatives have the following ranged weapon (you cannot select it for use more than twice during the battle): Blight grenade, 4 ATK, 4+ HIT, 2/4 DMG, Range 6\", Blast 2\", Saturate, Severe, Poison." },
+      { name: "Poison Vents", ep: 1, text: "Whenever an enemy operative is activated within 3\" of a friendly PLAGUE MARINE operative: if that enemy operative doesn't have one of your Poison tokens, roll one D3: on a 3, it gains one. If that enemy operative has one of your Poison tokens, inflict D3 damage on it (instead of 1)." },
+    ],
     attacker_effects: [],
     defender_effects: ["disgustingly_resilient"],
     operatives: [
@@ -3788,6 +4406,28 @@ const FACTIONS = [
     id: "warpcoven",
     name: "WARPCOVEN",
     short: "WARPCOVEN",
+    faction_rules: [
+      { name: "Boons of Tzeentch", text: "Whenever you select a SORCERER operative for the battle, you must select a BOON OF TZEENTCH for it to have for the battle. You cannot select each BOON OF TZEENTCH more than once per battle. The boons available are: Incorporeal Sight, Time-Walk, Echoes from the Warp, Warp Swell, Mutant Appendage, Immaterial Flight, Twist of Fate, Astral Bombardment, and Master of the Immaterium." },
+      { name: "Astartes", text: "During each friendly WARPCOVEN HERETIC ASTARTES operative's activation, it can perform either two Shoot actions or two Fight actions. If it's two Shoot actions, when selecting a soulreaper cannon or warpflamer for the second action, 1 additional AP is required. You cannot select the same PSYCHIC ranged weapon more than once per activation. Each friendly WARPCOVEN HERETIC ASTARTES operative can counteract regardless of its order." },
+    ],
+    strategic_ploys: [
+      { name: "Aetherial Warding", cp: 1, text: "Whenever an operative is shooting a friendly WARPCOVEN operative, weapons with the Piercing 1 weapon rule have the Piercing Crits 1 weapon rule instead." },
+      { name: "Fate Itself Is My Weapon", cp: 1, text: "Roll two D6 and reserve them (put them to one side). In the Firefight phase of this turning point, whenever an operative is shooting, fighting or retaliating, after you or your opponent roll their attack dice, but before re-rolls, you can use one of your reserved dice to replace one of the D6 rolled for that sequence (yours or your opponent's); that replacement dice cannot be re-rolled or retained as a success if it's not, and is discarded at the end of that sequence. Then, if the combined result of both reserved dice was less than 9, discard the other dice. You cannot use more than one reserved dice per sequence. Discard any remaining reserved dice at the end of the turning point." },
+      { name: "Brotherhood of Sorcerers", cp: 1, text: "Friendly WARPCOVEN SORCERER operatives' PSYCHIC weapons have the Balanced weapon rule, or the Ceaseless weapon rule if another friendly WARPCOVEN SORCERER operative is within 9\" of it." },
+      { name: "Savage Herd", cp: 1, text: "Friendly WARPCOVEN TZAANGOR operatives' melee weapons have the Accurate 1 weapon rule. When assisted or fighting visible to and within 6\" of a friendly WARPCOVEN SORCERER operative, those melee weapons also have the Severe weapon rule." },
+    ],
+    firefight_ploys: [
+      { name: "All Is Dust", cp: 1, text: "Use this firefight ploy when an attack dice inflicts Normal Dmg on a friendly WARPCOVEN RUBRIC MARINE operative. That attack dice inflicts 1 damage instead." },
+      { name: "Capricious Plan", cp: 1, text: "Use this firefight ploy at the end of a friendly WARPCOVEN SORCERER operative's activation. That friendly operative can immediately perform a free Dash action (even if it's performed an action that prevents it from performing the Dash action), or you can change its order instead." },
+      { name: "Psychic Cabal", cp: 1, text: "Use this firefight ploy when a friendly WARPCOVEN SORCERER operative is activated. Select one other friendly WARPCOVEN SORCERER operative within 9\" of it, then select one of that other operative's PSYCHIC unique actions or PSYCHIC ranged weapons. The activated operative can use that selected unique action or ranged weapon until the end of its activation." },
+      { name: "Mutant Herd", cp: 1, text: "Use this firefight ploy when a friendly WARPCOVEN TZAANGOR operative is activated. Select one other ready friendly WARPCOVEN TZAANGOR operative visible to and within 2\" of it to activate simultaneously. Complete those activations action by action in any order." },
+    ],
+    equipment: [
+      { name: "Ensorcelled Rounds", ep: 1, text: "Friendly WARPCOVEN operatives' inferno boltguns, inferno bolt pistols and autopistols have the Devastating 1 weapon rule." },
+      { name: "Daemonmaw Weapons", ep: 1, text: "Add 1 to the Atk stat of friendly WARPCOVEN RUBRIC MARINE operatives' melee weapons. Whenever they're retaliating, those melee weapons have the Accurate 1 weapon rule." },
+      { name: "Arcane Robes", ep: 1, text: "Once per turning point, when an attack dice would inflict Critical Dmg on a friendly WARPCOVEN SORCERER operative, that attack dice inflicts Normal Dmg instead." },
+      { name: "Sorcerous Scrolls", ep: 1, text: "Once per battle, when a friendly WARPCOVEN SORCERER operative is activated or counteracts, you can select a different BOON OF TZEENTCH for it to have until the end of the battle (it loses the previous one)." },
+    ],
     attacker_effects: [],
     defender_effects: ["all_is_dust"],
     operatives: [
@@ -3930,6 +4570,31 @@ const FACTIONS = [
     id: "blades-of-khaine",
     name: "BLADES OF KHAINE",
     short: "BLADES",
+    faction_rules: [
+      { name: "Defence Tactics", text: "Whenever this operative contests an objective marker or one of your mission markers, or whenever it's shooting an enemy operative that does, this operative's weapons have the Balanced weapon rule. (Dire Avenger Exarch & Warrior)" },
+      { name: "Exarch", text: "This operative can perform two Shoot or two Fight actions during its activation. (All Exarchs)" },
+      { name: "Shimmershield", text: "Whenever an operative is shooting a friendly BLADES OF KHAINE operative that's visible to and within 2\" of this operative, ignore the Piercing weapon rule. This operative only has this rule if you select the shimmershield weapon option. (Dire Avenger Exarch)" },
+      { name: "Banshee Mask", text: "Whenever this operative is fighting, worsen the Hit stat of the enemy operative's melee weapons by 1. This isn't cumulative with being injured. (Howling Banshee Exarch & Warrior)" },
+      { name: "Mandiblasters", text: "Whenever this operative performs the Fight action, at the start of the Roll Attack Dice step, you can use this rule. If you do, inflict 2 damage on the enemy operative in that sequence. (Striking Scorpion Exarch & Warrior)" },
+    ],
+    strategic_ploys: [
+      { name: "Forewarned", cp: 1, text: "Whenever an operative is shooting a ready friendly BLADES OF KHAINE operative, you can re-roll any of your defence dice results of one result (e.g. results of 2)." },
+      { name: "Ruthless Poise", cp: 1, text: "Whenever a friendly BLADES OF KHAINE operative is fighting a ready enemy operative, that friendly operative's melee weapons have the Ceaseless weapon rule." },
+      { name: "Khaine's Vengeance", cp: 1, text: "Whenever a friendly BLADES OF KHAINE operative is shooting an expended enemy operative, that friendly operative's ranged weapons have the Ceaseless weapon rule." },
+      { name: "Dance of Death", cp: 1, text: "Select two friendly BLADES OF KHAINE operatives visible to and within 6\" of each other. Remove them both from the killzone and set them back up in each other's previous locations (in other words, swap their positions)." },
+    ],
+    firefight_ploys: [
+      { name: "Bladewind", cp: 1, text: "Use this firefight ploy during a friendly BLADES OF KHAINE operative's activation. During that activation, that operative can perform two Fight actions." },
+      { name: "Starfall", cp: 1, text: "Use this firefight ploy during a friendly BLADES OF KHAINE operative's activation. During that activation, that operative can perform two Shoot actions." },
+      { name: "Fading Light", cp: 1, text: "Use this firefight ploy during a friendly BLADES OF KHAINE operative's activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP." },
+      { name: "Contempt", cp: 1, text: "Use this firefight ploy when a friendly BLADES OF KHAINE operative is retaliating or an enemy operative is shooting it, after your opponent rolls their attack dice, but before re-rolls. Until the end of the sequence, your opponent cannot re-roll their attack dice (if your opponent declared the use of any firefight ploys during that sequence that would allow them to re-roll, that ploy is cancelled and the CP spent on it is refunded)." },
+    ],
+    equipment: [
+      { name: "Rune of Prophecy", ep: 1, text: "Once per battle, after rolling off to decide initiative, you can add D3 to, or subtract D3 from, your result." },
+      { name: "Rune of Shielding", ep: 1, text: "Once per battle, when an attack dice inflicts Normal Dmg on a friendly BLADES OF KHAINE operative, you can ignore that inflicted damage." },
+      { name: "Rune of Foresight", ep: 1, text: "When this equipment is revealed, roll one D3. In the Strategy phase of the turning point equal to the result, you gain 1 additional CP." },
+      { name: "Wraithbone Talisman", ep: 1, text: "Once per turning point, when a friendly BLADES OF KHAINE operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead." },
+    ],
     attacker_effects: ["khaines_vengeance"],
     defender_effects: [],
     operatives: [
@@ -4024,6 +4689,27 @@ const FACTIONS = [
     id: "brood-brother",
     name: "BROOD BROTHER",
     short: "BROOD",
+    faction_rules: [
+      { name: "Crossfire", text: "Whenever a friendly BROOD BROTHER operative is shooting against or fighting against an enemy operative, after resolving all of your attack dice, if that enemy operative isn't incapacitated it gains one of your Crossfire tokens. Whenever a friendly BROOD BROTHER operative is shooting against, fighting against or retaliating against an enemy operative that has any of your Crossfire tokens, you can remove any of those tokens. For each that you do, you can re-roll one of your attack dice." },
+    ],
+    strategic_ploys: [
+      { name: "Pervasive", cp: 1, text: "During each friendly BROOD BROTHER operative's activation, you can ignore the first vertical distance of 2\" they move during one climb." },
+      { name: "Uprising", cp: 1, text: "The first time each friendly BROOD BROTHER operative performs either the Shoot or Fight action during each of its activations, if its order was changed from Conceal to Engage at the start of that activation, the enemy operative selected as the valid target or to fight against gains one of your Crossfire tokens as soon as it's selected (instead of after resolving your attack dice)." },
+      { name: "Embedded", cp: 1, text: "Whenever an enemy operative is shooting a friendly BROOD BROTHER operative, if you can retain any cover saves as a result of Heavy terrain, you can retain one additional cover save." },
+      { name: "Cult Devotion", cp: 1, text: "Whenever a friendly BROOD BROTHER operative (excluding PATRIARCH) is incapacitated while fighting or retaliating, if you have any unresolved successes, you can roll one D6: if the result is a success, you can strike the enemy operative with one of your unresolved normal successes." },
+    ],
+    firefight_ploys: [
+      { name: "Ruthless Coordination", cp: 1, text: "Use this firefight ploy when selecting a valid target for a friendly BROOD BROTHER operative. Until the end of the action, determine visibility as normal, but you can instead determine intervening from another friendly BROOD BROTHER operative that both that friendly operative and the potential valid target are visible to." },
+      { name: "Unquestioning Loyalty", cp: 1, text: "Use this firefight ploy when a friendly BROOD BROTHER LEADER operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly BROODGUARD operative visible to and within 3\" of that LEADER operative to become the valid target or to be fought against instead." },
+      { name: "Idolisation", cp: 1, text: "Use this firefight ploy when a friendly BROOD BROTHER operative (excluding LEADER) within 6\" of a friendly BROOD BROTHER LEADER or ICONWARD operative is shooting, fighting or retaliating, in the Roll Attack Dice step. You can retain one of your fails as a normal success instead of discarding it." },
+      { name: "Insidious", cp: 1, text: "Use this firefight ploy after an activation. Before the next activation, one friendly BROOD BROTHER operative can perform a free Dash action, as long as it's not a valid target for enemy operatives when it starts and ends that action. You cannot use this ploy during the first turning point." },
+    ],
+    equipment: [
+      { name: "Cult Talisman", ep: 1, text: "Once per turning point, when an operative is shooting a friendly BROOD BROTHER operative (excluding PATRIARCH), in the Roll Defence Dice step, you can retain one of your normal successes as a critical success instead." },
+      { name: "Covert Guises", ep: 1, text: "After revealing this equipment option, roll one D3. As a STRATEGIC GAMBIT in the first turning point, a number of friendly BROODGUARD operatives equal to the result that are wholly within your drop zone can immediately perform a free Reposition action, but must end that move wholly within 3\" of your drop zone." },
+      { name: "Cult Knives", ep: 1, text: "Friendly BROODGUARD operatives have the following melee weapon: Cult knife (ATK 3, HIT 4+, DMG 3/4)." },
+      { name: "Lookout", ep: 1, text: "STRATEGIC GAMBIT. Select one enemy operative visible to a friendly BROOD BROTHER operative to gain one of your Crossfire tokens." },
+    ],
     attacker_effects: ["crossfire_balanced"],
     defender_effects: [],
     operatives: [
@@ -4223,6 +4909,28 @@ const FACTIONS = [
     id: "canoptek-circle",
     name: "CANOPTEK CIRCLE",
     short: "CANOPTEK",
+    faction_rules: [
+      { name: "Obelisk Node Matrix", text: "Whenever a friendly CANOPTEK CIRCLE operative is within your OBELISK NODE MATRIX: weapons on its datacard have the Accurate 1 weapon rule; add 1 to its APL stat (to a maximum of 3)." },
+      { name: "A Ceaseless Scuttling", text: "As a STRATEGIC GAMBIT in each turning point after the first, if you have less than three non-incapacitated friendly CANOPTEK CIRCLE WARRIOR operatives, you can set up another one ready and with a Conceal order wholly within your drop zone." },
+    ],
+    strategic_ploys: [
+      { name: "Hypershielding", cp: 1, text: "Whenever an operative is shooting a friendly CANOPTEK CIRCLE operative, if your OBELISK NODE MATRIX is intervening, or that friendly operative is within your OBELISK NODE MATRIX, you can re-roll any of your defence dice results of one result." },
+      { name: "Cryptogravitic Repulsion", cp: 1, text: "Once per action, the first time an enemy operative would move within your OBELISK NODE MATRIX, the distance is treated as an additional 1\"." },
+      { name: "Transdynamic Amplification", cp: 1, text: "Whenever a friendly CANOPTEK CIRCLE operative is shooting, if your OBELISK NODE MATRIX is intervening, or the target is within your OBELISK NODE MATRIX, that friendly operative's weapons have the Ceaseless weapon rule." },
+      { name: "Souldrain", cp: 1, text: "Whenever an enemy operative is within your OBELISK NODE MATRIX, subtract 1 from both Dmg stats of that enemy operative's melee weapons (to a minimum of 2)." },
+    ],
+    firefight_ploys: [
+      { name: "Shield Flare", cp: 1, text: "Use this firefight ploy when an attack dice inflicts Normal Dmg on a friendly CANOPTEK CIRCLE operative. If your OBELISK NODE MATRIX is intervening, or that friendly operative is within your OBELISK NODE MATRIX, ignore that inflicted damage." },
+      { name: "Nodal Response", cp: 1, text: "Use this firefight ploy during a friendly CANOPTEK CIRCLE operative's activation, before or after it performs an action. You can either change one of the strategy ploys you used during this turning point or use a strategy ploy now." },
+      { name: "Animate Obelisk Nodes", cp: 1, text: "Use this firefight ploy when it's your turn to activate or counteract with a friendly operative. Move any number of your OBELISK NODE markers instead. They can move up to 6\" horizontally combined." },
+      { name: "Sacrificial Thrall", cp: 1, text: "Use this firefight ploy when a friendly CANOPTEK CIRCLE GEOMANCER operative is selected as the valid target of a Shoot action or to fight against. Select one other friendly CANOPTEK operative visible to and within 3\" to become the valid target instead." },
+    ],
+    equipment: [
+      { name: "Matrix Manipulator", ep: 1, text: "Once per battle, during a friendly CANOPTEK CIRCLE operative's activation or counteraction, you can use this rule. If you do, until the end of that activation/counteraction, a friendly CANOPTEK CIRCLE GEOMANCER operative is treated as your fourth OBELISK NODE marker." },
+      { name: "Nanoscarab Caskets", ep: 1, text: "Whenever a friendly CANOPTEK CIRCLE operative is activated, it regains up to D3 lost wounds." },
+      { name: "Awakened Obelisk Nodes", ep: 1, text: "After revealing this equipment option, roll one D3. You can use the Animate Obelisk Nodes firefight ploy for 0CP a number of times during the battle equal to the result." },
+      { name: "Phase Shifter", ep: 1, text: "Once per turning point, when an operative is shooting a friendly CANOPTEK CIRCLE GEOMANCER operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1." },
+    ],
     attacker_effects: ["transdynamic_amplification"],
     defender_effects: ["hypershielding", "shield_flare"],
     operatives: [
@@ -4298,6 +5006,28 @@ const FACTIONS = [
     id: "corsair-voidscarred",
     name: "CORSAIR VOIDSCARRED",
     short: "CORSAIR",
+    faction_rules: [
+      { name: "Rifles", text: "Whenever a friendly CORSAIR VOIDSCARRED operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule." },
+      { name: "Aeldari Raiders", text: "Each friendly CORSAIR VOIDSCARRED operative can perform a free Dash action during their activation." },
+    ],
+    strategic_ploys: [
+      { name: "Plunderers", cp: 1, text: "Up to D3 friendly CORSAIR VOIDSCARRED operatives can immediately perform a free Dash action in an order of your choice. This turning point, each that does so cannot perform the Dash action during their activation. You cannot use this ploy during the first turning point." },
+      { name: "Piratical Profiteers", cp: 1, text: "Whenever a friendly CORSAIR VOIDSCARRED operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative's weapons have the Balanced weapon rule." },
+      { name: "Mobile Engagement", cp: 1, text: "Whenever an operative is shooting a friendly CORSAIR VOIDSCARRED operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice." },
+      { name: "Outcasts", cp: 1, text: "Whenever a friendly CORSAIR VOIDSCARRED operative is more than 5\" from other friendly operatives, its weapons have the Punishing weapon rule." },
+    ],
+    firefight_ploys: [
+      { name: "Opportunistic Fighters", cp: 1, text: "Use this firefight ploy when an enemy operative performs the Fall Back action. Before it moves, inflict 2D3 damage on that operative for each friendly CORSAIR VOIDSCARRED operative within its control range." },
+      { name: "Light Fingers", cp: 1, text: "Use this firefight ploy during a friendly CORSAIR VOIDSCARRED operative's activation. Until the end of that activation, having an enemy operative within its control range doesn't prevent that friendly operative from performing the Pick Up Marker or mission actions." },
+      { name: "Capricious Flight", cp: 1, text: "Use this firefight ploy during a friendly CORSAIR VOIDSCARRED operative's activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP." },
+      { name: "Contemptuous Adventurer", cp: 1, text: "Use this firefight ploy when the first friendly CORSAIR VOIDSCARRED operative is activated during the turning point, if it's more than 5\" from other friendly operatives. The first time that operative performs either the Shoot or Fight action during that activation, its weapons have the Relentless weapon rule." },
+    ],
+    equipment: [
+      { name: "Diuturnal Mantles", ep: 1, text: "Whenever an operative is shooting a friendly CORSAIR VOIDSCARRED operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly CORSAIR VOIDSCARRED operatives aren't affected by the x\" Devastating x weapon rule unless they are the target during that sequence." },
+      { name: "Mistfield", ep: 1, text: "Once per turning point, when an operative is shooting a friendly CORSAIR VOIDSCARRED operative more than 3\" from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence." },
+      { name: "Runes of Guidance", ep: 1, text: "Once per turning point, when a friendly CORSAIR VOIDSCARRED Way Seeker or Soul Weaver operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3\" to its distance requirement." },
+      { name: "Star Charts", ep: 1, text: "Strategic Gambit. Roll one D3: if the result is higher than the number of the current turning point, you gain 1CP and cannot use this Strategic Gambit for the rest of the battle." },
+    ],
     attacker_effects: ["piratical_profiteers", "outcasts_punishing", "contemptuous_adventurer"],
     defender_effects: ["mobile_engagement"],
     operatives: [
@@ -4456,6 +5186,27 @@ const FACTIONS = [
     id: "farstalker-kinband",
     name: "FARSTALKER KINBAND",
     short: "FARSTALKER",
+    faction_rules: [
+      { name: "Farstalker", text: "In the Ready step of each Strategy phase, you can change the order of up to three friendly FARSTALKER KINBAND operatives that are not within control range of enemy operatives. Whenever it's your turn to counteract, you can change the order of one friendly FARSTALKER KINBAND operative that's not within control range of enemy operatives instead." },
+    ],
+    strategic_ploys: [
+      { name: "Cut-Throats", cp: 1, text: "Add 1 to the Atk stat of friendly FARSTALKER KINBAND operatives' melee weapons (to a maximum of 5)." },
+      { name: "Prey", cp: 1, text: "Whenever a friendly FARSTALKER KINBAND operative is shooting during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, its ranged weapons have the Balanced and Severe weapon rules; if the weapon already has the Balanced weapon rule, it has the Ceaseless and Severe weapon rules instead." },
+      { name: "Rogue", cp: 1, text: "Whenever an operative is shooting a friendly FARSTALKER KINBAND operative: ignore the Saturate weapon rule. If you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead." },
+      { name: "Bound", cp: 1, text: "During each friendly FARSTALKER KINBAND operative's activation, you can ignore the first vertical distance of 2\" they move during one climb up." },
+    ],
+    firefight_ploys: [
+      { name: "Savage Ambush", cp: 1, text: "Use this firefight ploy during the Fight action when a ready friendly FARSTALKER KINBAND operative that has Light or Heavy terrain within its control range is selected to fight against. In the Resolve Attack Dice step of that sequence, you resolve the first attack dice (i.e. defender instead of attacker)." },
+      { name: "Poach", cp: 1, text: "Use this firefight ploy during a friendly FARSTALKER KINBAND operative's activation. Until the end of that activation, that operative doesn't have to control a marker to perform the Pick Up Marker or mission actions that usually require this." },
+      { name: "Slip Away", cp: 1, text: "Use this firefight ploy during a friendly FARSTALKER KINBAND operative's activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP." },
+      { name: "Vengeance for the Kinband", cp: 1, text: "Use this firefight ploy when a friendly FARSTALKER KINBAND operative is incapacitated by an enemy operative. Until the end of the battle, whenever another friendly FARSTALKER KINBAND operative is shooting against, fighting against or retaliating against that enemy operative, that other friendly operative's weapons have the Relentless weapon rule." },
+    ],
+    equipment: [
+      { name: "Piercing Shot", ep: 1, text: "Once per turning point, when a friendly FARSTALKER KINBAND operative is performing the Shoot action and you select a Kroot rifle, Kroot scattergun or dual Kroot pistols (focused), you can use this rule. If you do, until the end of that action, that weapon has the Piercing 1 weapon rule. You cannot use the Piercing Shot and Toxin Shot rule during the same action." },
+      { name: "Meat", ep: 1, text: "Once per turning point, when a friendly FARSTALKER KINBAND operative (excluding HOUND) is activated, if it's not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+1 lost wounds." },
+      { name: "Toxin Shot", ep: 1, text: "Once per turning point, when a friendly FARSTALKER KINBAND operative is performing the Shoot action and you select a Kroot rifle, Kroot scattergun or dual Kroot pistols (focused), you can use this rule. If you do, until the end of that action, that weapon has the Lethal 5+ and Stun weapon rules. You cannot use the Piercing Shot and Toxin Shot rule during the same action." },
+      { name: "Trophy", ep: 1, text: "Once per battle, during a friendly FARSTALKER KINBAND operative's activation (excluding HOUND), before or after it performs an action, if it's not within control range of enemy operatives, you can use this rule. If you do, add 1 to that friendly operative's APL stat until the end of its activation." },
+    ],
     attacker_effects: ["prey_balanced_severe", "vengeance_relentless"],
     defender_effects: [],
     operatives: [
@@ -4604,6 +5355,29 @@ const FACTIONS = [
     id: "hand-of-the-archon",
     name: "HAND OF THE ARCHON",
     short: "ARCHON",
+    faction_rules: [
+      { name: "Power From Pain", text: "After a friendly HAND OF THE ARCHON operative performs an action, it gains one of your Pain tokens if:\nAn enemy operative was injured during that action, but was not incapacitated.An enemy operative was incapacitated during that action. If that enemy operative had a Wounds stat of 12 or more, that friendly operative gains two of your Pain tokens instead.You can spend friendly operatives' Pain tokens on invigorations when the 'when' condition is met. You cannot use more than one invigoration per activation or counteraction, except Stimulated Senses, which can be used once per activation or counteraction in addition to another invigorations." },
+      { name: "Invigorations", text: "Dark Animus\nWhen: During the operative's activation, before or after it performs an action.\nEffect: Until the start of the operative's next activation, add 1 to its APL stat.\n\nAccelerated Rejuvenation\nWhen: During the operative's activation or counteraction, before or after it performs an action.\nEffect: The operative regains D3+1 lost wounds.\n\nVitalised Surge\nWhen: After the operative incapacitates an enemy operative and that enemy operative is removed from the killzone.\nEffect: The operative can immediately perform a free Dash action, even if it's performed an action that prevents it from performing the Dash action.\n\nStimulated Senses\nWhen: After rolling your attack or defence dice for the operative.\nEffect: You can re-roll any of your dice results of one result (e.g. results of 2)." },
+      { name: "Rifles", text: "Whenever a friendly HAND OF THE ARCHON operative is shooting with a splinter rifle during an activation in which it hasn't performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule. Note that operative isn't restricted from performing those actions after shooting." },
+    ],
+    strategic_ploys: [
+      { name: "BLADE ARTISTS", cp: 1, text: "Friendly HAND OF THE ARCHON operatives' melee weapons have the Rending weapon rule." },
+      { name: "FROM DARKNESS, DEATH", cp: 1, text: "Whenever a friendly HAND OF THE ARCHON operative is activated, before you determine its order, you can select one enemy operative that friendly operative isn't a valid target for. Until the end of that activation, the first time that friendly operative is shooting against or fighting against that enemy operative, you can retain one of your normal successes as a critical success instead." },
+      { name: "MERCILESS SADISTS", cp: 1, text: "Whenever a friendly HAND OF THE ARCHON operative is shooting against or fighting against a wounded enemy operative, that friendly operative's weapons have the Balanced weapon rule." },
+      { name: "DENIZENS OF NIGHT", cp: 1, text: "Whenever an enemy operative is shooting a friendly HAND OF THE ARCHON operative that's more than 2\" from enemy operatives, if Heavy or Light terrain is intervening, or any part of that friendly operative's base is underneath Vantage terrain, you can re-roll one of your defence dice." },
+    ],
+    firefight_ploys: [
+      { name: "CRUEL DECEPTION", cp: 1, text: "Use this firefight ploy during a friendly HAND OF THE ARCHON operative's activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP." },
+      { name: "HEINOUS ARROGANCE", cp: 1, text: "Use this firefight ploy when it's your turn to activate a friendly operative. You can skip that activation." },
+      { name: "DEVIOUS SCHEME", cp: 1, text: "Use this firefight ploy after an opponent uses a firefight ploy (excluding one that costs 0CP). The next time they would use that ploy, they must spend 1 additional CP to do so (at which point this effect ends). You cannot use this ploy again during the battle until its effect has ended." },
+      { name: "PREY ON THE WOUNDED", cp: 1, text: "Use this firefight ploy after rolling your attack dice for a friendly HAND OF THE ARCHON operative, if it's shooting against or fighting against a wounded enemy operative. You can re-roll any of your attack dice." },
+    ],
+    equipment: [
+      { name: "CHAIN SNARE", ep: 1, text: "Whenever an enemy operative would perform the Fall Back action while within control range of a friendly HAND OF THE ARCHON operative, if no other enemy operatives are within that friendly operative's control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point." },
+      { name: "TOXIN COATING", ep: 1, text: "Up to twice per turning point, whenever a friendly HAND OF THE ARCHON operative is fighting or retaliating and you're selecting a melee weapon, you can use this rule. If you do, until the end of that sequence, that operative's melee weapon has the Lethal 5+ weapon rule." },
+      { name: "WICKED BLADES", ep: 1, text: "Add 1 to the Atk stat of friendly HAND OF THE ARCHON operatives' array of blades." },
+      { name: "REFINED POISON", ep: 1, text: "Up to twice per turning point, whenever a friendly HAND OF THE ARCHON operative is performing the Shoot action and you select a shardcarbine, splinter cannon, splinter pistol, splinter rifle or stinger pistol, you can use this rule. If you do, until the end of that action, add 1 to the Normal Dmg stat of that weapon." },
+    ],
     attacker_effects: ["merciless_sadists"],
     defender_effects: ["denizens_of_night"],
     operatives: [
@@ -4732,6 +5506,28 @@ const FACTIONS = [
     id: "hernkyn-yaegir",
     name: "HERNKYN YAEGIR",
     short: "HERNKYN",
+    faction_rules: [
+      { name: "Resourceful", text: "In the Ready step of each Strategy phase after the first, you gain Resourceful points determined by the number of friendly HERNKYN YAEGIR operatives in the killzone that aren't within control range of enemy operatives. At the end of each turning point, discard your Resourceful points.\n\nOPERATIVESRESOURCEFUL POINTS5+21-41\nYou can spend 1 of your Resourceful points during each activation of each friendly HERNKYN YAEGIR operative to do one of the following:\nBefore or after it performs an action, if it's not within control range of enemy operatives, you can use this rule. If you do, add 1 to that friendly operative's APL stat until the end of its activation.When it's activated, if it's not within control range of enemy operatives, it regains up to D3+1 lost wounds." },
+      { name: "Dauntless Explorers", text: "STRATEGIC GAMBIT in the first turning point. Each friendly HERNKYN YAEGIR operative wholly within your drop zone can immediately perform a free Reposition action. Each that does so must end that move wholly within 4\" of your drop zone." },
+    ],
+    strategic_ploys: [
+      { name: "HIDDEN ENGAGEMENT", cp: 1, text: "Whenever a friendly HERNKYN YAEGIR operative is shooting, if it's in cover from the target's perspective, that friendly operative's weapons have the Balanced weapon rule. Note that your opponent still determines the targeting lines for this (i.e. they decide which point of their operative's base targeting lines are drawn from)." },
+      { name: "MASTERFUL BLADEWORK", cp: 1, text: "Whenever a friendly HERNKYN YAEGIR operative is fighting, or has a Conceal order and is retaliating, add 1 to the Atk stat of its melee weapons (to a maximum of 4) and they have the Balanced weapon rule; if the weapon already has that weapon rule, it has the Ceaseless weapon rule instead of Balanced." },
+      { name: "TOUGH SURVIVALISTS", cp: 1, text: "The first time an attack dice inflicts damage on each friendly HERNKYN YAEGIR operative during the turning point in the Resolve Attack Dice step, you can halve that inflicted damage (rounding up, to a minimum of 2)." },
+      { name: "IN POSITION", cp: 1, text: "Whenever a friendly HERNKYN YAEGIR operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"." },
+    ],
+    firefight_ploys: [
+      { name: "STURDY", cp: 1, text: "Use this firefight ploy when an operative is shooting a friendly HERNKYN YAEGIR operative, when you collect your defence dice. Change the attacker's retained critical successes to normal successes (any weapon rules they've already resolved aren't affected, e.g. Piercing Crits)." },
+      { name: "BONDS THAT BIND", cp: 1, text: "Use this firefight ploy when a friendly HERNKYN YAEGIR operative is activated. Select one other ready friendly HERNKYN YAEGIR operative visible to and within 3\" of that operative. When that first friendly operative is expended, you can activate that other friendly operative before your opponent activates. When that other operative is expended, your opponent then activates as normal.\n\nNeither operative can be a BOMBAST operative if its Wroughtlock Negotiation STRATEGIC GAMBIT has been used this turning point." },
+      { name: "NO KIN LEFT BEHIND", cp: 1, text: "Use this firefight ploy when a friendly HERNKYN YAEGIR operative is incapacitated. Before that operative is removed from the killzone, remove your Fallen Kin marker from the killzone (if any), then place it within that operative's control range. That operative is then removed from the killzone as normal.\n\nWhenever a friendly HERNKYN YAEGIR operative within 3\" of your Fallen Kin marker is shooting, fighting or retaliating, in the Roll Attack Dice step, you can retain one of your fails as a normal success instead of discarding it, or retain one of your normal successes as a critical success instead." },
+      { name: "STALWART DEFENCE", cp: 1, text: "Use this firefight ploy when an enemy operative ends a move within control range of a friendly HERNKYN YAEGIR operative. Select one other friendly HERNKYN YAEGIR operative visible to and within 6\" of that friendly operative, but that isn't itself within control range of enemy operatives. The selected operative can perform a free Shoot action. During that action:\nIt can target that enemy operative even though it's within control range of a friendly operative.You cannot select any other enemy operative as a valid target.You cannot select a frag or krak grenade, or a weapon with the Blast or x\" Devastating x weapon rule (i.e. Devastating with a distance)." },
+    ],
+    equipment: [
+      { name: "PLASMA KNIVES", ep: 1, text: "Friendly HERNKYN YAEGIR operatives have the following melee weapon. Note that some operatives already have this weapon but with better stats; in that instance, use the better version, and that weapon has the Balanced weapon rule for the battle.\n\nPlasma Knife" },
+      { name: "STABILISED BOLT SHELLS", ep: 1, text: "Up to twice per turning point, whenever a friendly HERNKYN YAEGIR operative is performing the Shoot action and you select a bolt shotgun (long range), you can use this rule. If you do, until the end of that action, improve the Hit stat of that weapon by 1 and add 1 to both of its Dmg stats" },
+      { name: "FIRESTORM BOLT SHELLS", ep: 1, text: "Once per turning point, when a friendly HERNKYN YAEGIR operative is performing the Shoot action and you select a bolt shotgun (short range), you can use this rule. If you do, until the end of that action, that weapon has the Blast 1\" weapon rule." },
+      { name: "KV-CERAMIDE UNDERSUIT", ep: 1, text: "Whenever an operative is shooting a friendly HERNKYN YAEGIR operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly HERNKYN YAEGIR operatives aren't affected by the x\" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence." },
+    ],
     attacker_effects: ["hidden_engagement"],
     defender_effects: ["sturdy"],
     operatives: [
@@ -4848,6 +5644,29 @@ const FACTIONS = [
     id: "hierotek-circle",
     name: "HIEROTEK CIRCLE",
     short: "HIEROTEK",
+    faction_rules: [
+      { name: "Reanimation Protocols", text: "The first time each friendly HIEROTEK CIRCLE operative is incapacitated, before it's removed from the killzone, place one of your Reanimation markers within its control range. Then remove it as incapacitated, also removing any tokens and rules effects it had (e.g. CHRONOMANCER operative's Chronometron action, Poison tokens, APL stat changes, being implanted, etc.).\n\nIn the Ready step of each Strategy phase, select one of your Reanimation markers and roll one D6: on a 1-2, leave that Reanimation marker in the killzone and repeat this process with a different one of your Reanimation markers (if any); on a 3+, an operative is REANIMATED.\nYou can only select each of your Reanimation markers once per turning point, and once you roll a 3+, you don't select any more for that turning point. Whenever an operative is REANIMATED:\nSet up the operative that Reanimation marker was placed for (it's no longer incapacitated). It must be placed within 3\" of that Reanimation marker and not within control range of enemy operatives (if you cannot do so, treat the roll as 1-2 instead).It has 1 wound remaining.It has an order of your choice and is ready.Remove that Reanimation marker.As REANIMATED operatives are no longer incapacitated, for the purposes of the kill op, this means your opponent's kill grade can go down during the battle (they lose VP accordingly). However, it won't retroactively change any other VPs your opponent has scored, e.g. from tac ops." },
+      { name: "Magnify", text: "Some HIEROTEK CIRCLE APPRENTEK and HIEROTEK CIRCLE CRYPTEK weapons in this team's rules have the Magnify weapon rule below.\n\n*Magnify: Whenever this operative is performing the Shoot action with this weapon, if the target is visible to this operative, and another friendly HIEROTEK CIRCLE APPRENTEK or HIEROTEK CIRCLE CRYPTEK operative that has an Engage order and isn't within control range of enemy operatives is visible to this operative, you can use this rule. If you do, treat that operative as the active operative for the purposes of determining a valid target, cover and obscured. If you do, this weapon has the Ceaseless weapon rule until the end of that action." },
+      { name: "Living Metal", text: "In the Ready step of each Strategy phase, after resolving all other rules in this step (e.g. Reanimation Protocols faction rule), each friendly HIEROTEK CIRCLE operative regains up to D3+1 lost wounds (roll separately for each)." },
+    ],
+    strategic_ploys: [
+      { name: "RELENTLESS ONSLAUGHT", cp: 1, text: "Whenever a friendly HIEROTEK CIRCLE operative is shooting an operative within 8\" of it, that friendly operative's ranged weapons have the Balanced weapon rule. Note that when you're using the Magnify weapon rule, this operative must still be within 8\" of the target to use this rule (not the other friendly operative from which you're determining a valid target)." },
+      { name: "UNDYING ANDROIDS", cp: 1, text: "Whenever an operative is shooting a friendly HIEROTEK CIRCLE operative, if you cannot retain any cover saves, you can retain one of your defence dice as a normal success without rolling it." },
+      { name: "METHODICAL ELIMINATION", cp: 1, text: "Friendly HIEROTEK CIRCLE operatives' melee weapons have the Accurate 1 weapon rule. Whenever a friendly HIEROTEK CIRCLE operative is fighting during an activation in which it hasn't moved more than its Move stat, or whenever it's retaliating, its melee weapons have the Accurate 2 weapon rule instead." },
+      { name: "COMMAND UNDERLINGS", cp: 1, text: "Select one of the following:\nSUPPORT. Each other friendly HIEROTEK CIRCLE operative visible to and within 6\" of a friendly CRYPTEK operative can immediately perform a free Dash action in an order of your choice.SUPPORT. Each other friendly HIEROTEK CIRCLE operative (excluding CRYPTEK) visible to and within 3\" of a friendly APPRENTEK operative can immediately perform a free Dash action in an order of your choice." },
+    ],
+    firefight_ploys: [
+      { name: "CORTICAL CONTROL", cp: 1, text: "Use this firefight ploy when a friendly HIEROTEK CIRCLE APPRENTEK or HIEROTEK CIRCLE CRYPTEK operative performs a SUPPORT unique action. Until the end of that action, for the purposes of selecting another friendly operative, ignore the distance requirement (only visibility is a requirement)." },
+      { name: "REANIMATED FUNCTION", cp: 1, text: "Use this firefight ploy when determining control of a marker. Select one of your Reanimation markers. Until the start of the next turning point, whenever determining control of a marker, treat that Reanimation marker as a friendly HIEROTEK CIRCLE operative that has an APL stat of 1. For the purposes of the Martyrs tac op (Approved Ops 2025), this ploy has no effect." },
+      { name: "LIVING LIGHTNING", cp: 1, text: "Use this firefight ploy when a friendly HIEROTEK CIRCLE IMMORTAL operative is performing the Shoot action and you select a tesla carbine. Until the end of that action, that weapon doesn't have the 2\" from its Devastating weapon rule but has the Blast 2\" weapon rule." },
+      { name: "DIMENSIONAL AMBUSH", cp: 1, text: "Use this firefight ploy during a friendly HIEROTEK CIRCLE DEATHMARK operative's activation, if it has a Conceal order. During that activation, that operative can perform the Guard action regardless of the killzone and while it has a Conceal order (see close quarters rules, Kill Team Core Book), but when you perform the free Shoot or Fight action during the interruption, you must change its order to Engage." },
+    ],
+    equipment: [
+      { name: "MAGNIFICATION CONDUITS", ep: 1, text: "Once per turning point, when a friendly HIEROTEK CIRCLE APPRENTEK or HIEROTEK CIRCLE CRYPTEK operative is performing the Shoot action, you can use this rule. If you do, select one other friendly HIEROTEK CIRCLE operative (excluding PLASMACYTE) that has an Engage order and is visible to that friendly operative. Until the end of that action, that other friendly operative can be treated as the active operative for the Magnify weapon rule." },
+      { name: "PHASE SHIFTER", ep: 1, text: "Once per turning point, when an operative is shooting a friendly CRYPTEK operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored." },
+      { name: "TESSERACT CUBE", ep: 1, text: "In the Ready step of each Strategy phase, when you gain CP, if a friendly CRYPTEK operative isn't incapacitated, isn't within control range of enemy operatives and hasn't been REANIMATED this turning point, you can use this rule. If you do, roll one D6: on a 1, you cannot use this rule for the rest of the battle; on a 4+, you gain 1CP. Once you have gained 2CP from this rule, you cannot use it for the rest of the battle." },
+      { name: "TESLA WEAVE", ep: 1, text: "Once per turning point, when an enemy operative ends the Charge action with friendly HIEROTEK CIRCLE operatives within its control range, you can use this rule. If you do, inflict D3+1 damage on that enemy operative." },
+    ],
     attacker_effects: ["relentless_onslaught"],
     defender_effects: [],
     operatives: [
@@ -4970,6 +5789,27 @@ const FACTIONS = [
     id: "kommandos",
     name: "KOMMANDOS",
     short: "KOMMANDOS",
+    faction_rules: [
+      { name: "Throat Slittas", text: "Each friendly KOMMANDO operative (excluding BOMB SQUIG) can perform the Charge action while it has a Conceal order." },
+    ],
+    strategic_ploys: [
+      { name: "DAKKA! DAKKA! DAKKA!", cp: 1, text: "Friendly KOMMANDO operatives' ranged weapons have the Punishing weapon rule." },
+      { name: "WAAAGH!", cp: 1, text: "Friendly KOMMANDO operatives' melee weapons have the Balanced weapon rule." },
+      { name: "SKULK ABOUT", cp: 1, text: "Whenever an enemy operative is shooting a friendly KOMMANDO operative that has a Conceal order, you can retain one of your defence dice as a normal success without rolling it (in addition to a cover save, if any)." },
+      { name: "SSSSHHHH!", cp: 1, text: "Each friendly KOMMANDO operative that's not a valid target for enemy operatives, or has a Conceal order and is more than 6\" from enemy operatives, can immediately perform a free Dash action. You cannot use this ploy during the first turning point." },
+    ],
+    firefight_ploys: [
+      { name: "JUST A SCRATCH", cp: 1, text: "Use this firefight ploy when an attack dice inflicts Normal Dmg on a friendly KOMMANDO operative (excluding BOMB SQUIG and GROT). Ignore that inflicted damage." },
+      { name: "KRUMP 'EM!", cp: 1, text: "Use this firefight ploy at the end of the Firefight phase. Select one friendly KOMMANDO operative. It can immediately perform a free Fight action." },
+      { name: "KUNNIN' BUT BRUTAL", cp: 1, text: "Use this firefight ploy when a friendly KOMMANDO operative that has a Conceal order is fighting during an activation in which it performed the Charge action, you're resolving the first attack dice, and it's a strike with a normal success. Treat that normal success as a critical success instead." },
+      { name: "SHAKE IT OFF", cp: 1, text: "Use this firefight ploy when a friendly KOMMANDO operative is activated, or when its APL stat is changed. Until the start of the next turning point, you can ignore any changes to its APL stat." },
+    ],
+    equipment: [
+      { name: "CHOPPAS", ep: 1, text: "Friendly KOMMANDO operatives (excluding BOMB SQUIG and GROT) have the following melee weapon. Note that some operatives already have this weapon but with better stats; in that instance, use the better version.\n\nChoppa" },
+      { name: "DYNAMITE", ep: 1, text: "Once per battle, a friendly KOMMANDO operative (excluding BOMB SQUIG and GROT) can use the following ranged weapon:\n\nDynamite" },
+      { name: "HARPOON", ep: 1, text: "Once per turning point, a friendly KOMMANDO operative (excluding BOMB SQUIG and GROT) can use the following ranged weapon:\n\nHarpoon" },
+      { name: "COLLAPSIBLE STOCKS", ep: 1, text: "Remove the Range weapon rule from the following ranged weapons friendly KOMMANDO operatives have:\nShokka pistolSlugga" },
+    ],
     attacker_effects: ["dakka_dakka_punishing"],
     defender_effects: ["just_a_scratch"],
     operatives: [
@@ -5117,6 +5957,30 @@ const FACTIONS = [
     id: "mandrakes",
     name: "MANDRAKES",
     short: "MANDRAKES",
+    faction_rules: [
+      { name: "Soulstrike", text: "Some weapons in this team's rules have the Soulstrike weapon rule below.\n\n*Soulstrike: Successful defence dice are determined differently. Each result that's equal to or less than the target's APL stat is a success and is retained. Each result that's higher than the target's APL stat is a fail and is discarded. Each result of 1 is always a critical success. Each other success is a normal success. Each result of 6 is always a fail.\n\nDesigner's Note: Many of this kill team's rules refer to an enemy operative's APL stat. This would be the APL stat at the time the rule takes effect (i.e. including changes)." },
+      { name: "Shadow Passage", text: "Once per turning point, one friendly MANDRAKE operative WITHIN SHADOW can use a SHADOW PASSAGE when it performs the Reposition action. If it does, don't move it. Instead, remove it from the killzone and set it back up WITHIN SHADOW in a location it can be placed. When you set it back up, it cannot:\nBe within control range of an enemy operative.Be a valid target for an enemy operative.Perform the Shoot or Fight action until the start of the next turning point." },
+      { name: "Umbral Entities", text: "Whenever an operative is shooting a friendly MANDRAKE operative, ignore the Piercing weapon rule. Whenever a friendly MANDRAKE operative is WITHIN SHADOW, improve its Save stat by 1." },
+      { name: "Within Shadow", text: "An operative is WITHIN SHADOW if any of the following are true:\nIt's within 1\" of Heavy terrain that's not lower than it.Any part of its base is underneath Vantage terrain.A Shadow Portal marker is within its control range (see SHADEWEAVER)." },
+    ],
+    strategic_ploys: [
+      { name: "CREEPING HORROR", cp: 1, text: "After each enemy operative's activation, before the next operative is activated, one friendly MANDRAKE operative that has a Conceal order can perform a free Dash action if it starts and ends that action WITHIN SHADOW. You cannot use this ploy during the first turning point, and you cannot select each friendly operative for this ploy more than once per turning point." },
+      { name: "GLOAMING SHROUD", cp: 1, text: "Whenever an operative is shooting a friendly MANDRAKE operative that's WITHIN SHADOW, you can retain one of your defence dice as a normal success without rolling it (in addition to a cover save, if any)." },
+      { name: "BLADE IN THE DARK", cp: 1, text: "Each friendly MANDRAKE operative can perform the Charge action while it has a Conceal order if it starts or ends that action WITHIN SHADOW." },
+      { name: "INESCAPABLE NIGHTMARE", cp: 1, text: "Whenever a friendly MANDRAKE operative is shooting, fighting or retaliating, if it's WITHIN SHADOW, you can re-roll one of your attack dice." },
+    ],
+    firefight_ploys: [
+      { name: "SLITHER OUT OF SIGHT", cp: 1, text: "Use this firefight ploy at the end of any operative's activation. Select one friendly MANDRAKE operative that has an Engage order and is WITHIN SHADOW. Change that operative's order to Conceal." },
+      { name: "SOUL FEAST", cp: 1, text: "Use this firefight ploy when a friendly MANDRAKE operative is shooting against, fighting against or retaliating against an enemy operative within 6\" of it, at the end of the Resolve Attack Dice step. That friendly operative regains a number of lost wounds equal to that enemy operative's APL stat, multiplied by the number of your attack dice that inflicted damage during that sequence. Excess attack dice are ignored (i.e. if the enemy operative is incapacitated before remaining attack dice are resolved). You cannot use this ploy if that friendly MANDRAKE operative is incapacitated." },
+      { name: "NOWHERE TO HIDE", cp: 1, text: "Use this firefight ploy during a friendly MANDRAKE operative's activation, when it performs an action in which it moves. Until the end of that activation, that operative can move through parts of terrain features as if they were not there, but it cannot move more than its Move stat if it's the Charge action andmust end those moves in a location it can be placed." },
+      { name: "SHADOW'S BITE", cp: 1, text: "Use this firefight ploy when an enemy operative performs the Fight action during an activation in which it performed the Charge action, and selects a friendly MANDRAKE operative WITHIN SHADOW to fight against. In the Resolve Attack Dice step of that sequence, you resolve the first attack dice (i.e. defender instead of attacker)." },
+    ],
+    equipment: [
+      { name: "CHAIN SNARE", ep: 1, text: "Whenever an enemy operative would perform the Fall Back action while within control range of a friendly MANDRAKE operative, if no other enemy operatives are within that friendly operative's control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point." },
+      { name: "SHADOW GLYPH", ep: 1, text: "Once per turning point, when a friendly MANDRAKE operative is activated WITHIN SHADOW, you can use this rule. If you do, until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"." },
+      { name: "SOUL GEM", ep: 1, text: "Once per turning point, when a friendly MANDRAKE operative is performing the Shoot action and you select a baleblast, you can use this rule. If you do, until the end of that action, that weapon has the Blast 1\" weapon rule." },
+      { name: "BONE DARTS", ep: 1, text: "Once per turning point, a friendly MANDRAKE operative can use the following ranged weapon:\n\nBone dart" },
+    ],
     attacker_effects: ["inescapable_nightmare"],
     defender_effects: [],
     operatives: [
@@ -5201,6 +6065,27 @@ const FACTIONS = [
     id: "pathfinders",
     name: "PATHFINDERS",
     short: "PATHFINDERS",
+    faction_rules: [
+      { name: "Markerlights", text: "Some PATHFINDER operatives (indicated on their datacard) can perform the Markerlight unique action:\n\nMARKERLIGHT1APSelect one enemy operative visible to this operative. That enemy operative gains one of your Markerlight tokens (to a maximum of four).\nAn operative cannot perform this action while within control range of an enemy operative. If an operative (excluding MB3 RECON DRONE) would perform the Shoot action (excluding Guard) and this action during the same activation, only the target of that Shoot action can be selected for this action (and vice versa).Once during each of their activations, whenever an enemy operative that has any of your Markerlight tokens performs the Dash, Charge, Fall Back or Reposition action, remove one of those tokens.\n\nWhile only some PATHFINDER operatives can perform the Markerlight action, all PATHFINDER operatives can benefit from its effects. Whenever a friendly PATHFINDER operative is shooting with a weapon from its datacard (excluding ASSAULT GRENADIER's fusion grenade), it has additional rules determined by the number of your Markerlight tokens the target has. These are cumulative, so if an enemy operative has two of your Markerlight tokens, the friendly operative shooting it has the rules for 1 and 2 tokens during that sequence.\n\nMARKERLIGHT TOKENSADDITIONAL RULES1Saturate and Balanced weapon rules.2Improve the Hit stat of that friendly operative's ranged weapons by 1 (to a maximum of 3+).3The target cannot be obscured.4Seek Light weapon rule." },
+    ],
+    strategic_ploys: [
+      { name: "RECON SWEEP", cp: 1, text: "Select one killzone edge (excluding your own). Each friendly PATHFINDER operative that's wholly within 6\" of that edge can immediately perform a free Dash action in an order of your choice, but each that does so must end that move wholly within 6\" of a killzone edge (excluding your own). You cannot use this ploy during the first turning point." },
+      { name: "SUPPRESSING FIRE", cp: 1, text: "Whenever an enemy operative is performing the Shoot action, if the target (the primary target if the weapon has the Blast or Torrent weapon rules) isn't the closest valid target, your opponent cannot re-roll their attack dice. Ignore friendly PATHFINDER operatives that have a Conceal order or are obscured when determining this." },
+      { name: "BONDED", cp: 1, text: "Whenever a friendly PATHFINDER operative (excluding DRONE) is shooting or retaliating with a ranged weapon (see Point-Blank Fusillade firefight ploy), if it's within 3\" of another friendly PATHFINDER operative (excluding DRONE), that first friendly operative's ranged weapons have the Accurate 1 weapon rule." },
+      { name: "TAKE COVER", cp: 1, text: "Whenever an operative is shooting a friendly PATHFINDER operative, if you can retain any cover saves, improve that friendly operative's Save stat by 1." },
+    ],
+    firefight_ploys: [
+      { name: "A WORTHY CAUSE", cp: 1, text: "Use this firefight ploy at the start of the Firefight phase. One friendly PATHFINDER operative (excluding DRONE) can immediately perform a free mission action." },
+      { name: "SUPPORTING FIRE", cp: 1, text: "Use this firefight ploy when a friendly PATHFINDER operative is performing the Shoot action and you're selecting a valid target within 6\" of it. Having other friendly PATHFINDER operatives within an enemy operative's control range doesn't prevent that enemy operative from being selected." },
+      { name: "SAVIOUR PROTOCOLS", cp: 1, text: "Use this firefight ploy when a friendly PATHFINDER operative (excluding DRONE) is selected as the valid target of a Shoot action. Select one friendly PATHFINDER DRONE operative visible to and within 3\" of that first friendly operative to become the valid target instead (even if it wouldn't normally be valid for this). That friendly DRONE operative is only in cover or obscured if the original target was. This ploy has no effect if the ranged weapon has the Blast or Torrent weapon rule." },
+      { name: "POINT-BLANK FUSILLADE", cp: 1, text: "Use this firefight ploy when a friendly PATHFINDER operative (excluding DRONE) is retaliating, if it wasn't within control range of enemy operatives at the start of that activation/counteraction. You can use one of its ranged weapons as a melee weapon (excluding a weapon that has the word 'grenade' in its name) during that sequence. If you do, you cannot block during that sequence, and the following weapon rules have no effect on its weapons until the end of that sequence: Devastating, Piercing, Torrent. If that friendly operative is ready, has an Engage order and is retaliating with a pulse weapon, you resolve the first attack dice (i.e. defender instead of attacker)." },
+    ],
+    equipment: [
+      { name: "TARGET ANALYSIS OPTIC", ep: 1, text: "Once per turning point, when a friendly PATHFINDER operative (excluding DRONE) is performing the Shoot action and you're selecting a valid target, you can use this rule. If you do, until the end of that action, if the target has at least one of your Markerlight tokens, it's treated as having one more. If the ranged weapon has the Blast or Torrent weapon rule, only the primary target is affected." },
+      { name: "HIGH-INTENSITY MARKERLIGHT", ep: 1, text: "Up to twice per turning point, when a friendly PATHFINDER operative (excluding MV7 MARKER DRONE) performs the Markerlight action, you can use this rule. If you do, the enemy operative you select gains two of your Markerlight tokens (instead of one)." },
+      { name: "PHOTON GRENADE", ep: 1, text: "Once per turning point, a friendly PATHFINDER operative that has the Markerlight action on their datacard (excluding DRONE) can perform the following unique action:\n\nPHOTON GRENADE1APSelect one enemy operative visible to this operative and roll one D6: on a 3+, until the end of that operative's next activation, subtract 2\" from its Move stat.\nAn operative cannot perform this action while within control range of an enemy operative." },
+      { name: "ORBITAL SURVEY UPLINK", ep: 1, text: "Once per turning point, when a friendly PATHFINDER operative performs the Markerlight action, you can use this rule. If you do, you can select one enemy operative in the killzone to gain one of your Markerlight tokens instead (it doesn't need to be visible). This isn't cumulative with the High-intensity Markerlight or Analyse rules." },
+    ],
     attacker_effects: ["bonded_accurate"],
     defender_effects: ["take_cover"],
     operatives: [
@@ -5404,6 +6289,29 @@ const FACTIONS = [
     id: "raveners",
     name: "RAVENERS",
     short: "RAVENERS",
+    faction_rules: [
+      { name: "Burrow", text: "When setting up a RAVENER kill team before the battle, your first two operatives must be set up as normal. Each other friendly RAVENER operative thereafter can be set up underground: place it to one side instead of in the killzone.\n\nIn the Firefight phase, friendly RAVENER operatives set up underground are activated and can counteract as normal. Whenever a friendly RAVENER operative is underground, it cannot perform any actions other than Burrow. At the end of the battle, each friendly RAVENER operative that's underground is incapacitated.\n\nFriendly RAVENER operatives can perform the following unique action:\n\nBURROW1APIf this operative is underground, set it up on your TUNNEL in a location it can be placed (it's no longer underground, and it can be set up within control range of enemy operatives). Until the end of the activation/counteraction, subtract 2\" from its Move stat.\nAlternatively, instead of resolving the above effect, if this operative is in the killzone and on your TUNNEL, remove it from the killzone: it's now underground.\nAn operative cannot perform this action while carrying a marker." },
+      { name: "Tunnel", text: "At the end of the Set Up Operatives step, place your Tunnel marker numbered '0' on the killzone floor, wholly within your drop zone and touching your killzone edge. As a STRATEGIC GAMBIT in the first four turning points, you can place your next numbered Tunnel marker on the killzone floor wholly within 5\" of your preceding Tunnel marker. This means that, as the battle progresses, you can have a series of sequentially numbered Tunnel markers (0, 1, 2, 3 and 4). Once you have placed five Tunnel markers, don't place any more (i.e. if your battle lasts more than four turning points).\n\nYour Tunnel markers and the area between your sequentially numbered markers (i.e. between 0 and 1, 1 and 2, etc.), create your TUNNEL.\n\nIn a killzone that uses the close quarters rules (e.g. Killzone: Tomb World), your TUNNEL and the distance between your Tunnel markers can be measured through Wall terrain.In a killzone that uses the hazardous areas rules (e.g. Killzone: Bheta Decima), for the purposes of the Restricted Movement rule, parts of a Tunnel marker that are touching a hazardous area are treated as a hazardous area.\n\nIn this example, operative A is on your TUNNEL as it's on the area between markers 0 and 1. Operative B is also on your TUNNEL as it's touching one of your Tunnel markers. Operative C is not on your TUNNEL as markers 1 and 3 are not sequential, so the area between those markers is not part of your TUNNEL." },
+      { name: "Predatory Instincts", text: "During each friendly RAVENER operative's activation, it can perform two Fight actions.\n\nEach friendly RAVENER operative can counteract regardless of its order. Whenever it does:\nYou can change its order first, or change its order instead of performing an action (for the latter, still treat it as having counteracted this turning point).During that counteraction, if it doesn't perform a mission action it can perform a free Burrow action." },
+    ],
+    strategic_ploys: [
+      { name: "DEATH FROM BELOW", cp: 1, text: "Whenever a friendly RAVENER operative is fighting:\nIf it's performed the Burrow action during that activation/counteraction, its melee weapons have the Balanced weapon rule.If it's on your TUNNEL, its melee weapons have the Ceaseless weapon rule." },
+      { name: "WHIPCORD EMERGENCE", cp: 1, text: "Whenever an operative is shooting a friendly RAVENER operative:\nIf that friendly operative has performed the Burrow action during that turning point, you can re-roll one of your defence dice.If that friendly operative is on your TUNNEL, you can re-roll any of your defence dice." },
+      { name: "WRITHE OUT OF SIGHT", cp: 1, text: "Select one friendly RAVENER operative in the killzone. That friendly operative can immediately perform a free Burrow action. If it's within 2\" of your TUNNEL, it can immediately perform a free Fall Back or Reposition action before it does so." },
+      { name: "TUNNEL LURKERS", cp: 1, text: "Whenever a friendly RAVENER operative is on your TUNNEL it's in cover, unless it's within 2\" of the active operative. Treat this as cover provided by Light terrain (therefore it's affected by rules that prevent this, e.g. Seek Light and Vantage terrain)." },
+    ],
+    firefight_ploys: [
+      { name: "SLITHERING EVASION", cp: 1, text: "Use this firefight ploy during a friendly RAVENER operative's activation or counteraction, before or after it performs an action. During that activation/ counteraction, that operative can:\nPerform the Fall Back action for 1 less AP.Perform the Charge action while within control range of an enemy operative, and can leave that operative's control range to do so (but then normal requirements for that move apply)." },
+      { name: "SUBTERRANEAN HORROR", cp: 1, text: "Use this firefight ploy when an enemy operative is performing the Fight action and selects a friendly RAVENER operative on your TUNNEL to fight against. In the Resolve Attack Dice step of that sequence, you resolve the first attack dice (i.e. defender instead of attacker)." },
+      { name: "BURROWING STRIKE", cp: 1, text: "Use this firefight ploy when a friendly RAVENER operative performs the Burrow action. Before that operative is removed from the killzone, or after setting it up on your TUNNEL, inflict D3+1 damage on each enemy operative within its control range (roll separately for each). You cannot use this ploy in the Strategy phase, or during a FELLTALON operative's activation or counteraction if it performs the Toxic Lunge action (and vice versa)." },
+      { name: "DEATH FRENZY", cp: 1, text: "Use this firefight ploy when a friendly RAVENER operative is incapacitated. Before that operative is removed from the killzone, inflict D3 damage on each enemy operative within its control range (roll separately for each). If that friendly operative is a VENOMSPITTER that's currently benefitting from the effects of its Distend Dorsal Sac action, inflict 2D3 damage instead." },
+    ],
+    equipment: [
+      { name: "CHROMATOSPORE CAMOUFLAGE", ep: 1, text: "Whenever an operative is shooting a friendly RAVENER operative, if you can retain any cover saves, you can retain one additional cover save. This isn't cumulative with improved cover saves from Vantage terrain." },
+      { name: "ACID BLOOD", ep: 1, text: "Whenever a friendly RAVENER operative is fighting or retaliating, whenever an attack dice inflicts damage on it, roll one D6: on a 5+, inflict 1 damage on the enemy operative in that sequence." },
+      { name: "METAMORPHIC FLESH", ep: 1, text: "Whenever a friendly RAVENER operative is activated, it regains up to D3 lost wounds." },
+      { name: "HEIGHTENED SENSES", ep: 1, text: "Once per battle, after rolling off to decide initiative, if a friendly RAVENER operative is underground and an enemy operative is within 5\" of your TUNNEL, you can re-roll your dice." },
+    ],
     attacker_effects: [],
     defender_effects: ["whipcord_emergence"],
     operatives: [
@@ -5489,6 +6397,29 @@ const FACTIONS = [
     id: "vespid-stingwings",
     name: "VESPID STINGWINGS",
     short: "VESPID",
+    faction_rules: [
+      { name: "Communion", text: "Communion points are used to maintain the tactical focus of friendly VESPID STINGWING operatives. In the Ready step of each Strategy phase, you gain D3 Communion points, plus 1 if a friendly OVERSIGHT DRONE operative is in the killzone. Communion points are used as follows (OVERSIGHT DRONE operatives aren't affected by the following):\nWhenever a friendly VESPID STINGWING operative is performing the Shoot action, it can only target the closest enemy operative within 8\" of it (excluding enemy operatives within control range of other friendly VESPID STINGWING operatives) unless you spend 1 of your Communion points. For weapons with the Blast and Torrent weapon rules, only the first target must be selected in this way.Whenever a friendly VESPID STINGWING operative performs the Charge action, it must end the action within control range of the closest enemy operative it can unless you spend 1 of your Communion points.Whenever you would perform the Pick Up Marker or a mission action (excluding Operate Hatch) with a friendly VESPID STINGWING operative, you must also spend 1 of your Communion points to do so.Whenever a friendly VESPID STINGWING operative is shooting, you can spend 1 (and only 1) of your Communion points to re-roll one of your attack dice." },
+      { name: "Neutron Charge", text: "Neutron weapons are any weapons that have the word 'neutron' in their name, e.g. neutron blaster, neutron grenade launcher, etc. Whenever a friendly VESPID STINGWING operative moves or uses FLY, its neutron weapons have the Piercing 1 weapon rule until the end of the turning point." },
+      { name: "Fly", text: "Whenever a friendly VESPID STINGWING operative performs an action in which it moves, it can FLY. If it does, don't move it. Instead, remove it from the killzone and set it back up wholly within a distance equal to its Move stat (or 3\" if it was a Dash) horizontally of its original location (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, this distance cannot be measured over or through Wall terrain, and that operative cannot be set up on the other side of an access point - in other words it cannot FLY through an open hatchway). Note that it gains no additional distance when performing the Charge action. It must be set up in a location it can be placed, and unless it's the Charge action, it cannot be set up within control range of an enemy operative." },
+    ],
+    strategic_ploys: [
+      { name: "HARDENED EXOSKELETON", cp: 1, text: "Whenever a friendly VESPID STINGWING operative (excluding OVERSIGHT DRONE) is fighting or retaliating, Normal Dmg of 4 or more inflicts 1 less damage on it." },
+      { name: "AERIAL AGILITY", cp: 1, text: "Whenever an operative is shooting a friendly VESPID STINGWING operative while counteracting, or during an activation in which that shooting operative moved or was set up, roll one D6 whenever an attack dice would inflict Normal Dmg: on a 5+, ignore that inflicted damage. You cannot ignore more than one attack dice per Shoot action sequence this way." },
+      { name: "AIRBORNE PREDATORS", cp: 1, text: "Whenever a friendly VESPID STINGWING operative moves or uses FLY during its activation, its weapons have the Balanced weapon rule until the end of that activation." },
+      { name: "STING", cp: 1, text: "Improve the Hit stat of friendly VESPID STINGWING operatives' claws by 1, and those weapons have the Lethal 5+ and Shock weapon rules." },
+    ],
+    firefight_ploys: [
+      { name: "OCELLI", cp: 1, text: "Use this firefight ploy when a friendly VESPID STINGWING operative performs the Shoot action during an activation in which it's used FLY. Until the end of that action, it gains all benefits from the first and second main features of Vantage terrain. When determining the height difference between operatives for Vantage terrain rules, treat that friendly operative as being 3\" higher than it currently is (but not when determining the distance for Communion)." },
+      { name: "DARTING FLIGHT", cp: 1, text: "Use this firefight ploy when a friendly VESPID STINGWING operative performs the Reposition action. Until the end of that action, it can move an additional D3\", or be set up an additional D3\" away if it uses FLY. In either case, it cannot perform Shoot or Fight actions for the rest of the turning point." },
+      { name: "NEUTRON OVERLOAD", cp: 1, text: "Use this firefight ploy when you resolve a critical success for a friendly VESPID STINGWING operative that's shooting with a neutron weapon during an activation in which it's moved or used FLY. If the target is within 4\" of it, inflict D3 additional damage." },
+      { name: "VICIOUS VENOM", cp: 1, text: "Use this firefight ploy when a friendly VESPID STINGWING operative (excluding OVERSIGHT DRONE) is fighting and you strike with a critical success. Inflict D3 additional damage." },
+    ],
+    equipment: [
+      { name: "NEUROSTIMULANT", ep: 1, text: "In the Ready step of each Strategy phase, when determining how many Communion points to gain, you can roll two D3 and select one D3 to use." },
+      { name: "CONVERGENCE STIMULANT", ep: 1, text: "Once per turning point, a friendly VESPID STINGWING operative can perform the Pick Up Marker or a mission action without you spending a Communion point." },
+      { name: "ACCELERANT STIMULANT", ep: 1, text: "Whenever a friendly VESPID STINGWING operative (excluding OVERSIGHT DRONE) performs the Charge or Dash action, it can move an additional 1\". If it uses FLY for this action, you can set it back up 1\" further away." },
+      { name: "AGGRESSION STIMULANT", ep: 1, text: "Whenever a friendly VESPID STINGWING operative (excluding OVERSIGHT DRONE) is fighting, its melee weapons have the Ceaseless weapon rule." },
+    ],
     attacker_effects: ["airborne_predators"],
     defender_effects: ["hardened_exoskeleton", "aerial_agility"],
     operatives: [
@@ -5585,6 +6516,28 @@ const FACTIONS = [
     id: "void-dancer-troupe",
     name: "VOID-DANCER TROUPE",
     short: "VOID-DANCER",
+    faction_rules: [
+      { name: "Saedath", text: "As a STRATEGIC GAMBIT in the first turning point, you must select an ALLEGORY (Epic or Melodrama below) for your kill team for the battle, and one friendly VOID-DANCER TROUPE operative to have the PIVOTAL ROLE for the battle. Whenever a friendly operative has the PIVOTAL ROLE, it has the ACCOLADE rule of your ALLEGORY for the battle.\n\nAs a STRATEGIC GAMBIT in each subsequent turning point, you can select one friendly VOID-DANCER TROUPE operative to gain the ACCOLADE rule of your ALLEGORY for the battle.\n\nOnce per turning point, when a friendly operative that has the PIVOTAL ROLE completes the performance of your ALLEGORY, you can select one friendly VOID-DANCER TROUPE operative to gain the ACCOLADE rule of your ALLEGORY for the battle.\n\nEpicPerformance: The operative incapacitates an enemy operative while fighting.\n\nAccolade: Whenever this operative is fighting, its melee weapons have the Balanced weapon rule.\nMelodramaPerformance: The operative incapacitates an enemy operative while shooting.\n\nAccolade: The operative's ranged weapons have the Balanced weapon rule." },
+      { name: "Harlequin's Panoply", text: "Whenever an operative is shooting a friendly VOID-DANCER TROUPE operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any). Note that Piercing 1 would therefore be ignored.\n\nWhenever a friendly VOID-DANCER TROUPE operative is climbing up, you can treat the vertical distance as 2\" (regardless of how far the operative actually moves vertically).\n\nFriendly VOID-DANCER TROUPE operatives can move within control range of enemy operatives (they must still start and end the move following all requirements for that move)." },
+    ],
+    strategic_ploys: [
+      { name: "DARTING SALVO", cp: 1, text: "Whenever a friendly VOID-DANCER TROUPE operative performs the Reposition action during its activation, it can perform the Shoot action during that action (it must do so in a location it can be placed, and any remaining move distance it had from that Reposition action can be used after it does so)." },
+      { name: "RISING CRESCENDO", cp: 1, text: "Friendly VOID-DANCER TROUPE operatives can perform the Dash action during the same activation in which they performed the Charge action, but not vice versa (i.e. not DASH then CHARGE)." },
+      { name: "PRISMATIC BLUR", cp: 1, text: "Whenever an operative is shooting a friendly VOID-DANCER TROUPE operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice." },
+      { name: "CEGORACH'S JEST", cp: 1, text: "Whenever a friendly VOID-DANCER TROUPE operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent's selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence." },
+    ],
+    firefight_ploys: [
+      { name: "MURDEROUS ENTRANCE", cp: 1, text: "Use this firefight ploy when a friendly VOID-DANCER TROUPE operative is fighting during an activation in which it performed the Charge action, after you strike. You can immediately resolve another of your normal successes as a strike (before your opponent), or one of your critical successes if there are none." },
+      { name: "THE CURTAIN FALLS", cp: 1, text: "Use this firefight ploy when a friendly VOID-DANCER TROUPE operative is fighting, after you strike with a critical success, if the enemy operative isn't incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Fall Back action up to 3\" with that operative (then the Fight action ends). That operative can do so even if it's performed an action that prevents it from performing the Fall Back action." },
+      { name: "ELUSIVE TARGET", cp: 1, text: "Use this firefight ploy during a friendly VOID-DANCER TROUPE operative's activation. Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"." },
+      { name: "DOMINO FIELD", cp: 1, text: "Use this firefight ploy when an operative is shooting a friendly VOID-DANCER TROUPE operative, during the Resolve Defence Dice step. You can allocate one of your rolled successful dice to block all of your opponent's attack dice with matching results (e.g. one of your successful defence dice results of 5 can be used to block all successful attack dice results of 5)." },
+    ],
+    equipment: [
+      { name: "WRAITHBONE TALISMAN", ep: 1, text: "Once per turning point, when a friendly VOID-DANCER TROUPE operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead." },
+      { name: "SHRIEKER TOXIN ROUNDS", ep: 1, text: "Once per turning point, when a friendly VOID-DANCER TROUPE operative is performing the Shoot action and you select a shuriken pistol or shrieker cannon (focused), you can use this rule. If you do, until the end of that action, that weapon has the Devastating 1 weapon rule." },
+      { name: "DEATH MASK", ep: 1, text: "Keep a Tragedy tally. Whenever a friendly VOID-DANCER TROUPE operative that has an ACCOLADE rule is incapacitated, add 1 to your Tragedy tally. When your Tragedy tally reaches 3, you gain 1CP and stop that tally." },
+      { name: "UNDERSTUDY'S MASK", ep: 1, text: "Once per battle, when you activate a friendly VOID-DANCER TROUPE operative, if the friendly operative that has the PIVOTAL ROLE has been incapacitated, you can use this rule. If you do, that activated operative has the PIVOTAL ROLE for the battle." },
+    ],
     attacker_effects: [],
     defender_effects: ["prismatic_blur"],
     operatives: [
@@ -5657,6 +6610,28 @@ const FACTIONS = [
     id: "wrecka-krew",
     name: "WRECKA KREW",
     short: "WRECKA",
+    faction_rules: [
+      { name: "Wrecka Rampage", text: "Whenever a friendly WRECKA KREW operative is shooting, fighting or retaliating, in the Roll Attack Dice step:\nFor each attack dice result of 6 you retain, you gain one Wrecka point.You can spend up to 2 of your Wrecka points (unless it's a BOMB SQUIG, then you cannot spend any). For each point you spend this way, retain one of your fails as a normal success instead of discarding it.You cannot have more than 6 Wrecka points at once. You can gain and spend Wrecka points during the same action and can do so in an order of your choice, unless you started the action with 6, in which case you can only spend them." },
+      { name: "Tanked Up", text: "The first time a friendly WRECKA KREW operative (excluding BOMB SQUIG) that has an Engage order performs either the Charge, Shoot or Fight action (excluding Guard) during each of its activations/counteractions, add 1 to its APL stat until the start of its next activation." },
+    ],
+    strategic_ploys: [
+      { name: "WAAAGH!", cp: 1, text: "Friendly WRECKA KREW operatives' melee weapons have the Balanced weapon rule." },
+      { name: "DESTRUCTION", cp: 1, text: "Friendly WRECKA KREW operatives' ranged weapons have the Saturate weapon rule." },
+      { name: "TUFF GITZ", cp: 1, text: "Whenever an operative is shooting a friendly WRECKA KREW operative that has an Engage order, you can re-roll one of your defence dice." },
+      { name: "AMPED UP", cp: 1, text: "Each friendly WRECKA KREW operative that has an Engage order can immediately regain up to D3+1 lost wounds (roll separately for each)." },
+    ],
+    firefight_ploys: [
+      { name: "JUST A SCRATCH", cp: 1, text: "Use this firefight ploy when an attack dice inflicts Normal Dmg on a friendly WRECKA KREW operative (excluding BOMB SQUIG). Ignore that inflicted damage." },
+      { name: "PROPPA SCRAP", cp: 1, text: "Use this firefight ploy during a friendly BREAKA BOY or BOSS NOB operative's activation. During that activation, that operative can perform two FIGHT actions." },
+      { name: "DEMOLITION JOB", cp: 1, text: "Use this firefight ploy after a friendly WRECKA KREW operative performs the Shoot or Fight action, just before incapacitated operatives are removed (if any). Place one of your Demolition markers within the target's control range (if it's using a Blast weapon, the primary target). Whenever a friendly WRECKA KREW operative (excluding BOMB SQUIG) is shooting against, fighting against or retaliating against an operative that's within 3\" of that marker, you can spend a Wrecka point for free (even if you have none). In the Ready step of the next Strategy phase, remove that marker." },
+      { name: "KABOOM!", cp: 1, text: "Use this firefight ploy when a friendly WRECKA KREW operative performs the Shoot action and a weapon with the Blast weapon rule is selected. Until the end of that action, add 1\" to that weapon's Blast and it has the Severe weapon rule when shooting the primary target. You cannot use this ploy and the Drill Rokkits rule during the same action. Note that Severe doesn't generate a Wrecka point (as it's not a 6)." },
+    ],
+    equipment: [
+      { name: "DRILL ROKKITS", ep: 1, text: "Once per turning point, when a friendly WRECKA KREW operative is performing the Shoot action and you select a rokkit launcha or 'eavy rokkit launcha, you can use this rule. If you do, until the end of that action, that weapon loses the Blast weapon rule but has the Piercing 1 weapon rule." },
+      { name: "ENGINE OIL", ep: 1, text: "Once per turning point, when a friendly WRECKA KREW operative (excluding BOMB SQUIG) is activated, you can use this rule. If you do, until the end of that activation, you can ignore any changes to that operative's stats from being injured (including its weapons' stats)." },
+      { name: "EXTRA ARMOUR", ep: 1, text: "Subtract 1\" from the Move stat of friendly WRECKA KREW operatives and improve their Save stat by 1. This excludes BOMB SQUIG operatives and isn't cumulative with the Protective rule of a Portable Barricade from universal equipment." },
+      { name: "GLYPHS", ep: 1, text: "When this item of equipment is selected, also select the Waaagh! or Destruction strategy ploy. The first time you would use that ploy during the battle, it costs you 0CP; whenever you would use it thereafter, it costs you 0CP if you have any Wrecka points." },
+    ],
     attacker_effects: ["destruction_saturate"],
     defender_effects: ["tuff_gitz", "just_a_scratch"],
     operatives: [
@@ -5754,6 +6729,29 @@ const FACTIONS = [
     id: "wyrmblade",
     name: "WYRMBLADE",
     short: "WYRMBLADE",
+    faction_rules: [
+      { name: "Familiar Territory", text: "When setting up a WYRMBLADE kill team before the battle, one third of your kill team can be set up in HIDING: place them to one side instead of in the killzone. CULT AGENT operatives cannot be set up in HIDING.\n\nIn the Firefight phase, friendly WYRMBLADE operatives set up in HIDING are activated as normal. When you do, you can either expend that operative or have it emerge. If it emerges, set it up in the killzone in a location it can be placed as follows (it's no longer set up in HIDING):\nWholly within 6\" of your drop zone.More than 6\" from enemy operatives.With an order of your choice.\nThe operative is treated as performing the Reposition action (spend the AP accordingly), then continue its activation as normal. If the operative is a WARRIOR, ignore its Group Activation rule. Friendly operatives still in HIDING at the end of the second turning point are incapacitated." },
+      { name: "Cult Agent", text: "Whenever an operative is shooting a friendly WYRMBLADE CULT AGENT operative:\nIgnore the Piercing and Saturate weapon rules.If you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn't cumulative with improved cover saves from Vantage terrain." },
+      { name: "Cult Ambush", text: "Whenever a friendly WYRMBLADE operative is shooting or fighting during its activation, if its order was changed from Conceal to Engage at the start of that activation, or it wasn't visible to enemy operatives at the start of that activation, that friendly operative's weapons have the Ceaseless weapon rule." },
+    ],
+    strategic_ploys: [
+      { name: "THE DAY IS AT HAND", cp: 1, text: "Whenever a friendly WYRMBLADE operative is activated, if its order is changed from Conceal to Engage, until the end of that activation:\nIts ranged weapons have the Rending weapon rule.Add 1 to the Atk stat of its melee weapons (to a maximum of 5)." },
+      { name: "CROSSFIRE", cp: 1, text: "Whenever a friendly WYRMBLADE operative is shooting an operative that another friendly WYRMBLADE operative has already shot during this turning point, that first friendly operative's ranged weapons have the Accurate 1 weapon rule." },
+      { name: "ONE WITH THE SHADOWS", cp: 1, text: "Whenever an operative is shooting a friendly WYRMBLADE operative that has a Conceal order, if Light terrain is intervening, that friendly operative is obscured (unless the intervening Light terrain is within 1\" of either operative)." },
+      { name: "DIVERT AND DISAPPEAR", cp: 1, text: "Up to three friendly WYRMBLADE operatives can immediately perform a free Dash or Charge action in an order of your choice (choose separately for each, and for the latter, it cannot move more than 3\"). If a WYRMBLADE CULT AGENT operative is selected for this ploy, it counts as two operatives, and it can perform a free Fall Back action instead (it cannot move more than 3\"); if it does, subtract 1 from its APL stat until the end of its next activation." },
+    ],
+    firefight_ploys: [
+      { name: "SLINK INTO DARKNESS", cp: 1, text: "Use this firefight ploy at the end of a friendly WYRMBLADE operative's activation. If that operative has an Engage order, change it to Conceal. You cannot use this ploy for each friendly operative more than once per battle." },
+      { name: "COILED SERPENT", cp: 1, text: "Use this firefight ploy when a friendly WYRMBLADE operative is shooting or fighting, after rolling your attack dice. If that friendly operative's order was changed from Conceal to Engage at the start of that activation and this is the first time it's performed either the Shoot or Fight action during that activation, you can retain one of your normal successes as a critical success instead. Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation)." },
+      { name: "UNQUESTIONING LOYALTY", cp: 1, text: "Use this firefight ploy when a friendly WYRMBLADE CULT AGENT or WYRMBLADE LEADER operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly WYRMBLADE NEOPHYTE operative (excluding LEADER) visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn't normally be valid for this). If it's the Fight action, treat that other operative as being within the fighting operative's control range for the duration of that action. If it's the Shoot action, that other operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it's the Shoot action and the ranged weapon has the Blast or Torrent weapon rule." },
+      { name: "A PLAN GENERATIONS IN THE MAKING", cp: 1, text: "Use this firefight ploy when a friendly WYRMBLADE NEOPHYTE operative is incapacitated. It can perform a free mission action before it's removed from the killzone." },
+    ],
+    equipment: [
+      { name: "BLASTING CHARGES", ep: 1, text: "Once per turning point, a friendly WYRMBLADE NEOPHYTE operative can use the following ranged weapon:\n\nBlasting charge" },
+      { name: "CULT KNIVES", ep: 1, text: "Friendly WYRMBLADE NEOPHYTE operatives have the following melee weapon:\n\nCult knife" },
+      { name: "EXPLOSIVE TRAPS", ep: 1, text: "This equipment allows you to select two mines (see universal equipment). You cannot also select that equipment as normal (i.e. to give you three), and friendly WYRMBLADE operatives are ignored for your mines' effects (i.e. they cannot trigger or take damage from them). This takes precedence over the normal mines rules." },
+      { name: "SPOTLIGHTS", ep: 1, text: "Whenever a friendly WYRMBLADE operative is shooting, the target cannot be obscured if it's visible to and within 6\" of a friendly WYRMBLADE NEOPHYTE operative that isn't within control range of enemy operatives." },
+    ],
     attacker_effects: ["day_is_at_hand", "wyrmblade_crossfire"],
     defender_effects: [],
     operatives: [
@@ -5890,6 +6888,28 @@ const FACTIONS = [
     id: "xv26-stealth-battlesuits",
     name: "XV26 STEALTH BATTLESUITS",
     short: "XV26",
+    faction_rules: [
+      { name: "Kauyon", text: "Whenever a friendly XV26 STEALTH BATTLESUIT operative is shooting an enemy operative, its ranged weapons have the Accurate X weapon rule. X is determined by that enemy operative's location.\n\nENEMY OPERATIVE LOCATIONACCURATE XWithin 3\" of your territoryAccurate 1Within your territoryAccurate 2Within 3\" of your drop zoneAccurate 3" },
+      { name: "Stealth Fields", text: "Whenever a friendly XV26 STEALTH BATTLESUIT operative has a Conceal order, it cannot be visible to enemy operatives more than 3\" from it (this takes precedence over all other rules).\n\nWhenever a friendly XV26 STEALTH BATTLESUIT operative has a Conceal order, it can perform the Fall Back action for 1 less AP." },
+    ],
+    strategic_ploys: [
+      { name: "PATIENT HUNTERS", cp: 1, text: "Whenever a friendly XV26 STEALTH BATTLESUIT operative is shooting against or fighting against an expended enemy operative, that friendly operative's weapons have the Balanced weapon rule and its ranged weapons have the Saturate weapon rule." },
+      { name: "PREPARE AMBUSH", cp: 1, text: "Place one of your Ambush markers wholly within your territory and more than 2\" from enemy operatives. Whenever a friendly XV26 STEALTH BATTLESUIT operative is shooting an enemy operative that's within 2\" of that marker, you can use this rule. If you do, remove that marker and that friendly operative's ranged weapons have the Seek weapon rule until the end of the action. In the Ready step of the next Strategy phase, if that marker is still in the killzone, remove that marker." },
+      { name: "BONDS OF UNITY", cp: 1, text: "Whenever a friendly XV26 STEALTH BATTLESUIT operative is activated (excluding DRONE), if it's visible to and within 6\" of another friendly XV26 STEALTH BATTLESUIT operative (excluding DRONE), you can ignore any changes to that first friendly operative's APL stat and select one of the following:\nIgnore any changes to that first friendly operative's Move stat from being injured until the end of that activation.Ignore any changes to the Hit stat of that first friendly operative's weapons from being injured until the end of that activation." },
+      { name: "HOLOWAVE COUNTERMEASURES", cp: 1, text: "Whenever an operative is shooting a friendly XV26 STEALTH BATTLESUIT operative more than 6\" from it, in the Roll Attack Dice step, the attacker must discard one of their unresolved normal successes (or one of their critical successes if there are none). This isn't cumulative with being obscured." },
+    ],
+    firefight_ploys: [
+      { name: "VECTORED RETRO-THRUSTERS", cp: 1, text: "Use this firefight ploy when an enemy operative ends the Charge action within control range of a friendly XV26 STEALTH BATTLESUIT operative (excluding DRONE). Interrupt that action to use this rule. If you do, that friendly operative can immediately perform a free Fall Back action, but it cannot move more than 3\" during that action. Then, that enemy operative can immediately perform a free Reposition action using any remaining move distance it had from that first Charge action, and can do so even if it's performed an action that prevents it from performing the Reposition action." },
+      { name: "ENGAGE JET PACK", cp: 1, text: "Use this firefight ploy when a friendly XV26 STEALTH BATTLESUIT operative (excluding DRONE) is activated or counteracts. Until the end of that activation/counteraction, you can ignore the vertical distance they move during one climb and one drop." },
+      { name: "GHOSTSHROUD", cp: 1, text: "Use this firefight ploy at the end of a friendly XV26 STEALTH BATTLESUIT operative's activation. If that operative has an Engage order, change it to Conceal. You cannot use this ploy for each friendly operative more than once per battle." },
+      { name: "SAVIOUR PROTOCOLS", cp: 1, text: "Use this firefight ploy when a friendly XV26 STEALTH BATTLESUIT operative (excluding DRONE) is selected as the valid target of a Shoot action. Select one friendly DRONE operative visible to and within 3\" of that first friendly operative to become the valid target instead (even if it wouldn't normally be valid for this). That friendly DRONE operative is only in cover or obscured if the original target was. This ploy has no effect if the ranged weapon has the Blast or Torrent weapon rule." },
+    ],
+    equipment: [
+      { name: "XV26 MULTITRACKERS", ep: 1, text: "Once per turning point, when a friendly XV26 STEALTH BATTLESUIT operative is performing the Shoot action and you select a burst cannon (sweeping), you can use this rule. If you do, until the end of that action, that weapon has the Torrent 2\" weapon rule." },
+      { name: "ADVANCED BLACKSUN FILTERS", ep: 1, text: "Whenever a friendly XV26 STEALTH BATTLESUIT operative is shooting an operative that's obscured, you don't have to discard one success as a result of that rule. All other effects of obscured apply as normal." },
+      { name: "COUNTER-NETWORK JAMMERS", ep: 1, text: "STRATEGIC GAMBIT. Select one objective marker or mission marker. Until the end of the turning point, whenever determining control of that marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of friendly XV26 STEALTH BATTLESUIT operatives. Note this isn't a change to the APL stat, so any changes are cumulative with this." },
+      { name: "HARDWIRED TARGET LOCKS", ep: 1, text: "Whenever you would counteract, you can do so with one friendly XV26 STEALTH BATTLESUIT operative that has a Conceal order and is more than 3\" from enemy operatives, but before it counteracts, you must change its order to Engage and it cannot perform any actions other than Shoot during that counteraction." },
+    ],
     attacker_effects: ["patient_hunters", "prepare_ambush_seek", "markerlight_severe"],
     defender_effects: [],
     operatives: [
