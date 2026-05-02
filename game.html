@@ -115,6 +115,38 @@
       </div>
     </section>
 
+    <!-- Activation control panel: shown during combat once an operative has
+         been picked. Contains the order picker, the action menu, undo /
+         end-activation buttons, and a hint line. Mobile lays this out
+         beneath the canvas; desktop lets it dock alongside the sidebar. -->
+    <section id="activation-panel" class="activation-panel" style="display:none;">
+      <div class="activation-head">
+        <div class="activation-who" id="activation-who">—</div>
+        <div class="activation-meta" id="activation-meta"></div>
+      </div>
+      <div class="activation-orders" id="activation-orders" style="display:none;">
+        <p class="phase-hint">Choose an order for this activation:</p>
+        <div class="order-buttons">
+          <button class="btn-ghost order-btn" data-order="engage" type="button">
+            <span class="order-name">Engage</span>
+            <span class="order-desc">Free to Shoot, Charge, Counteract.</span>
+          </button>
+          <button class="btn-ghost order-btn" data-order="conceal" type="button">
+            <span class="order-name">Conceal</span>
+            <span class="order-desc">Cannot Shoot, Charge or Counteract. Cover hides you.</span>
+          </button>
+        </div>
+      </div>
+      <div class="activation-actions" id="activation-actions" style="display:none;">
+        <div class="action-grid" id="action-grid"></div>
+        <div class="activation-controls">
+          <button class="btn-ghost" id="undo-btn" type="button">Undo</button>
+          <button class="btn-fire" id="end-activation-btn" type="button">End Activation</button>
+        </div>
+      </div>
+      <p class="activation-hint" id="activation-hint"></p>
+    </section>
+
     <!-- Stat block popup (hover/tap) -->
     <div id="stat-block" class="stat-block" style="display:none;"></div>
 
@@ -133,8 +165,36 @@
     </div>
   </div>
 
+  <!-- Shooting modal: walks the user through attacker dice → defender dice
+       → block allocation → resolution. Stays open until dismissed. -->
+  <div id="shoot-modal" class="kt-modal" style="display:none;">
+    <div class="kt-modal-card">
+      <div class="kt-modal-head">
+        <h2 class="section-title" style="margin:0;">Shoot</h2>
+        <button class="kt-modal-close" id="shoot-cancel" type="button" aria-label="Cancel">×</button>
+      </div>
+      <div class="kt-modal-body" id="shoot-body"></div>
+    </div>
+  </div>
+
+  <!-- Fight modal: simultaneous roll, alternating strike/parry. -->
+  <div id="fight-modal" class="kt-modal" style="display:none;">
+    <div class="kt-modal-card">
+      <div class="kt-modal-head">
+        <h2 class="section-title" style="margin:0;">Fight</h2>
+        <button class="kt-modal-close" id="fight-cancel" type="button" aria-label="Cancel">×</button>
+      </div>
+      <div class="kt-modal-body" id="fight-body"></div>
+    </div>
+  </div>
+
+  <!-- Target picker overlay: a transient list shown over the canvas when
+       choosing a Shoot or Fight target so phones can hit them easily. -->
+  <div id="target-picker" class="kt-target-picker" style="display:none;"></div>
+
   <script src="./factions.js"></script>
   <script src="./maps-data.js"></script>
+  <script src="./rules.js"></script>
   <script src="./game.js"></script>
 </body>
 </html>
