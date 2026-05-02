@@ -90,6 +90,31 @@
 
       <div class="deploy-status" id="deploy-status"></div>
 
+      <!-- Victory points scoreboard. Shown during combat (and on the
+           game-over overlay context). Each side shows running Kill Op VP and
+           Crit Op VP, plus a total. -->
+      <div class="vp-board" id="vp-board" style="display:none;">
+        <div class="vp-side" data-team="A">
+          <div class="vp-name" id="vp-name-A">Player Blue</div>
+          <div class="vp-total" id="vp-total-A">0</div>
+          <div class="vp-breakdown">
+            <span class="vp-tag" title="Kill Op (max 5)">Kill <strong id="vp-kill-A">0</strong></span>
+            <span class="vp-tag" title="Crit Op — objectives held">Crit <strong id="vp-crit-A">0</strong></span>
+            <span class="vp-tag vp-kills" title="Enemies incapacitated">KIA <strong id="vp-kills-A">0</strong>/<span id="vp-size-A">0</span></span>
+          </div>
+        </div>
+        <div class="vp-divider">VP</div>
+        <div class="vp-side" data-team="B">
+          <div class="vp-name" id="vp-name-B">Player Red</div>
+          <div class="vp-total" id="vp-total-B">0</div>
+          <div class="vp-breakdown">
+            <span class="vp-tag" title="Kill Op (max 5)">Kill <strong id="vp-kill-B">0</strong></span>
+            <span class="vp-tag" title="Crit Op — objectives held">Crit <strong id="vp-crit-B">0</strong></span>
+            <span class="vp-tag vp-kills" title="Enemies incapacitated">KIA <strong id="vp-kills-B">0</strong>/<span id="vp-size-B">0</span></span>
+          </div>
+        </div>
+      </div>
+
       <div class="board-wrap">
         <canvas id="board" class="board" width="720" height="720"></canvas>
         <aside class="sidebar">
