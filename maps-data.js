@@ -456,6 +456,29 @@
     return null;
   }
 
+  // Length of the openable hatch / breach gap along the wall (matches the
+  // visual marker drawn on the wall — see drawWallPiece).
+  const OPENABLE_GAP_IN = 3.0;
+
+  // Where (in inches from the wall anchor) the hatch / breach marker is centred.
+  function pieceMarkerOffset(p, def) {
+    if (def.asymm === 'half') {
+      return p.flip ? def.len * 0.75 : def.len * 0.25;
+    }
+    return def.len / 2;
+  }
+
+  // Endpoints of the openable (hatch / breach) span along the wall.
+  function pieceOpenableSpan(p, def) {
+    const center = pieceMarkerOffset(p, def);
+    const half = OPENABLE_GAP_IN / 2;
+    return {
+      lo: Math.max(0, center - half),
+      hi: Math.min(def.len, center + half),
+      center,
+    };
+  }
+
   function compilePieces(pieces) {
     const walls = [], terrain = [];
     const openable = []; // indices of pieces that can toggle (hatchway / breach)
@@ -463,11 +486,36 @@
     (pieces || []).forEach((p, idx) => {
       const def = PIECES[p.kind];
       if (!def) return;
-      const seg = pieceWallSegment(p);
-      if (seg) {
-        walls.push({ ...seg, pieceIndex: idx, marker: def.marker || null });
-        if (def.marker === 'hatchway' || def.marker === 'breach') {
-          openable.push({ pieceIndex: idx, kind: def.marker, label: def.label, x: (seg.x1 + seg.x2) / 2, y: (seg.y1 + seg.y2) / 2 });
+      if (def.type === 'wall') {
+        const isOpenable = def.marker === 'hatchway' || def.marker === 'breach';
+        const [dx, dy] = rotDir(p.rot);
+        const at = (s) => ({ x: p.x + dx * s, y: p.y + dy * s });
+        if (isOpenable) {
+          // Split the wall around the hatch / breach span. The flanking
+          // (solid) portions never disappear; only the openable span carries
+          // pieceIndex so it's removed when the piece is open.
+          const span = pieceOpenableSpan(p, def);
+          if (span.lo > 1e-6) {
+            const A = at(0), B = at(span.lo);
+            walls.push({ x1: A.x, y1: A.y, x2: B.x, y2: B.y, pieceIndex: null, marker: def.marker, ownerPiece: idx, role: 'flank' });
+          }
+          const HA = at(span.lo), HB = at(span.hi);
+          walls.push({ x1: HA.x, y1: HA.y, x2: HB.x, y2: HB.y, pieceIndex: idx, marker: def.marker, ownerPiece: idx, role: 'openable' });
+          if (span.hi < def.len - 1e-6) {
+            const A = at(span.hi), B = at(def.len);
+            walls.push({ x1: A.x, y1: A.y, x2: B.x, y2: B.y, pieceIndex: null, marker: def.marker, ownerPiece: idx, role: 'flank' });
+          }
+          openable.push({
+            pieceIndex: idx,
+            kind: def.marker,
+            label: def.label,
+            x: (HA.x + HB.x) / 2,
+            y: (HA.y + HB.y) / 2,
+            x1: HA.x, y1: HA.y, x2: HB.x, y2: HB.y,
+          });
+        } else {
+          const seg = pieceWallSegment(p);
+          walls.push({ ...seg, pieceIndex: idx, marker: def.marker || null, ownerPiece: idx, role: 'wall' });
         }
       }
       const ter = pieceTerrainShape(p);
@@ -546,21 +594,39 @@
     ctx.restore();
   }
 
-  function drawWallPiece(ctx, p, def, sx, sy) {
+  function drawWallPiece(ctx, p, def, sx, sy, opts) {
     const rot = ((p.rot || 0) % 4 + 4) % 4;
     const flip = !!p.flip;
     const [dx, dy] = rotDir(rot);
     const x1 = p.x * sx, y1 = p.y * sy;
     const x2 = (p.x + dx * def.len) * sx, y2 = (p.y + dy * def.len) * sy;
+    const isOpen = !!(opts && opts.isOpen);
+    const isOpenable = def.marker === 'hatchway' || def.marker === 'breach';
 
-    // Main wall line
+    // Main wall line — when an openable piece is open, draw the flanks but
+    // leave a gap where the hatch / breach used to be. Otherwise draw the
+    // full segment in one stroke.
     ctx.strokeStyle = PIECE_COLORS.wall;
     ctx.lineWidth = Math.max(3, Math.min(sx, sy) * 0.32);
     ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
+    if (isOpenable && isOpen) {
+      const span = pieceOpenableSpan(p, def);
+      if (span.lo > 1e-6) {
+        const A = { x: p.x * sx, y: p.y * sy };
+        const B = { x: (p.x + dx * span.lo) * sx, y: (p.y + dy * span.lo) * sy };
+        ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+      }
+      if (span.hi < def.len - 1e-6) {
+        const A = { x: (p.x + dx * span.hi) * sx, y: (p.y + dy * span.hi) * sy };
+        const B = { x: x2, y: y2 };
+        ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+      }
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
 
     // End caps — 1" filled squares (same size as C4/C5) at each endpoint.
     const capX = 1.0 * sx, capY = 1.0 * sy;
@@ -569,6 +635,23 @@
     ctx.fillRect(x2 - capX / 2, y2 - capY / 2, capX, capY);
 
     if (!def.marker) return;
+    // When the openable is open we replace the marker with an "opened" hint
+    // (dashed silhouette) so the gap is visually obvious.
+    if (isOpenable && isOpen) {
+      const angle = Math.atan2(y2 - y1, x2 - x1);
+      const inch = Math.min(sx, sy);
+      const cx = (p.x + dx * pieceMarkerOffset(p, def)) * sx;
+      const cy = (p.y + dy * pieceMarkerOffset(p, def)) * sy;
+      const w = 3.0 * inch, h = 0.6 * inch;
+      ctx.save();
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = def.marker === 'breach' ? PIECE_COLORS.breach : PIECE_COLORS.hatchway;
+      ctx.lineWidth = 1.5;
+      squashedHexPath(ctx, cx, cy, w, h, angle);
+      ctx.stroke();
+      ctx.restore();
+      return;
+    }
 
     const angle = Math.atan2(y2 - y1, x2 - x1); // along-wall direction (radians)
     const perp = angle + Math.PI / 2;
@@ -692,10 +775,10 @@
     }
   }
 
-  function drawPieceCanvas(ctx, p, sx, sy) {
+  function drawPieceCanvas(ctx, p, sx, sy, opts) {
     const def = PIECES[p.kind];
     if (!def) return;
-    if (def.type === 'wall')        drawWallPiece(ctx, p, def, sx, sy);
+    if (def.type === 'wall')        drawWallPiece(ctx, p, def, sx, sy, opts);
     else if (def.type === 'wallend') drawWallEndPiece(ctx, p, sx, sy);
     else if (def.type === 'circle')  drawCirclePiece(ctx, p, def, sx, sy);
     else if (def.type === 'rect' || def.type === 'sarcophagus') drawRectPiece(ctx, p, def, sx, sy);
