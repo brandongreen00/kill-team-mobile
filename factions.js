@@ -17,6 +17,7 @@
        operatives: [{
          id, name, full_name,
          save, wounds, apl, move,
+         base: { d } | { w, h },                // base size in mm; circle or oval
          defender_abilities: [effect_id, ...],  // operative-specific
          attacker_effects:    [effect_id, ...], // operative-specific
          weapons: [{
@@ -60,7 +61,7 @@ const FACTIONS = [
         id: "kasrkin-sergeant",
         name: "Sergeant",
         full_name: "KASRKIN SERGEANT",
-        save: 4, wounds: 9, apl: 3, move: "6\"",
+        save: 4, wounds: 9, apl: 3, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -78,7 +79,7 @@ const FACTIONS = [
         id: "kasrkin-combat-medic",
         name: "Combat Medic",
         full_name: "KASRKIN COMBAT MEDIC",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -90,7 +91,7 @@ const FACTIONS = [
         id: "kasrkin-demo-trooper",
         name: "Demo-Trooper",
         full_name: "KASRKIN DEMO-TROOPER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: ["dt_blast_reroll"],
         attacker_effects: [],
         weapons: [
@@ -102,7 +103,7 @@ const FACTIONS = [
         id: "kasrkin-gunner",
         name: "Gunner",
         full_name: "KASRKIN GUNNER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -121,7 +122,7 @@ const FACTIONS = [
         id: "kasrkin-recon-trooper",
         name: "Recon-Trooper",
         full_name: "KASRKIN RECON-TROOPER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -133,7 +134,7 @@ const FACTIONS = [
         id: "kasrkin-sharpshooter",
         name: "Sharpshooter",
         full_name: "KASRKIN SHARPSHOOTER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: ["camo_cloak"],
         attacker_effects: [],
         weapons: [
@@ -147,7 +148,7 @@ const FACTIONS = [
         id: "kasrkin-trooper",
         name: "Trooper",
         full_name: "KASRKIN TROOPER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -159,7 +160,7 @@ const FACTIONS = [
         id: "kasrkin-vox-trooper",
         name: "Vox-Trooper",
         full_name: "KASRKIN VOX-TROOPER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -203,7 +204,7 @@ const FACTIONS = [
         id: "aod-captain",
         name: "Captain",
         full_name: "SPACE MARINE CAPTAIN",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 40 },
         defender_abilities: ["iron_halo"],
         attacker_effects: [],
         weapons: [
@@ -216,7 +217,7 @@ const FACTIONS = [
         id: "aod-assault-sergeant",
         name: "Sergeant",
         full_name: "ASSAULT INTERCESSOR SERGEANT",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -234,7 +235,7 @@ const FACTIONS = [
         id: "aod-intercessor-sergeant",
         name: "Sergeant",
         full_name: "INTERCESSOR SERGEANT",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -253,7 +254,7 @@ const FACTIONS = [
         id: "aod-assault-grenadier",
         name: "Grenadier",
         full_name: "ASSAULT INTERCESSOR GRENADIER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -267,7 +268,7 @@ const FACTIONS = [
         id: "aod-assault-warrior",
         name: "Warrior",
         full_name: "ASSAULT INTERCESSOR WARRIOR",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -279,7 +280,7 @@ const FACTIONS = [
         id: "aod-heavy-gunner",
         name: "Gunner",
         full_name: "HEAVY INTERCESSOR GUNNER",
-        save: 3, wounds: 18, apl: 3, move: "5\"",
+        save: 3, wounds: 18, apl: 3, move: "5\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -293,7 +294,7 @@ const FACTIONS = [
         id: "aod-intercessor-gunner",
         name: "Gunner",
         full_name: "INTERCESSOR GUNNER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -310,7 +311,7 @@ const FACTIONS = [
         id: "aod-intercessor-warrior",
         name: "Warrior",
         full_name: "INTERCESSOR WARRIOR",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -325,7 +326,7 @@ const FACTIONS = [
         id: "aod-eliminator-sniper",
         name: "Sniper",
         full_name: "ELIMINATOR SNIPER",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 40 },
         defender_abilities: ["camo_cloak"],
         attacker_effects: [],
         weapons: [
@@ -371,7 +372,7 @@ const FACTIONS = [
         id: "battleclade-technoarcheologist",
         name: "Technoarcheologist",
         full_name: "BATTLECLADE TECHNOARCHEOLOGIST",
-        save: 3, wounds: 9, apl: 3, move: "6\"",
+        save: 3, wounds: 9, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -383,7 +384,7 @@ const FACTIONS = [
         id: "battleclade-servitor-underseer",
         name: "Servitor Underseer",
         full_name: "BATTLECLADE SERVITOR UNDERSEER",
-        save: 3, wounds: 9, apl: 3, move: "6\"",
+        save: 3, wounds: 9, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -395,7 +396,7 @@ const FACTIONS = [
         id: "battleclade-auto-proxy-servitor",
         name: "Auto-Proxy Servitor",
         full_name: "BATTLECLADE AUTO-PROXY SERVITOR",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -406,7 +407,7 @@ const FACTIONS = [
         id: "battleclade-breacher-servitor",
         name: "Breacher Servitor",
         full_name: "BATTLECLADE BREACHER SERVITOR",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -418,7 +419,7 @@ const FACTIONS = [
         id: "battleclade-combat-servitor",
         name: "Combat Servitor",
         full_name: "BATTLECLADE COMBAT SERVITOR",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -432,7 +433,7 @@ const FACTIONS = [
         id: "battleclade-gun-servitor",
         name: "Gun Servitor",
         full_name: "BATTLECLADE GUN SERVITOR",
-        save: 4, wounds: 11, apl: 2, move: "5\"",
+        save: 4, wounds: 11, apl: 2, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -446,7 +447,7 @@ const FACTIONS = [
         id: "battleclade-technomedic-servitor",
         name: "Technomedic Servitor",
         full_name: "BATTLECLADE TECHNOMEDIC SERVITOR",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -491,7 +492,7 @@ const FACTIONS = [
         id: "insidiant-superior",
         name: "Superior",
         full_name: "INSIDIANT SUPERIOR",
-        save: 3, wounds: 10, apl: 3, move: "6\"",
+        save: 3, wounds: 10, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -505,7 +506,7 @@ const FACTIONS = [
         id: "insidiant-abjuror",
         name: "Abjuror",
         full_name: "INSIDIANT ABJUROR",
-        save: 2, wounds: 11, apl: 2, move: "6\"",
+        save: 2, wounds: 11, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -517,7 +518,7 @@ const FACTIONS = [
         id: "insidiant-censor",
         name: "Censor",
         full_name: "INSIDIANT CENSOR",
-        save: 3, wounds: 9, apl: 2, move: "6\"",
+        save: 3, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -528,7 +529,7 @@ const FACTIONS = [
         id: "insidiant-cremator",
         name: "Cremator",
         full_name: "INSIDIANT CREMATOR",
-        save: 3, wounds: 9, apl: 2, move: "6\"",
+        save: 3, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -541,7 +542,7 @@ const FACTIONS = [
         id: "insidiant-denuncia",
         name: "Denuncia",
         full_name: "INSIDIANT DENUNCIA",
-        save: 3, wounds: 9, apl: 2, move: "6\"",
+        save: 3, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -553,7 +554,7 @@ const FACTIONS = [
         id: "insidiant-mortisanctus",
         name: "Mortisanctus",
         full_name: "INSIDIANT MORTISANCTUS",
-        save: 3, wounds: 9, apl: 2, move: "6\"",
+        save: 3, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -564,7 +565,7 @@ const FACTIONS = [
         id: "insidiant-reliquarius",
         name: "Reliquarius",
         full_name: "INSIDIANT RELIQUARIUS",
-        save: 3, wounds: 9, apl: 2, move: "6\"",
+        save: 3, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -577,7 +578,7 @@ const FACTIONS = [
         id: "insidiant-warrior",
         name: "Warrior",
         full_name: "INSIDIANT WARRIOR",
-        save: 3, wounds: 9, apl: 2, move: "6\"",
+        save: 3, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -621,7 +622,7 @@ const FACTIONS = [
         id: "dkok-watchmaster",
         name: "Watchmaster",
         full_name: "DEATH KORPS WATCHMASTER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -639,7 +640,7 @@ const FACTIONS = [
         id: "dkok-bruiser",
         name: "Bruiser",
         full_name: "DEATH KORPS BRUISER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -651,7 +652,7 @@ const FACTIONS = [
         id: "dkok-confidant",
         name: "Confidant",
         full_name: "DEATH KORPS CONFIDANT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -667,7 +668,7 @@ const FACTIONS = [
         id: "dkok-gunner",
         name: "Gunner",
         full_name: "DEATH KORPS GUNNER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -684,7 +685,7 @@ const FACTIONS = [
         id: "dkok-medic",
         name: "Medic",
         full_name: "DEATH KORPS MEDIC",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -696,7 +697,7 @@ const FACTIONS = [
         id: "dkok-sapper",
         name: "Sapper",
         full_name: "DEATH KORPS SAPPER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -709,7 +710,7 @@ const FACTIONS = [
         id: "dkok-sniper",
         name: "Sniper",
         full_name: "DEATH KORPS SNIPER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -723,7 +724,7 @@ const FACTIONS = [
         id: "dkok-spotter",
         name: "Spotter",
         full_name: "DEATH KORPS SPOTTER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -736,7 +737,7 @@ const FACTIONS = [
         id: "dkok-trooper",
         name: "Trooper",
         full_name: "DEATH KORPS TROOPER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -748,7 +749,7 @@ const FACTIONS = [
         id: "dkok-veteran",
         name: "Veteran",
         full_name: "DEATH KORPS VETERAN",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["veteran_dmg_reduction"],
         attacker_effects: [],
         weapons: [
@@ -760,7 +761,7 @@ const FACTIONS = [
         id: "dkok-vox-operator",
         name: "Vox-Operator",
         full_name: "DEATH KORPS VOX-OPERATOR",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -772,7 +773,7 @@ const FACTIONS = [
         id: "dkok-zealot",
         name: "Zealot",
         full_name: "DEATH KORPS ZEALOT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["zealot_defence_reroll"],
         attacker_effects: [],
         weapons: [
@@ -816,7 +817,7 @@ const FACTIONS = [
         id: "dw-watch-sergeant",
         name: "Watch Sergeant",
         full_name: "DEATHWATCH WATCH SERGEANT",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -829,7 +830,7 @@ const FACTIONS = [
         id: "dw-aegis-veteran",
         name: "Aegis Veteran",
         full_name: "DEATHWATCH AEGIS VETERAN",
-        save: 2, wounds: 15, apl: 3, move: "6\"",
+        save: 2, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: ["storm_shield"],
         attacker_effects: [],
         weapons: [
@@ -841,7 +842,7 @@ const FACTIONS = [
         id: "dw-blademaster-veteran",
         name: "Blademaster Veteran",
         full_name: "DEATHWATCH BLADEMASTER VETERAN",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -854,7 +855,7 @@ const FACTIONS = [
         id: "dw-bombard-veteran",
         name: "Bombard Veteran",
         full_name: "DEATHWATCH BOMBARD VETERAN",
-        save: 3, wounds: 18, apl: 3, move: "5\"",
+        save: 3, wounds: 18, apl: 3, move: "5\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -868,7 +869,7 @@ const FACTIONS = [
         id: "dw-breacher-veteran",
         name: "Breacher Veteran",
         full_name: "DEATHWATCH BREACHER VETERAN",
-        save: 3, wounds: 18, apl: 3, move: "5\"",
+        save: 3, wounds: 18, apl: 3, move: "5\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -883,7 +884,7 @@ const FACTIONS = [
         id: "dw-demolisher-veteran",
         name: "Demolisher Veteran",
         full_name: "DEATHWATCH DEMOLISHER VETERAN",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: ["aggressive_force"],
         attacker_effects: [],
         weapons: [
@@ -895,7 +896,7 @@ const FACTIONS = [
         id: "dw-disruptor-veteran",
         name: "Disruptor Veteran",
         full_name: "DEATHWATCH DISRUPTOR VETERAN",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -907,7 +908,7 @@ const FACTIONS = [
         id: "dw-gunner-veteran",
         name: "Gunner Veteran",
         full_name: "DEATHWATCH GUNNER VETERAN",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -921,7 +922,7 @@ const FACTIONS = [
         id: "dw-headtaker-veteran",
         name: "Headtaker Veteran",
         full_name: "DEATHWATCH HEADTAKER VETERAN",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -933,7 +934,7 @@ const FACTIONS = [
         id: "dw-horde-slayer-veteran",
         name: "Horde-Slayer Veteran",
         full_name: "DEATHWATCH HORDE-SLAYER VETERAN",
-        save: 3, wounds: 18, apl: 3, move: "5\"",
+        save: 3, wounds: 18, apl: 3, move: "5\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -948,7 +949,7 @@ const FACTIONS = [
         id: "dw-marksman-veteran",
         name: "Marksman Veteran",
         full_name: "DEATHWATCH MARKSMAN VETERAN",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1000,7 +1001,7 @@ const FACTIONS = [
         id: "starstrider-elucia-vhane",
         name: "Elucia Vhane",
         full_name: "ELUCIA VHANE",
-        save: 4, wounds: 8, apl: 3, move: "6\"",
+        save: 4, wounds: 8, apl: 3, move: "6\"", base: { d: 25 },
         defender_abilities: ["disruption_field"],
         attacker_effects: ["merciless"],
         weapons: [
@@ -1012,7 +1013,7 @@ const FACTIONS = [
         id: "starstrider-canid",
         name: "Canid",
         full_name: "CANID",
-        save: 5, wounds: 7, apl: 2, move: "8\"",
+        save: 5, wounds: 7, apl: 2, move: "8\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1023,7 +1024,7 @@ const FACTIONS = [
         id: "starstrider-death-cult-executioner",
         name: "Death Cult Executioner",
         full_name: "DEATH CULT EXECUTIONER",
-        save: 5, wounds: 8, apl: 3, move: "6\"",
+        save: 5, wounds: 8, apl: 3, move: "6\"", base: { d: 25 },
         defender_abilities: ["rapid_reflexes"],
         attacker_effects: [],
         weapons: [
@@ -1035,7 +1036,7 @@ const FACTIONS = [
         id: "starstrider-lectro-maester",
         name: "Lectro-Maester",
         full_name: "LECTRO-MAESTER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1047,7 +1048,7 @@ const FACTIONS = [
         id: "starstrider-rejuvenat-adept",
         name: "Rejuvenat Adept",
         full_name: "REJUVENAT ADEPT",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1059,7 +1060,7 @@ const FACTIONS = [
         id: "starstrider-voidmaster",
         name: "Voidmaster",
         full_name: "VOIDMASTER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["hardy"],
         attacker_effects: [],
         weapons: [
@@ -1073,7 +1074,7 @@ const FACTIONS = [
         id: "starstrider-voidsman",
         name: "Voidsman",
         full_name: "VOIDSMAN",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1120,7 +1121,7 @@ const FACTIONS = [
         id: "arbites-proctor-exactant",
         name: "Proctor-Exactant",
         full_name: "ARBITES PROCTOR-EXACTANT",
-        save: 4, wounds: 9, apl: 2, move: "6\"",
+        save: 4, wounds: 9, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1135,7 +1136,7 @@ const FACTIONS = [
         id: "arbites-castigator",
         name: "Castigator",
         full_name: "ARBITES CASTIGATOR",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1148,7 +1149,7 @@ const FACTIONS = [
         id: "arbites-chirurgant",
         name: "Chirurgant",
         full_name: "ARBITES CHIRURGANT",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1161,7 +1162,7 @@ const FACTIONS = [
         id: "arbites-gunner",
         name: "Gunner",
         full_name: "ARBITES GUNNER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1176,7 +1177,7 @@ const FACTIONS = [
         id: "arbites-leashmaster",
         name: "Leashmaster",
         full_name: "ARBITES LEASHMASTER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1190,7 +1191,7 @@ const FACTIONS = [
         id: "arbites-cyber-mastiff",
         name: "R-VR Cyber-Mastiff",
         full_name: "R-VR CYBER-MASTIFF",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1201,7 +1202,7 @@ const FACTIONS = [
         id: "arbites-malocator",
         name: "Malocator",
         full_name: "ARBITES MALOCATOR",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1214,7 +1215,7 @@ const FACTIONS = [
         id: "arbites-marksman",
         name: "Marksman",
         full_name: "ARBITES MARKSMAN",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1228,7 +1229,7 @@ const FACTIONS = [
         id: "arbites-revelatum",
         name: "Revelatum",
         full_name: "ARBITES REVELATUM",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1241,7 +1242,7 @@ const FACTIONS = [
         id: "arbites-subductor",
         name: "Subductor",
         full_name: "ARBITES SUBDUCTOR",
-        save: 3, wounds: 8, apl: 2, move: "6\"",
+        save: 3, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1253,7 +1254,7 @@ const FACTIONS = [
         id: "arbites-vigilant",
         name: "Vigilant",
         full_name: "ARBITES VIGILANT",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1266,7 +1267,7 @@ const FACTIONS = [
         id: "arbites-vox-signifier",
         name: "Vox-Signifier",
         full_name: "ARBITES VOX-SIGNIFIER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1310,7 +1311,7 @@ const FACTIONS = [
         id: "hc-ruststalker-princeps",
         name: "Ruststalker Princeps",
         full_name: "SICARIAN RUSTSTALKER PRINCEPS",
-        save: 4, wounds: 11, apl: 2, move: "6\"",
+        save: 4, wounds: 11, apl: 2, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1321,7 +1322,7 @@ const FACTIONS = [
         id: "hc-infiltrator-princeps",
         name: "Infiltrator Princeps",
         full_name: "SICARIAN INFILTRATOR PRINCEPS",
-        save: 4, wounds: 11, apl: 2, move: "6\"",
+        save: 4, wounds: 11, apl: 2, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1335,7 +1336,7 @@ const FACTIONS = [
         id: "hc-ranger-alpha",
         name: "Ranger Alpha",
         full_name: "SKITARII RANGER ALPHA",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1353,7 +1354,7 @@ const FACTIONS = [
         id: "hc-vanguard-alpha",
         name: "Vanguard Alpha",
         full_name: "SKITARII VANGUARD ALPHA",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["vanguard_aura"],
         attacker_effects: [],
         weapons: [
@@ -1371,7 +1372,7 @@ const FACTIONS = [
         id: "hc-infiltrator-warrior",
         name: "Infiltrator Warrior",
         full_name: "SICARIAN INFILTRATOR WARRIOR",
-        save: 4, wounds: 10, apl: 2, move: "6\"",
+        save: 4, wounds: 10, apl: 2, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1385,7 +1386,7 @@ const FACTIONS = [
         id: "hc-ruststalker-warrior",
         name: "Ruststalker Warrior",
         full_name: "SICARIAN RUSTSTALKER WARRIOR",
-        save: 4, wounds: 10, apl: 2, move: "6\"",
+        save: 4, wounds: 10, apl: 2, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1397,7 +1398,7 @@ const FACTIONS = [
         id: "hc-ranger-diktat",
         name: "Ranger Diktat",
         full_name: "SKITARII RANGER DIKTAT",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1409,7 +1410,7 @@ const FACTIONS = [
         id: "hc-ranger-gunner",
         name: "Ranger Gunner",
         full_name: "SKITARII RANGER GUNNER",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1425,7 +1426,7 @@ const FACTIONS = [
         id: "hc-ranger-surveyor",
         name: "Ranger Surveyor",
         full_name: "SKITARII RANGER SURVEYOR",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1437,7 +1438,7 @@ const FACTIONS = [
         id: "hc-ranger-warrior",
         name: "Ranger Warrior",
         full_name: "SKITARII RANGER WARRIOR",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1449,7 +1450,7 @@ const FACTIONS = [
         id: "hc-vanguard-diktat",
         name: "Vanguard Diktat",
         full_name: "SKITARII VANGUARD DIKTAT",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["vanguard_aura"],
         attacker_effects: [],
         weapons: [
@@ -1461,7 +1462,7 @@ const FACTIONS = [
         id: "hc-vanguard-gunner",
         name: "Vanguard Gunner",
         full_name: "SKITARII VANGUARD GUNNER",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["vanguard_aura"],
         attacker_effects: [],
         weapons: [
@@ -1477,7 +1478,7 @@ const FACTIONS = [
         id: "hc-vanguard-surveyor",
         name: "Vanguard Surveyor",
         full_name: "SKITARII VANGUARD SURVEYOR",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["vanguard_aura"],
         attacker_effects: [],
         weapons: [
@@ -1489,7 +1490,7 @@ const FACTIONS = [
         id: "hc-vanguard-warrior",
         name: "Vanguard Warrior",
         full_name: "SKITARII VANGUARD WARRIOR",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["vanguard_aura"],
         attacker_effects: [],
         weapons: [
@@ -1533,7 +1534,7 @@ const FACTIONS = [
         id: "inb-sergeant-at-arms",
         name: "Sergeant-At-Arms",
         full_name: "NAVIS SERGEANT-AT-ARMS",
-        save: 4, wounds: 9, apl: 2, move: "6\"",
+        save: 4, wounds: 9, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1548,7 +1549,7 @@ const FACTIONS = [
         id: "inb-armsman",
         name: "Armsman",
         full_name: "NAVIS ARMSMAN",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1561,7 +1562,7 @@ const FACTIONS = [
         id: "inb-axejack",
         name: "Axejack",
         full_name: "NAVIS AXEJACK",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1573,7 +1574,7 @@ const FACTIONS = [
         id: "inb-cat-unit",
         name: "C.A.T. Unit",
         full_name: "NAVIS C.A.T. UNIT",
-        save: 5, wounds: 5, apl: 2, move: "8\"",
+        save: 5, wounds: 5, apl: 2, move: "8\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [],
@@ -1582,7 +1583,7 @@ const FACTIONS = [
         id: "inb-endurant",
         name: "Endurant",
         full_name: "NAVIS ENDURANT",
-        save: 2, wounds: 11, apl: 2, move: "4\"",
+        save: 2, wounds: 11, apl: 2, move: "4\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1595,7 +1596,7 @@ const FACTIONS = [
         id: "inb-gheistskull",
         name: "Gheistskull",
         full_name: "NAVIS GHEISTSKULL",
-        save: 5, wounds: 5, apl: 2, move: "8\"",
+        save: 5, wounds: 5, apl: 2, move: "8\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [],
@@ -1604,7 +1605,7 @@ const FACTIONS = [
         id: "inb-grenadier",
         name: "Grenadier",
         full_name: "NAVIS GRENADIER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1618,7 +1619,7 @@ const FACTIONS = [
         id: "inb-gunner",
         name: "Gunner",
         full_name: "NAVIS GUNNER",
-        save: 4, wounds: 9, apl: 2, move: "6\"",
+        save: 4, wounds: 9, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1634,7 +1635,7 @@ const FACTIONS = [
         id: "inb-hatchcutter",
         name: "Hatchcutter",
         full_name: "NAVIS HATCHCUTTER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1646,7 +1647,7 @@ const FACTIONS = [
         id: "inb-surveyor",
         name: "Surveyor",
         full_name: "NAVIS SURVEYOR",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1659,7 +1660,7 @@ const FACTIONS = [
         id: "inb-void-jammer",
         name: "Void-Jammer",
         full_name: "NAVIS VOID-JAMMER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1704,7 +1705,7 @@ const FACTIONS = [
         id: "ia-interrogator",
         name: "Interrogator",
         full_name: "INTERROGATOR AGENT",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1716,7 +1717,7 @@ const FACTIONS = [
         id: "ia-tome-skull",
         name: "Tome-Skull",
         full_name: "TOME-SKULL",
-        save: 5, wounds: 5, apl: 2, move: "6\"",
+        save: 5, wounds: 5, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [],
@@ -1725,7 +1726,7 @@ const FACTIONS = [
         id: "ia-autosavant",
         name: "Autosavant",
         full_name: "AUTOSAVANT AGENT",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1736,7 +1737,7 @@ const FACTIONS = [
         id: "ia-death-world-veteran",
         name: "Death World Veteran",
         full_name: "DEATH WORLD VETERAN AGENT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1749,7 +1750,7 @@ const FACTIONS = [
         id: "ia-enlightener",
         name: "Enlightener",
         full_name: "ENLIGHTENER AGENT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1761,7 +1762,7 @@ const FACTIONS = [
         id: "ia-hexorcist",
         name: "Hexorcist",
         full_name: "HEXORCIST AGENT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1773,7 +1774,7 @@ const FACTIONS = [
         id: "ia-mystic",
         name: "Mystic",
         full_name: "MYSTIC AGENT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1785,7 +1786,7 @@ const FACTIONS = [
         id: "ia-penal-legionnaire",
         name: "Penal Legionnaire",
         full_name: "PENAL LEGIONNAIRE AGENT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1797,7 +1798,7 @@ const FACTIONS = [
         id: "ia-pistolier",
         name: "Pistolier",
         full_name: "PISTOLIER AGENT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1811,7 +1812,7 @@ const FACTIONS = [
         id: "ia-questkeeper",
         name: "Questkeeper",
         full_name: "QUESTKEEPER AGENT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1823,7 +1824,7 @@ const FACTIONS = [
         id: "ia-gun-servitor",
         name: "Requisitioned Gun Servitor",
         full_name: "REQUISITIONED GUN SERVITOR",
-        save: 4, wounds: 11, apl: 1, move: "5\"",
+        save: 4, wounds: 11, apl: 1, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1839,7 +1840,7 @@ const FACTIONS = [
         id: "ia-sos-prosecutor",
         name: "SoS Prosecutor",
         full_name: "SISTER OF SILENCE PROSECUTOR",
-        save: 3, wounds: 8, apl: 2, move: "6\"",
+        save: 3, wounds: 8, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1851,7 +1852,7 @@ const FACTIONS = [
         id: "ia-sos-vigilator",
         name: "SoS Vigilator",
         full_name: "SISTER OF SILENCE VIGILATOR",
-        save: 3, wounds: 8, apl: 2, move: "6\"",
+        save: 3, wounds: 8, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1862,7 +1863,7 @@ const FACTIONS = [
         id: "ia-sos-witchseeker",
         name: "SoS Witchseeker",
         full_name: "SISTER OF SILENCE WITCHSEEKER",
-        save: 3, wounds: 8, apl: 2, move: "6\"",
+        save: 3, wounds: 8, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1874,7 +1875,7 @@ const FACTIONS = [
         id: "ia-scion-gunner",
         name: "Scion Gunner",
         full_name: "TEMPESTUS SCION GUNNER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1893,7 +1894,7 @@ const FACTIONS = [
         id: "ia-scion-medic",
         name: "Scion Medic",
         full_name: "TEMPESTUS SCION MEDIC",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1905,7 +1906,7 @@ const FACTIONS = [
         id: "ia-scion-trooper",
         name: "Scion Trooper",
         full_name: "TEMPESTUS SCION TROOPER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1917,7 +1918,7 @@ const FACTIONS = [
         id: "ia-scion-vox-operator",
         name: "Scion Vox-Operator",
         full_name: "TEMPESTUS SCION VOX-OPERATOR",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1960,7 +1961,7 @@ const FACTIONS = [
         id: "nov-superior",
         name: "Superior",
         full_name: "NOVITIATE SUPERIOR",
-        save: 3, wounds: 9, apl: 3, move: "6\"",
+        save: 3, wounds: 9, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1975,7 +1976,7 @@ const FACTIONS = [
         id: "nov-condemnor",
         name: "Condemnor",
         full_name: "NOVITIATE CONDEMNOR",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1987,7 +1988,7 @@ const FACTIONS = [
         id: "nov-dialogus",
         name: "Dialogus",
         full_name: "NOVITIATE DIALOGUS",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -1999,7 +2000,7 @@ const FACTIONS = [
         id: "nov-duellist",
         name: "Duellist",
         full_name: "NOVITIATE DUELLIST",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2011,7 +2012,7 @@ const FACTIONS = [
         id: "nov-exactor",
         name: "Exactor",
         full_name: "NOVITIATE EXACTOR",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2023,7 +2024,7 @@ const FACTIONS = [
         id: "nov-hospitaller",
         name: "Hospitaller",
         full_name: "NOVITIATE HOSPITALLER",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2035,7 +2036,7 @@ const FACTIONS = [
         id: "nov-militant",
         name: "Militant",
         full_name: "NOVITIATE MILITANT",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2048,7 +2049,7 @@ const FACTIONS = [
         id: "nov-penitent",
         name: "Penitent",
         full_name: "NOVITIATE PENITENT",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2060,7 +2061,7 @@ const FACTIONS = [
         id: "nov-preceptor",
         name: "Preceptor",
         full_name: "NOVITIATE PRECEPTOR",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2071,7 +2072,7 @@ const FACTIONS = [
         id: "nov-pronatus",
         name: "Pronatus",
         full_name: "NOVITIATE PRONATUS",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2083,7 +2084,7 @@ const FACTIONS = [
         id: "nov-purgatus",
         name: "Purgatus",
         full_name: "NOVITIATE PURGATUS",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2095,7 +2096,7 @@ const FACTIONS = [
         id: "nov-reliquarius",
         name: "Reliquarius",
         full_name: "NOVITIATE RELIQUARIUS",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2141,7 +2142,7 @@ const FACTIONS = [
         id: "ph-infiltrator-sergeant",
         name: "Infiltrator Sergeant",
         full_name: "INFILTRATOR SERGEANT",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2153,7 +2154,7 @@ const FACTIONS = [
         id: "ph-infiltrator-commsman",
         name: "Infiltrator Commsman",
         full_name: "INFILTRATOR COMMSMAN",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2165,7 +2166,7 @@ const FACTIONS = [
         id: "ph-infiltrator-helix-adept",
         name: "Infiltrator Helix Adept",
         full_name: "INFILTRATOR HELIX ADEPT",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2177,7 +2178,7 @@ const FACTIONS = [
         id: "ph-infiltrator-saboteur",
         name: "Infiltrator Saboteur",
         full_name: "INFILTRATOR SABOTEUR",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2190,7 +2191,7 @@ const FACTIONS = [
         id: "ph-infiltrator-veteran",
         name: "Infiltrator Veteran",
         full_name: "INFILTRATOR VETERAN",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2204,7 +2205,7 @@ const FACTIONS = [
         id: "ph-infiltrator-voxbreaker",
         name: "Infiltrator Voxbreaker",
         full_name: "INFILTRATOR VOXBREAKER",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2216,7 +2217,7 @@ const FACTIONS = [
         id: "ph-infiltrator-warrior",
         name: "Infiltrator Warrior",
         full_name: "INFILTRATOR WARRIOR",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2228,7 +2229,7 @@ const FACTIONS = [
         id: "ph-incursor-sergeant",
         name: "Incursor Sergeant",
         full_name: "INCURSOR SERGEANT",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2240,7 +2241,7 @@ const FACTIONS = [
         id: "ph-incursor-marksman",
         name: "Incursor Marksman",
         full_name: "INCURSOR MARKSMAN",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2252,7 +2253,7 @@ const FACTIONS = [
         id: "ph-incursor-minelayer",
         name: "Incursor Minelayer",
         full_name: "INCURSOR MINELAYER",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2264,7 +2265,7 @@ const FACTIONS = [
         id: "ph-incursor-warrior",
         name: "Incursor Warrior",
         full_name: "INCURSOR WARRIOR",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2276,7 +2277,7 @@ const FACTIONS = [
         id: "ph-reiver-sergeant",
         name: "Reiver Sergeant",
         full_name: "REIVER SERGEANT",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2290,7 +2291,7 @@ const FACTIONS = [
         id: "ph-reiver-warrior",
         name: "Reiver Warrior",
         full_name: "REIVER WARRIOR",
-        save: 3, wounds: 12, apl: 3, move: "7\"",
+        save: 3, wounds: 12, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2335,7 +2336,7 @@ const FACTIONS = [
         id: "rat-fixer",
         name: "Fixer",
         full_name: "RATLING FIXER",
-        save: 5, wounds: 7, apl: 2, move: "5\"",
+        save: 5, wounds: 7, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2349,7 +2350,7 @@ const FACTIONS = [
         id: "rat-battlemutt",
         name: "Battlemutt",
         full_name: "RATLING BATTLEMUTT",
-        save: 5, wounds: 4, apl: 2, move: "6\"",
+        save: 5, wounds: 4, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2360,7 +2361,7 @@ const FACTIONS = [
         id: "rat-bullgryn",
         name: "Bullgryn",
         full_name: "BULLGRYN",
-        save: 4, wounds: 16, apl: 2, move: "6\"",
+        save: 4, wounds: 16, apl: 2, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2373,7 +2374,7 @@ const FACTIONS = [
         id: "rat-ogryn",
         name: "Ogryn",
         full_name: "OGRYN",
-        save: 5, wounds: 16, apl: 2, move: "6\"",
+        save: 5, wounds: 16, apl: 2, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2385,7 +2386,7 @@ const FACTIONS = [
         id: "rat-big-shot",
         name: "Big Shot",
         full_name: "RATLING BIG SHOT",
-        save: 5, wounds: 6, apl: 2, move: "5\"",
+        save: 5, wounds: 6, apl: 2, move: "5\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2398,7 +2399,7 @@ const FACTIONS = [
         id: "rat-bomber",
         name: "Bomber",
         full_name: "RATLING BOMBER",
-        save: 4, wounds: 6, apl: 2, move: "5\"",
+        save: 4, wounds: 6, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2412,7 +2413,7 @@ const FACTIONS = [
         id: "rat-hardbit",
         name: "Hardbit",
         full_name: "RATLING HARDBIT",
-        save: 5, wounds: 6, apl: 2, move: "5\"",
+        save: 5, wounds: 6, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2424,7 +2425,7 @@ const FACTIONS = [
         id: "rat-raider",
         name: "Raider",
         full_name: "RATLING RAIDER",
-        save: 5, wounds: 6, apl: 2, move: "5\"",
+        save: 5, wounds: 6, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2437,7 +2438,7 @@ const FACTIONS = [
         id: "rat-sneak",
         name: "Sneak",
         full_name: "RATLING SNEAK",
-        save: 5, wounds: 6, apl: 2, move: "5\"",
+        save: 5, wounds: 6, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2450,7 +2451,7 @@ const FACTIONS = [
         id: "rat-sniper",
         name: "Sniper",
         full_name: "RATLING SNIPER",
-        save: 5, wounds: 6, apl: 2, move: "5\"",
+        save: 5, wounds: 6, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2463,7 +2464,7 @@ const FACTIONS = [
         id: "rat-spotter",
         name: "Spotter",
         full_name: "RATLING SPOTTER",
-        save: 5, wounds: 6, apl: 2, move: "5\"",
+        save: 5, wounds: 6, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2476,7 +2477,7 @@ const FACTIONS = [
         id: "rat-stashmaster",
         name: "Stashmaster",
         full_name: "RATLING STASHMASTER",
-        save: 5, wounds: 6, apl: 2, move: "5\"",
+        save: 5, wounds: 6, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2489,7 +2490,7 @@ const FACTIONS = [
         id: "rat-vox-thief",
         name: "Vox-Thief",
         full_name: "RATLING VOX-THIEF",
-        save: 5, wounds: 6, apl: 2, move: "5\"",
+        save: 5, wounds: 6, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2534,7 +2535,7 @@ const FACTIONS = [
         id: "sanc-confessor",
         name: "Confessor",
         full_name: "SANCTIFIER CONFESSOR",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: ["sermon_dmg_reduction"],
         attacker_effects: [],
         weapons: [
@@ -2545,7 +2546,7 @@ const FACTIONS = [
         id: "sanc-cherub",
         name: "Cherub",
         full_name: "SANCTIFIER CHERUB",
-        save: 5, wounds: 5, apl: 2, move: "7\"",
+        save: 5, wounds: 5, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [],
@@ -2554,7 +2555,7 @@ const FACTIONS = [
         id: "sanc-conflagrator",
         name: "Conflagrator",
         full_name: "SANCTIFIER CONFLAGRATOR",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2567,7 +2568,7 @@ const FACTIONS = [
         id: "sanc-death-cult-assassin",
         name: "Death Cult Assassin",
         full_name: "SANCTIFIER DEATH CULT ASSASSIN",
-        save: 5, wounds: 8, apl: 3, move: "6\"",
+        save: 5, wounds: 8, apl: 3, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2579,7 +2580,7 @@ const FACTIONS = [
         id: "sanc-drill-abbot",
         name: "Drill Abbot",
         full_name: "SANCTIFIER DRILL ABBOT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2590,7 +2591,7 @@ const FACTIONS = [
         id: "sanc-persecutor",
         name: "Persecutor",
         full_name: "SANCTIFIER PERSECUTOR",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2602,7 +2603,7 @@ const FACTIONS = [
         id: "sanc-miraculist",
         name: "Miraculist",
         full_name: "SANCTIFIER MIRACULIST",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2616,7 +2617,7 @@ const FACTIONS = [
         id: "sanc-missionary",
         name: "Missionary",
         full_name: "SANCTIFIER MISSIONARY",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2633,7 +2634,7 @@ const FACTIONS = [
         id: "sanc-preacher",
         name: "Preacher",
         full_name: "SANCTIFIER PREACHER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2645,7 +2646,7 @@ const FACTIONS = [
         id: "sanc-reliquant",
         name: "Reliquant",
         full_name: "SANCTIFIER RELIQUANT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2657,7 +2658,7 @@ const FACTIONS = [
         id: "sanc-salvationist",
         name: "Salvationist",
         full_name: "SANCTIFIER SALVATIONIST",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2708,7 +2709,7 @@ const FACTIONS = [
         id: "scout-sergeant",
         name: "Scout Sergeant",
         full_name: "SCOUT SERGEANT",
-        save: 4, wounds: 11, apl: 3, move: "6\"",
+        save: 4, wounds: 11, apl: 3, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2723,7 +2724,7 @@ const FACTIONS = [
         id: "scout-heavy-gunner",
         name: "Heavy Gunner",
         full_name: "SCOUT HEAVY GUNNER",
-        save: 4, wounds: 10, apl: 2, move: "6\"",
+        save: 4, wounds: 10, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2739,7 +2740,7 @@ const FACTIONS = [
         id: "scout-hunter",
         name: "Hunter",
         full_name: "SCOUT HUNTER",
-        save: 4, wounds: 10, apl: 2, move: "6\"",
+        save: 4, wounds: 10, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2751,7 +2752,7 @@ const FACTIONS = [
         id: "scout-sniper",
         name: "Sniper",
         full_name: "SCOUT SNIPER",
-        save: 4, wounds: 10, apl: 2, move: "6\"",
+        save: 4, wounds: 10, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: ["camo_cloak"],
         attacker_effects: [],
         weapons: [
@@ -2765,7 +2766,7 @@ const FACTIONS = [
         id: "scout-tracker",
         name: "Tracker",
         full_name: "SCOUT TRACKER",
-        save: 4, wounds: 10, apl: 2, move: "6\"",
+        save: 4, wounds: 10, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2777,7 +2778,7 @@ const FACTIONS = [
         id: "scout-warrior",
         name: "Warrior",
         full_name: "SCOUT WARRIOR",
-        save: 4, wounds: 10, apl: 2, move: "6\"",
+        save: 4, wounds: 10, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2824,7 +2825,7 @@ const FACTIONS = [
         id: "aq-tempestor",
         name: "Tempestor",
         full_name: "AQUILON TEMPESTOR",
-        save: 4, wounds: 9, apl: 3, move: "6\"",
+        save: 4, wounds: 9, apl: 3, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2840,7 +2841,7 @@ const FACTIONS = [
         id: "aq-servo-sentry",
         name: "Servo-Sentry",
         full_name: "AQUILON SERVO-SENTRY",
-        save: 3, wounds: 10, apl: 2, move: "4\"",
+        save: 3, wounds: 10, apl: 2, move: "4\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2855,7 +2856,7 @@ const FACTIONS = [
         id: "aq-grenadier",
         name: "Grenadier",
         full_name: "AQUILON GRENADIER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2868,7 +2869,7 @@ const FACTIONS = [
         id: "aq-gunfighter",
         name: "Gunfighter",
         full_name: "AQUILON GUNFIGHTER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2881,7 +2882,7 @@ const FACTIONS = [
         id: "aq-gunner",
         name: "Gunner",
         full_name: "AQUILON GUNNER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2895,7 +2896,7 @@ const FACTIONS = [
         id: "aq-marksman",
         name: "Marksman",
         full_name: "AQUILON MARKSMAN",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2909,7 +2910,7 @@ const FACTIONS = [
         id: "aq-precursor",
         name: "Precursor",
         full_name: "AQUILON PRECURSOR",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2921,7 +2922,7 @@ const FACTIONS = [
         id: "aq-trooper",
         name: "Trooper",
         full_name: "AQUILON TROOPER",
-        save: 4, wounds: 8, apl: 2, move: "6\"",
+        save: 4, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2965,7 +2966,7 @@ const FACTIONS = [
         id: "ws-pack-leader",
         name: "Pack Leader",
         full_name: "WOLF SCOUT PACK LEADER",
-        save: 3, wounds: 14, apl: 3, move: "7\"",
+        save: 3, wounds: 14, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2978,7 +2979,7 @@ const FACTIONS = [
         id: "ws-fangbearer",
         name: "Fangbearer",
         full_name: "WOLF SCOUT FANGBEARER",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -2990,7 +2991,7 @@ const FACTIONS = [
         id: "ws-frosteye",
         name: "Frosteye",
         full_name: "WOLF SCOUT FROSTEYE",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3003,7 +3004,7 @@ const FACTIONS = [
         id: "ws-gunner",
         name: "Gunner",
         full_name: "WOLF SCOUT GUNNER",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: ["tempests_fury"],
         weapons: [
@@ -3016,7 +3017,7 @@ const FACTIONS = [
         id: "ws-hunter",
         name: "Hunter",
         full_name: "WOLF SCOUT HUNTER",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: ["fierce_temperament"],
         weapons: [
@@ -3029,7 +3030,7 @@ const FACTIONS = [
         id: "ws-rune-priest-skjald",
         name: "Rune Priest Skjald",
         full_name: "WOLF SCOUT RUNE PRIEST SKJALD",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3044,7 +3045,7 @@ const FACTIONS = [
         id: "ws-trapmaster",
         name: "Trapmaster",
         full_name: "WOLF SCOUT TRAPMASTER",
-        save: 3, wounds: 13, apl: 3, move: "7\"",
+        save: 3, wounds: 13, apl: 3, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3057,7 +3058,7 @@ const FACTIONS = [
         id: "ws-fenrisian-wolf",
         name: "Fenrisian Wolf",
         full_name: "WOLF SCOUT FENRISIAN WOLF",
-        save: 5, wounds: 9, apl: 2, move: "8\"",
+        save: 5, wounds: 9, apl: 2, move: "8\"", base: { w: 60, h: 35 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3099,7 +3100,7 @@ const FACTIONS = [
         id: "bl-chieftain",
         name: "Chieftain",
         full_name: "TRAITOR CHIEFTAIN",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3119,7 +3120,7 @@ const FACTIONS = [
         id: "bl-brimstone-grenadier",
         name: "Brimstone Grenadier",
         full_name: "TRAITOR BRIMSTONE GRENADIER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3132,7 +3133,7 @@ const FACTIONS = [
         id: "bl-butcher",
         name: "Butcher",
         full_name: "TRAITOR BUTCHER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3143,7 +3144,7 @@ const FACTIONS = [
         id: "bl-commsman",
         name: "Commsman",
         full_name: "TRAITOR COMMSMAN",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3155,7 +3156,7 @@ const FACTIONS = [
         id: "bl-corpseman",
         name: "Corpseman",
         full_name: "TRAITOR CORPSEMAN",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3168,7 +3169,7 @@ const FACTIONS = [
         id: "bl-enforcer",
         name: "Enforcer",
         full_name: "TRAITOR ENFORCER",
-        save: 4, wounds: 9, apl: 2, move: "6\"",
+        save: 4, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3180,7 +3181,7 @@ const FACTIONS = [
         id: "bl-flenser",
         name: "Flenser",
         full_name: "TRAITOR FLENSER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3191,7 +3192,7 @@ const FACTIONS = [
         id: "bl-gunner",
         name: "Gunner",
         full_name: "TRAITOR GUNNER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3208,7 +3209,7 @@ const FACTIONS = [
         id: "bl-ogryn",
         name: "Ogryn",
         full_name: "TRAITOR OGRYN",
-        save: 5, wounds: 16, apl: 2, move: "6\"",
+        save: 5, wounds: 16, apl: 2, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3219,7 +3220,7 @@ const FACTIONS = [
         id: "bl-sharpshooter",
         name: "Sharpshooter",
         full_name: "TRAITOR SHARPSHOOTER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["camo_cloak"],
         attacker_effects: [],
         weapons: [
@@ -3232,7 +3233,7 @@ const FACTIONS = [
         id: "bl-thug",
         name: "Thug",
         full_name: "TRAITOR THUG",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["traitor_thug_tough"],
         attacker_effects: [],
         weapons: [
@@ -3243,7 +3244,7 @@ const FACTIONS = [
         id: "bl-trench-sweeper",
         name: "Trench Sweeper",
         full_name: "TRAITOR TRENCH SWEEPER",
-        save: 4, wounds: 9, apl: 2, move: "6\"",
+        save: 4, wounds: 9, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3255,7 +3256,7 @@ const FACTIONS = [
         id: "bl-trooper",
         name: "Trooper",
         full_name: "TRAITOR TROOPER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3299,7 +3300,7 @@ const FACTIONS = [
         id: "cc-demagogue",
         name: "Demagogue",
         full_name: "CULT DEMAGOGUE",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3312,7 +3313,7 @@ const FACTIONS = [
         id: "cc-blessed-blade",
         name: "Blessed Blade",
         full_name: "BLESSED BLADE",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3323,7 +3324,7 @@ const FACTIONS = [
         id: "cc-iconarch",
         name: "Iconarch",
         full_name: "ICONARCH",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3336,7 +3337,7 @@ const FACTIONS = [
         id: "cc-mindwitch",
         name: "Mindwitch",
         full_name: "MINDWITCH",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3348,7 +3349,7 @@ const FACTIONS = [
         id: "cc-devotee",
         name: "Devotee",
         full_name: "CHAOS DEVOTEE",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3360,7 +3361,7 @@ const FACTIONS = [
         id: "cc-mutant",
         name: "Mutant",
         full_name: "CHAOS MUTANT",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["vanguard_aura"],
         attacker_effects: [],
         weapons: [
@@ -3371,7 +3372,7 @@ const FACTIONS = [
         id: "cc-torment",
         name: "Torment",
         full_name: "CHAOS TORMENT",
-        save: 5, wounds: 13, apl: 2, move: "6\"",
+        save: 5, wounds: 13, apl: 2, move: "6\"", base: { d: 40 },
         defender_abilities: ["vanguard_aura"],
         attacker_effects: [],
         weapons: [
@@ -3413,7 +3414,7 @@ const FACTIONS = [
         id: "fg-ironhorn",
         name: "Ironhorn",
         full_name: "FELLGOR IRONHORN",
-        save: 5, wounds: 11, apl: 2, move: "6\"",
+        save: 5, wounds: 11, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3428,7 +3429,7 @@ const FACTIONS = [
         id: "fg-deathknell",
         name: "Deathknell",
         full_name: "FELLGOR DEATHKNELL",
-        save: 4, wounds: 10, apl: 2, move: "6\"",
+        save: 4, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3440,7 +3441,7 @@ const FACTIONS = [
         id: "fg-fluxbray",
         name: "Fluxbray",
         full_name: "FELLGOR FLUXBRAY",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3451,7 +3452,7 @@ const FACTIONS = [
         id: "fg-gnarlscar",
         name: "Gnarlscar",
         full_name: "FELLGOR GNARLSCAR",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3463,7 +3464,7 @@ const FACTIONS = [
         id: "fg-gorehorn",
         name: "Gorehorn",
         full_name: "FELLGOR GOREHORN",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3475,7 +3476,7 @@ const FACTIONS = [
         id: "fg-herd-goad",
         name: "Herd-Goad",
         full_name: "FELLGOR HERD-GOAD",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3488,7 +3489,7 @@ const FACTIONS = [
         id: "fg-mangler",
         name: "Mangler",
         full_name: "FELLGOR MANGLER",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3499,7 +3500,7 @@ const FACTIONS = [
         id: "fg-shaman",
         name: "Shaman",
         full_name: "FELLGOR SHAMAN",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3512,7 +3513,7 @@ const FACTIONS = [
         id: "fg-toxhorn",
         name: "Toxhorn",
         full_name: "FELLGOR TOXHORN",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3524,7 +3525,7 @@ const FACTIONS = [
         id: "fg-vandal",
         name: "Vandal",
         full_name: "FELLGOR VANDAL",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3535,7 +3536,7 @@ const FACTIONS = [
         id: "fg-warrior",
         name: "Warrior",
         full_name: "FELLGOR WARRIOR",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3585,7 +3586,7 @@ const FACTIONS = [
         id: "gx-vulglar",
         name: "Vulglar Thrice-Cursed",
         full_name: "VULGLAR THRICE-CURSED",
-        save: 5, wounds: 21, apl: 2, move: "5\"",
+        save: 5, wounds: 21, apl: 2, move: "5\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3598,7 +3599,7 @@ const FACTIONS = [
         id: "gx-bloatspawn",
         name: "Bloatspawn",
         full_name: "BLOATSPAWN",
-        save: 5, wounds: 20, apl: 2, move: "5\"",
+        save: 5, wounds: 20, apl: 2, move: "5\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3611,7 +3612,7 @@ const FACTIONS = [
         id: "gx-fleshscreamer",
         name: "Fleshscreamer",
         full_name: "FLESHSCREAMER",
-        save: 5, wounds: 20, apl: 2, move: "5\"",
+        save: 5, wounds: 20, apl: 2, move: "5\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3623,7 +3624,7 @@ const FACTIONS = [
         id: "gx-lumberghast",
         name: "Lumberghast",
         full_name: "LUMBERGHAST",
-        save: 5, wounds: 20, apl: 2, move: "5\"",
+        save: 5, wounds: 20, apl: 2, move: "5\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3634,7 +3635,7 @@ const FACTIONS = [
         id: "gx-mutant",
         name: "Mutant",
         full_name: "GELLERPOX MUTANT",
-        save: 5, wounds: 7, apl: 2, move: "5\"",
+        save: 5, wounds: 7, apl: 2, move: "5\"", base: { d: 25 },
         defender_abilities: ["mutant_crit_to_normal"],
         attacker_effects: [],
         weapons: [
@@ -3647,7 +3648,7 @@ const FACTIONS = [
         id: "gx-glitchling",
         name: "Glitchling",
         full_name: "GLITCHLING",
-        save: 6, wounds: 3, apl: 2, move: "6\"",
+        save: 6, wounds: 3, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["disruption_field"],
         attacker_effects: [],
         weapons: [
@@ -3659,7 +3660,7 @@ const FACTIONS = [
         id: "gx-cursemite",
         name: "Cursemite",
         full_name: "CURSEMITE",
-        save: 6, wounds: 2, apl: 2, move: "6\"",
+        save: 6, wounds: 2, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3670,7 +3671,7 @@ const FACTIONS = [
         id: "gx-eyestinger-swarm",
         name: "Eyestinger Swarm",
         full_name: "EYESTINGER SWARM",
-        save: 6, wounds: 2, apl: 2, move: "6\"",
+        save: 6, wounds: 2, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3682,7 +3683,7 @@ const FACTIONS = [
         id: "gx-sludge-grub",
         name: "Sludge-Grub",
         full_name: "SLUDGE-GRUB",
-        save: 6, wounds: 2, apl: 2, move: "4\"",
+        save: 6, wounds: 2, apl: 2, move: "4\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3727,7 +3728,7 @@ const FACTIONS = [
         id: "gm-blood-herald",
         name: "Blood Herald",
         full_name: "GOREMONGER BLOOD HERALD",
-        save: 5, wounds: 11, apl: 2, move: "7\"",
+        save: 5, wounds: 11, apl: 2, move: "7\"", base: { d: 32 },
         defender_abilities: ["hardy"],
         attacker_effects: [],
         weapons: [
@@ -3739,7 +3740,7 @@ const FACTIONS = [
         id: "gm-aspirant",
         name: "Aspirant",
         full_name: "GOREMONGER ASPIRANT",
-        save: 5, wounds: 10, apl: 2, move: "7\"",
+        save: 5, wounds: 10, apl: 2, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3751,7 +3752,7 @@ const FACTIONS = [
         id: "gm-bloodtaker",
         name: "Bloodtaker",
         full_name: "GOREMONGER BLOODTAKER",
-        save: 5, wounds: 10, apl: 2, move: "7\"",
+        save: 5, wounds: 10, apl: 2, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3763,7 +3764,7 @@ const FACTIONS = [
         id: "gm-impaler",
         name: "Impaler",
         full_name: "GOREMONGER IMPALER",
-        save: 5, wounds: 10, apl: 2, move: "7\"",
+        save: 5, wounds: 10, apl: 2, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3776,7 +3777,7 @@ const FACTIONS = [
         id: "gm-inciter",
         name: "Inciter",
         full_name: "GOREMONGER INCITER",
-        save: 5, wounds: 10, apl: 2, move: "7\"",
+        save: 5, wounds: 10, apl: 2, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3788,7 +3789,7 @@ const FACTIONS = [
         id: "gm-skullclaimer",
         name: "Skullclaimer",
         full_name: "GOREMONGER SKULLCLAIMER",
-        save: 5, wounds: 10, apl: 2, move: "7\"",
+        save: 5, wounds: 10, apl: 2, move: "7\"", base: { d: 32 },
         defender_abilities: ["mutant_crit_to_normal"],
         attacker_effects: [],
         weapons: [
@@ -3800,7 +3801,7 @@ const FACTIONS = [
         id: "gm-stalker",
         name: "Stalker",
         full_name: "GOREMONGER STALKER",
-        save: 5, wounds: 10, apl: 2, move: "7\"",
+        save: 5, wounds: 10, apl: 2, move: "7\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3844,7 +3845,7 @@ const FACTIONS = [
         id: "lg-aspiring-champion",
         name: "Aspiring Champion",
         full_name: "LEGIONARY ASPIRING CHAMPION",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3861,7 +3862,7 @@ const FACTIONS = [
         id: "lg-chosen",
         name: "Chosen",
         full_name: "LEGIONARY CHOSEN",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3875,7 +3876,7 @@ const FACTIONS = [
         id: "lg-anointed",
         name: "Anointed",
         full_name: "LEGIONARY ANOINTED",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: ["sermon_dmg_reduction"],
         attacker_effects: [],
         weapons: [
@@ -3887,7 +3888,7 @@ const FACTIONS = [
         id: "lg-balefire-acolyte",
         name: "Balefire Acolyte",
         full_name: "LEGIONARY BALEFIRE ACOLYTE",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3901,7 +3902,7 @@ const FACTIONS = [
         id: "lg-butcher",
         name: "Butcher",
         full_name: "LEGIONARY BUTCHER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3913,7 +3914,7 @@ const FACTIONS = [
         id: "lg-gunner",
         name: "Gunner",
         full_name: "LEGIONARY GUNNER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3929,7 +3930,7 @@ const FACTIONS = [
         id: "lg-heavy-gunner",
         name: "Heavy Gunner",
         full_name: "LEGIONARY HEAVY GUNNER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3947,7 +3948,7 @@ const FACTIONS = [
         id: "lg-icon-bearer",
         name: "Icon Bearer",
         full_name: "LEGIONARY ICON BEARER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3961,7 +3962,7 @@ const FACTIONS = [
         id: "lg-shrivetalon",
         name: "Shrivetalon",
         full_name: "LEGIONARY SHRIVETALON",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -3973,7 +3974,7 @@ const FACTIONS = [
         id: "lg-warrior",
         name: "Warrior",
         full_name: "LEGIONARY WARRIOR",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4020,7 +4021,7 @@ const FACTIONS = [
         id: "mw-chaos-lord",
         name: "Chaos Lord",
         full_name: "MURDERWING CHAOS LORD",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4037,7 +4038,7 @@ const FACTIONS = [
         id: "mw-champion",
         name: "Champion",
         full_name: "MURDERWING CHAMPION",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4052,7 +4053,7 @@ const FACTIONS = [
         id: "mw-curseclaw",
         name: "Curseclaw",
         full_name: "MURDERWING CURSECLAW",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4064,7 +4065,7 @@ const FACTIONS = [
         id: "mw-depredator",
         name: "Depredator",
         full_name: "MURDERWING DEPREDATOR",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4076,7 +4077,7 @@ const FACTIONS = [
         id: "mw-huntmaster",
         name: "Huntmaster",
         full_name: "MURDERWING HUNTMASTER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4088,7 +4089,7 @@ const FACTIONS = [
         id: "mw-raptor",
         name: "Raptor",
         full_name: "MURDERWING RAPTOR",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4102,7 +4103,7 @@ const FACTIONS = [
         id: "mw-shrieker",
         name: "Shrieker",
         full_name: "MURDERWING SHRIEKER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4114,7 +4115,7 @@ const FACTIONS = [
         id: "mw-skysear",
         name: "Skysear",
         full_name: "MURDERWING SKYSEAR",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4130,7 +4131,7 @@ const FACTIONS = [
         id: "mw-warp-talon",
         name: "Warp Talon",
         full_name: "MURDERWING WARP TALON",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4173,7 +4174,7 @@ const FACTIONS = [
         id: "nc-visionary",
         name: "Visionary",
         full_name: "NIGHT LORD VISIONARY",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4190,7 +4191,7 @@ const FACTIONS = [
         id: "nc-fearmonger",
         name: "Fearmonger",
         full_name: "NIGHT LORD FEARMONGER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4204,7 +4205,7 @@ const FACTIONS = [
         id: "nc-gunner",
         name: "Gunner",
         full_name: "NIGHT LORD GUNNER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4220,7 +4221,7 @@ const FACTIONS = [
         id: "nc-heavy-gunner",
         name: "Heavy Gunner",
         full_name: "NIGHT LORD HEAVY GUNNER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4236,7 +4237,7 @@ const FACTIONS = [
         id: "nc-screecher",
         name: "Screecher",
         full_name: "NIGHT LORD SCREECHER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4247,7 +4248,7 @@ const FACTIONS = [
         id: "nc-skinthief",
         name: "Skinthief",
         full_name: "NIGHT LORD SKINTHIEF",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: ["aggressive_force"],
         attacker_effects: [],
         weapons: [
@@ -4259,7 +4260,7 @@ const FACTIONS = [
         id: "nc-ventrilokar",
         name: "Ventrilokar",
         full_name: "NIGHT LORD VENTRILOKAR",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4271,7 +4272,7 @@ const FACTIONS = [
         id: "nc-warrior",
         name: "Warrior",
         full_name: "NIGHT LORD WARRIOR",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: ["cruel_tormenter"],
         weapons: [
@@ -4318,7 +4319,7 @@ const FACTIONS = [
         id: "pm-champion",
         name: "Champion",
         full_name: "PLAGUE MARINE CHAMPION",
-        save: 3, wounds: 15, apl: 3, move: "5\"",
+        save: 3, wounds: 15, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4331,7 +4332,7 @@ const FACTIONS = [
         id: "pm-bombardier",
         name: "Bombardier",
         full_name: "PLAGUE MARINE BOMBARDIER",
-        save: 3, wounds: 14, apl: 3, move: "5\"",
+        save: 3, wounds: 14, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4343,7 +4344,7 @@ const FACTIONS = [
         id: "pm-fighter",
         name: "Fighter",
         full_name: "PLAGUE MARINE FIGHTER",
-        save: 3, wounds: 14, apl: 3, move: "5\"",
+        save: 3, wounds: 14, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4354,7 +4355,7 @@ const FACTIONS = [
         id: "pm-heavy-gunner",
         name: "Heavy Gunner",
         full_name: "PLAGUE MARINE HEAVY GUNNER",
-        save: 3, wounds: 14, apl: 3, move: "5\"",
+        save: 3, wounds: 14, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4366,7 +4367,7 @@ const FACTIONS = [
         id: "pm-icon-bearer",
         name: "Icon Bearer",
         full_name: "PLAGUE MARINE ICON BEARER",
-        save: 3, wounds: 14, apl: 3, move: "5\"",
+        save: 3, wounds: 14, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4378,7 +4379,7 @@ const FACTIONS = [
         id: "pm-plaguecaster",
         name: "Plaguecaster",
         full_name: "MALIGNANT PLAGUECASTER",
-        save: 3, wounds: 14, apl: 3, move: "5\"",
+        save: 3, wounds: 14, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4391,7 +4392,7 @@ const FACTIONS = [
         id: "pm-warrior",
         name: "Warrior",
         full_name: "PLAGUE MARINE WARRIOR",
-        save: 3, wounds: 14, apl: 3, move: "5\"",
+        save: 3, wounds: 14, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4435,7 +4436,7 @@ const FACTIONS = [
         id: "wc-sorcerer-destiny",
         name: "Sorcerer of Destiny",
         full_name: "SORCERER OF DESTINY",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4450,7 +4451,7 @@ const FACTIONS = [
         id: "wc-sorcerer-tempyrion",
         name: "Sorcerer of Tempyrion",
         full_name: "SORCERER OF TEMPYRION",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4465,7 +4466,7 @@ const FACTIONS = [
         id: "wc-sorcerer-warpfire",
         name: "Sorcerer of Warpfire",
         full_name: "SORCERER OF WARPFIRE",
-        save: 3, wounds: 15, apl: 3, move: "6\"",
+        save: 3, wounds: 15, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4481,7 +4482,7 @@ const FACTIONS = [
         id: "wc-rubric-gunner",
         name: "Rubric Gunner",
         full_name: "RUBRIC MARINE GUNNER",
-        save: 3, wounds: 14, apl: 3, move: "5\"",
+        save: 3, wounds: 14, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4495,7 +4496,7 @@ const FACTIONS = [
         id: "wc-rubric-icon-bearer",
         name: "Rubric Icon Bearer",
         full_name: "RUBRIC MARINE ICON BEARER",
-        save: 3, wounds: 14, apl: 3, move: "5\"",
+        save: 3, wounds: 14, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4507,7 +4508,7 @@ const FACTIONS = [
         id: "wc-rubric-warrior",
         name: "Rubric Warrior",
         full_name: "RUBRIC MARINE WARRIOR",
-        save: 3, wounds: 14, apl: 3, move: "5\"",
+        save: 3, wounds: 14, apl: 3, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4519,7 +4520,7 @@ const FACTIONS = [
         id: "wc-tzaangor-champion",
         name: "Tzaangor Champion",
         full_name: "TZAANGOR CHAMPION",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4531,7 +4532,7 @@ const FACTIONS = [
         id: "wc-tzaangor-horn-bearer",
         name: "Tzaangor Horn Bearer",
         full_name: "TZAANGOR HORN BEARER",
-        save: 5, wounds: 9, apl: 2, move: "6\"",
+        save: 5, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4542,7 +4543,7 @@ const FACTIONS = [
         id: "wc-tzaangor-icon-bearer",
         name: "Tzaangor Icon Bearer",
         full_name: "TZAANGOR ICON BEARER",
-        save: 5, wounds: 9, apl: 2, move: "6\"",
+        save: 5, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4553,7 +4554,7 @@ const FACTIONS = [
         id: "wc-tzaangor-warrior",
         name: "Tzaangor Warrior",
         full_name: "TZAANGOR WARRIOR",
-        save: 5, wounds: 9, apl: 2, move: "6\"",
+        save: 5, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4602,7 +4603,7 @@ const FACTIONS = [
         id: "bk-dire-avenger-exarch",
         name: "Dire Avenger Exarch",
         full_name: "DIRE AVENGER EXARCH",
-        save: 3, wounds: 9, apl: 3, move: "7\"",
+        save: 3, wounds: 9, apl: 3, move: "7\"", base: { d: 28 },
         defender_abilities: ["disruption_field"],
         attacker_effects: [],
         weapons: [
@@ -4619,7 +4620,7 @@ const FACTIONS = [
         id: "bk-dire-avenger-warrior",
         name: "Dire Avenger Warrior",
         full_name: "DIRE AVENGER WARRIOR",
-        save: 4, wounds: 8, apl: 3, move: "7\"",
+        save: 4, wounds: 8, apl: 3, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4631,7 +4632,7 @@ const FACTIONS = [
         id: "bk-howling-banshee-exarch",
         name: "Howling Banshee Exarch",
         full_name: "HOWLING BANSHEE EXARCH",
-        save: 3, wounds: 9, apl: 3, move: "7\"",
+        save: 3, wounds: 9, apl: 3, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4647,7 +4648,7 @@ const FACTIONS = [
         id: "bk-howling-banshee-warrior",
         name: "Howling Banshee Warrior",
         full_name: "HOWLING BANSHEE WARRIOR",
-        save: 4, wounds: 8, apl: 3, move: "7\"",
+        save: 4, wounds: 8, apl: 3, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4659,7 +4660,7 @@ const FACTIONS = [
         id: "bk-striking-scorpion-exarch",
         name: "Striking Scorpion Exarch",
         full_name: "STRIKING SCORPION EXARCH",
-        save: 3, wounds: 9, apl: 3, move: "7\"",
+        save: 3, wounds: 9, apl: 3, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4674,7 +4675,7 @@ const FACTIONS = [
         id: "bk-striking-scorpion-warrior",
         name: "Striking Scorpion Warrior",
         full_name: "STRIKING SCORPION WARRIOR",
-        save: 4, wounds: 8, apl: 3, move: "7\"",
+        save: 4, wounds: 8, apl: 3, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4717,7 +4718,7 @@ const FACTIONS = [
         id: "bb-commander",
         name: "Commander",
         full_name: "BROOD BROTHER COMMANDER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4733,7 +4734,7 @@ const FACTIONS = [
         id: "bb-agitator",
         name: "Agitator",
         full_name: "BROOD BROTHER AGITATOR",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4744,7 +4745,7 @@ const FACTIONS = [
         id: "bb-gunner",
         name: "Gunner",
         full_name: "BROOD BROTHER GUNNER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4760,7 +4761,7 @@ const FACTIONS = [
         id: "bb-iconward",
         name: "Iconward",
         full_name: "BROOD BROTHER ICONWARD",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4771,7 +4772,7 @@ const FACTIONS = [
         id: "bb-knife-fighter",
         name: "Knife Fighter",
         full_name: "BROOD BROTHER KNIFE FIGHTER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4782,7 +4783,7 @@ const FACTIONS = [
         id: "bb-medic",
         name: "Medic",
         full_name: "BROOD BROTHER MEDIC",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4795,7 +4796,7 @@ const FACTIONS = [
         id: "bb-sapper",
         name: "Sapper",
         full_name: "BROOD BROTHER SAPPER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4807,7 +4808,7 @@ const FACTIONS = [
         id: "bb-sniper",
         name: "Sniper",
         full_name: "BROOD BROTHER SNIPER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4821,7 +4822,7 @@ const FACTIONS = [
         id: "bb-trooper",
         name: "Trooper",
         full_name: "BROOD BROTHER TROOPER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4833,7 +4834,7 @@ const FACTIONS = [
         id: "bb-veteran",
         name: "Veteran",
         full_name: "BROOD BROTHER VETERAN",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: ["veteran_dmg_reduction"],
         attacker_effects: [],
         weapons: [
@@ -4846,7 +4847,7 @@ const FACTIONS = [
         id: "bb-vox-operator",
         name: "Vox-Operator",
         full_name: "BROOD BROTHER VOX-OPERATOR",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4858,7 +4859,7 @@ const FACTIONS = [
         id: "bb-psychic-familiar",
         name: "Psychic Familiar",
         full_name: "PSYCHIC FAMILIAR",
-        save: 5, wounds: 3, apl: 2, move: "6\"",
+        save: 5, wounds: 3, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4869,7 +4870,7 @@ const FACTIONS = [
         id: "bb-magus",
         name: "Magus",
         full_name: "MAGUS",
-        save: 4, wounds: 9, apl: 3, move: "6\"",
+        save: 4, wounds: 9, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4882,7 +4883,7 @@ const FACTIONS = [
         id: "bb-patriarch",
         name: "Patriarch",
         full_name: "PATRIARCH",
-        save: 4, wounds: 21, apl: 4, move: "6\"",
+        save: 4, wounds: 21, apl: 4, move: "6\"", base: { d: 50 },
         defender_abilities: ["disruption_field"],
         attacker_effects: [],
         weapons: [
@@ -4893,7 +4894,7 @@ const FACTIONS = [
         id: "bb-primus",
         name: "Primus",
         full_name: "PRIMUS",
-        save: 4, wounds: 9, apl: 3, move: "6\"",
+        save: 4, wounds: 9, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4938,7 +4939,7 @@ const FACTIONS = [
         id: "cn-geomancer",
         name: "Geomancer",
         full_name: "GEOMANCER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 50 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4951,7 +4952,7 @@ const FACTIONS = [
         id: "cn-macrocyte-accelerator",
         name: "Macrocyte Accelerator",
         full_name: "CANOPTEK MACROCYTE ACCELERATOR",
-        save: 4, wounds: 7, apl: 2, move: "7\"",
+        save: 4, wounds: 7, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4963,7 +4964,7 @@ const FACTIONS = [
         id: "cn-macrocyte-reanimator",
         name: "Macrocyte Reanimator",
         full_name: "CANOPTEK MACROCYTE REANIMATOR",
-        save: 4, wounds: 7, apl: 2, move: "7\"",
+        save: 4, wounds: 7, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4975,7 +4976,7 @@ const FACTIONS = [
         id: "cn-macrocyte-warrior",
         name: "Macrocyte Warrior",
         full_name: "CANOPTEK MACROCYTE WARRIOR",
-        save: 4, wounds: 7, apl: 2, move: "7\"",
+        save: 4, wounds: 7, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -4989,7 +4990,7 @@ const FACTIONS = [
         id: "cn-tomb-crawler",
         name: "Tomb Crawler",
         full_name: "CANOPTEK TOMB CRAWLER",
-        save: 3, wounds: 21, apl: 2, move: "5\"",
+        save: 3, wounds: 21, apl: 2, move: "5\"", base: { d: 50 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5035,7 +5036,7 @@ const FACTIONS = [
         id: "cv-felarch",
         name: "Felarch",
         full_name: "VOIDSCARRED FELARCH",
-        save: 4, wounds: 9, apl: 2, move: "7\"",
+        save: 4, wounds: 9, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5049,7 +5050,7 @@ const FACTIONS = [
         id: "cv-fate-dealer",
         name: "Fate Dealer",
         full_name: "VOIDSCARRED FATE DEALER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: ["camo_cloak"],
         attacker_effects: [],
         weapons: [
@@ -5063,7 +5064,7 @@ const FACTIONS = [
         id: "cv-gunner",
         name: "Gunner",
         full_name: "VOIDSCARRED GUNNER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5077,7 +5078,7 @@ const FACTIONS = [
         id: "cv-heavy-gunner",
         name: "Heavy Gunner",
         full_name: "VOIDSCARRED HEAVY GUNNER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5092,7 +5093,7 @@ const FACTIONS = [
         id: "cv-kurnathi",
         name: "Kurnathi",
         full_name: "VOIDSCARRED KURNATHI",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5104,7 +5105,7 @@ const FACTIONS = [
         id: "cv-kurnite-hunter",
         name: "Kurnite Hunter",
         full_name: "VOIDSCARRED KURNITE HUNTER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5117,7 +5118,7 @@ const FACTIONS = [
         id: "cv-shade-runner",
         name: "Shade Runner",
         full_name: "VOIDSCARRED SHADE RUNNER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5130,7 +5131,7 @@ const FACTIONS = [
         id: "cv-soul-weaver",
         name: "Soul Weaver",
         full_name: "VOIDSCARRED SOUL WEAVER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5142,7 +5143,7 @@ const FACTIONS = [
         id: "cv-starstorm-duellist",
         name: "Starstorm Duellist",
         full_name: "VOIDSCARRED STARSTORM DUELLIST",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5155,7 +5156,7 @@ const FACTIONS = [
         id: "cv-warrior",
         name: "Warrior",
         full_name: "VOIDSCARRED WARRIOR",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5169,7 +5170,7 @@ const FACTIONS = [
         id: "cv-way-seeker",
         name: "Way Seeker",
         full_name: "VOIDSCARRED WAY SEEKER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5214,7 +5215,7 @@ const FACTIONS = [
         id: "fk-kill-broker",
         name: "Kill-Broker",
         full_name: "KROOT KILL-BROKER",
-        save: 5, wounds: 9, apl: 2, move: "6\"",
+        save: 5, wounds: 9, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5227,7 +5228,7 @@ const FACTIONS = [
         id: "fk-bow-hunter",
         name: "Bow-Hunter",
         full_name: "KROOT BOW-HUNTER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5241,7 +5242,7 @@ const FACTIONS = [
         id: "fk-cold-blood",
         name: "Cold-Blood",
         full_name: "KROOT COLD-BLOOD",
-        save: 5, wounds: 9, apl: 2, move: "6\"",
+        save: 5, wounds: 9, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: ["cruel_tormenter"],
         weapons: [
@@ -5253,7 +5254,7 @@ const FACTIONS = [
         id: "fk-cut-skin",
         name: "Cut-Skin",
         full_name: "KROOT CUT-SKIN",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5264,7 +5265,7 @@ const FACTIONS = [
         id: "fk-heavy-gunner",
         name: "Heavy Gunner",
         full_name: "KROOT HEAVY GUNNER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5277,7 +5278,7 @@ const FACTIONS = [
         id: "fk-hound",
         name: "Hound",
         full_name: "KROOT HOUND",
-        save: 5, wounds: 7, apl: 2, move: "8\"",
+        save: 5, wounds: 7, apl: 2, move: "8\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5288,7 +5289,7 @@ const FACTIONS = [
         id: "fk-long-sight",
         name: "Long-Sight",
         full_name: "KROOT LONG-SIGHT",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5302,7 +5303,7 @@ const FACTIONS = [
         id: "fk-pistolier",
         name: "Pistolier",
         full_name: "KROOT PISTOLIER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5315,7 +5316,7 @@ const FACTIONS = [
         id: "fk-stalker",
         name: "Stalker",
         full_name: "KROOT STALKER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5327,7 +5328,7 @@ const FACTIONS = [
         id: "fk-tracker",
         name: "Tracker",
         full_name: "KROOT TRACKER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5339,7 +5340,7 @@ const FACTIONS = [
         id: "fk-warrior",
         name: "Warrior",
         full_name: "KROOT WARRIOR",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5385,7 +5386,7 @@ const FACTIONS = [
         id: "ha-archsybarite",
         name: "Archsybarite",
         full_name: "KABALITE ARCHSYBARITE",
-        save: 4, wounds: 9, apl: 2, move: "7\"",
+        save: 4, wounds: 9, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5402,7 +5403,7 @@ const FACTIONS = [
         id: "ha-agent",
         name: "Agent",
         full_name: "KABALITE AGENT",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5414,7 +5415,7 @@ const FACTIONS = [
         id: "ha-crimson-duellist",
         name: "Crimson Duellist",
         full_name: "KABALITE CRIMSON DUELLIST",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5427,7 +5428,7 @@ const FACTIONS = [
         id: "ha-disciple-of-yaelindra",
         name: "Disciple of Yaelindra",
         full_name: "KABALITE DISCIPLE OF YAELINDRA",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5439,7 +5440,7 @@ const FACTIONS = [
         id: "ha-elixicant",
         name: "Elixicant",
         full_name: "KABALITE ELIXICANT",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5452,7 +5453,7 @@ const FACTIONS = [
         id: "ha-flayer",
         name: "Flayer",
         full_name: "KABALITE FLAYER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: ["aggressive_force"],
         attacker_effects: [],
         weapons: [
@@ -5463,7 +5464,7 @@ const FACTIONS = [
         id: "ha-gunner",
         name: "Gunner",
         full_name: "KABALITE GUNNER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5476,7 +5477,7 @@ const FACTIONS = [
         id: "ha-heavy-gunner",
         name: "Heavy Gunner",
         full_name: "KABALITE HEAVY GUNNER",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5490,7 +5491,7 @@ const FACTIONS = [
         id: "ha-skysplinter-assassin",
         name: "Skysplinter Assassin",
         full_name: "KABALITE SKYSPLINTER ASSASSIN",
-        save: 4, wounds: 8, apl: 2, move: "7\"",
+        save: 4, wounds: 8, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5535,7 +5536,7 @@ const FACTIONS = [
         id: "hk-theyn",
         name: "Theyn",
         full_name: "YAEGIR THEYN",
-        save: 4, wounds: 9, apl: 2, move: "5\"",
+        save: 4, wounds: 9, apl: 2, move: "5\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5549,7 +5550,7 @@ const FACTIONS = [
         id: "hk-bladekyn",
         name: "Bladekyn",
         full_name: "YAEGIR BLADEKYN",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5561,7 +5562,7 @@ const FACTIONS = [
         id: "hk-bombast",
         name: "Bombast",
         full_name: "YAEGIR BOMBAST",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5573,7 +5574,7 @@ const FACTIONS = [
         id: "hk-gunner",
         name: "Gunner",
         full_name: "YAEGIR GUNNER",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5587,7 +5588,7 @@ const FACTIONS = [
         id: "hk-ironbraek",
         name: "Ironbraek",
         full_name: "YAEGIR IRONBRAEK",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5599,7 +5600,7 @@ const FACTIONS = [
         id: "hk-riflekyn",
         name: "Riflekyn",
         full_name: "YAEGIR RIFLEKYN",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5613,7 +5614,7 @@ const FACTIONS = [
         id: "hk-tracker",
         name: "Tracker",
         full_name: "YAEGIR TRACKER",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5626,7 +5627,7 @@ const FACTIONS = [
         id: "hk-warrior",
         name: "Warrior",
         full_name: "YAEGIR WARRIOR",
-        save: 4, wounds: 8, apl: 2, move: "5\"",
+        save: 4, wounds: 8, apl: 2, move: "5\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5674,7 +5675,7 @@ const FACTIONS = [
         id: "hi-chronomancer",
         name: "Chronomancer",
         full_name: "CHRONOMANCER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5688,7 +5689,7 @@ const FACTIONS = [
         id: "hi-psychomancer",
         name: "Psychomancer",
         full_name: "PSYCHOMANCER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5700,7 +5701,7 @@ const FACTIONS = [
         id: "hi-technomancer",
         name: "Technomancer",
         full_name: "TECHNOMANCER",
-        save: 3, wounds: 14, apl: 3, move: "6\"",
+        save: 3, wounds: 14, apl: 3, move: "6\"", base: { d: 50 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5712,7 +5713,7 @@ const FACTIONS = [
         id: "hi-plasmacyte-accelerator",
         name: "Plasmacyte Accelerator",
         full_name: "PLASMACYTE ACCELERATOR",
-        save: 5, wounds: 5, apl: 2, move: "7\"",
+        save: 5, wounds: 5, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5724,7 +5725,7 @@ const FACTIONS = [
         id: "hi-plasmacyte-reanimator",
         name: "Plasmacyte Reanimator",
         full_name: "PLASMACYTE REANIMATOR",
-        save: 5, wounds: 5, apl: 2, move: "7\"",
+        save: 5, wounds: 5, apl: 2, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5736,7 +5737,7 @@ const FACTIONS = [
         id: "hi-apprentek",
         name: "Apprentek",
         full_name: "APPRENTEK",
-        save: 3, wounds: 11, apl: 3, move: "6\"",
+        save: 3, wounds: 11, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5748,7 +5749,7 @@ const FACTIONS = [
         id: "hi-deathmark",
         name: "Deathmark",
         full_name: "DEATHMARK",
-        save: 3, wounds: 10, apl: 2, move: "5\"",
+        save: 3, wounds: 10, apl: 2, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5760,7 +5761,7 @@ const FACTIONS = [
         id: "hi-immortal-despotek",
         name: "Immortal Despotek",
         full_name: "IMMORTAL DESPOTEK",
-        save: 3, wounds: 11, apl: 2, move: "5\"",
+        save: 3, wounds: 11, apl: 2, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5773,7 +5774,7 @@ const FACTIONS = [
         id: "hi-immortal-guardian",
         name: "Immortal Guardian",
         full_name: "IMMORTAL GUARDIAN",
-        save: 3, wounds: 10, apl: 2, move: "5\"",
+        save: 3, wounds: 10, apl: 2, move: "5\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5817,7 +5818,7 @@ const FACTIONS = [
         id: "ko-boss-nob",
         name: "Boss Nob",
         full_name: "KOMMANDO BOSS NOB",
-        save: 5, wounds: 14, apl: 3, move: "6\"",
+        save: 5, wounds: 14, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5830,7 +5831,7 @@ const FACTIONS = [
         id: "ko-bomb-squig",
         name: "Bomb Squig",
         full_name: "KOMMANDO BOMB SQUIG",
-        save: 5, wounds: 5, apl: 2, move: "6\"",
+        save: 5, wounds: 5, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5842,7 +5843,7 @@ const FACTIONS = [
         id: "ko-boy",
         name: "Boy",
         full_name: "KOMMANDO BOY",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5854,7 +5855,7 @@ const FACTIONS = [
         id: "ko-breacha-boy",
         name: "Breacha Boy",
         full_name: "KOMMANDO BREACHA BOY",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5866,7 +5867,7 @@ const FACTIONS = [
         id: "ko-burna-boy",
         name: "Burna Boy",
         full_name: "KOMMANDO BURNA BOY",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5879,7 +5880,7 @@ const FACTIONS = [
         id: "ko-comms-boy",
         name: "Comms Boy",
         full_name: "KOMMANDO COMMS BOY",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5891,7 +5892,7 @@ const FACTIONS = [
         id: "ko-dakka-boy",
         name: "Dakka Boy",
         full_name: "KOMMANDO DAKKA BOY",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5904,7 +5905,7 @@ const FACTIONS = [
         id: "ko-grot",
         name: "Grot",
         full_name: "KOMMANDO GROT",
-        save: 5, wounds: 5, apl: 2, move: "6\"",
+        save: 5, wounds: 5, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5915,7 +5916,7 @@ const FACTIONS = [
         id: "ko-rokkit-boy",
         name: "Rokkit Boy",
         full_name: "KOMMANDO ROKKIT BOY",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5928,7 +5929,7 @@ const FACTIONS = [
         id: "ko-slasha-boy",
         name: "Slasha Boy",
         full_name: "KOMMANDO SLASHA BOY",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5940,7 +5941,7 @@ const FACTIONS = [
         id: "ko-snipa-boy",
         name: "Snipa Boy",
         full_name: "KOMMANDO SNIPA BOY",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -5988,7 +5989,7 @@ const FACTIONS = [
         id: "md-nightfiend",
         name: "Nightfiend",
         full_name: "MANDRAKE NIGHTFIEND",
-        save: 5, wounds: 9, apl: 2, move: "7\"",
+        save: 5, wounds: 9, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6000,7 +6001,7 @@ const FACTIONS = [
         id: "md-abyssal",
         name: "Abyssal",
         full_name: "MANDRAKE ABYSSAL",
-        save: 5, wounds: 8, apl: 2, move: "7\"",
+        save: 5, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6013,7 +6014,7 @@ const FACTIONS = [
         id: "md-chooser",
         name: "Chooser of the Flesh",
         full_name: "MANDRAKE CHOOSER OF THE FLESH",
-        save: 5, wounds: 8, apl: 2, move: "7\"",
+        save: 5, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6025,7 +6026,7 @@ const FACTIONS = [
         id: "md-dirgemaw",
         name: "Dirgemaw",
         full_name: "MANDRAKE DIRGEMAW",
-        save: 5, wounds: 8, apl: 2, move: "7\"",
+        save: 5, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6038,7 +6039,7 @@ const FACTIONS = [
         id: "md-shadeweaver",
         name: "Shadeweaver",
         full_name: "MANDRAKE SHADEWEAVER",
-        save: 5, wounds: 8, apl: 2, move: "7\"",
+        save: 5, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6050,7 +6051,7 @@ const FACTIONS = [
         id: "md-warrior",
         name: "Warrior",
         full_name: "MANDRAKE WARRIOR",
-        save: 5, wounds: 8, apl: 2, move: "7\"",
+        save: 5, wounds: 8, apl: 2, move: "7\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6093,7 +6094,7 @@ const FACTIONS = [
         id: "pf-shasui",
         name: "Shas'ui",
         full_name: "SHAS'UI PATHFINDER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6105,7 +6106,7 @@ const FACTIONS = [
         id: "pf-shasla",
         name: "Shas'la",
         full_name: "SHAS'LA PATHFINDER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6117,7 +6118,7 @@ const FACTIONS = [
         id: "pf-blooded",
         name: "Blooded",
         full_name: "BLOODED PATHFINDER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6129,7 +6130,7 @@ const FACTIONS = [
         id: "pf-drone-controller",
         name: "Drone Controller",
         full_name: "DRONE CONTROLLER PATHFINDER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6141,7 +6142,7 @@ const FACTIONS = [
         id: "pf-transpectral-interference",
         name: "Transpectral Interference",
         full_name: "TRANSPECTRAL INTERFERENCE PATHFINDER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6153,7 +6154,7 @@ const FACTIONS = [
         id: "pf-assault-grenadier",
         name: "Assault Grenadier",
         full_name: "ASSAULT GRENADIER PATHFINDER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6166,7 +6167,7 @@ const FACTIONS = [
         id: "pf-comms-specialist",
         name: "Comms Specialist",
         full_name: "COMMS SPECIALIST PATHFINDER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6178,7 +6179,7 @@ const FACTIONS = [
         id: "pf-medical-technician",
         name: "Medical Technician",
         full_name: "MEDICAL TECHNICIAN PATHFINDER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6190,7 +6191,7 @@ const FACTIONS = [
         id: "pf-weapons-expert",
         name: "Weapons Expert",
         full_name: "WEAPONS EXPERT PATHFINDER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6204,7 +6205,7 @@ const FACTIONS = [
         id: "pf-marksman",
         name: "Marksman",
         full_name: "MARKSMAN PATHFINDER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6217,7 +6218,7 @@ const FACTIONS = [
         id: "pf-mb3-recon-drone",
         name: "MB3 Recon Drone",
         full_name: "MB3 RECON DRONE",
-        save: 4, wounds: 12, apl: 2, move: "6\"",
+        save: 4, wounds: 12, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6230,7 +6231,7 @@ const FACTIONS = [
         id: "pf-mv1-gun-drone",
         name: "MV1 Gun Drone",
         full_name: "MV1 GUN DRONE",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6242,7 +6243,7 @@ const FACTIONS = [
         id: "pf-mv4-shield-drone",
         name: "MV4 Shield Drone",
         full_name: "MV4 SHIELD DRONE",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: ["disruption_field", "hardy"],
         attacker_effects: [],
         weapons: [
@@ -6253,7 +6254,7 @@ const FACTIONS = [
         id: "pf-mv7-marker-drone",
         name: "MV7 Marker Drone",
         full_name: "MV7 MARKER DRONE",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6264,7 +6265,7 @@ const FACTIONS = [
         id: "pf-mv31-pulse-accelerator",
         name: "MV31 Pulse Accelerator Drone",
         full_name: "MV31 PULSE ACCELERATOR DRONE",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6275,7 +6276,7 @@ const FACTIONS = [
         id: "pf-mv33-grav-inhibitor",
         name: "MV33 Grav-Inhibitor Drone",
         full_name: "MV33 GRAV-INHIBITOR DRONE",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6319,7 +6320,7 @@ const FACTIONS = [
         id: "rv-prime",
         name: "Prime",
         full_name: "RAVENER PRIME",
-        save: 5, wounds: 21, apl: 3, move: "7\"",
+        save: 5, wounds: 21, apl: 3, move: "7\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6331,7 +6332,7 @@ const FACTIONS = [
         id: "rv-felltalon",
         name: "Felltalon",
         full_name: "RAVENER FELLTALON",
-        save: 5, wounds: 20, apl: 3, move: "7\"",
+        save: 5, wounds: 20, apl: 3, move: "7\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6344,7 +6345,7 @@ const FACTIONS = [
         id: "rv-tremorscythe",
         name: "Tremorscythe",
         full_name: "RAVENER TREMORSCYTHE",
-        save: 5, wounds: 20, apl: 3, move: "7\"",
+        save: 5, wounds: 20, apl: 3, move: "7\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6356,7 +6357,7 @@ const FACTIONS = [
         id: "rv-venomspitter",
         name: "Venomspitter",
         full_name: "RAVENER VENOMSPITTER",
-        save: 5, wounds: 20, apl: 3, move: "7\"",
+        save: 5, wounds: 20, apl: 3, move: "7\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6370,7 +6371,7 @@ const FACTIONS = [
         id: "rv-warrior",
         name: "Warrior",
         full_name: "RAVENER WARRIOR",
-        save: 5, wounds: 20, apl: 3, move: "7\"",
+        save: 5, wounds: 20, apl: 3, move: "7\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6382,7 +6383,7 @@ const FACTIONS = [
         id: "rv-wrecker",
         name: "Wrecker",
         full_name: "RAVENER WRECKER",
-        save: 4, wounds: 20, apl: 3, move: "7\"",
+        save: 4, wounds: 20, apl: 3, move: "7\"", base: { d: 40 },
         defender_abilities: ["sermon_dmg_reduction"],
         attacker_effects: [],
         weapons: [
@@ -6427,7 +6428,7 @@ const FACTIONS = [
         id: "vp-strain-leader",
         name: "Strain Leader",
         full_name: "VESPID STRAIN LEADER",
-        save: 5, wounds: 10, apl: 2, move: "6\"",
+        save: 5, wounds: 10, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6439,7 +6440,7 @@ const FACTIONS = [
         id: "vp-oversight-drone",
         name: "Oversight Drone",
         full_name: "OVERSIGHT DRONE",
-        save: 2, wounds: 5, apl: 2, move: "8\"",
+        save: 2, wounds: 5, apl: 2, move: "8\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6450,7 +6451,7 @@ const FACTIONS = [
         id: "vp-longsting",
         name: "Longsting",
         full_name: "VESPID LONGSTING",
-        save: 5, wounds: 9, apl: 2, move: "6\"",
+        save: 5, wounds: 9, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6463,7 +6464,7 @@ const FACTIONS = [
         id: "vp-shadestrain",
         name: "Shadestrain",
         full_name: "VESPID SHADESTRAIN",
-        save: 3, wounds: 9, apl: 2, move: "6\"",
+        save: 3, wounds: 9, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: ["disruption_field"],
         attacker_effects: [],
         weapons: [
@@ -6476,7 +6477,7 @@ const FACTIONS = [
         id: "vp-skyblast",
         name: "Skyblast",
         full_name: "VESPID SKYBLAST",
-        save: 5, wounds: 9, apl: 2, move: "6\"",
+        save: 5, wounds: 9, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6488,7 +6489,7 @@ const FACTIONS = [
         id: "vp-swarmguard",
         name: "Swarmguard",
         full_name: "VESPID SWARMGUARD",
-        save: 5, wounds: 9, apl: 2, move: "6\"",
+        save: 5, wounds: 9, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6501,7 +6502,7 @@ const FACTIONS = [
         id: "vp-warrior",
         name: "Warrior",
         full_name: "VESPID WARRIOR",
-        save: 5, wounds: 9, apl: 2, move: "6\"",
+        save: 5, wounds: 9, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6545,7 +6546,7 @@ const FACTIONS = [
         id: "vd-lead-player",
         name: "Lead Player",
         full_name: "LEAD PLAYER",
-        save: 4, wounds: 9, apl: 3, move: "7\"",
+        save: 4, wounds: 9, apl: 3, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6563,7 +6564,7 @@ const FACTIONS = [
         id: "vd-death-jester",
         name: "Death Jester",
         full_name: "DEATH JESTER",
-        save: 4, wounds: 9, apl: 3, move: "7\"",
+        save: 4, wounds: 9, apl: 3, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6576,7 +6577,7 @@ const FACTIONS = [
         id: "vd-player",
         name: "Player",
         full_name: "PLAYER",
-        save: 4, wounds: 8, apl: 3, move: "7\"",
+        save: 4, wounds: 8, apl: 3, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6593,7 +6594,7 @@ const FACTIONS = [
         id: "vd-shadowseer",
         name: "Shadowseer",
         full_name: "SHADOWSEER",
-        save: 4, wounds: 9, apl: 3, move: "7\"",
+        save: 4, wounds: 9, apl: 3, move: "7\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6639,7 +6640,7 @@ const FACTIONS = [
         id: "wk-boss-nob",
         name: "Boss Nob",
         full_name: "WRECKA BOSS NOB",
-        save: 4, wounds: 14, apl: 2, move: "6\"",
+        save: 4, wounds: 14, apl: 2, move: "6\"", base: { d: 40 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6654,7 +6655,7 @@ const FACTIONS = [
         id: "wk-bomb-squig",
         name: "Bomb Squig",
         full_name: "WRECKA BOMB SQUIG",
-        save: 5, wounds: 5, apl: 2, move: "6\"",
+        save: 5, wounds: 5, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6666,7 +6667,7 @@ const FACTIONS = [
         id: "wk-breaka-demolisha",
         name: "Breaka Demolisha",
         full_name: "BREAKA BOY DEMOLISHA",
-        save: 4, wounds: 12, apl: 2, move: "6\"",
+        save: 4, wounds: 12, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: ["sermon_dmg_reduction"],
         attacker_effects: [],
         weapons: [
@@ -6678,7 +6679,7 @@ const FACTIONS = [
         id: "wk-breaka-fighter",
         name: "Breaka Fighter",
         full_name: "BREAKA BOY FIGHTER",
-        save: 4, wounds: 12, apl: 2, move: "6\"",
+        save: 4, wounds: 12, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6689,7 +6690,7 @@ const FACTIONS = [
         id: "wk-breaka-krusha",
         name: "Breaka Krusha",
         full_name: "BREAKA BOY KRUSHA",
-        save: 4, wounds: 12, apl: 2, move: "6\"",
+        save: 4, wounds: 12, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: ["armoured_up"],
         attacker_effects: [],
         weapons: [
@@ -6700,7 +6701,7 @@ const FACTIONS = [
         id: "wk-tankbusta-gunner",
         name: "Tankbusta Gunner",
         full_name: "TANKBUSTA GUNNER",
-        save: 4, wounds: 12, apl: 2, move: "6\"",
+        save: 4, wounds: 12, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6713,7 +6714,7 @@ const FACTIONS = [
         id: "wk-tankbusta-rokkiteer",
         name: "Tankbusta Rokkiteer",
         full_name: "TANKBUSTA ROKKITEER",
-        save: 4, wounds: 12, apl: 2, move: "6\"",
+        save: 4, wounds: 12, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6759,7 +6760,7 @@ const FACTIONS = [
         id: "wb-neophyte-leader",
         name: "Neophyte Leader",
         full_name: "NEOPHYTE LEADER",
-        save: 5, wounds: 8, apl: 2, move: "6\"",
+        save: 5, wounds: 8, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6778,7 +6779,7 @@ const FACTIONS = [
         id: "wb-kelermorph",
         name: "Kelermorph",
         full_name: "KELERMORPH",
-        save: 4, wounds: 9, apl: 3, move: "6\"",
+        save: 4, wounds: 9, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6792,7 +6793,7 @@ const FACTIONS = [
         id: "wb-locus",
         name: "Locus",
         full_name: "LOCUS",
-        save: 4, wounds: 9, apl: 3, move: "6\"",
+        save: 4, wounds: 9, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6804,7 +6805,7 @@ const FACTIONS = [
         id: "wb-neophyte-gunner",
         name: "Neophyte Gunner",
         full_name: "NEOPHYTE GUNNER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6819,7 +6820,7 @@ const FACTIONS = [
         id: "wb-neophyte-heavy-gunner",
         name: "Neophyte Heavy Gunner",
         full_name: "NEOPHYTE HEAVY GUNNER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6835,7 +6836,7 @@ const FACTIONS = [
         id: "wb-neophyte-icon-bearer",
         name: "Neophyte Icon Bearer",
         full_name: "NEOPHYTE ICON BEARER",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6848,7 +6849,7 @@ const FACTIONS = [
         id: "wb-sanctus-sniper",
         name: "Sanctus Sniper",
         full_name: "SANCTUS SNIPER",
-        save: 4, wounds: 9, apl: 3, move: "6\"",
+        save: 4, wounds: 9, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6861,7 +6862,7 @@ const FACTIONS = [
         id: "wb-sanctus-talon",
         name: "Sanctus Talon",
         full_name: "SANCTUS TALON",
-        save: 4, wounds: 9, apl: 3, move: "6\"",
+        save: 4, wounds: 9, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6872,7 +6873,7 @@ const FACTIONS = [
         id: "wb-neophyte-warrior",
         name: "Neophyte Warrior",
         full_name: "NEOPHYTE WARRIOR",
-        save: 5, wounds: 7, apl: 2, move: "6\"",
+        save: 5, wounds: 7, apl: 2, move: "6\"", base: { d: 25 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6917,7 +6918,7 @@ const FACTIONS = [
         id: "xv-shasvre",
         name: "Shas'Vre",
         full_name: "XV26 SHAS'VRE",
-        save: 3, wounds: 13, apl: 3, move: "6\"",
+        save: 3, wounds: 13, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6934,7 +6935,7 @@ const FACTIONS = [
         id: "xv-designator",
         name: "Designator",
         full_name: "XV26 DESIGNATOR",
-        save: 3, wounds: 12, apl: 3, move: "6\"",
+        save: 3, wounds: 12, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6949,7 +6950,7 @@ const FACTIONS = [
         id: "xv-infiltrator",
         name: "Infiltrator",
         full_name: "XV26 INFILTRATOR",
-        save: 3, wounds: 12, apl: 3, move: "6\"",
+        save: 3, wounds: 12, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6964,7 +6965,7 @@ const FACTIONS = [
         id: "xv-liberator",
         name: "Liberator",
         full_name: "XV26 LIBERATOR",
-        save: 3, wounds: 12, apl: 3, move: "6\"",
+        save: 3, wounds: 12, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6980,7 +6981,7 @@ const FACTIONS = [
         id: "xv-lodestar",
         name: "Lodestar",
         full_name: "XV26 LODESTAR",
-        save: 3, wounds: 12, apl: 3, move: "6\"",
+        save: 3, wounds: 12, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -6995,7 +6996,7 @@ const FACTIONS = [
         id: "xv-neutraliser",
         name: "Neutraliser",
         full_name: "XV26 NEUTRALISER",
-        save: 3, wounds: 12, apl: 3, move: "6\"",
+        save: 3, wounds: 12, apl: 3, move: "6\"", base: { d: 32 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -7010,7 +7011,7 @@ const FACTIONS = [
         id: "xv-mv15-gun-drone",
         name: "MV15 Gun Drone",
         full_name: "MV15 GUN DRONE",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [
@@ -7022,7 +7023,7 @@ const FACTIONS = [
         id: "xv-mv75-marker-drone",
         name: "MV75 Marker Drone",
         full_name: "MV75 MARKER DRONE",
-        save: 4, wounds: 7, apl: 2, move: "6\"",
+        save: 4, wounds: 7, apl: 2, move: "6\"", base: { d: 28 },
         defender_abilities: [],
         attacker_effects: [],
         weapons: [

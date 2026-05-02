@@ -6,27 +6,44 @@
   const MAX_AP = 2;
   const MOVE_INCHES = 6;
   const SHOOT_RANGE_INCHES = 14;
-  const UNIT_RADIUS = 0.6;
+  const DEFAULT_UNIT_RADIUS = 0.6;
+  const MM_PER_INCH = 25.4;
   const COVER_RADIUS = 1.2;
   const BASE_HIT = 0.65;
   const COVER_PENALTY = 0.20;
 
+  // `base` mirrors the field on operatives in factions.js — { d } circle or { w, h } oval, in mm.
   const TEAM_A = {
     id: 'A', name: 'Imperium', color: '#c9a74d', accent: '#fff8e0',
     units: [
-      { name: 'Sergeant', hp: 10, dmg: 4 },
-      { name: 'Gunner',   hp: 8,  dmg: 5 },
-      { name: 'Trooper',  hp: 8,  dmg: 3 },
+      { name: 'Sergeant', hp: 10, dmg: 4, base: { d: 32 } },
+      { name: 'Gunner',   hp: 8,  dmg: 5, base: { d: 40 } },
+      { name: 'Trooper',  hp: 8,  dmg: 3, base: { d: 28 } },
     ],
   };
   const TEAM_B = {
     id: 'B', name: 'Chaos', color: '#b8203a', accent: '#ffd9d9',
     units: [
-      { name: 'Champion', hp: 10, dmg: 4 },
-      { name: 'Heretic',  hp: 8,  dmg: 5 },
-      { name: 'Cultist',  hp: 8,  dmg: 3 },
+      { name: 'Champion', hp: 10, dmg: 4, base: { d: 32 } },
+      { name: 'Heretic',  hp: 8,  dmg: 5, base: { d: 32 } },
+      { name: 'Cultist',  hp: 8,  dmg: 3, base: { d: 25 } },
     ],
   };
+
+  // Radii in inches. Ovals render with their long axis horizontal.
+  function unitRadii(u) {
+    const b = u && u.base;
+    if (!b) return { rx: DEFAULT_UNIT_RADIUS, ry: DEFAULT_UNIT_RADIUS };
+    if (b.d != null) {
+      const r = (b.d / 2) / MM_PER_INCH;
+      return { rx: r, ry: r };
+    }
+    return { rx: (b.w / 2) / MM_PER_INCH, ry: (b.h / 2) / MM_PER_INCH };
+  }
+  function unitRadius(u) {
+    const { rx, ry } = unitRadii(u);
+    return Math.max(rx, ry);
+  }
 
   const mapId = sessionStorage.getItem('kt.mapId') || 'tomb-1';
   const mapDefRaw = KT.getMap(mapId) || KT.TOMB_MAPS['tomb-1'];
@@ -94,12 +111,12 @@
   function selected() { return state.units.find(u => u === state.selectedId); }
 
   function unitAtPoint(x, y) {
-    return state.units.find(u => u.alive && Math.hypot(u.x - x, u.y - y) <= UNIT_RADIUS + 0.4);
+    return state.units.find(u => u.alive && Math.hypot(u.x - x, u.y - y) <= unitRadius(u) + 0.4);
   }
 
   function unitOccupiesCircle(x, y, r, ignore) {
     return state.units.find(u => u.alive && u !== ignore &&
-      Math.hypot(u.x - x, u.y - y) < r + UNIT_RADIUS);
+      Math.hypot(u.x - x, u.y - y) < r + unitRadius(u));
   }
 
   // --- Movement & LOS ---------------------------------------------------
@@ -107,11 +124,12 @@
   function moveCost(u, x, y) { return Math.hypot(x - u.x, y - u.y); }
 
   function canMoveTo(u, x, y) {
-    if (x < UNIT_RADIUS || y < UNIT_RADIUS) return false;
-    if (x > BOARD.width - UNIT_RADIUS || y > BOARD.height - UNIT_RADIUS) return false;
+    const r = unitRadius(u);
+    if (x < r || y < r) return false;
+    if (x > BOARD.width - r || y > BOARD.height - r) return false;
     if (moveCost(u, x, y) > MOVE_INCHES) return false;
     if (KT.geom.losBlocked(mapDef, u.x, u.y, x, y)) return false;
-    if (unitOccupiesCircle(x, y, UNIT_RADIUS, u)) return false;
+    if (unitOccupiesCircle(x, y, r, u)) return false;
     return true;
   }
 
@@ -302,8 +320,9 @@
         ctx.moveTo(u.x * s, u.y * s);
         ctx.lineTo(state.hoverPt.x * s, state.hoverPt.y * s);
         ctx.stroke();
+        const { rx, ry } = unitRadii(u);
         ctx.beginPath();
-        ctx.arc(state.hoverPt.x * s, state.hoverPt.y * s, UNIT_RADIUS * s, 0, Math.PI * 2);
+        ctx.ellipse(state.hoverPt.x * s, state.hoverPt.y * s, rx * s, ry * s, 0, 0, Math.PI * 2);
         ctx.stroke();
       }
     }
@@ -313,20 +332,23 @@
       if (!u.alive) continue;
       const team = teamOf(u.team);
       const cx = u.x * s, cy = u.y * s;
-      const r = UNIT_RADIUS * s;
+      const { rx, ry } = unitRadii(u);
+      const sx = rx * s, sy = ry * s;
       ctx.fillStyle = '#000';
-      ctx.beginPath(); ctx.arc(cx + 1, cy + 2, r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx + 1, cy + 2, sx, sy, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = team.color;
-      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(cx, cy, sx, sy, 0, 0, Math.PI * 2); ctx.fill();
       ctx.strokeStyle = team.accent;
       ctx.lineWidth = 1.5; ctx.stroke();
       if (u === state.selectedId) {
         ctx.strokeStyle = '#fff8e0';
         ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(cx, cy, r + 4, 0, Math.PI * 2); ctx.stroke();
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, sx + 4, sy + 4, 0, 0, Math.PI * 2);
+        ctx.stroke();
       }
       const hpPct = u.hp / u.maxHp;
-      const barW = r * 2.4, bx = cx - barW / 2, by = cy + r + 4;
+      const barW = sx * 2.4, bx = cx - barW / 2, by = cy + sy + 4;
       ctx.fillStyle = '#000'; ctx.fillRect(bx - 1, by - 1, barW + 2, 5);
       ctx.fillStyle = '#3a302a'; ctx.fillRect(bx, by, barW, 3);
       ctx.fillStyle = hpPct > 0.5 ? '#c9a74d' : (hpPct > 0.25 ? '#e68a6a' : '#b8203a');
