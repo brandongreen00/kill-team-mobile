@@ -1142,17 +1142,34 @@
   }
 
   // ── Hatchway / breach actions ──────────────────────────────────────
-  // Each openable piece has a wall segment endpoint at its midpoint. The
-  // operative must be within 1" of that midpoint to interact (control range).
+  // Distance is measured from the operative to the closest point on the
+  // wall *segment*, not to its midpoint. Hatchways can be up to 8" long,
+  // so a midpoint check would put a unit standing right next to the wall
+  // outside the 1" interaction range as soon as the wall is more than 2"
+  // long. Falls back to the stored midpoint if we can't find the segment.
+  function pointSegDist(px, py, x1, y1, x2, y2) {
+    const dx = x2 - x1, dy = y2 - y1;
+    const len2 = dx * dx + dy * dy;
+    if (len2 === 0) return Math.hypot(px - x1, py - y1);
+    let t = ((px - x1) * dx + (py - y1) * dy) / len2;
+    if (t < 0) t = 0; else if (t > 1) t = 1;
+    return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+  }
+  function openableDistance(o, u) {
+    const w = (mapDef.walls || []).find(w => w.pieceIndex === o.pieceIndex);
+    return w
+      ? pointSegDist(u.x, u.y, w.x1, w.y1, w.x2, w.y2)
+      : Math.hypot(o.x - u.x, o.y - u.y);
+  }
   function nearestOpenable(u, kindFilter) {
     const list = mapDef.openable || [];
     let best = null, bestD = Infinity;
     for (const o of list) {
       if (kindFilter && o.kind !== kindFilter) continue;
-      const d = Math.hypot(o.x - u.x, o.y - u.y);
+      const d = openableDistance(o, u);
       if (d < bestD) { bestD = d; best = o; }
     }
-    if (!best || bestD > 1) return null;
+    if (!best || bestD > RC.ENGAGEMENT_RANGE) return null;
     return best;
   }
 
@@ -2805,19 +2822,32 @@
       }
 
       // Highlight openable hatchways/breaches relative to the active unit.
+      // Distance is measured to the closest point on the wall segment so
+      // long hatchways light up correctly when the operative is touching
+      // any part of them. The highlight is drawn as a stroke along the
+      // segment itself instead of a tiny circle at the midpoint.
       if (a) {
         const u = a.unit;
         for (const o of (mapDef.openable || [])) {
-          const d = Math.hypot(o.x - u.x, o.y - u.y);
+          const w = (mapDef.walls || []).find(w => w.pieceIndex === o.pieceIndex);
+          const d = openableDistance(o, u);
           if (d > 4) continue;
           const isOpen = state.combat.pieceState.open.has(o.pieceIndex);
-          ctx.strokeStyle = d <= 1
+          const inReach = d <= RC.ENGAGEMENT_RANGE + 1e-3;
+          ctx.strokeStyle = inReach
             ? (o.kind === 'hatchway' ? 'rgba(122,156,62,0.85)' : 'rgba(201,122,58,0.85)')
             : 'rgba(255,255,255,0.18)';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.arc(o.x * s, o.y * s, 0.7 * s, 0, Math.PI * 2);
-          ctx.stroke();
+          ctx.lineWidth = inReach ? 4 : 2;
+          if (w) {
+            ctx.beginPath();
+            ctx.moveTo(w.x1 * s, w.y1 * s);
+            ctx.lineTo(w.x2 * s, w.y2 * s);
+            ctx.stroke();
+          } else {
+            ctx.beginPath();
+            ctx.arc(o.x * s, o.y * s, 0.7 * s, 0, Math.PI * 2);
+            ctx.stroke();
+          }
           if (isOpen) {
             ctx.fillStyle = 'rgba(0,0,0,0.6)';
             ctx.fillRect(o.x * s - 0.5 * s, o.y * s - 0.1 * s, 1 * s, 0.2 * s);
