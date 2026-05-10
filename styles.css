@@ -318,9 +318,11 @@ a:hover { color: var(--text-bright); }
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Allow long team names to wrap to a second line rather than truncating
+     ("STRIKE SQUAD VORTIG…"). The scoreboard cell already has room for it
+     and word-level wrapping keeps the name readable. */
+  overflow-wrap: anywhere;
+  line-height: 1.2;
 }
 .vp-total {
   font-family: var(--section-font);
