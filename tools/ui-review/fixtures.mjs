@@ -37,4 +37,8 @@ export const sampleRosters = [
   },
 ];
 
-export const defaultMapId = 'tomb-1';
+// Use Approved Ops 2 for combat-state captures: it's the densest map in the
+// catalog (23 pieces — long/short walls, terrain, two teleport pads, three
+// objectives across the player A / neutral / player B spawn lines), so it
+// surfaces real layout density rather than the near-empty tomb-1 reference.
+export const defaultMapId = 'tomb-approved-2';

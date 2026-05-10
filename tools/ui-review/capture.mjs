@@ -81,6 +81,26 @@ const SCENARIOS = [
   { name: 'map-creator',       path: '/map-creator.html',  seed: '' },
   { name: 'roster-empty',      path: '/roster.html',       seed: '' },
   { name: 'roster-populated',  path: '/roster.html',       seed: 'rosters' },
+  {
+    name: 'roster-faction-picker',
+    path: '/roster.html',
+    seed: '',
+    setup: async (page) => {
+      await page.locator('#new-roster-btn').click();
+      await page.waitForTimeout(150);
+    },
+  },
+  {
+    name: 'roster-editor',
+    path: '/roster.html',
+    seed: 'rosters',
+    setup: async (page) => {
+      // Click Edit on the first saved roster card to open the operative
+      // editor for that roster (loadout list + Add/Remove controls).
+      await page.locator('.saved-roster [data-act="edit"]').first().click();
+      await page.waitForTimeout(150);
+    },
+  },
 
   // Game flow — each builds on the previous via scripted clicks.
   {
@@ -152,14 +172,9 @@ const SCENARIOS = [
     setup: async (page) => {
       await page.evaluate(() => {
         window.__kt_test.jumpToCombat({ first: 'A' });
-        const teamA = window.__kt_test.state().units.filter(u => u.team === 'A');
-        // Pick whichever Team A operative actually has a clear shot on
-        // a Team B operative — exact letter assignment depends on the
-        // roster fixture.
-        for (const u of teamA) {
-          try { window.__kt_test.openShoot(u.letter); return; } catch {}
-        }
-        throw new Error('no Team A operative had a valid shoot target');
+        const pair = window.__kt_test.findClearShoot();
+        if (!pair) throw new Error('no valid shoot pair found on this map');
+        window.__kt_test.openShoot(pair.shooter, pair.target);
       });
       await page.waitForTimeout(200);
     },
@@ -171,10 +186,9 @@ const SCENARIOS = [
     setup: async (page) => {
       await page.evaluate(() => {
         window.__kt_test.jumpToCombat({ first: 'A' });
-        const teamA = window.__kt_test.state().units.filter(u => u.team === 'A');
-        for (const u of teamA) {
-          try { window.__kt_test.openShoot(u.letter); break; } catch {}
-        }
+        const pair = window.__kt_test.findClearShoot();
+        if (!pair) throw new Error('no valid shoot pair found on this map');
+        window.__kt_test.openShoot(pair.shooter, pair.target);
         window.__kt_test.advanceShoot('rolledAttack');
         // Modal body scrolls; pin to the bottom so the captured viewport
         // shows the new attack-roll UI rather than the now-static
@@ -191,10 +205,9 @@ const SCENARIOS = [
     setup: async (page) => {
       await page.evaluate(() => {
         window.__kt_test.jumpToCombat({ first: 'A' });
-        const teamA = window.__kt_test.state().units.filter(u => u.team === 'A');
-        for (const u of teamA) {
-          try { window.__kt_test.openShoot(u.letter); break; } catch {}
-        }
+        const pair = window.__kt_test.findClearShoot();
+        if (!pair) throw new Error('no valid shoot pair found on this map');
+        window.__kt_test.openShoot(pair.shooter, pair.target);
         window.__kt_test.advanceShoot('resolved');
         document.getElementById('shoot-body').scrollTop = 1e9;
       });

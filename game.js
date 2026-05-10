@@ -3445,5 +3445,47 @@
       if (!f) throw new Error('fight modal not open');
       if (f.step === 'pickWeapon') rollFight();
     },
+    // Find a pair of (Team A, Team B) positions with clear shoot LoS by
+    // sweeping a coarse grid across each half-board, repositioning the
+    // first alive operative on each team into the first valid pair found.
+    // Necessary on dense maps (e.g. tomb-approved-2) where the default
+    // grid layout from jumpToCombat puts every unit behind a wall —
+    // shootCandidates returns empty for every shooter and openShoot
+    // throws "no valid target".
+    findClearShoot() {
+      const a = state.units.find(u => u.team === 'A' && u.alive);
+      const b = state.units.find(u => u.team === 'B' && u.alive);
+      if (!a || !b) return null;
+      // Quick path: existing layout already has a clear pair.
+      const teamA = state.units.filter(u => u.team === 'A' && u.alive);
+      const teamB = state.units.filter(u => u.team === 'B' && u.alive);
+      for (const sa of teamA) for (const sb of teamB) {
+        const env = KTR.shootEnv(mapDef, state.combat.pieceState.open, sa, sb);
+        if (env.visible) return { shooter: sa.letter, target: sb.letter };
+      }
+      // Fallback: brute-force scan a 3-inch grid across each half-board
+      // for the first valid pair, repositioning a/b in place.
+      const W = KT.TOMB_BOARD.width, H = KT.TOMB_BOARD.height;
+      const splitV = (mapDef.split !== 'horizontal');
+      const aXs = splitV ? range(2, W / 2, 3) : range(2, W, 3);
+      const aYs = splitV ? range(2, H, 3) : range(H / 2, H, 3);
+      const bXs = splitV ? range(W / 2 + 1, W, 3) : range(2, W, 3);
+      const bYs = splitV ? range(2, H, 3) : range(2, H / 2, 3);
+      for (const ax of aXs) for (const ay of aYs) {
+        a.x = ax; a.y = ay;
+        for (const bx of bXs) for (const by of bYs) {
+          b.x = bx; b.y = by;
+          const env = KTR.shootEnv(mapDef, state.combat.pieceState.open, a, b);
+          if (env.visible) return { shooter: a.letter, target: b.letter };
+        }
+      }
+      return null;
+
+      function range(start, end, step) {
+        const out = [];
+        for (let v = start; v < end; v += step) out.push(v);
+        return out;
+      }
+    },
   };
 })();
