@@ -3418,5 +3418,32 @@
       state.score.critOp[winningTeam] = 3;
       checkVictory();
     },
+    // Advance the shoot modal one step. Requires the modal to already be
+    // open (via openShoot). `to` is the step name from the shoot state
+    // machine: 'rolledAttack' | 'rolledDefence' | 'resolved'.
+    advanceShoot(to) {
+      const s = state.combat.shoot;
+      if (!s) throw new Error('shoot modal not open');
+      if (to === 'rolledAttack' || to === 'rolledDefence' || to === 'resolved') {
+        if (s.step === 'pickWeapon') rollShootAttack();
+      }
+      if (to === 'rolledDefence' || to === 'resolved') {
+        if (s.step === 'rolledAttack') rollShootDefence();
+      }
+      if (to === 'resolved') {
+        if (s.step === 'rolledDefence') {
+          allocateShootSavesOptimally();
+          s.step = 'resolved';
+          renderShootModal();
+        }
+      }
+    },
+    // Roll the dice in the open fight modal — leaves the user at the
+    // dice-allocation step (alternating strike / parry).
+    rollFightDice() {
+      const f = state.combat.fight;
+      if (!f) throw new Error('fight modal not open');
+      if (f.step === 'pickWeapon') rollFight();
+    },
   };
 })();

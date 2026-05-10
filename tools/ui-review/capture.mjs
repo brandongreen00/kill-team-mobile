@@ -165,6 +165,43 @@ const SCENARIOS = [
     },
   },
   {
+    name: 'game-combat-shoot-attack-rolled',
+    path: '/game.html',
+    seed: 'rosters,mapId',
+    setup: async (page) => {
+      await page.evaluate(() => {
+        window.__kt_test.jumpToCombat({ first: 'A' });
+        const teamA = window.__kt_test.state().units.filter(u => u.team === 'A');
+        for (const u of teamA) {
+          try { window.__kt_test.openShoot(u.letter); break; } catch {}
+        }
+        window.__kt_test.advanceShoot('rolledAttack');
+        // Modal body scrolls; pin to the bottom so the captured viewport
+        // shows the new attack-roll UI rather than the now-static
+        // weapon picker at the top.
+        document.getElementById('shoot-body').scrollTop = 1e9;
+      });
+      await page.waitForTimeout(200);
+    },
+  },
+  {
+    name: 'game-combat-shoot-resolved',
+    path: '/game.html',
+    seed: 'rosters,mapId',
+    setup: async (page) => {
+      await page.evaluate(() => {
+        window.__kt_test.jumpToCombat({ first: 'A' });
+        const teamA = window.__kt_test.state().units.filter(u => u.team === 'A');
+        for (const u of teamA) {
+          try { window.__kt_test.openShoot(u.letter); break; } catch {}
+        }
+        window.__kt_test.advanceShoot('resolved');
+        document.getElementById('shoot-body').scrollTop = 1e9;
+      });
+      await page.waitForTimeout(200);
+    },
+  },
+  {
     name: 'game-combat-fight-modal',
     path: '/game.html',
     seed: 'rosters,mapId',
@@ -175,6 +212,23 @@ const SCENARIOS = [
         const a = units.find(u => u.team === 'A');
         const t = units.find(u => u.team === 'B');
         window.__kt_test.openFight(a.letter, t.letter);
+      });
+      await page.waitForTimeout(200);
+    },
+  },
+  {
+    name: 'game-combat-fight-rolled',
+    path: '/game.html',
+    seed: 'rosters,mapId',
+    setup: async (page) => {
+      await page.evaluate(() => {
+        window.__kt_test.jumpToCombat({ first: 'A' });
+        const units = window.__kt_test.state().units;
+        const a = units.find(u => u.team === 'A');
+        const t = units.find(u => u.team === 'B');
+        window.__kt_test.openFight(a.letter, t.letter);
+        window.__kt_test.rollFightDice();
+        document.getElementById('fight-body').scrollTop = 1e9;
       });
       await page.waitForTimeout(200);
     },
@@ -191,6 +245,20 @@ const SCENARIOS = [
         window.__kt_test.triggerGameOver('B');
       });
       await page.waitForTimeout(200);
+    },
+  },
+  {
+    // Map-creator with a real saved map loaded — exercises the layer
+    // summary, the canvas with actual pieces, and the loaded-map
+    // controls (Save / Export / Delete). Uses tomb-approved-2 from the
+    // built-in catalog because it's the densest map and shows the
+    // most piece-placement detail.
+    name: 'map-creator-loaded',
+    path: '/map-creator.html',
+    seed: '',
+    setup: async (page) => {
+      await page.selectOption('#load-map', 'tomb-approved-2');
+      await page.waitForTimeout(300);
     },
   },
 ];
