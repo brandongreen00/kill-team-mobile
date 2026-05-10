@@ -236,7 +236,10 @@ a:hover { color: var(--text-bright); }
   user-select: none;
 }
 .map-card .preview {
-  aspect-ratio: 4 / 3;
+  /* Match the 28"×24" board ratio so the preview SVG fills the box
+     (preserveAspectRatio="xMidYMid meet" was letterboxing the board
+     inside a 4:3 frame, shrinking it on narrow viewports). */
+  aspect-ratio: 7 / 6;
   background: var(--input-bg);
   border: 1px solid var(--border);
   position: relative;
@@ -873,6 +876,7 @@ a:hover { color: var(--text-bright); }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 14px 16px;
   background: var(--input-bg);
@@ -886,6 +890,7 @@ a:hover { color: var(--text-bright); }
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  flex: 1 1 60%;
 }
 .saved-roster .saved-name {
   font-family: var(--subtitle-font);
@@ -894,9 +899,7 @@ a:hover { color: var(--text-bright); }
   text-transform: uppercase;
   color: var(--text-bright);
   font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 .saved-roster .saved-sub {
   font-family: var(--section-font);
@@ -905,7 +908,7 @@ a:hover { color: var(--text-bright); }
   text-transform: uppercase;
   color: var(--text-muted);
 }
-.saved-roster .saved-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.saved-roster .saved-actions { display: flex; gap: 6px; flex-shrink: 0; margin-left: auto; }
 
 .roster-empty-state {
   padding: 40px 20px;
