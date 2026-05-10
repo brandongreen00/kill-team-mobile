@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="bg-grain scanline">
-  <div class="shell creator-shell">
+  <main class="shell creator-shell">
     <header class="masthead" style="padding: 16px 0 6px;">
       <div class="eyebrow">Cartographer</div>
       <h1 class="hard-shadow" style="font-size: clamp(32px, 5vw, 56px);">Map Creator</h1>
@@ -134,7 +134,7 @@
           <div id="creator-help" class="creator-help"></div>
         </div>
 
-        <aside class="sidebar creator-sidebar">
+        <div class="sidebar creator-sidebar">
           <div>
             <div class="label-cap" style="margin-bottom:6px;">Load</div>
             <select id="load-map" class="text-input" style="width:100%;" aria-label="Load saved map">
@@ -167,7 +167,7 @@
               squares where each team's operatives must be deployed.
             </p>
           </div>
-        </aside>
+        </div>
       </div>
     </section>
 
@@ -177,7 +177,7 @@
     </div>
 
     <p class="footer-note">Cogito, ergo aedifico</p>
-  </div>
+  </main>
 
   <script src="./maps-data.js"></script>
   <script src="./map-creator.js"></script>

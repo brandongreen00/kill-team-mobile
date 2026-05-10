@@ -3401,5 +3401,22 @@
     },
     // Escape hatch for the harness if it needs to inspect runtime state.
     state() { return state; },
+    // Wipe `losingTeam` so checkVictory() fires and the game-over overlay
+    // appears. Optional `kills` boosts the winning team's Kill Op count for
+    // a more realistic score on the final card; defaults to wiping the
+    // losing team's full starting size.
+    triggerGameOver(losingTeam = 'B', { kills } = {}) {
+      const winningTeam = losingTeam === 'A' ? 'B' : 'A';
+      state.units.filter(u => u.team === losingTeam).forEach(u => {
+        u.alive = false;
+        u.hp = 0;
+        u.unitState = 'incapacitated';
+      });
+      state.score.kills[winningTeam] = kills ?? state.score.startSize[winningTeam];
+      // Also bump the winner's Crit Op count so the overlay shows non-zero
+      // VP on both ops — purely cosmetic for screenshots.
+      state.score.critOp[winningTeam] = 3;
+      checkVictory();
+    },
   };
 })();

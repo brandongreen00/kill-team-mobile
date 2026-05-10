@@ -179,6 +179,20 @@ const SCENARIOS = [
       await page.waitForTimeout(200);
     },
   },
+  {
+    name: 'game-over',
+    path: '/game.html',
+    seed: 'rosters,mapId',
+    setup: async (page) => {
+      await page.evaluate(() => {
+        window.__kt_test.jumpToCombat({ first: 'A' });
+        // Blue (A) wipes Red (B) — fires checkVictory(), shows the
+        // victory overlay with final VP.
+        window.__kt_test.triggerGameOver('B');
+      });
+      await page.waitForTimeout(200);
+    },
+  },
 ];
 
 function probePort(port, host = '127.0.0.1') {
