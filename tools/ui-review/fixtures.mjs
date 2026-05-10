@@ -37,8 +37,7 @@ export const sampleRosters = [
   },
 ];
 
-// Use Approved Ops 2 for combat-state captures: it's the densest map in the
-// catalog (23 pieces — long/short walls, terrain, two teleport pads, three
-// objectives across the player A / neutral / player B spawn lines), so it
-// surfaces real layout density rather than the near-empty tomb-1 reference.
+// The only built-in map after the catalog was trimmed down to Approved Ops.
+// Custom user-authored maps land in localStorage['kt.customMaps'] and merge
+// in via KT.getMap(); seed those if you want to capture a custom layout.
 export const defaultMapId = 'tomb-approved-2';

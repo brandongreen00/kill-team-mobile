@@ -53,6 +53,16 @@ const DEVICE_PROFILES = [
   { name: 'pixel-7',   device: devices['Pixel 7'] },
 ];
 
+// We capture under both prefers-color-scheme: dark (the design intent — the
+// app's grimdark aesthetic is dark-only) and light. The light pass is a
+// regression check: if anything renders differently it means a color is
+// leaking through unscoped, an OS form-control default is showing through,
+// or the app isn't honouring its own design tokens.
+const COLOR_SCHEMES = [
+  { name: 'dark',  scheme: 'dark'  },
+  { name: 'light', scheme: 'light' },
+];
+
 // Helpers reused by setup steps.
 const clickConfirmedTeams = async (page) => {
   // Pick the first roster for team A, the second for team B, then confirm.
@@ -247,6 +257,27 @@ const SCENARIOS = [
     },
   },
   {
+    // Mid-game scoreboard: TP3 with both teams on the board, non-zero
+    // kill/crit op scores so the VP card, KIA badges, and phase chip all
+    // render with realistic content rather than the all-zeros opening
+    // state captured by game-combat-entry.
+    name: 'game-combat-mid-game',
+    path: '/game.html',
+    seed: 'rosters,mapId',
+    setup: async (page) => {
+      await page.evaluate(() => {
+        window.__kt_test.jumpToCombat({ first: 'A' });
+        window.__kt_test.setVP({
+          tp: 3,
+          killA: 2, critA: 2,
+          killB: 1, critB: 1,
+          kills: { A: 2, B: 1 },
+        });
+      });
+      await page.waitForTimeout(200);
+    },
+  },
+  {
     name: 'game-over',
     path: '/game.html',
     seed: 'rosters,mapId',
@@ -330,8 +361,9 @@ const RANDOM_STUB = `
   })();
 `;
 
-async function captureScenario(ctx, profile, scenario) {
+async function captureScenario(ctx, profile, scheme, scenario) {
   const page = await ctx.newPage();
+  await page.emulateMedia({ colorScheme: scheme.scheme });
   // Chromium background telemetry / safebrowsing fetches surface as
   // ERR_CERT_AUTHORITY_INVALID inside sandboxes that proxy TLS — they have
   // nothing to do with the app under test, so drop them.
@@ -382,7 +414,7 @@ async function captureScenario(ctx, profile, scenario) {
     await page.waitForTimeout(250);
   }
 
-  const base = join(OUT_DIR, `${scenario.name}__${profile.name}`);
+  const base = join(OUT_DIR, `${scenario.name}__${profile.name}__${scheme.name}`);
   await page.screenshot({ path: `${base}__viewport.png`, fullPage: false });
   await page.screenshot({ path: `${base}__page.png`,     fullPage: true });
 
@@ -437,15 +469,20 @@ async function main() {
     browser = await chromium.launch();
     const summary = [];
     for (const profile of DEVICE_PROFILES) {
-      const ctx = await browser.newContext({ ...profile.device });
-      for (const scenario of SCENARIOS) {
-        const { base, errors } = await captureScenario(ctx, profile, scenario);
-        const rel = base.replace(__dirname + '/', '');
-        const tag = errors ? `  (${errors} console error${errors === 1 ? '' : 's'})` : '';
-        summary.push(`${rel}__{viewport,page}.png${tag}`);
-        process.stdout.write(`✓ ${rel}__{viewport,page}.png${tag}\n`);
+      for (const scheme of COLOR_SCHEMES) {
+        const ctx = await browser.newContext({
+          ...profile.device,
+          colorScheme: scheme.scheme,
+        });
+        for (const scenario of SCENARIOS) {
+          const { base, errors } = await captureScenario(ctx, profile, scheme, scenario);
+          const rel = base.replace(__dirname + '/', '');
+          const tag = errors ? `  (${errors} console error${errors === 1 ? '' : 's'})` : '';
+          summary.push(`${rel}__{viewport,page}.png${tag}`);
+          process.stdout.write(`✓ ${rel}__{viewport,page}.png${tag}\n`);
+        }
+        await ctx.close();
       }
-      await ctx.close();
     }
     await writeFile(join(OUT_DIR, 'INDEX.txt'), summary.join('\n') + '\n');
   } finally {

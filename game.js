@@ -39,10 +39,11 @@
 
   // ── Map ──────────────────────────────────────────────────────────────
   // Some environments (file:// in headless tests) reject sessionStorage; fall
-  // back to the default tomb-1 map silently in that case.
-  let mapId = 'tomb-1';
-  try { mapId = sessionStorage.getItem('kt.mapId') || 'tomb-1'; } catch (e) {}
-  const mapDefRaw = KT.getMap(mapId) || KT.TOMB_MAPS['tomb-1'];
+  // back to the default Approved Ops map silently in that case.
+  const DEFAULT_MAP_ID = 'tomb-approved-2';
+  let mapId = DEFAULT_MAP_ID;
+  try { mapId = sessionStorage.getItem('kt.mapId') || DEFAULT_MAP_ID; } catch (e) {}
+  const mapDefRaw = KT.getMap(mapId) || KT.TOMB_MAPS[DEFAULT_MAP_ID];
   const mapDef = KT.compileMap(mapDefRaw);
 
   document.getElementById('map-eyebrow').textContent = mapDefRaw.eyebrow || (mapDefRaw.custom ? 'Custom Map' : 'Tomb World');
@@ -3401,6 +3402,25 @@
     },
     // Escape hatch for the harness if it needs to inspect runtime state.
     state() { return state; },
+    // Force the scoreboard into a mid-game state for screenshots: bumps
+    // the turning point and writes non-zero kill / crit op counts so the
+    // VP board, batch chip, and phase chip render with realistic content
+    // rather than the all-zeros opening state.
+    setVP({ tp = 2, killA = 0, critA = 0, killB = 0, critB = 0, kills } = {}) {
+      state.combat.turningPoint = tp;
+      state.score.killOp.A = killA;
+      state.score.killOp.B = killB;
+      state.score.critOp.A = critA;
+      state.score.critOp.B = critB;
+      if (kills) {
+        state.score.kills.A = kills.A ?? state.score.kills.A;
+        state.score.kills.B = kills.B ?? state.score.kills.B;
+      }
+      phaseChip.textContent = `Turning Point ${tp}`;
+      renderVpBoard();
+      syncActivationPanel();
+      render();
+    },
     // Wipe `losingTeam` so checkVictory() fires and the game-over overlay
     // appears. Optional `kills` boosts the winning team's Kill Op count for
     // a more realistic score on the final card; defaults to wiping the
