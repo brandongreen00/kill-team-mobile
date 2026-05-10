@@ -117,6 +117,68 @@ const SCENARIOS = [
       await page.waitForTimeout(200);
     },
   },
+
+  // Combat scenarios use the window.__kt_test hook in game.js to skip
+  // straight to combat with a default unit layout, bypassing the team
+  // picker / initiative roll / deploy click sequence.
+  {
+    name: 'game-combat-entry',
+    path: '/game.html',
+    seed: 'rosters,mapId',
+    setup: async (page) => {
+      await page.evaluate(() => window.__kt_test.jumpToCombat({ first: 'A' }));
+      await page.waitForTimeout(200);
+    },
+  },
+  {
+    name: 'game-combat-activating',
+    path: '/game.html',
+    seed: 'rosters,mapId',
+    setup: async (page) => {
+      await page.evaluate(() => {
+        window.__kt_test.jumpToCombat({ first: 'A' });
+        // Activate Team A's first unit by letter. Letters are auto-assigned
+        // from operative names, so 'S' is the Strike Squad sergeant.
+        const teamA = window.__kt_test.state().units.filter(u => u.team === 'A');
+        window.__kt_test.startActivation(teamA[0].letter);
+      });
+      await page.waitForTimeout(200);
+    },
+  },
+  {
+    name: 'game-combat-shoot-modal',
+    path: '/game.html',
+    seed: 'rosters,mapId',
+    setup: async (page) => {
+      await page.evaluate(() => {
+        window.__kt_test.jumpToCombat({ first: 'A' });
+        const teamA = window.__kt_test.state().units.filter(u => u.team === 'A');
+        // Pick whichever Team A operative actually has a clear shot on
+        // a Team B operative — exact letter assignment depends on the
+        // roster fixture.
+        for (const u of teamA) {
+          try { window.__kt_test.openShoot(u.letter); return; } catch {}
+        }
+        throw new Error('no Team A operative had a valid shoot target');
+      });
+      await page.waitForTimeout(200);
+    },
+  },
+  {
+    name: 'game-combat-fight-modal',
+    path: '/game.html',
+    seed: 'rosters,mapId',
+    setup: async (page) => {
+      await page.evaluate(() => {
+        window.__kt_test.jumpToCombat({ first: 'A' });
+        const units = window.__kt_test.state().units;
+        const a = units.find(u => u.team === 'A');
+        const t = units.find(u => u.team === 'B');
+        window.__kt_test.openFight(a.letter, t.letter);
+      });
+      await page.waitForTimeout(200);
+    },
+  },
 ];
 
 function probePort(port, host = '127.0.0.1') {

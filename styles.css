@@ -1468,11 +1468,18 @@ a:hover { color: var(--text-bright); }
   background: var(--accent-action-soft);
   color: var(--text-bright);
 }
-.kt-weapon-row .kt-w-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.kt-weapon-row .kt-w-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .kt-weapon-row .kt-w-stats {
   font-size: 10px;
   color: var(--text-muted);
   white-space: nowrap;
+}
+/* On narrow viewports the nowrap stats column crushes the name into a
+   1-character-wide ellipsis-per-line strip ("P… / p… / (..."). Stack
+   instead so each cell gets the full row width. */
+@media (max-width: 480px) {
+  .kt-weapon-row { flex-direction: column; align-items: stretch; gap: 2px; }
+  .kt-weapon-row .kt-w-stats { white-space: normal; }
 }
 .kt-resolve-step {
   margin-top: 10px;
