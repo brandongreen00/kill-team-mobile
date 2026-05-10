@@ -1,0 +1,14 @@
+{
+  "name": "kt-ui-review",
+  "private": true,
+  "type": "module",
+  "description": "Headless mobile-viewport capture for the Kill Team Mobile UI. Dev-only; not part of the deployed site.",
+  "scripts": {
+    "capture": "node capture.mjs",
+    "install-browser": "playwright install chromium"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "playwright": "^1.56.0"
+  }
+}

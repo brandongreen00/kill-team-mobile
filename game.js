@@ -39,10 +39,11 @@
 
   // ── Map ──────────────────────────────────────────────────────────────
   // Some environments (file:// in headless tests) reject sessionStorage; fall
-  // back to the default tomb-1 map silently in that case.
-  let mapId = 'tomb-1';
-  try { mapId = sessionStorage.getItem('kt.mapId') || 'tomb-1'; } catch (e) {}
-  const mapDefRaw = KT.getMap(mapId) || KT.TOMB_MAPS['tomb-1'];
+  // back to the default Approved Ops map silently in that case.
+  const DEFAULT_MAP_ID = 'tomb-approved-2';
+  let mapId = DEFAULT_MAP_ID;
+  try { mapId = sessionStorage.getItem('kt.mapId') || DEFAULT_MAP_ID; } catch (e) {}
+  const mapDefRaw = KT.getMap(mapId) || KT.TOMB_MAPS[DEFAULT_MAP_ID];
   const mapDef = KT.compileMap(mapDefRaw);
 
   document.getElementById('map-eyebrow').textContent = mapDefRaw.eyebrow || (mapDefRaw.custom ? 'Custom Map' : 'Tomb World');
@@ -1608,7 +1609,12 @@
           <div class="kt-side-meta">
             <strong>${s.attacker.letter} · ${escapeHtml(s.attacker._displayName)}</strong><br>
             Atk ${w.atk} · Hit ${w.hit}+ · Dmg ${w.normal_dmg}/${w.crit_dmg}<br>
-            ${escapeHtml(w.name)}${(w.rules && w.rules.length) ? ' · ' + escapeHtml(w.rules.join(' · ')) : ''}<br>
+            ${escapeHtml(w.name)}${(() => {
+              // Drop "Range N\"" from the rules join — the dedicated Range line
+              // below already shows it (and renders ∞ for unlimited weapons).
+              const extras = (w.rules || []).filter(r => !/^Range\b/i.test(String(r)));
+              return extras.length ? ' · ' + escapeHtml(extras.join(' · ')) : '';
+            })()}<br>
             Range ${rangeStr}
           </div>
         </div>
@@ -3316,4 +3322,190 @@
     }
     if (state.pinnedStatUnit || state.hoverUnit) positionStatBlock(null, state.pinnedStatUnit || state.hoverUnit);
   });
+
+  // ── Test / review hook ───────────────────────────────────────────────
+  // Skips the team-picker → initiative → deploy interactions so the
+  // headless ui-review harness (tools/ui-review/capture.mjs) can land
+  // directly in combat states for screenshots and a11y audits. Not
+  // referenced by any production code path; safe to call from the
+  // browser console too if you want to poke at the combat UI without
+  // playing a full game.
+  window.__kt_test = {
+    // Build units from saved rosters, lay them out in a tidy grid inside
+    // each team's deploy zone, and enter combat. `first` is the team that
+    // gets the first activation of TP1.
+    jumpToCombat({ rosterAId, rosterBId, first = 'A' } = {}) {
+      const rosters = loadRosters();
+      if (rosters.length < 1) throw new Error('no rosters in localStorage');
+      state.rosters.A = rosters.find(r => r.id === rosterAId) || rosters[0];
+      state.rosters.B = rosters.find(r => r.id === rosterBId) || rosters[1] || rosters[0];
+      state.units = [
+        ...unitsFromRoster(state.rosters.A, 'A'),
+        ...unitsFromRoster(state.rosters.B, 'B'),
+      ];
+      const layoutTeam = (team) => {
+        const zone = KT.deployZone(mapDef, team);
+        const units = state.units.filter(u => u.team === team);
+        const cols = Math.ceil(Math.sqrt(units.length));
+        const rows = Math.ceil(units.length / cols);
+        const dx = zone.w / (cols + 1);
+        const dy = zone.h / (rows + 1);
+        units.forEach((u, i) => {
+          const c = i % cols, r = Math.floor(i / cols);
+          u.x = zone.x + (c + 1) * dx;
+          u.y = zone.y + (r + 1) * dy;
+          u.deployed = true;
+        });
+      };
+      layoutTeam('A');
+      layoutTeam('B');
+      state.deploy.first = first;
+      startCombat();
+    },
+    // Start `letter`'s activation. Forces activeTeam to that unit's team
+    // so the harness can pick either side without juggling turn order.
+    startActivation(letter) {
+      const u = state.units.find(x => x.letter === letter);
+      if (!u) throw new Error(`no unit with letter ${letter}`);
+      state.combat.activeTeam = u.team;
+      u.unitState = 'ready';
+      u.ap = u.apl;
+      startActivation(u);
+    },
+    // Open the shoot modal. Defaults to the first valid target if
+    // `targetLetter` is omitted.
+    openShoot(shooterLetter, targetLetter) {
+      const u = state.units.find(x => x.letter === shooterLetter);
+      if (!u) throw new Error(`no shooter ${shooterLetter}`);
+      if (!activation() || activation().unit !== u) {
+        window.__kt_test.startActivation(shooterLetter);
+      }
+      const cands = shootCandidates(u);
+      const cand = targetLetter
+        ? cands.find(c => c.target.letter === targetLetter)
+        : cands[0];
+      if (!cand) throw new Error(`no valid shoot target${targetLetter ? ' ' + targetLetter : ''} for ${shooterLetter}`);
+      openShootModal(u, cand.target, cand.env);
+    },
+    // Open the fight modal. Teleports the attacker next to the defender
+    // so engagement-range checks pass — visual review only, not gameplay.
+    openFight(attackerLetter, defenderLetter) {
+      const a = state.units.find(x => x.letter === attackerLetter);
+      const t = state.units.find(x => x.letter === defenderLetter);
+      if (!a) throw new Error(`no attacker ${attackerLetter}`);
+      if (!t) throw new Error(`no defender ${defenderLetter}`);
+      a.x = t.x + 0.5; a.y = t.y;
+      if (!activation() || activation().unit !== a) {
+        window.__kt_test.startActivation(attackerLetter);
+      }
+      openFightModal(a, t);
+    },
+    // Escape hatch for the harness if it needs to inspect runtime state.
+    state() { return state; },
+    // Force the scoreboard into a mid-game state for screenshots: bumps
+    // the turning point and writes non-zero kill / crit op counts so the
+    // VP board, batch chip, and phase chip render with realistic content
+    // rather than the all-zeros opening state.
+    setVP({ tp = 2, killA = 0, critA = 0, killB = 0, critB = 0, kills } = {}) {
+      state.combat.turningPoint = tp;
+      state.score.killOp.A = killA;
+      state.score.killOp.B = killB;
+      state.score.critOp.A = critA;
+      state.score.critOp.B = critB;
+      if (kills) {
+        state.score.kills.A = kills.A ?? state.score.kills.A;
+        state.score.kills.B = kills.B ?? state.score.kills.B;
+      }
+      phaseChip.textContent = `Turning Point ${tp}`;
+      renderVpBoard();
+      syncActivationPanel();
+      render();
+    },
+    // Wipe `losingTeam` so checkVictory() fires and the game-over overlay
+    // appears. Optional `kills` boosts the winning team's Kill Op count for
+    // a more realistic score on the final card; defaults to wiping the
+    // losing team's full starting size.
+    triggerGameOver(losingTeam = 'B', { kills } = {}) {
+      const winningTeam = losingTeam === 'A' ? 'B' : 'A';
+      state.units.filter(u => u.team === losingTeam).forEach(u => {
+        u.alive = false;
+        u.hp = 0;
+        u.unitState = 'incapacitated';
+      });
+      state.score.kills[winningTeam] = kills ?? state.score.startSize[winningTeam];
+      // Also bump the winner's Crit Op count so the overlay shows non-zero
+      // VP on both ops — purely cosmetic for screenshots.
+      state.score.critOp[winningTeam] = 3;
+      checkVictory();
+    },
+    // Advance the shoot modal one step. Requires the modal to already be
+    // open (via openShoot). `to` is the step name from the shoot state
+    // machine: 'rolledAttack' | 'rolledDefence' | 'resolved'.
+    advanceShoot(to) {
+      const s = state.combat.shoot;
+      if (!s) throw new Error('shoot modal not open');
+      if (to === 'rolledAttack' || to === 'rolledDefence' || to === 'resolved') {
+        if (s.step === 'pickWeapon') rollShootAttack();
+      }
+      if (to === 'rolledDefence' || to === 'resolved') {
+        if (s.step === 'rolledAttack') rollShootDefence();
+      }
+      if (to === 'resolved') {
+        if (s.step === 'rolledDefence') {
+          allocateShootSavesOptimally();
+          s.step = 'resolved';
+          renderShootModal();
+        }
+      }
+    },
+    // Roll the dice in the open fight modal — leaves the user at the
+    // dice-allocation step (alternating strike / parry).
+    rollFightDice() {
+      const f = state.combat.fight;
+      if (!f) throw new Error('fight modal not open');
+      if (f.step === 'pickWeapon') rollFight();
+    },
+    // Find a pair of (Team A, Team B) positions with clear shoot LoS by
+    // sweeping a coarse grid across each half-board, repositioning the
+    // first alive operative on each team into the first valid pair found.
+    // Necessary on dense maps (e.g. tomb-approved-2) where the default
+    // grid layout from jumpToCombat puts every unit behind a wall —
+    // shootCandidates returns empty for every shooter and openShoot
+    // throws "no valid target".
+    findClearShoot() {
+      const a = state.units.find(u => u.team === 'A' && u.alive);
+      const b = state.units.find(u => u.team === 'B' && u.alive);
+      if (!a || !b) return null;
+      // Quick path: existing layout already has a clear pair.
+      const teamA = state.units.filter(u => u.team === 'A' && u.alive);
+      const teamB = state.units.filter(u => u.team === 'B' && u.alive);
+      for (const sa of teamA) for (const sb of teamB) {
+        const env = KTR.shootEnv(mapDef, state.combat.pieceState.open, sa, sb);
+        if (env.visible) return { shooter: sa.letter, target: sb.letter };
+      }
+      // Fallback: brute-force scan a 3-inch grid across each half-board
+      // for the first valid pair, repositioning a/b in place.
+      const W = KT.TOMB_BOARD.width, H = KT.TOMB_BOARD.height;
+      const splitV = (mapDef.split !== 'horizontal');
+      const aXs = splitV ? range(2, W / 2, 3) : range(2, W, 3);
+      const aYs = splitV ? range(2, H, 3) : range(H / 2, H, 3);
+      const bXs = splitV ? range(W / 2 + 1, W, 3) : range(2, W, 3);
+      const bYs = splitV ? range(2, H, 3) : range(2, H / 2, 3);
+      for (const ax of aXs) for (const ay of aYs) {
+        a.x = ax; a.y = ay;
+        for (const bx of bXs) for (const by of bYs) {
+          b.x = bx; b.y = by;
+          const env = KTR.shootEnv(mapDef, state.combat.pieceState.open, a, b);
+          if (env.visible) return { shooter: a.letter, target: b.letter };
+        }
+      }
+      return null;
+
+      function range(start, end, step) {
+        const out = [];
+        for (let v = start; v < end; v += step) out.push(v);
+        return out;
+      }
+    },
+  };
 })();

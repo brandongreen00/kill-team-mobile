@@ -236,7 +236,10 @@ a:hover { color: var(--text-bright); }
   user-select: none;
 }
 .map-card .preview {
-  aspect-ratio: 4 / 3;
+  /* Match the 28"×24" board ratio so the preview SVG fills the box
+     (preserveAspectRatio="xMidYMid meet" was letterboxing the board
+     inside a 4:3 frame, shrinking it on narrow viewports). */
+  aspect-ratio: 7 / 6;
   background: var(--input-bg);
   border: 1px solid var(--border);
   position: relative;
@@ -315,9 +318,11 @@ a:hover { color: var(--text-bright); }
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Allow long team names to wrap to a second line rather than truncating
+     ("STRIKE SQUAD VORTIG…"). The scoreboard cell already has room for it
+     and word-level wrapping keeps the name readable. */
+  overflow-wrap: anywhere;
+  line-height: 1.2;
 }
 .vp-total {
   font-family: var(--section-font);
@@ -873,6 +878,7 @@ a:hover { color: var(--text-bright); }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
   padding: 14px 16px;
   background: var(--input-bg);
@@ -886,6 +892,7 @@ a:hover { color: var(--text-bright); }
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  flex: 1 1 60%;
 }
 .saved-roster .saved-name {
   font-family: var(--subtitle-font);
@@ -894,9 +901,7 @@ a:hover { color: var(--text-bright); }
   text-transform: uppercase;
   color: var(--text-bright);
   font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
 }
 .saved-roster .saved-sub {
   font-family: var(--section-font);
@@ -905,7 +910,7 @@ a:hover { color: var(--text-bright); }
   text-transform: uppercase;
   color: var(--text-muted);
 }
-.saved-roster .saved-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.saved-roster .saved-actions { display: flex; gap: 6px; flex-shrink: 0; margin-left: auto; }
 
 .roster-empty-state {
   padding: 40px 20px;
@@ -1465,11 +1470,18 @@ a:hover { color: var(--text-bright); }
   background: var(--accent-action-soft);
   color: var(--text-bright);
 }
-.kt-weapon-row .kt-w-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.kt-weapon-row .kt-w-name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .kt-weapon-row .kt-w-stats {
   font-size: 10px;
   color: var(--text-muted);
   white-space: nowrap;
+}
+/* On narrow viewports the nowrap stats column crushes the name into a
+   1-character-wide ellipsis-per-line strip ("P… / p… / (..."). Stack
+   instead so each cell gets the full row width. */
+@media (max-width: 480px) {
+  .kt-weapon-row { flex-direction: column; align-items: stretch; gap: 2px; }
+  .kt-weapon-row .kt-w-stats { white-space: normal; }
 }
 .kt-resolve-step {
   margin-top: 10px;
@@ -1551,10 +1563,12 @@ a:hover { color: var(--text-bright); }
   .vp-divider { font-size: 10px; letter-spacing: 0.2em; }
   .deploy-status { font-size: 11px; padding: 8px 10px; }
 
-  /* Sidebar becomes a slide-in drawer triggered by the on-board "Roster"
-     button. The board takes the full width when the drawer is closed. */
+  /* Game-board sidebar becomes a slide-in drawer triggered by the on-board
+     "Roster" button. Scoped to #sidebar so map-creator's sidebar (which
+     also uses the .sidebar class for desktop styling) keeps its default
+     in-flow layout instead of getting hidden off-screen with no toggle. */
   .board-roster-toggle { display: inline-flex; }
-  .sidebar {
+  #sidebar {
     position: fixed;
     top: 0; right: 0; bottom: 0;
     width: min(86vw, 360px);
@@ -1567,7 +1581,7 @@ a:hover { color: var(--text-bright); }
     transition: transform 0.2s ease;
     box-shadow: -10px 0 30px rgba(0,0,0,0.6);
   }
-  .sidebar.open { transform: translateX(0); }
+  #sidebar.open { transform: translateX(0); }
   .sidebar-close { display: flex; align-items: center; justify-content: center; }
   body.sidebar-open { overflow: hidden; }
   body.sidebar-open::after {

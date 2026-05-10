@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body class="bg-grain scanline">
-  <div class="shell creator-shell">
+  <main class="shell creator-shell">
     <header class="masthead" style="padding: 16px 0 6px;">
       <div class="eyebrow">Cartographer</div>
       <h1 class="hard-shadow" style="font-size: clamp(32px, 5vw, 56px);">Map Creator</h1>
@@ -21,11 +21,11 @@
         <div class="tool-group tool-group-map">
           <label class="label-cap">Map</label>
           <input id="map-name" class="text-input" type="text" placeholder="My Map" />
-          <select id="map-split" class="text-input">
+          <select id="map-split" class="text-input" aria-label="Deployment split orientation">
             <option value="vertical">Vertical Split</option>
             <option value="horizontal">Horizontal Split</option>
           </select>
-          <select id="map-size" class="text-input">
+          <select id="map-size" class="text-input" aria-label="Board size">
             <option value="28x24">28&Prime; &times; 24&Prime; (7&times;6)</option>
             <option value="22x30">22&Prime; &times; 30&Prime; (alt)</option>
           </select>
@@ -62,7 +62,7 @@
 
         <div class="tool-group tool-group-options">
           <label class="label-cap">Snap</label>
-          <select id="snap" class="text-input">
+          <select id="snap" class="text-input" aria-label="Grid snap distance">
             <option value="0.5">0.5&Prime;</option>
             <option value="1">1&Prime;</option>
             <option value="2">2&Prime;</option>
@@ -134,10 +134,10 @@
           <div id="creator-help" class="creator-help"></div>
         </div>
 
-        <aside class="sidebar creator-sidebar">
+        <div class="sidebar creator-sidebar">
           <div>
             <div class="label-cap" style="margin-bottom:6px;">Load</div>
-            <select id="load-map" class="text-input" style="width:100%;">
+            <select id="load-map" class="text-input" style="width:100%;" aria-label="Load saved map">
               <option value="">— New blank map —</option>
             </select>
           </div>
@@ -167,7 +167,7 @@
               squares where each team's operatives must be deployed.
             </p>
           </div>
-        </aside>
+        </div>
       </div>
     </section>
 
@@ -177,7 +177,7 @@
     </div>
 
     <p class="footer-note">Cogito, ergo aedifico</p>
-  </div>
+  </main>
 
   <script src="./maps-data.js"></script>
   <script src="./map-creator.js"></script>
