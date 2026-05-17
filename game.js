@@ -816,11 +816,14 @@
     if (unit.team !== activeTeam()) return;
     unit.unitState = 'activating';
     unit.ap = unit.apl;
-    unit.order = null;
+    // Default to Engage so the player can act immediately. They can flip to
+    // Conceal via the chip in the activation header until the first action
+    // is taken (Kill Team locks the order once a decision depends on it).
+    unit.order = 'engage';
     state.combat.selectedId = unit;
     state.combat.activation = {
       unit,
-      order: null,
+      order: 'engage',
       ap: unit.apl,
       apMax: unit.apl,
       history: [],
@@ -836,7 +839,7 @@
       baseline: null,
     };
     state.combat.activation.baseline = snapshotForUndo();
-    log(`${teamName(unit.team)} activates ${unit.letter} (${unit._displayName}).`, 'turn');
+    log(`${teamName(unit.team)} activates ${unit.letter} (${unit._displayName}) — Engage.`, 'turn');
     state.combat.pendingMove = null;
     syncActivationPanel();
     render();
@@ -845,12 +848,36 @@
   function pickOrder(order) {
     const a = activation();
     if (!a) return;
-    if (a.order) return; // can't change once chosen
+    if (a.order === order) return;
+    // Locked once any action has been taken (matches Kill Team's
+    // declaration-at-start rule once a choice depended on the order).
+    if (a.history.length > 0) return;
     a.order = order;
     a.unit.order = order;
-    log(`${a.unit.letter} declares ${order === 'engage' ? 'Engage' : 'Conceal'}.`);
+    log(`${a.unit.letter} switches to ${order === 'engage' ? 'Engage' : 'Conceal'}.`);
     syncActivationPanel();
     render();
+  }
+
+  function renderOrderChip(order, locked) {
+    const label = order === 'conceal' ? 'Conceal' : 'Engage';
+    const next = order === 'conceal' ? 'engage' : 'conceal';
+    if (locked) {
+      return `<span class="order-chip order-${order} locked" title="Order locks after the first action">${label}</span>`;
+    }
+    const altLabel = next === 'conceal' ? 'Conceal' : 'Engage';
+    return `<span class="order-chip order-${order}" data-toggle-order="${next}" role="button" tabindex="0" title="Switch to ${altLabel}">${label} <span class="order-chip-swap">⇄</span></span>`;
+  }
+
+  function wireOrderChip() {
+    const chip = activationMeta.querySelector('[data-toggle-order]');
+    if (!chip) return;
+    const next = chip.dataset.toggleOrder;
+    const fire = () => pickOrder(next);
+    chip.addEventListener('click', fire);
+    chip.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fire(); }
+    });
   }
 
   // ── Undo ───────────────────────────────────────────────────────────
@@ -1274,17 +1301,11 @@
     }
     const u = a.unit;
     activationWho.textContent = `${u.letter} · ${u._displayName}`;
-    const orderTxt = a.order ? (a.order === 'engage' ? 'Engage' : 'Conceal') : '— no order';
-    activationMeta.textContent = `AP ${a.ap}/${a.apMax} · ${orderTxt} · TP ${state.combat.turningPoint}`;
+    const orderLocked = a.history.length > 0;
+    const orderChip = renderOrderChip(a.order, orderLocked);
+    activationMeta.innerHTML = `AP ${a.ap}/${a.apMax} · ${orderChip} · TP ${state.combat.turningPoint}`;
+    wireOrderChip();
     syncMiniHud(a);
-    if (!a.order) {
-      activationOrders.style.display = '';
-      activationActions.style.display = 'none';
-      activationHint.classList.remove('warn');
-      activationHint.textContent = '';
-      document.body.classList.add('dock-orders');
-      return;
-    }
     document.body.classList.remove('dock-orders');
     activationOrders.style.display = 'none';
     activationActions.style.display = '';
@@ -1294,15 +1315,26 @@
       const remaining = Math.max(0, pm.maxInches - pm.used);
       const legs = pm.waypoints.length - 1;
       if (!activationHint.classList.contains('warn')) {
-        activationHint.textContent = legs === 0
+        const base = legs === 0
           ? `${pm.label}: tap on the board to set waypoints. Budget ${pm.maxInches.toFixed(1)}".`
           : `${pm.label}: ${pm.used.toFixed(1)}" used · ${remaining.toFixed(1)}" left · ${legs} leg${legs === 1 ? '' : 's'}. Add more waypoints to route around walls/CR; press Confirm to commit.`;
+        activationHint.innerHTML = escapeHtml(base) + kbdHintHTML('move');
       }
     } else if (!a.history.length) {
       activationHint.classList.remove('warn');
-      activationHint.textContent = 'Choose an action. Press Undo to revert any choice until you End Activation.';
+      activationHint.innerHTML = 'Choose an action. Press Undo to revert any choice until you End Activation.' + kbdHintHTML('actions');
+    } else {
+      activationHint.classList.remove('warn');
+      activationHint.innerHTML = '' + kbdHintHTML('actions');
     }
     undoBtn.disabled = a.undoStack.length === 0;
+  }
+
+  function kbdHintHTML(ctx) {
+    if (ctx === 'move') {
+      return `<span class="kbd-hint"><kbd>Enter</kbd> confirm · <kbd>Backspace</kbd> undo leg · <kbd>Esc</kbd> cancel</span>`;
+    }
+    return `<span class="kbd-hint"><kbd>1</kbd>–<kbd>6</kbd> action · <kbd>E</kbd>/<kbd>C</kbd> order · <kbd>U</kbd> undo · <kbd>Space</kbd> end</span>`;
   }
 
   function buildActionButton(it, onClick) {
@@ -1584,7 +1616,25 @@
       done: false,
     };
     shootModal.style.display = 'flex';
+    // Fast-path: if the attacker has exactly one ranged weapon, the player has
+    // already committed to "shoot this target with this weapon" by the time
+    // the modal opens — roll attack + defence and auto-allocate optimally so
+    // the dialog opens to the resolved result. The "Re-roll" and "Allocate
+    // manually" controls remain for fine-grained control. With multiple
+    // weapons we still pause on the weapon picker.
+    if (ranged.length === 1) {
+      autoResolveShoot();
+    }
     renderShootModal();
+  }
+
+  function autoResolveShoot() {
+    const s = state.combat.shoot;
+    if (!s) return;
+    rollShootAttack(true);
+    rollShootDefence(true);
+    allocateShootSavesOptimally();
+    s.step = 'resolved';
   }
 
   function closeShootModal() {
@@ -1667,12 +1717,15 @@
             <button class="btn-fire" id="kt-resolve">Resolve damage</button>
           </div>`;
         } else if (s.step === 'resolved') {
+          const willKill = s.target.hp - s.damage <= 0;
           html += `<div class="kt-resolved">
             ${s.target.letter} takes <strong>${s.damage}</strong> damage (${s.atkRemaining.normals} normal × ${w.normal_dmg} + ${s.atkRemaining.criticals} crit × ${w.crit_dmg}).
-            ${s.killed ? '<br><strong>Incapacitated.</strong>' : `<br>HP now ${Math.max(0, s.target.hp)} / ${s.target.maxHp}.`}
+            ${willKill ? '<br><strong>Will be incapacitated.</strong>' : `<br>HP ${s.target.hp}/${s.target.maxHp} → ${Math.max(0, s.target.hp - s.damage)}/${s.target.maxHp}.`}
           </div>
           <div class="kt-modal-footer">
-            <button class="btn-fire" id="kt-shoot-done">Done</button>
+            <button class="btn-ghost" id="kt-shoot-reroll" title="Re-roll attack and defence (Shift+Enter)">Re-roll</button>
+            <button class="btn-ghost" id="kt-shoot-manual">Allocate manually</button>
+            <button class="btn-fire" id="kt-shoot-done" title="Apply damage (Enter)">Apply damage</button>
           </div>`;
         }
       }
@@ -1687,20 +1740,28 @@
         row.addEventListener('click', () => {
           const i = +row.dataset.i;
           s.weapon = ranged[i];
+          // Picking a weapon means "this is the one I want to shoot with" —
+          // auto-resolve straight to the damage preview, same as the single-
+          // weapon fast-path in openShootModal.
+          autoResolveShoot();
           renderShootModal();
         });
       });
     }
     const ra = shootBody.querySelector('#kt-roll-attack');
-    if (ra) ra.addEventListener('click', rollShootAttack);
+    if (ra) ra.addEventListener('click', () => rollShootAttack(false));
     const rd = shootBody.querySelector('#kt-roll-defence');
-    if (rd) rd.addEventListener('click', rollShootDefence);
+    if (rd) rd.addEventListener('click', () => rollShootDefence(false));
     const aa = shootBody.querySelector('#kt-allocate-auto');
     if (aa) aa.addEventListener('click', () => { allocateShootSavesOptimally(); s.step = 'resolved'; renderShootModal(); });
     const am = shootBody.querySelector('#kt-allocate-manual');
-    if (am) am.addEventListener('click', () => { s.step = 'allocate'; renderShootModal(); attachManualAllocate(); });
+    if (am) am.addEventListener('click', () => { s.step = 'allocate'; s.atkRemaining = null; renderShootModal(); attachManualAllocate(); });
     const rs = shootBody.querySelector('#kt-resolve');
     if (rs) rs.addEventListener('click', () => { applyShootResolution(); });
+    const reroll = shootBody.querySelector('#kt-shoot-reroll');
+    if (reroll) reroll.addEventListener('click', () => { autoResolveShoot(); renderShootModal(); });
+    const sm = shootBody.querySelector('#kt-shoot-manual');
+    if (sm) sm.addEventListener('click', () => { s.step = 'allocate'; s.atkRemaining = null; renderShootModal(); attachManualAllocate(); });
     const dn = shootBody.querySelector('#kt-shoot-done');
     if (dn) dn.addEventListener('click', commitShoot);
 
@@ -1724,7 +1785,7 @@
     return `<div class="kt-dice-row">${cells.join('')}</div>`;
   }
 
-  function rollShootAttack() {
+  function rollShootAttack(silent) {
     const s = state.combat.shoot;
     if (!s) return;
     const w = s.weapon;
@@ -1770,10 +1831,10 @@
     };
     s.step = 'rolledAttack';
     log(`${s.attacker.letter} fires ${atkDice}D6 at ${s.target.letter}: ${nC} crit · ${nN} normal · ${nF} fail${didFix ? ' (' + didFix.trim() + ')' : ''}.`);
-    renderShootModal();
+    if (!silent) renderShootModal();
   }
 
-  function rollShootDefence() {
+  function rollShootDefence(silent) {
     const s = state.combat.shoot;
     if (!s) return;
     const w = s.weapon;
@@ -1798,7 +1859,7 @@
     };
     s.step = 'rolledDefence';
     log(`${s.target.letter} rolls defence (${dice.dice}D6 + ${dice.autoNormals} cover): ${crits.length} crit · ${normals.length + dice.autoNormals} normal · ${fails.length} fail.`);
-    renderShootModal();
+    if (!silent) renderShootModal();
   }
 
   function allocateShootSavesOptimally() {
@@ -1986,7 +2047,20 @@
       done: false,
     };
     fightModal.style.display = 'flex';
+    // Fast-path: if there's no weapon ambiguity, roll and auto-resolve so the
+    // modal opens to the resolved result. Manual die-by-die resolution stays
+    // available via the "Resolve manually" button, and "Re-roll" reseeds.
+    if (meleeA.length === 1 && meleeT.length === 1) {
+      autoRollAndResolveFight();
+    }
     renderFightModal();
+  }
+
+  function autoRollAndResolveFight() {
+    const f = state.combat.fight;
+    if (!f) return;
+    rollFight(true);
+    autoResolveFight();
   }
   function closeFightModal() {
     fightModal.style.display = 'none';
@@ -2055,9 +2129,11 @@
         html += `<div class="kt-resolved" id="kt-fight-prompt">${
           fightPrompt(f)
         }</div>`;
+        const done = fightDone(f);
         html += `<div class="kt-modal-footer">
-          <button class="btn-ghost" id="kt-fight-auto">Auto-resolve</button>
-          <button class="btn-fire" id="kt-fight-end" ${fightDone(f) ? '' : 'disabled'}>Apply damage</button>
+          ${done ? `<button class="btn-ghost" id="kt-fight-reroll" title="Re-roll both sides">Re-roll</button>` : ''}
+          ${done ? '' : `<button class="btn-ghost" id="kt-fight-auto">Auto-resolve</button>`}
+          <button class="btn-fire" id="kt-fight-end" ${done ? '' : 'disabled'} title="Apply damage (Enter)">Apply damage</button>
         </div>`;
       }
     }
@@ -2066,16 +2142,22 @@
 
     const wpA = fightBody.querySelector('#kt-weapon-pick-A');
     if (wpA) wpA.querySelectorAll('.kt-weapon-row').forEach(row => row.addEventListener('click', () => {
-      f.weaponA = meleeA[+row.dataset.i]; renderFightModal();
+      f.weaponA = meleeA[+row.dataset.i];
+      if (meleeT.length === 1) { autoRollAndResolveFight(); }
+      renderFightModal();
     }));
     const wpT = fightBody.querySelector('#kt-weapon-pick-T');
     if (wpT) wpT.querySelectorAll('.kt-weapon-row').forEach(row => row.addEventListener('click', () => {
-      f.weaponT = meleeT[+row.dataset.i]; renderFightModal();
+      f.weaponT = meleeT[+row.dataset.i];
+      if (meleeA.length === 1) { autoRollAndResolveFight(); }
+      renderFightModal();
     }));
     const rb = fightBody.querySelector('#kt-fight-roll');
-    if (rb) rb.addEventListener('click', rollFight);
+    if (rb) rb.addEventListener('click', () => { autoRollAndResolveFight(); renderFightModal(); });
     const auto = fightBody.querySelector('#kt-fight-auto');
     if (auto) auto.addEventListener('click', () => { autoResolveFight(); renderFightModal(); });
+    const reroll = fightBody.querySelector('#kt-fight-reroll');
+    if (reroll) reroll.addEventListener('click', () => { autoRollAndResolveFight(); renderFightModal(); });
     const ee = fightBody.querySelector('#kt-fight-end');
     if (ee) ee.addEventListener('click', commitFight);
     if (f.step === 'rolled' || f.step === 'resolving') attachFightDiceHandlers();
@@ -2104,7 +2186,7 @@
     return remainingFightDice(f, 'A') === 0 && remainingFightDice(f, 'T') === 0;
   }
 
-  function rollFight() {
+  function rollFight(silent) {
     const f = state.combat.fight;
     if (!f) return;
     function rollSide(weapon, opName) {
@@ -2137,7 +2219,7 @@
     f.atkT = rollSide(f.weaponT, f.target.letter);
     f.next = 'A'; // attacker resolves first
     f.step = 'rolled';
-    renderFightModal();
+    if (!silent) renderFightModal();
   }
 
   function attachFightDiceHandlers() {
@@ -2350,6 +2432,81 @@
     if (rosterToggle && rosterToggle.contains(e.target)) return;
     closeSidebar();
   });
+
+  // ── Keyboard shortcuts (desktop) ─────────────────────────────────────
+  // Combat-only bindings. Skipped when a text input is focused so map names
+  // and roster fields stay typeable. Modal-aware: Enter advances the open
+  // Shoot/Fight modal, Escape closes it. Outside modals, 1-6 fire actions
+  // in the order they appear, E/C swap order pre-action, Enter confirms a
+  // pending move, U undoes, Space ends the activation.
+  document.addEventListener('keydown', (e) => {
+    if (e.defaultPrevented) return;
+    const t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable || t.tagName === 'SELECT')) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (state.phase !== 'combat') return;
+
+    // Modal handling takes priority — keys go to whichever modal is open.
+    if (shootModal.style.display === 'flex') {
+      if (e.key === 'Escape') { e.preventDefault(); closeShootModal(); return; }
+      if (e.key === 'Enter')  { e.preventDefault(); shootModalPrimaryAction(); return; }
+      return;
+    }
+    if (fightModal.style.display === 'flex') {
+      if (e.key === 'Escape') { e.preventDefault(); closeFightModal(); return; }
+      if (e.key === 'Enter')  { e.preventDefault(); fightModalPrimaryAction(); return; }
+      return;
+    }
+    if (targetPicker.style.display !== 'none') {
+      if (e.key === 'Escape') { e.preventDefault(); clearTargetPicker(); return; }
+      return;
+    }
+
+    const a = activation();
+    // Pre-activation: no shortcuts (the user picks a unit on the board).
+    if (!a) return;
+
+    // Cancel a pending move with Escape; undo the last waypoint with Backspace.
+    if (state.combat.pendingMove) {
+      if (e.key === 'Escape')    { e.preventDefault(); cancelPath(); return; }
+      if (e.key === 'Backspace') { e.preventDefault(); undoWaypoint(); return; }
+      if (e.key === 'Enter')     { e.preventDefault(); commitPath(); return; }
+    }
+
+    if (e.key === 'e' || e.key === 'E') { e.preventDefault(); pickOrder('engage'); return; }
+    if (e.key === 'c' || e.key === 'C') { e.preventDefault(); pickOrder('conceal'); return; }
+    if (e.key === 'u' || e.key === 'U') { e.preventDefault(); if (!undoBtn.disabled) applyUndo(); return; }
+    if (e.key === ' ')                  { e.preventDefault(); endActivation(); return; }
+
+    // 1-9 → nth action button (action-grid first, then more tray).
+    if (/^[1-9]$/.test(e.key)) {
+      const n = parseInt(e.key, 10) - 1;
+      const buttons = [
+        ...actionGrid.querySelectorAll('button.action-btn:not([disabled])'),
+        ...(actionGridMore ? actionGridMore.querySelectorAll('button.action-btn:not([disabled])') : []),
+      ];
+      if (buttons[n]) { e.preventDefault(); buttons[n].click(); }
+    }
+  });
+
+  function shootModalPrimaryAction() {
+    const s = state.combat.shoot;
+    if (!s) return;
+    const order = ['kt-shoot-done', 'kt-resolve', 'kt-roll-defence', 'kt-roll-attack'];
+    for (const id of order) {
+      const btn = shootBody.querySelector('#' + id);
+      if (btn && !btn.disabled) { btn.click(); return; }
+    }
+  }
+  function fightModalPrimaryAction() {
+    const f = state.combat.fight;
+    if (!f) return;
+    const order = ['kt-fight-end', 'kt-fight-roll'];
+    for (const id of order) {
+      const btn = fightBody.querySelector('#' + id);
+      if (btn && !btn.disabled) { btn.click(); return; }
+    }
+  }
 
   // ── Logging & sidebar ────────────────────────────────────────────────
   function log(msg, cls) {
@@ -3009,6 +3166,13 @@
     renderSidebar();
     renderHud();
     renderVpBoard();
+    syncBoardArmed();
+  }
+
+  function syncBoardArmed() {
+    const armed = (state.phase === 'deploy' && state.deploy && state.deploy.pendingUnit)
+      || (state.phase === 'combat' && state.combat && state.combat.pendingMove);
+    document.body.classList.toggle('board-armed', !!armed);
   }
 
   // ── Input ────────────────────────────────────────────────────────────

@@ -389,20 +389,27 @@ a:hover { color: var(--text-bright); }
 }
 
 /* Wraps the canvas so the mini-HUD and roster toggle can be absolutely
-   positioned relative to it. */
+   positioned relative to it. Border lives here (not on .board) so the
+   canvas's intrinsic clientWidth matches getBoundingClientRect().width
+   and pointer→inch math agrees with rendering. */
 .board-stage {
   position: relative;
+  border: 1px solid var(--border);
+  line-height: 0;
 }
 
 .board {
   position: relative;
   background: var(--input-bg);
-  border: 1px solid var(--border);
   width: 100%;
   aspect-ratio: 1 / 1;
   touch-action: none;
   display: block;
+  cursor: default;
 }
+/* Crosshair while plotting a move or placing a deploying operative so the
+   cursor itself tells you "click on the board". */
+body.board-armed .board { cursor: crosshair; }
 
 /* Mini-HUD shown over the top-left of the board during combat: who is
    activating, AP pips, order, HP. Always-visible "what does this unit have
@@ -1157,6 +1164,34 @@ a:hover { color: var(--text-bright); }
   font-size: 12px;
   color: var(--text-muted);
 }
+.order-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border: 1px solid var(--border-mid);
+  border-radius: 2px;
+  font-family: var(--section-font);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-bright);
+  cursor: pointer;
+  transition: border-color 0.1s ease, background 0.1s ease;
+  user-select: none;
+}
+.order-chip.order-engage { color: #ffb4b4; border-color: rgba(184, 32, 58, 0.5); }
+.order-chip.order-conceal { color: #cfdfff; border-color: rgba(58, 109, 184, 0.5); }
+.order-chip:hover:not(.locked) {
+  background: rgba(255, 248, 224, 0.04);
+  border-color: var(--accent-primary);
+}
+.order-chip.locked {
+  cursor: default;
+  opacity: 0.7;
+}
+.order-chip.locked .order-chip-swap { display: none; }
+.order-chip-swap { font-size: 10px; opacity: 0.7; }
 .activation-collapse {
   display: none;
   background: transparent;
@@ -1641,6 +1676,53 @@ a:hover { color: var(--text-bright); }
      never butts directly against the dock. */
   body.has-activation-dock {
     padding-bottom: calc(var(--dock-h, 220px) + 12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Keyboard hints are only useful with a physical keyboard. */
+  .kbd-hint { display: none !important; }
+}
+
+/* ── Desktop polish (≥ 821px) ─────────────────────────────────────────
+   The mobile-first layout works on desktop but wastes screen real estate
+   and duplicates info between the on-canvas mini-HUD and the activation
+   panel. On wider viewports we hide redundant chrome, surface all actions
+   inline (no "More ▾" disclosure), and expose a keyboard-shortcut hint
+   in the activation panel footer. */
+@media (min-width: 821px) {
+  /* The mini-HUD on the canvas mirrors the dock's letter/AP/order/HP. On
+     desktop the activation panel below the board is always visible, so
+     the on-canvas copy is pure noise — hide it and reclaim the top-left
+     corner of the board for game info (deploy zone tints, log overlays). */
+  .board-mini-hud { display: none !important; }
+
+  /* The "More actions ▾" tray exists to keep the mobile dock short. On
+     desktop the action row has room for 6+ tiles, so always render the
+     secondary actions inline and hide the toggle. */
+  .action-more-toggle { display: none !important; }
+  .action-grid-more {
+    display: grid !important;
+    margin-top: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 8px;
+  }
+
+  /* Show kbd hint chip at the end of the activation hint line. */
+  .activation-hint .kbd-hint {
+    display: inline-block;
+    margin-left: 8px;
+    color: var(--text-label);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+  }
+  .activation-hint .kbd-hint kbd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 1px 4px;
+    border: 1px solid var(--border-mid);
+    border-radius: 2px;
+    background: var(--chip-on-bg);
+    color: var(--text);
+    margin: 0 1px;
   }
 }
 
