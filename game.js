@@ -1251,7 +1251,7 @@
       }
     });
     setPhase('combat');
-    phaseChip.textContent = 'Turning Point 1';
+    phaseChip.textContent = `TP 1 / ${RC.MAX_TURNING_POINTS}`;
     batchChip.style.display = '';
     endTurnBtn.style.display = 'none';
     log(`— Turning Point 1 begins —`, 'turn');
@@ -4005,7 +4005,7 @@
       deployStatus.textContent = msg;
       deployStatus.style.display = '';
     } else if (state.phase === 'combat' || state.phase === 'over') {
-      phaseChip.textContent = `Turning Point ${state.combat.turningPoint}`;
+      phaseChip.textContent = `TP ${state.combat.turningPoint} / ${RC.MAX_TURNING_POINTS}`;
       batchChip.style.display = '';
       const pb = document.getElementById('ploys-btn');
       if (pb) pb.style.display = state.phase === 'combat' ? '' : 'none';
@@ -4045,8 +4045,9 @@
     const rangedHTML = ranged.length ? ranged.map(weaponLine).join('') : '<div class="sb-weapon-empty">No ranged profile.</div>';
     const meleeHTML  = melee.length  ? melee.map(weaponLine).join('')  : '<div class="sb-weapon-empty">No melee profile.</div>';
     const loadout = [];
-    if (u.rangedChoice) loadout.push('Ranged: ' + u.rangedChoice);
-    if (u.meleeChoice)  loadout.push('Melee: '  + u.meleeChoice);
+    const joinChoice = (c) => Array.isArray(c) ? c.join(' + ') : c;
+    if (u.rangedChoice) loadout.push('Ranged: ' + joinChoice(u.rangedChoice));
+    if (u.meleeChoice)  loadout.push('Melee: '  + joinChoice(u.meleeChoice));
 
     const teamColor = TEAM_INFO[u.team].color;
     const hpLine = (state.phase === 'combat' || state.phase === 'over')
@@ -4925,7 +4926,7 @@
         state.score.kills.A = kills.A ?? state.score.kills.A;
         state.score.kills.B = kills.B ?? state.score.kills.B;
       }
-      phaseChip.textContent = `Turning Point ${tp}`;
+      phaseChip.textContent = `TP ${tp} / ${RC.MAX_TURNING_POINTS}`;
       renderVpBoard();
       syncActivationPanel();
       render();

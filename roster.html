@@ -68,6 +68,7 @@
   </main>
 
   <script src="./factions.js"></script>
+  <script src="./presets.js"></script>
   <script>
     'use strict';
 
@@ -278,12 +279,15 @@
       document.getElementById('faction-count').textContent =
         factions.length + ' team' + (factions.length === 1 ? '' : 's');
 
+      const presets = window.KT_PRESETS || [];
       factions.forEach(f => {
+        const preset = presets.find(p => p.factionId === f.id);
         const card = document.createElement('div');
         card.className = 'faction-card corner-brackets';
         card.innerHTML = `
           <div class="faction-name"></div>
           <div class="faction-meta"></div>
+          ${preset ? '<button type="button" class="btn-add faction-preset-btn">★ Use preset loadout</button>' : ''}
         `;
         card.querySelector('.faction-name').textContent = f.name;
         card.querySelector('.faction-meta').textContent =
@@ -294,6 +298,26 @@
             name: '',
             factionId: f.id,
             picks: [],
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+          };
+          openEditor(draft, /*isNew=*/true);
+        });
+        // Preset shortcut: open the editor pre-filled with the community
+        // "best loadout" roster for this faction.
+        const pbtn = card.querySelector('.faction-preset-btn');
+        if (pbtn) pbtn.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          const draft = {
+            id: newRosterId(),
+            name: preset.name,
+            factionId: f.id,
+            picks: preset.picks.map((p, i) => ({
+              uid: 'u_' + Date.now().toString(36) + '_' + i,
+              operativeId: p.operativeId,
+              rangedChoice: p.rangedChoice || null,
+              meleeChoice: p.meleeChoice || null,
+            })),
             createdAt: Date.now(),
             updatedAt: Date.now(),
           };
@@ -555,8 +579,9 @@
         meta.appendChild(sub);
 
         const loadoutParts = [];
-        if (pick.rangedChoice) loadoutParts.push('Ranged: ' + pick.rangedChoice);
-        if (pick.meleeChoice) loadoutParts.push('Melee: ' + pick.meleeChoice);
+        const joinChoice = (c) => Array.isArray(c) ? c.join(' + ') : c;
+        if (pick.rangedChoice) loadoutParts.push('Ranged: ' + joinChoice(pick.rangedChoice));
+        if (pick.meleeChoice) loadoutParts.push('Melee: ' + joinChoice(pick.meleeChoice));
         if (!loadoutParts.length && pick.weaponChoice) loadoutParts.push(pick.weaponChoice);
         if (loadoutParts.length) {
           const loadout = document.createElement('div');

@@ -3,15 +3,19 @@
 // All distances are in inches; the rest of the game treats the 28×24 Tomb-
 // World board the same way.
 //
-// We cover the chunks of the core rules the game currently exercises:
-//   * Engage / Conceal orders
+// Core-rules coverage (KT24 / kill-team3, per wahapedia):
+//   * Engage / Conceal orders; Silent shooting on Conceal
 //   * Cover (light / full) and visibility
-//   * Engagement range (1")
-//   * Action validation (Reposition / Dash / Charge / Fall Back)
-//   * Shooting and Fighting dice math, including optimal save allocation
+//   * Engagement range (1"), control range
+//   * Action validation (Reposition / Dash / Charge / Fall Back / Shoot /
+//     Fight / Guard), same-action-once restrictions
+//   * Shooting and Fighting dice math, incl. optimal save allocation and
+//     the full universal weapon-rule list (see parseWeaponRules)
+//   * Injured (-2" Move w/ 4" floor, worsened Hit), APL modifiers (±1 cap)
+//   * Game structure constants (4 turning points, CP, counteract)
 //
-// Faction rules, ploys, and equipment are intentionally skipped; weapon
-// special rules we recognise are listed in WEAPON_RULES below.
+// Faction rules and equipment stay data-driven in factions.js; ploys are
+// tracked (CP spend + log) by game.js rather than fully mechanised.
 
 (function (root) {
   const KT_RULES = root.KT_RULES = root.KT_RULES || {};
