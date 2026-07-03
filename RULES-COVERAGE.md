@@ -61,12 +61,14 @@ Killzone: Tomb World). Updated 2026-07.
 - Ploys: faction strategy/firefight ploys browsable in the Ploys & CP
   sheet; CP costs enforced, once-per-TP enforced, usage logged and shown —
   their *effects* are reminders for the players (not auto-applied).
+- Equipment: each side secretly brings up to 4 options (team screen);
+  shown with full text in the Ploys & CP sheet during the battle.
 
 ## Not yet implemented (roadmap, roughly in priority order)
 
-1. **Equipment selection** (AO2025: pick up to 4) — data exists in
-   factions.js; needs a pick step on the team screen and reminder chips
-   (mechanising common ones like re-rolls and extra weapons can follow).
+1. **Equipment effects as mechanics** — selection (up to 4 per side) and
+   in-battle reminders exist; auto-applying common effects (re-rolls,
+   extra weapons) can follow.
 2. **Faction rules / ploy effects as mechanics** — the effect IDs in
    factions.js (`attacker_effects` / `defender_effects`) suggest a generic
    buff engine (e.g. `*_ceaseless` grants Ceaseless for a sequence).

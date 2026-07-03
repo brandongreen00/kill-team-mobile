@@ -2112,6 +2112,31 @@ body.board-armed .board { cursor: crosshair; }
 }
 .ai-toggle input { accent-color: var(--accent-action); margin: 0; }
 .hud-ploys-btn { padding: 8px 12px; font-size: 10px; }
+
+/* Equipment picker on the team screen */
+.equip-pick { flex-basis: 48%; min-width: 200px; }
+.equip-pick:empty { display: none; }
+.equip-pick-team {
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  margin: 4px 0;
+}
+.equip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--bg-base-1);
+  border: 1px solid var(--border);
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+.equip-row input { accent-color: var(--accent-action); margin: 0; }
 .team-pick-summary {
   font-size: 11px;
   letter-spacing: 0.04em;

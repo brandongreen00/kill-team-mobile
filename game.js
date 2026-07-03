@@ -250,6 +250,9 @@
     // Solo mode: which side (if any) the AI commands.
     aiTeam: null,
 
+    // Equipment picks per side (up to 4 names from the faction list).
+    equipChoice: { A: [], B: [] },
+
     hoverUnit: null,                 // for the stat block popup
     pinnedStatUnit: null,            // tap-pinned (mobile)
   };
@@ -781,7 +784,46 @@
       c.classList.toggle('selected', c.dataset.rosterId === roster.id);
     });
     syncTacOpSelect(team);
+    syncEquipPick(team);
     updateTeamPickerUI();
+  }
+
+  // Equipment picker: up to 4 checkboxes from the faction's equipment list.
+  const EQUIP_MAX = 4;
+  function syncEquipPick(team) {
+    const box = document.getElementById('equip-pick-' + team);
+    if (!box) return;
+    const roster = state.rosters[team];
+    const faction = roster ? FACTIONS_BY_ID[roster.factionId] : null;
+    box.innerHTML = '';
+    state.equipChoice[team] = [];
+    if (!faction || !faction.equipment || !faction.equipment.length) return;
+    const label = document.createElement('div');
+    label.className = 'equip-pick-team';
+    label.textContent = (team === 'A' ? 'Blue — ' : 'Red — ') + (faction.short || faction.name);
+    box.appendChild(label);
+    faction.equipment.forEach(eq => {
+      const row = document.createElement('label');
+      row.className = 'equip-row';
+      row.title = eq.text || '';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.value = eq.name;
+      cb.addEventListener('change', () => {
+        const chosen = state.equipChoice[team];
+        if (cb.checked) {
+          if (chosen.length >= EQUIP_MAX) { cb.checked = false; return; }
+          chosen.push(eq.name);
+        } else {
+          state.equipChoice[team] = chosen.filter(n => n !== eq.name);
+        }
+      });
+      const span = document.createElement('span');
+      span.textContent = eq.name;
+      row.appendChild(cb);
+      row.appendChild(span);
+      box.appendChild(row);
+    });
   }
 
   // ── Ops selection (team screen) ──────────────────────────────────────
@@ -3576,6 +3618,18 @@
     if (tacOp) {
       html += `<span class="kt-step-tag">Tac Op — ${escapeHtml(tacOp.name)}</span>
         <p class="ploy-text">${escapeHtml(tacOp.scoring)}</p>`;
+    }
+    const equipment = (state.equipChoice[team] || [])
+      .map(name => (faction && (faction.equipment || []).find(e => e.name === name)) || { name, text: '' });
+    if (equipment.length) {
+      html += `<span class="kt-step-tag">Equipment</span><div class="ploy-list">`;
+      for (const eq of equipment) {
+        html += `<div class="ploy-row"><div class="ploy-row-main">
+          <div class="ploy-name">${escapeHtml(eq.name)}</div>
+          <div class="ploy-text">${escapeHtml(eq.text || '')}</div>
+        </div></div>`;
+      }
+      html += `</div>`;
     }
     if (active.length) {
       html += `<span class="kt-step-tag">Active this turning point</span>
