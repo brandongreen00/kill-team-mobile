@@ -97,6 +97,8 @@ for (let i = 0; i < 90; i++) {
     console.log('B units:', JSON.stringify(detail.bUnits));
     const moves = detail.fullLog.match(/[A-Z][0-9]? (repositions|dashes|charges|falls back)[^.]*\./g) || [];
     console.log('move log entries:', moves.length, moves.slice(0, 8));
+    const notable = detail.fullLog.match(/[^\n]*(counteract|Guard|hatchway|Loot|scores|stunned|overheats|Devastating|initiative)[^\n]*/gi) || [];
+    console.log('notable:', notable.slice(0, 30));
     break;
   }
 }
