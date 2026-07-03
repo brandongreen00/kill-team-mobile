@@ -455,12 +455,15 @@
       return hasRule(parsed, 'Silent');
     });
     if (activation.order !== 'engage' && !silent) return 'Shoot requires the Engage order (or a Silent weapon).';
+    if (activation.hasShot) return 'Already Shot this activation.';
+    if (activation.hasGuard) return 'Guard counts as this activation’s Shoot action.';
     if (inEnemyControlRange(unit, units)) return 'Cannot Shoot while in enemy control range.';
     if (activation.ap < SHOOT_AP) return 'Not enough AP.';
     if (!unit.weapons || !unit.weapons.some(w => !w.is_melee)) return 'No ranged weapon.';
     return null;
   }
   function validateFight(unit, activation, units) {
+    if (activation.hasFought) return 'Already Fought this activation.';
     if (!inEnemyControlRange(unit, units)) return 'Fight requires enemy in control range.';
     if (activation.ap < FIGHT_AP) return 'Not enough AP.';
     if (!unit.weapons || !unit.weapons.some(w => w.is_melee)) return 'No melee weapon.';
@@ -481,6 +484,8 @@
   function validateGuard(unit, activation, units) {
     if (activation.order !== 'engage') return 'Guard requires the Engage order.';
     if (activation.hasGuard) return 'Already on Guard.';
+    if (activation.hasShot) return 'Guard is treated as a Shoot action (already Shot).';
+    if (activation.counteract) return 'Cannot Guard while counteracting.';
     if (inEnemyControlRange(unit, units)) return 'Cannot Guard while in enemy control range.';
     if (activation.ap < GUARD_AP) return 'Not enough AP.';
     return null;

@@ -176,6 +176,8 @@
         maxHp: op.wounds,
         ap: op.apl || 2,
         aplMod: 0,               // Stun / concussion; clamped ±1, expires after next activation
+        onGuard: false,          // set by the Guard action; allows an interrupt
+        hasCounteracted: false,  // one counteract per operative per turning point
         alive: true,
         deployed: false,
         // turn / activation state
@@ -234,10 +236,16 @@
     score: {
       killOp:    { A: 0, B: 0 },
       critOp:    { A: 0, B: 0 },
+      tacOp:     { A: 0, B: 0 },     // secret-objective VP (max 6)
       kills:     { A: 0, B: 0 },     // # enemies this team has incapacitated
       startSize: { A: 0, B: 0 },     // enemy starting size at game start
       lastScoredTP: 0,               // guards crit-op against double-scoring
     },
+
+    // Pre-game op selections (team screen). critOpChoice 'random' rolls at
+    // battle start; tacOpChoice is per side.
+    critOpChoice: 'random',
+    tacOpChoice: { A: null, B: null },
 
     hoverUnit: null,                 // for the stat block popup
     pinnedStatUnit: null,            // tap-pinned (mobile)
@@ -296,36 +304,355 @@
     return 'neutral';
   }
 
-  // Score the round that just ended. Awards 1 VP per controlled objective.
+  // ── Ops engine (crit op + tac ops) ──────────────────────────────────
+  const OPS = window.KT_OPS;
+  const CRIT_OP_VP_CAP = 6;
+  const TAC_OP_VP_CAP = 6;
+
+  function opsState() { return state.combat.ops; }
+  function enemyOf(team) { return team === 'A' ? 'B' : 'A'; }
+
+  function initOps() {
+    const critId = (state.critOpChoice === 'random' || !state.critOpChoice)
+      ? OPS.CRIT_OPS[Math.floor(Math.random() * OPS.CRIT_OPS.length)].id
+      : state.critOpChoice;
+    const mkTacOp = (team) => {
+      const id = state.tacOpChoice[team];
+      if (!id || !OPS.tacOpById(id)) return null;
+      return {
+        id,
+        dominateTokens: {},                                  // unitIndex -> tokens
+        martyrTokens: (mapDef.objectives || []).map(() => 0),
+        deviceTokens: (mapDef.objectives || []).map(() => false),
+        monitored: new Set(),                                // enemy unit indexes
+        envoyIdx: null,
+        envoyUsed: new Set(),
+        envoyStartHp: 0,
+        flankPrev: { a: false, b: false },                   // controlled at end of prev TP
+      };
+    };
+    state.combat.ops = {
+      critOp: critId,
+      objState: (mapDef.objectives || []).map(() => ({ securedBy: null, transmitting: false, lootedTP: 0 })),
+      lootVPThisTP: { A: 0, B: 0 },
+      routVPThisTP: { A: 0, B: 0 },
+      tacOps: { A: mkTacOp('A'), B: mkTacOp('B') },
+    };
+    log(`Crit Op: ${OPS.critOpById(critId).name}.`, 'turn');
+    ['A', 'B'].forEach(t => {
+      const to = state.combat.ops.tacOps[t];
+      if (to) log(`${teamName(t)} Tac Op: ${OPS.tacOpById(to.id).name}.`, 'turn');
+    });
+  }
+
+  function addCritVP(team, n, why) {
+    if (n <= 0) return;
+    const gain = Math.min(n, CRIT_OP_VP_CAP - state.score.critOp[team]);
+    if (gain <= 0) return;
+    state.score.critOp[team] += gain;
+    log(`${teamName(team)} scores ${gain}VP (${why}).`, 'turn');
+  }
+  function addTacVP(team, n, why) {
+    if (n <= 0) return;
+    const gain = Math.min(n, TAC_OP_VP_CAP - state.score.tacOp[team]);
+    if (gain <= 0) return;
+    state.score.tacOp[team] += gain;
+    log(`${teamName(team)} scores ${gain}VP (Tac Op — ${why}).`, 'turn');
+  }
+
+  function unitContests(u, obj) {
+    return u.alive && u.deployed
+      && Math.hypot(u.x - obj.x, u.y - obj.y) - KTR.unitBaseRadius(u) <= RC.ENGAGEMENT_RANGE + 1e-3;
+  }
+
+  // Distance from a unit to a team's drop zone (deploy squares or half).
+  function distToDropZone(u, team) {
+    const squares = KT.deploySquares(mapDef, team);
+    const rects = squares.length ? squares : [KT.deployZone(mapDef, team)];
+    let best = Infinity;
+    for (const z of rects) {
+      const dx = Math.max(z.x - u.x, 0, u.x - (z.x + z.w));
+      const dy = Math.max(z.y - u.y, 0, u.y - (z.y + z.h));
+      best = Math.min(best, Math.hypot(dx, dy));
+    }
+    return best;
+  }
+
+  // Is the unit wholly within `team`'s half of the board?
+  function whollyInTerritory(u, team) {
+    const z = KT.deployZone(mapDef, team); // full half of the board
+    const r = KTR.unitBaseRadius(u);
+    return u.x - r >= z.x && u.x + r <= z.x + z.w
+        && u.y - r >= z.y && u.y + r <= z.y + z.h;
+  }
+
+  // Kill hooks (Rout / Dominate / Martyrs).
+  function onKillScored(killerTeam, killer, victim) {
+    const ops = opsState();
+    if (!ops) return;
+    const myOp = ops.tacOps[killerTeam];
+    if (myOp && killer) {
+      if (myOp.id === 'rout') {
+        if (distToDropZone(killer, enemyOf(killerTeam)) <= 6 + 1e-3 && ops.routVPThisTP[killerTeam] < 2) {
+          const vp = Math.min((victim && victim.maxHp >= 12) ? 2 : 1, 2 - ops.routVPThisTP[killerTeam]);
+          ops.routVPThisTP[killerTeam] += vp;
+          addTacVP(killerTeam, vp, 'Rout');
+        }
+      } else if (myOp.id === 'dominate') {
+        const idx = state.units.indexOf(killer);
+        if (idx >= 0) {
+          const tokens = (victim && victim.maxHp >= 12) ? 2 : 1;
+          myOp.dominateTokens[idx] = (myOp.dominateTokens[idx] || 0) + tokens;
+          log(`${killer.letter} claims ${tokens} Dominate token${tokens > 1 ? 's' : ''}.`);
+        }
+      }
+    }
+    // Martyrs triggers for the *victim's* team.
+    if (victim) {
+      const victimOp = ops.tacOps[victim.team];
+      if (victimOp && victimOp.id === 'martyrs') {
+        (mapDef.objectives || []).forEach((obj, i) => {
+          if (unitContestsIncapacitated(victim, obj)) {
+            victimOp.martyrTokens[i] += 1;
+            log(`A martyr falls on objective ${i + 1}.`);
+          }
+        });
+      }
+    }
+  }
+  // The victim is already flagged !alive when the hook runs — test position only.
+  function unitContestsIncapacitated(u, obj) {
+    return u.deployed
+      && Math.hypot(u.x - obj.x, u.y - obj.y) - KTR.unitBaseRadius(u) <= RC.ENGAGEMENT_RANGE + 1e-3;
+  }
+
+  // Valid-target check used by Track Enemy (visible and not conceal+cover).
+  function isValidTarget(shooter, target) {
+    const env = KTR.shootEnv(mapDef, state.combat.pieceState.open, shooter, target);
+    if (!env.visible) return false;
+    if (target.order === 'conceal' && env.inCover) return false;
+    return true;
+  }
+
+  // Flanks: the dividing line runs through the centre of each player's
+  // killzone edge (perpendicular to the deployment split). Returns 'a'|'b'
+  // for whichever flank the unit is wholly within, else null.
+  function flankOf(u) {
+    const r = KTR.unitBaseRadius(u);
+    if (mapDef.split === 'vertical') {
+      const mid = BOARD.height / 2;
+      if (u.y + r <= mid) return 'a';
+      if (u.y - r >= mid) return 'b';
+    } else {
+      const mid = BOARD.width / 2;
+      if (u.x + r <= mid) return 'a';
+      if (u.x - r >= mid) return 'b';
+    }
+    return null;
+  }
+  function flankControlled(team, flank) {
+    let mine = 0, theirs = 0;
+    for (const u of state.units) {
+      if (!u.alive || !u.deployed) continue;
+      if (!whollyInTerritory(u, enemyOf(team))) continue;
+      if (flankOf(u) !== flank) continue;
+      if (u.team === team) mine += KTR.effectiveAPL(u);
+      else theirs += KTR.effectiveAPL(u);
+    }
+    return mine > theirs;
+  }
+
+  // Score the turning point that just ended: crit op then both tac ops.
   // Guarded so a single TP can never score twice (covers the case where the
   // game ends mid-TP via elimination).
-  function scoreCritOpEndOfTurn() {
+  function scoreEndOfTurningPoint() {
     const tp = state.combat.turningPoint;
     if (state.score.lastScoredTP >= tp) return;
     state.score.lastScoredTP = tp;
-    let aGained = 0, bGained = 0;
-    for (const o of (mapDef.objectives || [])) {
-      const c = objectiveControl(o);
-      if (c === 'A') aGained++;
-      else if (c === 'B') bGained++;
+    const ops = opsState();
+    if (!ops) return;
+    if (tp >= 2) {
+      scoreCritOpForTP(ops, tp);
+      ['A', 'B'].forEach(team => scoreTacOpForTP(team, ops, tp));
     }
-    state.score.critOp.A += aGained;
-    state.score.critOp.B += bGained;
-    if (aGained || bGained) {
-      log(`— TP ${tp} crit op: Blue +${aGained}, Red +${bGained} —`, 'turn');
+    // Per-TP housekeeping.
+    ops.objState.forEach(o => { o.transmitting = false; });
+    ops.lootVPThisTP = { A: 0, B: 0 };
+    ops.routVPThisTP = { A: 0, B: 0 };
+    ['A', 'B'].forEach(team => {
+      const to = ops.tacOps[team];
+      if (to) to.monitored = new Set();
+    });
+  }
+
+  function scoreCritOpForTP(ops, tp) {
+    const objs = mapDef.objectives || [];
+    if (ops.critOp === 'secure') {
+      const counts = { A: 0, B: 0 };
+      objs.forEach((o, i) => {
+        const s = ops.objState[i].securedBy;
+        if (s) counts[s]++;
+      });
+      ['A', 'B'].forEach(t => {
+        let vp = 0;
+        if (counts[t] > 0) vp++;
+        if (counts[t] > counts[enemyOf(t)]) vp++;
+        addCritVP(t, vp, 'Secure');
+      });
+    } else if (ops.critOp === 'transmission') {
+      const counts = { A: 0, B: 0 };
+      objs.forEach((o, i) => {
+        if (!ops.objState[i].transmitting) return;
+        const c = objectiveControl(o);
+        if (c === 'A' || c === 'B') counts[c]++;
+      });
+      ['A', 'B'].forEach(t => {
+        let vp = 0;
+        if (counts[t] > 0) vp++;
+        if (counts[t] > counts[enemyOf(t)]) vp++;
+        addCritVP(t, vp, 'Transmission');
+      });
     }
+    // Loot scores immediately when the action is performed.
+  }
+
+  function scoreTacOpForTP(team, ops, tp) {
+    const to = ops.tacOps[team];
+    if (!to) return;
+    const objs = mapDef.objectives || [];
+    const enemy = enemyOf(team);
+    switch (to.id) {
+      case 'dominate': {
+        if (tp === 3 || tp === 4) {
+          let vp = 0;
+          for (const [idxStr, tokens] of Object.entries(to.dominateTokens)) {
+            const u = state.units[+idxStr];
+            if (u && u.alive) { vp += tokens; to.dominateTokens[idxStr] = 0; }
+          }
+          addTacVP(team, Math.min(3, vp), 'Dominate');
+        }
+        break;
+      }
+      case 'martyrs': {
+        let vp = 0;
+        objs.forEach((obj, i) => {
+          if (to.martyrTokens[i] <= 0) return;
+          const contested = state.units.some(u => u.team === team && unitContests(u, obj));
+          if (!contested) return;
+          const controlled = objectiveControl(obj) === team;
+          vp += to.martyrTokens[i] * (controlled ? 2 : 1);
+          to.martyrTokens[i] = 0;
+        });
+        addTacVP(team, Math.min(2, vp), 'Martyrs');
+        break;
+      }
+      case 'envoy': {
+        const envoy = to.envoyIdx != null ? state.units[to.envoyIdx] : null;
+        if (envoy && envoy.alive && whollyInTerritory(envoy, enemy)
+            && !KTR.inEnemyControlRange(envoy, state.units)) {
+          const unhurt = envoy.hp >= to.envoyStartHp;
+          addTacVP(team, unhurt ? 2 : 1, 'Envoy');
+        }
+        break;
+      }
+      case 'flank': {
+        let vp = 0;
+        const now = { a: flankControlled(team, 'a'), b: flankControlled(team, 'b') };
+        ['a', 'b'].forEach(f => {
+          if (!now[f]) return;
+          vp += (tp === 4 && to.flankPrev[f]) ? 2 : 1;
+        });
+        to.flankPrev = now;
+        addTacVP(team, Math.min(2, vp), 'Flank');
+        break;
+      }
+      case 'scout': {
+        let vp = 0;
+        for (const idx of to.monitored) {
+          const e = state.units[idx];
+          if (!e || !e.alive) continue;
+          const seen = state.units.some(f => f.team === team && f.alive && f.deployed
+            && KTR.shootEnv(mapDef, state.combat.pieceState.open, f, e).visible);
+          if (seen) vp++;
+        }
+        addTacVP(team, Math.min(2, vp), 'Scout Enemy Movement');
+        break;
+      }
+      case 'track': {
+        let tracked = 0;
+        for (const e of state.units) {
+          if (!e.alive || !e.deployed || e.team !== enemy) continue;
+          const isTracked = state.units.some(f => {
+            if (f.team !== team || !f.alive || !f.deployed) return false;
+            if (f.order !== 'conceal') return false;
+            if (KTR.edgeDist(f, e) > 6 + 1e-3) return false;
+            if (KTR.inEnemyControlRange(f, state.units)) return false;
+            return isValidTarget(f, e) && !isValidTarget(e, f);
+          });
+          if (isTracked) tracked++;
+        }
+        let vp = 0;
+        if (tracked >= 2) vp = 2;
+        else if (tracked === 1) vp = (tp === 4) ? 2 : 1;
+        addTacVP(team, vp, 'Track Enemy');
+        break;
+      }
+      case 'plant-devices': {
+        let vp = 0;
+        objs.forEach((obj, i) => {
+          if (!to.deviceTokens[i]) return;
+          if (obj.owner === enemy) vp++;
+          else if (state.units.some(u => u.team === enemy && unitContests(u, obj))) vp++;
+        });
+        addTacVP(team, Math.min(2, vp), 'Plant Devices');
+        break;
+      }
+      // rout scores immediately via onKillScored.
+    }
+  }
+
+  // Envoy auto-selection at the start of each TP after the first: the
+  // surviving friendly deepest toward (or into) enemy territory that hasn't
+  // served as envoy before.
+  function selectEnvoys() {
+    const ops = opsState();
+    if (!ops) return;
+    ['A', 'B'].forEach(team => {
+      const to = ops.tacOps[team];
+      if (!to || to.id !== 'envoy') return;
+      const enemy = enemyOf(team);
+      const depth = (u) => {
+        if (mapDef.split === 'vertical') return enemy === 'B' ? u.x : -u.x;
+        return enemy === 'B' ? -u.y : u.y;
+      };
+      let best = null, bestDepth = -Infinity;
+      state.units.forEach((u, idx) => {
+        if (u.team !== team || !u.alive || !u.deployed) return;
+        if (to.envoyUsed.has(idx)) return;
+        const d = depth(u);
+        if (d > bestDepth) { bestDepth = d; best = idx; }
+      });
+      to.envoyIdx = best;
+      if (best != null) {
+        to.envoyUsed.add(best);
+        to.envoyStartHp = state.units[best].hp;
+        log(`${teamName(team)} appoints ${state.units[best].letter} as Envoy.`);
+      }
+    });
   }
 
   function totalVP(team) {
-    return (state.score.killOp[team] || 0) + (state.score.critOp[team] || 0);
+    return (state.score.killOp[team] || 0) + (state.score.critOp[team] || 0)
+      + (state.score.tacOp[team] || 0);
   }
 
   // Called whenever an enemy is incapacitated. `killerTeam` is the team that
-  // scored the kill (i.e. the opposing side from the operative who fell).
-  function registerKill(killerTeam) {
+  // scored the kill; `killer` / `victim` (optional) feed tac-op hooks.
+  function registerKill(killerTeam, killer, victim) {
     if (killerTeam !== 'A' && killerTeam !== 'B') return;
     state.score.kills[killerTeam] = (state.score.kills[killerTeam] || 0) + 1;
     recomputeKillOp();
+    onKillScored(killerTeam, killer || null, victim || null);
   }
 
   // ── DOM refs ─────────────────────────────────────────────────────────
@@ -450,8 +777,63 @@
     document.querySelectorAll('#roster-list-' + team + ' .roster-pick-card').forEach(c => {
       c.classList.toggle('selected', c.dataset.rosterId === roster.id);
     });
+    syncTacOpSelect(team);
     updateTeamPickerUI();
   }
+
+  // ── Ops selection (team screen) ──────────────────────────────────────
+  function initOpsPickers() {
+    const critSel = document.getElementById('crit-op-select');
+    if (!critSel || !OPS) return;
+    OPS.CRIT_OPS.forEach(c => {
+      const o = document.createElement('option');
+      o.value = c.id;
+      o.textContent = c.name;
+      critSel.appendChild(o);
+    });
+    const critDesc = document.getElementById('crit-op-desc');
+    const syncCrit = () => {
+      state.critOpChoice = critSel.value;
+      const c = OPS.critOpById(critSel.value);
+      critDesc.textContent = c ? c.summary : 'One of the three crit ops, rolled at battle start.';
+    };
+    critSel.addEventListener('change', syncCrit);
+    syncCrit();
+  }
+
+  function syncTacOpSelect(team) {
+    const sel = document.getElementById('tac-op-' + team);
+    const desc = document.getElementById('tac-op-desc-' + team);
+    if (!sel || !OPS) return;
+    const roster = state.rosters[team];
+    sel.innerHTML = '';
+    if (!roster) {
+      sel.disabled = true;
+      desc.textContent = '';
+      state.tacOpChoice[team] = null;
+      return;
+    }
+    sel.disabled = false;
+    const opts = OPS.tacOpsFor(roster.factionId);
+    opts.forEach(t => {
+      const o = document.createElement('option');
+      o.value = t.id;
+      o.textContent = `${t.name} (${t.archetype})`;
+      sel.appendChild(o);
+    });
+    const sync = () => {
+      state.tacOpChoice[team] = sel.value;
+      const t = OPS.tacOpById(sel.value);
+      desc.textContent = t ? t.summary : '';
+    };
+    sel.onchange = sync;
+    // Keep a previously chosen op if it's still legal for the new faction.
+    if (state.tacOpChoice[team] && opts.some(t => t.id === state.tacOpChoice[team])) {
+      sel.value = state.tacOpChoice[team];
+    }
+    sync();
+  }
+  initOpsPickers();
 
   function updateTeamPickerUI() {
     ['A', 'B'].forEach(team => {
@@ -824,6 +1206,8 @@
       },
       lastScoredTP: 0,
     };
+    state.score.tacOp = { A: 0, B: 0 };
+    initOps();
     // TP1 initiative goes to whoever deployed first (the setup roll-off
     // winner's choice); later TPs roll off in each Strategy phase.
     state.combat.initiativeTeam = state.deploy.first;
@@ -831,8 +1215,13 @@
     // Approved Ops: each player starts the battle with 2CP, then gains 1CP
     // in the first Ready step.
     state.combat.cp = { A: 2 + RC.CP_PER_TP, B: 2 + RC.CP_PER_TP };
+    state.combat.usedPloys = { A: new Set(), B: new Set() };
+    state.combat.activePloys = { A: [], B: [] };
     state.units.forEach(u => {
-      if (u.alive) { u.unitState = 'ready'; u.order = null; u.ap = u.apl; }
+      if (u.alive) {
+        u.unitState = 'ready'; u.order = null; u.ap = u.apl;
+        u.onGuard = false; u.hasCounteracted = false;
+      }
     });
     setPhase('combat');
     phaseChip.textContent = 'Turning Point 1';
@@ -848,8 +1237,14 @@
   function startActivation(unit) {
     if (!unit || unit.unitState !== 'ready') return;
     if (unit.team !== activeTeam()) return;
+    // Activating while a counteract offer is open counts as the opposing
+    // player passing on it.
+    if (state.combat.counteract && state.combat.counteract.selecting) {
+      state.combat.counteract = null;
+    }
     unit.unitState = 'activating';
     unit.ap = KTR.effectiveAPL(unit);
+    unit.onGuard = false;
     // Default to Engage so the player can act immediately. They can flip to
     // Conceal via the chip in the activation header until the first action
     // is taken (Kill Team locks the order once a decision depends on it).
@@ -928,6 +1323,23 @@
       })),
       open: new Set(state.combat.pieceState.open),
       activeTeam: state.combat.activeTeam,
+      cp: { ...state.combat.cp },
+      score: JSON.parse(JSON.stringify(state.score)),
+      ops: state.combat.ops ? {
+        objState: JSON.parse(JSON.stringify(state.combat.ops.objState)),
+        lootVPThisTP: { ...state.combat.ops.lootVPThisTP },
+        routVPThisTP: { ...state.combat.ops.routVPThisTP },
+        tacOps: ['A', 'B'].reduce((acc, t) => {
+          const to = state.combat.ops.tacOps[t];
+          acc[t] = to ? {
+            dominateTokens: { ...to.dominateTokens },
+            martyrTokens: [...to.martyrTokens],
+            deviceTokens: [...to.deviceTokens],
+            monitored: new Set(to.monitored),
+          } : null;
+          return acc;
+        }, {}),
+      } : null,
       a: a ? {
         order: a.order, ap: a.ap,
         hasReposition: a.hasReposition, hasDashed: a.hasDashed,
@@ -954,6 +1366,23 @@
     });
     state.combat.pieceState.open = snap.open;
     state.combat.activeTeam = snap.activeTeam;
+    if (snap.cp) state.combat.cp = { ...snap.cp };
+    if (snap.score) state.score = JSON.parse(JSON.stringify(snap.score));
+    if (snap.ops && state.combat.ops) {
+      state.combat.ops.objState = JSON.parse(JSON.stringify(snap.ops.objState));
+      state.combat.ops.lootVPThisTP = { ...snap.ops.lootVPThisTP };
+      state.combat.ops.routVPThisTP = { ...snap.ops.routVPThisTP };
+      ['A', 'B'].forEach(t => {
+        const to = state.combat.ops.tacOps[t];
+        const st = snap.ops.tacOps[t];
+        if (to && st) {
+          to.dominateTokens = { ...st.dominateTokens };
+          to.martyrTokens = [...st.martyrTokens];
+          to.deviceTokens = [...st.deviceTokens];
+          to.monitored = new Set(st.monitored);
+        }
+      });
+    }
     if (snap.a && a) Object.assign(a, snap.a);
     state.combat.pendingMove = null;
     log(`Undo: reverted last action.`);
@@ -964,6 +1393,7 @@
   function endActivation() {
     const a = activation();
     if (!a) return;
+    if (a.counteract) { endCounteract(); return; }
     if (!a.order) {
       activationHint.textContent = 'Pick an order before ending the activation.';
       activationHint.classList.add('warn');
@@ -977,21 +1407,102 @@
     log(`${u.letter} ends activation.`, 'turn');
     state.combat.activation = null;
     state.combat.pendingMove = null;
-    // Switch active team if the other has ready units; otherwise keep current.
-    const cur = u.team;
-    const other = cur === 'A' ? 'B' : 'A';
-    if (readyUnits(other).length > 0) state.combat.activeTeam = other;
-    else if (readyUnits(cur).length > 0) state.combat.activeTeam = cur;
-    else { nextTurningPoint(); return; }
+    advanceAfterActivation(u.team);
+  }
+
+  // Alternation after an activation (or counteract) resolves. When one side
+  // is fully expended but the other still has ready operatives, the expended
+  // side is offered a counteract before each remaining enemy activation.
+  function advanceAfterActivation(justActedTeam) {
+    const other = justActedTeam === 'A' ? 'B' : 'A';
+    const readyOther = readyUnits(other).length;
+    const readyCur = readyUnits(justActedTeam).length;
+    if (!readyOther && !readyCur) { nextTurningPoint(); return; }
+    let counteractTeam = null;
+    if (readyOther) {
+      state.combat.activeTeam = other;
+      if (!readyCur) counteractTeam = justActedTeam;
+    } else {
+      state.combat.activeTeam = justActedTeam;
+      counteractTeam = other;
+    }
+    if (counteractTeam && counteractCandidates(counteractTeam).length) {
+      state.combat.counteract = { team: counteractTeam, selecting: true };
+    } else {
+      state.combat.counteract = null;
+    }
     state.combat.selectedId = readyUnits(state.combat.activeTeam)[0] || null;
     if (checkVictory()) return;
     syncActivationPanel();
     render();
   }
 
+  // ── Counteract ─────────────────────────────────────────────────────
+  // An expended operative with an Engage order may perform one free 1AP
+  // action (excluding Guard) between enemy activations, once per turning
+  // point, moving no more than 2".
+  function counteractCandidates(team) {
+    return state.units.filter(u => u.alive && u.deployed && u.team === team
+      && u.unitState === 'activated' && u.order === 'engage'
+      && !u.hasCounteracted);
+  }
+
+  function startCounteract(unit) {
+    const c = state.combat.counteract;
+    if (!c || unit.team !== c.team) return;
+    c.selecting = false;
+    state.combat.selectedId = unit;
+    state.combat.activation = {
+      unit,
+      counteract: true,
+      order: unit.order,
+      ap: 1,
+      apMax: 1,
+      history: [],
+      undoStack: [],
+      hasReposition: false, hasDashed: false, hasCharged: false,
+      hasFallenBack: false, hasShot: false, hasFought: false,
+      hasGuard: false, teleportedThisActivation: false,
+      baseline: null,
+    };
+    state.combat.activation.baseline = snapshotForUndo();
+    log(`${teamName(unit.team)} counteracts with ${unit.letter} (${unit._displayName}).`, 'turn');
+    syncActivationPanel();
+    render();
+  }
+
+  function passCounteract() {
+    const c = state.combat.counteract;
+    if (!c) return;
+    log(`${teamName(c.team)} passes on counteracting.`);
+    state.combat.counteract = null;
+    syncActivationPanel();
+    render();
+  }
+
+  function endCounteract() {
+    const a = activation();
+    if (!a || !a.counteract) return;
+    a.unit.hasCounteracted = true;
+    log(`${a.unit.letter} finishes counteracting.`, 'turn');
+    state.combat.activation = null;
+    state.combat.pendingMove = null;
+    state.combat.counteract = null;
+    state.combat.selectedId = readyUnits(state.combat.activeTeam)[0] || null;
+    if (checkVictory()) return;
+    syncActivationPanel();
+    render();
+  }
+
+  // Counteract allows exactly one action — auto-finish once AP is spent.
+  function maybeFinishCounteract() {
+    const a = activation();
+    if (a && a.counteract && a.ap <= 0) endCounteract();
+  }
+
   function nextTurningPoint() {
     // Score the round that just ended before advancing the turning point.
-    scoreCritOpEndOfTurn();
+    scoreEndOfTurningPoint();
     // The game always ends after the final turning point — most VP wins.
     if (state.combat.turningPoint >= RC.MAX_TURNING_POINTS) {
       endGameByScore();
@@ -1019,8 +1530,15 @@
     state.combat.cp[noInit] += RC.CP_PER_TP * 2;
     log(`Command Points — ${teamName('A')} ${state.combat.cp.A}CP · ${teamName('B')} ${state.combat.cp.B}CP.`);
     state.units.forEach(u => {
-      if (u.alive) { u.unitState = 'ready'; u.order = null; u.ap = u.apl; }
+      if (u.alive) {
+        u.unitState = 'ready'; u.order = null; u.ap = u.apl;
+        u.onGuard = false; u.hasCounteracted = false;
+      }
     });
+    state.combat.counteract = null;
+    state.combat.usedPloys = { A: new Set(), B: new Set() };
+    state.combat.activePloys = { A: [], B: [] };
+    selectEnvoys();
     state.combat.selectedId = readyUnits(state.combat.activeTeam)[0] || null;
     if (checkVictory()) return;
     syncActivationPanel();
@@ -1034,6 +1552,12 @@
     state.phase = 'over';
     state.combat.activation = null;
     state.combat.pendingMove = null;
+    // Kill Op end-of-battle bonus: higher kill grade than the opponent = 1VP.
+    if (state.score.killOp.A !== state.score.killOp.B) {
+      const higher = state.score.killOp.A > state.score.killOp.B ? 'A' : 'B';
+      state.score.killOp[higher] += 1;
+      log(`${teamName(higher)} scores 1VP (higher kill grade).`, 'turn');
+    }
     const aVP = totalVP('A'), bVP = totalVP('B');
     let title, text;
     if (aVP === bVP) {
@@ -1056,7 +1580,7 @@
     const bAlive = state.units.some(u => u.team === 'B' && u.alive);
     if (aAlive && bAlive) return false;
     // Score crit op for the in-progress round before the game closes out.
-    scoreCritOpEndOfTurn();
+    scoreEndOfTurningPoint();
     state.combat.over = true;
     state.phase = 'over';
     state.combat.activation = null;
@@ -1209,12 +1733,22 @@
     else if (pm.kind === 'charge'){ a.hasCharged = true;    cost = RC.CHARGE_AP;     label = 'charges'; }
     else                          { a.hasFallenBack = true; cost = RC.FALL_BACK_AP;  label = 'falls back'; }
     a.ap -= cost;
+    // Any action performed while on guard ends the guard stance.
+    u.onGuard = false;
     const legs = pm.waypoints.length - 1;
     a.history.push({ type: pm.kind, dist: pm.used, legs });
     log(`${u.letter} ${label} ${pm.used.toFixed(1)}"${legs > 1 ? ` (${legs} legs)` : ''}.`);
     state.combat.pendingMove = null;
     activationHint.classList.remove('warn');
     activationHint.textContent = '';
+    afterActionResolved();
+  }
+
+  // Common post-action hook: offers Guard interrupts to the opposing side,
+  // then finishes a counteract if its single action was just spent.
+  function afterActionResolved() {
+    maybeOfferGuardInterrupt();
+    maybeFinishCounteract();
     syncActivationPanel();
     render();
   }
@@ -1252,10 +1786,10 @@
     if (kind === 'charge') a.hasCharged = true;
     if (kind === 'fallBack') a.hasFallenBack = true;
     a.history.push({ type: 'teleport', from: padFrom.pieceIndex, to: padTo.pieceIndex });
+    u.onGuard = false;
     log(`${u.letter} teleports across the pads.`);
     state.combat.pendingMove = null;
-    syncActivationPanel();
-    render();
+    afterActionResolved();
   }
 
   function padAt(x, y) {
@@ -1315,10 +1849,10 @@
     if (wasOpen) open.delete(target.pieceIndex);
     else open.add(target.pieceIndex);
     a.ap -= RC.OPEN_HATCH_AP;
+    u.onGuard = false;
     a.history.push({ type: 'operateHatch', piece: target.pieceIndex, open: !wasOpen });
     log(`${u.letter} ${wasOpen ? 'closes' : 'opens'} hatchway ${target.label || ''}.`);
-    syncActivationPanel();
-    render();
+    afterActionResolved();
   }
 
   function performBreach() {
@@ -1335,10 +1869,236 @@
     pushUndo();
     state.combat.pieceState.open.add(target.pieceIndex);
     a.ap -= cost;
+    u.onGuard = false;
     a.history.push({ type: 'breach', piece: target.pieceIndex });
     log(`${u.letter} breaches the wall ${target.label || ''} (${cost} AP).`);
+    // Concussion: each operative on the far side within control range of the
+    // access point rolls a D6 — on 4+ it loses 1 APL and takes half the
+    // result (rounded up) in damage.
+    breachConcussion(target, u);
+    afterActionResolved();
+  }
+
+  function breachConcussion(target, breacher) {
+    for (const o of state.units) {
+      if (!o.alive || !o.deployed || o === breacher) continue;
+      const w = (mapDef.walls || []).find(w => w.pieceIndex === target.pieceIndex);
+      const d = w
+        ? pointSegDist(o.x, o.y, w.x1, w.y1, w.x2, w.y2) - KTR.unitBaseRadius(o)
+        : Math.hypot(target.x - o.x, target.y - o.y) - KTR.unitBaseRadius(o);
+      if (d > RC.ENGAGEMENT_RANGE + 1e-3) continue;
+      // Same side as the breacher? Concussion hits the operatives on the
+      // OTHER side. Use the wall segment as the divider.
+      if (w) {
+        const sideOf = (x, y) => Math.sign((w.x2 - w.x1) * (y - w.y1) - (w.y2 - w.y1) * (x - w.x1)) || 1;
+        if (sideOf(o.x, o.y) === sideOf(breacher.x, breacher.y)) continue;
+      }
+      const roll = KTR.rollD6();
+      if (roll >= 4) {
+        const dmg = Math.ceil(roll / 2);
+        o.aplMod = -1;
+        o.hp = Math.max(0, o.hp - dmg);
+        log(`Breach concussion: ${o.letter} takes ${dmg} damage and -1 APL (rolled ${roll}).`, 'hit');
+        if (o.hp <= 0) {
+          o.alive = false;
+          o.unitState = 'incapacitated';
+          log(`${o.letter} (${o._displayName}) is incapacitated by the breach.`, 'kill');
+          registerKill(breacher.team, breacher, o);
+        }
+      } else {
+        log(`Breach concussion: ${o.letter} shrugs it off (rolled ${roll}).`);
+      }
+    }
+  }
+
+  // ── Mission actions (crit op + tac op) ──────────────────────────────
+  function contestedControlledObjectives(u) {
+    const out = [];
+    (mapDef.objectives || []).forEach((obj, i) => {
+      if (unitContests(u, obj) && objectiveControl(obj) === u.team) out.push(i);
+    });
+    return out;
+  }
+
+  function scoutTargets(u) {
+    return state.units.filter(e => e.alive && e.deployed && e.team !== u.team
+      && e.unitState === 'ready'
+      && KTR.edgeDist(u, e) > 6
+      && KTR.shootEnv(mapDef, state.combat.pieceState.open, u, e).visible);
+  }
+
+  function missionActionsFor(u, a) {
+    const ops = opsState();
+    if (!ops) return [];
+    const tp = state.combat.turningPoint;
+    if (tp < 2) return [];
+    if (KTR.inEnemyControlRange(u, state.units)) return [];
+    const out = [];
+    const objIdxs = contestedControlledObjectives(u);
+    const apShort = a.ap < 1 ? 'Not enough AP.' : null;
+    if (objIdxs.length) {
+      if (ops.critOp === 'secure') {
+        const i = objIdxs.find(ix => ops.objState[ix].securedBy !== u.team);
+        if (i != null) out.push({ id: 'ma-secure', name: 'Secure', cost: 1, info: 'Hold until enemy re-secures', reason: apShort, obj: i });
+      } else if (ops.critOp === 'loot') {
+        const i = objIdxs.find(ix => ops.objState[ix].lootedTP < tp);
+        if (i != null) {
+          const capped = ops.lootVPThisTP[u.team] >= 2;
+          out.push({ id: 'ma-loot', name: 'Loot', cost: 1, info: '+1VP', reason: apShort || (capped ? 'Already scored 2VP this turning point.' : null), obj: i });
+        }
+      } else if (ops.critOp === 'transmission') {
+        const i = objIdxs.find(ix => !ops.objState[ix].transmitting);
+        if (i != null) out.push({ id: 'ma-transmit', name: 'Initiate Transmission', cost: 1, info: 'Transmits until next TP', reason: apShort, obj: i });
+      }
+    }
+    const to = ops.tacOps[u.team];
+    if (to) {
+      if (to.id === 'plant-devices') {
+        const i = objIdxs.find(ix => !to.deviceTokens[ix]);
+        if (i != null) out.push({ id: 'ma-plant', name: 'Plant Device', cost: 1, info: 'Rig this objective', reason: apShort, obj: i });
+      } else if (to.id === 'scout' && u.order === 'conceal' && scoutTargets(u).length) {
+        out.push({ id: 'ma-scout', name: 'Scout', cost: 1, info: 'Monitor a distant enemy', reason: apShort });
+      }
+    }
+    return out;
+  }
+
+  function performMissionAction(item) {
+    const a = activation();
+    if (!a || a.ap < 1) return;
+    const ops = opsState();
+    const u = a.unit;
+    if (item.id === 'ma-scout') {
+      const targets = scoutTargets(u);
+      if (!targets.length) return;
+      const items = targets.map(t => ({
+        letter: t.letter, name: t._displayName,
+        meta: `${KTR.edgeDist(u, t).toFixed(1)}"`,
+        color: TEAM_INFO[t.team].color,
+        onPick: () => {
+          clearTargetPicker();
+          pushUndo();
+          a.ap -= 1;
+          u.onGuard = false;
+          const to = ops.tacOps[u.team];
+          to.monitored.add(state.units.indexOf(t));
+          a.history.push({ type: 'scout', target: t.letter });
+          log(`${u.letter} scouts ${t.letter} — monitored this turning point.`);
+          afterActionResolved();
+        },
+      }));
+      showTargetPickerAt(items, { title: 'Scout — pick an enemy to monitor' });
+      return;
+    }
+    pushUndo();
+    a.ap -= 1;
+    u.onGuard = false;
+    const i = item.obj;
+    if (item.id === 'ma-secure') {
+      ops.objState[i].securedBy = u.team;
+      a.history.push({ type: 'secure', obj: i });
+      log(`${u.letter} secures objective ${i + 1}.`, 'turn');
+    } else if (item.id === 'ma-loot') {
+      ops.objState[i].lootedTP = state.combat.turningPoint;
+      ops.lootVPThisTP[u.team] += 1;
+      a.history.push({ type: 'loot', obj: i });
+      addCritVP(u.team, 1, 'Loot');
+    } else if (item.id === 'ma-transmit') {
+      ops.objState[i].transmitting = true;
+      a.history.push({ type: 'transmit', obj: i });
+      log(`${u.letter} sets objective ${i + 1} transmitting.`, 'turn');
+    } else if (item.id === 'ma-plant') {
+      ops.tacOps[u.team].deviceTokens[i] = true;
+      a.history.push({ type: 'plantDevice', obj: i });
+      log(`${u.letter} plants a device on objective ${i + 1}.`, 'turn');
+    }
+    afterActionResolved();
+  }
+
+  // ── Guard ──────────────────────────────────────────────────────────
+  function performGuard() {
+    const a = activation();
+    if (!a) return;
+    const u = a.unit;
+    const reason = KTR.validate.guard(u, a, state.units);
+    if (reason) { activationHint.textContent = reason; activationHint.classList.add('warn'); return; }
+    pushUndo();
+    a.ap -= RC.GUARD_AP;
+    a.hasGuard = true;
+    u.onGuard = true;
+    a.history.push({ type: 'guard' });
+    log(`${u.letter} goes on Guard.`);
     syncActivationPanel();
     render();
+  }
+
+  // After an enemy action resolves, an opposing operative on guard may
+  // interrupt with a free Shoot or Fight (once per enemy activation).
+  function maybeOfferGuardInterrupt() {
+    const a = activation();
+    if (!a || a.counteract || a.guardInterrupted) return;
+    if (!a.unit || !a.unit.alive) return;
+    const enemyTeam = a.unit.team === 'A' ? 'B' : 'A';
+    const options = [];
+    for (const g of state.units) {
+      if (!g.alive || !g.deployed || g.team !== enemyTeam || !g.onGuard) continue;
+      const canShoot = !KTR.inEnemyControlRange(g, state.units) && shootCandidates(g).length > 0;
+      const canFight = fightCandidates(g).length > 0
+        && (g.weapons || []).some(w => w.is_melee);
+      if (canShoot) options.push({ unit: g, kind: 'shoot' });
+      if (canFight) options.push({ unit: g, kind: 'fight' });
+    }
+    if (!options.length) return;
+    const items = options.map(o => ({
+      letter: o.unit.letter,
+      name: `${o.unit._displayName} — ${o.kind === 'shoot' ? 'Shoot' : 'Fight'} (free)`,
+      meta: 'Guard interrupt',
+      color: TEAM_INFO[o.unit.team].color,
+      onPick: () => {
+        clearTargetPicker();
+        a.guardInterrupted = true;
+        o.unit.onGuard = false;
+        log(`${o.unit.letter} interrupts on Guard!`, 'turn');
+        if (o.kind === 'shoot') openGuardShoot(o.unit);
+        else openGuardFight(o.unit);
+      },
+    }));
+    showTargetPickerAt(items, { title: `${teamName(enemyTeam)} — Guard interrupt?` });
+  }
+
+  function openGuardShoot(guardUnit) {
+    const cands = shootCandidates(guardUnit);
+    if (!cands.length) return;
+    const items = cands.map(c => ({
+      letter: c.target.letter,
+      name: c.target._displayName,
+      meta: `${KTR.edgeDist(guardUnit, c.target).toFixed(1)}" · HP ${c.target.hp}/${c.target.maxHp}`,
+      color: TEAM_INFO[c.target.team].color,
+      onPick: () => {
+        clearTargetPicker();
+        openShootModal(guardUnit, c.target, c.env);
+        if (state.combat.shoot) state.combat.shoot.free = true;
+      },
+    }));
+    showTargetPickerAt(items, { title: 'Guard — pick target' });
+  }
+
+  function openGuardFight(guardUnit) {
+    const cands = fightCandidates(guardUnit);
+    if (!cands.length) return;
+    const pick = (t) => {
+      clearTargetPicker();
+      openFightModal(guardUnit, t);
+      if (state.combat.fight) state.combat.fight.free = true;
+    };
+    if (cands.length === 1) { pick(cands[0]); return; }
+    const items = cands.map(t => ({
+      letter: t.letter, name: t._displayName,
+      meta: `HP ${t.hp}/${t.maxHp}`,
+      color: TEAM_INFO[t.team].color,
+      onPick: () => pick(t),
+    }));
+    showTargetPickerAt(items, { title: 'Guard — pick target' });
   }
 
   // ── Activation panel ────────────────────────────────────────────────
@@ -1369,6 +2129,34 @@
     }
 
     if (!a) {
+      // Counteract offer takes over the dock until resolved or passed.
+      const c = state.combat.counteract;
+      if (c && c.selecting) {
+        const cands = counteractCandidates(c.team);
+        activationWho.textContent = `${teamName(c.team)} — Counteract?`;
+        activationMeta.textContent = `${cands.length} eligible · free 1AP action · TP ${state.combat.turningPoint}`;
+        activationOrders.style.display = 'none';
+        activationActions.style.display = '';
+        actionGrid.innerHTML = '';
+        if (actionGridMore) actionGridMore.innerHTML = '';
+        if (actionMoreToggle) actionMoreToggle.style.display = 'none';
+        cands.forEach(u2 => {
+          actionGrid.appendChild(buildActionButton(
+            { id: 'ca', name: `${u2.letter} · ${u2._displayName}`, cost: '·', info: `HP ${u2.hp}/${u2.maxHp}`, reason: null },
+            () => startCounteract(u2)
+          ));
+        });
+        actionGrid.appendChild(buildActionButton(
+          { id: 'pass', name: 'Pass', cost: '·', info: 'Skip counteracting', reason: null },
+          passCounteract
+        ));
+        activationHint.classList.remove('warn');
+        activationHint.textContent = 'An expended Engage operative may perform one free 1AP action (max 2" move), once per turning point.';
+        document.body.classList.remove('dock-orders');
+        syncMiniHud(null);
+        undoBtn.disabled = true;
+        return;
+      }
       // Pre-activation: prompt to pick a ready operative.
       const team = activeTeam();
       const ready = readyUnits(team);
@@ -1494,9 +2282,25 @@
     const secondary = [
       { id: 'charge',    name: 'Charge',     cost: RC.CHARGE_AP,    info: `Move ${effMove + RC.CHARGE_BONUS}", end in CR`, reason: v.charge(u, a, state.units) },
       { id: 'fallBack',  name: 'Fall Back',  cost: RC.FALL_BACK_AP, info: `Move ${effMove}"`,                              reason: v.fallBack(u, a, state.units) },
+      { id: 'guard',     name: 'Guard',      cost: RC.GUARD_AP,     info: 'Interrupt later with a free Shoot/Fight',       reason: v.guard(u, a, state.units) },
     ];
     if (hatchAvailable) secondary.push({ id: 'openHatch', name: 'Operate Hatch', cost: RC.OPEN_HATCH_AP, info: 'Open / close', reason: v.openHatchway(u, a) });
     if (breachAvailable) secondary.push({ id: 'breach', name: 'Breach', cost: KTR.breachAPCost(u), info: 'Open a breach point', reason: v.breach(u, a) });
+    // Mission actions (crit op / tac op) surface only when performable here.
+    for (const ma of missionActionsFor(u, a)) secondary.push(ma);
+    // Counteract: a single free 1AP action, moving no more than 2"; Guard
+    // and Fall Back are excluded.
+    if (a.counteract) {
+      const moveNote = ' (max 2")';
+      primary.forEach(it => {
+        if (it.id === 'reposition' || it.id === 'dash') it.info += moveNote;
+      });
+      for (let i = secondary.length - 1; i >= 0; i--) {
+        if (secondary[i].id === 'guard' || secondary[i].id === 'fallBack') secondary.splice(i, 1);
+        else if (secondary[i].id === 'charge') secondary[i].info = 'Move 2", end in CR';
+        else if (secondary[i].id === 'breach' && KTR.breachAPCost(u) > 1) secondary.splice(i, 1);
+      }
+    }
 
     // Promote any secondary action that's currently legal to the primary
     // grid so the most relevant choice for *this* situation is always one
@@ -1511,11 +2315,11 @@
     const primaryRendered = primary.concat(promoted);
 
     for (const it of primaryRendered) {
-      actionGrid.appendChild(buildActionButton(it, () => onActionClick(it.id)));
+      actionGrid.appendChild(buildActionButton(it, () => onActionClick(it.id, it)));
     }
     if (actionGridMore && secondary.length) {
       for (const it of secondary) {
-        actionGridMore.appendChild(buildActionButton(it, () => onActionClick(it.id)));
+        actionGridMore.appendChild(buildActionButton(it, () => onActionClick(it.id, it)));
       }
       if (actionMoreToggle) {
         actionMoreToggle.style.display = '';
@@ -1554,19 +2358,22 @@
     return 1;
   }
 
-  function onActionClick(id) {
+  function onActionClick(id, item) {
     const a = activation();
     if (!a) return;
     activationHint.classList.remove('warn');
     activationHint.textContent = '';
+    if (id.startsWith('ma-')) { performMissionAction(item); return; }
     if (id === 'reposition' || id === 'dash' || id === 'charge' || id === 'fallBack') {
       const u = a.unit;
       const moveIn = KTR.effectiveMove(u);
-      const max =
+      let max =
         id === 'reposition' ? moveIn :
         id === 'dash' ? RC.DASH_INCHES :
         id === 'charge' ? moveIn + RC.CHARGE_BONUS :
         moveIn;
+      // Counteracting operatives cannot move more than 2".
+      if (a.counteract) max = Math.min(max, 2);
       const labels = { reposition: 'Reposition', dash: 'Dash', charge: 'Charge', fallBack: 'Fall Back' };
       state.combat.pendingMove = {
         actionId: id, kind: id, label: labels[id], maxInches: max,
@@ -1590,6 +2397,7 @@
     if (id === 'fight') { openFightPrep(); return; }
     if (id === 'openHatch') { performOpenHatchway(); return; }
     if (id === 'breach') { performBreach(); return; }
+    if (id === 'guard') { performGuard(); return; }
   }
 
   // ── Target picker (transient overlay above the board) ────────────────
@@ -1848,6 +2656,10 @@
             ${willKill ? '<br><strong>Will be incapacitated.</strong>' : `<br>HP ${s.target.hp}/${s.target.maxHp} → ${Math.max(0, s.target.hp - s.damage)}/${s.target.maxHp}.`}
           </div>
           <div class="kt-modal-footer">
+            ${s.atk && s.atk.fails.length && state.combat.cp[s.attacker.team] > 0
+              ? `<button class="btn-ghost" id="kt-cmd-reroll-atk">Shooter: Cmd Re-roll (1CP)</button>` : ''}
+            ${s.def && s.def.fails.length && state.combat.cp[s.target.team] > 0
+              ? `<button class="btn-ghost" id="kt-cmd-reroll-def">Defender: Cmd Re-roll (1CP)</button>` : ''}
             <button class="btn-ghost" id="kt-shoot-reroll" title="Re-roll attack and defence (Shift+Enter)">Re-roll</button>
             <button class="btn-ghost" id="kt-shoot-manual">Allocate manually</button>
             <button class="btn-fire" id="kt-shoot-done" title="Apply damage (Enter)">Apply damage</button>
@@ -1890,6 +2702,10 @@
     if (sm) sm.addEventListener('click', () => { s.step = 'allocate'; s.atkRemaining = null; renderShootModal(); attachManualAllocate(); });
     const dn = shootBody.querySelector('#kt-shoot-done');
     if (dn) dn.addEventListener('click', commitShoot);
+    const cra = shootBody.querySelector('#kt-cmd-reroll-atk');
+    if (cra) cra.addEventListener('click', () => commandRerollShoot('atk'));
+    const crd = shootBody.querySelector('#kt-cmd-reroll-def');
+    if (crd) crd.addEventListener('click', () => commandRerollShoot('def'));
 
     if (s.step === 'allocate') attachManualAllocate();
   }
@@ -2134,7 +2950,7 @@
       target.alive = false;
       target.unitState = 'incapacitated';
       log(`${target.letter} (${target._displayName}) is incapacitated by ${attacker.letter} (${dmg} dmg).`, 'kill');
-      registerKill(attacker.team);
+      registerKill(attacker.team, attacker, target);
       return true;
     }
     if (dmg > 0) log(`${attacker.letter} hits ${target.letter} for ${dmg}.`, 'hit');
@@ -2189,9 +3005,13 @@
     const a = activation();
     const w = s.weapon;
     const parsed = w._parsedRules || (w._parsedRules = KTR.parseWeaponRules(w.rules));
-    a.ap -= RC.SHOOT_AP;
-    a.hasShot = true;
-    a.history.push({ type: 'shoot', target: s.target.letter, weapon: w.name, dmg: s.damage });
+    // Free shots (Guard interrupts) don't spend the active activation's AP.
+    if (!s.free && a) {
+      a.ap -= RC.SHOOT_AP;
+      a.hasShot = true;
+      a.history.push({ type: 'shoot', target: s.target.letter, weapon: w.name, dmg: s.damage });
+      s.attacker.onGuard = false;
+    }
     const killed = applyShootDamage(s.attacker, s.target, w, s.damage, s.atk ? s.atk.counts.c : 0);
     s.killed = killed;
     // Blast / Torrent secondary sequences.
@@ -2208,7 +3028,7 @@
           s.attacker.alive = false;
           s.attacker.unitState = 'incapacitated';
           log(`${s.attacker.letter} (${s.attacker._displayName}) is incapacitated by their own weapon.`, 'kill');
-          registerKill(s.target.team);
+          registerKill(s.target.team, null, s.attacker);
         }
       } else {
         log(`${w.name} runs hot but holds (rolled ${roll}).`);
@@ -2216,8 +3036,7 @@
     }
     closeShootModal();
     if (checkVictory()) return;
-    syncActivationPanel();
-    render();
+    afterActionResolved();
   }
 
   // ── Fight flow ──────────────────────────────────────────────────────
@@ -2366,7 +3185,12 @@
             <button class="btn-ghost" id="kt-fight-parry" ${parryOk ? '' : 'disabled'}>${parryOk ? 'Block' : 'Block (no valid die)'}</button>
           </div>`;
         }
+        const noneSpent = f.atkA && f.atkT && f.atkA.spent.size === 0 && f.atkT.spent.size === 0;
         html += `<div class="kt-modal-footer">
+          ${!done && noneSpent && f.atkA.fails.length && state.combat.cp[f.attacker.team] > 0
+            ? `<button class="btn-ghost" id="kt-cmd-reroll-A">${escapeHtml(f.attacker.letter)}: Cmd Re-roll (1CP)</button>` : ''}
+          ${!done && noneSpent && f.atkT.fails.length && state.combat.cp[f.target.team] > 0
+            ? `<button class="btn-ghost" id="kt-cmd-reroll-T">${escapeHtml(f.target.letter)}: Cmd Re-roll (1CP)</button>` : ''}
           ${done ? `<button class="btn-ghost" id="kt-fight-reroll" title="Re-roll both sides">Re-roll</button>` : ''}
           ${done ? '' : `<button class="btn-ghost" id="kt-fight-auto">Auto-resolve</button>`}
           <button class="btn-fire" id="kt-fight-end" ${done ? '' : 'disabled'} title="Apply damage (Enter)">Apply damage</button>
@@ -2396,6 +3220,10 @@
     if (strikeBtn) strikeBtn.addEventListener('click', () => resolveArmedFightDie('strike'));
     const parryBtn = fightBody.querySelector('#kt-fight-parry');
     if (parryBtn) parryBtn.addEventListener('click', () => resolveArmedFightDie('parry'));
+    const crA = fightBody.querySelector('#kt-cmd-reroll-A');
+    if (crA) crA.addEventListener('click', () => commandRerollFight('A'));
+    const crT = fightBody.querySelector('#kt-cmd-reroll-T');
+    if (crT) crT.addEventListener('click', () => commandRerollFight('T'));
     const reroll = fightBody.querySelector('#kt-fight-reroll');
     if (reroll) reroll.addEventListener('click', () => { autoRollAndResolveFight(); renderFightModal(); });
     const ee = fightBody.querySelector('#kt-fight-end');
@@ -2642,8 +3470,11 @@
     if (!f) return;
     pushUndo();
     const a = activation();
-    a.ap -= RC.FIGHT_AP;
-    a.hasFought = true;
+    if (!f.free && a) {
+      a.ap -= RC.FIGHT_AP;
+      a.hasFought = true;
+      f.attacker.onGuard = false;
+    }
     f.attacker.hp = Math.max(0, f.attacker.hp - f.damageA);
     f.target.hp = Math.max(0, f.target.hp - f.damageT);
     // Stun: a retained crit with a Stun weapon worsens the opponent's APL
@@ -2659,18 +3490,181 @@
     if (f.attacker.hp <= 0) {
       f.attacker.alive = false; f.attacker.unitState = 'incapacitated';
       log(`${f.attacker.letter} is slain in melee.`, 'kill');
-      registerKill(f.target.team);
+      registerKill(f.target.team, f.target, f.attacker);
     }
     if (f.target.hp <= 0) {
       f.target.alive = false; f.target.unitState = 'incapacitated';
       log(`${f.target.letter} is slain in melee.`, 'kill');
-      registerKill(f.attacker.team);
+      registerKill(f.attacker.team, f.attacker, f.target);
     }
-    a.history.push({ type: 'fight', target: f.target.letter, dmg: f.damageT, taken: f.damageA });
+    if (!f.free && a) a.history.push({ type: 'fight', target: f.target.letter, dmg: f.damageT, taken: f.damageA });
     closeFightModal();
     if (checkVictory()) return;
-    syncActivationPanel();
+    afterActionResolved();
+  }
+
+  // ── Ploys / CP sheet ────────────────────────────────────────────────
+  const ployModal = document.getElementById('ploy-modal');
+  const ployBody = document.getElementById('ploy-body');
+  const ployCancel = document.getElementById('ploy-cancel');
+  const ploysBtn = document.getElementById('ploys-btn');
+  let ployTab = 'A';
+
+  function openPloyModal() {
+    ployTab = activeTeam();
+    ployModal.style.display = 'flex';
+    renderPloyModal();
+  }
+  function closePloyModal() {
+    ployModal.style.display = 'none';
+    ployBody.innerHTML = '';
+  }
+  if (ploysBtn) ploysBtn.addEventListener('click', openPloyModal);
+  if (ployCancel) ployCancel.addEventListener('click', closePloyModal);
+
+  function ployKey(kind, name) { return kind + ':' + name; }
+
+  function renderPloyModal() {
+    if (!ployModal || state.phase !== 'combat') return;
+    const team = ployTab;
+    const roster = state.rosters[team];
+    const faction = roster ? FACTIONS_BY_ID[roster.factionId] : null;
+    const cp = state.combat.cp[team];
+    const used = state.combat.usedPloys[team];
+    const active = state.combat.activePloys[team];
+    const tacOp = opsState() && opsState().tacOps[team] ? OPS.tacOpById(opsState().tacOps[team].id) : null;
+    const critOp = opsState() ? OPS.critOpById(opsState().critOp) : null;
+
+    let html = `
+      <div class="ploy-tabs">
+        <button type="button" class="ploy-tab${team === 'A' ? ' active' : ''}" data-team="A">${escapeHtml(teamName('A'))}</button>
+        <button type="button" class="ploy-tab${team === 'B' ? ' active' : ''}" data-team="B">${escapeHtml(teamName('B'))}</button>
+      </div>
+      <div class="ploy-cp">Command Points: <strong>${cp}</strong> · TP ${state.combat.turningPoint}</div>
+    `;
+    if (critOp) {
+      html += `<span class="kt-step-tag">Crit Op — ${escapeHtml(critOp.name)}</span>
+        <p class="ploy-text">${escapeHtml(critOp.scoring)}</p>`;
+    }
+    if (tacOp) {
+      html += `<span class="kt-step-tag">Tac Op — ${escapeHtml(tacOp.name)}</span>
+        <p class="ploy-text">${escapeHtml(tacOp.scoring)}</p>`;
+    }
+    if (active.length) {
+      html += `<span class="kt-step-tag">Active this turning point</span>
+        <p class="ploy-text">${active.map(escapeHtml).join(' · ')}</p>`;
+    }
+    const section = (title, list, kind) => {
+      if (!list || !list.length) return '';
+      let out = `<span class="kt-step-tag">${title}</span><div class="ploy-list">`;
+      for (const p of list) {
+        const cost = p.cp != null ? p.cp : 1;
+        const key = ployKey(kind, p.name);
+        const spent = used.has(key);
+        const cantAfford = cp < cost;
+        out += `
+          <div class="ploy-row${spent ? ' used' : ''}">
+            <div class="ploy-row-main">
+              <div class="ploy-name">${escapeHtml(p.name)} <span class="ploy-cost">${cost}CP</span></div>
+              <div class="ploy-text">${escapeHtml(p.text)}</div>
+            </div>
+            <button type="button" class="btn-ghost ploy-use" data-kind="${kind}" data-name="${escapeHtml(p.name)}"
+              ${spent || cantAfford ? 'disabled' : ''}>
+              ${spent ? 'Used' : cantAfford ? 'No CP' : 'Use'}
+            </button>
+          </div>`;
+      }
+      return out + '</div>';
+    };
+    if (faction) {
+      html += section('Strategy Ploys (start of turning point)', faction.strategic_ploys, 'strategic');
+      html += section('Firefight Ploys', faction.firefight_ploys, 'firefight');
+    } else {
+      html += `<p class="ploy-text">No faction data for this side.</p>`;
+    }
+    html += `<span class="kt-step-tag">Universal</span>
+      <p class="ploy-text"><strong>Command Re-roll (1CP)</strong> — after rolling attack or defence dice, re-roll one die. Available directly inside the Shoot and Fight dialogs.</p>`;
+    ployBody.innerHTML = html;
+
+    ployBody.querySelectorAll('.ploy-tab').forEach(b => {
+      b.addEventListener('click', () => { ployTab = b.dataset.team; renderPloyModal(); });
+    });
+    ployBody.querySelectorAll('.ploy-use').forEach(b => {
+      b.addEventListener('click', () => usePloy(team, b.dataset.kind, b.dataset.name));
+    });
+  }
+
+  function usePloy(team, kind, name) {
+    const roster = state.rosters[team];
+    const faction = roster ? FACTIONS_BY_ID[roster.factionId] : null;
+    if (!faction) return;
+    const list = kind === 'strategic' ? faction.strategic_ploys : faction.firefight_ploys;
+    const p = (list || []).find(x => x.name === name);
+    if (!p) return;
+    const cost = p.cp != null ? p.cp : 1;
+    const key = ployKey(kind, name);
+    if (state.combat.cp[team] < cost || state.combat.usedPloys[team].has(key)) return;
+    state.combat.cp[team] -= cost;
+    state.combat.usedPloys[team].add(key);
+    state.combat.activePloys[team].push(p.name);
+    log(`${teamName(team)} uses ${kind === 'strategic' ? 'strategy' : 'firefight'} ploy: ${p.name} (${cost}CP).`, 'turn');
+    renderPloyModal();
     render();
+  }
+
+  // Command Re-roll (1CP): re-roll one failed die on the given side of the
+  // open shoot state, then re-resolve optimally.
+  function commandRerollShoot(side) {
+    const s = state.combat.shoot;
+    if (!s) return;
+    const team = side === 'atk' ? s.attacker.team : s.target.team;
+    if (state.combat.cp[team] < 1) return;
+    const roll = side === 'atk' ? s.atk : s.def;
+    if (!roll || !roll.fails.length) return;
+    state.combat.cp[team] -= 1;
+    const idx = roll.fails[0];
+    const newVal = KTR.rollD6();
+    roll.rolls[idx] = newVal;
+    // Re-categorise just this die.
+    roll.fails = roll.fails.filter(i => i !== idx);
+    if (side === 'atk') {
+      if (newVal >= roll.critAt && newVal >= roll.bs) roll.crits.push(idx);
+      else if (newVal >= roll.bs) roll.normals.push(idx);
+      else roll.fails.push(idx);
+      roll.counts = { n: roll.normals.length + (roll.autoNormals || 0), c: roll.crits.length, f: roll.fails.length };
+    } else {
+      if (newVal === 6) roll.crits.push(idx);
+      else if (newVal >= roll.save) roll.normals.push(idx);
+      else roll.fails.push(idx);
+      roll.counts = { n: roll.normals.length + (roll.autoNormals || 0), c: roll.crits.length, f: roll.fails.length };
+    }
+    log(`${teamName(team)} spends 1CP — Command Re-roll (${newVal}).`);
+    allocateShootSavesOptimally();
+    s.step = 'resolved';
+    renderShootModal();
+  }
+
+  function commandRerollFight(side) {
+    const f = state.combat.fight;
+    if (!f) return;
+    const unit = side === 'A' ? f.attacker : f.target;
+    const set = side === 'A' ? f.atkA : f.atkT;
+    if (!set || !set.fails.length) return;
+    if (state.combat.cp[unit.team] < 1) return;
+    state.combat.cp[unit.team] -= 1;
+    const idx = set.fails[0];
+    const newVal = KTR.rollD6();
+    set.rolls[idx] = newVal;
+    set.fails = set.fails.filter(i => i !== idx);
+    const parsed = set.parsed;
+    const lethal = KTR.ruleByName(parsed, 'Lethal');
+    const critAt = lethal ? lethal.value : 6;
+    const hit = KTR.effectiveHit(unit, set.weapon);
+    if (newVal >= critAt && newVal >= hit) set.crits.push(idx);
+    else if (newVal >= hit) set.normals.push(idx);
+    else set.fails.push(idx);
+    log(`${teamName(unit.team)} spends 1CP — Command Re-roll (${newVal}).`);
+    renderFightModal();
   }
 
   // ── Wire panel buttons ────────────────────────────────────────────
@@ -2938,6 +3932,14 @@
     document.getElementById('vp-kills-B').textContent = state.score.kills.B;
     document.getElementById('vp-size-A').textContent  = state.score.startSize.B;
     document.getElementById('vp-size-B').textContent  = state.score.startSize.A;
+    const tacA = document.getElementById('vp-tac-A');
+    if (tacA) tacA.textContent = state.score.tacOp.A;
+    const tacB = document.getElementById('vp-tac-B');
+    if (tacB) tacB.textContent = state.score.tacOp.B;
+    const cpA = document.getElementById('vp-cp-A');
+    if (cpA) cpA.textContent = state.combat.cp.A;
+    const cpB = document.getElementById('vp-cp-B');
+    if (cpB) cpB.textContent = state.combat.cp.B;
     // Highlight which side currently leads in projected crit-op control.
     const live = liveObjectiveTally();
     const aSide = vpBoardEl.querySelector('.vp-side[data-team="A"]');
@@ -2978,6 +3980,8 @@
     } else if (state.phase === 'combat' || state.phase === 'over') {
       phaseChip.textContent = `Turning Point ${state.combat.turningPoint}`;
       batchChip.style.display = '';
+      const pb = document.getElementById('ploys-btn');
+      if (pb) pb.style.display = state.phase === 'combat' ? '' : 'none';
       const a = activation();
       if (a) batchChip.textContent = `${a.unit.letter} · AP ${a.ap}/${a.apMax}`;
       else {
