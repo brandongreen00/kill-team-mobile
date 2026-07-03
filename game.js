@@ -2223,7 +2223,9 @@
         activationHint.textContent = 'An expended Engage operative may perform one free 1AP action (max 2" move), once per turning point.';
         document.body.classList.remove('dock-orders');
         syncMiniHud(null);
-        undoBtn.disabled = true;
+        // Undo / End Activation don't apply to the offer itself.
+        const controls = activationActions.querySelector('.activation-controls');
+        if (controls) controls.style.display = 'none';
         return;
       }
       // Pre-activation: prompt to pick a ready operative.
@@ -2242,7 +2244,12 @@
       return;
     }
     const u = a.unit;
-    activationWho.textContent = `${u.letter} · ${u._displayName}`;
+    // Restore the controls hidden by the counteract-offer branch.
+    const controlsEl = activationActions.querySelector('.activation-controls');
+    if (controlsEl) controlsEl.style.display = '';
+    activationWho.textContent = a.counteract
+      ? `${u.letter} · ${u._displayName} — Counteract`
+      : `${u.letter} · ${u._displayName}`;
     const orderLocked = a.history.length > 0;
     const orderChip = renderOrderChip(a.order, orderLocked);
     activationMeta.innerHTML = `AP ${a.ap}/${a.apMax} · ${orderChip} · TP ${state.combat.turningPoint}`;
