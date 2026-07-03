@@ -1929,6 +1929,9 @@ body.board-armed .board { cursor: crosshair; }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* Grid/flex items default to min-width auto; long nowrap roster names
+     would otherwise blow the layout out past the phone viewport. */
+  min-width: 0;
 }
 .team-pick-header {
   display: flex;
@@ -1967,8 +1970,11 @@ body.board-armed .board { cursor: crosshair; }
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
   transition: border-color 0.15s ease, background 0.15s ease;
 }
+.roster-pick-card .roster-pick-name,
+.roster-pick-card .roster-pick-meta { min-width: 0; }
 .roster-pick-card:hover { border-color: var(--accent-primary); }
 .roster-pick-card.selected {
   border-color: var(--accent-primary);
