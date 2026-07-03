@@ -2088,6 +2088,30 @@ body.board-armed .board { cursor: crosshair; }
 
 /* Out-of-range weapons in the shoot modal */
 .kt-weapon-row.disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Solo-mode AI toggle on the team picker */
+.ai-toggle {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border-mid);
+  padding: 4px 8px;
+  background: var(--chip-bg);
+}
+.ai-toggle:has(input:checked) {
+  color: var(--text-bright);
+  border-color: var(--accent-primary);
+  background: var(--accent-action-soft);
+}
+.ai-toggle input { accent-color: var(--accent-action); margin: 0; }
+.hud-ploys-btn { padding: 8px 12px; font-size: 10px; }
 .team-pick-summary {
   font-size: 11px;
   letter-spacing: 0.04em;

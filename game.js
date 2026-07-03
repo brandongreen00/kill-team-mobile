@@ -247,6 +247,9 @@
     critOpChoice: 'random',
     tacOpChoice: { A: null, B: null },
 
+    // Solo mode: which side (if any) the AI commands.
+    aiTeam: null,
+
     hoverUnit: null,                 // for the stat block popup
     pinnedStatUnit: null,            // tap-pinned (mobile)
   };
@@ -834,6 +837,30 @@
     sync();
   }
   initOpsPickers();
+
+  // Solo mode toggle: the AI commands Red. Enabling it with no roster
+  // chosen auto-picks the Plague Marines preset (the recommended first AI
+  // team — few, durable operatives with simple decisions).
+  const aiToggleB = document.getElementById('ai-toggle-B');
+  if (aiToggleB) {
+    aiToggleB.addEventListener('change', () => {
+      state.aiTeam = aiToggleB.checked ? 'B' : null;
+      if (aiToggleB.checked && window.KT_AI) window.KT_AI.poke();
+      if (aiToggleB.checked && !state.rosters.B) {
+        const plague = PRESET_ROSTERS.find(p => p.factionId === 'plague-marines') || PRESET_ROSTERS[0];
+        if (plague) selectRoster('B', plague);
+      }
+      // The AI plays Dominate best (kills score anywhere, no positioning).
+      if (aiToggleB.checked) {
+        const selB = document.getElementById('tac-op-B');
+        if (selB && Array.from(selB.options).some(o => o.value === 'dominate')) {
+          selB.value = 'dominate';
+          if (selB.onchange) selB.onchange();
+        }
+      }
+      updateTeamPickerUI();
+    });
+  }
 
   function updateTeamPickerUI() {
     ['A', 'B'].forEach(team => {
@@ -4989,5 +5016,132 @@
         return out;
       }
     },
+  };
+
+  // ── AI hook API ─────────────────────────────────────────────────────
+  // Controlled surface for ai.js (solo mode). The AI drives the same code
+  // paths as the human UI — actions validate exactly the same way.
+  window.__kt_ai_api = {
+    state: () => state,
+    mapDef: () => mapDef,
+    KTR,
+    TEAM_INFO,
+    teamName,
+    readyUnits,
+    activation,
+    activeTeam,
+    startActivation: (u) => startActivation(u),
+    pickOrder,
+    endActivation,
+    startCounteract,
+    passCounteract,
+    counteractCandidates,
+    shootCandidates,
+    fightCandidates,
+    missionActionsFor,
+    performMissionAction,
+    performGuard,
+    unitContests,
+    objectiveControl,
+    effectiveWalls,
+    validDeployPoint,
+    tryPlacePending,
+    clearTargetPicker,
+    // Probe a single-leg move of `kind` to (x, y): returns null if legal,
+    // else the reason. Leaves no state behind.
+    probeMove(kind, x, y) {
+      const a = activation();
+      if (!a) return 'No activation.';
+      const u = a.unit;
+      const v = KTR.validate;
+      const vres = kind === 'reposition' ? v.reposition(u, a)
+        : kind === 'dash' ? v.dash(u, a)
+        : kind === 'charge' ? v.charge(u, a, state.units)
+        : v.fallBack(u, a, state.units);
+      if (vres) return vres;
+      let max = kind === 'dash' ? RC.DASH_INCHES
+        : kind === 'charge' ? KTR.effectiveMove(u) + RC.CHARGE_BONUS
+        : KTR.effectiveMove(u);
+      if (a.counteract) max = Math.min(max, 2);
+      const pm = { kind, maxInches: max, waypoints: [{ x: u.x, y: u.y }], used: 0 };
+      const extendReason = canExtendPathReason(u, pm, x, y);
+      if (extendReason) return extendReason;
+      pm.waypoints.push({ x, y });
+      return endpointReason(u, pm);
+    },
+    // Execute a move along one or more legs; returns true on success.
+    doMove(kind, x, y) {
+      const a = activation();
+      if (!a) return false;
+      const pts = Array.isArray(x) ? x : [{ x, y }];
+      onActionClick(kind);
+      clearTargetPicker();
+      if (!state.combat.pendingMove) return false;
+      for (const p of pts) addWaypoint(p.x, p.y);
+      if (state.combat.pendingMove.waypoints.length < 2) { cancelPath(); return false; }
+      const apBefore = a.ap;
+      commitPath();
+      if (state.combat.pendingMove) { cancelPath(); return false; }
+      return a.ap < apBefore;
+    },
+    // Hatchway helpers for AI pathing.
+    nearestOpenable,
+    isPieceOpen: (pieceIndex) => state.combat.pieceState.open.has(pieceIndex),
+    performOpenHatchway,
+    unitOccupiesCircle,
+    moveBlockedByWalls: (x1, y1, x2, y2, r) =>
+      KTR.moveBlockedByWalls(mapDef, state.combat.pieceState.open, x1, y1, x2, y2, r),
+    // Open + resolve a shoot against `target` with the best-named weapon.
+    // Leaves the resolved modal open; call commitShoot() to apply.
+    doShoot(target, weaponName) {
+      const a = activation();
+      if (!a) return false;
+      const u = a.unit;
+      const cands = shootCandidates(u);
+      const cand = cands.find(c => c.target === target);
+      if (!cand) return false;
+      openShootModal(u, cand.target, cand.env);
+      const s = state.combat.shoot;
+      if (!s) return false;
+      if (weaponName) {
+        const w = (u.weapons || []).find(x => !x.is_melee && x.name === weaponName);
+        if (w && weaponReaches(u, w, target)) s.weapon = w;
+      }
+      autoResolveShoot();
+      renderShootModal();
+      return true;
+    },
+    commitShoot,
+    doFight(target, weaponName) {
+      const a = activation();
+      if (!a) return false;
+      const u = a.unit;
+      const cands = fightCandidates(u);
+      if (!cands.includes(target)) return false;
+      openFightModal(u, target);
+      const f = state.combat.fight;
+      if (!f) return false;
+      if (weaponName) {
+        const w = (u.weapons || []).find(x => x.is_melee && x.name === weaponName);
+        if (w) f.weaponA = w;
+      }
+      autoRollAndResolveFight();
+      renderFightModal();
+      return true;
+    },
+    commitFight,
+    closeShootModal,
+    closeFightModal,
+  };
+
+  // Notify the AI (if loaded) whenever the game state advances. ai.js
+  // debounces and inspects the state itself.
+  function aiPoke() {
+    if (window.KT_AI && state.aiTeam) window.KT_AI.poke();
+  }
+  const _origSync = syncActivationPanel;
+  syncActivationPanel = function () {
+    _origSync.apply(this, arguments);
+    aiPoke();
   };
 })();
