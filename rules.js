@@ -365,16 +365,17 @@
     return 1.0;
   }
 
-  // Check if a piece of light terrain intervenes between attacker and target,
-  // and is >2" from attacker (cover requirement).
+  // Check if a piece of light terrain gives the target cover: the terrain
+  // must intervene on the shot line AND be within the target's control range
+  // (1"), and the target cannot be in cover at all while within 2" of the
+  // shooter (COVER_FAR_THRESHOLD).
   function lightCoverIntervening(map, ax, ay, dx, dy) {
+    if (dist(ax, ay, dx, dy) <= COVER_FAR_THRESHOLD) return false;
     for (const t of lightCoverPieces(map)) {
       const r = terrainRadius(t) * 0.85; // small relaxation so ovals catch
-      const distFromShooter = Math.hypot(t.x - ax, t.y - ay);
-      if (distFromShooter <= COVER_FAR_THRESHOLD) continue;
-      const distToTarget = Math.hypot(t.x - dx, t.y - dy);
-      // require terrain to be nearer the target side than the shooter
-      if (distFromShooter < distToTarget) continue;
+      // within the target's control range (edge of piece to target centre)
+      const distToTarget = Math.hypot(t.x - dx, t.y - dy) - r;
+      if (distToTarget > ENGAGEMENT_RANGE) continue;
       const d = pointSegDist(t.x, t.y, ax, ay, dx, dy);
       if (d <= r) return true;
     }
@@ -448,7 +449,12 @@
     return null;
   }
   function validateShoot(unit, activation, units) {
-    if (activation.order !== 'engage') return 'Shoot requires the Engage order.';
+    const silent = (unit.weapons || []).some(w => {
+      if (w.is_melee) return false;
+      const parsed = w._parsedRules || (w._parsedRules = parseWeaponRules(w.rules));
+      return hasRule(parsed, 'Silent');
+    });
+    if (activation.order !== 'engage' && !silent) return 'Shoot requires the Engage order (or a Silent weapon).';
     if (inEnemyControlRange(unit, units)) return 'Cannot Shoot while in enemy control range.';
     if (activation.ap < SHOOT_AP) return 'Not enough AP.';
     if (!unit.weapons || !unit.weapons.some(w => !w.is_melee)) return 'No ranged weapon.';
@@ -532,22 +538,27 @@
   }
   KT_RULES.applyAttackFixups = applyAttackFixups;
 
-  function defenceDiceCount(parsed, inCover) {
-    // Saturate means cover does not retain a save; otherwise cover saves
-    // replace one rolled die.
+  // Defence dice pool: 3 base, minus Piercing (Piercing Crits only bites when
+  // the attacker retained a crit). A cover save retains one of the pool as a
+  // normal success without rolling it (negated by Saturate).
+  function defenceDiceCount(parsed, inCover, attackerRetainedCrit) {
     const saturate = hasRule(parsed, 'Saturate');
-    let dice = 3;
+    let pool = 3;
+    const piercing = ruleByName(parsed, 'Piercing');
+    if (piercing) pool -= piercing.value;
+    const pCrits = ruleByName(parsed, 'Piercing Crits');
+    if (pCrits && attackerRetainedCrit) pool -= pCrits.value;
+    pool = Math.max(0, pool);
     let autoNormals = 0;
-    if (inCover && !saturate) { dice = 2; autoNormals = 1; }
-    return { dice, autoNormals };
+    if (inCover && !saturate && pool > 0) { pool -= 1; autoNormals = 1; }
+    return { dice: pool, autoNormals };
   }
   KT_RULES.defenceDiceCount = defenceDiceCount;
 
+  // Piercing no longer modifies the save stat (it removes defence dice);
+  // kept as a hook for future save-stat modifiers.
   function effectiveSave(target, parsed) {
-    let save = target.save;
-    const piercing = ruleByName(parsed, 'Piercing');
-    if (piercing) save = Math.min(6, save + piercing.value);
-    return save;
+    return target.save;
   }
   KT_RULES.effectiveSave = effectiveSave;
 
@@ -566,12 +577,23 @@
   }
   KT_RULES.isInjured = isInjured;
 
-  // Effective Move stat in inches, including the injured penalty.
+  // Effective Move stat in inches, including the injured penalty. A Move
+  // stat can never be *changed* to less than 4" (an operative whose printed
+  // Move is below 4" keeps it).
   function effectiveMove(unit) {
     const base = parseMoveStat(unit.move != null ? unit.move : unit.moveInches);
-    return isInjured(unit) ? Math.max(0, base - INJURED_MOVE_PENALTY) : base;
+    if (!isInjured(unit)) return base;
+    return Math.max(Math.min(base, 4), base - INJURED_MOVE_PENALTY);
   }
   KT_RULES.effectiveMove = effectiveMove;
+
+  // Effective APL including modifiers (Stun, Breach concussion). Total
+  // modification is clamped to ±1 regardless of how many effects apply.
+  function effectiveAPL(unit) {
+    const mod = Math.max(-1, Math.min(1, unit.aplMod || 0));
+    return Math.max(0, (unit.apl || 2) + mod);
+  }
+  KT_RULES.effectiveAPL = effectiveAPL;
 
   // Effective Hit stat for a weapon wielded by `unit` (injured worsens by 1,
   // capped at 6+).

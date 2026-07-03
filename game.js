@@ -175,6 +175,7 @@
         hp: op.wounds,
         maxHp: op.wounds,
         ap: op.apl || 2,
+        aplMod: 0,               // Stun / concussion; clamped ±1, expires after next activation
         alive: true,
         deployed: false,
         // turn / activation state
@@ -286,8 +287,8 @@
       if (!u.alive || !u.deployed) continue;
       const d = Math.hypot(u.x - obj.x, u.y - obj.y) - KTR.unitBaseRadius(u);
       if (d <= RC.ENGAGEMENT_RANGE + 1e-3) {
-        if (u.team === 'A') aSum += (u.apl || 0);
-        else                bSum += (u.apl || 0);
+        if (u.team === 'A') aSum += KTR.effectiveAPL(u);
+        else                bSum += KTR.effectiveAPL(u);
       }
     }
     if (aSum > bSum) return 'A';
@@ -827,7 +828,9 @@
     // winner's choice); later TPs roll off in each Strategy phase.
     state.combat.initiativeTeam = state.deploy.first;
     state.combat.activeTeam = state.deploy.first;
-    state.combat.cp = { A: RC.CP_PER_TP, B: RC.CP_PER_TP };
+    // Approved Ops: each player starts the battle with 2CP, then gains 1CP
+    // in the first Ready step.
+    state.combat.cp = { A: 2 + RC.CP_PER_TP, B: 2 + RC.CP_PER_TP };
     state.units.forEach(u => {
       if (u.alive) { u.unitState = 'ready'; u.order = null; u.ap = u.apl; }
     });
@@ -846,7 +849,7 @@
     if (!unit || unit.unitState !== 'ready') return;
     if (unit.team !== activeTeam()) return;
     unit.unitState = 'activating';
-    unit.ap = unit.apl;
+    unit.ap = KTR.effectiveAPL(unit);
     // Default to Engage so the player can act immediately. They can flip to
     // Conceal via the chip in the activation header until the first action
     // is taken (Kill Team locks the order once a decision depends on it).
@@ -855,8 +858,8 @@
     state.combat.activation = {
       unit,
       order: 'engage',
-      ap: unit.apl,
-      apMax: unit.apl,
+      ap: unit.ap,
+      apMax: unit.ap,
       history: [],
       undoStack: [],
       hasReposition: false,
@@ -865,6 +868,7 @@
       hasFallenBack: false,
       hasShot: false,
       hasFought: false,
+      hasGuard: false,
       teleportedThisActivation: false,
       // baseline snapshot so the user can undo back to "before this activation".
       baseline: null,
@@ -920,7 +924,7 @@
     return {
       units: state.units.map(u => ({
         x: u.x, y: u.y, hp: u.hp, alive: u.alive, ap: u.ap,
-        unitState: u.unitState, order: u.order,
+        unitState: u.unitState, order: u.order, aplMod: u.aplMod || 0,
       })),
       open: new Set(state.combat.pieceState.open),
       activeTeam: state.combat.activeTeam,
@@ -946,7 +950,7 @@
     state.units.forEach((u, i) => {
       const s = snap.units[i];
       u.x = s.x; u.y = s.y; u.hp = s.hp; u.alive = s.alive; u.ap = s.ap;
-      u.unitState = s.unitState; u.order = s.order;
+      u.unitState = s.unitState; u.order = s.order; u.aplMod = s.aplMod || 0;
     });
     state.combat.pieceState.open = snap.open;
     state.combat.activeTeam = snap.activeTeam;
@@ -967,6 +971,9 @@
     }
     const u = a.unit;
     u.unitState = 'activated';
+    // Stun / concussion APL penalties last until the end of the operative's
+    // next activation — which has just ended.
+    u.aplMod = 0;
     log(`${u.letter} ends activation.`, 'turn');
     state.combat.activation = null;
     state.combat.pendingMove = null;
@@ -993,15 +1000,24 @@
     state.combat.turningPoint++;
     const tp = state.combat.turningPoint;
     log(`— Turning Point ${tp} begins —`, 'turn');
-    // Strategy phase: gain CP, then roll off for initiative (ties re-roll).
-    state.combat.cp.A += RC.CP_PER_TP;
-    state.combat.cp.B += RC.CP_PER_TP;
-    let ia, ib;
-    do { ia = KTR.rollD6(); ib = KTR.rollD6(); } while (ia === ib);
-    const initiative = ia > ib ? 'A' : 'B';
+    // Strategy phase: roll off for initiative. A tie goes to the player who
+    // did NOT have initiative (Approved Ops rule — no re-roll).
+    const ia = KTR.rollD6(), ib = KTR.rollD6();
+    let initiative;
+    if (ia === ib) {
+      initiative = state.combat.initiativeTeam === 'A' ? 'B' : 'A';
+      log(`Initiative roll — tied at ${ia}: ${teamName(initiative)} seizes initiative.`, 'turn');
+    } else {
+      initiative = ia > ib ? 'A' : 'B';
+      log(`Initiative roll — Blue ${ia} vs Red ${ib}: ${teamName(initiative)} takes initiative.`, 'turn');
+    }
     state.combat.initiativeTeam = initiative;
     state.combat.activeTeam = initiative;
-    log(`Initiative roll — Blue ${ia} vs Red ${ib}: ${teamName(initiative)} takes initiative.`, 'turn');
+    // Ready step: 1CP each, but the player without initiative gains 2CP.
+    const noInit = initiative === 'A' ? 'B' : 'A';
+    state.combat.cp[initiative] += RC.CP_PER_TP;
+    state.combat.cp[noInit] += RC.CP_PER_TP * 2;
+    log(`Command Points — ${teamName('A')} ${state.combat.cp.A}CP · ${teamName('B')} ${state.combat.cp.B}CP.`);
     state.units.forEach(u => {
       if (u.alive) { u.unitState = 'ready'; u.order = null; u.ap = u.apl; }
     });
@@ -1079,9 +1095,10 @@
       return 'Off-board.';
     }
     const last = pm.waypoints[pm.waypoints.length - 1];
-    const segDist = Math.hypot(toX - last.x, toY - last.y);
+    // Each straight-line increment is rounded UP to the nearest inch.
+    const segDist = Math.ceil(Math.hypot(toX - last.x, toY - last.y) - 1e-6);
     if (pm.used + segDist > pm.maxInches + 1e-3) {
-      return `Beyond move budget (${(pm.used + segDist).toFixed(1)}" > ${pm.maxInches.toFixed(1)}").`;
+      return `Beyond move budget (${(pm.used + segDist).toFixed(0)}" > ${pm.maxInches.toFixed(0)}" — each leg rounds up).`;
     }
     // The whole base must clear the wall along the leg, not just the centre
     // line — segment-to-segment distance from the path to every wall must be
@@ -1139,7 +1156,7 @@
       return;
     }
     const last = pm.waypoints[pm.waypoints.length - 1];
-    pm.used += Math.hypot(x - last.x, y - last.y);
+    pm.used += Math.ceil(Math.hypot(x - last.x, y - last.y) - 1e-6);
     pm.waypoints.push({ x, y });
     activationHint.classList.remove('warn');
     activationHint.textContent = '';
@@ -1152,7 +1169,7 @@
     if (!pm || pm.waypoints.length <= 1) return;
     const last = pm.waypoints.pop();
     const prev = pm.waypoints[pm.waypoints.length - 1];
-    pm.used = Math.max(0, pm.used - Math.hypot(last.x - prev.x, last.y - prev.y));
+    pm.used = Math.max(0, pm.used - Math.ceil(Math.hypot(last.x - prev.x, last.y - prev.y) - 1e-6));
     activationHint.classList.remove('warn');
     activationHint.textContent = '';
     syncActivationPanel();
@@ -1639,17 +1656,36 @@
   function rangedWeaponsInRange(attacker, target) {
     return (attacker.weapons || []).filter(w => !w.is_melee && weaponReaches(attacker, w, target));
   }
-  function shootCandidates(attacker) {
+  function hasSilentRanged(unit) {
+    return (unit.weapons || []).some(w => {
+      if (w.is_melee) return false;
+      const parsed = w._parsedRules || (w._parsedRules = KTR.parseWeaponRules(w.rules));
+      return KTR.hasRule(parsed, 'Silent');
+    });
+  }
+  function shootCandidates(attacker, opts) {
     const out = [];
+    const concealShooter = attacker.order === 'conceal';
     for (const o of state.units) {
       if (!o.alive || !o.deployed || o.team === attacker.team) continue;
       const env = KTR.shootEnv(mapDef, state.combat.pieceState.open, attacker, o);
       if (!env.visible) continue;
-      // Conceal target with cover cannot be selected (unless attacker within 2" of cover).
+      // Conceal target in cover is not a valid target.
       if (o.order === 'conceal' && env.inCover) continue;
-      // At least one ranged weapon must reach the target.
-      if (!rangedWeaponsInRange(attacker, o).length) continue;
-      out.push({ target: o, env });
+      // Cannot shoot an enemy that has friendly operatives within its
+      // control range (no shooting into your own melee).
+      const friendlyEngaged = state.units.some(fr =>
+        fr !== attacker && fr.alive && fr.deployed && fr.team === attacker.team
+        && KTR.edgeDist(fr, o) <= RC.ENGAGEMENT_RANGE + 1e-3);
+      if (friendlyEngaged) continue;
+      // A concealed shooter may only use Silent weapons.
+      const pool = rangedWeaponsInRange(attacker, o).filter(w => {
+        if (!concealShooter) return true;
+        const parsed = w._parsedRules || (w._parsedRules = KTR.parseWeaponRules(w.rules));
+        return KTR.hasRule(parsed, 'Silent');
+      });
+      if (!pool.length) continue;
+      out.push({ target: o, env, weapons: pool });
     }
     return out;
   }
@@ -1683,7 +1719,13 @@
   }
 
   function openShootModal(attacker, target, env) {
-    const ranged = rangedWeaponsInRange(attacker, target);
+    let ranged = rangedWeaponsInRange(attacker, target);
+    if (attacker.order === 'conceal') {
+      ranged = ranged.filter(w => {
+        const parsed = w._parsedRules || (w._parsedRules = KTR.parseWeaponRules(w.rules));
+        return KTR.hasRule(parsed, 'Silent');
+      });
+    }
     if (!ranged.length) return;
     state.combat.shoot = {
       attacker, target, env,
@@ -1731,7 +1773,7 @@
     const parsed = w._parsedRules || (w._parsedRules = KTR.parseWeaponRules(w.rules));
     const inCover = s.env.inCover;
     const ti = TEAM_INFO;
-    const dice = KTR.defenceDiceCount(parsed, inCover);
+    const dice = KTR.defenceDiceCount(parsed, inCover, !!(s.atk && s.atk.counts.c > 0));
     const rangeStr = KTR.rangeFromInches(w);
     let html = `
       <div class="kt-side-row">
@@ -1802,7 +1844,7 @@
         } else if (s.step === 'resolved') {
           const willKill = s.target.hp - s.damage <= 0;
           html += `<div class="kt-resolved">
-            ${s.target.letter} takes <strong>${s.damage}</strong> damage (${s.atkRemaining.normals} normal × ${w.normal_dmg} + ${s.atkRemaining.criticals} crit × ${w.crit_dmg}).
+            ${s.target.letter} takes <strong>${s.damage}</strong> damage (${s.atkRemaining.normals} normal × ${w.normal_dmg} + ${s.atkRemaining.criticals} crit × ${w.crit_dmg}${s.devDamage ? ` + ${s.devDamage} Devastating` : ''}).
             ${willKill ? '<br><strong>Will be incapacitated.</strong>' : `<br>HP ${s.target.hp}/${s.target.maxHp} → ${Math.max(0, s.target.hp - s.damage)}/${s.target.maxHp}.`}
           </div>
           <div class="kt-modal-footer">
@@ -1855,9 +1897,10 @@
   function diceRowHTML(roll, side) {
     if (!roll) return '';
     const cells = [];
-    // Pre-retained successes (autoNormals / cover save) shown first.
+    // Pre-retained successes (Accurate / cover save) shown first.
     const auto = roll.autoNormals || 0;
-    for (let i = 0; i < auto; i++) cells.push(`<div class="kt-dice normal" data-tag="${side}-auto-${i}">A<div class="kt-dice-tag">cover</div></div>`);
+    const autoLabel = side === 'atk' ? 'acc' : 'cover';
+    for (let i = 0; i < auto; i++) cells.push(`<div class="kt-dice normal" data-tag="${side}-auto-${i}">A<div class="kt-dice-tag">${autoLabel}</div></div>`);
     for (let i = 0; i < (roll.rolls || []).length; i++) {
       const v = roll.rolls[i];
       let cls = 'fail';
@@ -1875,44 +1918,58 @@
     const w = s.weapon;
     const parsed = w._parsedRules || (w._parsedRules = KTR.parseWeaponRules(w.rules));
     let lethal = KTR.ruleByName(parsed, 'Lethal');
-    // Close Quarters (Tomb World killzone): weapons with Blast / Torrent /
-    // distance-based Devastating also gain Lethal 5+. We treat any weapon
-    // with Blast, Torrent, or Devastating as qualifying.
-    const cq = KTR.hasRule(parsed, 'Blast') || KTR.hasRule(parsed, 'Torrent') || KTR.hasRule(parsed, 'Devastating');
+    // Close Quarters (Tomb World killzone): weapons with Blast or Torrent
+    // (and distance-based Devastating, which this data set doesn't use)
+    // also gain Lethal 5+.
+    const cq = KTR.hasRule(parsed, 'Blast') || KTR.hasRule(parsed, 'Torrent');
     if (cq && (!lethal || lethal.value > 5)) lethal = { name: 'Lethal', value: 5, raw: 'Lethal 5+ (Close Quarters)' };
     const critAt = lethal ? lethal.value : 6;
     if (cq) log(`Close Quarters: ${w.name} gains Lethal 5+.`);
     const bs = KTR.effectiveHit(s.attacker, w);
-    const atkDice = w.atk;
+
+    // Accurate x — retain up to x dice as normal successes without rolling.
+    const accurate = KTR.ruleByName(parsed, 'Accurate');
+    const retained = accurate ? Math.min(accurate.value, w.atk) : 0;
+    const atkDice = w.atk - retained;
 
     const out = KTR.rollAttack(atkDice, bs, critAt, 0, 0);
-    // Convert flat counts into per-roll category indices for the UI.
     const rolls = out.rolls;
+    // Re-roll rules (Balanced / Ceaseless / Relentless) — auto-apply to fails.
+    const rerolls = KTR.rerollIndices(parsed, rolls, bs);
+    if (rerolls.length) {
+      for (const i of rerolls) rolls[i] = KTR.rollD6();
+      log(`${s.attacker.letter} re-rolls ${rerolls.length} attack dice (${parsed.find(p => ['Balanced','Ceaseless','Relentless'].includes(p.name)).name}).`);
+    }
     const crits = [], normals = [], fails = [];
     for (let i = 0; i < rolls.length; i++) {
       const v = rolls[i];
-      if (v >= critAt) crits.push(i);
+      if (v >= critAt && v >= bs) crits.push(i);
       else if (v >= bs) normals.push(i);
       else fails.push(i);
     }
-    let nN = normals.length, nC = crits.length, nF = fails.length;
-    // Severe / Rending / Punishing fixups.
+    let nN = normals.length + retained, nC = crits.length, nF = fails.length;
+    const naturalCrits = crits.length;
+    // Severe / Rending / Punishing fixups. Rending and Punishing require a
+    // *natural* retained crit — a crit created by Severe doesn't enable them.
     let didFix = '';
     if (KTR.hasRule(parsed, 'Severe') && nC === 0 && nN > 0) {
-      const idx = normals.pop(); crits.push(idx); nN--; nC++; didFix += ' Severe';
+      if (normals.length) { const idx = normals.pop(); crits.push(idx); }
+      nN--; nC++; didFix += ' Severe';
     }
-    if (KTR.hasRule(parsed, 'Rending') && nC > 0 && nN > 0) {
-      const idx = normals.pop(); crits.push(idx); nN--; nC++; didFix += ' Rending';
+    if (KTR.hasRule(parsed, 'Rending') && naturalCrits > 0 && nN > 0) {
+      if (normals.length) { const idx = normals.pop(); crits.push(idx); }
+      nN--; nC++; didFix += ' Rending';
     }
-    if (KTR.hasRule(parsed, 'Punishing') && nC > 0 && nF > 0) {
+    if (KTR.hasRule(parsed, 'Punishing') && naturalCrits > 0 && nF > 0) {
       const idx = fails.pop(); normals.push(idx); nF--; nN++; didFix += ' Punishing';
     }
-    s.atk = { rolls, crits, normals, fails, autoNormals: 0,
+    s.atk = { rolls, crits, normals, fails, autoNormals: retained,
       counts: { n: nN, c: nC, f: nF },
       bs, critAt,
     };
     s.step = 'rolledAttack';
-    log(`${s.attacker.letter} fires ${atkDice}D6 at ${s.target.letter}: ${nC} crit · ${nN} normal · ${nF} fail${didFix ? ' (' + didFix.trim() + ')' : ''}.`);
+    const accNote = retained ? ` (+${retained} Accurate)` : '';
+    log(`${s.attacker.letter} fires ${atkDice}D6${accNote} at ${s.target.letter}: ${nC} crit · ${nN} normal · ${nF} fail${didFix ? ' (' + didFix.trim() + ')' : ''}.`);
     if (!silent) renderShootModal();
   }
 
@@ -1922,7 +1979,8 @@
     const w = s.weapon;
     const parsed = w._parsedRules || (w._parsedRules = KTR.parseWeaponRules(w.rules));
     const inCover = s.env.inCover;
-    const dice = KTR.defenceDiceCount(parsed, inCover);
+    const attackerRetainedCrit = !!(s.atk && s.atk.counts.c > 0);
+    const dice = KTR.defenceDiceCount(parsed, inCover, attackerRetainedCrit);
     const save = KTR.effectiveSave(s.target, parsed);
     const out = KTR.rollDefence(dice.dice, save, 0);
     const rolls = out.rolls;
@@ -1958,12 +2016,14 @@
     s.atkRemaining = { normals: r.remN, criticals: r.remC };
     s.defRemaining = { normals: 0, criticals: 0 };
     s.damage = r.remN * w.normal_dmg + r.remC * w.crit_dmg;
-    // Devastating: each crit retained inflicts crit dmg ignoring saves.
+    // Devastating x: each retained crit immediately inflicts x damage that
+    // cannot be blocked — and the crit still resolves normally afterwards.
     const dev = KTR.ruleByName(parsed, 'Devastating');
     if (dev && s.atk.counts.c > 0) {
-      // Already counted via remC; KT3 Devastating applies even before saves.
-      s.damage = r.remN * w.normal_dmg + s.atk.counts.c * Math.max(w.crit_dmg, dev.value);
-      s.atkRemaining.criticals = s.atk.counts.c;
+      s.devDamage = s.atk.counts.c * dev.value;
+      s.damage += s.devDamage;
+    } else {
+      s.devDamage = 0;
     }
   }
 
@@ -2047,11 +2107,79 @@
         else if (d.dataset.cat === 'crit') remC++;
       });
       const w = s.weapon;
+      const parsed = w._parsedRules || (w._parsedRules = KTR.parseWeaponRules(w.rules));
       s.atkRemaining = { normals: remN, criticals: remC };
       s.damage = remN * w.normal_dmg + remC * w.crit_dmg;
+      // Devastating applies to every retained crit even if it was blocked.
+      const dev = KTR.ruleByName(parsed, 'Devastating');
+      s.devDamage = (dev && s.atk.counts.c > 0) ? s.atk.counts.c * dev.value : 0;
+      s.damage += s.devDamage;
     }
     s.step = 'resolved';
     renderShootModal();
+  }
+
+  // Apply one resolved shooting sequence's damage to `target`. Returns true
+  // if the target went down.
+  function applyShootDamage(attacker, target, weapon, dmg, retainedCrits) {
+    const parsed = weapon._parsedRules || (weapon._parsedRules = KTR.parseWeaponRules(weapon.rules));
+    target.hp = Math.max(0, target.hp - dmg);
+    // Stun: any retained crit worsens the target's APL by 1 until the end
+    // of its next activation.
+    if (retainedCrits > 0 && KTR.hasRule(parsed, 'Stun') && target.alive) {
+      target.aplMod = -1;
+      log(`${target.letter} is stunned (-1 APL).`);
+    }
+    if (target.hp <= 0 && target.alive) {
+      target.alive = false;
+      target.unitState = 'incapacitated';
+      log(`${target.letter} (${target._displayName}) is incapacitated by ${attacker.letter} (${dmg} dmg).`, 'kill');
+      registerKill(attacker.team);
+      return true;
+    }
+    if (dmg > 0) log(`${attacker.letter} hits ${target.letter} for ${dmg}.`, 'hit');
+    return false;
+  }
+
+  // Blast x / Torrent x: after the primary sequence, resolve one sequence
+  // against every other visible enemy within x of the primary target
+  // (regardless of Conceal). Auto-rolled and optimally allocated.
+  function resolveAreaSecondaries(attacker, primary, weapon) {
+    const parsed = weapon._parsedRules || (weapon._parsedRules = KTR.parseWeaponRules(weapon.rules));
+    const area = KTR.ruleByName(parsed, 'Blast') || KTR.ruleByName(parsed, 'Torrent');
+    if (!area || area.value == null) return;
+    const radius = area.value;
+    const secondaries = state.units.filter(o => {
+      if (!o.alive || !o.deployed || o.team === attacker.team || o === primary) return false;
+      if (KTR.edgeDist(primary, o) > radius + 1e-3) return false;
+      // must be visible to the shooter; Torrent secondaries also must not be
+      // within control range of the shooter's friends
+      const env = KTR.shootEnv(mapDef, state.combat.pieceState.open, attacker, o);
+      if (!env.visible) return false;
+      if (area.name === 'Torrent') {
+        const engaged = state.units.some(fr => fr.alive && fr.deployed
+          && fr.team === attacker.team && KTR.edgeDist(fr, o) <= RC.ENGAGEMENT_RANGE + 1e-3);
+        if (engaged) return false;
+      }
+      return true;
+    });
+    for (const sec of secondaries) {
+      // Roll a full independent sequence, silent + optimal.
+      const env = KTR.shootEnv(mapDef, state.combat.pieceState.open, attacker, sec);
+      const saved = state.combat.shoot;
+      state.combat.shoot = {
+        attacker, target: sec, env, weapon,
+        step: 'pickWeapon', atk: null, def: null,
+        atkRemaining: null, defRemaining: null, damage: 0, done: false,
+      };
+      rollShootAttack(true);
+      rollShootDefence(true);
+      allocateShootSavesOptimally();
+      const seq = state.combat.shoot;
+      log(`${area.name} ${radius}": secondary target ${sec.letter}.`);
+      applyShootDamage(attacker, sec, weapon, seq.damage, seq.atk.counts.c);
+      state.combat.shoot = saved;
+    }
   }
 
   function commitShoot() {
@@ -2060,18 +2188,31 @@
     pushUndo();
     const a = activation();
     const w = s.weapon;
+    const parsed = w._parsedRules || (w._parsedRules = KTR.parseWeaponRules(w.rules));
     a.ap -= RC.SHOOT_AP;
     a.hasShot = true;
     a.history.push({ type: 'shoot', target: s.target.letter, weapon: w.name, dmg: s.damage });
-    s.target.hp = Math.max(0, s.target.hp - s.damage);
-    if (s.target.hp <= 0) {
-      s.target.alive = false;
-      s.target.unitState = 'incapacitated';
-      log(`${s.target.letter} (${s.target._displayName}) is incapacitated by ${s.attacker.letter} (${s.damage} dmg).`, 'kill');
-      s.killed = true;
-      registerKill(s.attacker.team);
-    } else {
-      log(`${s.attacker.letter} hits ${s.target.letter} for ${s.damage}.`, 'hit');
+    const killed = applyShootDamage(s.attacker, s.target, w, s.damage, s.atk ? s.atk.counts.c : 0);
+    s.killed = killed;
+    // Blast / Torrent secondary sequences.
+    resolveAreaSecondaries(s.attacker, s.target, w);
+    // Hot: after use, roll one D6 — below the weapon's Hit stat inflicts
+    // (result × 2) damage on the shooter.
+    if (KTR.hasRule(parsed, 'Hot')) {
+      const roll = KTR.rollD6();
+      if (roll < w.hit) {
+        const selfDmg = roll * 2;
+        s.attacker.hp = Math.max(0, s.attacker.hp - selfDmg);
+        log(`${w.name} overheats! ${s.attacker.letter} takes ${selfDmg} damage (rolled ${roll}).`, 'hit');
+        if (s.attacker.hp <= 0) {
+          s.attacker.alive = false;
+          s.attacker.unitState = 'incapacitated';
+          log(`${s.attacker.letter} (${s.attacker._displayName}) is incapacitated by their own weapon.`, 'kill');
+          registerKill(s.target.team);
+        }
+      } else {
+        log(`${w.name} runs hot but holds (rolled ${roll}).`);
+      }
     }
     closeShootModal();
     if (checkVictory()) return;
@@ -2313,30 +2454,55 @@
       const lethal = KTR.ruleByName(parsed, 'Lethal');
       const critAt = lethal ? lethal.value : 6;
       const hit = wielder ? KTR.effectiveHit(wielder, weapon) : weapon.hit;
-      const out = KTR.rollAttack(weapon.atk, hit, critAt, 0, 0);
+      // Accurate x — retain as unrollable normal successes.
+      const accurate = KTR.ruleByName(parsed, 'Accurate');
+      const retained = accurate ? Math.min(accurate.value, weapon.atk) : 0;
+      const out = KTR.rollAttack(weapon.atk - retained, hit, critAt, 0, 0);
       const rolls = out.rolls;
+      // Re-roll rules.
+      const rerolls = KTR.rerollIndices(parsed, rolls, hit);
+      for (const i of rerolls) rolls[i] = KTR.rollD6();
       const crits = [], normals = [], fails = [];
       for (let i = 0; i < rolls.length; i++) {
         const v = rolls[i];
-        if (v >= critAt) crits.push(i);
+        if (v >= critAt && v >= hit) crits.push(i);
         else if (v >= hit) normals.push(i);
         else fails.push(i);
       }
-      // Severe / Rending / Punishing
+      // Accurate dice join the pool as pre-retained normal successes so they
+      // can be struck / blocked with like any other die.
+      for (let i = 0; i < retained; i++) {
+        rolls.push(hit);
+        normals.push(rolls.length - 1);
+      }
+      const naturalCrits = crits.length;
+      // Severe / Rending / Punishing (Rending and Punishing need a natural crit).
       if (KTR.hasRule(parsed, 'Severe') && crits.length === 0 && normals.length > 0) {
         const idx = normals.pop(); crits.push(idx);
       }
-      if (KTR.hasRule(parsed, 'Rending') && crits.length > 0 && normals.length > 0) {
+      if (KTR.hasRule(parsed, 'Rending') && naturalCrits > 0 && normals.length > 0) {
         const idx = normals.pop(); crits.push(idx);
       }
-      if (KTR.hasRule(parsed, 'Punishing') && crits.length > 0 && fails.length > 0) {
+      if (KTR.hasRule(parsed, 'Punishing') && naturalCrits > 0 && fails.length > 0) {
         const idx = fails.pop(); normals.push(idx);
       }
-      log(`${opName} rolls ${weapon.atk}D6 (${weapon.name}): ${crits.length} crit · ${normals.length} normal · ${fails.length} fail.`);
-      return { rolls, crits, normals, fails, autoNormals: 0, spent: new Set(), parsed, weapon };
+      log(`${opName} rolls ${weapon.atk - retained}D6${retained ? ` (+${retained} Accurate)` : ''} (${weapon.name}): ${crits.length} crit · ${normals.length} normal · ${fails.length} fail.`);
+      return { rolls, crits, normals, fails, autoNormals: 0, spent: new Set(), shockUsed: false, parsed, weapon };
     }
-    f.atkA = rollSide(f.weaponA, f.attacker.letter);
-    f.atkT = rollSide(f.weaponT, f.target.letter);
+    f.atkA = rollSide(f.weaponA, f.attacker.letter, f.attacker);
+    f.atkT = rollSide(f.weaponT, f.target.letter, f.target);
+    // Devastating x: each retained crit immediately inflicts x damage on the
+    // opponent, before any strikes or blocks — the dice still resolve later.
+    const devA = KTR.ruleByName(f.atkA.parsed, 'Devastating');
+    if (devA && f.atkA.crits.length > 0) {
+      f.damageT += f.atkA.crits.length * devA.value;
+      log(`${f.attacker.letter}'s Devastating inflicts ${f.atkA.crits.length * devA.value} immediately.`);
+    }
+    const devT = KTR.ruleByName(f.atkT.parsed, 'Devastating');
+    if (devT && f.atkT.crits.length > 0) {
+      f.damageA += f.atkT.crits.length * devT.value;
+      log(`${f.target.letter}'s Devastating inflicts ${f.atkT.crits.length * devT.value} immediately.`);
+    }
     f.next = 'A'; // attacker resolves first
     f.step = 'rolled';
     if (!silent) renderFightModal();
@@ -2385,6 +2551,7 @@
       if (side === 'A') f.damageT += dmg;
       else f.damageA += dmg;
       log(`${side === 'A' ? f.attacker.letter : f.target.letter} strikes for ${dmg}.`);
+      applyShockOnCritStrike(f, side, set, cat);
     } else {
       // Block: discard one of the opponent's unresolved dice (crit first when
       // blocking with a crit; a normal can only drop a normal).
@@ -2406,6 +2573,23 @@
     if (remainingFightDice(f, otherSide) > 0) f.next = otherSide;
     else f.next = side; // continue on same side
     renderFightModal();
+  }
+
+  // Shock: the first time a side strikes with a critical success in the
+  // sequence, also discard one of the opponent's unresolved normal successes
+  // (or a critical success if there are no normals).
+  function applyShockOnCritStrike(f, side, set, cat) {
+    if (cat !== 'crit' || set.shockUsed) return;
+    if (!KTR.hasRule(set.parsed, 'Shock')) return;
+    set.shockUsed = true;
+    const oppSet = side === 'A' ? f.atkT : f.atkA;
+    let target = null;
+    for (const i of oppSet.normals) if (!oppSet.spent.has(i)) { target = i; break; }
+    if (target == null) for (const i of oppSet.crits) if (!oppSet.spent.has(i)) { target = i; break; }
+    if (target != null) {
+      oppSet.spent.add(target);
+      log(`Shock! ${side === 'A' ? f.attacker.letter : f.target.letter} discards an opposing success.`);
+    }
   }
 
   function autoResolveFight() {
@@ -2439,6 +2623,7 @@
         const dmg = useCat === 'crit' ? set.weapon.crit_dmg : set.weapon.normal_dmg;
         if (side === 'A') f.damageT += dmg;
         else f.damageA += dmg;
+        applyShockOnCritStrike(f, side, set, useCat);
       } else {
         // parry highest opponent
         let parryIdx = null;
@@ -2461,6 +2646,16 @@
     a.hasFought = true;
     f.attacker.hp = Math.max(0, f.attacker.hp - f.damageA);
     f.target.hp = Math.max(0, f.target.hp - f.damageT);
+    // Stun: a retained crit with a Stun weapon worsens the opponent's APL
+    // by 1 until the end of its next activation.
+    if (f.atkA && f.atkA.crits.length > 0 && KTR.hasRule(f.atkA.parsed, 'Stun') && f.target.hp > 0) {
+      f.target.aplMod = -1;
+      log(`${f.target.letter} is stunned (-1 APL).`);
+    }
+    if (f.atkT && f.atkT.crits.length > 0 && KTR.hasRule(f.atkT.parsed, 'Stun') && f.attacker.hp > 0) {
+      f.attacker.aplMod = -1;
+      log(`${f.attacker.letter} is stunned (-1 APL).`);
+    }
     if (f.attacker.hp <= 0) {
       f.attacker.alive = false; f.attacker.unitState = 'incapacitated';
       log(`${f.attacker.letter} is slain in melee.`, 'kill');
