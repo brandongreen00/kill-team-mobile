@@ -1992,6 +1992,21 @@ body.board-armed .board { cursor: crosshair; }
   text-transform: uppercase;
   color: var(--text-muted);
 }
+.roster-pick-heading {
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  padding: 6px 2px 2px;
+  border-bottom: 1px solid var(--border);
+}
+.roster-pick-card.preset .roster-pick-name::after {
+  content: ' · PRESET';
+  color: var(--accent-primary);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
 .team-pick-summary {
   font-size: 11px;
   letter-spacing: 0.04em;

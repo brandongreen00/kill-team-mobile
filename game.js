@@ -136,12 +136,23 @@
         display = display.slice(facName.length + 1).trim();
       }
       if (!display) display = op.name;
-      // Wounds drives our HP. Use a flat damage approximation from the best
-      // ranged weapon (or melee if none) until weapon-specific logic lands.
-      const weapons = op.weapons || [];
-      const ranged = weapons.find(w => !w.is_melee);
-      const melee  = weapons.find(w => w.is_melee);
-      const dmgWeapon = ranged || melee || { normal_dmg: 3 };
+      // Apply the roster loadout: when a ranged / melee choice was made at
+      // list-build, only that base weapon (all its firing modes) plus any
+      // Limited extras come along. Without a choice all weapons remain.
+      const weaponBaseName = (n) => String(n || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+      const isLimitedWeapon = (w) =>
+        Array.isArray(w && w.rules) && w.rules.some(r => /^Limited\b/i.test(String(r || '')));
+      // A choice may be a single base name (roster editor) or an array of
+      // base names (preset loadouts that carry e.g. a pistol AND a heavy gun).
+      const matchesChoice = (w, choice) => {
+        if (!choice) return true;
+        const bases = Array.isArray(choice) ? choice : [choice];
+        return bases.some(c => weaponBaseName(w.name) === weaponBaseName(c));
+      };
+      const weapons = (op.weapons || []).filter(w => {
+        if (isLimitedWeapon(w)) return true;
+        return matchesChoice(w, w.is_melee ? pick.meleeChoice : pick.rangedChoice);
+      });
       const moveInches = KTR.parseMoveStat(op.move);
       built.push({
         team,
@@ -200,6 +211,7 @@
       turningPoint: 1,
       initiativeTeam: 'A',         // who chose first this TP
       activeTeam: 'A',             // whose pick of ready unit is next
+      cp: { A: 0, B: 0 },          // command points
       selectedId: null,            // unit currently selected (pre-activation hover or active)
       activation: null,            // see startActivation()
       pendingMove: null,           // {kind, maxInches, dashed?} when waiting for click destination
@@ -380,23 +392,24 @@
   }
 
   // ── Phase 1: Team selection ──────────────────────────────────────────
+  // Saved rosters (if any) render first, then the built-in preset kill
+  // teams — so a first-time player can start a game with zero setup.
+  const PRESET_ROSTERS = (window.KT_PRESETS || []).filter(p => FACTIONS_BY_ID[p.factionId]);
   function renderTeamPicker() {
     const rosters = loadRosters();
     ['A', 'B'].forEach(team => {
       const list = document.getElementById('roster-list-' + team);
       list.innerHTML = '';
-      if (!rosters.length) {
-        const empty = document.createElement('div');
-        empty.className = 'roster-empty-state';
-        empty.style.padding = '20px 12px';
-        empty.textContent = 'No rosters saved. Build one from the Roster screen.';
-        list.appendChild(empty);
-        return;
-      }
-      rosters.forEach(r => {
+      const addHeading = (text) => {
+        const h = document.createElement('div');
+        h.className = 'roster-pick-heading';
+        h.textContent = text;
+        list.appendChild(h);
+      };
+      const addCard = (r, isPreset) => {
         const f = FACTIONS_BY_ID[r.factionId];
         const card = document.createElement('div');
-        card.className = 'roster-pick-card';
+        card.className = 'roster-pick-card' + (isPreset ? ' preset' : '');
         card.dataset.rosterId = r.id;
         card.innerHTML = `
           <div class="roster-pick-name"></div>
@@ -404,13 +417,29 @@
         `;
         card.querySelector('.roster-pick-name').textContent = r.name || 'Untitled Kill Team';
         card.querySelector('.roster-pick-meta').textContent =
-          (f ? f.name : '—') + ' · ' + r.picks.length + ' operative' + (r.picks.length === 1 ? '' : 's');
+          (f ? f.name : '—') + ' · ' + r.picks.length + ' operative' + (r.picks.length === 1 ? '' : 's')
+          + (isPreset && r.blurb ? ' · ' + r.blurb : '');
         card.addEventListener('click', () => selectRoster(team, r));
         if (state.rosters[team] && state.rosters[team].id === r.id) {
           card.classList.add('selected');
         }
         list.appendChild(card);
-      });
+      };
+      if (rosters.length) {
+        addHeading('Your rosters');
+        rosters.forEach(r => addCard(r, false));
+      }
+      if (PRESET_ROSTERS.length) {
+        addHeading('Preset kill teams');
+        PRESET_ROSTERS.forEach(r => addCard(r, true));
+      }
+      if (!rosters.length && !PRESET_ROSTERS.length) {
+        const empty = document.createElement('div');
+        empty.className = 'roster-empty-state';
+        empty.style.padding = '20px 12px';
+        empty.textContent = 'No rosters saved. Build one from the Roster screen.';
+        list.appendChild(empty);
+      }
     });
     updateTeamPickerUI();
   }
@@ -794,9 +823,11 @@
       },
       lastScoredTP: 0,
     };
-    // For now initiative carries forward from deployment.
+    // TP1 initiative goes to whoever deployed first (the setup roll-off
+    // winner's choice); later TPs roll off in each Strategy phase.
     state.combat.initiativeTeam = state.deploy.first;
     state.combat.activeTeam = state.deploy.first;
+    state.combat.cp = { A: RC.CP_PER_TP, B: RC.CP_PER_TP };
     state.units.forEach(u => {
       if (u.alive) { u.unitState = 'ready'; u.order = null; u.ap = u.apl; }
     });
@@ -954,15 +985,52 @@
   function nextTurningPoint() {
     // Score the round that just ended before advancing the turning point.
     scoreCritOpEndOfTurn();
+    // The game always ends after the final turning point — most VP wins.
+    if (state.combat.turningPoint >= RC.MAX_TURNING_POINTS) {
+      endGameByScore();
+      return;
+    }
     state.combat.turningPoint++;
     const tp = state.combat.turningPoint;
     log(`— Turning Point ${tp} begins —`, 'turn');
-    state.combat.activeTeam = state.combat.initiativeTeam;
+    // Strategy phase: gain CP, then roll off for initiative (ties re-roll).
+    state.combat.cp.A += RC.CP_PER_TP;
+    state.combat.cp.B += RC.CP_PER_TP;
+    let ia, ib;
+    do { ia = KTR.rollD6(); ib = KTR.rollD6(); } while (ia === ib);
+    const initiative = ia > ib ? 'A' : 'B';
+    state.combat.initiativeTeam = initiative;
+    state.combat.activeTeam = initiative;
+    log(`Initiative roll — Blue ${ia} vs Red ${ib}: ${teamName(initiative)} takes initiative.`, 'turn');
     state.units.forEach(u => {
       if (u.alive) { u.unitState = 'ready'; u.order = null; u.ap = u.apl; }
     });
     state.combat.selectedId = readyUnits(state.combat.activeTeam)[0] || null;
     if (checkVictory()) return;
+    syncActivationPanel();
+    render();
+  }
+
+  // Game end after the final turning point: highest VP wins (a draw is
+  // possible and reported as such).
+  function endGameByScore() {
+    state.combat.over = true;
+    state.phase = 'over';
+    state.combat.activation = null;
+    state.combat.pendingMove = null;
+    const aVP = totalVP('A'), bVP = totalVP('B');
+    let title, text;
+    if (aVP === bVP) {
+      title = 'Stalemate';
+      text = `Four turning points fought to a standstill. Final VP — Blue ${aVP} · Red ${bVP}.`;
+    } else {
+      const winner = aVP > bVP ? 'A' : 'B';
+      title = `${teamName(winner)} Victorious`;
+      text = `The mission concludes after Turning Point ${RC.MAX_TURNING_POINTS}. Final VP — Blue ${aVP} · Red ${bVP}.`;
+    }
+    overlayTitle.textContent = title;
+    overlayText.textContent = text;
+    overlay.style.display = 'flex';
     syncActivationPanel();
     render();
   }
@@ -1394,8 +1462,10 @@
     // a movement choice, plus their attacks. We always show these, even if
     // they're not legal right now, so the player gets feedback on *why*
     // they can't (e.g. "out of AP", "no enemy in range").
+    const effMove = KTR.effectiveMove(u);
+    const injuredTag = KTR.isInjured(u) ? ' (injured)' : '';
     const primary = [
-      { id: 'reposition', name: 'Reposition', cost: RC.REPOSITION_AP, info: `Move ${u.moveInches}"`, reason: v.reposition(u, a) },
+      { id: 'reposition', name: 'Reposition', cost: RC.REPOSITION_AP, info: `Move ${effMove}"${injuredTag}`, reason: v.reposition(u, a) },
       { id: 'dash',       name: 'Dash',       cost: RC.DASH_AP,        info: `Move ${RC.DASH_INCHES}"`,                  reason: v.dash(u, a) },
       { id: 'shoot',      name: 'Shoot',      cost: RC.SHOOT_AP,       info: 'Ranged attack',                             reason: v.shoot(u, a, state.units) },
       { id: 'fight',      name: 'Fight',      cost: RC.FIGHT_AP,       info: 'Melee attack',                              reason: v.fight(u, a, state.units) },
@@ -1405,8 +1475,8 @@
     // completely instead of greying them out — there's no "fix" that turns
     // a missing hatchway into a present one.
     const secondary = [
-      { id: 'charge',    name: 'Charge',     cost: RC.CHARGE_AP,    info: `Move ${u.moveInches + RC.CHARGE_BONUS}", end in CR`, reason: v.charge(u, a, state.units) },
-      { id: 'fallBack',  name: 'Fall Back',  cost: RC.FALL_BACK_AP, info: `Move ${u.moveInches}"`,                              reason: v.fallBack(u, a, state.units) },
+      { id: 'charge',    name: 'Charge',     cost: RC.CHARGE_AP,    info: `Move ${effMove + RC.CHARGE_BONUS}", end in CR`, reason: v.charge(u, a, state.units) },
+      { id: 'fallBack',  name: 'Fall Back',  cost: RC.FALL_BACK_AP, info: `Move ${effMove}"`,                              reason: v.fallBack(u, a, state.units) },
     ];
     if (hatchAvailable) secondary.push({ id: 'openHatch', name: 'Operate Hatch', cost: RC.OPEN_HATCH_AP, info: 'Open / close', reason: v.openHatchway(u, a) });
     if (breachAvailable) secondary.push({ id: 'breach', name: 'Breach', cost: KTR.breachAPCost(u), info: 'Open a breach point', reason: v.breach(u, a) });
@@ -1474,11 +1544,12 @@
     activationHint.textContent = '';
     if (id === 'reposition' || id === 'dash' || id === 'charge' || id === 'fallBack') {
       const u = a.unit;
+      const moveIn = KTR.effectiveMove(u);
       const max =
-        id === 'reposition' ? u.moveInches :
+        id === 'reposition' ? moveIn :
         id === 'dash' ? RC.DASH_INCHES :
-        id === 'charge' ? u.moveInches + RC.CHARGE_BONUS :
-        u.moveInches;
+        id === 'charge' ? moveIn + RC.CHARGE_BONUS :
+        moveIn;
       const labels = { reposition: 'Reposition', dash: 'Dash', charge: 'Charge', fallBack: 'Fall Back' };
       state.combat.pendingMove = {
         actionId: id, kind: id, label: labels[id], maxInches: max,
@@ -1560,6 +1631,14 @@
   }
 
   // ── Shoot flow ──────────────────────────────────────────────────────
+  // Weapon range is measured base-edge to base-edge. A weapon can be used
+  // against a target only if the target is within its Range (∞ if none).
+  function weaponReaches(attacker, weapon, target) {
+    return KTR.edgeDist(attacker, target) <= KTR.weaponRange(weapon) + 1e-3;
+  }
+  function rangedWeaponsInRange(attacker, target) {
+    return (attacker.weapons || []).filter(w => !w.is_melee && weaponReaches(attacker, w, target));
+  }
   function shootCandidates(attacker) {
     const out = [];
     for (const o of state.units) {
@@ -1568,6 +1647,8 @@
       if (!env.visible) continue;
       // Conceal target with cover cannot be selected (unless attacker within 2" of cover).
       if (o.order === 'conceal' && env.inCover) continue;
+      // At least one ranged weapon must reach the target.
+      if (!rangedWeaponsInRange(attacker, o).length) continue;
       out.push({ target: o, env });
     }
     return out;
@@ -1602,7 +1683,7 @@
   }
 
   function openShootModal(attacker, target, env) {
-    const ranged = (attacker.weapons || []).filter(w => !w.is_melee);
+    const ranged = rangedWeaponsInRange(attacker, target);
     if (!ranged.length) return;
     state.combat.shoot = {
       attacker, target, env,
@@ -1680,15 +1761,17 @@
       </div>
     `;
 
-    // Weapon picker (only if multiple ranged weapons exist)
+    // Weapon picker (only if multiple ranged weapons exist). Weapons whose
+    // Range can't reach the chosen target render disabled.
     const ranged = (s.attacker.weapons || []).filter(x => !x.is_melee);
     if (ranged.length > 1) {
       html += `<span class="kt-step-tag">Step 1 · Weapon</span><div class="kt-weapon-pick" id="kt-weapon-pick">`;
       for (let i = 0; i < ranged.length; i++) {
         const r = ranged[i];
-        html += `<div class="kt-weapon-row${r === s.weapon ? ' selected' : ''}" data-i="${i}">
+        const reaches = weaponReaches(s.attacker, r, s.target);
+        html += `<div class="kt-weapon-row${r === s.weapon ? ' selected' : ''}${reaches ? '' : ' disabled'}" data-i="${i}"${reaches ? '' : ' aria-disabled="true"'}>
           <span class="kt-w-name">${escapeHtml(r.name)}</span>
-          <span class="kt-w-stats">A${r.atk} · ${r.hit}+ · ${r.normal_dmg}/${r.crit_dmg}${r.rules && r.rules.length ? ' · ' + escapeHtml(r.rules.join(', ')) : ''}</span>
+          <span class="kt-w-stats">A${r.atk} · ${r.hit}+ · ${r.normal_dmg}/${r.crit_dmg}${r.rules && r.rules.length ? ' · ' + escapeHtml(r.rules.join(', ')) : ''}${reaches ? '' : ' · OUT OF RANGE'}</span>
         </div>`;
       }
       html += `</div>`;
@@ -1738,6 +1821,7 @@
     if (wp) {
       wp.querySelectorAll('.kt-weapon-row').forEach(row => {
         row.addEventListener('click', () => {
+          if (row.classList.contains('disabled')) return;
           const i = +row.dataset.i;
           s.weapon = ranged[i];
           // Picking a weapon means "this is the one I want to shoot with" —
@@ -1798,9 +1882,7 @@
     if (cq && (!lethal || lethal.value > 5)) lethal = { name: 'Lethal', value: 5, raw: 'Lethal 5+ (Close Quarters)' };
     const critAt = lethal ? lethal.value : 6;
     if (cq) log(`Close Quarters: ${w.name} gains Lethal 5+.`);
-    let bs = w.hit;
-    // Wounded/injured: +1 to Hit (worsened) -- we apply if attacker is injured.
-    if (KTR.isInjured(s.attacker)) bs = Math.min(6, bs + 1);
+    const bs = KTR.effectiveHit(s.attacker, w);
     const atkDice = w.atk;
 
     const out = KTR.rollAttack(atkDice, bs, critAt, 0, 0);
@@ -2043,6 +2125,7 @@
       step: 'pickWeapon',
       atkA: null, atkT: null,
       next: 'A',         // whose turn to spend a die (attacker first)
+      armed: null,       // index of the tapped-but-unresolved die on `next`'s side
       damageA: 0, damageT: 0,
       done: false,
     };
@@ -2130,6 +2213,18 @@
           fightPrompt(f)
         }</div>`;
         const done = fightDone(f);
+        // Armed die → offer Strike / Block as large tap targets instead of a
+        // blocking native confirm() dialog.
+        if (!done && f.armed != null) {
+          const set = f.next === 'A' ? f.atkA : f.atkT;
+          const cat = set.crits.includes(f.armed) ? 'crit' : 'normal';
+          const dmg = cat === 'crit' ? set.weapon.crit_dmg : set.weapon.normal_dmg;
+          const parryOk = canParry(f, f.next, cat);
+          html += `<div class="kt-modal-footer kt-strike-parry">
+            <button class="btn-fire" id="kt-fight-strike">Strike (${dmg} dmg)</button>
+            <button class="btn-ghost" id="kt-fight-parry" ${parryOk ? '' : 'disabled'}>${parryOk ? 'Block' : 'Block (no valid die)'}</button>
+          </div>`;
+        }
         html += `<div class="kt-modal-footer">
           ${done ? `<button class="btn-ghost" id="kt-fight-reroll" title="Re-roll both sides">Re-roll</button>` : ''}
           ${done ? '' : `<button class="btn-ghost" id="kt-fight-auto">Auto-resolve</button>`}
@@ -2156,6 +2251,10 @@
     if (rb) rb.addEventListener('click', () => { autoRollAndResolveFight(); renderFightModal(); });
     const auto = fightBody.querySelector('#kt-fight-auto');
     if (auto) auto.addEventListener('click', () => { autoResolveFight(); renderFightModal(); });
+    const strikeBtn = fightBody.querySelector('#kt-fight-strike');
+    if (strikeBtn) strikeBtn.addEventListener('click', () => resolveArmedFightDie('strike'));
+    const parryBtn = fightBody.querySelector('#kt-fight-parry');
+    if (parryBtn) parryBtn.addEventListener('click', () => resolveArmedFightDie('parry'));
     const reroll = fightBody.querySelector('#kt-fight-reroll');
     if (reroll) reroll.addEventListener('click', () => { autoRollAndResolveFight(); renderFightModal(); });
     const ee = fightBody.querySelector('#kt-fight-end');
@@ -2173,7 +2272,27 @@
     const remT = remainingFightDice(f, 'T');
     if (next === 'A' && remA === 0) return `${f.attacker.letter} has no dice left. ${f.target.letter} resolves remaining strikes.`;
     if (next === 'T' && remT === 0) return `${f.target.letter} has no dice left. ${f.attacker.letter} resolves remaining strikes.`;
-    return `${who} — pick a die: <strong>Strike</strong> to deal damage, <strong>Parry</strong> to block one of the opponent's successes.`;
+    if (f.armed != null) {
+      return `${who} — <strong>Strike</strong> to deal damage, or <strong>Block</strong> one of the opponent's successes.`;
+    }
+    return `${who} — tap one of your unresolved dice.`;
+  }
+
+  // Can `side` block with a die of category `cat`? Blocking rules: a crit
+  // blocks a crit or a normal; a normal blocks a normal only — and never
+  // anything if the opponent's weapon is Brutal.
+  function canParry(f, side, cat) {
+    const oppSet = side === 'A' ? f.atkT : f.atkA;
+    // If the opponent's weapon is Brutal, we may only block with crits.
+    const oppBrutal = KTR.hasRule(oppSet.parsed, 'Brutal');
+    if (oppBrutal && cat !== 'crit') return false;
+    if (cat === 'crit') {
+      for (const i of oppSet.crits) if (!oppSet.spent.has(i)) return true;
+      for (const i of oppSet.normals) if (!oppSet.spent.has(i)) return true;
+      return false;
+    }
+    for (const i of oppSet.normals) if (!oppSet.spent.has(i)) return true;
+    return false;
   }
 
   function remainingFightDice(f, who) {
@@ -2189,17 +2308,18 @@
   function rollFight(silent) {
     const f = state.combat.fight;
     if (!f) return;
-    function rollSide(weapon, opName) {
+    function rollSide(weapon, opName, wielder) {
       const parsed = weapon._parsedRules || (weapon._parsedRules = KTR.parseWeaponRules(weapon.rules));
       const lethal = KTR.ruleByName(parsed, 'Lethal');
       const critAt = lethal ? lethal.value : 6;
-      const out = KTR.rollAttack(weapon.atk, weapon.hit, critAt, 0, 0);
+      const hit = wielder ? KTR.effectiveHit(wielder, weapon) : weapon.hit;
+      const out = KTR.rollAttack(weapon.atk, hit, critAt, 0, 0);
       const rolls = out.rolls;
       const crits = [], normals = [], fails = [];
       for (let i = 0; i < rolls.length; i++) {
         const v = rolls[i];
         if (v >= critAt) crits.push(i);
-        else if (v >= weapon.hit) normals.push(i);
+        else if (v >= hit) normals.push(i);
         else fails.push(i);
       }
       // Severe / Rending / Punishing
@@ -2233,6 +2353,7 @@
         if (set.spent.has(idx)) { d.classList.add('spent'); return; }
         if (f.next !== side) return;
         d.classList.add('selectable');
+        if (f.armed === idx) d.classList.add('armed');
         d.onclick = () => onFightDieClick(side, idx, d, cat);
       });
     }
@@ -2240,14 +2361,24 @@
     wire('T', 'fb', f.atkT);
   }
 
+  // Tap a die to arm it; the Strike / Block buttons in the footer resolve it.
   function onFightDieClick(side, idx, dEl, cat) {
     const f = state.combat.fight;
     if (!f) return;
     if (f.next !== side) return;
-    // Show a tiny confirm: strike vs parry
-    const choice = strikeOrParryPrompt(side, cat);
-    if (!choice) return;
+    f.armed = (f.armed === idx) ? null : idx;
+    renderFightModal();
+  }
+
+  function resolveArmedFightDie(choice) {
+    const f = state.combat.fight;
+    if (!f || f.armed == null) return;
+    const side = f.next;
+    const idx = f.armed;
     const set = side === 'A' ? f.atkA : f.atkT;
+    const cat = set.crits.includes(idx) ? 'crit' : 'normal';
+    if (choice === 'parry' && !canParry(f, side, cat)) return;
+    f.armed = null;
     set.spent.add(idx);
     if (choice === 'strike') {
       const dmg = cat === 'crit' ? set.weapon.crit_dmg : set.weapon.normal_dmg;
@@ -2255,9 +2386,9 @@
       else f.damageA += dmg;
       log(`${side === 'A' ? f.attacker.letter : f.target.letter} strikes for ${dmg}.`);
     } else {
-      // Parry: discard one of the opponent's unresolved dice (highest first).
+      // Block: discard one of the opponent's unresolved dice (crit first when
+      // blocking with a crit; a normal can only drop a normal).
       const oppSet = side === 'A' ? f.atkT : f.atkA;
-      // Crit parry can drop crit; normal parry can drop normal
       let target = null;
       if (cat === 'crit') {
         for (const i of oppSet.crits) if (!oppSet.spent.has(i)) { target = i; break; }
@@ -2267,11 +2398,7 @@
       }
       if (target != null) {
         oppSet.spent.add(target);
-        log(`${side === 'A' ? f.attacker.letter : f.target.letter} parries.`);
-      } else {
-        // No valid parry target: revert spent on this side
-        set.spent.delete(idx);
-        return;
+        log(`${side === 'A' ? f.attacker.letter : f.target.letter} blocks.`);
       }
     }
     // Switch sides; if other has no dice, stay.
@@ -2279,14 +2406,6 @@
     if (remainingFightDice(f, otherSide) > 0) f.next = otherSide;
     else f.next = side; // continue on same side
     renderFightModal();
-  }
-
-  function strikeOrParryPrompt(side, cat) {
-    // Reuse confirm() for simplicity (good for desktop + mobile).
-    const useStrike = window.confirm(
-      `${side === 'A' ? 'Attacker' : 'Defender'} ${cat === 'crit' ? 'critical' : 'normal'} success — OK = Strike, Cancel = Parry`
-    );
-    return useStrike ? 'strike' : 'parry';
   }
 
   function autoResolveFight() {

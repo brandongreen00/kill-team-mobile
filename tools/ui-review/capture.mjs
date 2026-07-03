@@ -466,7 +466,10 @@ async function main() {
   const server = await startServer();
   let browser;
   try {
-    browser = await chromium.launch();
+    // In sandboxes the pre-installed browser may not match the playwright
+    // version's pinned build; fall back to the environment-provided binary.
+    browser = await chromium.launch().catch(() =>
+      chromium.launch({ executablePath: '/opt/pw-browsers/chromium' }));
     const summary = [];
     for (const profile of DEVICE_PROFILES) {
       for (const scheme of COLOR_SCHEMES) {

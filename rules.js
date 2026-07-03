@@ -33,6 +33,12 @@
   const OPEN_HATCH_AP = 1;
   const BREACH_AP = 2;
   const BREACH_AP_GRENADIER = 1;
+  const GUARD_AP = 1;
+  const PICK_UP_AP = 1;
+  const MAX_TURNING_POINTS = 4;             // the game always ends after TP4
+  const CP_PER_TP = 1;                      // each player gains 1CP per Strategy phase
+  const INJURED_MOVE_PENALTY = 2;           // -2" Move while injured
+  const COUNTERACT_AP = 1;                  // counteract grants a single 1AP action
 
   KT_RULES.constants = {
     ENGAGEMENT_RANGE,
@@ -49,6 +55,12 @@
     OPEN_HATCH_AP,
     BREACH_AP,
     BREACH_AP_GRENADIER,
+    GUARD_AP,
+    PICK_UP_AP,
+    MAX_TURNING_POINTS,
+    CP_PER_TP,
+    INJURED_MOVE_PENALTY,
+    COUNTERACT_AP,
   };
 
   // ── Dice ────────────────────────────────────────────────────────────
@@ -120,8 +132,9 @@
   }
 
   // ── Weapon rule parsing ─────────────────────────────────────────────
-  // Recognised: Range X", Lethal X+, Piercing X, Piercing Crits X, Rending,
-  // Punishing, Severe, Saturate, Brutal, Devastating X, Accurate X, Hot.
+  // Recognises every KT24 universal weapon rule. Value-carrying rules keep
+  // their number (inches for Blast/Torrent/Devastating-x"/Range; a die count
+  // for Accurate/Piercing/Limited; a threshold for Lethal).
   function parseWeaponRules(rules) {
     const out = [];
     for (const raw of (rules || [])) {
@@ -138,22 +151,60 @@
       // Piercing X
       m = r.match(/^Piercing\s+(\d+)$/i);
       if (m) { out.push({ name: 'Piercing', value: +m[1], raw: r }); continue; }
-      // Devastating X
-      m = r.match(/^Devastating\s+(\d+)$/i);
+      // Devastating X (optionally distance-limited, e.g. 'Devastating 3"')
+      m = r.match(/^Devastating\s+(\d+)\"?$/i);
       if (m) { out.push({ name: 'Devastating', value: +m[1], raw: r }); continue; }
       // Accurate X
       m = r.match(/^Accurate\s+(\d+)$/i);
       if (m) { out.push({ name: 'Accurate', value: +m[1], raw: r }); continue; }
+      // Blast X" / Torrent X" — value is the radius in inches
+      m = r.match(/^(Blast|Torrent)\s+(\d+(?:\.\d+)?)\"?$/i);
+      if (m) {
+        const nm = m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
+        out.push({ name: nm, value: +m[2], raw: r });
+        continue;
+      }
+      // Limited X (default 1)
+      m = r.match(/^Limited(?:\s+(\d+))?$/i);
+      if (m) { out.push({ name: 'Limited', value: m[1] ? +m[1] : 1, raw: r }); continue; }
+      // Seek Light must match before plain Seek
+      m = r.match(/^Seek\s+Light$/i);
+      if (m) { out.push({ name: 'Seek Light', value: null, raw: r }); continue; }
       // MWx (mortal wounds)
       m = r.match(/^MW\s*(\d+)$/i);
       if (m) { out.push({ name: 'MW', value: +m[1], raw: r }); continue; }
-      // Plain keywords: Rending, Punishing, Severe, Saturate, Brutal, Hot, Splash X (ignore)
-      m = r.match(/^(Rending|Punishing|Severe|Saturate|Brutal|Hot|Stun|Shock|Blast|Torrent|Indirect|Heavy|Silent|Limited)\b/i);
+      // Plain keywords
+      m = r.match(/^(Rending|Punishing|Severe|Saturate|Brutal|Hot|Stun|Shock|Blast|Torrent|Indirect|Heavy|Silent|Seek|Ceaseless|Balanced|Relentless)\b/i);
       if (m) { out.push({ name: m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase(), value: null, raw: r }); continue; }
       out.push({ name: '_unknown', value: null, raw: r });
     }
     return out;
   }
+
+  // ── Re-roll rules (Ceaseless / Balanced / Relentless / Hot) ─────────
+  // Given the raw attack rolls, return the indices that an optimal player
+  // would re-roll under the weapon's re-roll rule:
+  //   * Relentless — re-roll ANY dice (all fails).
+  //   * Ceaseless  — re-roll all dice of ONE result that is a fail
+  //                  (pick the most common failing value).
+  //   * Balanced   — re-roll ONE die (one fail).
+  // Returns [] when nothing should be re-rolled.
+  function rerollIndices(parsed, rolls, hit) {
+    const failIdx = [];
+    for (let i = 0; i < rolls.length; i++) if (rolls[i] < hit) failIdx.push(i);
+    if (!failIdx.length) return [];
+    if (hasRule(parsed, 'Relentless')) return failIdx;
+    if (hasRule(parsed, 'Ceaseless')) {
+      const byVal = {};
+      for (const i of failIdx) (byVal[rolls[i]] = byVal[rolls[i]] || []).push(i);
+      let best = [];
+      for (const v of Object.keys(byVal)) if (byVal[v].length > best.length) best = byVal[v];
+      return best;
+    }
+    if (hasRule(parsed, 'Balanced')) return [failIdx[0]];
+    return [];
+  }
+  KT_RULES.rerollIndices = rerollIndices;
   function ruleByName(parsed, name) {
     return parsed.find(p => p.name.toLowerCase() === name.toLowerCase());
   }
@@ -418,6 +469,16 @@
     if (activation.ap < cost) return 'Not enough AP for Breach (' + cost + ').';
     return null;
   }
+  // Guard: spend 1AP to interrupt a later enemy action with a free Shoot /
+  // Fight. Requires the Engage order and at least 1 AP remaining after it
+  // (i.e. it must be the operative's last meaningful choice or affordable).
+  function validateGuard(unit, activation, units) {
+    if (activation.order !== 'engage') return 'Guard requires the Engage order.';
+    if (activation.hasGuard) return 'Already on Guard.';
+    if (inEnemyControlRange(unit, units)) return 'Cannot Guard while in enemy control range.';
+    if (activation.ap < GUARD_AP) return 'Not enough AP.';
+    return null;
+  }
   KT_RULES.validate = {
     reposition: validateReposition,
     dash: validateDash,
@@ -427,6 +488,7 @@
     fight: validateFight,
     openHatchway: validateOpenHatchway,
     breach: validateBreach,
+    guard: validateGuard,
   };
 
   function breachAPCost(unit) {
@@ -497,11 +559,28 @@
   KT_RULES.fightDicePool = fightDicePool;
 
   // ── Wound thresholds ───────────────────────────────────────────────
-  // Operative is wounded (and gets -1 Hit, -2" Move) at < ceil(W/2) wounds.
+  // Operative is injured below half wounds: worsen Hit by 1 and subtract
+  // 2" from Move (both shooting and fighting are affected).
   function isInjured(unit) {
     return unit.alive && unit.hp <= Math.ceil(unit.maxHp / 2) - 1;
   }
   KT_RULES.isInjured = isInjured;
+
+  // Effective Move stat in inches, including the injured penalty.
+  function effectiveMove(unit) {
+    const base = parseMoveStat(unit.move != null ? unit.move : unit.moveInches);
+    return isInjured(unit) ? Math.max(0, base - INJURED_MOVE_PENALTY) : base;
+  }
+  KT_RULES.effectiveMove = effectiveMove;
+
+  // Effective Hit stat for a weapon wielded by `unit` (injured worsens by 1,
+  // capped at 6+).
+  function effectiveHit(unit, weapon) {
+    let hit = weapon.hit;
+    if (isInjured(unit)) hit = Math.min(6, hit + 1);
+    return hit;
+  }
+  KT_RULES.effectiveHit = effectiveHit;
 
   // ── Misc UI helpers ───────────────────────────────────────────────
   function rangeFromInches(weapon) {
