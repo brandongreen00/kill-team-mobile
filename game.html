@@ -25,16 +25,47 @@
             <span class="team-dot" data-team="A"></span>
             <span class="team-pick-label" id="team-pick-label-A">Player Blue</span>
           </div>
-          <div class="team-pick-roster" id="roster-list-A"></div>
+          <div class="team-pick-roster" id="roster-list-A" tabindex="0" role="group" aria-label="Player Blue roster choices"></div>
           <div class="team-pick-summary" id="roster-summary-A">No team chosen.</div>
         </div>
         <div class="team-pick-side">
           <div class="team-pick-header">
             <span class="team-dot" data-team="B"></span>
             <span class="team-pick-label" id="team-pick-label-B">Player Red</span>
+            <label class="ai-toggle" for="ai-toggle-B" title="The machine spirit commands Red">
+              <input type="checkbox" id="ai-toggle-B" />
+              <span>AI</span>
+            </label>
           </div>
-          <div class="team-pick-roster" id="roster-list-B"></div>
+          <div class="team-pick-roster" id="roster-list-B" tabindex="0" role="group" aria-label="Player Red roster choices"></div>
           <div class="team-pick-summary" id="roster-summary-B">No team chosen.</div>
+        </div>
+      </div>
+      <!-- Mission ops: the shared crit op and each side's secret tac op.
+           Tac op options depend on the chosen roster's faction archetypes. -->
+      <div class="ops-pick" id="ops-pick">
+        <div class="ops-pick-row">
+          <label class="ops-pick-label" for="crit-op-select">Crit Op</label>
+          <select id="crit-op-select" class="ops-select">
+            <option value="random" selected>Random</option>
+          </select>
+          <p class="ops-desc" id="crit-op-desc"></p>
+        </div>
+        <div class="ops-pick-row">
+          <label class="ops-pick-label" for="tac-op-A">Blue Tac Op</label>
+          <select id="tac-op-A" class="ops-select" disabled></select>
+          <p class="ops-desc" id="tac-op-desc-A"></p>
+        </div>
+        <div class="ops-pick-row">
+          <label class="ops-pick-label" for="tac-op-B">Red Tac Op</label>
+          <select id="tac-op-B" class="ops-select" disabled></select>
+          <p class="ops-desc" id="tac-op-desc-B"></p>
+        </div>
+        <div class="ops-pick-row">
+          <span class="ops-pick-label">Equipment</span>
+          <div class="equip-pick" id="equip-pick-A"></div>
+          <div class="equip-pick" id="equip-pick-B"></div>
+          <p class="ops-desc">Each side may bring up to 4 equipment options. Their effects are shown in the Ploys &amp; CP sheet during the battle.</p>
         </div>
       </div>
       <div class="phase-actions">
@@ -84,6 +115,7 @@
         </div>
         <div class="turn-banner" id="turn-banner">Activation</div>
         <div class="right">
+          <button class="btn-ghost hud-ploys-btn" id="ploys-btn" type="button" style="display:none;">Ploys · CP</button>
           <button class="btn-ghost" id="end-turn-btn" type="button" style="display:none;">End Turn</button>
         </div>
       </div>
@@ -98,8 +130,10 @@
           <div class="vp-name" id="vp-name-A">Player Blue</div>
           <div class="vp-total" id="vp-total-A">0</div>
           <div class="vp-breakdown">
-            <span class="vp-tag" title="Kill Op (max 5)">Kill <strong id="vp-kill-A">0</strong></span>
-            <span class="vp-tag" title="Crit Op — objectives held">Crit <strong id="vp-crit-A">0</strong></span>
+            <span class="vp-tag" title="Kill Op (max 6)">Kill <strong id="vp-kill-A">0</strong></span>
+            <span class="vp-tag" title="Crit Op (max 6)">Crit <strong id="vp-crit-A">0</strong></span>
+            <span class="vp-tag" title="Tac Op (max 6)">Tac <strong id="vp-tac-A">0</strong></span>
+            <span class="vp-tag vp-cp" title="Command Points">CP <strong id="vp-cp-A">0</strong></span>
             <span class="vp-tag vp-kills" title="Enemies incapacitated">KIA <strong id="vp-kills-A">0</strong>/<span id="vp-size-A">0</span></span>
           </div>
         </div>
@@ -108,8 +142,10 @@
           <div class="vp-name" id="vp-name-B">Player Red</div>
           <div class="vp-total" id="vp-total-B">0</div>
           <div class="vp-breakdown">
-            <span class="vp-tag" title="Kill Op (max 5)">Kill <strong id="vp-kill-B">0</strong></span>
-            <span class="vp-tag" title="Crit Op — objectives held">Crit <strong id="vp-crit-B">0</strong></span>
+            <span class="vp-tag" title="Kill Op (max 6)">Kill <strong id="vp-kill-B">0</strong></span>
+            <span class="vp-tag" title="Crit Op (max 6)">Crit <strong id="vp-crit-B">0</strong></span>
+            <span class="vp-tag" title="Tac Op (max 6)">Tac <strong id="vp-tac-B">0</strong></span>
+            <span class="vp-tag vp-cp" title="Command Points">CP <strong id="vp-cp-B">0</strong></span>
             <span class="vp-tag vp-kills" title="Enemies incapacitated">KIA <strong id="vp-kills-B">0</strong>/<span id="vp-size-B">0</span></span>
           </div>
         </div>
@@ -247,9 +283,24 @@
        choosing a Shoot or Fight target so phones can hit them easily. -->
   <div id="target-picker" class="kt-target-picker" role="dialog" aria-label="Pick a target" style="display:none;"></div>
 
+  <!-- Ploys / CP sheet: spend Command Points on the active side's strategy
+       and firefight ploys; tracked effects render as reminder chips. -->
+  <div id="ploy-modal" class="kt-modal" role="dialog" aria-modal="true" aria-labelledby="ploy-modal-title" style="display:none;">
+    <div class="kt-modal-card">
+      <div class="kt-modal-head">
+        <h2 class="section-title" id="ploy-modal-title" style="margin:0;">Ploys &amp; Command Points</h2>
+        <button class="kt-modal-close" id="ploy-cancel" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="kt-modal-body" id="ploy-body"></div>
+    </div>
+  </div>
+
   <script src="./factions.js"></script>
+  <script src="./presets.js"></script>
+  <script src="./tacops.js"></script>
   <script src="./maps-data.js"></script>
   <script src="./rules.js"></script>
   <script src="./game.js"></script>
+  <script src="./ai.js"></script>
 </body>
 </html>

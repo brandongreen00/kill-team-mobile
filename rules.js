@@ -3,15 +3,19 @@
 // All distances are in inches; the rest of the game treats the 28×24 Tomb-
 // World board the same way.
 //
-// We cover the chunks of the core rules the game currently exercises:
-//   * Engage / Conceal orders
+// Core-rules coverage (KT24 / kill-team3, per wahapedia):
+//   * Engage / Conceal orders; Silent shooting on Conceal
 //   * Cover (light / full) and visibility
-//   * Engagement range (1")
-//   * Action validation (Reposition / Dash / Charge / Fall Back)
-//   * Shooting and Fighting dice math, including optimal save allocation
+//   * Engagement range (1"), control range
+//   * Action validation (Reposition / Dash / Charge / Fall Back / Shoot /
+//     Fight / Guard), same-action-once restrictions
+//   * Shooting and Fighting dice math, incl. optimal save allocation and
+//     the full universal weapon-rule list (see parseWeaponRules)
+//   * Injured (-2" Move w/ 4" floor, worsened Hit), APL modifiers (±1 cap)
+//   * Game structure constants (4 turning points, CP, counteract)
 //
-// Faction rules, ploys, and equipment are intentionally skipped; weapon
-// special rules we recognise are listed in WEAPON_RULES below.
+// Faction rules and equipment stay data-driven in factions.js; ploys are
+// tracked (CP spend + log) by game.js rather than fully mechanised.
 
 (function (root) {
   const KT_RULES = root.KT_RULES = root.KT_RULES || {};
@@ -33,6 +37,12 @@
   const OPEN_HATCH_AP = 1;
   const BREACH_AP = 2;
   const BREACH_AP_GRENADIER = 1;
+  const GUARD_AP = 1;
+  const PICK_UP_AP = 1;
+  const MAX_TURNING_POINTS = 4;             // the game always ends after TP4
+  const CP_PER_TP = 1;                      // each player gains 1CP per Strategy phase
+  const INJURED_MOVE_PENALTY = 2;           // -2" Move while injured
+  const COUNTERACT_AP = 1;                  // counteract grants a single 1AP action
 
   KT_RULES.constants = {
     ENGAGEMENT_RANGE,
@@ -49,6 +59,12 @@
     OPEN_HATCH_AP,
     BREACH_AP,
     BREACH_AP_GRENADIER,
+    GUARD_AP,
+    PICK_UP_AP,
+    MAX_TURNING_POINTS,
+    CP_PER_TP,
+    INJURED_MOVE_PENALTY,
+    COUNTERACT_AP,
   };
 
   // ── Dice ────────────────────────────────────────────────────────────
@@ -120,8 +136,9 @@
   }
 
   // ── Weapon rule parsing ─────────────────────────────────────────────
-  // Recognised: Range X", Lethal X+, Piercing X, Piercing Crits X, Rending,
-  // Punishing, Severe, Saturate, Brutal, Devastating X, Accurate X, Hot.
+  // Recognises every KT24 universal weapon rule. Value-carrying rules keep
+  // their number (inches for Blast/Torrent/Devastating-x"/Range; a die count
+  // for Accurate/Piercing/Limited; a threshold for Lethal).
   function parseWeaponRules(rules) {
     const out = [];
     for (const raw of (rules || [])) {
@@ -138,22 +155,60 @@
       // Piercing X
       m = r.match(/^Piercing\s+(\d+)$/i);
       if (m) { out.push({ name: 'Piercing', value: +m[1], raw: r }); continue; }
-      // Devastating X
-      m = r.match(/^Devastating\s+(\d+)$/i);
+      // Devastating X (optionally distance-limited, e.g. 'Devastating 3"')
+      m = r.match(/^Devastating\s+(\d+)\"?$/i);
       if (m) { out.push({ name: 'Devastating', value: +m[1], raw: r }); continue; }
       // Accurate X
       m = r.match(/^Accurate\s+(\d+)$/i);
       if (m) { out.push({ name: 'Accurate', value: +m[1], raw: r }); continue; }
+      // Blast X" / Torrent X" — value is the radius in inches
+      m = r.match(/^(Blast|Torrent)\s+(\d+(?:\.\d+)?)\"?$/i);
+      if (m) {
+        const nm = m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
+        out.push({ name: nm, value: +m[2], raw: r });
+        continue;
+      }
+      // Limited X (default 1)
+      m = r.match(/^Limited(?:\s+(\d+))?$/i);
+      if (m) { out.push({ name: 'Limited', value: m[1] ? +m[1] : 1, raw: r }); continue; }
+      // Seek Light must match before plain Seek
+      m = r.match(/^Seek\s+Light$/i);
+      if (m) { out.push({ name: 'Seek Light', value: null, raw: r }); continue; }
       // MWx (mortal wounds)
       m = r.match(/^MW\s*(\d+)$/i);
       if (m) { out.push({ name: 'MW', value: +m[1], raw: r }); continue; }
-      // Plain keywords: Rending, Punishing, Severe, Saturate, Brutal, Hot, Splash X (ignore)
-      m = r.match(/^(Rending|Punishing|Severe|Saturate|Brutal|Hot|Stun|Shock|Blast|Torrent|Indirect|Heavy|Silent|Limited)\b/i);
+      // Plain keywords
+      m = r.match(/^(Rending|Punishing|Severe|Saturate|Brutal|Hot|Stun|Shock|Blast|Torrent|Indirect|Heavy|Silent|Seek|Ceaseless|Balanced|Relentless)\b/i);
       if (m) { out.push({ name: m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase(), value: null, raw: r }); continue; }
       out.push({ name: '_unknown', value: null, raw: r });
     }
     return out;
   }
+
+  // ── Re-roll rules (Ceaseless / Balanced / Relentless / Hot) ─────────
+  // Given the raw attack rolls, return the indices that an optimal player
+  // would re-roll under the weapon's re-roll rule:
+  //   * Relentless — re-roll ANY dice (all fails).
+  //   * Ceaseless  — re-roll all dice of ONE result that is a fail
+  //                  (pick the most common failing value).
+  //   * Balanced   — re-roll ONE die (one fail).
+  // Returns [] when nothing should be re-rolled.
+  function rerollIndices(parsed, rolls, hit) {
+    const failIdx = [];
+    for (let i = 0; i < rolls.length; i++) if (rolls[i] < hit) failIdx.push(i);
+    if (!failIdx.length) return [];
+    if (hasRule(parsed, 'Relentless')) return failIdx;
+    if (hasRule(parsed, 'Ceaseless')) {
+      const byVal = {};
+      for (const i of failIdx) (byVal[rolls[i]] = byVal[rolls[i]] || []).push(i);
+      let best = [];
+      for (const v of Object.keys(byVal)) if (byVal[v].length > best.length) best = byVal[v];
+      return best;
+    }
+    if (hasRule(parsed, 'Balanced')) return [failIdx[0]];
+    return [];
+  }
+  KT_RULES.rerollIndices = rerollIndices;
   function ruleByName(parsed, name) {
     return parsed.find(p => p.name.toLowerCase() === name.toLowerCase());
   }
@@ -314,16 +369,17 @@
     return 1.0;
   }
 
-  // Check if a piece of light terrain intervenes between attacker and target,
-  // and is >2" from attacker (cover requirement).
+  // Check if a piece of light terrain gives the target cover: the terrain
+  // must intervene on the shot line AND be within the target's control range
+  // (1"), and the target cannot be in cover at all while within 2" of the
+  // shooter (COVER_FAR_THRESHOLD).
   function lightCoverIntervening(map, ax, ay, dx, dy) {
+    if (dist(ax, ay, dx, dy) <= COVER_FAR_THRESHOLD) return false;
     for (const t of lightCoverPieces(map)) {
       const r = terrainRadius(t) * 0.85; // small relaxation so ovals catch
-      const distFromShooter = Math.hypot(t.x - ax, t.y - ay);
-      if (distFromShooter <= COVER_FAR_THRESHOLD) continue;
-      const distToTarget = Math.hypot(t.x - dx, t.y - dy);
-      // require terrain to be nearer the target side than the shooter
-      if (distFromShooter < distToTarget) continue;
+      // within the target's control range (edge of piece to target centre)
+      const distToTarget = Math.hypot(t.x - dx, t.y - dy) - r;
+      if (distToTarget > ENGAGEMENT_RANGE) continue;
       const d = pointSegDist(t.x, t.y, ax, ay, dx, dy);
       if (d <= r) return true;
     }
@@ -397,13 +453,21 @@
     return null;
   }
   function validateShoot(unit, activation, units) {
-    if (activation.order !== 'engage') return 'Shoot requires the Engage order.';
+    const silent = (unit.weapons || []).some(w => {
+      if (w.is_melee) return false;
+      const parsed = w._parsedRules || (w._parsedRules = parseWeaponRules(w.rules));
+      return hasRule(parsed, 'Silent');
+    });
+    if (activation.order !== 'engage' && !silent) return 'Shoot requires the Engage order (or a Silent weapon).';
+    if (activation.hasShot) return 'Already Shot this activation.';
+    if (activation.hasGuard) return 'Guard counts as this activation’s Shoot action.';
     if (inEnemyControlRange(unit, units)) return 'Cannot Shoot while in enemy control range.';
     if (activation.ap < SHOOT_AP) return 'Not enough AP.';
     if (!unit.weapons || !unit.weapons.some(w => !w.is_melee)) return 'No ranged weapon.';
     return null;
   }
   function validateFight(unit, activation, units) {
+    if (activation.hasFought) return 'Already Fought this activation.';
     if (!inEnemyControlRange(unit, units)) return 'Fight requires enemy in control range.';
     if (activation.ap < FIGHT_AP) return 'Not enough AP.';
     if (!unit.weapons || !unit.weapons.some(w => w.is_melee)) return 'No melee weapon.';
@@ -418,6 +482,18 @@
     if (activation.ap < cost) return 'Not enough AP for Breach (' + cost + ').';
     return null;
   }
+  // Guard: spend 1AP to interrupt a later enemy action with a free Shoot /
+  // Fight. Requires the Engage order and at least 1 AP remaining after it
+  // (i.e. it must be the operative's last meaningful choice or affordable).
+  function validateGuard(unit, activation, units) {
+    if (activation.order !== 'engage') return 'Guard requires the Engage order.';
+    if (activation.hasGuard) return 'Already on Guard.';
+    if (activation.hasShot) return 'Guard is treated as a Shoot action (already Shot).';
+    if (activation.counteract) return 'Cannot Guard while counteracting.';
+    if (inEnemyControlRange(unit, units)) return 'Cannot Guard while in enemy control range.';
+    if (activation.ap < GUARD_AP) return 'Not enough AP.';
+    return null;
+  }
   KT_RULES.validate = {
     reposition: validateReposition,
     dash: validateDash,
@@ -427,6 +503,7 @@
     fight: validateFight,
     openHatchway: validateOpenHatchway,
     breach: validateBreach,
+    guard: validateGuard,
   };
 
   function breachAPCost(unit) {
@@ -470,22 +547,27 @@
   }
   KT_RULES.applyAttackFixups = applyAttackFixups;
 
-  function defenceDiceCount(parsed, inCover) {
-    // Saturate means cover does not retain a save; otherwise cover saves
-    // replace one rolled die.
+  // Defence dice pool: 3 base, minus Piercing (Piercing Crits only bites when
+  // the attacker retained a crit). A cover save retains one of the pool as a
+  // normal success without rolling it (negated by Saturate).
+  function defenceDiceCount(parsed, inCover, attackerRetainedCrit) {
     const saturate = hasRule(parsed, 'Saturate');
-    let dice = 3;
+    let pool = 3;
+    const piercing = ruleByName(parsed, 'Piercing');
+    if (piercing) pool -= piercing.value;
+    const pCrits = ruleByName(parsed, 'Piercing Crits');
+    if (pCrits && attackerRetainedCrit) pool -= pCrits.value;
+    pool = Math.max(0, pool);
     let autoNormals = 0;
-    if (inCover && !saturate) { dice = 2; autoNormals = 1; }
-    return { dice, autoNormals };
+    if (inCover && !saturate && pool > 0) { pool -= 1; autoNormals = 1; }
+    return { dice: pool, autoNormals };
   }
   KT_RULES.defenceDiceCount = defenceDiceCount;
 
+  // Piercing no longer modifies the save stat (it removes defence dice);
+  // kept as a hook for future save-stat modifiers.
   function effectiveSave(target, parsed) {
-    let save = target.save;
-    const piercing = ruleByName(parsed, 'Piercing');
-    if (piercing) save = Math.min(6, save + piercing.value);
-    return save;
+    return target.save;
   }
   KT_RULES.effectiveSave = effectiveSave;
 
@@ -497,11 +579,39 @@
   KT_RULES.fightDicePool = fightDicePool;
 
   // ── Wound thresholds ───────────────────────────────────────────────
-  // Operative is wounded (and gets -1 Hit, -2" Move) at < ceil(W/2) wounds.
+  // Operative is injured below half wounds: worsen Hit by 1 and subtract
+  // 2" from Move (both shooting and fighting are affected).
   function isInjured(unit) {
     return unit.alive && unit.hp <= Math.ceil(unit.maxHp / 2) - 1;
   }
   KT_RULES.isInjured = isInjured;
+
+  // Effective Move stat in inches, including the injured penalty. A Move
+  // stat can never be *changed* to less than 4" (an operative whose printed
+  // Move is below 4" keeps it).
+  function effectiveMove(unit) {
+    const base = parseMoveStat(unit.move != null ? unit.move : unit.moveInches);
+    if (!isInjured(unit)) return base;
+    return Math.max(Math.min(base, 4), base - INJURED_MOVE_PENALTY);
+  }
+  KT_RULES.effectiveMove = effectiveMove;
+
+  // Effective APL including modifiers (Stun, Breach concussion). Total
+  // modification is clamped to ±1 regardless of how many effects apply.
+  function effectiveAPL(unit) {
+    const mod = Math.max(-1, Math.min(1, unit.aplMod || 0));
+    return Math.max(0, (unit.apl || 2) + mod);
+  }
+  KT_RULES.effectiveAPL = effectiveAPL;
+
+  // Effective Hit stat for a weapon wielded by `unit` (injured worsens by 1,
+  // capped at 6+).
+  function effectiveHit(unit, weapon) {
+    let hit = weapon.hit;
+    if (isInjured(unit)) hit = Math.min(6, hit + 1);
+    return hit;
+  }
+  KT_RULES.effectiveHit = effectiveHit;
 
   // ── Misc UI helpers ───────────────────────────────────────────────
   function rangeFromInches(weapon) {

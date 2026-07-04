@@ -1929,6 +1929,9 @@ body.board-armed .board { cursor: crosshair; }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  /* Grid/flex items default to min-width auto; long nowrap roster names
+     would otherwise blow the layout out past the phone viewport. */
+  min-width: 0;
 }
 .team-pick-header {
   display: flex;
@@ -1967,8 +1970,11 @@ body.board-armed .board { cursor: crosshair; }
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
   transition: border-color 0.15s ease, background 0.15s ease;
 }
+.roster-pick-card .roster-pick-name,
+.roster-pick-card .roster-pick-meta { min-width: 0; }
 .roster-pick-card:hover { border-color: var(--accent-primary); }
 .roster-pick-card.selected {
   border-color: var(--accent-primary);
@@ -1992,6 +1998,151 @@ body.board-armed .board { cursor: crosshair; }
   text-transform: uppercase;
   color: var(--text-muted);
 }
+.roster-pick-heading {
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  padding: 6px 2px 2px;
+  border-bottom: 1px solid var(--border);
+}
+.roster-pick-card.preset .roster-pick-name::after {
+  content: ' · PRESET';
+  color: var(--accent-primary);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+
+/* ── Ops selection (team screen) ─────────────────────────────────── */
+.ops-pick {
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ops-pick-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ops-pick-label {
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  min-width: 92px;
+}
+.ops-select {
+  background: var(--input-bg);
+  color: var(--text);
+  border: 1px solid var(--border-mid);
+  padding: 8px 10px;
+  font-size: 13px;
+  min-width: 180px;
+  flex: 1;
+}
+.ops-desc {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── Ploys / CP sheet ─────────────────────────────────────────────── */
+.ploy-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+.ploy-tab {
+  flex: 1;
+  padding: 10px;
+  background: var(--chip-bg);
+  border: 1px solid var(--border-mid);
+  color: var(--text-muted);
+  font-family: var(--section-font);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.ploy-tab.active { color: var(--text-bright); border-color: var(--accent-primary); background: var(--accent-action-soft); }
+.ploy-cp {
+  font-family: var(--section-font);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--text-bright);
+  margin-bottom: 10px;
+}
+.ploy-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.ploy-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--bg-base-1);
+  border: 1px solid var(--border);
+  padding: 10px;
+}
+.ploy-row.used { opacity: 0.55; }
+.ploy-row-main { flex: 1; min-width: 0; }
+.ploy-name { font-weight: 700; color: var(--text-bright); font-size: 13px; margin-bottom: 4px; }
+.ploy-cost { color: var(--accent-primary); font-size: 11px; margin-left: 6px; }
+.ploy-text { font-size: 11px; color: var(--text-muted); margin: 0 0 10px; white-space: pre-line; }
+.ploy-row .ploy-text { margin: 0; }
+.ploy-use { min-width: 72px; padding: 8px 10px; font-size: 11px; }
+
+/* Strike / Block choice buttons in the fight modal */
+.kt-strike-parry .btn-fire,
+.kt-strike-parry .btn-ghost { flex: 1; }
+
+/* Out-of-range weapons in the shoot modal */
+.kt-weapon-row.disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Solo-mode AI toggle on the team picker */
+.ai-toggle {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border-mid);
+  padding: 4px 8px;
+  background: var(--chip-bg);
+}
+.ai-toggle:has(input:checked) {
+  color: var(--text-bright);
+  border-color: var(--accent-primary);
+  background: var(--accent-action-soft);
+}
+.ai-toggle input { accent-color: var(--accent-action); margin: 0; }
+.hud-ploys-btn { padding: 8px 12px; font-size: 10px; }
+
+/* Equipment picker on the team screen */
+.equip-pick { flex-basis: 48%; min-width: 200px; }
+.equip-pick:empty { display: none; }
+.equip-pick-team {
+  font-family: var(--section-font);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-label);
+  margin: 4px 0;
+}
+.equip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--bg-base-1);
+  border: 1px solid var(--border);
+  margin-bottom: 4px;
+  cursor: pointer;
+}
+.equip-row input { accent-color: var(--accent-action); margin: 0; }
 .team-pick-summary {
   font-size: 11px;
   letter-spacing: 0.04em;
