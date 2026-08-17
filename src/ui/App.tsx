@@ -11,6 +11,7 @@ import { SequenceOverlay } from './SequenceOverlay.tsx';
 import { DecisionPanel } from './DecisionPanel.tsx';
 import { ActivationPanel } from './ActivationPanel.tsx';
 import { Setup, placeAt } from './flow/Setup.tsx';
+import { TargetingInspector } from './TargetingInspector.tsx';
 import { Store, setStore } from './store.ts';
 import { makeContext } from '../core/context.ts';
 import { SeededRng } from '../core/rng.ts';
@@ -27,6 +28,8 @@ export function App() {
   const [, force] = useState(0);
   const [tab, setTab] = useState<Tab>('board');
   const [placement, setPlacement] = useState<{ operativeId: string; player: PlayerId } | null>(null);
+  /** Targeting-line inspector: tap a shooter, then a target. */
+  const [inspect, setInspect] = useState<{ from?: string; to?: string }>({});
 
   useEffect(() => {
     void (async () => {
@@ -78,9 +81,16 @@ export function App() {
       <Board
         state={state}
         overlays={<SequenceOverlay state={state} decision={decision} />}
+        selectedId={inspect.from}
+        onOperativeClick={(op) => {
+          setInspect((cur) => (cur.from && cur.from !== op.id ? { from: cur.from, to: op.id } : { from: op.id }));
+        }}
         onBoardClick={(world) => {
-          if (!placement) return;
-          if (placeAt(store, placement, world)) setPlacement(null);
+          if (placement) {
+            if (placeAt(store, placement, world)) setPlacement(null);
+            return;
+          }
+          setInspect({});
         }}
       />
     </div>
@@ -89,6 +99,15 @@ export function App() {
   const playPane = (
     <>
       {decision && <DecisionPanel store={store} decision={decision} />}
+      {inspect.from && inspect.to && state.operatives[inspect.from] && state.operatives[inspect.to] && (
+        <TargetingInspector
+          ctx={store.ctx}
+          state={state}
+          shooter={state.operatives[inspect.from]!}
+          target={state.operatives[inspect.to]!}
+          onClose={() => setInspect({})}
+        />
+      )}
       <Setup store={store} teams={teams} pendingPlacement={placement} setPendingPlacement={setPlacement} />
       <ActivationPanel store={store} />
       <section class="card">

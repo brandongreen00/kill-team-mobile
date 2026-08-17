@@ -414,9 +414,6 @@
     "y": 11.938,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -462,9 +459,6 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -645,9 +639,6 @@
     "y": 8.125,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -828,9 +819,6 @@
     "y": 13.844,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1007,11 +995,8 @@
    "placement": {
     "x": 8.134,
     "y": 15.75,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1058,9 +1043,6 @@
     "y": 13.905,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1151,9 +1133,6 @@
     "y": 10.092,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1242,9 +1221,6 @@
     "y": 8.105,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   }
  ],
@@ -1262,9 +1238,7 @@
    "p1Side": "bottom",
    "centreSeamErrIn": 0.0,
    "latticeStepPx": 94.0,
-   "wallThicknessPx": 9.0,
-   "templateIoUMin": 1.0,
-   "templateIoUMedian": 1.0
+   "wallThicknessPx": 9.0
   }
  }
 }

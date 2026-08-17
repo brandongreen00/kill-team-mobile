@@ -70,6 +70,12 @@ def load_new() -> dict[str, dict]:
     return teams
 
 
+def _rule_key(raw: str) -> str:
+    """Rule token normalised for comparison: footnote markers dropped, since
+    `shield` and `shield*` are the same rule differently printed."""
+    return re.sub(r"(\*+|\^\d+(?:,\d+)*)\s*$", "", raw.strip().lower()).strip()
+
+
 def op_key(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", name.lower())
 
@@ -197,12 +203,16 @@ def build_report() -> tuple[list[str], dict]:
                         rows.append(f"`{a['name']}` / {wa['name']} {lab} "
                                     f"{wb[f_]} (old) -> {wa[f_]}")
                         stats["weapon_stat_diffs"] += 1
-                ra = {x.strip().lower() for x in wa["rules"]}
-                rb = {x.strip().lower() for x in wb["rules"]}
+                ra = {_rule_key(x) for x in wa["rules"]}
+                rb = {_rule_key(x) for x in wb["rules"]}
                 if ra != rb:
                     rows.append(f"`{a['name']}` / {wa['name']} rules "
                                 f"{sorted(rb)} (old) -> {sorted(ra)}")
                     stats["weapon_rule_diffs"] += 1
+                elif {x.strip().lower() for x in wa["rules"]} != \
+                        {x.strip().lower() for x in wb["rules"]}:
+                    # only the footnote marker differs (`shield` vs `shield*`)
+                    stats["weapon_rule_marker_only"] += 1
         for key, label in (("strategyPloys", "strategy ploys"),
                            ("firefightPloys", "firefight ploys"),
                            ("equipment", "equipment")):

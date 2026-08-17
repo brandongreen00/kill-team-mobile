@@ -234,9 +234,6 @@
     "y": 11.938,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.6941
    }
   },
   {
@@ -319,11 +316,8 @@
    "placement": {
     "x": 10.0,
     "y": 11.938,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.6941
    }
   },
   {
@@ -498,9 +492,6 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.4135
    }
   },
   {
@@ -630,9 +621,6 @@
     "y": 4.312,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.6957
    }
   },
   {
@@ -1014,9 +1002,6 @@
     "y": 15.75,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.6957
    }
   },
   {
@@ -1101,9 +1086,6 @@
     "y": 8.125,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.6957
    }
   },
   {
@@ -1186,11 +1168,8 @@
    "placement": {
     "x": 23.344,
     "y": 2.406,
-    "rotDeg": 0,
+    "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.6941
    }
   },
   {
@@ -1279,9 +1258,6 @@
     "y": 18.711,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1326,9 +1302,6 @@
     "y": 17.332,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1417,9 +1390,6 @@
     "y": 8.105,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1466,9 +1436,6 @@
     "y": 2.224,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   }
  ],
@@ -1486,9 +1453,7 @@
    "p1Side": "left",
    "centreSeamErrIn": 0.0406,
    "latticeStepPx": 94.0,
-   "wallThicknessPx": 13.0,
-   "templateIoUMin": 0.4135,
-   "templateIoUMedian": 0.6957
+   "wallThicknessPx": 13.0
   }
  }
 }
