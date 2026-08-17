@@ -362,21 +362,49 @@ describe('Astartes — "it can perform either two Shoot actions or two Fight act
     ).toContain('either two Shoot actions or two Fight actions');
   });
 
-  it('ENGINE GAP — "Each friendly MURDERWING operative can counteract regardless of its order" is not implemented', () => {
-    const { ctx, state } = setup();
-    const id = opWith(state, 'p1', RAPTOR);
+  it('"Each friendly MURDERWING operative can counteract regardless of its order"', () => {
+    // p2 is KASRKIN, so the enemy side is genuinely NOT covered by the printed clause.
+    const ctx = teamContext([murderwing, kasrkin], { seed: 7 });
+    const map = testMap();
+    ctx.maps.set(map.id, map);
+    const state = battle({ ctx, map, p1: { module: murderwing, picks: PICKS }, p2: { module: kasrkin } });
     for (const op of Object.values(state.operatives)) {
       op.ready = false;
       op.expended = true;
       op.order = 'conceal';
     }
-    // `counteractCandidates` filters on `order === 'engage'` BEFORE emitting `onCounteract`,
-    // and the hook can only forbid — so a Conceal-order MURDERWING operative can never be
-    // offered. Pinned here so the seam is visible if the engine ever gains one.
-    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(id);
-    state.operatives[id]!.order = 'engage';
-    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).toContain(id);
-    expect(rule('murderwing.rule.astartes')).toContain('can counteract regardless of its order');
+    const concealed = opWith(state, 'p1', RAPTOR);
+    const engaged = opWith(state, 'p1', SKYSEAR);
+    state.operatives[engaged]!.order = 'engage';
+
+    // The clause widens the core's Engage-order default: a Conceal MURDERWING operative is
+    // offered the counteract, and an Engage-order one still is.
+    const ids = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(ids).toContain(concealed);
+    expect(ids).toContain(engaged);
+
+    // It widens the ORDER only. "Each of their operatives that is expended … can counteract
+    // once during the turning point" still holds.
+    state.operatives[concealed]!.counteractedThisTP = true;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(concealed);
+    state.operatives[concealed]!.counteractedThisTP = false;
+    state.operatives[concealed]!.expended = false;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(concealed);
+    state.operatives[concealed]!.expended = true;
+    // …and so does the On Guard lockout, "that friendly operative cannot counteract during the
+    // turning point".
+    state.operatives[concealed]!.guardSpentTP = state.turningPoint;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(concealed);
+    state.operatives[concealed]!.guardSpentTP = null;
+
+    // The clause is ours alone: an enemy KASRKIN operative on a Conceal order is not offered.
+    const foe = state.teams.p2.operativeIds[0]!;
+    expect(state.operatives[foe]!.order).toBe('conceal');
+    expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).not.toContain(foe);
+
+    expect(rule('murderwing.rule.astartes')).toContain(
+      'Each friendly MURDERWING operative can counteract regardless of its order',
+    );
   });
 });
 

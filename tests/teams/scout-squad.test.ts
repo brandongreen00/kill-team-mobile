@@ -9,7 +9,8 @@ import { moveBudget } from '../../src/core/movement.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { aplOf, hitOf, moveOf } from '../../src/core/state.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import type { GameContext } from '../../src/core/context.ts';
+import { rebuildHooks, type GameContext } from '../../src/core/context.ts';
+import { counteractCandidates } from '../../src/core/phases.ts';
 import type { AttackContext } from '../../src/core/hooks.ts';
 import type { ShootSequence } from '../../src/core/sequences/types.ts';
 import type { GameState, OperativeState, WeaponProfile } from '../../src/core/types.ts';
@@ -752,6 +753,64 @@ describe('SCOUT SQUAD datacard abilities', () => {
       ctx,
     );
     expect(both.reason).toMatch(/either two Shoot actions or two Fight actions/);
+  });
+
+  it('SERGEANT › Astartes: "This operative can counteract regardless of its order"', () => {
+    expect(ability('scout-squad.sergeant', 'scout-squad.sergeant.astartes')).toContain(
+      'This operative can counteract regardless of its order.',
+    );
+    const { ctx, state } = setup();
+    const sergeant = state.operatives[opWith(state, 'p1', 'scout-squad.sergeant')]!;
+    const warrior = state.operatives[opWith(state, 'p1', 'scout-squad.warrior')]!;
+    const ids = (player: 'p1' | 'p2'): string[] => counteractCandidates(ctx, state, player).map((o) => o.id);
+
+    // "each of their operatives that is EXPENDED" is the core's condition, and this rule does
+    // not touch it: a ready SERGEANT is not a candidate whatever its order.
+    sergeant.order = 'conceal';
+    expect(ids('p1')).not.toContain(sergeant.id);
+
+    for (const op of [sergeant, warrior]) {
+      op.expended = true;
+      op.ready = false;
+      op.order = 'conceal';
+    }
+    // The clause reaches a Conceal SERGEANT — the whole point of it.
+    expect(ids('p1')).toContain(sergeant.id);
+    // …and the printed default (an Engage order) still counteracts.
+    sergeant.order = 'engage';
+    expect(ids('p1')).toContain(sergeant.id);
+
+    // The clause is printed on the SERGEANT datacard, not on the faction rule, so a Conceal
+    // WARRIOR is not widened by it.
+    expect(ids('p1')).not.toContain(warrior.id);
+    warrior.order = 'engage';
+    expect(ids('p1')).toContain(warrior.id);
+
+    // "can counteract ONCE during the turning point" is the core's condition, still enforced.
+    sergeant.order = 'conceal';
+    sergeant.counteractedThisTP = true;
+    expect(ids('p1')).not.toContain(sergeant.id);
+    sergeant.counteractedThisTP = false;
+
+    // …as is the On Guard lockout ("that friendly operative cannot counteract during the
+    // turning point").
+    sergeant.guardSpentTP = state.turningPoint;
+    expect(ids('p1')).not.toContain(sergeant.id);
+    sergeant.guardSpentTP = null;
+    expect(ids('p1')).toContain(sergeant.id);
+
+    // The grant is friendly-only: an ENEMY Conceal operative this rule does not cover stays on
+    // the printed default. The fixture puts SCOUT SQUAD on both sides, so p2's own copy of the
+    // rule is dropped first — otherwise it, not p1's handler, would be what allows the enemy.
+    const enemy = state.operatives[opWith(state, 'p2', 'scout-squad.sergeant')]!;
+    enemy.expended = true;
+    enemy.ready = false;
+    enemy.order = 'conceal';
+    expect(ids('p2')).toContain(enemy.id); // p2 has the same SERGEANT ability
+    state.teams.p2.teamId = 'no-such-team';
+    rebuildHooks(ctx, state);
+    expect(ids('p2')).not.toContain(enemy.id);
+    expect(ids('p1')).toContain(sergeant.id); // p1's grant is untouched
   });
 
   it('SERGEANT › Guidance and Experience adds 1 APL to one OTHER friendly operative, once per activation', () => {

@@ -4,6 +4,8 @@
  */
 import { describe, expect, it } from 'vitest';
 import { actionCost, availableActions } from '../../src/core/actions.ts';
+import { HookRegistry } from '../../src/core/hooks.ts';
+import { counteractCandidates, whoActivates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { aplOf, hitOf, inflictDamage, markerController, moveOf, saveOf } from '../../src/core/state.ts';
@@ -59,7 +61,12 @@ const picks = (...specs: Spec[]): RosterPickIn[] =>
 
 /** Sorcerers + rubricae (the printed default roster). */
 const SORCERERS: Spec[] = [DESTINY, TEMPYRION, WARPFIRE, RUBRIC_WARRIOR, RUBRIC_ICON];
-/** The Tzaangor half of the list (two of them share one selection between them). */
+/**
+ * The Tzaangor half of the list. NOT a legal kill team — the printed ^3 footnote caps the
+ * half-selection group at one selection, so a real roster can only field two TZAANGOR. This is
+ * a rule-test fixture whose only job is to put those four datacards on the table; the shared
+ * `tests/teams/selection.test.ts` pins the legal rosters.
+ */
 const HERD: Spec[] = [DESTINY, CHAMPION, HORN, TZ_ICON, [TZ_WARRIOR, 'warpcoven.g1e10.opt2']];
 
 function setup(
@@ -491,14 +498,95 @@ describe('Astartes — "it can perform either two Shoot actions or two Fight act
     expect(again.reason).toMatch(/same PSYCHIC ranged weapon more than once per activation/);
   });
 
-  it('"Each friendly WARPCOVEN HERETIC ASTARTES operative can counteract regardless of its order"', () => {
+});
+
+// ---------------------------------------------------------------------------
+/** The printed clause, read from the JSON like every other quote in this file. */
+const COUNTERACT_CLAUSE =
+  'Each friendly WARPCOVEN HERETIC ASTARTES operative can counteract regardless of its order.';
+
+describe(`Astartes — "${COUNTERACT_CLAUSE}"`, () => {
+  /** "each of their operatives that is expended" — the state a counteract turn starts from. */
+  function expendAll(state: GameState, player: 'p1' | 'p2'): void {
+    for (const id of state.teams[player].operativeIds) {
+      const o = state.operatives[id]!;
+      o.ready = false;
+      o.expended = true;
+      o.order = 'engage';
+    }
+  }
+
+  it('a Conceal operative of ours IS a counteract candidate, and an Engage one still is', () => {
+    expect(text('warpcoven.rule.astartes')).toContain(COUNTERACT_CLAUSE);
     const { ctx, state } = setup();
+    expendAll(state, 'p1');
+    const concealed = op(state, 'p1', DESTINY);
+    concealed.order = 'conceal';
+    const engaged = op(state, 'p1', RUBRIC_WARRIOR);
+    const ids = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(ids).toContain(concealed.id); // "regardless of its order"
+    expect(ids).toContain(engaged.id); // the printed Engage default is only widened, never removed
+  });
+
+  it('widens the ORDER only — expended, once per turning point and the On Guard lockout still apply', () => {
+    const { ctx, state } = setup();
+    expendAll(state, 'p1');
+    for (const id of state.teams.p1.operativeIds) state.operatives[id]!.order = 'conceal';
+    const notExpended = op(state, 'p1', DESTINY);
+    notExpended.expended = false;
+    notExpended.ready = true;
+    // "each of their operatives … can counteract ONCE during the turning point"
+    const alreadyCounteracted = op(state, 'p1', TEMPYRION);
+    alreadyCounteracted.counteractedThisTP = true;
+    // On Guard: "that friendly operative cannot counteract during the turning point"
+    const onGuardSpent = op(state, 'p1', WARPFIRE);
+    onGuardSpent.guardSpentTP = state.turningPoint;
+    const stillEligible = op(state, 'p1', RUBRIC_WARRIOR);
+    const ids = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(ids).not.toContain(notExpended.id);
+    expect(ids).not.toContain(alreadyCounteracted.id);
+    expect(ids).not.toContain(onGuardSpent.id);
+    expect(ids).toContain(stillEligible.id);
+  });
+
+  it('is scoped as printed — WARPCOVEN HERETIC ASTARTES, and friendly only', () => {
+    const { ctx, state } = setup({ p1: HERD });
+    expendAll(state, 'p1');
+    expendAll(state, 'p2');
     const sorcerer = op(state, 'p1', DESTINY);
+    const tzaangor = op(state, 'p1', TZ_WARRIOR);
     sorcerer.order = 'conceal';
-    const ev = ctx.hooks.emit('onCounteract', state, { state, operative: sorcerer, allowed: false });
-    expect(ev.allowed).toBe(true);
-    // The engine still filters the order before the hook is emitted (reported seam).
-    expect(text('warpcoven.rule.astartes')).toContain('can counteract regardless of its order');
+    tzaangor.order = 'conceal';
+    const mine = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(mine).toContain(sorcerer.id);
+    // TZAANGOR datacards carry WARPCOVEN but not HERETIC ASTARTES, so they keep the Engage default.
+    expect(card(TZ_WARRIOR).keywords).not.toContain('HERETIC ASTARTES');
+    expect(mine).not.toContain(tzaangor.id);
+
+    // "friendly": both sides here are Warpcoven, so p2's Conceal SORCERER is widened by p2's own
+    // copy of the rule. Rebuilding the registry from p1's registration alone stands in for an
+    // opposing team that does not print this clause — it must keep the Engage default.
+    const enemy = op(state, 'p2', DESTINY);
+    enemy.order = 'conceal';
+    expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).toContain(enemy.id);
+    const p1Only = new HookRegistry();
+    warpcoven.register(p1Only, 'p1', ctx);
+    ctx.hooks = p1Only;
+    expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).not.toContain(enemy.id);
+  });
+
+  it('the counteract turn is offered, and a Conceal operative counteracts through the reducer', () => {
+    const { ctx, state } = setup();
+    expendAll(state, 'p1');
+    for (const id of state.teams.p1.operativeIds) state.operatives[id]!.order = 'conceal';
+    // p1 has no ready operatives and p2 does, so p1's turn is the counteract turn — offered only
+    // because the Conceal operatives are candidates.
+    expect(whoActivates(state, ctx)).toEqual({ player: 'p1', mode: 'counteract' });
+    const sorcerer = op(state, 'p1', DESTINY);
+    const out = reduce(state, { t: 'Counteract', player: 'p1', operativeId: sorcerer.id }, ctx);
+    expect(out.ok).toBe(true);
+    expect(out.state.operatives[sorcerer.id]!.counteractedThisTP).toBe(true);
+    expect(out.state.rejected.length).toBe(0);
   });
 });
 
@@ -738,6 +826,11 @@ describe('WARPCOVEN ploys', () => {
     expect(effectiveRules(ctx, s, axe, use).some((r) => r.id === 'Severe')).toBe(false);
     s.operatives[sorcerer.id]!.pos = { x: 13, y: 11 };
     expect(effectiveRules(ctx, s, axe, use).some((r) => r.id === 'Severe')).toBe(true);
+    // The raw scrape runs the next page section into the last ploy of each section; the shared
+    // normaliser (`trimTrailingSection`) cuts it, so the quoted text really is just this ploy.
+    expect(text('warpcoven.sp.savage-herd')).toContain('also have the Severe weapon rule');
+    expect(text('warpcoven.sp.savage-herd')).not.toContain('ALL IS DUST');
+    expect(text('warpcoven.fp.mutant-herd')).not.toContain('ENSORCELLED ROUNDS');
   });
 
   it('ALL IS DUST: "That attack dice inflicts 1 damage instead" for a friendly RUBRIC MARINE', () => {

@@ -4,6 +4,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { availableActions } from '../../src/core/actions.ts';
+import { counteractCandidates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { hitOf, inflictDamage, moveOf } from '../../src/core/state.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
@@ -17,6 +18,7 @@ import {
   setCustomWeaponRules,
   useCommsArray,
 } from '../../src/teams/phobos-strike-team/index.ts';
+import { kasrkin } from '../../src/teams/kasrkin/index.ts';
 import type { GameState, OperativeState, WeaponProfile } from '../../src/core/types.ts';
 import { act, activate, battle, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import { testMap } from '../fixtures.ts';
@@ -287,12 +289,54 @@ describe('Terror — "your opponent must spend 1 additional AP … and treat the
 
 // ---------------------------------------------------------------------------
 describe('Astartes — "either two Shoot actions or two Fight actions … can counteract regardless of its order"', () => {
-  it('lets a PHOBOS STRIKE TEAM operative counteract regardless of its order', () => {
-    expect(rule(R.astartes)).toContain('can counteract regardless of its order');
-    const { ctx, state } = setup();
-    const op = state.operatives[opWith(state, 'p1', C.commsman)]!;
-    op.order = 'conceal';
-    expect(ctx.hooks.emit('onCounteract', state, { state, operative: op, allowed: false }).allowed).toBe(true);
+  it('offers a Conceal-order PHOBOS STRIKE TEAM operative the counteract, and only ours', () => {
+    expect(rule(R.astartes)).toContain('Each friendly PHOBOS STRIKE TEAM operative can counteract regardless of its order.');
+    // p2 is KASRKIN, so the enemy side genuinely does not print the clause.
+    const ctx = teamContext([phobosStrikeTeam, kasrkin], { seed: 7 });
+    const state = battle({
+      ctx,
+      p1: { module: phobosStrikeTeam, picks: rosterIncluding(phobosStrikeTeam, [C.commsman, C.reiverWarrior]) },
+      p2: { module: kasrkin },
+    });
+    for (const op of Object.values(state.operatives)) {
+      op.ready = false;
+      op.expended = true;
+      op.order = 'conceal';
+    }
+    const concealed = opWith(state, 'p1', C.commsman);
+    const engaged = opWith(state, 'p1', C.reiverWarrior);
+    state.operatives[engaged]!.order = 'engage';
+
+    // The clause widens the core's Engage-order default: a Conceal PHOBOS STRIKE TEAM operative
+    // is a counteract candidate, and an Engage-order one still is.
+    const ids = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(ids).toContain(concealed);
+    expect(ids).toContain(engaged);
+
+    // It widens the ORDER only. "Each of their operatives that is expended and has an Engage
+    // order can counteract once during the turning point" — the once-per-turning-point limit,
+    // the expended requirement and the On Guard lockout are untouched.
+    state.operatives[concealed]!.counteractedThisTP = true;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(concealed);
+    state.operatives[concealed]!.counteractedThisTP = false;
+    state.operatives[concealed]!.expended = false;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(concealed);
+    state.operatives[concealed]!.expended = true;
+    state.operatives[concealed]!.guardSpentTP = state.turningPoint;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(concealed);
+    state.operatives[concealed]!.guardSpentTP = null;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).toContain(concealed);
+
+    // "friendly PHOBOS STRIKE TEAM" is ours alone: an enemy KASRKIN operative on a Conceal
+    // order is not a candidate.
+    expect(counteractCandidates(ctx, state, 'p2')).toEqual([]);
+    expect(
+      ctx.hooks.emit('onCounteract', state, {
+        state,
+        operative: state.operatives[state.teams.p2.operativeIds[0]!]!,
+        allowed: false,
+      }).allowed,
+    ).toBe(false);
   });
 
   it('registers a second Shoot action that needs a bolt weapon for at least one of the two', () => {

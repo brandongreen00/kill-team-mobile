@@ -434,6 +434,13 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
 
   // ---- Astartes (faction rule) --------------------------------------------
   // "Each friendly PHOBOS STRIKE TEAM operative can counteract regardless of its order."
+  //
+  // `counteractCandidates` (`src/core/phases.ts`) emits `onCounteract` for every expended,
+  // not-yet-counteracted operative with `allowed: o.order === 'engage'` as the DEFAULT, so this
+  // handler WIDENS that default rather than narrowing it. It widens the ORDER requirement only:
+  // expended, once per turning point and the On Guard lockout ("that friendly operative cannot
+  // counteract during the turning point") stay the core's job, and this must not touch them.
+  // Scope is exactly as printed — friendly (ours) and PHOBOS STRIKE TEAM.
   reg.on('onCounteract', T.bind(RULE.astartes, 12), (ev) => {
     if (!T.mineKw(ev.operative, KW)) return;
     ev.allowed = true;

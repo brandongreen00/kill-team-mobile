@@ -9,6 +9,7 @@ import { newPool, addRolled } from '../../src/core/dice.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { moveBudget } from '../../src/core/movement.ts';
+import { counteractCandidates, whoActivates } from '../../src/core/phases.ts';
 import { aplOf, inflictDamage, markerController } from '../../src/core/state.ts';
 import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
@@ -297,14 +298,48 @@ describe('Astartes — "it can perform either two Shoot actions or two Fight act
   });
 
   it('"Each friendly NEMESIS CLAW operative can counteract regardless of its order"', () => {
+    expect(rule('nemesis-claw.rule.astartes')).toContain(
+      'Each friendly NEMESIS CLAW operative can counteract regardless of its order.',
+    );
     const { ctx, state } = setup();
-    const op = state.operatives[opWith(state, 'p1', SKINTHIEF)]!;
-    op.order = 'conceal';
-    const ev = ctx.hooks.emit('onCounteract', state, { state, operative: op, allowed: false });
-    expect(ev.allowed).toBe(true);
-    // ENGINE GAP: `counteractCandidates` (src/core/phases.ts) filters `o.order === 'engage'`
-    // BEFORE emitting `onCounteract`, so this grant cannot reach a Conceal-order operative yet.
-    // The seam is in the REPORT; the grant itself is pinned here.
+    const conceal = state.operatives[opWith(state, 'p1', SKINTHIEF)]!;
+    const engage = state.operatives[opWith(state, 'p1', SCREECHER)]!;
+    const already = state.operatives[opWith(state, 'p1', GUNNER)]!;
+    const guardLocked = state.operatives[opWith(state, 'p1', FEARMONGER)]!;
+    // Every NEMESIS CLAW operative is expended, so this is the counteract window.
+    for (const id of state.teams.p1.operativeIds) {
+      const o = state.operatives[id]!;
+      o.expended = true;
+      o.ready = false;
+      o.counteractedThisTP = false;
+      o.order = 'conceal';
+    }
+    engage.order = 'engage';
+    // The conditions the clause does NOT lift: "can counteract once during the turning point",
+    // and On Guard's "that friendly operative cannot counteract during the turning point".
+    already.counteractedThisTP = true;
+    guardLocked.guardSpentTP = state.turningPoint;
+
+    const ids = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(ids).toContain(conceal.id); // "regardless of its order" — a Conceal order is no bar
+    expect(ids).toContain(engage.id); // and an Engage one counteracts as it always did
+    expect(ids).not.toContain(already.id);
+    expect(ids).not.toContain(guardLocked.id);
+
+    // …so the counteract turn is actually offered, even with the whole team on Conceal.
+    state.activePlayer = 'p1';
+    expect(whoActivates(state, ctx)).toEqual({ player: 'p1', mode: 'counteract' });
+
+    // The clause names friendly NEMESIS CLAW operatives only. The KASRKIN opposite print no
+    // such rule, so an expended Conceal trooper keeps the core's printed Engage-order default.
+    const trooper = state.operatives[opWith(state, 'p2', 'kasrkin.trooper')]!;
+    trooper.expended = true;
+    trooper.ready = false;
+    trooper.counteractedThisTP = false;
+    trooper.order = 'conceal';
+    expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).not.toContain(trooper.id);
+    trooper.order = 'engage';
+    expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).toContain(trooper.id);
   });
 });
 

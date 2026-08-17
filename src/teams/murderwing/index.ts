@@ -563,6 +563,16 @@ const woundedAtStart = (state: GameState, op: OperativeState): boolean =>
 // ---------------------------------------------------------------------------
 
 function rules(reg: HookRegistry, T: TeamHooks): void {
+  // ---- Astartes: "Each friendly MURDERWING operative can counteract regardless of its order."
+  // `counteractCandidates` emits `onCounteract` for every expended, not-yet-counteracted
+  // operative with `allowed: o.order === 'engage'` as the DEFAULT, so this widens it rather than
+  // narrowing. Everything else the core checks — expended, once per turning point, and the On
+  // Guard lockout ("that friendly operative cannot counteract during the turning point") — is
+  // untouched, as is MALICIOUS NARCISSISM's later veto (priority 21, so it still wins).
+  reg.on('onCounteract', T.bind('murderwing.rule.astartes', 12), (ev) => {
+    if (T.mineKw(ev.operative, KW)) ev.allowed = true;
+  });
+
   // ---- Astartes: remember the ranged weapon, for the second Shoot ---------
   reg.on('onCollectAttackDice', T.bind('murderwing.rule.astartes', 13), (ev) => {
     if (ev.ctx.type !== 'ranged' || !T.mineKw(ev.ctx.attacker, KW)) return;

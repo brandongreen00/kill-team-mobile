@@ -333,10 +333,13 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   });
 
   // ---- Astartes › "can counteract regardless of its order" ---------------
-  // NOTE: `counteractCandidates` filters `o.order === 'engage'` BEFORE emitting `onCounteract`
-  // (src/core/phases.ts), so this grant cannot reach a Conceal operative today. Registered so it
-  // becomes live the moment the order test moves inside the hook; reported as a needed seam.
+  // `counteractCandidates` (src/core/phases.ts) now emits `onCounteract` for every expended,
+  // not-yet-counteracted operative with `allowed: o.order === 'engage'` as the DEFAULT, so this
+  // handler widens that default instead of only being able to narrow it. It grants — it never
+  // denies — so the printed limits the core owns (expended, once per turning point, and the On
+  // Guard "cannot counteract during the turning point" lockout) all keep working.
   reg.on('onCounteract', T.bind('legionary.rule.astartes', 12), (ev) => {
+    // "Each friendly LEGIONARY operative can counteract regardless of its order."
     if (T.mineKw(ev.operative, KW)) ev.allowed = true;
   });
 

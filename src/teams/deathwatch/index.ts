@@ -365,8 +365,13 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       });
   });
   // "Each friendly DEATHWATCH operative can counteract regardless of its order."
-  // `counteractCandidates` filters on an Engage order BEFORE emitting this hook, so this can
-  // only confirm the permission, never widen it — see the REPORT's seam list.
+  // `counteractCandidates` now emits `onCounteract` for every expended, not-yet-counteracted
+  // operative with `allowed: o.order === 'engage'` as the DEFAULT, so this WIDENS eligibility
+  // to a Conceal order. It is the only condition the clause lifts: expended, "once during the
+  // turning point" (`counteractedThisTP`) and the On Guard lockout ("that friendly operative
+  // cannot counteract during the turning point", `guardSpentTP`) are filtered by the core
+  // outside this hook and are deliberately left alone. Scoped to the printed keyword, so an
+  // allied non-DEATHWATCH operative — and every enemy — keeps the printed Engage default.
   reg.on('onCounteract', T.bind(RULE_VETERAN_ASTARTES, 13), (ev) => {
     if (!T.mineKw(ev.operative, KW)) return;
     ev.allowed = true;

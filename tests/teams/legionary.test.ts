@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { availableActions } from '../../src/core/actions.ts';
 import { resolveDecision } from '../../src/core/decisions.ts';
 import { moveBudget } from '../../src/core/movement.ts';
-import { gambitOptions } from '../../src/core/phases.ts';
+import { counteractCandidates, gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { hitOf, inflictDamage, saveOf } from '../../src/core/state.ts';
@@ -14,6 +14,7 @@ import type { AttackContext } from '../../src/core/hooks.ts';
 import type { GameState, OperativeState, PlayerId, WeaponProfile } from '../../src/core/types.ts';
 import { teamData } from '../../src/teams/data.ts';
 import { defaultRoster } from '../../src/teams/selection.ts';
+import { kasrkin } from '../../src/teams/kasrkin/index.ts';
 import {
   ASTARTES_FIGHT,
   ASTARTES_SHOOT,
@@ -384,13 +385,53 @@ describe('Astartes — "it can perform either two Shoot actions or two Fight act
     expect(second.state.rejected).toEqual([]);
   });
 
-  it('"Each friendly LEGIONARY operative can counteract regardless of its order" — the hook grants it', () => {
-    expect(rule('legionary.rule.astartes')).toContain('can counteract regardless of its order');
-    const { ctx, state } = setup();
-    const op = state.operatives[opWith(state, 'p1', 'legionary.warrior')]!;
-    op.order = 'conceal';
-    const ev = ctx.hooks.emit('onCounteract', state, { state, operative: op, allowed: false });
-    expect(ev.allowed).toBe(true);
+  it('"Each friendly LEGIONARY operative can counteract regardless of its order"', () => {
+    expect(rule('legionary.rule.astartes')).toContain(
+      'Each friendly LEGIONARY operative can counteract regardless of its order',
+    );
+    // p2 is KASRKIN, so the enemy side is genuinely not covered by the printed clause.
+    const ctx = teamContext([legionary, kasrkin], { seed: 9 });
+    const state = battle({
+      ctx,
+      p1: { module: legionary, picks: rosterIncluding(legionary, EVERY_ROLE) },
+      p2: { module: kasrkin },
+    });
+    for (const op of Object.values(state.operatives)) {
+      op.ready = false;
+      op.expended = true;
+      op.order = 'conceal';
+    }
+    const concealed = opWith(state, 'p1', 'legionary.warrior');
+    const engaged = opWith(state, 'p1', 'legionary.icon-bearer');
+    state.operatives[engaged]!.order = 'engage';
+
+    // The clause widens the core's Engage-order default: a Conceal LEGIONARY operative is a
+    // counteract candidate, and an Engage-order one still is.
+    const ids = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(ids).toContain(concealed);
+    expect(ids).toContain(engaged);
+
+    // It widens the ORDER only. "Each of their operatives that is expended and has an Engage
+    // order can counteract once during the turning point" — the once-per-turning-point limit,
+    // the expended requirement and the On Guard lockout are untouched.
+    state.operatives[concealed]!.counteractedThisTP = true;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(concealed);
+    state.operatives[concealed]!.counteractedThisTP = false;
+    state.operatives[concealed]!.expended = false;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(concealed);
+    state.operatives[concealed]!.expended = true;
+    state.operatives[concealed]!.guardSpentTP = state.turningPoint;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).not.toContain(concealed);
+    state.operatives[concealed]!.guardSpentTP = null;
+    expect(counteractCandidates(ctx, state, 'p1').map((o) => o.id)).toContain(concealed);
+
+    // "friendly LEGIONARY" is ours alone: an enemy KASRKIN operative on a Conceal order is not.
+    const foe = state.teams.p2.operativeIds[0]!;
+    expect(state.operatives[foe]!.order).toBe('conceal');
+    expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).not.toContain(foe);
+    expect(ctx.hooks.emit('onCounteract', state, { state, operative: state.operatives[foe]!, allowed: false }).allowed).toBe(
+      false,
+    );
   });
 });
 

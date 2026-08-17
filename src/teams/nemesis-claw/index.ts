@@ -240,8 +240,16 @@ export function inMidnightClad(T: TeamHooks, state: GameState, op: OperativeStat
 function rules(reg: HookRegistry, T: TeamHooks): void {
   // ---- Astartes: "Each friendly NEMESIS CLAW operative can counteract regardless of its
   //      order." (the two Shoot / two Fight actions are registered below) -----------------
+  // `counteractCandidates` (`src/core/phases.ts`) emits `onCounteract` for every expended,
+  // not-yet-counteracted operative with `allowed: o.order === 'engage'` as the DEFAULT, so this
+  // handler WIDENS eligibility to a Conceal order. The order is the only condition the clause
+  // lifts: expended, "can counteract once during the turning point" (`counteractedThisTP`) and
+  // On Guard's "that friendly operative cannot counteract during the turning point"
+  // (`guardSpentTP`) are filtered by the core outside this hook and are left alone. Scoped to
+  // the printed keyword, so every enemy keeps the core's printed Engage-order default.
   reg.on('onCounteract', T.bind(R_ASTARTES, 12), (ev) => {
-    if (T.mineKw(ev.operative, KW)) ev.allowed = true;
+    if (!T.mineKw(ev.operative, KW)) return;
+    ev.allowed = true;
   });
 
   // Astartes: remember the ranged weapon used, so the second Shoot can be checked against it.

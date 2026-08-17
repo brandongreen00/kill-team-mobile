@@ -95,9 +95,18 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (roll >= 4) ev.amount -= 1;
   });
 
-  // ---- Astartes: counteract regardless of order ---------------------------
+  // ---- Astartes › counteract regardless of order --------------------------
+  // "Each friendly PLAGUE MARINE operative can counteract regardless of its order."
+  //
+  // `counteractCandidates` (`src/core/phases.ts`) emits `onCounteract` for every expended,
+  // not-yet-counteracted operative with `allowed = (o.order === 'engage')` as the DEFAULT, so a
+  // handler can WIDEN the candidate list rather than only narrow it. This clause lifts exactly
+  // one condition — the Engage-order requirement — and nothing else: expended, once per turning
+  // point and the On Guard lockout ("that friendly operative cannot counteract during the
+  // turning point") remain the core's filters, so they are deliberately not touched here.
   reg.on('onCounteract', T.bind('plague-marines.rule.astartes', 12), (ev) => {
-    if (T.mineKw(ev.operative, 'PLAGUE MARINE')) ev.allowed = true;
+    if (!T.mineKw(ev.operative, 'PLAGUE MARINE')) return; // "each FRIENDLY PLAGUE MARINE operative"
+    ev.allowed = true;
   });
 
   // ---- CHAMPION › Grandfather's Blessing ----------------------------------

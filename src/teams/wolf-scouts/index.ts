@@ -275,6 +275,27 @@ function huntingAstartes(reg: HookRegistry, T: TeamHooks): void {
         expiry: { kind: 'endOfActivation', operativeId: ev.ctx.attacker.id },
       });
   });
+
+  // "Each friendly WOLF SCOUT operative can counteract regardless of its order."
+  //
+  // `counteractCandidates` (`src/core/phases.ts`) emits `onCounteract` for every expended,
+  // not-yet-counteracted operative with `allowed: o.order === 'engage'` as the DEFAULT, so this
+  // handler WIDENS that list rather than only being able to narrow it. It therefore only ever
+  // sets `true`: "expended", "once during the turning point" and the On Guard lockout stay the
+  // core's conditions and keep applying.
+  //
+  // Scope is exactly as printed — friendly (`T.player`) operatives with the WOLF SCOUT keyword,
+  // which every datacard on this team carries, FENRISIAN WOLF included. An enemy operative is
+  // never touched here; a Wolf Scouts mirror match gets the same widening from the opponent's
+  // own registration of this rule.
+  reg.on('onCounteract', T.bind('wolf-scouts.rule.hunting-astartes', 12), (ev) => {
+    if (!T.mineKw(ev.operative, KW)) return;
+    ev.allowed = true;
+  });
+
+  // The rest of the clause — "Whenever it does so within your STORM, you can change its order
+  // first, or change its order instead of performing an action" — is the
+  // `Change Order (Hunting Astartes)` action registered below.
 }
 
 // ---- PACK LEADER -----------------------------------------------------------

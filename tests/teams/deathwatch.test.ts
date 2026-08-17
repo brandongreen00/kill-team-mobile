@@ -276,22 +276,44 @@ describe('Veteran Astartes — "it can perform either two Shoot actions or two F
     expect(again.ok).toBe(true);
   });
 
-  it('"Each friendly DEATHWATCH operative can counteract regardless of its order" — ENGINE GAP, pinned', () => {
-    const { ctx, state } = setup();
-    expect(rule('deathwatch.rule.veteran-astartes')).toContain('can counteract regardless of its order');
+  it('"Each friendly DEATHWATCH operative can counteract regardless of its order"', () => {
+    const { ctx, state } = setup({ foe: kommandos as unknown as typeof deathwatch });
+    expect(rule('deathwatch.rule.veteran-astartes')).toContain(
+      'Each friendly DEATHWATCH operative can counteract regardless of its order',
+    );
     const engage = state.operatives[opWith(state, 'p1', MARKSMAN)]!;
     const conceal = state.operatives[opWith(state, 'p1', DISRUPTOR)]!;
-    for (const o of [engage, conceal]) {
+    const already = state.operatives[opWith(state, 'p1', GUNNER)]!;
+    const guardLocked = state.operatives[opWith(state, 'p1', BREACHER)]!;
+    for (const o of [engage, conceal, already, guardLocked]) {
       o.expended = true;
       o.ready = false;
       o.counteractedThisTP = false;
     }
     conceal.order = 'conceal';
+    already.order = 'conceal';
+    guardLocked.order = 'conceal';
+    // Core conditions the clause does NOT lift: "can counteract ONCE during the turning point",
+    // and On Guard's "that friendly operative cannot counteract during the turning point".
+    already.counteractedThisTP = true;
+    guardLocked.guardSpentTP = state.turningPoint;
+
     const ids = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
-    expect(ids).toContain(engage.id);
-    // `counteractCandidates` filters on an Engage order BEFORE emitting `onCounteract`, so the
-    // hook can only confirm the permission, never widen it. Reported as a seam.
-    expect(ids).not.toContain(conceal.id);
+    expect(ids).toContain(conceal.id); // "regardless of its order" — a Conceal order is no bar
+    expect(ids).toContain(engage.id); // and an Engage one counteracts as it always did
+    expect(ids).not.toContain(already.id);
+    expect(ids).not.toContain(guardLocked.id);
+
+    // The clause names friendly DEATHWATCH operatives only. The KOMMANDOS opposite print no
+    // such rule, so an expended Conceal ork keeps the core's printed Engage-order default.
+    const ork = state.operatives[opWith(state, 'p2', 'kommandos.boss-nob')]!;
+    ork.expended = true;
+    ork.ready = false;
+    ork.counteractedThisTP = false;
+    ork.order = 'conceal';
+    expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).not.toContain(ork.id);
+    ork.order = 'engage';
+    expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).toContain(ork.id);
   });
 });
 

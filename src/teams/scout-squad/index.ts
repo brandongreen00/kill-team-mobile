@@ -623,11 +623,21 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // "During this operative's activation, it can perform either two Shoot actions or two Fight
   //  actions" is the `Shoot (Scout Astartes)` / `Fight (Scout Astartes)` pair registered below.
   //
-  // "This operative can counteract regardless of its order" is REMINDER-ONLY: `counteractCandidates`
-  // (`src/core/phases.ts`) filters on `o.order === 'engage'` BEFORE it emits `onCounteract`, so a
-  // handler on that hook can only ever forbid a counteraction, never permit one for a Conceal
-  // operative. Registering it would be a silent no-op, which architecture rule 5 forbids.
-  // Reported as a seam.
+  // "This operative can counteract regardless of its order."
+  //
+  // `counteractCandidates` (`src/core/phases.ts`) now emits `onCounteract` for every expended,
+  // not-yet-counteracted operative with `allowed: o.order === 'engage'` as the DEFAULT, so this
+  // handler widens the list instead of only being able to narrow it. It ONLY ever sets `true`:
+  // "expended", "once during the turning point" and the On Guard lockout stay the core's job.
+  //
+  // "This operative" is the SERGEANT alone — the clause is printed on the SERGEANT datacard's
+  // Astartes ability, not on the faction rule, so it is scoped to friendly SCOUT SQUAD
+  // operatives with that datacard rather than to the whole kill team.
+  reg.on('onCounteract', T.bind('scout-squad.sergeant.astartes', 12), (ev) => {
+    if (!T.mineKw(ev.operative, KW)) return;
+    if (ev.operative.datacardId !== 'scout-squad.sergeant') return;
+    ev.allowed = true;
+  });
 
   // ---- HEAVY GUNNER › Heavy Weapon Bipod --------------------------------
   // "Whenever this operative is shooting with a weapon from its datacard, if it hasn't moved

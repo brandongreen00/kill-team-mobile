@@ -521,8 +521,10 @@ function boons(reg: HookRegistry, T: TeamHooks): void {
   // ECHOES FROM THE WARP is REMINDER-ONLY. "Once per battle, when you counteract with this
   // operative, you can change its order, and it can perform an additional 1AP action for free
   // during that counteraction": `reduce`'s PerformAction refuses a counteracting operative's
-  // second action outright (`counteract.actionsUsed > 0`) and `counteractCandidates` filters on
-  // the order before any hook is emitted, so neither half has a seam.
+  // second action outright (`counteract.actionsUsed > 0`), and flipping the order token mid-
+  // counteraction has no seam either. Note the order half no longer decides whether a SORCERER
+  // may counteract at all — every SORCERER is WARPCOVEN HERETIC ASTARTES, so the Astartes clause
+  // registered in `astartes()` already lets it counteract on a Conceal order.
 }
 
 const DISCOUNTABLE = new Set<string>(['Pick Up Marker', 'Place Marker', MUTANT_PICK_UP]);
@@ -535,11 +537,20 @@ function isDiscountableAction(action: string): boolean {
 function astartes(reg: HookRegistry, T: TeamHooks): void {
   // "Each friendly WARPCOVEN HERETIC ASTARTES operative can counteract regardless of its order."
   //
-  // NOTE: `counteractCandidates` (src/core/phases.ts) filters `o.order === 'engage'` BEFORE it
-  // emits `onCounteract`, so today this grant cannot reach a Conceal operative. Registered so it
-  // becomes live the moment that order test moves inside the hook; reported as a needed seam.
+  // `counteractCandidates` (src/core/phases.ts) emits `onCounteract` for every expended,
+  // not-yet-counteracted operative with `allowed: o.order === 'engage'` as the DEFAULT, so this
+  // handler WIDENS the candidate list instead of only being able to narrow it. It therefore only
+  // ever sets `true`: "expended", "once during the turning point" (`counteractedThisTP`) and the
+  // On Guard lockout ("that friendly operative cannot counteract during the turning point",
+  // `guardSpentTP`) are the core's conditions, filtered outside this hook, and stay untouched.
+  //
+  // Scope is exactly as printed — friendly (`T.player`), WARPCOVEN and HERETIC ASTARTES. The four
+  // TZAANGOR datacards carry WARPCOVEN but NOT HERETIC ASTARTES, so they keep the Engage default;
+  // every enemy keeps it too (a Warpcoven mirror match gets the same widening from the opponent's
+  // own registration of this rule).
   reg.on('onCounteract', T.bind('warpcoven.rule.astartes', 12), (ev) => {
-    if (T.mineKw(ev.operative, 'HERETIC ASTARTES') && T.kw(ev.operative, KW)) ev.allowed = true;
+    if (!T.mineKw(ev.operative, KW) || !T.kw(ev.operative, 'HERETIC ASTARTES')) return;
+    ev.allowed = true;
   });
 
   // Remember the ranged weapon used, so the Astartes second Shoot can be validated, and record

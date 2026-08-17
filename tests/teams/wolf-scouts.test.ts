@@ -6,6 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { getAction } from '../../src/core/actions.ts';
 import { newPool } from '../../src/core/dice.ts';
+import { counteractCandidates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { hitOf, inflictDamage, moveOf } from '../../src/core/state.ts';
@@ -30,6 +31,7 @@ import {
   stormMarkerId,
   wolfScouts,
 } from '../../src/teams/wolf-scouts/index.ts';
+import { kasrkin } from '../../src/teams/kasrkin/index.ts';
 import { act, activate, battle, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import type { AttackContext } from '../../src/core/hooks.ts';
 import type { GameState, OperativeState, WeaponProfile } from '../../src/core/types.ts';
@@ -415,19 +417,52 @@ describe('Hunting Astartes — "it can perform either two Shoot actions or two F
     expect(op.order).toBe('conceal');
   });
 
-  it('is reminder-only for "can counteract regardless of its order" (the engine filters on Engage first)', () => {
+  it('"Each friendly WOLF SCOUT operative can counteract regardless of its order"', () => {
     expect(rule('wolf-scouts.rule.hunting-astartes')).toContain(
       'Each friendly WOLF SCOUT operative can counteract regardless of its order',
     );
-    const { ctx, state } = setup();
-    const hunterId = opWith(state, 'p1', HUNTER);
-    const op = state.operatives[hunterId]!;
-    op.expended = true;
-    op.order = 'conceal';
-    // `counteractCandidates` filters `order === 'engage'` BEFORE `onCounteract` is emitted, and
-    // the hook can only forbid — so no team rule can widen the candidate list.
-    const ev = ctx.hooks.emit('onCounteract', state, { state, operative: op, allowed: true });
-    expect(ev.allowed).toBe(true);
+    // p2 is KASRKIN, so the enemy side is genuinely NOT covered by the printed clause (a Wolf
+    // Scouts mirror match would widen both sides, each from its own registration).
+    const ctx = teamContext([wolfScouts, kasrkin], { seed: 7 });
+    const state = battle({
+      ctx,
+      p1: { module: wolfScouts, picks: rosterIncluding(wolfScouts, EVERY_ROLE) },
+      p2: { module: kasrkin },
+    });
+    for (const op of Object.values(state.operatives)) {
+      op.ready = false;
+      op.expended = true;
+      op.order = 'conceal';
+    }
+    const ids = (player: 'p1' | 'p2'): string[] => counteractCandidates(ctx, state, player).map((o) => o.id);
+    const concealed = state.operatives[opWith(state, 'p1', HUNTER)]!;
+    const engaged = state.operatives[opWith(state, 'p1', GUNNER)]!;
+    engaged.order = 'engage';
+
+    // The clause widens the core's Engage-order default: an expended WOLF SCOUT on a Conceal
+    // order is offered the counteract, and one on an Engage order still is.
+    expect(ids('p1')).toContain(concealed.id);
+    expect(ids('p1')).toContain(engaged.id);
+
+    // It widens the ORDER only. "Each of their operatives that is expended … can counteract once
+    // during the turning point" is the core's condition and still holds.
+    concealed.counteractedThisTP = true;
+    expect(ids('p1')).not.toContain(concealed.id);
+    concealed.counteractedThisTP = false;
+    concealed.expended = false;
+    expect(ids('p1')).not.toContain(concealed.id);
+    concealed.expended = true;
+    // …and so does the On Guard lockout, "that friendly operative cannot counteract during the
+    // turning point".
+    concealed.guardSpentTP = state.turningPoint;
+    expect(ids('p1')).not.toContain(concealed.id);
+    concealed.guardSpentTP = null;
+    expect(ids('p1')).toContain(concealed.id);
+
+    // "Each FRIENDLY WOLF SCOUT operative" — an enemy KASRKIN on a Conceal order is not offered.
+    const foe = state.teams.p2.operativeIds[0]!;
+    expect(state.operatives[foe]!.order).toBe('conceal');
+    expect(ids('p2')).not.toContain(foe);
   });
 });
 
