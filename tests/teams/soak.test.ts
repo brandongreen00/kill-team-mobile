@@ -1,13 +1,16 @@
 /**
- * Bot-vs-bot soak for the batch-1 kill teams.
+ * Bot-vs-bot soak for every implemented kill team.
  *
- * Each team plays a full four-turning-point game against another batch-1 team on TWO real
- * Approved Ops maps, driven by the shared `RandomLegalAgent`/`GreedyAgent` from `src/ai`.
- * The bar (CLAUDE.md §Architecture 1): **zero rejected intents and no exceptions**.
+ * Each team plays a full four-turning-point game against the next team in its batch's ring on
+ * TWO real Approved Ops maps, driven by the shared `RandomLegalAgent`/`GreedyAgent` from
+ * `src/ai`. The bar (CLAUDE.md §Architecture 1): **zero rejected intents and no exceptions**.
+ *
+ * Batches ring separately so a batch's teams are soaked against the faction patterns they
+ * share, and so a new batch's failures are never masked by an older batch's pairing.
  */
 import { describe, expect, it } from 'vitest';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
-import { BATCH_1 } from '../../src/teams/index.ts';
+import { BATCH_1, BATCH_2 } from '../../src/teams/index.ts';
 import { defaultRoster } from '../../src/teams/selection.ts';
 import type { KtTeamModule } from '../../src/teams/helpers.ts';
 import { mapById, realMaps, teamContext } from './harness.ts';
@@ -52,15 +55,22 @@ function soak(mine: KtTeamModule, foe: KtTeamModule, mapId: string, seed: number
   expect(result.state.phase).toBe('battleEnd');
 }
 
-describe('batch-1 kill teams: bot-vs-bot soak (zero rejected intents)', () => {
-  const maps = MAPS();
-  for (let i = 0; i < BATCH_1.length; i++) {
-    const mine = BATCH_1[i]!;
-    const foe = BATCH_1[(i + 1) % BATCH_1.length]!;
-    for (const [n, mapId] of maps.entries()) {
-      it(`${mine.id} vs ${foe.id} on ${mapId}`, () => {
-        soak(mine, foe, mapId, 1000 + i * 10 + n);
-      });
+const BATCHES: { name: string; modules: KtTeamModule[]; seedBase: number }[] = [
+  { name: 'batch-1', modules: BATCH_1, seedBase: 1000 },
+  { name: 'batch-2', modules: BATCH_2, seedBase: 2000 },
+];
+
+for (const batch of BATCHES) {
+  describe(`${batch.name} kill teams: bot-vs-bot soak (zero rejected intents)`, () => {
+    const maps = MAPS();
+    for (let i = 0; i < batch.modules.length; i++) {
+      const mine = batch.modules[i]!;
+      const foe = batch.modules[(i + 1) % batch.modules.length]!;
+      for (const [n, mapId] of maps.entries()) {
+        it(`${mine.id} vs ${foe.id} on ${mapId}`, () => {
+          soak(mine, foe, mapId, batch.seedBase + i * 10 + n);
+        });
+      }
     }
-  }
-});
+  });
+}

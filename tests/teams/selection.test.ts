@@ -12,10 +12,10 @@ import {
   validateRosterFor,
   weaponsForPick,
 } from '../../src/teams/selection.ts';
-import { BATCH_1 } from '../../src/teams/index.ts';
+import { ALL_TEAM_MODULES } from '../../src/teams/index.ts';
 
 describe('selection rules (shared, driven by data/teams/<slug>.json)', () => {
-  for (const mod of BATCH_1) {
+  for (const mod of ALL_TEAM_MODULES) {
     it(`${mod.id}: the default roster is legal and fills every printed group`, () => {
       const picks = defaultRoster(mod.data);
       const result = mod.validateRoster(picks);
