@@ -37,7 +37,16 @@ export interface ActionDef {
   type: 'universal' | 'mission' | 'unique' | 'free';
   /** Killzone gating: only offered when the predicate passes. */
   available?(ctx: GameContext, state: GameState, op: OperativeState): boolean;
-  /** Legality check that does not change state. */
+  /**
+   * Legality check that does not change state.
+   *
+   * CONTRACT: whatever `check` accepts, `perform` must be able to complete. A `perform`
+   * failure is a rules-legitimate cancel-and-revert ("If an action is declared or begun but
+   * it's not possible to complete, the action is cancelled") — but the reducer ALSO records
+   * it as a rejected intent, so a caller that trusted `check` (the AI, the UI's action
+   * sheet) gets a rejection it could not have predicted. Validate the selection here, not
+   * in `perform`. The reducer logs a distinct 'action contract' entry when this is violated.
+   */
   check(ctx: GameContext, state: GameState, op: OperativeState, params: ActionParams): { ok: boolean; reason?: string };
   /** Perform it. May start a sequence and raise decisions. */
   perform(ctx: GameContext, state: GameState, op: OperativeState, params: ActionParams): { ok: boolean; reason?: string };

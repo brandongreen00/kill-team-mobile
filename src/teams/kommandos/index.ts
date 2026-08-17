@@ -4,6 +4,7 @@
  */
 import { getAction, registerAction } from '../../core/actions.ts';
 import { terrain } from '../../core/context.ts';
+import { withGrenadeBudgetIgnored } from '../../core/equipment/grenades.ts';
 import { supportDistance } from '../../core/equipment/index.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import { validateMove } from '../../core/movement.ts';
@@ -13,6 +14,7 @@ import { advanceShoot, startShoot } from '../../core/sequences/shoot.ts';
 import { coverAndObscured, isVisible, vantageIgnoreFilter } from '../../core/visibility.ts';
 import { dist } from '../../core/geometry.ts';
 import type { GameContext } from '../../core/context.ts';
+import type { ActionParams } from '../../core/intents.ts';
 import type { FightSequence } from '../../core/sequences/types.ts';
 import type { GameState, OperativeState, PlayerId, Weapon } from '../../core/types.ts';
 import { teamData } from '../data.ts';
@@ -185,10 +187,6 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   });
   reg.on('onCollectAttackDice', T.bind('kommandos.snipa-boy.concealed-position', 14), (ev) => {
     if (ev.ctx.type !== 'ranged' || ev.ctx.attacker.player !== T.player) return;
-    if (ev.ctx.profile.rules.some((r) => r.id === 'ConcealedPosition') && hasShot(ev.state, ev.ctx.attacker.id)) {
-      // The concealed profile can only be used once; a later use loses its Devastating punch.
-      ev.mods.hit -= 1;
-    }
     markShot(ev.state, ev.ctx.attacker.id);
   });
 
@@ -725,7 +723,7 @@ function wotNotz(id: string, name: string, delegate: string): void {
         const pos = params.targetPos ?? params.markerPos;
         if (!pos) return { ok: false, reason: 'select where to place the Smoke Grenade marker' };
         if (dist(op.pos, pos) > 6 + 1e-6) return { ok: false, reason: 'the marker must be within 6" of this operative' };
-        return { ok: true };
+        return delegateCheck(delegate, ctx, state, op, params);
       }
       const target = params.targetOperativeId ? state.operatives[params.targetOperativeId] : undefined;
       if (!target || target.removed || target.player === op.player)
@@ -734,7 +732,9 @@ function wotNotz(id: string, name: string, delegate: string): void {
         return { ok: false, reason: 'that operative is more than 6" away' };
       if (!isVisible(terrain(ctx, state), body(ctx, op), body(ctx, target)).visible)
         return { ok: false, reason: 'that operative is not visible' };
-      return { ok: true };
+      // The delegated universal action gets the final say: perform() runs ITS perform, and a
+      // perform failure is reverted AND recorded as a rejected intent, so check must agree.
+      return delegateCheck(delegate, ctx, state, op, params);
     },
     perform(ctx, state, op, params) {
       // "Performing these actions using this rule doesn't count towards their action limits" —
@@ -753,6 +753,7 @@ function markWotNotz(state: GameState, player: PlayerId, action: string): void {
   b[`kommandos.wotNotz:${player}:${action}`] = `${state.turningPoint}`;
   state.opState['teamOnce'] = b;
 }
+
 
 wotNotz(SMOKE_WOT_NOTZ, 'Smoke Grenade (Taktical Wot-notz)', 'Smoke Grenade');
 wotNotz(STUN_WOT_NOTZ, 'Stun Grenade (Taktical Wot-notz)', 'Stun Grenade');
@@ -805,3 +806,20 @@ export const kommandos = defineTeam({
 });
 
 export default kommandos;
+
+/**
+ * Probe a delegated universal action's own check, but with the kill team's grenade budget
+ * cleared: "Performing these actions using this rule doesn't count towards their action
+ * limits" — which is exactly what perform() restores afterwards. Non-mutating on purpose,
+ * because a check must never change game state.
+ */
+function delegateCheck(
+  delegate: string,
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  params: ActionParams,
+): { ok: boolean; reason?: string } {
+  return getAction(delegate)!.check(ctx, withGrenadeBudgetIgnored(state, op.player), op, params);
+}
+

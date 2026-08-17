@@ -6,13 +6,13 @@
  * pure function (`markerlightTokens`) that the weapon rules, the Hit bonus, the obscured
  * carve-out and the equipment all read.
  */
-import { allActions, getAction, registerAction } from '../../core/actions.ts';
+import { allActions, registerAction } from '../../core/actions.ts';
 import { terrain } from '../../core/context.ts';
 import { grenadeWeapon } from '../../core/equipment/grenades.ts';
 import { supportDistance } from '../../core/equipment/index.ts';
 import { dist } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
-import { aliveOperatives, body, enemiesInControlRange, log, recordRoll } from '../../core/state.ts';
+import { aliveOperatives, body, log, recordRoll } from '../../core/state.ts';
 import { isVisible } from '../../core/visibility.ts';
 import type { GameContext } from '../../core/context.ts';
 import type { ShootSequence } from '../../core/sequences/types.ts';

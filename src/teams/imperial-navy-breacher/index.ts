@@ -4,7 +4,9 @@
  * Rule text is read from `data/teams/imperial-navy-breacher.json`.
  */
 import { HookRegistry } from '../../core/hooks.ts';
-import { inflictDamage, log, recordRoll } from '../../core/state.ts';
+import { body, gapBetween, inflictDamage, log, recordRoll } from '../../core/state.ts';
+import { terrain, type GameContext } from '../../core/context.ts';
+import { isVisible } from '../../core/visibility.ts';
 import type { GameState, OperativeState, PlayerId } from '../../core/types.ts';
 import { teamData } from '../data.ts';
 import {
@@ -629,18 +631,28 @@ function actions(data: typeof DATA) {
 
     // INTERFERENCE PULSE 1AP — VOID-JAMMER
     uniqueAction(data, 'imperial-navy-breacher.navis-void-jammer', 'imperial-navy-breacher.navis-void-jammer.act.interference-pulse', {
+      // "Select one enemy operative visible to and within 8\" of a friendly GHEISTSKULL
+      // operative. Roll one D6, adding 1 to the result if that enemy operative is a valid
+      // target for that friendly GHEISTSKULL operative: on a 3+..."
+      // Validated HERE, not in perform: a perform failure is reverted AND recorded as a
+      // rejected intent, so anything check accepts must be performable.
       check: (ctx, state, op, params) => {
         const eng = notEngaged(ctx, state, op);
         if (!eng.ok) return eng;
-        if (!params.targetOperativeId) return { ok: false, reason: 'select one enemy operative within 8" of a GHEISTSKULL' };
+        const target = params.targetOperativeId ? state.operatives[params.targetOperativeId] : undefined;
+        if (!target || target.removed || target.player === op.player)
+          return { ok: false, reason: 'select one enemy operative' };
+        if (!gheistskullSeeing(ctx, state, op, target))
+          return { ok: false, reason: 'no friendly GHEISTSKULL can see that operative within 8"' };
         return { ok: true };
       },
       perform: (ctx, state, op, params) => {
-        const target = state.operatives[params.targetOperativeId!];
-        if (!target || target.player === op.player) return { ok: false, reason: 'select an enemy operative' };
+        const target = state.operatives[params.targetOperativeId!]!;
+        // "+1 to the result if that enemy operative is a valid target for that GHEISTSKULL"
+        const bonus = gheistskullSeeing(ctx, state, op, target) ? 1 : 0;
         const roll = ctx.rng.d6();
-        recordRoll(state, 'interferencePulse', [roll], op.player, 'INTERFERENCE PULSE 3+');
-        if (roll >= 3) {
+        recordRoll(state, 'interferencePulse', [roll], op.player, `INTERFERENCE PULSE 3+${bonus ? ' (+1)' : ''}`);
+        if (roll + bonus >= 3) {
           target.aplMods.push(-1);
           effect(state, {
             rule: 'inb.interferencePulse',
@@ -715,3 +727,24 @@ export const imperialNavyBreacher = defineTeam({
 });
 
 export default imperialNavyBreacher;
+
+/**
+ * "visible to and within 8\" of a friendly GHEISTSKULL operative" — used both to validate
+ * the selection and to decide INTERFERENCE PULSE's +1.
+ */
+function gheistskullSeeing(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  target: OperativeState,
+): boolean {
+  const index = terrain(ctx, state);
+  return Object.values(state.operatives).some(
+    (g) =>
+      !g.removed &&
+      g.player === op.player &&
+      g.datacardId.includes('gheistskull') &&
+      gapBetween(ctx, g, target) <= 8 + 1e-6 &&
+      isVisible(index, body(ctx, g), body(ctx, target)).visible,
+  );
+}

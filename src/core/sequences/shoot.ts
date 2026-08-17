@@ -264,6 +264,28 @@ export function startShoot(
   if (!intended || intended.removed) return { ok: false, reason: 'no such target' };
   const rules = effectiveRules(ctx, state, profile, { operative: attacker, target: intended, weaponName });
 
+  // Select Weapon: a rule may forbid THIS profile (the rare `Concealed Position` weapon rule,
+  // "this operative can only use this weapon the first time it's performing the Shoot action").
+  const pick = ctx.hooks.emit('onSelectWeapon', state, {
+    state,
+    ctx: {
+      attacker,
+      defender: intended,
+      weaponName,
+      profile,
+      rules,
+      type: 'ranged',
+      secondary: false,
+      pointBlank: opts.pointBlank ?? false,
+      inCover: false,
+      obscured: false,
+      vantageAccurate: 0,
+      distance: gapBetween(ctx, attacker, intended),
+    },
+    allowed: true,
+  });
+  if (!pick.allowed) return { ok: false, reason: pick.reason ?? `${weaponName} cannot be selected` };
+
   let check = checkTarget(ctx, state, attacker, intended, profile, rules, { pointBlank: opts.pointBlank ?? false });
   // "…becomes the valid target instead (even if it wouldn't normally be valid for this).
   //  That operative is only in cover or obscured if the original target was."

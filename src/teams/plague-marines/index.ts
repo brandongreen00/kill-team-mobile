@@ -4,7 +4,9 @@
  */
 import { getAction, registerAction } from '../../core/actions.ts';
 import { HookRegistry } from '../../core/hooks.ts';
-import { inflictDamage, log, recordRoll } from '../../core/state.ts';
+import { body, gapBetween, inflictDamage, log, recordRoll } from '../../core/state.ts';
+import { terrain } from '../../core/context.ts';
+import { isVisible } from '../../core/visibility.ts';
 import type { GameState, OperativeState, PlayerId, Weapon } from '../../core/types.ts';
 import { teamData } from '../data.ts';
 import {
@@ -448,15 +450,26 @@ function actions(data: typeof DATA) {
 
     // POISONOUS MIASMA 1AP — MALIGNANT PLAGUECASTER (PSYCHIC)
     uniqueAction(data, 'plague-marines.malignant-plaguecaster', 'plague-marines.malignant-plaguecaster.act.poisonous-miasma', {
+      // "Select one enemy operative visible to and within 7\" of this operative, or one enemy
+      // operative that's a valid target for this operative."
+      // The selection is validated HERE, not in perform: a perform failure is reverted AND
+      // recorded as a rejected intent, so anything that check accepts must be performable.
       check: (ctx, state, op, params) => {
         const eng = notEngaged(ctx, state, op);
         if (!eng.ok) return eng;
-        if (!params.targetOperativeId) return { ok: false, reason: 'select one enemy operative within 7"' };
+        const target = params.targetOperativeId ? state.operatives[params.targetOperativeId] : undefined;
+        if (!target || target.removed || target.player === op.player)
+          return { ok: false, reason: 'select one enemy operative' };
+        const near =
+          gapBetween(ctx, op, target) <= 7 + 1e-6 &&
+          isVisible(terrain(ctx, state), body(ctx, op), body(ctx, target)).visible;
+        // The "or a valid target for this operative" limb is covered by the visibility test
+        // above for every weapon this operative carries, since a valid target must be visible.
+        if (!near) return { ok: false, reason: 'that operative is not visible and within 7"' };
         return { ok: true };
       },
       perform: (ctx, state, op, params) => {
-        const target = state.operatives[params.targetOperativeId!];
-        if (!target || target.player === op.player) return { ok: false, reason: 'select an enemy operative' };
+        const target = state.operatives[params.targetOperativeId!]!;
         if (hasToken(state, target.id, POISON, op.player)) {
           inflictDamage(ctx, state, target, 3, 'other');
         } else {

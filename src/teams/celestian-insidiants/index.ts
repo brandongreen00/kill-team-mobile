@@ -21,7 +21,6 @@ import type { GameContext } from '../../core/context.ts';
 import type { GameState, OperativeState, PendingDecision, PlayerId, WeaponProfile } from '../../core/types.ts';
 import { teamData } from '../data.ts';
 import {
-  currentApl,
   defineTeam,
   dropEffects,
   effect,
@@ -854,10 +853,8 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     }
   });
 
-  // VOCIFERA MORTIS — read by `offerMartyrdom`, which widens the candidate list once per battle.
-  reg.on('onIncapacitated', T.bind('celestian-insidiants.eq.vocifera-mortis', 31), () => {
-    /* the widened selection happens in offerMartyrdom; this binding documents the rule */
-  });
+  // VOCIFERA MORTIS is read directly by `offerMartyrdom`, which widens the Martyrdom candidate
+  // list to operatives that are neither visible nor within 6" — once per battle.
 
   // AUTO-FLAGELLATOR
   reg.on('onActivationStart', T.bind('celestian-insidiants.eq.auto-flagellator', 30), (ev) => {

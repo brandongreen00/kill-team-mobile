@@ -98,10 +98,16 @@ export function effectivePart(part: TerrainPart, state?: GameState): TerrainPart
       : { ...part, state: st, types: ['Heavy', 'Wall'], solid: true, blocksVisibility: true };
   }
   if (part.role === 'hatch') {
-    // Gallowdark: an open hatch stays Heavy + Wall with a Blocking gap beneath.
-    // Tomb World: an open hatch is removed from the killzone.
+    // Tomb World: "While a hatchway is open... its hatch must be removed from the killzone."
     if (st === 'open' && part.featureId.startsWith('tomb-world')) return null;
-    return { ...part, state: st };
+    // Gallowdark: "Its hatch must be fully open (it cannot be ajar). Its hatch is Heavy and
+    // Wall terrain, and the gap directly underneath it is Blocking terrain."
+    // The panel keeps those types for cover and obscuring, but it has physically swung clear
+    // of the doorway, so it must not block movement, routing or visibility THROUGH the
+    // access point it shares a footprint with. Modelling it as still solid sealed every
+    // Gallowdark hatchway: opening one changed nothing.
+    if (st === 'open') return { ...part, state: st, solid: false, blocksVisibility: false };
+    return { ...part, state: st, solid: true, blocksVisibility: true };
   }
   if (part.role === 'breachWall') {
     return st === 'open' ? null : { ...part, state: st };
@@ -259,13 +265,14 @@ export function obstructingCrossings(index: TerrainIndex, a: Vec2, b: Vec2): Ind
  * with Dijkstra. Returns Infinity if no route exists (fully sealed compartments).
  */
 export function wallRouteDistance(index: TerrainIndex, a: Vec2, b: Vec2, pad = 0.02): number {
-  if (index.walls.length === 0) return dist(a, b);
+  const solidWalls = index.walls.filter((w) => w.solid !== false);
+  if (solidWalls.length === 0) return dist(a, b);
   const blocked = (p: Vec2, q: Vec2): boolean =>
-    index.walls.some((w) => segmentCrossesPoly(p, q, w.poly));
+    solidWalls.some((w) => segmentCrossesPoly(p, q, w.poly));
   if (!blocked(a, b)) return dist(a, b);
 
   const nodes: Vec2[] = [a, b];
-  for (const w of index.walls) {
+  for (const w of solidWalls) {
     const c = polyCentroid(w.poly);
     for (const v of w.poly) {
       const dx = v.x - c.x;

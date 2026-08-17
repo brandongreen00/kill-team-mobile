@@ -357,6 +357,14 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
         // "If an action is declared or begun but it's not possible to complete, the action is
         // cancelled. Revert back to the game state before that action."
         const reverted = before;
+        // check() said yes and perform() said no: that is an ActionDef contract violation,
+        // not a caller mistake. Name it, so it shows up as a bug rather than as a generic
+        // rejected intent in a soak report.
+        log(reverted, {
+          kind: 'system',
+          text: `action contract: ${def.id}.check accepted but perform failed — ${res.reason ?? 'no reason given'}`,
+          data: { action: def.id, contractViolation: true },
+        });
         reject(reverted, intent, res.reason ?? `${def.name} could not be completed`);
         return { state: reverted, ok: false, reason: res.reason };
       }

@@ -36,7 +36,8 @@ export const GRENADE_WEAPON_NAMES = ['Frag grenade', 'Krak grenade'];
 // ---------------------------------------------------------------------------
 
 const allowanceKey = (equipmentId: string, choice: string): string => `${equipmentId}:${choice}`;
-const usedKey = (equipmentId: string, choice: string): string => `used:${equipmentId}:${choice}`;
+const USED_PREFIX = 'used:';
+const usedKey = (equipmentId: string, choice: string): string => `${USED_PREFIX}${equipmentId}:${choice}`;
 
 export function selectUtilityGrenades(state: GameState, player: PlayerId, smoke: number, stun: number): void {
   if (smoke + stun !== 2) throw new Error('Select exactly two utility grenades (2 smoke, 2 stun, or 1 of each).');
@@ -307,3 +308,30 @@ export const explosiveGrenadesEquipment: EquipmentModule = {
     );
   },
 };
+
+/**
+ * A copy of the state in which this player's grenade budget is not a constraint.
+ *
+ * Some kill-team rules let an operative perform a grenade action without it counting
+ * against the kill team's total (e.g. KOMMANDOS "Taktical Wot-notz"). Those rules need to
+ * consult the universal action's own check for target/range/visibility WITHOUT its budget
+ * clause, so this clears the spent counters and floors the allowance. Non-mutating: a
+ * check must never change game state.
+ */
+export function withGrenadeBudgetIgnored(state: GameState, player: PlayerId): GameState {
+  const uses: Record<string, number> = {};
+  for (const [k, v] of Object.entries(state.teams[player].equipmentUses)) {
+    if (k.startsWith(USED_PREFIX)) continue;
+    uses[k] = v;
+  }
+  for (const [equipmentId, choices] of [
+    [UTILITY_ID, ['smoke', 'stun']],
+    [EXPLOSIVE_ID, ['frag', 'krak']],
+  ] as const) {
+    for (const choice of choices) {
+      const key = allowanceKey(equipmentId, choice);
+      if (!uses[key]) uses[key] = 1;
+    }
+  }
+  return { ...state, teams: { ...state.teams, [player]: { ...state.teams[player], equipmentUses: uses } } };
+}

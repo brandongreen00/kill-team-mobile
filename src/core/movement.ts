@@ -179,7 +179,7 @@ export function validateMove(
       total += charged;
 
       // Wall terrain: "Operatives cannot move over or through Wall terrain."
-      const wall = index.walls.find((w) => crossesWall(w, cur, next) && !isOpenAccessPoint(w));
+      const wall = index.walls.find((w) => w.solid !== false && crossesWall(w, cur, next) && !isOpenAccessPoint(w));
       if (wall) return fail('cannot move through Wall terrain');
     }
 
@@ -369,7 +369,7 @@ export function reachableCells(
       if (cost > budget + 1e-6) continue;
       if (baseBlockedByTerrain(index, np, c.base, op.rot, nz, h)) continue;
       if (baseTouchesHazardous(index, np, c.base, op.rot)) continue;
-      if (index.walls.some((w) => crossesWall(w, cur.pos, np) && !isOpenAccessPoint(w))) continue;
+      if (index.walls.some((w) => w.solid !== false && crossesWall(w, cur.pos, np) && !isOpenAccessPoint(w))) continue;
       const k = key(np, nz);
       const prev = out.get(k);
       if (prev && prev.cost <= cost) continue;

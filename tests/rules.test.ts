@@ -275,3 +275,51 @@ describe('performance invariants', () => {
     expect(out.state.operatives).not.toBe(s.operatives);
   });
 });
+
+describe('hatchways (Killzones › Gallowdark / Tomb World)', () => {
+  const hatchway = (id: string): TerrainFeature => ({
+    id,
+    kind: 'gallowdark.wallB2',
+    placement: { x: 10, y: 10, rotDeg: 0, flip: false },
+    parts: [
+      { id: `${id}.access`, featureId: id, poly: rect(10, 10, 1.5, 0.3), z0: 0, z1: 4, types: ['Heavy', 'Wall'], role: 'accessPoint', state: 'closed' },
+      { id: `${id}.hatch`, featureId: id, poly: rect(10, 10, 1.5, 0.3), z0: 0, z1: 4, types: ['Heavy', 'Wall'], role: 'hatch', state: 'closed' },
+    ],
+  });
+
+  it('closed: the access point and hatch are Heavy and Wall terrain', () => {
+    const map = testMap({ closeQuarters: true, features: [hatchway('h')] });
+    const index = buildTerrainIndex(map);
+    const access = index.byId.get('h.access')!;
+    expect(access.types).toContain('Wall');
+    expect(access.solid).toBe(true);
+    expect(index.byId.get('h.hatch')!.solid).toBe(true);
+  });
+
+  it('open: the access point becomes Accessible, Insignificant and Exposed, and the hatch stops blocking its own doorway', () => {
+    const map = testMap({ closeQuarters: true, features: [hatchway('h')] });
+    const state = { terrainState: { 'h.access': { state: 'open' }, 'h.hatch': { state: 'open' } }, placedFeatures: [] } as never;
+    const index = buildTerrainIndex(map, state);
+    const access = index.byId.get('h.access')!;
+    expect(access.types.sort()).toEqual(['Accessible', 'Exposed', 'Insignificant']);
+    expect(access.solid).toBe(false);
+    // "Its hatch is Heavy and Wall terrain" — it keeps those types for cover and obscuring,
+    // but it has swung clear, so it must not seal the opening it shares a footprint with.
+    const hatch = index.byId.get('h.hatch')!;
+    expect(hatch.types).toContain('Wall');
+    expect(hatch.solid).toBe(false);
+    expect(hatch.blocksVisibility).toBe(false);
+    // Routing must now go straight through rather than around.
+    const through = wallRouteDistance(index, { x: 10.7, y: 9 }, { x: 10.7, y: 11 });
+    expect(through).toBeCloseTo(2, 1);
+  });
+
+  it('Tomb World: an open hatch is removed from the killzone entirely', () => {
+    const f = hatchway('t');
+    const tw: TerrainFeature = { ...f, id: 'tomb-world-1.h', parts: f.parts.map((p) => ({ ...p, id: p.id.replace('t.', 'tomb-world-1.h.'), featureId: 'tomb-world-1.h' })) };
+    const map = testMap({ closeQuarters: true, features: [tw] });
+    const state = { terrainState: { 'tomb-world-1.h.access': { state: 'open' }, 'tomb-world-1.h.hatch': { state: 'open' } }, placedFeatures: [] } as never;
+    const index = buildTerrainIndex(map, state);
+    expect(index.byId.has('tomb-world-1.h.hatch')).toBe(false);
+  });
+});

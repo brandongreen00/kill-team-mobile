@@ -528,19 +528,27 @@ function actions(data: typeof DATA) {
   return [
     // TACTICAL COMMAND 0AP — SERGEANT
     uniqueAction(data, 'kasrkin.sergeant', 'kasrkin.sergeant.act.tactical-command', {
+      // "Select one friendly KASRKIN operative, then select one SKILL AT ARMS for that
+      // operative to have... This can be in addition to any SKILL AT ARMS it already has,
+      // but they cannot be the same."
+      // Validated HERE rather than in perform: a perform failure is reverted AND recorded as
+      // a rejected intent, so anything check accepts must be performable.
       check: (ctx, state, op, params) => {
         const eng = notEngaged(ctx, state, op);
         if (!eng.ok) return eng;
         const skill = params.choice as Skill | undefined;
         if (skill && !SKILLS.includes(skill)) return { ok: false, reason: `unknown SKILL AT ARMS '${skill}'` };
+        const target = state.operatives[params.targetOperativeId ?? op.id];
+        if (!target || target.removed || target.player !== op.player)
+          return { ok: false, reason: 'select a friendly KASRKIN operative' };
+        const chosen = (skill ?? 'light-em-up') as Skill;
+        if (state.effects.some((e) => e.rule === SKILL_EFFECT && e.operativeId === target.id && e.data?.['skill'] === chosen))
+          return { ok: false, reason: 'that operative already has that SKILL AT ARMS' };
         return { ok: true };
       },
       perform: (ctx, state, op, params) => {
         const skill = (params.choice ?? 'light-em-up') as Skill;
-        const target = state.operatives[params.targetOperativeId ?? op.id];
-        if (!target || target.player !== op.player) return { ok: false, reason: 'select a friendly KASRKIN operative' };
-        if (state.effects.some((e) => e.rule === SKILL_EFFECT && e.operativeId === target.id && e.data?.['skill'] === skill))
-          return { ok: false, reason: 'that operative already has that SKILL AT ARMS' };
+        const target = state.operatives[params.targetOperativeId ?? op.id]!;
         effect(state, {
           rule: SKILL_EFFECT,
           source: { kind: 'ability', id: 'kasrkin.sergeant.act.tactical-command' },
