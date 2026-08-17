@@ -35,9 +35,11 @@
     "CHRONOMANCER",
     "PSYCHOMANCER",
     "TECHNOMANCER"
-   ]
+   ],
+   "inList": false
   },
   "slots": 7,
+  "totalOperatives": 8,
   "groups": [
    {
     "index": 1,
@@ -87,6 +89,7 @@
     "datacardAnchor": "Plasmacyte-Accelerator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -97,17 +100,18 @@
     "group": 2,
     "datacardId": "hierotek-circle.plasmacyte-accelerator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Spark",
      "Claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PLASMACYTE REANIMATOR",
     "datacardAnchor": "Plasmacyte-Reanimator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -118,17 +122,18 @@
     "group": 3,
     "datacardId": "hierotek-circle.plasmacyte-reanimator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Atomiser beam",
      "Claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "APPRENTEK",
     "datacardAnchor": "Apprentek",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -139,16 +144,17 @@
     "group": 4,
     "datacardId": "hierotek-circle.apprentek",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Arcane conduit"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DEATHMARK",
     "datacardAnchor": "Deathmark",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -159,17 +165,18 @@
     "group": 4,
     "datacardId": "hierotek-circle.deathmark",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Synaptic disintegrator",
      "Fists"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "DESPOTEK",
     "datacardAnchor": "Immortal-Despotek",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hierotek-circle.g4e3.opt1",
@@ -197,14 +204,15 @@
     "group": 4,
     "datacardId": "hierotek-circle.immortal-despotek",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUARDIAN",
     "datacardAnchor": "Immortal-Guardian",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hierotek-circle.g4e4.opt1",
@@ -232,8 +240,8 @@
     "group": 4,
     "datacardId": "hierotek-circle.immortal-guardian",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -242,6 +250,7 @@
     "datacardAnchor": "Chronomancer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hierotek-circle.g1e1.opt1",
@@ -267,14 +276,15 @@
     "group": 1,
     "datacardId": "hierotek-circle.chronomancer",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "PSYCHOMANCER",
     "datacardAnchor": "Psychomancer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -285,16 +295,17 @@
     "group": 1,
     "datacardId": "hierotek-circle.psychomancer",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Abyssal lance"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TECHNOMANCER",
     "datacardAnchor": "Technomancer-1",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -305,10 +316,10 @@
     "group": 1,
     "datacardId": "hierotek-circle.technomancer",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Staff of light"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -321,6 +332,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 HIEROTEK CIRCLE operative selected from the following list:\n\nCHRONOMANCER operative with one of the following options:\n\nAeonstave\n\nEntropic lance\n\nPSYCHOMANCER\n\nTECHNOMANCER\n\n1 PLASMACYTE ACCELERATOR operative\n\n1 PLASMACYTE REANIMATOR operative\n\n5 HIEROTEK CIRCLE operatives selected from the following list:\n\nAPPRENTEK\n\nDEATHMARK\n\nDESPOTEK with one of the following options:\n\nGauss blaster; bayonet\n\nTesla carbine; bayonet\n\nGUARDIAN with one of the following options:\n\nGauss blaster; bayonet\n\nTesla carbine; bayonet\n\nOther than DEATHMARK and GUARDIAN operatives, your kill team can only include each operative on this list once."
  },

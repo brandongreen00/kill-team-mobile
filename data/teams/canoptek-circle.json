@@ -35,9 +35,11 @@
    ],
    "choices": [
     "GEOMANCER"
-   ]
+   ],
+   "inList": false
   },
   "slots": 7,
+  "totalOperatives": 8,
   "groups": [
    {
     "index": 1,
@@ -91,6 +93,7 @@
     "datacardAnchor": "Canoptek-Tomb-Crawler",
     "count": 2,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "canoptek-circle.g2.opt1",
@@ -126,6 +129,7 @@
     "datacardAnchor": "Canoptek-Macrocyte-Accelerator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -146,6 +150,7 @@
     "datacardAnchor": "Canoptek-Macrocyte-Reanimator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -166,6 +171,7 @@
     "datacardAnchor": "Canoptek-Macrocyte-Warrior",
     "count": 3,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "canoptek-circle.g5.opt1",
@@ -202,6 +208,7 @@
     "datacardAnchor": "Geomancer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -226,6 +233,14 @@
   ],
   "footnotes": {
    "*": "Your kill team can only include up to one transdimensional isolator."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "Your kill team can only include up to one transdimensional isolator.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 CANOPTEK CIRCLE GEOMANCER operative\n\n2 CANOPTEK CIRCLE TOMB CRAWLER operatives with one of the following options (select separately for each):\n\nTwin gauss reapers; claws\n\nTransdimensional isolator; claws *\n\n1 CANOPTEK CIRCLE ACCELERATOR operative\n\n1 CANOPTEK CIRCLE REANIMATOR operative\n\n3 CANOPTEK CIRCLE WARRIOR operatives with one of the following options (select separately for each):\n\nGauss scalpel; claws & tail\n\nTesla caster; claws & tail\n\n* Your kill team can only include up to one transdimensional isolator."

@@ -35,9 +35,11 @@
    ],
    "choices": [
     "INTERROGATOR"
-   ]
+   ],
+   "inList": false
   },
   "slots": 11,
+  "totalOperatives": 12,
   "groups": [
    {
     "index": 1,
@@ -77,10 +79,8 @@
    {
     "index": 4,
     "count": 5,
-    "kind": "fixed",
-    "roles": [
-     ""
-    ],
+    "kind": "sameAsAbove",
+    "roles": [],
     "rawText": "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups)."
    }
   ],
@@ -90,6 +90,7 @@
     "datacardAnchor": "Tome-Skull",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -100,14 +101,15 @@
     "group": 2,
     "datacardId": "inquisitorial-agent.tome-skull",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "AUTOSAVANT",
     "datacardAnchor": "Autosavant-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -118,16 +120,17 @@
     "group": 3,
     "datacardId": "inquisitorial-agent.autosavant-agent",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Mechanical appendages"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "QUESTKEEPER",
     "datacardAnchor": "Questkeeper-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -138,17 +141,18 @@
     "group": 3,
     "datacardId": "inquisitorial-agent.questkeeper-agent",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Eviscerator"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DEATH WORLD VETERAN",
     "datacardAnchor": "Death-World-Veteran-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -159,18 +163,19 @@
     "group": 3,
     "datacardId": "inquisitorial-agent.death-world-veteran-agent",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Knife",
      "Polearm"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "ENLIGHTENER",
     "datacardAnchor": "Enlightener-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -181,17 +186,18 @@
     "group": 3,
     "datacardId": "inquisitorial-agent.enlightener-agent",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Paired blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HEXORCIST",
     "datacardAnchor": "Hexorcist-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -202,17 +208,18 @@
     "group": 3,
     "datacardId": "inquisitorial-agent.hexorcist-agent",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Shotgun",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MYSTIC",
     "datacardAnchor": "Mystic-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -223,17 +230,18 @@
     "group": 3,
     "datacardId": "inquisitorial-agent.mystic-agent",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PENAL LEGIONNAIRE",
     "datacardAnchor": "Penal-Legionnaire-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -244,17 +252,18 @@
     "group": 3,
     "datacardId": "inquisitorial-agent.penal-legionnaire-agent",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Hand flamer",
      "Chainsword"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PISTOLIER",
     "datacardAnchor": "Pistolier-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -265,18 +274,19 @@
     "group": 3,
     "datacardId": "inquisitorial-agent.pistolier-agent",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Scoped plasma pistol",
      "Suppressed autopistol",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUN SERVITOR",
     "datacardAnchor": "Requisitioned-Gun-Servitor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "inquisitorial-agent.g3e9.opt1",
@@ -312,25 +322,8 @@
     "group": 3,
     "datacardId": "inquisitorial-agent.requisitioned-gun-servitor",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "",
-    "datacardAnchor": "",
-    "count": 5,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups).",
-    "group": 4,
-    "datacardId": "",
-    "isLeader": false,
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -339,6 +332,7 @@
     "datacardAnchor": "Interrogator-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -349,11 +343,11 @@
     "group": 1,
     "datacardId": "inquisitorial-agent.interrogator-agent",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Extended stock relic autopistol",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -373,6 +367,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 INQUISITORIAL AGENT INTERROGATOR operative\n\n1 INQUISITORIAL AGENT TOME-SKULL operative\n\n5 INQUISITORIAL AGENT operatives selected from the following list:\n\nAUTOSAVANT\n\nQUESTKEEPER\n\nDEATH WORLD VETERAN\n\nENLIGHTENER\n\nHEXORCIST\n\nMYSTIC\n\nPENAL LEGIONNAIRE\n\nPISTOLIER\n\nGUN SERVITOR with one of the following options:\n\nHeavy bolter; servo-claw\n\nMulti-melta; servo-claw\n\nPlasma cannon; servo-claw\n\n5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups).\n\nYour kill team can only include each operative on this list once, unless you’re not including any REQUISITIONED operatives, in which case you can include up to two GUN SERVITOR operatives, but each one must have different options. Your kill team (including any REQUISITIONED operatives) cannot include more than one weapon with the Piercing 2 weapon rule, and cannot include more than three weapons with the Piercing X (excluding Piercing Crits X) weapon rule combined."
  },
@@ -2013,8 +2008,6 @@
   }
  ],
  "markerGuide": "Denounce token\n\nMedic token\n\nChasten token\n\nServo-skull token\n\nDenunciation token\n\nProtection token\n\nQuarry token\n\nTome-skull marker\n\nSanctification token\n\nGuidance token\n\nWeathered token\n\nInquisitorial Rosette token",
- "notes": [
-  "selection entry '' could not be linked to a datacard (anchor none)"
- ],
+ "notes": [],
  "rareWeaponRules": []
 }

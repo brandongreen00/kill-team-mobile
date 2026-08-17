@@ -36,9 +36,11 @@
    ],
    "choices": [
     "SHAS’UI"
-   ]
+   ],
+   "inList": false
   },
   "slots": 11,
+  "totalOperatives": 12,
   "groups": [
    {
     "index": 1,
@@ -79,6 +81,7 @@
     "datacardAnchor": "Assault-Grenadier-Pathfinder",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -89,18 +92,19 @@
     "group": 2,
     "datacardId": "pathfinders.assault-grenadier-pathfinder",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Fusion grenade",
      "Pulse carbine",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "BLOODED",
     "datacardAnchor": "Blooded-Pathfinder",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -111,17 +115,18 @@
     "group": 2,
     "datacardId": "pathfinders.blooded-pathfinder",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Suppressed pulse carbine",
      "Bionic arm"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "COMMS SPECIALIST",
     "datacardAnchor": "Comms-Specialist-Pathfinder",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -132,17 +137,18 @@
     "group": 2,
     "datacardId": "pathfinders.comms-specialist-pathfinder",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Pulse carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DRONE CONTROLLER",
     "datacardAnchor": "Drone-Controller-Pathfinder",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -153,17 +159,18 @@
     "group": 2,
     "datacardId": "pathfinders.drone-controller-pathfinder",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Pulse carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MARKSMAN",
     "datacardAnchor": "Marksman-Pathfinder",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -174,17 +181,18 @@
     "group": 2,
     "datacardId": "pathfinders.marksman-pathfinder",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Marksman rail rifle",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MEDICAL TECHNICIAN",
     "datacardAnchor": "Medical-Technician-Pathfinder",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -195,17 +203,18 @@
     "group": 2,
     "datacardId": "pathfinders.medical-technician-pathfinder",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Pulse carbine",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SHAS’LA",
     "datacardAnchor": "Shas-la-Pathfinder",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -216,17 +225,18 @@
     "group": 2,
     "datacardId": "pathfinders.shas-la-pathfinder",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Pulse carbine",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "TRANSPECTRAL INTERFERENCE",
     "datacardAnchor": "Transpectral-Interference-Pathfinder",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -237,11 +247,11 @@
     "group": 2,
     "datacardId": "pathfinders.transpectral-interference-pathfinder",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Pulse carbine",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WEAPONS EXPERT",
@@ -250,6 +260,7 @@
     "fixedWeapons": [
      "Fists"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "pathfinders.g2e9.opt1",
@@ -277,14 +288,15 @@
     "group": 2,
     "datacardId": "pathfinders.weapons-expert-pathfinder",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    },
    {
     "role": "MB3 RECON DRONE",
     "datacardAnchor": "MB3-Recon-Drone",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -295,17 +307,18 @@
     "group": 2,
     "datacardId": "pathfinders.mb3-recon-drone",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Burst cannon",
      "Ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MV31 PULSE ACCELERATOR DRONE",
     "datacardAnchor": "MV31-Pulse-Accelerator-Drone",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -316,16 +329,17 @@
     "group": 2,
     "datacardId": "pathfinders.mv31-pulse-accelerator-drone",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MV33 GRAV-INHIBITOR DRONE",
     "datacardAnchor": "MV33-Grav-inhibitor-Drone",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -336,16 +350,17 @@
     "group": 2,
     "datacardId": "pathfinders.mv33-grav-inhibitor-drone",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MV1 GUN DRONE",
     "datacardAnchor": "MV1-Gun-Drone",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -356,17 +371,18 @@
     "group": 2,
     "datacardId": "pathfinders.mv1-gun-drone",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Twin pulse carbine",
      "Ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MV4 SHIELD DRONE",
     "datacardAnchor": "MV4-Shield-Drone",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -377,16 +393,17 @@
     "group": 2,
     "datacardId": "pathfinders.mv4-shield-drone",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MV7 MARKER DRONE",
     "datacardAnchor": "MV7-Marker-Drone",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -397,10 +414,10 @@
     "group": 2,
     "datacardId": "pathfinders.mv7-marker-drone",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -409,6 +426,7 @@
     "datacardAnchor": "Shas-ui-Pathfinder",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -419,11 +437,11 @@
     "group": 1,
     "datacardId": "pathfinders.shas-ui-pathfinder",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Pulse carbine",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -441,6 +459,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [
    "Some PATHFINDER rules refer to a ‘pulse weapon’. The following weapons are pulse weapons: burst cannon, pulse carbine, suppressed pulse carbine, twin pulse carbine."
   ],

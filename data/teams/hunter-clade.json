@@ -36,9 +36,11 @@
     "SICARIAN RUSTSTALKER PRINCEPS",
     "SKITARII RANGER ALPHA",
     "SKITARII VANGUARD ALPHA"
-   ]
+   ],
+   "inList": false
   },
   "slots": 9,
+  "totalOperatives": 10,
   "groups": [
    {
     "index": 1,
@@ -77,6 +79,7 @@
     "datacardAnchor": "Sicarian-Infiltrator-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [
      {
@@ -128,14 +131,15 @@
     "group": 2,
     "datacardId": "hunter-clade.sicarian-infiltrator-warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "WARRIOR SICARIAN",
     "datacardAnchor": "",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hunter-clade.g2e2.opt1",
@@ -159,15 +163,17 @@
     "requires": [],
     "rawText": "WARRIOR SICARIAN* with one of the following options:",
     "group": 2,
-    "datacardId": "",
+    "datacardId": "hunter-clade.sicarian-ruststalker-warrior",
     "isLeader": false,
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "SKITARII RANGER DIKTAT",
     "datacardAnchor": "Skitarii-Ranger-Diktat",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -178,11 +184,11 @@
     "group": 2,
     "datacardId": "hunter-clade.skitarii-ranger-diktat",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Galvanic rifle",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SKITARII RANGER GUNNER",
@@ -191,11 +197,19 @@
     "fixedWeapons": [
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hunter-clade.g2e4.opt1",
       "label": "Arc rifle, plasma caliver or transuranic arquebus",
-      "weapons": []
+      "weapons": [],
+      "choiceGroups": [
+       [
+        "Arc rifle",
+        "Plasma caliver",
+        "Transuranic arquebus"
+       ]
+      ]
      }
     ],
     "optionGroups": [],
@@ -204,24 +218,22 @@
     "footnoteGroup": "*",
     "requires": [],
     "rawText": "SKITARII RANGER GUNNER* with gun butt and one of the following options:",
-    "notes": [
-     "unresolved weapon(s) in option 'Arc rifle, plasma caliver or transuranic arquebus': ['Arc rifle, plasma caliver or transuranic arquebus']"
-    ],
     "group": 2,
     "datacardId": "hunter-clade.skitarii-ranger-gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Arc rifle",
      "Plasma caliver",
      "Transuranic arquebus"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SKITARII RANGER SURVEYOR",
     "datacardAnchor": "Skitarii-Ranger-Surveyor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -232,17 +244,18 @@
     "group": 2,
     "datacardId": "hunter-clade.skitarii-ranger-surveyor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Galvanic rifle",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "RANGER WARRIOR",
     "datacardAnchor": "Skitarii-Ranger-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -253,17 +266,18 @@
     "group": 2,
     "datacardId": "hunter-clade.skitarii-ranger-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Galvanic rifle",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SKITARII VANGUARD DIKTAT",
     "datacardAnchor": "Skitarii-Vanguard-Diktat",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -274,11 +288,11 @@
     "group": 2,
     "datacardId": "hunter-clade.skitarii-vanguard-diktat",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Radium carbine",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SKITARII VANGUARD GUNNER",
@@ -287,11 +301,19 @@
     "fixedWeapons": [
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hunter-clade.g2e8.opt1",
       "label": "Arc rifle, plasma caliver or transuranic arquebus",
-      "weapons": []
+      "weapons": [],
+      "choiceGroups": [
+       [
+        "Arc rifle",
+        "Plasma caliver",
+        "Transuranic arquebus"
+       ]
+      ]
      }
     ],
     "optionGroups": [],
@@ -300,24 +322,22 @@
     "footnoteGroup": "*",
     "requires": [],
     "rawText": "SKITARII VANGUARD GUNNER* with gun butt and one of the following options:",
-    "notes": [
-     "unresolved weapon(s) in option 'Arc rifle, plasma caliver or transuranic arquebus': ['Arc rifle, plasma caliver or transuranic arquebus']"
-    ],
     "group": 2,
     "datacardId": "hunter-clade.skitarii-vanguard-gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Arc rifle",
      "Plasma caliver",
      "Transuranic arquebus"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SKITARII VANGUARD SURVEYOR",
     "datacardAnchor": "Skitarii-Vanguard-Surveyor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -328,17 +348,18 @@
     "group": 2,
     "datacardId": "hunter-clade.skitarii-vanguard-surveyor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Radium carbine",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "VANGUARD WARRIOR",
     "datacardAnchor": "Skitarii-Vanguard-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -349,11 +370,11 @@
     "group": 2,
     "datacardId": "hunter-clade.skitarii-vanguard-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Radium carbine",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -362,6 +383,7 @@
     "datacardAnchor": "Sicarian-Infiltrator-Princeps",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [
      {
@@ -413,14 +435,15 @@
     "group": 1,
     "datacardId": "hunter-clade.sicarian-infiltrator-princeps",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "SICARIAN RUSTSTALKER PRINCEPS",
     "datacardAnchor": "Sicarian-Ruststalker-Princeps",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -431,16 +454,17 @@
     "group": 1,
     "datacardId": "hunter-clade.sicarian-ruststalker-princeps",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Chordclaw & transonic blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SKITARII RANGER ALPHA",
     "datacardAnchor": "Skitarii-Ranger-Alpha",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hunter-clade.g1e3.opt1",
@@ -509,14 +533,15 @@
     "group": 1,
     "datacardId": "hunter-clade.skitarii-ranger-alpha",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "SKITARII VANGUARD ALPHA",
     "datacardAnchor": "Skitarii-Vanguard-Alpha",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hunter-clade.g1e4.opt1",
@@ -585,8 +610,8 @@
     "group": 1,
     "datacardId": "hunter-clade.skitarii-vanguard-alpha",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -630,6 +655,14 @@
   ],
   "footnotes": {
    "*": "You cannot select more than seven of these operatives combined."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "You cannot select more than seven of these operatives combined.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 HUNTER CLADE operative selected from the following list:\n\nSICARIAN INFILTRATOR PRINCEPS with one option from each of the following:\n\nFlechette blaster or stubcarbine\n\nPower weapon or taser goad\n\nSICARIAN RUSTSTALKER PRINCEPS\n\nSKITARII RANGER ALPHA with one of the following options:\n\nGalvanic rifle; gun butt\n\nMaster-crafted radium pistol; power weapon\n\nOr one option from each of the following:\n\nArc pistol or phosphor blast pistol\n\nArc maul or taser goad\n\nSKITARII VANGUARD ALPHA with one of the following options:\n\nRadium carbine; gun butt\n\nMaster-crafted radium pistol; power weapon\n\nOr one option from each of the following:\n\nArc pistol or phosphor blast pistol\n\nArc maul or taser goad\n\n9 HUNTER CLADE operatives selected from the following list:\n\nWARRIOR INFILTRATOR* with one option from each of the following:\n\nFlechette blaster or stubcarbine\n\nPower weapon or taser goad\n\nWARRIOR SICARIAN* with one of the following options:\n\nChordclaw & transonic razor\n\nTransonic blades\n\nSKITARII RANGER DIKTAT\n\nSKITARII RANGER GUNNER* with gun butt and one of the following options:\n\nArc rifle, plasma caliver or transuranic arquebus\n\nSKITARII RANGER SURVEYOR\n\nRANGER WARRIOR\n\nSKITARII VANGUARD DIKTAT\n\nSKITARII VANGUARD GUNNER* with gun butt and one of the following options:\n\nArc rifle, plasma caliver or transuranic arquebus\n\nSKITARII VANGUARD SURVEYOR\n\nVANGUARD WARRIOR\n\nOther than GUNNER and WARRIOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to one DIKTAT operative, up to one SURVEYOR operative and up to five SICARIAN operatives. Your kill team can only include up to one arc rifle, up to one plasma caliver and up to one transuranic arquebus.\n\n* You cannot select more than seven of these operatives combined."
@@ -2307,7 +2340,7 @@
  ],
  "markerGuide": "",
  "notes": [
-  "selection entry 'WARRIOR SICARIAN' could not be linked to a datacard (anchor none)"
+  "selection entry 'WARRIOR SICARIAN' has no datacard link on the page; matched by name to Sicarian Ruststalker Warrior"
  ],
  "rareWeaponRules": []
 }

@@ -36,9 +36,11 @@
    ],
    "choices": [
     "WATCH SERGEANT"
-   ]
+   ],
+   "inList": true
   },
-  "slots": 0,
+  "slots": 5,
+  "totalOperatives": 5,
   "groups": [
    {
     "index": 1,
@@ -62,227 +64,11 @@
   ],
   "list": [
    {
-    "role": "AEGIS",
-    "datacardAnchor": "Deathwatch-Aegis-Veteran",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "AEGIS",
-    "group": 1,
-    "datacardId": "deathwatch.aegis-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Bolt pistol",
-     "Power maul & storm shield"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "BLADEMASTER",
-    "datacardAnchor": "Deathwatch-Blademaster-Veteran",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "BLADEMASTER",
-    "group": 1,
-    "datacardId": "deathwatch.blademaster-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Special issue bolt pistol",
-     "Xenophase blade"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "BOMBARD",
-    "datacardAnchor": "Deathwatch-Bombard-Veteran",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "BOMBARD",
-    "group": 1,
-    "datacardId": "deathwatch.bombard-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Bolt pistol",
-     "Frag cannon",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "BREACHER",
-    "datacardAnchor": "Deathwatch-Breacher-Veteran",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "BREACHER",
-    "group": 1,
-    "datacardId": "deathwatch.breacher-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Auxiliary grenade launcher",
-     "Hellstorm bolt rifle",
-     "Melta bomb",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "DEMOLISHER",
-    "datacardAnchor": "Deathwatch-Demolisher-Veteran",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "DEMOLISHER",
-    "group": 1,
-    "datacardId": "deathwatch.demolisher-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Bolt pistol",
-     "Heavy thunder hammer"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "DISRUPTOR",
-    "datacardAnchor": "Deathwatch-Disruptor-Veteran-1",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "DISRUPTOR",
-    "group": 1,
-    "datacardId": "deathwatch.disruptor-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Marksman bolt carbine",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "GUNNER",
-    "datacardAnchor": "Deathwatch-Gunner-Veteran",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "GUNNER",
-    "group": 1,
-    "datacardId": "deathwatch.gunner-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Bolt pistol",
-     "Heavy plasma incinerator",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "HEADTAKER",
-    "datacardAnchor": "Deathwatch-Headtaker-Veteran",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "HEADTAKER",
-    "group": 1,
-    "datacardId": "deathwatch.headtaker-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Special issue bolt pistol",
-     "Combat knives"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "HORDE-SLAYER",
-    "datacardAnchor": "Deathwatch-Horde-Slayer-Veteran",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "HORDE-SLAYER",
-    "group": 1,
-    "datacardId": "deathwatch.horde-slayer-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Bolt pistol",
-     "Infernus heavy bolter",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "MARKSMAN",
-    "datacardAnchor": "Deathwatch-Marksman-Veteran",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "MARKSMAN",
-    "group": 1,
-    "datacardId": "deathwatch.marksman-veteran",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Stalker bolt rifle",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
-   }
-  ],
-  "leaderList": [
-   {
     "role": "WATCH SERGEANT",
     "datacardAnchor": "Deathwatch-Watch-Sergeant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -293,11 +79,260 @@
     "group": 1,
     "datacardId": "deathwatch.watch-sergeant",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Plasma pistol",
      "Power weapon"
-    ],
-    "uniqueUnlessRole": true
+    ]
+   },
+   {
+    "role": "AEGIS",
+    "datacardAnchor": "Deathwatch-Aegis-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "AEGIS",
+    "group": 1,
+    "datacardId": "deathwatch.aegis-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Power maul & storm shield"
+    ]
+   },
+   {
+    "role": "BLADEMASTER",
+    "datacardAnchor": "Deathwatch-Blademaster-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BLADEMASTER",
+    "group": 1,
+    "datacardId": "deathwatch.blademaster-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Special issue bolt pistol",
+     "Xenophase blade"
+    ]
+   },
+   {
+    "role": "BOMBARD",
+    "datacardAnchor": "Deathwatch-Bombard-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BOMBARD",
+    "group": 1,
+    "datacardId": "deathwatch.bombard-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Frag cannon",
+     "Fists"
+    ]
+   },
+   {
+    "role": "BREACHER",
+    "datacardAnchor": "Deathwatch-Breacher-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BREACHER",
+    "group": 1,
+    "datacardId": "deathwatch.breacher-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Auxiliary grenade launcher",
+     "Hellstorm bolt rifle",
+     "Melta bomb",
+     "Fists"
+    ]
+   },
+   {
+    "role": "DEMOLISHER",
+    "datacardAnchor": "Deathwatch-Demolisher-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DEMOLISHER",
+    "group": 1,
+    "datacardId": "deathwatch.demolisher-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Heavy thunder hammer"
+    ]
+   },
+   {
+    "role": "DISRUPTOR",
+    "datacardAnchor": "Deathwatch-Disruptor-Veteran-1",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DISRUPTOR",
+    "group": 1,
+    "datacardId": "deathwatch.disruptor-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Marksman bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Deathwatch-Gunner-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER",
+    "group": 1,
+    "datacardId": "deathwatch.gunner-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Heavy plasma incinerator",
+     "Fists"
+    ]
+   },
+   {
+    "role": "HEADTAKER",
+    "datacardAnchor": "Deathwatch-Headtaker-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEADTAKER",
+    "group": 1,
+    "datacardId": "deathwatch.headtaker-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Special issue bolt pistol",
+     "Combat knives"
+    ]
+   },
+   {
+    "role": "HORDE-SLAYER",
+    "datacardAnchor": "Deathwatch-Horde-Slayer-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HORDE-SLAYER",
+    "group": 1,
+    "datacardId": "deathwatch.horde-slayer-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Infernus heavy bolter",
+     "Fists"
+    ]
+   },
+   {
+    "role": "MARKSMAN",
+    "datacardAnchor": "Deathwatch-Marksman-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MARKSMAN",
+    "group": 1,
+    "datacardId": "deathwatch.marksman-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Stalker bolt rifle",
+     "Fists"
+    ]
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "WATCH SERGEANT",
+    "datacardAnchor": "Deathwatch-Watch-Sergeant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WATCH SERGEANT",
+    "group": 1,
+    "datacardId": "deathwatch.watch-sergeant",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Plasma pistol",
+     "Power weapon"
+    ]
    }
   ],
   "constraints": [
@@ -312,6 +347,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "5 DEATHWATCH operatives selected from the following list:\n\nWATCH SERGEANT\n\nAEGIS\n\nBLADEMASTER\n\nBOMBARD\n\nBREACHER\n\nDEMOLISHER\n\nDISRUPTOR\n\nGUNNER\n\nHEADTAKER\n\nHORDE-SLAYER\n\nMARKSMAN\n\nYour kill team can only include each operative on this list once, and can only include up to one GRAVIS operative."
  },

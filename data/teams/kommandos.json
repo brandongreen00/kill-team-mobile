@@ -50,9 +50,11 @@
    "alwaysWeapons": [],
    "choices": [
     "BOSS NOB"
-   ]
+   ],
+   "inList": false
   },
   "slots": 9,
+  "totalOperatives": 10,
   "groups": [
    {
     "index": 1,
@@ -88,6 +90,7 @@
     "datacardAnchor": "Kommando-Bomb-Squig",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -98,17 +101,18 @@
     "group": 2,
     "datacardId": "kommandos.kommando-bomb-squig",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Explosives",
      "Bite"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "BOY",
     "datacardAnchor": "Kommando-Boy",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -119,17 +123,18 @@
     "group": 2,
     "datacardId": "kommandos.kommando-boy",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Slugga",
      "Choppa"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "BREACHA BOY",
     "datacardAnchor": "Kommando-Breacha-Boy",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -140,17 +145,18 @@
     "group": 2,
     "datacardId": "kommandos.kommando-breacha-boy",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Slugga",
      "Breacha ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "BURNA BOY",
     "datacardAnchor": "Kommando-Burna-Boy",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -161,17 +167,18 @@
     "group": 2,
     "datacardId": "kommandos.kommando-burna-boy",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Burna",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "COMMS BOY",
     "datacardAnchor": "Kommando-Comms-Boy",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -182,17 +189,18 @@
     "group": 2,
     "datacardId": "kommandos.kommando-comms-boy",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Shokka pistol",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DAKKA BOY",
     "datacardAnchor": "Kommando-Dakka-Boy",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -203,17 +211,18 @@
     "group": 2,
     "datacardId": "kommandos.kommando-dakka-boy",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Dakka shoota",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GROT",
     "datacardAnchor": "Kommando-Grot",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -224,16 +233,17 @@
     "group": 2,
     "datacardId": "kommandos.kommando-grot",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Grot choppa"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "ROKKIT BOY",
     "datacardAnchor": "Kommando-Rokkit-Boy",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -244,17 +254,18 @@
     "group": 2,
     "datacardId": "kommandos.kommando-rokkit-boy",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Rokkit launcha",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SLASHA BOY",
     "datacardAnchor": "Kommando-Slasha-Boy",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -265,17 +276,18 @@
     "group": 2,
     "datacardId": "kommandos.kommando-slasha-boy",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Throwing knives",
      "Twin choppas"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SNIPA BOY",
     "datacardAnchor": "Kommando-Snipa-Boy",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -286,11 +298,11 @@
     "group": 2,
     "datacardId": "kommandos.kommando-snipa-boy",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Scoped big shoota",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -299,6 +311,7 @@
     "datacardAnchor": "Kommando-Boss-Nob",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "kommandos.g1.opt1",
@@ -326,8 +339,8 @@
     "group": 1,
     "datacardId": "kommandos.kommando-boss-nob",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -345,6 +358,14 @@
   ],
   "footnotes": {
    "*": "These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 KOMMANDO BOSS NOB operative with one of the following options:\n\nSlugga; big choppa\n\nSlugga; power klaw\n\n9 KOMMANDO operatives selected from the following list:\n\nBOMB SQUIG*\n\nBOY\n\nBREACHA BOY\n\nBURNA BOY\n\nCOMMS BOY\n\nDAKKA BOY\n\nGROT*\n\nROKKIT BOY\n\nSLASHA BOY\n\nSNIPA BOY\n\nOther than BOY operatives, your kill team can only include each operative on this list once.\n\n*These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total."

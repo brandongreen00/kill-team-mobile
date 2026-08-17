@@ -30,7 +30,13 @@
     {
      "id": "xv26-stealth-battlesuits.g1.opt1",
      "label": "Burst cannon or fusion blaster",
-     "weapons": []
+     "weapons": [],
+     "choiceGroups": [
+      [
+       "Burst cannon",
+       "Fusion blaster"
+      ]
+     ]
     }
    ],
    "optionGroups": [],
@@ -44,9 +50,11 @@
    ],
    "choices": [
     "SHAS’VRE"
-   ]
+   ],
+   "inList": false
   },
   "slots": 6,
+  "totalOperatives": 7,
   "groups": [
    {
     "index": 1,
@@ -95,6 +103,7 @@
     "datacardAnchor": "MV75-Marker-Drone",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -105,16 +114,17 @@
     "group": 2,
     "datacardId": "xv26-stealth-battlesuits.mv75-marker-drone",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MV15 GUN DRONE",
     "datacardAnchor": "MV15-Gun-Drone",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -125,20 +135,38 @@
     "group": 3,
     "datacardId": "xv26-stealth-battlesuits.mv15-gun-drone",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Twin pulse carbine",
      "Ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DESIGNATOR",
     "datacardAnchor": "XV26-Designator",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "xv26-stealth-battlesuits.fn1o1",
+      "label": "Burst cannon; fists",
+      "weapons": [
+       "Burst cannon",
+       "Fists"
+      ]
+     },
+     {
+      "id": "xv26-stealth-battlesuits.fn1o2",
+      "label": "Fusion blaster; fists",
+      "weapons": [
+       "Fusion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -146,21 +174,36 @@
     "group": 4,
     "datacardId": "xv26-stealth-battlesuits.designator",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Burst cannon",
-     "Fusion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "INFILTRATOR",
     "datacardAnchor": "XV26-Infiltrator",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "xv26-stealth-battlesuits.fn1o1",
+      "label": "Burst cannon; fists",
+      "weapons": [
+       "Burst cannon",
+       "Fists"
+      ]
+     },
+     {
+      "id": "xv26-stealth-battlesuits.fn1o2",
+      "label": "Fusion blaster; fists",
+      "weapons": [
+       "Fusion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -168,21 +211,36 @@
     "group": 4,
     "datacardId": "xv26-stealth-battlesuits.infiltrator",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Burst cannon",
-     "Fusion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "LIBERATOR",
     "datacardAnchor": "XV26-Liberator",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "xv26-stealth-battlesuits.fn1o1",
+      "label": "Burst cannon; fists",
+      "weapons": [
+       "Burst cannon",
+       "Fists"
+      ]
+     },
+     {
+      "id": "xv26-stealth-battlesuits.fn1o2",
+      "label": "Fusion blaster; fists",
+      "weapons": [
+       "Fusion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -190,22 +248,38 @@
     "group": 4,
     "datacardId": "xv26-stealth-battlesuits.liberator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
     "alwaysWeapons": [
-     "Burst cannon",
-     "EMP bomb",
-     "Fusion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+     "EMP bomb"
+    ]
    },
    {
     "role": "LODESTAR",
     "datacardAnchor": "XV26-Lodestar",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "xv26-stealth-battlesuits.fn1o1",
+      "label": "Burst cannon; fists",
+      "weapons": [
+       "Burst cannon",
+       "Fists"
+      ]
+     },
+     {
+      "id": "xv26-stealth-battlesuits.fn1o2",
+      "label": "Fusion blaster; fists",
+      "weapons": [
+       "Fusion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -213,21 +287,36 @@
     "group": 4,
     "datacardId": "xv26-stealth-battlesuits.lodestar",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Burst cannon",
-     "Fusion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "NEUTRALISER",
     "datacardAnchor": "XV26-Neutraliser",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "xv26-stealth-battlesuits.fn1o1",
+      "label": "Burst cannon; fists",
+      "weapons": [
+       "Burst cannon",
+       "Fists"
+      ]
+     },
+     {
+      "id": "xv26-stealth-battlesuits.fn1o2",
+      "label": "Fusion blaster; fists",
+      "weapons": [
+       "Fusion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -235,12 +324,9 @@
     "group": 4,
     "datacardId": "xv26-stealth-battlesuits.neutraliser",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Burst cannon",
-     "Fusion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -251,11 +337,18 @@
     "fixedWeapons": [
      "Pulse pistol"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "xv26-stealth-battlesuits.g1.opt1",
       "label": "Burst cannon or fusion blaster",
-      "weapons": []
+      "weapons": [],
+      "choiceGroups": [
+       [
+        "Burst cannon",
+        "Fusion blaster"
+       ]
+      ]
      }
     ],
     "optionGroups": [],
@@ -264,17 +357,14 @@
     "footnoteGroup": null,
     "requires": [],
     "rawText": "1 XV26 STEALTH BATTLESUIT SHAS’VRE with pulse pistol and one of the following options:",
-    "notes": [
-     "unresolved weapon(s) in option 'Burst cannon or fusion blaster': ['Burst cannon or fusion blaster']"
-    ],
     "group": 1,
     "datacardId": "xv26-stealth-battlesuits.shas-vre",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Burst cannon",
      "Fusion blaster"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -288,15 +378,35 @@
     "kind": "maxItem",
     "item": "fusion blasters",
     "max": 2
-   },
-   {
-    "kind": "custom",
-    "text": "With one of the following options:",
-    "hook": "xv26-stealth-battlesuits.with-one-of-the-following-options"
    }
   ],
   "footnotes": {
    "*": "With one of the following options:"
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "With one of the following options:",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "xv26-stealth-battlesuits.fn1o1",
+      "label": "Burst cannon; fists",
+      "weapons": [
+       "Burst cannon",
+       "Fists"
+      ]
+     },
+     {
+      "id": "xv26-stealth-battlesuits.fn1o2",
+      "label": "Fusion blaster; fists",
+      "weapons": [
+       "Fusion blaster",
+       "Fists"
+      ]
+     }
+    ]
+   }
   },
   "designerNotes": [],
   "rawText": "1 XV26 STEALTH BATTLESUIT SHAS’VRE with pulse pistol and one of the following options:\n\nBurst cannon or fusion blaster\n\n1 XV26 STEALTH BATTLESUIT MV75 MARKER DRONE\n\n1 XV26 STEALTH BATTLESUIT MV15 GUN DRONE\n\n4 XV26 STEALTH BATTLESUIT operatives selected from the following list:\n\nDESIGNATOR *\n\nINFILTRATOR *\n\nLIBERATOR *\n\nLODESTAR *\n\nNEUTRALISER *\n\nOther than INFILTRATOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two fusion blasters.\n\n* With one of the following options:\n\nBurst cannon; fists\n\nFusion blaster; fists"

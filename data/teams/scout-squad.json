@@ -58,9 +58,11 @@
    "alwaysWeapons": [],
    "choices": [
     "SERGEANT"
-   ]
+   ],
+   "inList": false
   },
   "slots": 8,
+  "totalOperatives": 9,
   "groups": [
    {
     "index": 1,
@@ -91,7 +93,12 @@
     "role": "HEAVY GUNNER",
     "datacardAnchor": "Scout-Heavy-Gunner",
     "count": 1,
-    "fixedWeapons": [],
+    "fixedWeapons": [
+     "Fists",
+     "Bolt pistol",
+     "Heavy bolter"
+    ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -99,25 +106,22 @@
     "footnoteGroup": null,
     "requires": [],
     "rawText": "HEAVY GUNNER with fists, bolt pistol and heavy bolter",
-    "notes": [
-     "unresolved fixed weapon(s) 'fists, bolt pistol and heavy bolter': ['fists, bolt pistol and heavy bolter']"
-    ],
     "group": 2,
     "datacardId": "scout-squad.heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Bolt pistol",
-     "Heavy bolter",
-     "Missile launcher",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HEAVY GUNNER",
     "datacardAnchor": "Scout-Heavy-Gunner",
     "count": 1,
-    "fixedWeapons": [],
+    "fixedWeapons": [
+     "Fists",
+     "Bolt pistol",
+     "Missile launcher"
+    ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -125,25 +129,18 @@
     "footnoteGroup": null,
     "requires": [],
     "rawText": "HEAVY GUNNER with fists, bolt pistol and missile launcher",
-    "notes": [
-     "unresolved fixed weapon(s) 'fists, bolt pistol and missile launcher': ['fists, bolt pistol and missile launcher']"
-    ],
     "group": 2,
     "datacardId": "scout-squad.heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Bolt pistol",
-     "Heavy bolter",
-     "Missile launcher",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HUNTER",
     "datacardAnchor": "Scout-Hunter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -154,17 +151,18 @@
     "group": 2,
     "datacardId": "scout-squad.hunter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Combat blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SNIPER",
     "datacardAnchor": "Scout-Sniper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -175,18 +173,19 @@
     "group": 2,
     "datacardId": "scout-squad.sniper",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Sniper rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TRACKER",
     "datacardAnchor": "Scout-Tracker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -197,17 +196,18 @@
     "group": 2,
     "datacardId": "scout-squad.tracker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Boltgun",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Scout-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "scout-squad.g2e6.opt1",
@@ -243,8 +243,8 @@
     "group": 2,
     "datacardId": "scout-squad.warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -253,6 +253,7 @@
     "datacardAnchor": "Scout-Sergeant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "scout-squad.g1.opt1",
@@ -288,8 +289,8 @@
     "group": 1,
     "datacardId": "scout-squad.sergeant",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -301,6 +302,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 SCOUT SQUAD SERGEANT operative with one of the following options:\n\nAstartes shotgun; fists\n\nBoltgun; fists\n\nBolt pistol; chainsword\n\n8 SCOUT SQUAD operatives selected from the following list:\n\nHEAVY GUNNER with fists, bolt pistol and heavy bolter\n\nHEAVY GUNNER with fists, bolt pistol and missile launcher\n\nHUNTER\n\nSNIPER\n\nTRACKER\n\nWARRIOR with one of the following options:\n\nAstartes shotgun; fists\n\nBoltgun; fists\n\nBolt pistol; combat blade\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

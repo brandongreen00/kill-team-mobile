@@ -74,9 +74,11 @@
    "alwaysWeapons": [],
    "choices": [
     "ARCHSYBARITE"
-   ]
+   ],
+   "inList": false
   },
   "slots": 8,
+  "totalOperatives": 9,
   "groups": [
    {
     "index": 1,
@@ -110,6 +112,7 @@
     "datacardAnchor": "Kabalite-Agent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -120,17 +123,18 @@
     "group": 2,
     "datacardId": "hand-of-the-archon.kabalite-agent",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Splinter rifle",
      "Array of blades"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "CRIMSON DUELLIST",
     "datacardAnchor": "Kabalite-Crimson-Duellist",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -141,17 +145,18 @@
     "group": 2,
     "datacardId": "hand-of-the-archon.kabalite-crimson-duellist",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Splinter pistol",
      "Razorflail"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DISCIPLE OF YAELINDRA",
     "datacardAnchor": "Kabalite-Disciple-of-Yaelindra",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -162,17 +167,18 @@
     "group": 2,
     "datacardId": "hand-of-the-archon.kabalite-disciple-of-yaelindra",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Stinger pistol",
      "Array of blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "ELIXICANT",
     "datacardAnchor": "Kabalite-Elixicant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -183,18 +189,19 @@
     "group": 2,
     "datacardId": "hand-of-the-archon.kabalite-elixicant",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Splinter rifle",
      "Stim-needler",
      "Array of blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "FLAYER",
     "datacardAnchor": "Kabalite-Flayer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -205,16 +212,17 @@
     "group": 2,
     "datacardId": "hand-of-the-archon.kabalite-flayer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Pain sculptors"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
     "datacardAnchor": "Kabalite-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hand-of-the-archon.g2e6.opt1",
@@ -242,14 +250,15 @@
     "group": 2,
     "datacardId": "hand-of-the-archon.kabalite-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HEAVY GUNNER",
     "datacardAnchor": "Kabalite-Heavy-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hand-of-the-archon.g2e7.opt1",
@@ -277,14 +286,15 @@
     "group": 2,
     "datacardId": "hand-of-the-archon.kabalite-heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "SKYSPLINTER ASSASSIN",
     "datacardAnchor": "Kabalite-Skysplinter-Assassin",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -295,12 +305,12 @@
     "group": 2,
     "datacardId": "hand-of-the-archon.kabalite-skysplinter-assassin",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Razorwing",
      "Shardcarbine",
      "Array of blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -309,6 +319,7 @@
     "datacardAnchor": "Kabalite-Archsybarite",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hand-of-the-archon.g1.opt1",
@@ -360,8 +371,8 @@
     "group": 1,
     "datacardId": "hand-of-the-archon.kabalite-archsybarite",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -378,6 +389,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 HAND OF THE ARCHON ARCHSYBARITE operative with one of the following options:\n\nBlast pistol; venom blade\n\nSplinter pistol; venom blade\n\nSplinter pistol; agoniser\n\nSplinter pistol; power weapon\n\nSplinter rifle; array of blades\n\n8 HAND OF THE ARCHON operatives selected from the following list:\n\nAGENT\n\nCRIMSON DUELLIST\n\nDISCIPLE OF YAELINDRA\n\nELIXICANT\n\nFLAYER\n\nGUNNER with one of the following options:\n\nBlaster; array of blades\n\nShredder; array of blades\n\nHEAVY GUNNER with one of the following options:\n\nDark lance; array of blades\n\nSplinter cannon; array of blades\n\nSKYSPLINTER ASSASSIN\n\nOther than AGENT operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two darklight weapons (blast pistol, blaster and dark lance are darklight weapons)."
  },

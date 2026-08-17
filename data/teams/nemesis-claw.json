@@ -66,9 +66,11 @@
    "alwaysWeapons": [],
    "choices": [
     "VISIONARY"
-   ]
+   ],
+   "inList": false
   },
   "slots": 5,
+  "totalOperatives": 6,
   "groups": [
    {
     "index": 1,
@@ -101,6 +103,7 @@
     "datacardAnchor": "Night-Lord-Fearmonger",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -111,18 +114,19 @@
     "group": 2,
     "datacardId": "nemesis-claw.night-lord-fearmonger",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Scoped bolt pistol",
      "Terrorchem vial",
      "Tainted blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
     "datacardAnchor": "Night-Lord-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "nemesis-claw.g2e2.opt1",
@@ -161,14 +165,15 @@
     "group": 2,
     "datacardId": "nemesis-claw.night-lord-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HEAVY GUNNER",
     "datacardAnchor": "Night-Lord-Heavy-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "nemesis-claw.g2e3.opt1",
@@ -198,14 +203,15 @@
     "group": 2,
     "datacardId": "nemesis-claw.night-lord-heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "SCREECHER",
     "datacardAnchor": "Night-Lord-Screecher",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -216,16 +222,17 @@
     "group": 2,
     "datacardId": "nemesis-claw.night-lord-screecher",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lightning claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SKINTHIEF",
     "datacardAnchor": "Night-Lord-Skinthief",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -236,17 +243,18 @@
     "group": 2,
     "datacardId": "nemesis-claw.night-lord-skinthief",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Nostraman chainglaive"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "VENTRILOKAR",
     "datacardAnchor": "Night-Lord-Ventrilokar",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -257,17 +265,18 @@
     "group": 2,
     "datacardId": "nemesis-claw.night-lord-ventrilokar",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Chainsword"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Night-Lord-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "nemesis-claw.g2e7.opt1",
@@ -295,8 +304,8 @@
     "group": 2,
     "datacardId": "nemesis-claw.night-lord-warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -305,6 +314,7 @@
     "datacardAnchor": "Night-Lord-Visionary",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "nemesis-claw.g1.opt1",
@@ -348,8 +358,8 @@
     "group": 1,
     "datacardId": "nemesis-claw.night-lord-visionary",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -361,6 +371,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 NEMESIS CLAW VISIONARY equipped with one of the following options:\n\nBolt pistol; power fist\n\nBolt pistol; power maul\n\nBolt pistol; power weapon\n\nPlasma pistol; Nostraman chainblade\n\n5 NEMESIS CLAW operatives selected from the following list:\n\nFEARMONGER\n\nGUNNER equipped with one of the following options:\n\nBolt pistol; flamer; fists\n\nBolt pistol; meltagun; fists\n\nBolt pistol; plasma gun; fists\n\nHEAVY GUNNER equipped with one of the following options:\n\nBolt pistol; heavy bolter; fists\n\nBolt pistol; missile launcher; fists\n\nSCREECHER\n\nSKINTHIEF\n\nVENTRILOKAR\n\nWARRIOR equipped with one of the following options:\n\nBolt pistol; chainsword\n\nBoltgun; fists\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

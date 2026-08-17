@@ -58,9 +58,11 @@
    "alwaysWeapons": [],
    "choices": [
     "SUPERIOR"
-   ]
+   ],
+   "inList": false
   },
   "slots": 9,
+  "totalOperatives": 10,
   "groups": [
    {
     "index": 1,
@@ -97,6 +99,7 @@
     "datacardAnchor": "Novitiate-Condemnor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -107,17 +110,18 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-condemnor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Condemnor stakethrower",
      "Null rod"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DIALOGUS",
     "datacardAnchor": "Novitiate-Dialogus",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -128,17 +132,18 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-dialogus",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Dialogus stave"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DUELLIST",
     "datacardAnchor": "Novitiate-Duellist",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -149,17 +154,18 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-duellist",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Duelling blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "EXACTOR",
     "datacardAnchor": "Novitiate-Exactor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -170,16 +176,17 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-exactor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Neural whips"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HOSPITALLER",
     "datacardAnchor": "Novitiate-Hospitaller",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -190,17 +197,18 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-hospitaller",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Surgical saw"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MILITANT",
     "datacardAnchor": "Novitiate-Militant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "novitiates.g2e6.opt1",
@@ -228,14 +236,15 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-militant",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    },
    {
     "role": "PENITENT",
     "datacardAnchor": "Novitiate-Penitent",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -246,17 +255,18 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-penitent",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Penitent eviscerator"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PRECEPTOR",
     "datacardAnchor": "Novitiate-Preceptor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -267,16 +277,17 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-preceptor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Mace of the Righteous"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PRONATUS",
     "datacardAnchor": "Novitiate-Pronatus",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -287,17 +298,18 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-pronatus",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PURGATUS",
     "datacardAnchor": "Novitiate-Purgatus",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -308,17 +320,18 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-purgatus",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Ministorum flamer",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "RELIQUARIUS",
     "datacardAnchor": "Novitiate-Reliquarius",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -329,11 +342,11 @@
     "group": 2,
     "datacardId": "novitiates.novitiate-reliquarius",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -342,6 +355,7 @@
     "datacardAnchor": "Novitiate-Superior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "novitiates.g1.opt1",
@@ -377,8 +391,8 @@
     "group": 1,
     "datacardId": "novitiates.novitiate-superior",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -396,6 +410,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 NOVITIATE SUPERIOR operative with one of the following options:\n\nPlasma pistol; power weapon\n\nRelic boltgun; gun butt\n\nRelic bolt pistol; power weapon\n\n9 NOVITIATE operatives selected from the following list:\n\nCONDEMNOR\n\nDIALOGUS\n\nDUELLIST\n\nEXACTOR\n\nHOSPITALLER\n\nMILITANT with one of the following options:\n\nAutopistol; Novitiate blade\n\nAutogun; gun butt\n\nPENITENT\n\nPRECEPTOR\n\nPRONATUS\n\nPURGATUS\n\nRELIQUARIUS\n\nOther than MILITANT and PURGATUS operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two PURGATUS operatives."
  },

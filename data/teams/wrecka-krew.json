@@ -50,9 +50,11 @@
    "alwaysWeapons": [],
    "choices": [
     "BOSS NOB"
-   ]
+   ],
+   "inList": false
   },
   "slots": 7,
+  "totalOperatives": 8,
   "groups": [
    {
     "index": 1,
@@ -92,6 +94,7 @@
     "datacardAnchor": "Wrecka-Bomb-Squig",
     "count": 2,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -102,17 +105,18 @@
     "group": 2,
     "datacardId": "wrecka-krew.bomb-squig",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Explosives",
      "Bite"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "BREAKA BOY DEMOLISHA",
     "datacardAnchor": "Breaka-Boy-Demolisha",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -123,16 +127,17 @@
     "group": 3,
     "datacardId": "wrecka-krew.breaka-boy-demolisha",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Tankhammer"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "FIGHTER",
     "datacardAnchor": "Breaka-Boy-Fighter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -143,16 +148,17 @@
     "group": 3,
     "datacardId": "wrecka-krew.breaka-boy-fighter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Smash hammer"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "KRUSHA",
     "datacardAnchor": "Breaka-Boy-Krusha-1",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -163,16 +169,17 @@
     "group": 3,
     "datacardId": "wrecka-krew.breaka-boy-krusha",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Knucklebustas"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
     "datacardAnchor": "Tankbusta-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "wrecka-krew.g3e4.opt1",
@@ -200,14 +207,15 @@
     "group": 3,
     "datacardId": "wrecka-krew.tankbusta-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "ROKKITEER",
     "datacardAnchor": "Tankbusta-Rokkiteer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "wrecka-krew.g3e5.opt1",
@@ -237,8 +245,8 @@
     "group": 3,
     "datacardId": "wrecka-krew.tankbusta-rokkiteer",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -247,6 +255,7 @@
     "datacardAnchor": "Wrecka-Boss-Nob",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "wrecka-krew.g1.opt1",
@@ -274,8 +283,8 @@
     "group": 1,
     "datacardId": "wrecka-krew.boss-nob",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -289,6 +298,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "BOSS NOB operative with one\nof the following options:\n\nRokkit pistol; smash hammer\n\nTwo rokkit pistols; choppa\n\n2 WRECKA KREW BOMB SQUIG operatives\n\n5 WRECKA KREW operatives selected from the following list:\n\nBREAKA BOY DEMOLISHA\n\nFIGHTER\n\nKRUSHA\n\nGUNNER with one of the following options:\n\n’Eavy rokkit launcha; fists\n\nRokkit launcha; fists\n\nROKKITEER with one of the following options:\n\nRokkit launcha; pulsa rokkit; fists\n\nRokkit launcha; rokkit rack; fists\n\nOther than BOMB SQUIG, BREAKA BOY FIGHTER and TANKBUSTA GUNNER operatives, your kill team can only include each operative on this list once."
  },

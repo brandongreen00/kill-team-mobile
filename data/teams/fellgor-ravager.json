@@ -50,9 +50,11 @@
    "alwaysWeapons": [],
    "choices": [
     "IRONHORN"
-   ]
+   ],
+   "inList": false
   },
   "slots": 9,
+  "totalOperatives": 10,
   "groups": [
    {
     "index": 1,
@@ -88,6 +90,7 @@
     "datacardAnchor": "Fellgor-Deathknell",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -98,17 +101,18 @@
     "group": 2,
     "datacardId": "fellgor-ravager.deathknell",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Bludgeon"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "FLUXBRAY",
     "datacardAnchor": "Fellgor-Fluxbray",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -119,16 +123,17 @@
     "group": 2,
     "datacardId": "fellgor-ravager.fluxbray",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Triple cleavers"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GNARLSCAR",
     "datacardAnchor": "Fellgor-Gnarlscar",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -139,17 +144,18 @@
     "group": 2,
     "datacardId": "fellgor-ravager.gnarlscar",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Bionic fist"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GOREHORN",
     "datacardAnchor": "Fellgor-Gorehorn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -160,17 +166,18 @@
     "group": 2,
     "datacardId": "fellgor-ravager.gorehorn",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Skullcleaver"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HERD-GOAD",
     "datacardAnchor": "Fellgor-Herd-Goad",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -181,17 +188,18 @@
     "group": 2,
     "datacardId": "fellgor-ravager.herd-goad",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Crackthorn whip"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MANGLER",
     "datacardAnchor": "Fellgor-Mangler",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -202,16 +210,17 @@
     "group": 2,
     "datacardId": "fellgor-ravager.mangler",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Vicious claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SHAMAN",
     "datacardAnchor": "Fellgor-Shaman",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -222,18 +231,19 @@
     "group": 2,
     "datacardId": "fellgor-ravager.shaman",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Tech-curse",
      "Braystave"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TOXHORN",
     "datacardAnchor": "Fellgor-Toxhorn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -244,17 +254,18 @@
     "group": 2,
     "datacardId": "fellgor-ravager.toxhorn",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Cleaver"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "VANDAL",
     "datacardAnchor": "Fellgor-Vandal",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -265,16 +276,17 @@
     "group": 2,
     "datacardId": "fellgor-ravager.vandal",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Mancrusher"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Fellgor-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "fellgor-ravager.g2e10.opt1",
@@ -302,8 +314,8 @@
     "group": 2,
     "datacardId": "fellgor-ravager.warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -312,6 +324,7 @@
     "datacardAnchor": "Fellgor-Ironhorn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "fellgor-ravager.g1.opt1",
@@ -339,8 +352,8 @@
     "group": 1,
     "datacardId": "fellgor-ravager.ironhorn",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -352,6 +365,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 FELLGOR RAVAGER IRONHORN operative with one of the following options:\n\nCorrupted pistol; corrupted chainsword\n\nPlasma pistol; bludgeon\n\n9 FELLGOR RAVAGER operatives selected from the following list:\n\nDEATHKNELL\n\nFLUXBRAY\n\nGNARLSCAR\n\nGOREHORN\n\nHERD-GOAD\n\nMANGLER\n\nSHAMAN\n\nTOXHORN\n\nVANDAL\n\nWARRIOR with one of the following options:\n\nAutopistol; bludgeon\n\nAutopistol; cleaver\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

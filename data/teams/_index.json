@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-17T03:50:02+00:00",
+ "generatedAt": "2026-08-17T03:55:38+00:00",
  "teams": [
   {
    "id": "angel-of-death",
@@ -48,7 +48,7 @@
    "strategyPloys": 4,
    "firefightPloys": 4,
    "equipment": 4,
-   "slots": 0,
+   "slots": 7,
    "notes": 0
   },
   {
@@ -82,7 +82,7 @@
    "strategyPloys": 4,
    "firefightPloys": 4,
    "equipment": 4,
-   "slots": 9,
+   "slots": 12,
    "notes": 0
   },
   {
@@ -184,7 +184,7 @@
    "strategyPloys": 4,
    "firefightPloys": 4,
    "equipment": 4,
-   "slots": 0,
+   "slots": 5,
    "notes": 0
   },
   {
@@ -201,7 +201,7 @@
    "strategyPloys": 4,
    "firefightPloys": 4,
    "equipment": 4,
-   "slots": 0,
+   "slots": 10,
    "notes": 0
   },
   {
@@ -286,8 +286,8 @@
    "strategyPloys": 4,
    "firefightPloys": 4,
    "equipment": 4,
-   "slots": 0,
-   "notes": 2
+   "slots": 12,
+   "notes": 1
   },
   {
    "id": "goremonger",
@@ -422,7 +422,7 @@
    "firefightPloys": 4,
    "equipment": 4,
    "slots": 11,
-   "notes": 1
+   "notes": 0
   },
   {
    "id": "kasrkin",
@@ -745,7 +745,7 @@
    "firefightPloys": 4,
    "equipment": 4,
    "slots": 5,
-   "notes": 1
+   "notes": 4
   },
   {
    "id": "wolf-scouts",
@@ -761,7 +761,7 @@
    "strategyPloys": 4,
    "firefightPloys": 4,
    "equipment": 4,
-   "slots": 1,
+   "slots": 6,
    "notes": 0
   },
   {

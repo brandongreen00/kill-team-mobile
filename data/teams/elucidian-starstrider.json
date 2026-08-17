@@ -36,14 +36,16 @@
    ],
    "choices": [
     "ELUCIA VHANE"
-   ]
+   ],
+   "inList": true
   },
-  "slots": 0,
+  "slots": 10,
+  "totalOperatives": 10,
   "groups": [
    {
     "index": 1,
-    "count": 1,
-    "kind": "list",
+    "count": 10,
+    "kind": "every",
     "roles": [
      "ELUCIA VHANE",
      "CANID",
@@ -59,10 +61,32 @@
   ],
   "list": [
    {
+    "role": "ELUCIA VHANE",
+    "datacardAnchor": "Elucia-Vhane",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 ELUCIA VHANE",
+    "group": 1,
+    "datacardId": "elucidian-starstrider.elucia-vhane",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Heirloom relic pistol",
+     "Monomolecular cane-rapier"
+    ]
+   },
+   {
     "role": "CANID",
     "datacardAnchor": "Canid",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -82,6 +106,7 @@
     "datacardAnchor": "Death-Cult-Executioner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -102,6 +127,7 @@
     "datacardAnchor": "Lectro-Maester",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -122,6 +148,7 @@
     "datacardAnchor": "Rejuvenat-Adept",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -142,6 +169,7 @@
     "datacardAnchor": "Voidmaster",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -166,6 +194,7 @@
      "Lasgun",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -186,6 +215,7 @@
      "Rotor cannon",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -205,6 +235,7 @@
     "datacardAnchor": "Elucia-Vhane",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -223,6 +254,7 @@
   ],
   "constraints": [],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "Every ELUCIDIAN STARSTRIDER operative in the following list:\n\n1 ELUCIA VHANE\n\n1 CANID\n\n1 DEATH CULT EXECUTIONER\n\n1 LECTRO-MAESTER\n\n1 REJUVENAT ADEPT\n\n1 VOIDMASTER\n\n3 VOIDSMAN with lasgun and gun butt\n\n1 VOIDSMAN with rotor cannon and gun butt"
  },

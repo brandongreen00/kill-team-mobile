@@ -36,9 +36,11 @@
    ],
    "choices": [
     "BLOOD HERALD"
-   ]
+   ],
+   "inList": false
   },
   "slots": 7,
+  "totalOperatives": 8,
   "groups": [
    {
     "index": 1,
@@ -70,6 +72,7 @@
     "datacardAnchor": "Goremonger-Aspirant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -90,6 +93,7 @@
     "datacardAnchor": "Goremonger-Bloodtaker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -110,6 +114,7 @@
     "datacardAnchor": "Goremonger-Impaler",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -130,6 +135,7 @@
     "datacardAnchor": "Goremonger-Inciter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -149,6 +155,7 @@
     "datacardAnchor": "Goremonger-Skullclaimer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -169,6 +176,7 @@
     "datacardAnchor": "Goremonger-Stalker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -191,6 +199,7 @@
     "datacardAnchor": "Goremonger-Blood-Herald",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -215,6 +224,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 GOREMONGER BLOOD HERALD operative\n\n7 GOREMONGER operatives selected from the following list:\n\nASPIRANT\n\nBLOODTAKER\n\nIMPALER\n\nINCITER\n\nSKULLCLAIMER\n\nSTALKER\n\nOther than ASPIRANT operatives, your kill team can only include each operative above once."
  },

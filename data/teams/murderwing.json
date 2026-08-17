@@ -62,14 +62,20 @@
      "choices": [
       {
        "id": "murderwing.g1.g2o1",
-       "label": "Lightning claw, power fist",
+       "label": "Lightning claw",
        "weapons": [
-        "Lightning claw",
-        "Power fist"
+        "Lightning claw"
        ]
       },
       {
        "id": "murderwing.g1.g2o2",
+       "label": "power fist",
+       "weapons": [
+        "Power fist"
+       ]
+      },
+      {
+       "id": "murderwing.g1.g2o3",
        "label": "power weapon",
        "weapons": [
         "Power weapon"
@@ -83,9 +89,11 @@
    "alwaysWeapons": [],
    "choices": [
     "CHAOS LORD"
-   ]
+   ],
+   "inList": false
   },
   "slots": 5,
+  "totalOperatives": 6,
   "groups": [
    {
     "index": 1,
@@ -119,6 +127,7 @@
     "datacardAnchor": "Murderwing-Champion",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [
      {
@@ -170,14 +179,15 @@
     "group": 2,
     "datacardId": "murderwing.champion",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "CURSECLAW",
     "datacardAnchor": "Murderwing-Curseclaw",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -188,17 +198,18 @@
     "group": 2,
     "datacardId": "murderwing.curseclaw",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Mutated claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DEPREDATOR",
     "datacardAnchor": "Murderwing-Depredator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -209,17 +220,18 @@
     "group": 2,
     "datacardId": "murderwing.depredator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Great chainaxe"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HUNTMASTER",
     "datacardAnchor": "Murderwing-Huntmaster",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -230,17 +242,18 @@
     "group": 2,
     "datacardId": "murderwing.huntmaster",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Power weapon"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "RAPTOR",
     "datacardAnchor": "Murderwing-Raptor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "murderwing.g2e5.opt1",
@@ -268,14 +281,15 @@
     "group": 2,
     "datacardId": "murderwing.raptor",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    },
    {
     "role": "SHRIEKER",
     "datacardAnchor": "Murderwing-Shrieker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -286,17 +300,18 @@
     "group": 2,
     "datacardId": "murderwing.shrieker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Chainsword"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SKYSEAR",
     "datacardAnchor": "Murderwing-Skysear",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "murderwing.g2e7.opt1",
@@ -335,14 +350,15 @@
     "group": 2,
     "datacardId": "murderwing.skysear",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "WARP TALON",
     "datacardAnchor": "Murderwing-Warp-Talon",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -353,10 +369,10 @@
     "group": 2,
     "datacardId": "murderwing.warp-talon",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lightning claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -365,6 +381,7 @@
     "datacardAnchor": "Murderwing-Chaos-Lord",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "murderwing.g1.opt1",
@@ -401,14 +418,20 @@
       "choices": [
        {
         "id": "murderwing.g1.g2o1",
-        "label": "Lightning claw, power fist",
+        "label": "Lightning claw",
         "weapons": [
-         "Lightning claw",
-         "Power fist"
+         "Lightning claw"
         ]
        },
        {
         "id": "murderwing.g1.g2o2",
+        "label": "power fist",
+        "weapons": [
+         "Power fist"
+        ]
+       },
+       {
+        "id": "murderwing.g1.g2o3",
         "label": "power weapon",
         "weapons": [
          "Power weapon"
@@ -425,8 +448,8 @@
     "group": 1,
     "datacardId": "murderwing.chaos-lord",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -444,6 +467,14 @@
   ],
   "footnotes": {
    "*": "You cannot select more than two operatives with these weapons combined."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "You cannot select more than two operatives with these weapons combined.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 MURDERWING CHAOS LORD operative with one option from each of the following:\n\nBolt pistol or plasma pistol*\n\nLightning claw, power fist or power weapon\n\nOr the following option:\n\nRelic lightning claws\n\n5 MURDERWING operatives selected from the following list:\n\nCHAMPION with one option from each of the following:\n\nPlasma pistol* or bolt pistol\n\nPower fist or power weapon\n\nCURSECLAW\n\nDEPREDATOR\n\nHUNTMASTER\n\nRAPTOR with one of the following options:\n\nBolt pistol; chainsword\n\nPlasma pistol*; chainsword\n\nSHRIEKER\n\nSKYSEAR with one of the following options:\n\nFlamer; bolt pistol; fists\n\nMeltagun*; bolt pistol; fists\n\nPlasma gun*; bolt pistol; fists\n\nWARP TALON\n\nOther than RAPTOR operatives, your kill team can only include each operative on this list once.\n\n* You cannot select more than two operatives with these weapons combined."

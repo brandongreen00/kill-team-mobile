@@ -35,9 +35,11 @@
     "INFILTRATOR SERGEANT",
     "INCURSOR SERGEANT",
     "REIVER SERGEANT"
-   ]
+   ],
+   "inList": false
   },
   "slots": 5,
+  "totalOperatives": 6,
   "groups": [
    {
     "index": 1,
@@ -75,6 +77,7 @@
     "datacardAnchor": "Infiltrator-Commsman",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -85,17 +88,18 @@
     "group": 2,
     "datacardId": "phobos-strike-team.infiltrator-commsman",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Marksman bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INFILTRATOR HELIX ADEPT",
     "datacardAnchor": "Infiltrator-Helix-Adept",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -106,17 +110,18 @@
     "group": 2,
     "datacardId": "phobos-strike-team.infiltrator-helix-adept",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Marksman bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INFILTRATOR SABOTEUR",
     "datacardAnchor": "Infiltrator-Saboteur",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -127,18 +132,19 @@
     "group": 2,
     "datacardId": "phobos-strike-team.infiltrator-saboteur",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Marksman bolt carbine",
      "Remote detonator",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INFILTRATOR VETERAN",
     "datacardAnchor": "Infiltrator-Veteran",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -149,17 +155,18 @@
     "group": 2,
     "datacardId": "phobos-strike-team.infiltrator-veteran",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Custom bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INFILTRATOR VOXBREAKER",
     "datacardAnchor": "Infiltrator-Voxbreaker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -170,17 +177,18 @@
     "group": 2,
     "datacardId": "phobos-strike-team.infiltrator-voxbreaker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Marksman bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INFILTRATOR WARRIOR",
     "datacardAnchor": "Infiltrator-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -191,17 +199,18 @@
     "group": 2,
     "datacardId": "phobos-strike-team.infiltrator-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Marksman bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INCURSOR MARKSMAN",
     "datacardAnchor": "Incursor-Marksman",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -212,17 +221,18 @@
     "group": 2,
     "datacardId": "phobos-strike-team.incursor-marksman",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Stalker marksman bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INCURSOR MINELAYER",
     "datacardAnchor": "Incursor-Minelayer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -233,17 +243,18 @@
     "group": 2,
     "datacardId": "phobos-strike-team.incursor-minelayer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Occulus bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INCURSOR WARRIOR",
     "datacardAnchor": "Incursor-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -254,17 +265,18 @@
     "group": 2,
     "datacardId": "phobos-strike-team.incursor-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Occulus bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "REIVER WARRIOR",
     "datacardAnchor": "Reiver-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "phobos-strike-team.g2e10.opt1",
@@ -292,8 +304,8 @@
     "group": 2,
     "datacardId": "phobos-strike-team.reiver-warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -302,6 +314,7 @@
     "datacardAnchor": "Infiltrator-Sergeant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -312,17 +325,18 @@
     "group": 1,
     "datacardId": "phobos-strike-team.infiltrator-sergeant",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Marksman bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INCURSOR SERGEANT",
     "datacardAnchor": "Incursor-Sergeant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -333,17 +347,18 @@
     "group": 1,
     "datacardId": "phobos-strike-team.incursor-sergeant",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Marksman bolt carbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "REIVER SERGEANT",
     "datacardAnchor": "Reiver-Sergeant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "phobos-strike-team.g1e3.opt1",
@@ -371,8 +386,8 @@
     "group": 1,
     "datacardId": "phobos-strike-team.reiver-sergeant",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -384,6 +399,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 PHOBOS STRIKE TEAM operative selected from the following list:\n\nINFILTRATOR SERGEANT\n\nINCURSOR SERGEANT\n\nREIVER SERGEANT with one of the following options:\n\nSpecial issue bolt pistol; combat knife\n\nBolt carbine; fists\n\n5 PHOBOS STRIKE TEAM operatives selected from the following list:\n\nINFILTRATOR COMMSMAN\n\nINFILTRATOR HELIX ADEPT\n\nINFILTRATOR SABOTEUR\n\nINFILTRATOR VETERAN\n\nINFILTRATOR VOXBREAKER\n\nINFILTRATOR WARRIOR\n\nINCURSOR MARKSMAN\n\nINCURSOR MINELAYER\n\nINCURSOR WARRIOR\n\nREIVER WARRIOR with one of the following options:\n\nSpecial issue bolt pistol; combat knife\n\nBolt carbine; fists\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

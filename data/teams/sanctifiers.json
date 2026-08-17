@@ -35,9 +35,11 @@
    ],
    "choices": [
     "CONFESSOR"
-   ]
+   ],
+   "inList": false
   },
   "slots": 10,
+  "totalOperatives": 11,
   "groups": [
    {
     "index": 1,
@@ -82,6 +84,7 @@
     "datacardAnchor": "Sanctifier-Cherub",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -92,16 +95,17 @@
     "group": 2,
     "datacardId": "sanctifiers.sanctifier-cherub",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Incentiviser"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "CONFLAGRATOR",
     "datacardAnchor": "Sanctifier-Conflagrator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -112,17 +116,18 @@
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-conflagrator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Twin hand flamers",
      "Gun butts"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DEATH CULT ASSASSIN",
     "datacardAnchor": "Sanctifier-Death-Cult-Assassin",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -133,17 +138,18 @@
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-death-cult-assassin",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Throwing knives",
      "Ritual blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DRILL ABBOT",
     "datacardAnchor": "Sanctifier-Drill-Abbot",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -154,16 +160,17 @@
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-drill-abbot",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Great hammer"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MIRACULIST",
     "datacardAnchor": "Sanctifier-Miraculist",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -174,19 +181,20 @@
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-miraculist",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Holy light",
      "Wreathe in fire",
      "Burning hands",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MISSIONARY",
     "datacardAnchor": "Sanctifier-Missionary",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "sanctifiers.g3e5.opt1",
@@ -203,6 +211,9 @@
       "weapons": [
        "Ministorum flamer",
        "Gun butt"
+      ],
+      "items": [
+       "holy relic"
       ]
      }
     ],
@@ -213,19 +224,20 @@
     "requires": [],
     "rawText": "MISSIONARY with one of the following options:",
     "notes": [
-     "unresolved weapon(s) in option 'Ministorum flamer; gun butt; holy relic': ['holy relic']"
+     "option 'Ministorum flamer; gun butt; holy relic': ['holy relic'] is not a weapon on the datacard (kept verbatim in `items`)"
     ],
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-missionary",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "MISSIONARY",
     "datacardAnchor": "Sanctifier-Missionary",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "sanctifiers.g3e6.opt1",
@@ -233,6 +245,9 @@
       "weapons": [
        "Meltagun",
        "Chainsword"
+      ],
+      "items": [
+       "holy relic"
       ]
      },
      {
@@ -253,19 +268,20 @@
     "requires": [],
     "rawText": "MISSIONARY with one of the following options:",
     "notes": [
-     "unresolved weapon(s) in option 'Meltagun; chainsword; holy relic': ['holy relic']"
+     "option 'Meltagun; chainsword; holy relic': ['holy relic'] is not a weapon on the datacard (kept verbatim in `items`)"
     ],
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-missionary",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "PERSECUTOR",
     "datacardAnchor": "Sanctifier-Persecutor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -276,17 +292,18 @@
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-persecutor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Hand flamer",
      "Eviscerator"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PREACHER",
     "datacardAnchor": "Sanctifier-Preacher",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -297,17 +314,18 @@
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-preacher",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Hand flamer",
      "Chainsword"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "RELIQUANT",
     "datacardAnchor": "Sanctifier-Reliquant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -318,17 +336,18 @@
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-reliquant",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Hand flamer",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SALVATIONIST",
     "datacardAnchor": "Sanctifier-Salvationist",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -339,10 +358,10 @@
     "group": 3,
     "datacardId": "sanctifiers.sanctifier-salvationist",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Soulstave"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -351,6 +370,7 @@
     "datacardAnchor": "Sanctifier-Confessor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -361,10 +381,10 @@
     "group": 1,
     "datacardId": "sanctifiers.sanctifier-confessor",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Mace of Censure"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -388,6 +408,14 @@
   ],
   "footnotes": {
    "*": "You cannot select an option that includes a brazier of holy fire more than once per battle."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "You cannot select an option that includes a brazier of holy fire more than once per battle.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 SANCTIFIER CONFESSOR operative\n\n1 SANCTIFIER CHERUB operative\n\n9 SANCTIFIER operatives selected from the following list:\n\nCONFLAGRATOR\n\nDEATH CULT ASSASSIN\n\nDRILL ABBOT\n\nMIRACULIST\n\nMISSIONARY with one of the following options:\n\nMinistorum flamer; brazier of holy fire*\n\nMinistorum flamer; gun butt; holy relic\n\nMISSIONARY with one of the following options:\n\nMeltagun; chainsword; holy relic\n\nPlasma gun; chainsword; brazier of holy fire*\n\nPERSECUTOR\n\nPREACHER\n\nRELIQUANT\n\nSALVATIONIST\n\nOther than PREACHER operatives, your kill team can only include each operative on this list once. Your kill team can only include up to four PREACHER operatives.\n\n* You cannot select an option that includes a brazier of holy fire more than once per battle."

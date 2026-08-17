@@ -31,9 +31,11 @@
    "loadoutMode": "fixed",
    "fixedWeapons": [],
    "alwaysWeapons": [],
-   "choices": []
+   "choices": [],
+   "inList": false
   },
   "slots": 5,
+  "totalOperatives": 5,
   "groups": [
    {
     "index": 1,
@@ -78,6 +80,7 @@
     "datacardAnchor": "Dragon-Master-Clanblade",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -99,6 +102,7 @@
     "datacardAnchor": "Dragon-Master-Leystalker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -120,6 +124,7 @@
     "datacardAnchor": "Dragon-Master-Stonesinger",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -142,6 +147,7 @@
     "datacardAnchor": "Drakolithe",
     "count": 2,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -160,6 +166,7 @@
   "leaderList": [],
   "constraints": [],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 EXODITE DRAGON MASTER CLANBLADE operative\n\n1 EXODITE DRAGON MASTER LEYSTALKER operative\n\n1 EXODITE DRAGON MASTER STONESINGER operative\n\n2 EXODITE DRAGON MASTER DRAKOLITHE operatives"
  },
@@ -690,7 +697,7 @@
  ],
  "markerGuide": "Remaining Actions\n\nSow the Seeds\n\nSpeed (SPEED 3- indicated by no token)\n\nSpectral Nimbus\n\nWails of the World\n\nWind’s Grace\n\nSong of Renewal\n\nFated Shot\n\nNexus Sentinel\n\nDragonscale Mesh\n\nClan Talismans\n\nLileathan Crystal Matrices\n\nSprint template\n\nFront/Back Pivot Template\n\nCentre Pivot Template",
  "notes": [
-  "no datacard in this team carries the LEADER keyword"
+  "no datacard in this team carries the LEADER keyword — the leader is not marked on the source page"
  ],
  "rareWeaponRules": [
   "Aimed",

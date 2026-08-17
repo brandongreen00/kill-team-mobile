@@ -35,9 +35,11 @@
     "ASSAULT INTERCESSOR SERGEANT",
     "INTERCESSOR SERGEANT",
     "SPACE MARINE CAPTAIN"
-   ]
+   ],
+   "inList": false
   },
   "slots": 5,
+  "totalOperatives": 6,
   "groups": [
    {
     "index": 1,
@@ -71,6 +73,7 @@
     "datacardAnchor": "Assault-Intercessor-Grenadier",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -81,17 +84,18 @@
     "group": 2,
     "datacardId": "angel-of-death.assault-intercessor-grenadier",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Heavy bolt pistol",
      "Chainsword"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "ASSAULT INTERCESSOR WARRIOR",
     "datacardAnchor": "Assault-Intercessor-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -102,17 +106,18 @@
     "group": 2,
     "datacardId": "angel-of-death.assault-intercessor-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Heavy bolt pistol",
      "Chainsword"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "ELIMINATOR SNIPER",
     "datacardAnchor": "Eliminator-Sniper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -123,18 +128,19 @@
     "group": 2,
     "datacardId": "angel-of-death.eliminator-sniper",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Bolt sniper rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HEAVY INTERCESSOR GUNNER",
     "datacardAnchor": "Heavy-Intercessor-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -145,12 +151,12 @@
     "group": 2,
     "datacardId": "angel-of-death.heavy-intercessor-gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Heavy bolter",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "INTERCESSOR GUNNER",
@@ -159,6 +165,7 @@
     "fixedWeapons": [
      "Auxiliary grenade launcher"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "angel-of-death.g2e5.opt1",
@@ -194,14 +201,15 @@
     "group": 2,
     "datacardId": "angel-of-death.intercessor-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "INTERCESSOR WARRIOR",
     "datacardAnchor": "Intercessor-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "angel-of-death.g2e6.opt1",
@@ -237,8 +245,8 @@
     "group": 2,
     "datacardId": "angel-of-death.intercessor-warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -247,6 +255,7 @@
     "datacardAnchor": "Assault-Intercessor-Sergeant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "angel-of-death.g1e2.opt1",
@@ -284,15 +293,27 @@
       "choices": [
        {
         "id": "angel-of-death.g1e1.g2o1",
-        "label": "Chainsword, power fist, power weapon",
+        "label": "Chainsword",
         "weapons": [
-         "Chainsword",
-         "Power fist",
-         "Power weapon"
+         "Chainsword"
         ]
        },
        {
         "id": "angel-of-death.g1e1.g2o2",
+        "label": "power fist",
+        "weapons": [
+         "Power fist"
+        ]
+       },
+       {
+        "id": "angel-of-death.g1e1.g2o3",
+        "label": "power weapon",
+        "weapons": [
+         "Power weapon"
+        ]
+       },
+       {
+        "id": "angel-of-death.g1e1.g2o4",
         "label": "thunder hammer",
         "weapons": [
          "Thunder hammer"
@@ -309,14 +330,15 @@
     "group": 1,
     "datacardId": "angel-of-death.assault-intercessor-sergeant",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "INTERCESSOR SERGEANT",
     "datacardAnchor": "Intercessor-Sergeant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [
      {
@@ -325,14 +347,20 @@
       "choices": [
        {
         "id": "angel-of-death.g1e3.g1o1",
-        "label": "Auto bolt rifle, bolt rifle",
+        "label": "Auto bolt rifle",
         "weapons": [
-         "Auto bolt rifle",
-         "Bolt rifle"
+         "Auto bolt rifle"
         ]
        },
        {
         "id": "angel-of-death.g1e3.g1o2",
+        "label": "bolt rifle",
+        "weapons": [
+         "Bolt rifle"
+        ]
+       },
+       {
+        "id": "angel-of-death.g1e3.g1o3",
         "label": "stalker bolt rifle",
         "weapons": [
          "Stalker bolt rifle"
@@ -346,16 +374,34 @@
       "choices": [
        {
         "id": "angel-of-death.g1e3.g2o1",
-        "label": "Chainsword, fists, power fist, power weapon",
+        "label": "Chainsword",
         "weapons": [
-         "Chainsword",
-         "Fists",
-         "Power fist",
-         "Power weapon"
+         "Chainsword"
         ]
        },
        {
         "id": "angel-of-death.g1e3.g2o2",
+        "label": "fists",
+        "weapons": [
+         "Fists"
+        ]
+       },
+       {
+        "id": "angel-of-death.g1e3.g2o3",
+        "label": "power fist",
+        "weapons": [
+         "Power fist"
+        ]
+       },
+       {
+        "id": "angel-of-death.g1e3.g2o4",
+        "label": "power weapon",
+        "weapons": [
+         "Power weapon"
+        ]
+       },
+       {
+        "id": "angel-of-death.g1e3.g2o5",
         "label": "thunder hammer",
         "weapons": [
          "Thunder hammer"
@@ -372,14 +418,15 @@
     "group": 1,
     "datacardId": "angel-of-death.intercessor-sergeant",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "SPACE MARINE CAPTAIN",
     "datacardAnchor": "Space-Marine-Captain",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -390,11 +437,11 @@
     "group": 1,
     "datacardId": "angel-of-death.space-marine-captain",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Plasma pistol",
      "Power fist"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -406,6 +453,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 ANGEL OF DEATH operative selected from the following list:\n\nASSAULT INTERCESSOR SERGEANT with one option from each of the following:\n\nHand flamer or heavy bolt pistol\n\nChainsword, power fist, power weapon or thunder hammer\n\nOr the following option:\n\nPlasma pistol; chainsword\n\nINTERCESSOR SERGEANT with one option from each of the following:\n\nAuto bolt rifle, bolt rifle or stalker bolt rifle\n\nChainsword, fists, power fist, power weapon or thunder hammer\n\nSPACE MARINE CAPTAIN\n\n5 ANGEL OF DEATH operatives selected from the following list:\n\nASSAULT INTERCESSOR GRENADIER\n\nASSAULT INTERCESSOR WARRIOR\n\nELIMINATOR SNIPER\n\nHEAVY INTERCESSOR GUNNER\n\nINTERCESSOR GUNNER with auxiliary grenade launcher and one of the following options:\n\nAuto bolt rifle; fists\n\nBolt rifle; fists\n\nStalker bolt rifle; fists\n\nINTERCESSOR WARRIOR with one of the following options:\n\nAuto bolt rifle; fists\n\nBolt rifle; fists\n\nStalker bolt rifle; fists\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

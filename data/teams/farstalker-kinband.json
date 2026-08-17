@@ -50,9 +50,11 @@
    "alwaysWeapons": [],
    "choices": [
     "KILL-BROKER"
-   ]
+   ],
+   "inList": false
   },
   "slots": 11,
+  "totalOperatives": 12,
   "groups": [
    {
     "index": 1,
@@ -88,6 +90,7 @@
     "datacardAnchor": "Kroot-Bow-Hunter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -98,17 +101,18 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-bow-hunter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Accelerator bow",
      "Blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "COLD-BLOOD",
     "datacardAnchor": "Kroot-Cold-Blood",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -119,17 +123,18 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-cold-blood",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Kroot rifle",
      "Blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "CUT-SKIN",
     "datacardAnchor": "Kroot-Cut-Skin-1",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -140,16 +145,17 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-cut-skin",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Cut-skin's blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HOUND",
     "datacardAnchor": "Kroot-Hound",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -160,16 +166,17 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-hound",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Ripping fangs"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "LONG-SIGHT",
     "datacardAnchor": "Kroot-Long-Sight",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -180,17 +187,18 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-long-sight",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Kroot hunting rifle",
      "Blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PISTOLIER",
     "datacardAnchor": "Kroot-Pistolier",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -201,17 +209,18 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-pistolier",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Dual Kroot pistols",
      "Blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "STALKER",
     "datacardAnchor": "Kroot-Stalker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -222,17 +231,18 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-stalker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Kroot scattergun",
      "Stalker's blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TRACKER",
     "datacardAnchor": "Kroot-Tracker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -243,17 +253,18 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-tracker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Kroot rifle",
      "Blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HEAVY GUNNER",
     "datacardAnchor": "Kroot-Heavy-Gunner-1",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "farstalker-kinband.g2e9.opt1",
@@ -281,14 +292,15 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Kroot-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "farstalker-kinband.g2e10.opt1",
@@ -316,8 +328,8 @@
     "group": 2,
     "datacardId": "farstalker-kinband.kroot-warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -326,6 +338,7 @@
     "datacardAnchor": "Kroot-Kill-Broker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "farstalker-kinband.g1.opt1",
@@ -353,8 +366,8 @@
     "group": 1,
     "datacardId": "farstalker-kinband.kroot-kill-broker",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -372,6 +385,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 FARSTALKER KINBAND KILL-BROKER operative with one of the following options:\n\nKroot rifle; ritual blade\n\nPulse weapon; ritual blade\n\n11 FARSTALKER KINBAND operatives selected from the following list:\n\nBOW-HUNTER\n\nCOLD-BLOOD\n\nCUT-SKIN\n\nHOUND\n\nLONG-SIGHT\n\nPISTOLIER\n\nSTALKER\n\nTRACKER\n\nHEAVY GUNNER with one of the following options:\n\nDvorgite skinner; blade\n\nLondaxi tribalest; blade\n\nWARRIOR with one of the following options:\n\nKroot rifle; blade\n\nKroot scattergun; blade\n\nOther than HOUND and WARRIOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two HOUND operatives."
  },

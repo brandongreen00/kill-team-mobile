@@ -83,9 +83,11 @@
    "alwaysWeapons": [],
    "choices": [
     "SERGEANT-AT-ARMS"
-   ]
+   ],
+   "inList": false
   },
   "slots": 10,
+  "totalOperatives": 11,
   "groups": [
    {
     "index": 1,
@@ -123,6 +125,7 @@
     "datacardAnchor": "Navis-Armsman-1",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -133,17 +136,18 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-armsman",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Navis shotgun",
      "Navis hatchet"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "AXEJACK",
     "datacardAnchor": "Navis-Axejack",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -154,17 +158,18 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-axejack",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Power weapon"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "C.A.T. UNIT",
     "datacardAnchor": "Navis-C.A.T.-Unit",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -177,14 +182,15 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-c-a-t-unit",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "ENDURANT",
     "datacardAnchor": "Navis-Endurant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -195,17 +201,18 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-endurant",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Navis heavy shotgun",
      "Shield bash"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GHEISTSKULL",
     "datacardAnchor": "Navis-Gheistskull",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -218,14 +225,15 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-gheistskull",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GRENADIER",
     "datacardAnchor": "Navis-Grenadier",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -236,12 +244,12 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-grenadier",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Demolition charge",
      "Navis shotgun",
      "Navis hatchet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
@@ -251,6 +259,7 @@
      "Navis las-volley",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -261,8 +270,8 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -272,6 +281,7 @@
      "Meltagun",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -282,8 +292,8 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -293,6 +303,7 @@
      "Plasma gun",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -303,14 +314,15 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HATCHCUTTER",
     "datacardAnchor": "Navis-Hatchcutter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -321,17 +333,18 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-hatchcutter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Chainfist"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SURVEYOR",
     "datacardAnchor": "Navis-Surveyor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -342,17 +355,18 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-surveyor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Navis shotgun",
      "Navis hatchet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "VOID-JAMMER",
     "datacardAnchor": "Navis-Void-Jammer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -363,12 +377,12 @@
     "group": 2,
     "datacardId": "imperial-navy-breacher.navis-void-jammer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Gheistskull detonator",
      "Navis shotgun",
      "Navis hatchet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -377,6 +391,7 @@
     "datacardAnchor": "Navis-Sergeant-At-Arms",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "imperial-navy-breacher.g1.opt1",
@@ -437,8 +452,8 @@
     "group": 1,
     "datacardId": "imperial-navy-breacher.navis-sergeant-at-arms",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -471,6 +486,14 @@
   ],
   "footnotes": {
    "*": "These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 IMPERIAL NAVY BREACHER SERGEANT-AT-ARMS operative with the following option:\n\nNavis shotgun and Navis hatchet\n\nOr one option from each of the following:\n\nBolt pistol or heirloom autopistol\n\nChainsword or power weapon\n\n10 IMPERIAL NAVY BREACHER operatives selected from the following list:\n\nARMSMAN\n\nAXEJACK\n\nC.A.T. UNIT*\n\nENDURANT\n\nGHEISTSKULL*\n\nGRENADIER\n\nGUNNER with Navis las-volley and gun butt\n\nGUNNER with meltagun and gun butt\n\nGUNNER with plasma gun and gun butt\n\nHATCHCUTTER\n\nSURVEYOR\n\nVOID-JAMMER\n\nOther than ARMSMAN operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two GUNNER operatives.\n\nYour kill team can only include a GHEISTSKULL operative if it also includes a VOID-JAMMER operative, and it can only include a C.A.T. UNIT operative if it also includes a SURVEYOR operative.\n\n*These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total."

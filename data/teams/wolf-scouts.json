@@ -36,9 +36,11 @@
    ],
    "choices": [
     "PACK LEADER"
-   ]
+   ],
+   "inList": true
   },
-  "slots": 1,
+  "slots": 6,
+  "totalOperatives": 6,
   "groups": [
    {
     "index": 1,
@@ -71,6 +73,7 @@
     "datacardAnchor": "Wolf-Scout-Fenrisian-Wolf",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -81,146 +84,17 @@
     "group": 1,
     "datacardId": "wolf-scouts.scout-fenrisian-wolf",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Fangs"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
-   {
-    "role": "FANGBEARER",
-    "datacardAnchor": "Wolf-Scout-Fangbearer",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "FANGBEARER",
-    "group": 2,
-    "datacardId": "wolf-scouts.scout-fangbearer",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Absolvor bolt pistol",
-     "Combat blade"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "FROSTEYE",
-    "datacardAnchor": "Wolf-Scout-Frosteye",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "FROSTEYE",
-    "group": 2,
-    "datacardId": "wolf-scouts.scout-frosteye",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Instigator bolt carbine",
-     "Combat blade"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "GUNNER",
-    "datacardAnchor": "Wolf-Scout-Gunner",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "GUNNER",
-    "group": 2,
-    "datacardId": "wolf-scouts.scout-gunner",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Plasma gun",
-     "Combat blade"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "TRAPMASTER",
-    "datacardAnchor": "Wolf-Scout-Trapmaster",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "TRAPMASTER",
-    "group": 2,
-    "datacardId": "wolf-scouts.scout-trapmaster",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Plasma pistol",
-     "Combat blade"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "RUNE PRIEST SKJALD",
-    "datacardAnchor": "Wolf-Scout-Rune-Priest-Skjald",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "RUNE PRIEST SKJALD",
-    "group": 2,
-    "datacardId": "wolf-scouts.scout-rune-priest-skjald",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Bolt pistol",
-     "Jaws of the World Wolf",
-     "Thunderclap",
-     "Runic stave"
-    ],
-    "uniqueUnlessRole": true
-   },
-   {
-    "role": "HUNTER",
-    "datacardAnchor": "Wolf-Scout-Hunter",
-    "count": 1,
-    "fixedWeapons": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "HUNTER",
-    "group": 2,
-    "datacardId": "wolf-scouts.scout-hunter",
-    "isLeader": false,
-    "alwaysWeapons": [
-     "Plasma pistol",
-     "Combat blade"
-    ],
-    "uniqueUnlessRole": false
-   }
-  ],
-  "leaderList": [
    {
     "role": "PACK LEADER",
     "datacardAnchor": "Wolf-Scout-Pack-Leader",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -231,11 +105,169 @@
     "group": 2,
     "datacardId": "wolf-scouts.scout-pack-leader",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Plasma pistol",
      "Power weapon"
-    ],
-    "uniqueUnlessRole": true
+    ]
+   },
+   {
+    "role": "FANGBEARER",
+    "datacardAnchor": "Wolf-Scout-Fangbearer",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "FANGBEARER",
+    "group": 2,
+    "datacardId": "wolf-scouts.scout-fangbearer",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Absolvor bolt pistol",
+     "Combat blade"
+    ]
+   },
+   {
+    "role": "FROSTEYE",
+    "datacardAnchor": "Wolf-Scout-Frosteye",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "FROSTEYE",
+    "group": 2,
+    "datacardId": "wolf-scouts.scout-frosteye",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Instigator bolt carbine",
+     "Combat blade"
+    ]
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Wolf-Scout-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER",
+    "group": 2,
+    "datacardId": "wolf-scouts.scout-gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Plasma gun",
+     "Combat blade"
+    ]
+   },
+   {
+    "role": "TRAPMASTER",
+    "datacardAnchor": "Wolf-Scout-Trapmaster",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "TRAPMASTER",
+    "group": 2,
+    "datacardId": "wolf-scouts.scout-trapmaster",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Plasma pistol",
+     "Combat blade"
+    ]
+   },
+   {
+    "role": "RUNE PRIEST SKJALD",
+    "datacardAnchor": "Wolf-Scout-Rune-Priest-Skjald",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "RUNE PRIEST SKJALD",
+    "group": 2,
+    "datacardId": "wolf-scouts.scout-rune-priest-skjald",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Jaws of the World Wolf",
+     "Thunderclap",
+     "Runic stave"
+    ]
+   },
+   {
+    "role": "HUNTER",
+    "datacardAnchor": "Wolf-Scout-Hunter",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HUNTER",
+    "group": 2,
+    "datacardId": "wolf-scouts.scout-hunter",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": [
+     "Plasma pistol",
+     "Combat blade"
+    ]
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "PACK LEADER",
+    "datacardAnchor": "Wolf-Scout-Pack-Leader",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PACK LEADER",
+    "group": 2,
+    "datacardId": "wolf-scouts.scout-pack-leader",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Plasma pistol",
+     "Power weapon"
+    ]
    }
   ],
   "constraints": [
@@ -247,6 +279,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 WOLF SCOUT FENRISIAN WOLF\n\n5 WOLF SCOUT operatives selected from the following list:\n\nPACK LEADER\n\nFANGBEARER\n\nFROSTEYE\n\nGUNNER\n\nTRAPMASTER\n\nRUNE PRIEST SKJALD\n\nHUNTER\n\nOther than HUNTER operatives, your kill team can only include each operative on this list once."
  },

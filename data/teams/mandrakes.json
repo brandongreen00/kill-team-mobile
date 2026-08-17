@@ -36,9 +36,11 @@
    ],
    "choices": [
     "NIGHTFIEND"
-   ]
+   ],
+   "inList": false
   },
   "slots": 8,
+  "totalOperatives": 9,
   "groups": [
    {
     "index": 1,
@@ -69,6 +71,7 @@
     "datacardAnchor": "Mandrake-Abyssal",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -79,17 +82,18 @@
     "group": 2,
     "datacardId": "mandrakes.mandrake-abyssal",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Balesurge",
      "Glimmersteel blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "CHOOSER OF THE FLESH",
     "datacardAnchor": "Mandrake-Chooser-of-The-Flesh",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -100,17 +104,18 @@
     "group": 2,
     "datacardId": "mandrakes.mandrake-chooser-of-the-flesh",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Baleblast",
      "Baleblade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "DIRGEMAW",
     "datacardAnchor": "Mandrake-Dirgemaw",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -121,18 +126,19 @@
     "group": 2,
     "datacardId": "mandrakes.mandrake-dirgemaw",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Baleblast",
      "Horrifying scream",
      "Glimmersteel blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SHADEWEAVER",
     "datacardAnchor": "Mandrake-Shadeweaver",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -143,17 +149,18 @@
     "group": 2,
     "datacardId": "mandrakes.mandrake-shadeweaver",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Baleblast",
      "Glimmersteel blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Mandrake-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -164,11 +171,11 @@
     "group": 2,
     "datacardId": "mandrakes.mandrake-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Baleblast",
      "Glimmersteel blade"
-    ],
-    "uniqueUnlessRole": false
+    ]
    }
   ],
   "leaderList": [
@@ -177,6 +184,7 @@
     "datacardAnchor": "Mandrake-Nightfiend",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -187,11 +195,11 @@
     "group": 1,
     "datacardId": "mandrakes.mandrake-nightfiend",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Baleblast",
      "Huskblade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -203,6 +211,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 MANDRAKE NIGHTFIEND operative\n\n8 MANDRAKE operatives selected from the following list:\n\nABYSSAL\n\nCHOOSER OF THE FLESH\n\nDIRGEMAW\n\nSHADEWEAVER\n\nWARRIOR\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

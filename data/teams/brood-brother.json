@@ -23,22 +23,46 @@
  "source": "cache",
  "selection": {
   "leader": {
-   "role": null,
-   "datacardId": null,
+   "role": "COMMANDER",
+   "datacardId": "brood-brother.commander",
    "count": 1,
-   "loadouts": [],
+   "loadouts": [
+    {
+     "id": "brood-brother.g1.opt1",
+     "label": "Bolt pistol; chainsword & claw",
+     "weapons": [
+      "Bolt pistol",
+      "Chainsword & claw"
+     ]
+    },
+    {
+     "id": "brood-brother.g1.opt2",
+     "label": "Drum-fed autogun; bayonet",
+     "weapons": [
+      "Drum-fed autogun",
+      "Bayonet"
+     ]
+    },
+    {
+     "id": "brood-brother.g1.opt3",
+     "label": "Laspistol; power weapon & claw",
+     "weapons": [
+      "Laspistol",
+      "Power weapon & claw"
+     ]
+    }
+   ],
    "optionGroups": [],
    "loadoutMode": "choice",
    "fixedWeapons": [],
    "alwaysWeapons": [],
    "choices": [
-    "COMMANDER",
-    "MAGUS",
-    "PATRIARCH",
-    "PRIMUS"
-   ]
+    "COMMANDER"
+   ],
+   "inList": false
   },
-  "slots": 9,
+  "slots": 12,
+  "totalOperatives": 13,
   "groups": [
    {
     "index": 1,
@@ -90,6 +114,7 @@
     "datacardAnchor": "Psychic-Familiar",
     "count": 2,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -106,10 +131,74 @@
     ]
    },
    {
+    "role": "MAGUS",
+    "datacardAnchor": "Magus",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 2,
+    "footnoteGroup": "^2",
+    "requires": [],
+    "rawText": "MAGUS (counts as two selections)^2",
+    "group": 2,
+    "datacardId": "brood-brother.magus",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Bio dagger",
+     "Force stave"
+    ]
+   },
+   {
+    "role": "PATRIARCH",
+    "datacardAnchor": "Patriarch",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 3,
+    "footnoteGroup": "^2",
+    "requires": [],
+    "rawText": "PATRIARCH (counts as three selections)^2",
+    "group": 2,
+    "datacardId": "brood-brother.patriarch",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Claws"
+    ]
+   },
+   {
+    "role": "PRIMUS",
+    "datacardAnchor": "Primus",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 2,
+    "footnoteGroup": "^2",
+    "requires": [],
+    "rawText": "PRIMUS (counts as two selections)^2",
+    "group": 2,
+    "datacardId": "brood-brother.primus",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Scoped needle pistol",
+     "Bonesword & toxin injector claw"
+    ]
+   },
+   {
     "role": "TROOPER",
     "datacardAnchor": "Brood-Brother-Trooper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -130,6 +219,7 @@
     "datacardAnchor": "Brood-Brother-Agitator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -152,6 +242,7 @@
      "Flamer",
      "Bayonet"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -172,6 +263,7 @@
      "Grenade launcher",
      "Bayonet"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -192,6 +284,7 @@
      "Meltagun",
      "Bayonet"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -212,6 +305,7 @@
      "Plasma gun",
      "Bayonet"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -229,6 +323,7 @@
     "datacardAnchor": "Brood-Brother-Iconward",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -248,6 +343,7 @@
     "datacardAnchor": "Brood-Brother-Knife-Fighter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -267,6 +363,7 @@
     "datacardAnchor": "Brood-Brother-Medic",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -288,6 +385,7 @@
     "datacardAnchor": "Brood-Brother-Sapper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -308,6 +406,7 @@
     "datacardAnchor": "Brood-Brother-Sniper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -328,6 +427,7 @@
     "datacardAnchor": "Brood-Brother-Trooper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -348,6 +448,7 @@
     "datacardAnchor": "Brood-Brother-Veteran",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -368,6 +469,7 @@
     "datacardAnchor": "Brood-Brother-Vox-Operator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -390,6 +492,7 @@
     "datacardAnchor": "Brood-Brother-Commander",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "brood-brother.g1.opt1",
@@ -432,6 +535,7 @@
     "datacardAnchor": "Magus",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -453,6 +557,7 @@
     "datacardAnchor": "Patriarch",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -472,6 +577,7 @@
     "datacardAnchor": "Primus",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -524,6 +630,26 @@
    "^1": "You cannot select more than three of these operatives combined.",
    "^2": "Your kill team can only include up to one BROODCOVEN operative. If one of these operatives is selected for deployment, your COMMANDER operative loses the LEADER keyword for the battle.",
    "^3": "Up to three times, instead of selecting one of these operatives, you can select one BROOD BROTHER ploy to cost you 0CP for the battle. Note that ‘counts as’ selections still apply; for example, if you select a PATRIARCH operative, you could not do this."
+  },
+  "footnoteOptions": {
+   "^1": {
+    "text": "You cannot select more than three of these operatives combined.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   },
+   "^2": {
+    "text": "Your kill team can only include up to one BROODCOVEN operative. If one of these operatives is selected for deployment, your COMMANDER operative loses the LEADER keyword for the battle.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   },
+   "^3": {
+    "text": "Up to three times, instead of selecting one of these operatives, you can select one BROOD BROTHER ploy to cost you 0CP for the battle. Note that ‘counts as’ selections still apply; for example, if you select a PATRIARCH operative, you could not do this.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 BROOD BROTHER COMMANDER operative with one of the following options:\n\nBolt pistol; chainsword & claw\n\nDrum-fed autogun; bayonet\n\nLaspistol; power weapon & claw\n\n3 BROOD BROTHER operatives selected from the following list^3:\n\n2 PSYCHIC FAMILIAR operatives (still counts as one selection)\n\nMAGUS (counts as two selections)^2\n\nPATRIARCH (counts as three selections)^2\n\nPRIMUS (counts as two selections)^2\n\nTROOPER\n\n9 BROOD BROTHER operatives selected from the following list:\n\nAGITATOR\n\nGUNNER with flamer and bayonet^1\n\nGUNNER with grenade launcher and bayonet^1\n\nGUNNER with meltagun and bayonet^1\n\nGUNNER with plasma gun and bayonet^1\n\nICONWARD\n\nKNIFE FIGHTER\n\nMEDIC\n\nSAPPER\n\nSNIPER^1\n\nTROOPER\n\nVETERAN\n\nVOX-OPERATOR\n\nOther than TROOPER operatives, your kill team can only include each option on this list once.\n\n^1You cannot select more than three of these operatives combined.\n\n^2Your kill team can only include up to one BROODCOVEN operative. If one of these operatives is selected for deployment, your COMMANDER operative loses the LEADER keyword for the battle.\n\n^3Up to three times, instead of selecting one of these operatives, you can select one BROOD BROTHER ploy to cost you 0CP for the battle. Note that ‘counts as’ selections still apply; for example, if you select a PATRIARCH operative, you could not do this."

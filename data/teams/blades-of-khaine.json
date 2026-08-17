@@ -71,7 +71,10 @@
       {
        "id": "blades-of-khaine.g1e1.g2o1",
        "label": "Shimmershield",
-       "weapons": []
+       "weapons": [],
+       "items": [
+        "Shimmershield"
+       ]
       },
       {
        "id": "blades-of-khaine.g1e1.g2o2",
@@ -88,9 +91,11 @@
    "alwaysWeapons": [],
    "choices": [
     "DIRE AVENGER EXARCH"
-   ]
+   ],
+   "inList": false
   },
-  "slots": 0,
+  "slots": 7,
+  "totalOperatives": 8,
   "groups": [
    {
     "index": 1,
@@ -100,15 +105,91 @@
      "DIRE AVENGER EXARCH"
     ],
     "rawText": "1 BLADES OF KHAINE operative selected from the following list:"
+   },
+   {
+    "index": 2,
+    "count": 7,
+    "kind": "list",
+    "roles": [
+     "DIRE AVENGER WARRIOR",
+     "HOWLING BANSHEE WARRIOR",
+     "STRIKING SCORPION WARRIOR"
+    ],
+    "rawText": "7 BLADES OF KHAINE operatives selected from the following list:"
    }
   ],
-  "list": [],
+  "list": [
+   {
+    "role": "DIRE AVENGER WARRIOR",
+    "datacardAnchor": "Dire-Avenger-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DIRE AVENGER WARRIOR",
+    "group": 2,
+    "datacardId": "blades-of-khaine.dire-avenger-warrior",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Shuriken catapult",
+     "Fists"
+    ]
+   },
+   {
+    "role": "HOWLING BANSHEE WARRIOR",
+    "datacardAnchor": "Howling-Banshee-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HOWLING BANSHEE WARRIOR",
+    "group": 2,
+    "datacardId": "blades-of-khaine.howling-banshee-warrior",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Shuriken pistol",
+     "Power weapon"
+    ]
+   },
+   {
+    "role": "STRIKING SCORPION WARRIOR",
+    "datacardAnchor": "Striking-Scorpion-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "STRIKING SCORPION WARRIOR",
+    "group": 2,
+    "datacardId": "blades-of-khaine.striking-scorpion-warrior",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Shuriken pistol",
+     "Chainsword"
+    ]
+   }
+  ],
   "leaderList": [
    {
     "role": "DIRE AVENGER EXARCH",
     "datacardAnchor": "Dire-Avenger-Exarch",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "blades-of-khaine.g1e1.opt1",
@@ -155,7 +236,10 @@
        {
         "id": "blades-of-khaine.g1e1.g2o1",
         "label": "Shimmershield",
-        "weapons": []
+        "weapons": [],
+        "items": [
+         "Shimmershield"
+        ]
        },
        {
         "id": "blades-of-khaine.g1e1.g2o2",
@@ -173,7 +257,7 @@
     "requires": [],
     "rawText": "DIRE AVENGER EXARCH equipped with one of the following options:",
     "notes": [
-     "unresolved weapon(s) in option 'Shimmershield': ['Shimmershield']"
+     "option 'Shimmershield': ['Shimmershield'] is not a weapon on the datacard (kept verbatim in `items`)"
     ],
     "group": 1,
     "datacardId": "blades-of-khaine.dire-avenger-exarch",
@@ -183,6 +267,7 @@
   ],
   "constraints": [],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 BLADES OF KHAINE operative selected from the following list:\n\nDIRE AVENGER EXARCH equipped with one of the following options:\n\nShuriken catapult; fists \n\nTwin shuriken catapult; gun butts\nOr one option from each of the following: \n\nDiresword or power weapon \n\nShimmershield or shuriken pistol\n\nHOWLING BANSHEE EXARCH equipped with one of the following options:\n\nMirrorswords \n\nShuriken pistol; executioner \n\nShuriken pistol; power weapon \n\nShuriken pistol; triskele\n\nTriskele; power weapon \n\nSTRIKING SCORPION EXARCH equipped with one of the following options:\n\nShuriken pistol; biting blade \n\nShuriken pistol; scorpion’s claw and chainsword \n\nTwin shuriken pistols; twin chainswords \n\n7 BLADES OF KHAINE operatives selected from the following list:\n\nDIRE AVENGER WARRIOR\n\nHOWLING BANSHEE WARRIOR\n\nSTRIKING SCORPION WARRIOR"
  },

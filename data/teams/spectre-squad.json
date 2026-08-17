@@ -36,9 +36,11 @@
    ],
    "choices": [
     "VETERAN SERGEANT"
-   ]
+   ],
+   "inList": false
   },
   "slots": 10,
+  "totalOperatives": 11,
   "groups": [
    {
     "index": 1,
@@ -83,6 +85,7 @@
     "datacardAnchor": "Spectre-Vox-Relay-Beacon",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -93,17 +96,35 @@
     "group": 2,
     "datacardId": "spectre-squad.vox-relay-beacon",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "FIELD MEDICAE",
     "datacardAnchor": "Spectre-Field-Medicae",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -111,21 +132,36 @@
     "group": 3,
     "datacardId": "spectre-squad.field-medicae",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Lascarbine",
-     "Lasrifle",
-     "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "GRENADIER",
     "datacardAnchor": "Spectre-Grenadier",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -133,21 +169,36 @@
     "group": 3,
     "datacardId": "spectre-squad.grenadier",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Lascarbine",
-     "Lasrifle",
-     "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "GUIDE",
     "datacardAnchor": "Spectre-Guide",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -155,18 +206,16 @@
     "group": 3,
     "datacardId": "spectre-squad.guide",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Lascarbine",
-     "Lasrifle",
-     "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
     "datacardAnchor": "Spectre-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "spectre-squad.g3e4.opt1",
@@ -194,16 +243,17 @@
     "group": 3,
     "datacardId": "spectre-squad.gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HEAVY GUNNER",
     "datacardAnchor": "Spectre-Heavy-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -214,18 +264,19 @@
     "group": 3,
     "datacardId": "spectre-squad.heavy-gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Laspistol",
      "Missile launcher",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "LOADER",
     "datacardAnchor": "Spectre-Loader",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -236,17 +287,18 @@
     "group": 3,
     "datacardId": "spectre-squad.loader",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Laspistol",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SHARPSHOOTER",
     "datacardAnchor": "Spectre-Sharpshooter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -257,17 +309,18 @@
     "group": 3,
     "datacardId": "spectre-squad.sharpshooter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Long-las",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "STUB-GUNNER",
     "datacardAnchor": "Spectre-Stub-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -278,20 +331,38 @@
     "group": 3,
     "datacardId": "spectre-squad.stub-gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autostubber",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TROOPER",
     "datacardAnchor": "Spectre-Trooper",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -299,21 +370,36 @@
     "group": 3,
     "datacardId": "spectre-squad.trooper",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Lascarbine",
-     "Lasrifle",
-     "Gun butt"
-    ],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "VOX-OPERATOR",
     "datacardAnchor": "Spectre-Vox-Operator",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -321,12 +407,9 @@
     "group": 3,
     "datacardId": "spectre-squad.vox-operator",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Lascarbine",
-     "Lasrifle",
-     "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -335,6 +418,7 @@
     "datacardAnchor": "Spectre-Veteran-Sergeant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -345,11 +429,11 @@
     "group": 1,
     "datacardId": "spectre-squad.veteran-sergeant",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Scoped lascarbine",
      "Bionic arm"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -358,15 +442,35 @@
     "roles": [
      "TROOPER"
     ]
-   },
-   {
-    "kind": "custom",
-    "text": "With one of the following options:",
-    "hook": "spectre-squad.with-one-of-the-following-options"
    }
   ],
   "footnotes": {
    "*": "With one of the following options:"
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "With one of the following options:",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ]
+   }
   },
   "designerNotes": [],
   "rawText": "1 SPECTRE SQUAD VETERAN SERGEANT\n\n1 SPECTRE SQUAD VOX-RELAY BEACON\n\n9 SPECTRE SQUAD operatives selected from the following list:\n\nFIELD MEDICAE*\n\nGRENADIER*\n\nGUIDE*\n\nGUNNER with one of the following options:\n\nMeltagun; fists\n\nPlasma gun; fists\n\nHEAVY GUNNER\n\nLOADER\n\nSHARPSHOOTER\n\nSTUB-GUNNER\n\nTROOPER*\n\nVOX-OPERATOR*\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once.\n\n*With one of the following options:\n\nLasrifle; gun butt\n\nLascarbine; gun butt"

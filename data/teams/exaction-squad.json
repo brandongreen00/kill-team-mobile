@@ -50,9 +50,11 @@
    "alwaysWeapons": [],
    "choices": [
     "PROCTOR-EXACTANT"
-   ]
+   ],
+   "inList": false
   },
   "slots": 10,
+  "totalOperatives": 11,
   "groups": [
    {
     "index": 1,
@@ -89,6 +91,7 @@
     "datacardAnchor": "Arbites-Castigator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -99,17 +102,18 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-castigator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Combat shotgun",
      "Excruciator maul"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "CHIRURGANT",
     "datacardAnchor": "Arbites-Chirurgant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -120,17 +124,18 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-chirurgant",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Combat shotgun",
      "Repression baton"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "LEASHMASTER",
     "datacardAnchor": "Arbites-Leashmaster",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -141,18 +146,19 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-leashmaster",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Combat shotgun",
      "Shotpistol",
      "Repression baton"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "R-VR CYBER-MASTIFF",
     "datacardAnchor": "R-VR-Cyber-mastiff",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -163,16 +169,17 @@
     "group": 2,
     "datacardId": "exaction-squad.r-vr-cyber-mastiff",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Mechanical bite"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MALOCATOR",
     "datacardAnchor": "Arbites-Malocator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -183,17 +190,18 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-malocator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Combat shotgun",
      "Repression baton"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MARKSMAN",
     "datacardAnchor": "Arbites-Marksman",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -204,17 +212,18 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-marksman",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Executioner shotgun",
      "Repression baton"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "REVELATUM",
     "datacardAnchor": "Arbites-Revelatum",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -225,17 +234,18 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-revelatum",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Scoped shotpistol",
      "Repression baton"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SUBDUCTOR",
     "datacardAnchor": "Arbites-Subductor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -246,17 +256,18 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-subductor",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Shotpistol",
      "Shock maul & assault shield"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "VIGILANT",
     "datacardAnchor": "Arbites-Vigilant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -267,17 +278,18 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-vigilant",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Combat shotgun",
      "Repression baton"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "VOX-SIGNIFIER",
     "datacardAnchor": "Arbites-Vox-signifier",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -288,17 +300,18 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-vox-signifier",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Combat shotgun",
      "Repression baton"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
     "datacardAnchor": "Arbites-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "exaction-squad.g2e11.opt1",
@@ -334,8 +347,8 @@
     "group": 2,
     "datacardId": "exaction-squad.arbites-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -344,6 +357,7 @@
     "datacardAnchor": "Arbites-Proctor-exactant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "exaction-squad.g1.opt1",
@@ -371,8 +385,8 @@
     "group": 1,
     "datacardId": "exaction-squad.arbites-proctor-exactant",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -400,6 +414,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 EXACTION SQUAD PROCTOR-EXACTANT operative with one of the following options:\n\nCombat shotgun; repression baton\n\nShotpistol; dominator maul & assault shield\n\n10 EXACTION SQUAD operatives selected from the following list:\n\nCASTIGATOR\n\nCHIRURGANT\n\nLEASHMASTER\n\nR-VR CYBER-MASTIFF\n\nMALOCATOR\n\nMARKSMAN\n\nREVELATUM\n\nSUBDUCTOR\n\nVIGILANT\n\nVOX-SIGNIFIER\n\nGUNNER with one of the following options:\n\nGrenade launcher; repression baton\n\nHeavy stubber; repression baton\n\nWebber; repression baton\n\nOther than GUNNER, SUBDUCTOR and VIGILANT operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two GUNNER operatives (each must have a different option) and up to four SUBDUCTOR operatives."
  },

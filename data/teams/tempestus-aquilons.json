@@ -58,9 +58,11 @@
    "alwaysWeapons": [],
    "choices": [
     "TEMPESTOR"
-   ]
+   ],
+   "inList": false
   },
   "slots": 10,
+  "totalOperatives": 11,
   "groups": [
    {
     "index": 1,
@@ -102,6 +104,7 @@
     "datacardAnchor": "Aquilon-Servo‑Sentry",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "tempestus-aquilons.g2.opt1",
@@ -134,14 +137,15 @@
     "group": 2,
     "datacardId": "tempestus-aquilons.aquilon-servo-sentry",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GRENADIER",
     "datacardAnchor": "Aquilon-Grenadier",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -152,18 +156,19 @@
     "group": 3,
     "datacardId": "tempestus-aquilons.aquilon-grenadier",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Hot‑shot laspistol",
      "Melta bomb",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNFIGHTER",
     "datacardAnchor": "Aquilon-Gunfighter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -174,10 +179,10 @@
     "group": 3,
     "datacardId": "tempestus-aquilons.aquilon-gunfighter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Hot‑shot laspistols"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
@@ -187,6 +192,7 @@
      "Melta carbine",
      "Fists"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -197,8 +203,8 @@
     "group": 3,
     "datacardId": "tempestus-aquilons.aquilon-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -208,6 +214,7 @@
      "Plasma carbine",
      "Fists"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -218,14 +225,15 @@
     "group": 3,
     "datacardId": "tempestus-aquilons.aquilon-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "MARKSMAN",
     "datacardAnchor": "Aquilon-Marksman",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -236,17 +244,18 @@
     "group": 3,
     "datacardId": "tempestus-aquilons.aquilon-marksman",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Hot‑shot long‑las",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PRECURSOR",
     "datacardAnchor": "Aquilon-Precursor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -257,17 +266,18 @@
     "group": 3,
     "datacardId": "tempestus-aquilons.aquilon-precursor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Hot‑shot laspistol",
      "Tempestus dagger"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TROOPER",
     "datacardAnchor": "Aquilon-Trooper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -278,11 +288,11 @@
     "group": 3,
     "datacardId": "tempestus-aquilons.aquilon-trooper",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Hot‑shot lascarbine",
      "Fists"
-    ],
-    "uniqueUnlessRole": false
+    ]
    }
   ],
   "leaderList": [
@@ -291,6 +301,7 @@
     "datacardAnchor": "Aquilon-Tempestor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "tempestus-aquilons.g1.opt1",
@@ -326,8 +337,8 @@
     "group": 1,
     "datacardId": "tempestus-aquilons.aquilon-tempestor",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -339,6 +350,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 TEMPESTUS AQUILON TEMPESTOR operative with one of the following options:\n\nHot-shot laspistol; power weapon\n\nRelic bolt pistol; chainsword\n\nHot-shot lascarbine; fists\n\n1 TEMPESTUS AQUILON SERVO-SENTRY with one of the following options:\n\nFlamer\n\nGrenade launcher\n\nHot-shot volley gun\n\n9 TEMPESTUS AQUILON operatives selected from the following list:\n\nGRENADIER\n\nGUNFIGHTER\n\nGUNNER with melta carbine and fists\n\nGUNNER with plasma carbine and fists\n\nMARKSMAN\n\nPRECURSOR\n\nTROOPER\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once."
  },

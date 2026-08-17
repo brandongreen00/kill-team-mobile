@@ -31,9 +31,11 @@
    "loadoutMode": "fixed",
    "fixedWeapons": [],
    "alwaysWeapons": [],
-   "choices": []
+   "choices": [],
+   "inList": false
   },
   "slots": 5,
+  "totalOperatives": 5,
   "groups": [
    {
     "index": 1,
@@ -60,9 +62,32 @@
     "datacardAnchor": "Sorcerer-of-Destiny",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.fn1o1",
+      "label": "Inferno bolt pistol",
+      "weapons": [
+       "Inferno bolt pistol"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o2",
+      "label": "Prosperine khopesh",
+      "weapons": [
+       "Prosperine khopesh"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o3",
+      "label": "Warpflame pistol",
+      "weapons": [
+       "Warpflame pistol"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "^1",
     "requires": [],
@@ -70,23 +95,44 @@
     "group": 1,
     "datacardId": "warpcoven.sorcerer-of-destiny",
     "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "^1",
     "alwaysWeapons": [
      "Doombolt",
-     "Inferno bolt pistol",
-     "Warpflame pistol",
-     "Force stave",
-     "Prosperine khopesh"
-    ],
-    "uniqueUnlessRole": true
+     "Force stave"
+    ]
    },
    {
     "role": "SORCERER TEMPYRION",
     "datacardAnchor": "Sorcerer-of-Tempyrion",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.fn1o1",
+      "label": "Inferno bolt pistol",
+      "weapons": [
+       "Inferno bolt pistol"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o2",
+      "label": "Prosperine khopesh",
+      "weapons": [
+       "Prosperine khopesh"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o3",
+      "label": "Warpflame pistol",
+      "weapons": [
+       "Warpflame pistol"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "^1",
     "requires": [],
@@ -94,23 +140,44 @@
     "group": 1,
     "datacardId": "warpcoven.sorcerer-of-tempyrion",
     "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "^1",
     "alwaysWeapons": [
      "Fluxblast",
-     "Inferno bolt pistol",
-     "Warpflame pistol",
-     "Force stave",
-     "Prosperine khopesh"
-    ],
-    "uniqueUnlessRole": true
+     "Force stave"
+    ]
    },
    {
     "role": "SORCERER WARPFIRE",
     "datacardAnchor": "Sorcerer-of-Warpfire",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.fn1o1",
+      "label": "Inferno bolt pistol",
+      "weapons": [
+       "Inferno bolt pistol"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o2",
+      "label": "Prosperine khopesh",
+      "weapons": [
+       "Prosperine khopesh"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o3",
+      "label": "Warpflame pistol",
+      "weapons": [
+       "Warpflame pistol"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "^1",
     "requires": [],
@@ -118,21 +185,20 @@
     "group": 1,
     "datacardId": "warpcoven.sorcerer-of-warpfire",
     "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "^1",
     "alwaysWeapons": [
      "Firestorm",
-     "Inferno bolt pistol",
      "Mindburn",
-     "Warpflame pistol",
-     "Force stave",
-     "Prosperine khopesh"
-    ],
-    "uniqueUnlessRole": true
+     "Force stave"
+    ]
    },
    {
     "role": "RUBRIC MARINE GUNNER",
     "datacardAnchor": "Rubric-Marine-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "warpcoven.g1e4.opt1",
@@ -146,6 +212,7 @@
       "id": "warpcoven.g1e4.opt2",
       "label": "Soulreaper cannon^2; fists",
       "weapons": [
+       "Soulreaper cannon",
        "Fists"
       ]
      }
@@ -156,22 +223,18 @@
     "footnoteGroup": null,
     "requires": [],
     "rawText": "RUBRIC MARINE GUNNER with one of the following options:",
-    "notes": [
-     "unresolved weapon(s) in option 'Soulreaper cannon^2; fists': ['Soulreaper cannon^2']"
-    ],
     "group": 1,
     "datacardId": "warpcoven.rubric-marine-gunner",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Soulreaper cannon"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "RUBRIC MARINE ICON BEARER",
     "datacardAnchor": "Rubric-Marine-Icon-Bearer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -182,17 +245,18 @@
     "group": 1,
     "datacardId": "warpcoven.rubric-marine-icon-bearer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Inferno boltgun",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "RUBRIC MARINE WARRIOR",
     "datacardAnchor": "Rubric-Marine-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -203,17 +267,18 @@
     "group": 1,
     "datacardId": "warpcoven.rubric-marine-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Inferno boltgun",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TZAANGOR CHAMPION",
     "datacardAnchor": "Tzaangor-Champion",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "warpcoven.g1e7.opt1",
@@ -239,14 +304,15 @@
     "group": 1,
     "datacardId": "warpcoven.tzaangor-champion",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "TZAANGOR HORN BEARER",
     "datacardAnchor": "Tzaangor-Horn-Bearer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -257,16 +323,17 @@
     "group": 1,
     "datacardId": "warpcoven.tzaangor-horn-bearer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Dagger"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TZAANGOR ICON BEARER",
     "datacardAnchor": "Tzaangor-Icon-Bearer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -277,16 +344,17 @@
     "group": 1,
     "datacardId": "warpcoven.tzaangor-icon-bearer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Dagger"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TZAANGOR WARRIOR",
     "datacardAnchor": "Tzaangor-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "warpcoven.g1e10.opt1",
@@ -320,8 +388,8 @@
     "group": 1,
     "datacardId": "warpcoven.tzaangor-warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [],
@@ -336,11 +404,6 @@
     "roles": [
      "WARRIOR"
     ]
-   },
-   {
-    "kind": "custom",
-    "text": "With force stave, PSYCHIC weapons on their datacard and one of the following options:",
-    "hook": "warpcoven.with-force-stave-psychic-weapons-on"
    },
    {
     "kind": "maxItem",
@@ -362,6 +425,51 @@
    "^1": "With force stave, PSYCHIC weapons on their datacard and one of the following options:",
    "^2": "Your kill team can only include up to one warpflame pistol and up to one soulreaper cannon.",
    "^3": "These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total."
+  },
+  "footnoteOptions": {
+   "^1": {
+    "text": "With force stave, PSYCHIC weapons on their datacard and one of the following options:",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.fn1o1",
+      "label": "Inferno bolt pistol",
+      "weapons": [
+       "Inferno bolt pistol"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o2",
+      "label": "Prosperine khopesh",
+      "weapons": [
+       "Prosperine khopesh"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o3",
+      "label": "Warpflame pistol",
+      "weapons": [
+       "Warpflame pistol"
+      ]
+     }
+    ],
+    "unresolvedFixed": [
+     "force stave, PSYCHIC weapons on their datacard"
+    ]
+   },
+   "^2": {
+    "text": "Your kill team can only include up to one warpflame pistol and up to one soulreaper cannon.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   },
+   "^3": {
+    "text": "These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "5 WARPCOVEN operatives selected from the following list:\n\nSORCERER DESTINY^1\n\nSORCERER TEMPYRION^1\n\nSORCERER WARPFIRE^1\n\nRUBRIC MARINE GUNNER with one of the following options:\n\nWarpflamer; fists\n\nSoulreaper cannon^2; fists\n\nRUBRIC MARINE ICON BEARER\n\nRUBRIC MARINE WARRIOR\n\nTZAANGOR CHAMPION^3 with one of the following options:\n\nGreataxe\n\nGreatblade\n\nTZAANGOR HORN BEARER^3\n\nTZAANGOR ICON BEARER^3\n\nTZAANGOR WARRIOR^3 with one of the following options:\n\nTzaangor blades\n\nTzaangor blade & shield\n\nAutopistol; chainsword\n\nYou must select at least one friendly SORCERER operative. Other than WARRIOR operatives, your kill team can only include each operative on this list once.\n\n^1With force stave, PSYCHIC weapons on their datacard and one of the following options:\n\nInferno bolt pistol\n\nProsperine khopesh\n\nWarpflame pistol^2\n\n^2Your kill team can only include up to one warpflame pistol and up to one soulreaper cannon.\n\n^3These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total."
@@ -1514,7 +1622,10 @@
  ],
  "markerGuide": "",
  "notes": [
-  "no datacard in this team carries the LEADER keyword"
+  "SORCERER DESTINY: footnote ^1 also grants ['force stave, PSYCHIC weapons on their datacard'] — not a named datacard weapon, left for the team module",
+  "SORCERER TEMPYRION: footnote ^1 also grants ['force stave, PSYCHIC weapons on their datacard'] — not a named datacard weapon, left for the team module",
+  "SORCERER WARPFIRE: footnote ^1 also grants ['force stave, PSYCHIC weapons on their datacard'] — not a named datacard weapon, left for the team module",
+  "no datacard in this team carries the LEADER keyword — the leader is not marked on the source page"
  ],
  "rareWeaponRules": [
   "Mindburn",

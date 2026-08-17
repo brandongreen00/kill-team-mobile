@@ -43,14 +43,20 @@
      "choices": [
       {
        "id": "death-korps.g1.g1o1",
-       "label": "Bolt pistol, plasma pistol",
+       "label": "Bolt pistol",
        "weapons": [
-        "Bolt pistol",
-        "Plasma pistol"
+        "Bolt pistol"
        ]
       },
       {
        "id": "death-korps.g1.g1o2",
+       "label": "plasma pistol",
+       "weapons": [
+        "Plasma pistol"
+       ]
+      },
+      {
+       "id": "death-korps.g1.g1o3",
        "label": "relic laspistol",
        "weapons": [
         "Relic laspistol"
@@ -84,9 +90,11 @@
    "alwaysWeapons": [],
    "choices": [
     "WATCHMASTER"
-   ]
+   ],
+   "inList": false
   },
   "slots": 13,
+  "totalOperatives": 14,
   "groups": [
    {
     "index": 1,
@@ -135,6 +143,7 @@
     "datacardAnchor": "Death-Korps-Trooper",
     "count": 4,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -145,17 +154,18 @@
     "group": 2,
     "datacardId": "death-korps.trooper",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "BRUISER",
     "datacardAnchor": "Death-Korps-Bruiser",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -166,23 +176,30 @@
     "group": 3,
     "datacardId": "death-korps.bruiser",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Trench club"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "CONFIDANT",
     "datacardAnchor": "Death-Korps-Confidant",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "death-korps.g3e2.opt1",
       "label": "Boltgun or lasgun; bayonet",
       "weapons": [
        "Bayonet"
+      ],
+      "choiceGroups": [
+       [
+        "Boltgun",
+        "Lasgun"
+       ]
       ]
      },
      {
@@ -190,6 +207,12 @@
       "label": "Bolt pistol or relic laspistol; chainsword",
       "weapons": [
        "Chainsword"
+      ],
+      "choiceGroups": [
+       [
+        "Bolt pistol",
+        "Relic laspistol"
+       ]
       ]
      }
     ],
@@ -199,20 +222,16 @@
     "footnoteGroup": null,
     "requires": [],
     "rawText": "CONFIDANT with one of the following options:",
-    "notes": [
-     "unresolved weapon(s) in option 'Boltgun or lasgun; bayonet': ['Boltgun or lasgun']",
-     "unresolved weapon(s) in option 'Bolt pistol or relic laspistol; chainsword': ['Bolt pistol or relic laspistol']"
-    ],
     "group": 3,
     "datacardId": "death-korps.confidant",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Boltgun",
      "Lasgun",
      "Relic laspistol"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
@@ -222,6 +241,7 @@
      "Bayonet",
      "Flamer"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -232,8 +252,8 @@
     "group": 3,
     "datacardId": "death-korps.gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -243,6 +263,7 @@
      "Bayonet",
      "Grenade launcher"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -253,8 +274,8 @@
     "group": 3,
     "datacardId": "death-korps.gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -264,6 +285,7 @@
      "Bayonet",
      "Meltagun"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -274,8 +296,8 @@
     "group": 3,
     "datacardId": "death-korps.gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -285,6 +307,7 @@
      "Bayonet",
      "Plasma gun"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -295,14 +318,15 @@
     "group": 3,
     "datacardId": "death-korps.gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "MEDIC",
     "datacardAnchor": "Death-Korps-Medic",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -313,17 +337,18 @@
     "group": 3,
     "datacardId": "death-korps.medic",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SAPPER",
     "datacardAnchor": "Death-Korps-Sapper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -334,18 +359,19 @@
     "group": 3,
     "datacardId": "death-korps.sapper",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Remote detonator",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SNIPER",
     "datacardAnchor": "Death-Korps-Sniper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -356,17 +382,18 @@
     "group": 3,
     "datacardId": "death-korps.sniper",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Long-las",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SPOTTER",
     "datacardAnchor": "Death-Korps-Spotter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -377,18 +404,19 @@
     "group": 3,
     "datacardId": "death-korps.spotter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Mortar barrage",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TROOPER",
     "datacardAnchor": "Death-Korps-Trooper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -399,17 +427,18 @@
     "group": 3,
     "datacardId": "death-korps.trooper",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "VETERAN",
     "datacardAnchor": "Death-Korps-Veteran",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -420,17 +449,18 @@
     "group": 3,
     "datacardId": "death-korps.veteran",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Bionic arm"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "VOX-OPERATOR",
     "datacardAnchor": "Death-Korps-Vox-Operator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -441,17 +471,18 @@
     "group": 3,
     "datacardId": "death-korps.vox-operator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "ZEALOT",
     "datacardAnchor": "Death-Korps-Zealot",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -462,11 +493,11 @@
     "group": 3,
     "datacardId": "death-korps.zealot",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -475,6 +506,7 @@
     "datacardAnchor": "Death-Korps-Watchmaster",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "death-korps.g1.opt1",
@@ -492,14 +524,20 @@
       "choices": [
        {
         "id": "death-korps.g1.g1o1",
-        "label": "Bolt pistol, plasma pistol",
+        "label": "Bolt pistol",
         "weapons": [
-         "Bolt pistol",
-         "Plasma pistol"
+         "Bolt pistol"
         ]
        },
        {
         "id": "death-korps.g1.g1o2",
+        "label": "plasma pistol",
+        "weapons": [
+         "Plasma pistol"
+        ]
+       },
+       {
+        "id": "death-korps.g1.g1o3",
         "label": "relic laspistol",
         "weapons": [
          "Relic laspistol"
@@ -533,14 +571,11 @@
     "footnoteGroup": null,
     "requires": [],
     "rawText": "1 DEATH KORPS WATCHMASTER operative with the following:",
-    "notes": [
-     "unresolved fixed weapon(s) 'the following': ['the following']"
-    ],
     "group": 1,
     "datacardId": "death-korps.watchmaster",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -558,6 +593,14 @@
   ],
   "footnotes": {
    "*": "Up to four times, instead of selecting one of these TROOPER operatives, you can select one DEATH KORPS ploy to cost you 0CP for the battle."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "Up to four times, instead of selecting one of these TROOPER operatives, you can select one DEATH KORPS ploy to cost you 0CP for the battle.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 DEATH KORPS WATCHMASTER operative with the following:\n\nBoltgun; bayonet\n\nOr one option from each of the following:\n\nBolt pistol, plasma pistol or relic laspistol\n\nChainsword or power weapon\n\n4 TROOPER operatives*\n\n9 DEATH KORPS operatives selected from the following list:\n\nBRUISER\n\nCONFIDANT with one of the following options:\n\nBoltgun or lasgun; bayonet\n\nBolt pistol or relic laspistol; chainsword\n\nGUNNER with bayonet and flamer\n\nGUNNER with bayonet and grenade launcher\n\nGUNNER with bayonet and meltagun\n\nGUNNER with bayonet and plasma gun\n\nMEDIC\n\nSAPPER\n\nSNIPER\n\nSPOTTER\n\nTROOPER\n\nVETERAN\n\nVOX-OPERATOR\n\nZEALOT\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once.\n\n* Up to four times, instead of selecting one of these TROOPER operatives, you can select one DEATH KORPS ploy to cost you 0CP for the battle."

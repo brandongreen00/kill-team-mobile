@@ -36,14 +36,16 @@
    ],
    "choices": [
     "VULGRAR THRICE-CURSED"
-   ]
+   ],
+   "inList": true
   },
-  "slots": 0,
+  "slots": 12,
+  "totalOperatives": 12,
   "groups": [
    {
     "index": 1,
-    "count": 1,
-    "kind": "list",
+    "count": 11,
+    "kind": "every",
     "roles": [
      "VULGRAR THRICE-CURSED",
      "BLOATSPAWN",
@@ -54,14 +56,47 @@
      "MUTANT"
     ],
     "rawText": "Every GELLERPOX INFECTED operative in the following list:"
+   },
+   {
+    "index": 2,
+    "count": 1,
+    "kind": "list",
+    "roles": [
+     "CURSEMITE",
+     "EYESTINGER SWARM",
+     "SLUDGE-GRUB"
+    ],
+    "rawText": "Specified number of GELLERPOX INFECTED operatives selected from the following list:"
    }
   ],
   "list": [
+   {
+    "role": "VULGRAR THRICE-CURSED",
+    "datacardAnchor": "Vulgrar-Thrice-Cursed",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 VULGRAR THRICE-CURSED",
+    "group": 1,
+    "datacardId": "gellerpox-infected.vulgrar-thrice-cursed",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Pyregut",
+     "Fleshmelded weapons"
+    ]
+   },
    {
     "role": "BLOATSPAWN",
     "datacardAnchor": "Bloatspawn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -82,6 +117,7 @@
     "datacardAnchor": "Fleshscreamer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -101,6 +137,7 @@
     "datacardAnchor": "Lumberghast",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -120,6 +157,7 @@
     "datacardAnchor": "Glitchling",
     "count": 4,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -143,6 +181,7 @@
      "Frag grenade",
      "Heavy axe"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -151,8 +190,9 @@
     "requires": [],
     "rawText": "1 MUTANT with frag grenade and heavy axe",
     "group": 1,
-    "datacardId": "",
-    "isLeader": false
+    "datacardId": "gellerpox-infected.mutant",
+    "isLeader": false,
+    "alwaysWeapons": []
    },
    {
     "role": "MUTANT",
@@ -162,6 +202,7 @@
      "Frag grenade",
      "Improvised weapon"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -170,8 +211,71 @@
     "requires": [],
     "rawText": "2 MUTANT with frag grenade and improvised weapon",
     "group": 1,
-    "datacardId": "",
-    "isLeader": false
+    "datacardId": "gellerpox-infected.mutant",
+    "isLeader": false,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "CURSEMITE",
+    "datacardAnchor": "Cursemite",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CURSEMITE",
+    "group": 2,
+    "datacardId": "gellerpox-infected.cursemite",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bloodsucking proboscis"
+    ]
+   },
+   {
+    "role": "EYESTINGER SWARM",
+    "datacardAnchor": "Eyestinger-Swarm",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "EYESTINGER SWARM",
+    "group": 2,
+    "datacardId": "gellerpox-infected.eyestinger-swarm",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Swarm",
+     "Sting"
+    ]
+   },
+   {
+    "role": "SLUDGE-GRUB",
+    "datacardAnchor": "Sludge-Grub-1",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SLUDGE-GRUB",
+    "group": 2,
+    "datacardId": "gellerpox-infected.sludge-grub",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Acid spit",
+     "Fanged maw"
+    ]
    }
   ],
   "leaderList": [
@@ -180,6 +284,7 @@
     "datacardAnchor": "Vulgrar-Thrice-Cursed",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -201,14 +306,10 @@
     "kind": "custom",
     "text": "If you selected the MUTOID VERMIN faction equipment:",
     "hook": "gellerpox-infected.if-you-selected-the-mutoid-vermin"
-   },
-   {
-    "kind": "custom",
-    "text": "Specified number of GELLERPOX INFECTED operatives selected from the following list:",
-    "hook": "gellerpox-infected.specified-number-of-gellerpox-infected-operatives"
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "Every GELLERPOX INFECTED operative in the following list:\n\n1 VULGRAR THRICE-CURSED\n\n1 BLOATSPAWN\n\n1 FLESHSCREAMER\n\n1 LUMBERGHAST\n\n4 GLITCHLING\n\n1 MUTANT with frag grenade and heavy axe\n\n2 MUTANT with frag grenade and improvised weapon\n\nIf you selected the MUTOID VERMIN faction equipment:\n\nSpecified number of GELLERPOX INFECTED operatives selected from the following list:\n\nCURSEMITE\n\nEYESTINGER SWARM\n\nSLUDGE-GRUB"
  },
@@ -1008,8 +1109,7 @@
  ],
  "markerGuide": "",
  "notes": [
-  "selection entry 'MUTANT' could not be linked to a datacard (anchor none)",
-  "selection entry 'MUTANT' could not be linked to a datacard (anchor none)"
+  "selection entry 'MUTANT' has no datacard link on the page; matched by name to Mutant"
  ],
  "rareWeaponRules": [
   "Engineered",

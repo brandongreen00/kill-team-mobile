@@ -34,9 +34,11 @@
    "choices": [
     "ASPIRING CHAMPION",
     "CHOSEN"
-   ]
+   ],
+   "inList": false
   },
   "slots": 5,
+  "totalOperatives": 6,
   "groups": [
    {
     "index": 1,
@@ -71,6 +73,7 @@
     "datacardAnchor": "Legionary-Anointed",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -81,17 +84,18 @@
     "group": 2,
     "datacardId": "legionary.anointed",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Daemonic claw"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "BALEFIRE ACOLYTE",
     "datacardAnchor": "Legionary-Balefire-Acolyte",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -102,19 +106,20 @@
     "group": 2,
     "datacardId": "legionary.balefire-acolyte",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Fireblast",
      "Life siphon",
      "Fell dagger"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "BUTCHER",
     "datacardAnchor": "Legionary-Butcher",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -125,17 +130,18 @@
     "group": 2,
     "datacardId": "legionary.butcher",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Double-handed chainaxe"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "ICON BEARER",
     "datacardAnchor": "Legionary-Icon-Bearer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "legionary.g2e4.opt1",
@@ -163,14 +169,15 @@
     "group": 2,
     "datacardId": "legionary.icon-bearer",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "SHRIVETALON",
     "datacardAnchor": "Legionary-Shrivetalon",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -181,17 +188,18 @@
     "group": 2,
     "datacardId": "legionary.shrivetalon",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Flensing blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Legionary-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "legionary.g2e6.opt1",
@@ -219,14 +227,15 @@
     "group": 2,
     "datacardId": "legionary.warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
     "datacardAnchor": "Legionary-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "legionary.g2e7.opt1",
@@ -265,14 +274,15 @@
     "group": 2,
     "datacardId": "legionary.gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HEAVY GUNNER",
     "datacardAnchor": "Legionary-Heavy-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "legionary.g2e8.opt1",
@@ -311,8 +321,8 @@
     "group": 2,
     "datacardId": "legionary.heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -321,6 +331,7 @@
     "datacardAnchor": "Legionary-Aspiring-Champion",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [
      {
@@ -349,15 +360,27 @@
       "choices": [
        {
         "id": "legionary.g1e1.g2o1",
-        "label": "Power fist, power maul, power weapon",
+        "label": "Power fist",
         "weapons": [
-         "Power fist",
-         "Power maul",
-         "Power weapon"
+         "Power fist"
         ]
        },
        {
         "id": "legionary.g1e1.g2o2",
+        "label": "power maul",
+        "weapons": [
+         "Power maul"
+        ]
+       },
+       {
+        "id": "legionary.g1e1.g2o3",
+        "label": "power weapon",
+        "weapons": [
+         "Power weapon"
+        ]
+       },
+       {
+        "id": "legionary.g1e1.g2o4",
         "label": "tainted chainsword",
         "weapons": [
          "Tainted chainsword"
@@ -374,14 +397,15 @@
     "group": 1,
     "datacardId": "legionary.aspiring-champion",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "CHOSEN",
     "datacardAnchor": "Legionary-Chosen",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "legionary.g1e2.opt1",
@@ -409,8 +433,8 @@
     "group": 1,
     "datacardId": "legionary.chosen",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -422,6 +446,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 LEGIONARY operative selected from the following list:\n\nASPIRING CHAMPION with one option from each of the following:\n\nPlasma pistol or tainted bolt pistol\n\nPower fist, power maul, power weapon or tainted chainsword\n\nCHOSEN with one of the following options:\n\nPlasma pistol; daemon blade\n\nTainted bolt pistol; daemon blade\n\n5 LEGIONARY operatives selected from the following list:\n\nANOINTED\n\nBALEFIRE ACOLYTE\n\nBUTCHER\n\nICON BEARER with one of the following options:\n\nBoltgun; fists\n\nBolt pistol; chainsword\n\nSHRIVETALON\n\nWARRIOR with one of the following options:\n\nBoltgun; fists\n\nBolt pistol; chainsword\n\nGUNNER with one of the following options:\n\nBolt pistol; flamer; fists\n\nBolt pistol; meltagun; fists\n\nBolt pistol; plasma gun; fists\n\nHEAVY GUNNER with one of the following options:\n\nBolt pistol; heavy bolter; fists\n\nBolt pistol; missile launcher; fists\n\nBolt pistol; reaper chaincannon; fists\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

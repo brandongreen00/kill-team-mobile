@@ -1,36 +1,47 @@
 /**
- * App shell. One responsive codebase: phone portrait uses the bottom tab bar, desktop
- * (>=900px) uses the three-column layout.
+ * App shell. One responsive codebase: phone portrait uses the bottom tab bar and keeps the
+ * board on its own full-height page; desktop (>=900px) shows board + rails together.
+ *
+ * The dice/decision surface is deliberately available on BOTH layouts: on a phone the
+ * decision panel docks under the board so a reactive window never hides the dice.
  */
 import { useEffect, useState } from 'preact/hooks';
 import { Board } from './Board.tsx';
+import { SequenceOverlay } from './SequenceOverlay.tsx';
+import { DecisionPanel } from './DecisionPanel.tsx';
+import { ActivationPanel } from './ActivationPanel.tsx';
+import { Setup, placeAt } from './flow/Setup.tsx';
 import { Store, setStore } from './store.ts';
 import { makeContext } from '../core/context.ts';
 import { SeededRng } from '../core/rng.ts';
 import { createBattle } from '../core/init.ts';
-import { loadMaps } from './data.ts';
-import type { GameState, KillzoneMap } from '../core/types.ts';
+import { loadMaps, loadTeams, type TeamData } from './data.ts';
+import type { GameState, KillzoneMap, PlayerId } from '../core/types.ts';
 
 type Tab = 'board' | 'play' | 'log';
 
 export function App() {
   const [maps, setMaps] = useState<KillzoneMap[]>([]);
+  const [teams, setTeams] = useState<TeamData[]>([]);
   const [store, setLocalStore] = useState<Store | null>(null);
   const [, force] = useState(0);
   const [tab, setTab] = useState<Tab>('board');
+  const [placement, setPlacement] = useState<{ operativeId: string; player: PlayerId } | null>(null);
 
   useEffect(() => {
-    loadMaps().then((m) => {
+    void (async () => {
+      const [m, t] = await Promise.all([loadMaps(), loadTeams()]);
       setMaps(m);
-      if (m.length > 0) {
-        const ctx = makeContext({ rng: new SeededRng(1) });
-        for (const map of m) ctx.maps.set(map.id, map);
-        const s = new Store(createBattle(ctx, { map: m[0]!, seed: 1, mode: 'sandbox' }), ctx);
-        setStore(s);
-        setLocalStore(s);
-        s.subscribe(() => force((n) => n + 1));
-      }
-    });
+      setTeams(t);
+      const ctx = makeContext({ rng: new SeededRng(1) });
+      for (const map of m) ctx.maps.set(map.id, map);
+      for (const team of t) for (const dc of team.datacards ?? []) ctx.datacards.set(dc.id, dc);
+      const map = m[0] ?? fallbackMap();
+      const s = new Store(createBattle(ctx, { map, seed: 1, mode: 'match' }), ctx);
+      setStore(s);
+      setLocalStore(s);
+      s.subscribe(() => force((n) => n + 1));
+    })();
   }, []);
 
   if (!store) {
@@ -42,10 +53,6 @@ export function App() {
         <main class="page">
           <div class="card">
             <h2>Loading</h2>
-            <p class="muted">
-              Preparing killzone data. If no maps appear, run <code>pnpm maps:extract</code> to generate{' '}
-              <code>data/maps</code> from the official Approved Ops cards.
-            </p>
           </div>
         </main>
       </>
@@ -53,6 +60,12 @@ export function App() {
   }
 
   const state: GameState = store.state;
+  const decision = state.pending[0];
+
+  // A reactive window must be answered before anything else: jump to it on a phone.
+  useEffect(() => {
+    if (decision && tab === 'log') setTab('board');
+  }, [decision?.id]);
 
   const pickMap = (id: string) => {
     const map = maps.find((m) => m.id === id);
@@ -60,59 +73,100 @@ export function App() {
     store.reset(createBattle(store.ctx, { map, seed: state.seed, mode: state.mode }));
   };
 
+  const boardPane = (
+    <div class="board-wrap">
+      <Board
+        state={state}
+        overlays={<SequenceOverlay state={state} decision={decision} />}
+        onBoardClick={(world) => {
+          if (!placement) return;
+          if (placeAt(store, placement, world)) setPlacement(null);
+        }}
+      />
+    </div>
+  );
+
+  const playPane = (
+    <>
+      {decision && <DecisionPanel store={store} decision={decision} />}
+      <Setup store={store} teams={teams} pendingPlacement={placement} setPendingPlacement={setPlacement} />
+      <ActivationPanel store={store} />
+      <section class="card">
+        <h2>Battle</h2>
+        <div class="row">
+          <span class="tag">TP {Math.max(1, state.turningPoint)}/{state.maxTurningPoints}</span>
+          <span class="tag">{state.phase}</span>
+          {state.initiative && <span class="tag">initiative: {state.initiative}</span>}
+        </div>
+        <div class="row" style={{ marginTop: 8 }}>
+          {(['p1', 'p2'] as PlayerId[]).map((p) => (
+            <span key={p} class="tag">
+              {p.toUpperCase()} · {state.teams[p].vp} VP · {state.teams[p].cp} CP
+            </span>
+          ))}
+        </div>
+        <div class="row" style={{ marginTop: 8 }}>
+          <button onClick={() => store.dispatch({ t: 'AdvancePhase' })}>Advance phase</button>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Killzone</h2>
+        <select value={state.map.id} onChange={(e) => pickMap((e.target as HTMLSelectElement).value)}>
+          {maps.length === 0 && <option value={state.map.id}>{state.map.name}</option>}
+          {maps.map((m) => (
+            <option key={m.id} value={m.id}>
+              {m.name}
+            </option>
+          ))}
+        </select>
+        <p class="muted">
+          {state.map.board.w}" × {state.map.board.h}" · {state.map.features.length} terrain features ·{' '}
+          {state.map.closeQuarters ? 'Close Quarters' : 'open killzone'} · {teams.length} kill teams loaded
+        </p>
+      </section>
+    </>
+  );
+
+  const logPane = (
+    <section class="card">
+      <h2>Battle log</h2>
+      <div class="log">
+        {state.log.length === 0 && <p class="muted">Nothing has happened yet.</p>}
+        {state.log.slice(-250).map((l) => (
+          <div key={l.seq} class={l.kind}>
+            <span class="muted">TP{l.tp}</span> {l.text}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+
   return (
     <>
       <header class="topbar">
         <h1>Kill Team</h1>
         <span class="tag">{state.map.name}</span>
         <div class="spacer" />
-        <span class="tag">TP {Math.max(1, state.turningPoint)}</span>
+        {decision && <span class="tag" style={{ color: 'var(--accent)' }}>decision: {decision.who}</span>}
       </header>
 
-      <div class="board-wrap" style={{ display: tab === 'board' ? 'grid' : 'none' }}>
-        <Board state={state} />
+      {/* Desktop: board centre, rails either side. Phone: one page at a time. */}
+      <div class="layout desktop-only">
+        <aside class="page">{playPane}</aside>
+        {boardPane}
+        <aside class="page">{logPane}</aside>
       </div>
 
-      <main class="page" style={{ display: tab === 'board' ? 'none' : 'block' }}>
-        {tab === 'play' && (
-          <>
-            <div class="card">
-              <h2>Killzone</h2>
-              <select value={state.map.id} onChange={(e) => pickMap((e.target as HTMLSelectElement).value)}>
-                {maps.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.name}
-                  </option>
-                ))}
-              </select>
-              <p class="muted">
-                {state.map.board.w}" × {state.map.board.h}" · {state.map.features.length} terrain features ·{' '}
-                {state.map.closeQuarters ? 'Close Quarters' : 'open killzone'}
-              </p>
-            </div>
-            <div class="card">
-              <h2>Score</h2>
-              <div class="row">
-                <span class="tag">P1 {state.teams.p1.vp} VP · {state.teams.p1.cp} CP</span>
-                <span class="tag">P2 {state.teams.p2.vp} VP · {state.teams.p2.cp} CP</span>
-              </div>
-            </div>
-          </>
-        )}
-        {tab === 'log' && (
-          <div class="card">
-            <h2>Battle log</h2>
-            <div class="log">
-              {state.log.length === 0 && <p class="muted">Nothing has happened yet.</p>}
-              {state.log.slice(-200).map((l) => (
-                <div key={l.seq} class={l.kind}>
-                  <span class="muted">TP{l.tp}</span> {l.text}
-                </div>
-              ))}
-            </div>
+      <div class="phone-only" style={{ display: 'contents' }}>
+        <div style={{ display: tab === 'board' ? 'contents' : 'none' }}>{boardPane}</div>
+        {tab === 'board' && decision && (
+          <div class="page dock">
+            <DecisionPanel store={store} decision={decision} />
           </div>
         )}
-      </main>
+        {tab === 'play' && <main class="page">{playPane}</main>}
+        {tab === 'log' && <main class="page">{logPane}</main>}
+      </div>
 
       <nav class="m-tabs" role="tablist">
         {(['board', 'play', 'log'] as Tab[]).map((t) => (
@@ -124,4 +178,29 @@ export function App() {
       </nav>
     </>
   );
+}
+
+/** Used only until `pnpm maps:extract` has produced data/maps — keeps the app usable. */
+function fallbackMap(): KillzoneMap {
+  const rect = (x: number, y: number, w: number, h: number) => [
+    { x, y },
+    { x: x + w, y },
+    { x: x + w, y: y + h },
+    { x, y: y + h },
+  ];
+  return {
+    id: 'placeholder',
+    killzone: 'volkus',
+    name: 'No killzone data — run pnpm maps:extract',
+    board: { w: 30, h: 22, grid: 1 },
+    closeQuarters: false,
+    dropZones: { p1: [rect(0, 0, 6, 22)], p2: [rect(24, 0, 6, 22)] },
+    territories: { p1: [rect(0, 0, 15, 22)], p2: [rect(15, 0, 15, 22)] },
+    killzoneEdges: { p1: [], p2: [], neutral: [] },
+    centreLine: { a: { x: 15, y: 0 }, b: { x: 15, y: 22 } },
+    flankLine: { a: { x: 0, y: 11 }, b: { x: 30, y: 11 } },
+    objectives: [{ id: 'centre', kind: 'centre', pos: { x: 15, y: 11 }, z: 0 }],
+    features: [],
+    source: { card: 'none', pxPerInch: 24, extractedAt: '', tool: 'fallback' },
+  };
 }

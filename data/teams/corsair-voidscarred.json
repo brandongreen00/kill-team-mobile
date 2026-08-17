@@ -51,9 +51,11 @@
    "alwaysWeapons": [],
    "choices": [
     "FELARCH"
-   ]
+   ],
+   "inList": false
   },
   "slots": 8,
+  "totalOperatives": 9,
   "groups": [
    {
     "index": 1,
@@ -89,6 +91,7 @@
     "datacardAnchor": "Voidscarred-Fate-Dealer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -99,18 +102,19 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-fate-dealer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Ranger long rifle",
      "Shuriken pistol",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
     "datacardAnchor": "Voidscarred-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "corsair-voidscarred.g2e2.opt1",
@@ -140,14 +144,15 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HEAVY GUNNER",
     "datacardAnchor": "Voidscarred-Heavy-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "corsair-voidscarred.g2e3.opt1",
@@ -177,14 +182,15 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "KURNATHI",
     "datacardAnchor": "Voidscarred-Kurnathi",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -195,17 +201,18 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-kurnathi",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Shuriken pistol",
      "Dual power weapons"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "KURNITE HUNTER",
     "datacardAnchor": "Voidscarred-Kurnite-Hunter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -216,18 +223,19 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-kurnite-hunter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Faolchú",
      "Shuriken pistol",
      "Power weapon"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SHADE RUNNER",
     "datacardAnchor": "Voidscarred-Shade-Runner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -238,18 +246,19 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-shade-runner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Shuriken pistol",
      "Throwing blades",
      "Hekatarii blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SOUL WEAVER",
     "datacardAnchor": "Voidscarred-Soul-Weaver",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -260,17 +269,18 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-soul-weaver",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Shuriken pistol",
      "Power weapon"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "STARSTORM DUELLIST",
     "datacardAnchor": "Voidscarred-Starstorm-Duellist",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -281,18 +291,19 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-starstorm-duellist",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Fusion pistol",
      "Shuriken pistol",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Voidscarred-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "corsair-voidscarred.g2e9.opt1",
@@ -320,14 +331,15 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    },
    {
     "role": "WAY SEEKER",
     "datacardAnchor": "Voidscarred-Way-Seeker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -338,13 +350,13 @@
     "group": 2,
     "datacardId": "corsair-voidscarred.voidscarred-way-seeker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Freezing grasp",
      "Lightning strike",
      "Shuriken pistol",
      "Witch staff"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -353,6 +365,7 @@
     "datacardAnchor": "Voidscarred-Felarch",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "corsair-voidscarred.g1.opt1",
@@ -381,8 +394,8 @@
     "group": 1,
     "datacardId": "corsair-voidscarred.voidscarred-felarch",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -400,6 +413,14 @@
   ],
   "footnotes": {
    "*": "Your kill team cannot include both a blaster and a wraithcannon."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "Your kill team cannot include both a blaster and a wraithcannon.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 CORSAIR VOIDSCARRED FELARCH operative with one of the following options:\n\nShuriken rifle; shuriken pistol; power weapon\n\nNeuro disruptor; power weapon\n\n8 CORSAIR VOIDSCARRED operatives selected from the following list:\n\nFATE DEALER\n\nGUNNER with one of the following options:\n\nBlaster*; shuriken pistol; fists\n\nShredder; shuriken pistol; fists\n\nHEAVY GUNNER with one of the following options:\n\nShuriken cannon; shuriken pistol; fists\n\nShuriken pistol; wraithcannon*; fists\n\nKURNATHI\n\nKURNITE HUNTER\n\nSHADE RUNNER\n\nSOUL WEAVER\n\nSTARSTORM DUELLIST\n\nWARRIOR with one of the following options:\n\nShuriken pistol; power weapon\n\nShuriken rifle; fists\n\nWAY SEEKER\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once.\n\n* Your kill team cannot include both a blaster and a wraithcannon."

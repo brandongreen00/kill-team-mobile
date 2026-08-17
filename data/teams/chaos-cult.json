@@ -36,9 +36,11 @@
    ],
    "choices": [
     "CULT DEMAGOGUE"
-   ]
+   ],
+   "inList": false
   },
   "slots": 13,
+  "totalOperatives": 14,
   "groups": [
    {
     "index": 1,
@@ -92,6 +94,7 @@
     "datacardAnchor": "Blessed-Blade",
     "count": 2,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -111,6 +114,7 @@
     "datacardAnchor": "Chaos-Devotee",
     "count": 9,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -131,6 +135,7 @@
     "datacardAnchor": "Iconarch",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -152,6 +157,7 @@
     "datacardAnchor": "Mindwitch",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -174,6 +180,7 @@
     "datacardAnchor": "Cult-Demagogue",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -192,6 +199,7 @@
   ],
   "constraints": [],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 CULT DEMAGOGUE operative\n\n2 BLESSED BLADE operatives\n\n9 CHAOS DEVOTEE operatives\n\n1 ICONARCH operative\n\n1 MINDWITCH operative"
  },

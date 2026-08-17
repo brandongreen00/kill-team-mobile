@@ -57,3 +57,32 @@ select, input { min-height: var(--tap); font-size: 15px; background: var(--panel
   .m-tabs { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* --- responsive shell ---------------------------------------------------- */
+.desktop-only { display: none; }
+.phone-only { display: contents; }
+.dock { flex: 0 0 auto; max-height: var(--dock-h); overflow-y: auto; border-top: 1px solid var(--line); }
+.decision { border-color: var(--accent); }
+.decision h2 { color: var(--accent); }
+
+@media (min-width: 900px) {
+  .desktop-only { display: grid; }
+  .phone-only { display: none; }
+  .layout > .page { overflow-y: auto; }
+}
+
+/* --- dice ---------------------------------------------------------------- */
+.die-rolling { animation: die-roll .42s ease-out; transform-origin: center; }
+@keyframes die-roll {
+  0%   { opacity: .2; }
+  40%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+.dmg-float { animation: dmg-rise 1.1s ease-out forwards; }
+@keyframes dmg-rise {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+.firing-line line { animation: tracer .6s ease-out; }
+@keyframes tracer { from { stroke-dashoffset: 4; } to { stroke-dashoffset: 0; } }

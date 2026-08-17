@@ -36,9 +36,11 @@
    ],
    "choices": [
     "TECHNOARCHEOLOGIST"
-   ]
+   ],
+   "inList": false
   },
   "slots": 9,
+  "totalOperatives": 10,
   "groups": [
    {
     "index": 1,
@@ -79,6 +81,7 @@
     "datacardAnchor": "Battleclade-Servitor-Underseer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -89,17 +92,18 @@
     "group": 2,
     "datacardId": "battleclade.servitor-underseer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Master-crafted radium pistol",
      "Dataspikes"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "AUTO-PROXY SERVITOR",
     "datacardAnchor": "Battleclade-Auto-Proxy-Servitor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -110,16 +114,17 @@
     "group": 3,
     "datacardId": "battleclade.auto-proxy-servitor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Taser goad"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SERVITOR BREACHER",
     "datacardAnchor": "Battleclade-Breacher-Servitor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -130,17 +135,18 @@
     "group": 3,
     "datacardId": "battleclade.breacher-servitor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lascutter",
      "Hydraulic pincer & lascutter"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "COMBAT SERVITOR",
     "datacardAnchor": "Battleclade-Combat-Servitor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "battleclade.g3e3.opt1",
@@ -176,8 +182,8 @@
     "group": 3,
     "datacardId": "battleclade.combat-servitor",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    },
    {
     "role": "GUN SERVITOR",
@@ -187,6 +193,7 @@
      "Heavy arc rifle",
      "Augmetic claw"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -197,8 +204,8 @@
     "group": 3,
     "datacardId": "battleclade.gun-servitor",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUN SERVITOR",
@@ -208,6 +215,7 @@
      "Heavy bolter",
      "Augmetic claw"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -218,14 +226,15 @@
     "group": 3,
     "datacardId": "battleclade.gun-servitor",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "TECHNOMEDIC SERVITOR",
     "datacardAnchor": "Battleclade-Technomedic-Servitor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -236,10 +245,10 @@
     "group": 3,
     "datacardId": "battleclade.technomedic-servitor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Servo-chirurgic claw"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -248,6 +257,7 @@
     "datacardAnchor": "Battleclade-Technoarcheologist",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -258,11 +268,11 @@
     "group": 1,
     "datacardId": "battleclade.technoarcheologist",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Eradication pistol",
      "Servo-arc claw"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -284,6 +294,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 BATTLECLADE TECHNOARCHEOLOGIST operative\n\n1 BATTLECLADE SERVITOR UNDERSEER operative\n\n8 BATTLECLADE operatives selected from the following list:\n\nAUTO-PROXY SERVITOR\n\nSERVITOR BREACHER\n\nCOMBAT SERVITOR with one of the following options:\n\nServo-claw; incendine igniter\n\nServo-claw; meltagun\n\nServo-claw; phosphor blaster\n\nGUN SERVITOR with heavy arc rifle and augmetic claw\n\nGUN SERVITOR with heavy bolter and augmetic claw\n\nTECHNOMEDIC SERVITOR\n\nOther than COMBAT SERVITOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to one COMBAT SERVITOR operative with meltagun, and it can only include up to three COMBAT SERVITOR operatives with incendine igniter."
  },

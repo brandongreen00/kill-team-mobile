@@ -34,14 +34,20 @@
      "choices": [
       {
        "id": "void-dancer-troupe.g1.g1o1",
-       "label": "Fusion pistol, neuro disruptor",
+       "label": "Fusion pistol",
        "weapons": [
-        "Fusion pistol",
-        "Neuro disruptor"
+        "Fusion pistol"
        ]
       },
       {
        "id": "void-dancer-troupe.g1.g1o2",
+       "label": "neuro disruptor",
+       "weapons": [
+        "Neuro disruptor"
+       ]
+      },
+      {
+       "id": "void-dancer-troupe.g1.g1o3",
        "label": "shuriken pistol",
        "weapons": [
         "Shuriken pistol"
@@ -55,16 +61,34 @@
      "choices": [
       {
        "id": "void-dancer-troupe.g1.g2o1",
-       "label": "Blade, caress, embrace, kiss",
+       "label": "Blade",
        "weapons": [
-        "Blade",
-        "Caress",
-        "Embrace",
-        "Kiss"
+        "Blade"
        ]
       },
       {
        "id": "void-dancer-troupe.g1.g2o2",
+       "label": "caress",
+       "weapons": [
+        "Caress"
+       ]
+      },
+      {
+       "id": "void-dancer-troupe.g1.g2o3",
+       "label": "embrace",
+       "weapons": [
+        "Embrace"
+       ]
+      },
+      {
+       "id": "void-dancer-troupe.g1.g2o4",
+       "label": "kiss",
+       "weapons": [
+        "Kiss"
+       ]
+      },
+      {
+       "id": "void-dancer-troupe.g1.g2o5",
        "label": "power weapon",
        "weapons": [
         "Power weapon"
@@ -78,9 +102,11 @@
    "alwaysWeapons": [],
    "choices": [
     "LEAD PLAYER"
-   ]
+   ],
+   "inList": false
   },
   "slots": 7,
+  "totalOperatives": 8,
   "groups": [
    {
     "index": 1,
@@ -109,6 +135,7 @@
     "datacardAnchor": "Death-Jester",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -119,17 +146,18 @@
     "group": 2,
     "datacardId": "void-dancer-troupe.death-jester",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Shrieker cannon",
      "Shrieker blade"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "PLAYER",
     "datacardAnchor": "Player",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [
      {
@@ -138,14 +166,20 @@
       "choices": [
        {
         "id": "void-dancer-troupe.g2e2.g1o1",
-        "label": "Fusion pistol, neuro disruptor",
+        "label": "Fusion pistol",
         "weapons": [
-         "Fusion pistol",
-         "Neuro disruptor"
+         "Fusion pistol"
         ]
        },
        {
         "id": "void-dancer-troupe.g2e2.g1o2",
+        "label": "neuro disruptor",
+        "weapons": [
+         "Neuro disruptor"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g2e2.g1o3",
         "label": "shuriken pistol",
         "weapons": [
          "Shuriken pistol"
@@ -159,15 +193,27 @@
       "choices": [
        {
         "id": "void-dancer-troupe.g2e2.g2o1",
-        "label": "Blade, caress, embrace",
+        "label": "Blade",
         "weapons": [
-         "Blade",
-         "Caress",
-         "Embrace"
+         "Blade"
         ]
        },
        {
         "id": "void-dancer-troupe.g2e2.g2o2",
+        "label": "caress",
+        "weapons": [
+         "Caress"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g2e2.g2o3",
+        "label": "embrace",
+        "weapons": [
+         "Embrace"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g2e2.g2o4",
         "label": "kiss",
         "weapons": [
          "Kiss"
@@ -184,8 +230,8 @@
     "group": 2,
     "datacardId": "void-dancer-troupe.player",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    },
    {
     "role": "SHADOWSEER",
@@ -194,6 +240,7 @@
     "fixedWeapons": [
      "Hallucinogen grenade"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "void-dancer-troupe.g2e3.opt1",
@@ -221,8 +268,8 @@
     "group": 2,
     "datacardId": "void-dancer-troupe.shadowseer",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -231,6 +278,7 @@
     "datacardAnchor": "Lead-Player",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [
      {
@@ -239,14 +287,20 @@
       "choices": [
        {
         "id": "void-dancer-troupe.g1.g1o1",
-        "label": "Fusion pistol, neuro disruptor",
+        "label": "Fusion pistol",
         "weapons": [
-         "Fusion pistol",
-         "Neuro disruptor"
+         "Fusion pistol"
         ]
        },
        {
         "id": "void-dancer-troupe.g1.g1o2",
+        "label": "neuro disruptor",
+        "weapons": [
+         "Neuro disruptor"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g1.g1o3",
         "label": "shuriken pistol",
         "weapons": [
          "Shuriken pistol"
@@ -260,16 +314,34 @@
       "choices": [
        {
         "id": "void-dancer-troupe.g1.g2o1",
-        "label": "Blade, caress, embrace, kiss",
+        "label": "Blade",
         "weapons": [
-         "Blade",
-         "Caress",
-         "Embrace",
-         "Kiss"
+         "Blade"
         ]
        },
        {
         "id": "void-dancer-troupe.g1.g2o2",
+        "label": "caress",
+        "weapons": [
+         "Caress"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g1.g2o3",
+        "label": "embrace",
+        "weapons": [
+         "Embrace"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g1.g2o4",
+        "label": "kiss",
+        "weapons": [
+         "Kiss"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g1.g2o5",
         "label": "power weapon",
         "weapons": [
          "Power weapon"
@@ -286,8 +358,8 @@
     "group": 1,
     "datacardId": "void-dancer-troupe.lead-player",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -309,6 +381,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 VOID-DANCER TROUPE LEAD PLAYER operative with one option from each of the following:\n\nFusion pistol, neuro disruptor or shuriken pistol\n\nBlade, caress, embrace, kiss or power weapon\n\n7 VOID-DANCER TROUPE operatives selected from the following list:\n\nDEATH JESTER\n\nPLAYER with one option from each of the following:\n\nFusion pistol, neuro disruptor or shuriken pistol\n\nBlade, caress, embrace or kiss\n\nSHADOWSEER with hallucinogen grenade and one of the following options:\n\nNeuro disruptor; miststave\n\nShuriken pistol; miststave\n\nOther than PLAYER operatives, your kill team can only include each operative on this list once. Your kill team can only include up to one fusion pistol and up to one neuro disruptor."
  },

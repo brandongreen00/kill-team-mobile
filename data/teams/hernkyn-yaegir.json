@@ -37,9 +37,11 @@
    ],
    "choices": [
     "THEYN"
-   ]
+   ],
+   "inList": false
   },
   "slots": 9,
+  "totalOperatives": 10,
   "groups": [
    {
     "index": 1,
@@ -72,6 +74,7 @@
     "datacardAnchor": "Yaegir-Bladekyn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -82,17 +85,18 @@
     "group": 2,
     "datacardId": "hernkyn-yaegir.yaegir-bladekyn",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Throwing plasma knife",
      "Dual plasma knives"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "BOMBAST",
     "datacardAnchor": "Yaegir-Bombast",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -103,17 +107,18 @@
     "group": 2,
     "datacardId": "hernkyn-yaegir.yaegir-bombast",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Wroughtlock revolvers",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
     "datacardAnchor": "Yaegir-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -124,17 +129,18 @@
     "group": 2,
     "datacardId": "hernkyn-yaegir.yaegir-gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "APM launcher",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "IRONBRAEK",
     "datacardAnchor": "Yaegir-Ironbraek",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -145,17 +151,18 @@
     "group": 2,
     "datacardId": "hernkyn-yaegir.yaegir-ironbraek",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt revolver",
      "Entrencher"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "RIFLEKYN",
     "datacardAnchor": "Yaegir-Riflekyn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -166,17 +173,18 @@
     "group": 2,
     "datacardId": "hernkyn-yaegir.yaegir-riflekyn",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Magna-coil rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TRACKER",
     "datacardAnchor": "Yaegir-Tracker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -187,18 +195,19 @@
     "group": 2,
     "datacardId": "hernkyn-yaegir.yaegir-tracker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "SiNR handbow",
      "Throwing hatchet",
      "Hatchet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Yaegir-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hernkyn-yaegir.g2e7.opt1",
@@ -226,8 +235,8 @@
     "group": 2,
     "datacardId": "hernkyn-yaegir.yaegir-warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -236,6 +245,7 @@
     "datacardAnchor": "Yaegir-Theyn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -246,12 +256,12 @@
     "group": 1,
     "datacardId": "hernkyn-yaegir.yaegir-theyn",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt revolver",
      "Bolt shotgun",
      "Plasma Knife"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -263,6 +273,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 HERNKYN YAEGIR THEYN operative\n\n9 HERNKYN YAEGIR operatives selected from the following list:\n\nBLADEKYN\n\nBOMBAST\n\nGUNNER\n\nIRONBRAEK\n\nRIFLEKYN\n\nTRACKER\n\nWARRIOR with one of the following options:\n\nBolt revolver; plasma knife\n\nBolt shotgun; fists\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

@@ -36,9 +36,11 @@
    ],
    "choices": [
     "STRAIN LEADER"
-   ]
+   ],
+   "inList": false
   },
   "slots": 10,
+  "totalOperatives": 11,
   "groups": [
    {
     "index": 1,
@@ -78,6 +80,7 @@
     "datacardAnchor": "Oversight-Drone",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -88,16 +91,17 @@
     "group": 2,
     "datacardId": "vespid-stingwings.oversight-drone",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Ram"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "LONGSTING",
     "datacardAnchor": "Vespid-Longsting",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -108,17 +112,18 @@
     "group": 3,
     "datacardId": "vespid-stingwings.longsting",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Neutron rail rifle",
      "Claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SHADESTRAIN",
     "datacardAnchor": "Vespid-Shadestrain",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -129,18 +134,19 @@
     "group": 3,
     "datacardId": "vespid-stingwings.shadestrain",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Neutron sting",
      "Neutron grenade",
      "Claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SKYBLAST",
     "datacardAnchor": "Vespid-Skyblast",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -151,17 +157,18 @@
     "group": 3,
     "datacardId": "vespid-stingwings.skyblast",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Neutron grenade launcher",
      "Claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SWARMGUARD",
     "datacardAnchor": "Vespid-Swarmguard",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -172,17 +179,18 @@
     "group": 3,
     "datacardId": "vespid-stingwings.swarmguard",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Flamer",
      "Claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Vespid-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -193,11 +201,11 @@
     "group": 3,
     "datacardId": "vespid-stingwings.warrior",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Neutron blaster",
      "Claws"
-    ],
-    "uniqueUnlessRole": false
+    ]
    }
   ],
   "leaderList": [
@@ -206,6 +214,7 @@
     "datacardAnchor": "Vespid-Strain-Leader",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -216,11 +225,11 @@
     "group": 1,
     "datacardId": "vespid-stingwings.strain-leader",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Neutron blaster",
      "Claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -232,6 +241,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 VESPID STINGWING STRAIN LEADER operative\n\n1 VESPID STINGWING OVERSIGHT DRONE operative\n\n9 VESPID STINGWING operatives selected from the following list:\n\nLONGSTING\n\nSHADESTRAIN\n\nSKYBLAST\n\nSWARMGUARD\n\nWARRIOR\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

@@ -50,9 +50,11 @@
    "alwaysWeapons": [],
    "choices": [
     "FIXER"
-   ]
+   ],
+   "inList": false
   },
   "slots": 10,
+  "totalOperatives": 11,
   "groups": [
    {
     "index": 1,
@@ -90,6 +92,7 @@
     "datacardAnchor": "Ratling-Battlemutt",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -100,16 +103,17 @@
     "group": 2,
     "datacardId": "ratlings.ratling-battlemutt",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bite"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "BULLGRYN",
     "datacardAnchor": "Bullgryn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [
      {
@@ -161,14 +165,15 @@
     "group": 2,
     "datacardId": "ratlings.bullgryn",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    },
    {
     "role": "OGRYN",
     "datacardAnchor": "Ogryn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -179,17 +184,18 @@
     "group": 2,
     "datacardId": "ratlings.ogryn",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Ripper gun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "BIG SHOT",
     "datacardAnchor": "Ratling-Big-Shot",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -200,17 +206,18 @@
     "group": 2,
     "datacardId": "ratlings.ratling-big-shot",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Tankstopper rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "BOMBER",
     "datacardAnchor": "Ratling-Bomber",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -221,18 +228,19 @@
     "group": 2,
     "datacardId": "ratlings.ratling-bomber",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Explosive arsenal",
      "Sniper rifle",
      "Bionic arm"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HARDBIT",
     "datacardAnchor": "Ratling-Hardbit",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -243,17 +251,18 @@
     "group": 2,
     "datacardId": "ratlings.ratling-hardbit",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Battle rifle",
      "Combat knife"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "RAIDER",
     "datacardAnchor": "Ratling-Raider",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -264,17 +273,18 @@
     "group": 2,
     "datacardId": "ratlings.ratling-raider",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Suppressed sniper rifle",
      "Dagger"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SNEAK",
     "datacardAnchor": "Ratling-Sneak",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -285,17 +295,18 @@
     "group": 2,
     "datacardId": "ratlings.ratling-sneak",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Suppressed sniper rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SNIPER",
     "datacardAnchor": "Ratling-Sniper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -306,17 +317,18 @@
     "group": 2,
     "datacardId": "ratlings.ratling-sniper",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Sniper rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "SPOTTER",
     "datacardAnchor": "Ratling-Spotter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -327,17 +339,18 @@
     "group": 2,
     "datacardId": "ratlings.ratling-spotter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Sniper rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "STASHMASTER",
     "datacardAnchor": "Ratling-Stashmaster",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -348,17 +361,18 @@
     "group": 2,
     "datacardId": "ratlings.ratling-stashmaster",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Sniper rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "VOX-THIEF",
     "datacardAnchor": "Ratling-Vox-Thief",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -369,11 +383,11 @@
     "group": 2,
     "datacardId": "ratlings.ratling-vox-thief",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Sniper rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -382,6 +396,7 @@
     "datacardAnchor": "Ratling-Fixer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "ratlings.g1.opt1",
@@ -409,8 +424,8 @@
     "group": 1,
     "datacardId": "ratlings.ratling-fixer",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -435,6 +450,14 @@
   ],
   "footnotes": {
    "*": "You cannot select more than three of these operatives combined. Up to three times, instead of selecting one of these operatives, you can select one RATLING operative to cost you 0CP for the battle."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "You cannot select more than three of these operatives combined. Up to three times, instead of selecting one of these operatives, you can select one RATLING operative to cost you 0CP for the battle.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [
    "Some RATLING rules refer to a ‘rifle’. This is a ranged weapon that includes ‘rifle’ in its name, e.g. tankstopper rifle, all profiles of a sniper rifle, etc."

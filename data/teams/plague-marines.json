@@ -36,9 +36,11 @@
    ],
    "choices": [
     "CHAMPION"
-   ]
+   ],
+   "inList": false
   },
   "slots": 5,
+  "totalOperatives": 6,
   "groups": [
    {
     "index": 1,
@@ -70,6 +72,7 @@
     "datacardAnchor": "Plague-Marine-Bombardier",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -80,17 +83,18 @@
     "group": 2,
     "datacardId": "plague-marines.marine-bombardier",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Boltgun",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "FIGHTER",
     "datacardAnchor": "Plague-Marine-Fighter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -101,17 +105,18 @@
     "group": 2,
     "datacardId": "plague-marines.marine-fighter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Flail of Corruption"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "HEAVY GUNNER",
     "datacardAnchor": "Plague-Marine-Heavy-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -122,18 +127,19 @@
     "group": 2,
     "datacardId": "plague-marines.marine-heavy-gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Plague spewer",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "ICON BEARER",
     "datacardAnchor": "Plague-Marine-Icon-Bearer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -144,17 +150,18 @@
     "group": 2,
     "datacardId": "plague-marines.marine-icon-bearer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Plague knife"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MALIGNANT PLAGUECASTER",
     "datacardAnchor": "Malignant-Plaguecaster",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -165,18 +172,19 @@
     "group": 2,
     "datacardId": "plague-marines.malignant-plaguecaster",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Entropy",
      "Plague wind",
      "Corrupted staff"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Plague-Marine-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -187,11 +195,11 @@
     "group": 2,
     "datacardId": "plague-marines.marine-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Boltgun",
      "Plague knife"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -200,6 +208,7 @@
     "datacardAnchor": "Plague-Marine-Champion",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -210,11 +219,11 @@
     "group": 1,
     "datacardId": "plague-marines.marine-champion",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Plasma pistol",
      "Plague sword"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -224,6 +233,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [
    "Nurgle’s number is 7 and his sigil shows 3. From these numbers does his corruption flow."
   ],

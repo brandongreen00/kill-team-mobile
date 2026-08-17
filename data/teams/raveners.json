@@ -36,9 +36,11 @@
    ],
    "choices": [
     "PRIME"
-   ]
+   ],
+   "inList": false
   },
   "slots": 4,
+  "totalOperatives": 5,
   "groups": [
    {
     "index": 1,
@@ -69,6 +71,7 @@
     "datacardAnchor": "Ravener-Felltalon",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -79,18 +82,19 @@
     "group": 2,
     "datacardId": "raveners.ravener-felltalon",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Pincer tail",
      "Toxic glands",
      "Toxic scythes"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TREMORSCYTHE",
     "datacardAnchor": "Ravener-Tremorscythe",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -101,17 +105,18 @@
     "group": 2,
     "datacardId": "raveners.ravener-tremorscythe",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Pincer tail",
      "Scything talons & rending claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "VENOMSPITTER",
     "datacardAnchor": "Ravener-Venomspitter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -122,18 +127,19 @@
     "group": 2,
     "datacardId": "raveners.ravener-venomspitter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Pincer tail",
      "Venom bolt",
      "Scything talons"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Ravener-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -144,17 +150,18 @@
     "group": 2,
     "datacardId": "raveners.ravener-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Pincer tail",
      "Scything talons"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "WRECKER",
     "datacardAnchor": "Ravener-Wrecker",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -165,11 +172,11 @@
     "group": 2,
     "datacardId": "raveners.ravener-wrecker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bone mace",
      "Scything talons & crushing claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "leaderList": [
@@ -178,6 +185,7 @@
     "datacardAnchor": "Ravener-Prime",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -188,11 +196,11 @@
     "group": 1,
     "datacardId": "raveners.ravener-prime",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Tail blade",
      "Scything talons & rending claws"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -204,6 +212,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 RAVENER PRIME operative\n\n4 RAVENER operatives selected from the following list:\n\nFELLTALON\n\nTREMORSCYTHE\n\nVENOMSPITTER\n\nWARRIOR\n\nWRECKER\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
  },

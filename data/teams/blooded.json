@@ -30,7 +30,17 @@
     {
      "id": "blooded.g1.opt1",
      "label": "Autopistol or laspistol; chainsword or power weapon",
-     "weapons": []
+     "weapons": [],
+     "choiceGroups": [
+      [
+       "Autopistol",
+       "Laspistol"
+      ],
+      [
+       "Chainsword",
+       "Power weapon"
+      ]
+     ]
     },
     {
      "id": "blooded.g1.opt2",
@@ -68,9 +78,11 @@
    ],
    "choices": [
     "CHIEFTAIN"
-   ]
+   ],
+   "inList": false
   },
   "slots": 13,
+  "totalOperatives": 14,
   "groups": [
    {
     "index": 1,
@@ -120,6 +132,7 @@
     "datacardAnchor": "Traitor-Brimstone-Grenadier",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -130,18 +143,19 @@
     "group": 2,
     "datacardId": "blooded.traitor-brimstone-grenadier",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Diabolyk bomb",
      "Lasgun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "BUTCHER",
     "datacardAnchor": "Traitor-Butcher",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -152,16 +166,17 @@
     "group": 2,
     "datacardId": "blooded.traitor-butcher",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Power weapon & cleaver"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "COMMSMAN",
     "datacardAnchor": "Traitor-Commsman",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -172,17 +187,18 @@
     "group": 2,
     "datacardId": "blooded.traitor-commsman",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "CORPSEMAN",
     "datacardAnchor": "Traitor-Corpseman",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -193,18 +209,19 @@
     "group": 2,
     "datacardId": "blooded.traitor-corpseman",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet",
      "Stimm needle"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "FLENSER",
     "datacardAnchor": "Traitor-Flenser",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -215,10 +232,10 @@
     "group": 2,
     "datacardId": "blooded.traitor-flenser",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Skinning blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
@@ -228,6 +245,7 @@
      "Bayonet",
      "Flamer"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -238,8 +256,8 @@
     "group": 2,
     "datacardId": "blooded.traitor-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -249,6 +267,7 @@
      "Bayonet",
      "Grenade launcher"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -259,8 +278,8 @@
     "group": 2,
     "datacardId": "blooded.traitor-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -270,6 +289,7 @@
      "Bayonet",
      "Meltagun"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -280,8 +300,8 @@
     "group": 2,
     "datacardId": "blooded.traitor-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -291,6 +311,7 @@
      "Bayonet",
      "Plasma gun"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -301,14 +322,15 @@
     "group": 2,
     "datacardId": "blooded.traitor-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "SHARPSHOOTER",
     "datacardAnchor": "Traitor-Sharpshooter",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -319,17 +341,18 @@
     "group": 2,
     "datacardId": "blooded.traitor-sharpshooter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Long-las",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "THUG",
     "datacardAnchor": "Traitor-Thug",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -340,16 +363,17 @@
     "group": 2,
     "datacardId": "blooded.traitor-thug",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Heavy club"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TRENCH SWEEPER",
     "datacardAnchor": "Traitor-Trench-Sweeper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -360,17 +384,18 @@
     "group": 2,
     "datacardId": "blooded.traitor-trench-sweeper",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Shotgun",
      "Bayonet & shield"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TROOPER",
     "datacardAnchor": "Traitor-Trooper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -381,17 +406,18 @@
     "group": 2,
     "datacardId": "blooded.traitor-trooper",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "ENFORCER",
     "datacardAnchor": "Traitor-Enforcer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -402,17 +428,18 @@
     "group": 3,
     "datacardId": "blooded.traitor-enforcer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Power fist"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "OGRYN",
     "datacardAnchor": "Traitor-Ogryn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -423,16 +450,17 @@
     "group": 3,
     "datacardId": "blooded.traitor-ogryn",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Power maul & mutant claw"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "TROOPER",
     "datacardAnchor": "Traitor-Trooper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -443,11 +471,11 @@
     "group": 3,
     "datacardId": "blooded.traitor-trooper",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
-    ],
-    "uniqueUnlessRole": false
+    ]
    }
   ],
   "leaderList": [
@@ -456,11 +484,22 @@
     "datacardAnchor": "Traitor-Chieftain",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "blooded.g1.opt1",
       "label": "Autopistol or laspistol; chainsword or power weapon",
-      "weapons": []
+      "weapons": [],
+      "choiceGroups": [
+       [
+        "Autopistol",
+        "Laspistol"
+       ],
+       [
+        "Chainsword",
+        "Power weapon"
+       ]
+      ]
      },
      {
       "id": "blooded.g1.opt2",
@@ -494,18 +533,15 @@
     "footnoteGroup": null,
     "requires": [],
     "rawText": "1 BLOODED CHIEFTAIN operative with one of the following options:",
-    "notes": [
-     "unresolved weapon(s) in option 'Autopistol or laspistol; chainsword or power weapon': ['Autopistol or laspistol', 'chainsword or power weapon']"
-    ],
     "group": 1,
     "datacardId": "blooded.traitor-chieftain",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Laspistol",
      "Power weapon"
-    ],
-    "uniqueUnlessRole": true
+    ]
    }
   ],
   "constraints": [
@@ -534,6 +570,20 @@
   "footnotes": {
    "^1": "You cannot select more than three of these operatives combined.",
    "^2": "You cannot select this option and this operative. In other words, you can only have one operative with a plasma weapon."
+  },
+  "footnoteOptions": {
+   "^1": {
+    "text": "You cannot select more than three of these operatives combined.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   },
+   "^2": {
+    "text": "You cannot select this option and this operative. In other words, you can only have one operative with a plasma weapon.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 BLOODED CHIEFTAIN operative with one of the following options:\n\nAutopistol or laspistol; chainsword or power weapon\n\nBolt pistol; chainsword\n\nBoltgun; bayonet\n\nPlasma pistol; improvised blade^2\n\n9 BLOODED operatives selected from the following list:\n\nBRIMSTONE GRENADIER\n\nBUTCHER\n\nCOMMSMAN\n\nCORPSEMAN\n\nFLENSER\n\nGUNNER with bayonet and flamer^1\n\nGUNNER with bayonet and grenade launcher^1\n\nGUNNER with bayonet and meltagun^1\n\nGUNNER with bayonet and plasma gun^1,2\n\nSHARPSHOOTER^1\n\nTHUG\n\nTRENCH SWEEPER\n\nTROOPER\n\n4 BLOODED operatives selected from the following list:\n\nENFORCER (counts as two selections)\n\nOGRYN (counts as two selections)\n\nTROOPER\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once.\n\n^1 You cannot select more than three of these operatives combined.\n\n^2 You cannot select this option and this operative. In other words, you can only have one operative with a plasma weapon."

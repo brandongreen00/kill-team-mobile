@@ -51,9 +51,11 @@
    "alwaysWeapons": [],
    "choices": [
     "SUPERIOR"
-   ]
+   ],
+   "inList": false
   },
   "slots": 8,
+  "totalOperatives": 9,
   "groups": [
    {
     "index": 1,
@@ -86,6 +88,7 @@
     "datacardAnchor": "Insidiant-Abjuror",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -96,16 +99,17 @@
     "group": 2,
     "datacardId": "celestian-insidiants.insidiant-abjuror",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Blessed sword & praesidium protectiva"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "CENSOR",
     "datacardAnchor": "Insidiant-Censor",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -116,16 +120,17 @@
     "group": 2,
     "datacardId": "celestian-insidiants.insidiant-censor",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Virge of admonition"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "CREMATOR",
     "datacardAnchor": "Insidiant-Cremator",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -136,17 +141,18 @@
     "group": 2,
     "datacardId": "celestian-insidiants.insidiant-cremator",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Hand flamer",
      "Null mace"
-    ],
-    "uniqueUnlessRole": false
+    ]
    },
    {
     "role": "DENUNCIA",
     "datacardAnchor": "Insidiant-Denuncia",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -157,17 +163,18 @@
     "group": 2,
     "datacardId": "celestian-insidiants.insidiant-denuncia",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Voice of condemnation",
      "Staff of declamation"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "MORTISANCTUS",
     "datacardAnchor": "Insidiant-Mortisanctus",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -178,16 +185,17 @@
     "group": 2,
     "datacardId": "celestian-insidiants.insidiant-mortisanctus",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Blessed broadsword"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "RELIQUARIUS",
     "datacardAnchor": "Insidiant-Reliquarius",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -198,18 +206,19 @@
     "group": 2,
     "datacardId": "celestian-insidiants.insidiant-reliquarius",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt pistol",
      "Condemnor stakethrower",
      "Gun butt"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Insidiant-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -220,12 +229,12 @@
     "group": 2,
     "datacardId": "celestian-insidiants.insidiant-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Bolt pistol",
      "Condemnor stakethrower",
      "Null mace"
-    ],
-    "uniqueUnlessRole": false
+    ]
    }
   ],
   "leaderList": [
@@ -234,6 +243,7 @@
     "datacardAnchor": "Insidiant-Superior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "celestian-insidiants.g1.opt1",
@@ -262,8 +272,8 @@
     "group": 1,
     "datacardId": "celestian-insidiants.insidiant-superior",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -281,6 +291,7 @@
    }
   ],
   "footnotes": {},
+  "footnoteOptions": {},
   "designerNotes": [],
   "rawText": "1 CELESTIAN INSIDIANT SUPERIOR operative with one of the following options:\n\nRelic condemnor stakethrower; relic bolt pistol; null mace\n\nInferno pistol; null mace\n\n8 CELESTIAN INSIDIANT operatives selected from the following list:\n\nABJUROR\n\nCENSOR\n\nCREMATOR\n\nDENUNCIA\n\nMORTISANCTUS\n\nRELIQUARIUS\n\nWARRIOR\n\nOther than CREMATOR and WARRIOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two CREMATOR operatives."
  },

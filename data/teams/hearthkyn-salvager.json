@@ -34,17 +34,41 @@
      "choices": [
       {
        "id": "hearthkyn-salvager.g1.g1o1",
-       "label": "Autoch-pattern bolt pistol, Autoch-pattern bolter, bolt revolver, EtaCarn plasma pistol, ion blaster",
+       "label": "Autoch-pattern bolt pistol",
        "weapons": [
-        "Autoch-pattern bolt pistol",
-        "Autoch-pattern bolter",
-        "Bolt revolver",
-        "EtaCarn plasma pistol",
-        "Ion blaster"
+        "Autoch-pattern bolt pistol"
        ]
       },
       {
        "id": "hearthkyn-salvager.g1.g1o2",
+       "label": "Autoch-pattern bolter",
+       "weapons": [
+        "Autoch-pattern bolter"
+       ]
+      },
+      {
+       "id": "hearthkyn-salvager.g1.g1o3",
+       "label": "bolt revolver",
+       "weapons": [
+        "Bolt revolver"
+       ]
+      },
+      {
+       "id": "hearthkyn-salvager.g1.g1o4",
+       "label": "EtaCarn plasma pistol",
+       "weapons": [
+        "EtaCarn plasma pistol"
+       ]
+      },
+      {
+       "id": "hearthkyn-salvager.g1.g1o5",
+       "label": "ion blaster",
+       "weapons": [
+        "Ion blaster"
+       ]
+      },
+      {
+       "id": "hearthkyn-salvager.g1.g1o6",
        "label": "ion pistol",
        "weapons": [
         "Ion pistol"
@@ -78,9 +102,11 @@
    "alwaysWeapons": [],
    "choices": [
     "THEYN"
-   ]
+   ],
+   "inList": false
   },
   "slots": 9,
+  "totalOperatives": 10,
   "groups": [
    {
     "index": 1,
@@ -116,6 +142,7 @@
     "datacardAnchor": "Hearthkyn-Dôzr",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -126,17 +153,18 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.d-zr",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autoch-pattern bolt pistol",
      "Concussion knux"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "FIELD MEDIC",
     "datacardAnchor": "Hearthkyn-Field-Medic",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -147,17 +175,18 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.field-medic",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Bolt revolver",
      "Plasma Knife"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GRENADIER",
     "datacardAnchor": "Hearthkyn-Grenadier",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -168,18 +197,19 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.grenadier",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autoch-pattern bolt pistol",
      "C8 HX charge",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
     "datacardAnchor": "Hearthkyn-Gunner",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "hearthkyn-salvager.g2e4.opt1",
@@ -231,14 +261,15 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    },
    {
     "role": "JUMP PACK WARRIOR",
     "datacardAnchor": "Hearthkyn-Jump-Pack-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -249,20 +280,38 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.jump-pack-warrior",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autoch-pattern bolt pistol",
      "Plasma weapon"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "KINLYNK",
     "datacardAnchor": "Hearthkyn-Kinlynk",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "hearthkyn-salvager.fn1o1",
+      "label": "Autoch-pattern bolter; fists",
+      "weapons": [
+       "Autoch-pattern bolter",
+       "Fists"
+      ]
+     },
+     {
+      "id": "hearthkyn-salvager.fn1o2",
+      "label": "Ion blaster; fists",
+      "weapons": [
+       "Ion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -270,21 +319,36 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.kinlynk",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Autoch-pattern bolter",
-     "Ion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "KOGNITÂAR",
     "datacardAnchor": "Hearthkyn-Kognit-ar",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "hearthkyn-salvager.fn1o1",
+      "label": "Autoch-pattern bolter; fists",
+      "weapons": [
+       "Autoch-pattern bolter",
+       "Fists"
+      ]
+     },
+     {
+      "id": "hearthkyn-salvager.fn1o2",
+      "label": "Ion blaster; fists",
+      "weapons": [
+       "Ion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -292,21 +356,36 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.kognit-ar",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Autoch-pattern bolter",
-     "Ion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "LOKÂTR",
     "datacardAnchor": "Hearthkyn-Lok-tr",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "hearthkyn-salvager.fn1o1",
+      "label": "Autoch-pattern bolter; fists",
+      "weapons": [
+       "Autoch-pattern bolter",
+       "Fists"
+      ]
+     },
+     {
+      "id": "hearthkyn-salvager.fn1o2",
+      "label": "Ion blaster; fists",
+      "weapons": [
+       "Ion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -314,21 +393,36 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.lok-tr",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Autoch-pattern bolter",
-     "Ion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "LUGGER",
     "datacardAnchor": "Hearthkyn-Lugger",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "hearthkyn-salvager.fn1o1",
+      "label": "Autoch-pattern bolter; fists",
+      "weapons": [
+       "Autoch-pattern bolter",
+       "Fists"
+      ]
+     },
+     {
+      "id": "hearthkyn-salvager.fn1o2",
+      "label": "Ion blaster; fists",
+      "weapons": [
+       "Ion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -336,21 +430,36 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.lugger",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Autoch-pattern bolter",
-     "Ion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Hearthkyn-Warrior",
     "count": 1,
     "fixedWeapons": [],
-    "loadouts": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "hearthkyn-salvager.fn1o1",
+      "label": "Autoch-pattern bolter; fists",
+      "weapons": [
+       "Autoch-pattern bolter",
+       "Fists"
+      ]
+     },
+     {
+      "id": "hearthkyn-salvager.fn1o2",
+      "label": "Ion blaster; fists",
+      "weapons": [
+       "Ion blaster",
+       "Fists"
+      ]
+     }
+    ],
     "optionGroups": [],
-    "loadoutMode": "fixed",
+    "loadoutMode": "choice",
     "selectionCost": 1,
     "footnoteGroup": "*",
     "requires": [],
@@ -358,12 +467,9 @@
     "group": 2,
     "datacardId": "hearthkyn-salvager.warrior",
     "isLeader": false,
-    "alwaysWeapons": [
-     "Autoch-pattern bolter",
-     "Ion blaster",
-     "Fists"
-    ],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -372,6 +478,7 @@
     "datacardAnchor": "Hearthkyn-Theyn",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [
      {
@@ -380,17 +487,41 @@
       "choices": [
        {
         "id": "hearthkyn-salvager.g1.g1o1",
-        "label": "Autoch-pattern bolt pistol, Autoch-pattern bolter, bolt revolver, EtaCarn plasma pistol, ion blaster",
+        "label": "Autoch-pattern bolt pistol",
         "weapons": [
-         "Autoch-pattern bolt pistol",
-         "Autoch-pattern bolter",
-         "Bolt revolver",
-         "EtaCarn plasma pistol",
-         "Ion blaster"
+         "Autoch-pattern bolt pistol"
         ]
        },
        {
         "id": "hearthkyn-salvager.g1.g1o2",
+        "label": "Autoch-pattern bolter",
+        "weapons": [
+         "Autoch-pattern bolter"
+        ]
+       },
+       {
+        "id": "hearthkyn-salvager.g1.g1o3",
+        "label": "bolt revolver",
+        "weapons": [
+         "Bolt revolver"
+        ]
+       },
+       {
+        "id": "hearthkyn-salvager.g1.g1o4",
+        "label": "EtaCarn plasma pistol",
+        "weapons": [
+         "EtaCarn plasma pistol"
+        ]
+       },
+       {
+        "id": "hearthkyn-salvager.g1.g1o5",
+        "label": "ion blaster",
+        "weapons": [
+         "Ion blaster"
+        ]
+       },
+       {
+        "id": "hearthkyn-salvager.g1.g1o6",
         "label": "ion pistol",
         "weapons": [
          "Ion pistol"
@@ -427,8 +558,8 @@
     "group": 1,
     "datacardId": "hearthkyn-salvager.theyn",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -447,15 +578,35 @@
    {
     "kind": "distinctOptions",
     "role": "GUNNER"
-   },
-   {
-    "kind": "custom",
-    "text": "With one of the following options:",
-    "hook": "hearthkyn-salvager.with-one-of-the-following-options"
    }
   ],
   "footnotes": {
    "*": "With one of the following options:"
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "With one of the following options:",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "hearthkyn-salvager.fn1o1",
+      "label": "Autoch-pattern bolter; fists",
+      "weapons": [
+       "Autoch-pattern bolter",
+       "Fists"
+      ]
+     },
+     {
+      "id": "hearthkyn-salvager.fn1o2",
+      "label": "Ion blaster; fists",
+      "weapons": [
+       "Ion blaster",
+       "Fists"
+      ]
+     }
+    ]
+   }
   },
   "designerNotes": [],
   "rawText": "1 HEARTHKYN SALVAGER THEYN operative with one option from each of the following:\n\nAutoch-pattern bolt pistol, Autoch-pattern bolter, bolt revolver, EtaCarn plasma pistol, ion blaster or ion pistol\n\nConcussion gauntlet or plasma weapon\n\n9 HEARTHKYN SALVAGER operatives selected from the following list:\n\nDÔZR\n\nFIELD MEDIC\n\nGRENADIER\n\nGUNNER with one of the following options:\n\nEtaCarn plasma beamer; fists\n\nHYLas auto rifle; fists\n\nHYLas rotary cannon; fists\n\nL7 missile launcher; fists\n\nMagna rail rifle; fists\n\nJUMP PACK WARRIOR\n\nKINLYNK*\n\nKOGNITÂAR*\n\nLOKÂTR*\n\nLUGGER*\n\nWARRIOR*\n\nOther than GUNNER and WARRIOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to three GUNNER operatives (each must have a different option).\n\n*With one of the following options:\n\nAutoch-pattern bolter; fists\n\nIon blaster; fists"

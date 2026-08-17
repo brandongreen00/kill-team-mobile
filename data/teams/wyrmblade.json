@@ -51,14 +51,20 @@
      "choices": [
       {
        "id": "wyrmblade.g1.g1o1",
-       "label": "Bolt pistol, master-crafted autopistol",
+       "label": "Bolt pistol",
        "weapons": [
-        "Bolt pistol",
-        "Master-crafted autopistol"
+        "Bolt pistol"
        ]
       },
       {
        "id": "wyrmblade.g1.g1o2",
+       "label": "master-crafted autopistol",
+       "weapons": [
+        "Master-crafted autopistol"
+       ]
+      },
+      {
+       "id": "wyrmblade.g1.g1o3",
        "label": "web pistol",
        "weapons": [
         "Web pistol"
@@ -72,14 +78,20 @@
      "choices": [
       {
        "id": "wyrmblade.g1.g2o1",
-       "label": "Chainsword, power maul",
+       "label": "Chainsword",
        "weapons": [
-        "Chainsword",
-        "Power maul"
+        "Chainsword"
        ]
       },
       {
        "id": "wyrmblade.g1.g2o2",
+       "label": "power maul",
+       "weapons": [
+        "Power maul"
+       ]
+      },
+      {
+       "id": "wyrmblade.g1.g2o3",
        "label": "power pick",
        "weapons": [
         "Power pick"
@@ -93,9 +105,11 @@
    "alwaysWeapons": [],
    "choices": [
     "NEOPHYTE LEADER"
-   ]
+   ],
+   "inList": false
   },
   "slots": 13,
+  "totalOperatives": 14,
   "groups": [
    {
     "index": 1,
@@ -133,6 +147,7 @@
     "datacardAnchor": "Kelermorph",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -143,17 +158,18 @@
     "group": 2,
     "datacardId": "wyrmblade.kelermorph",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Liberator autostubs",
      "Kelermorph knife"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "LOCUS",
     "datacardAnchor": "Locus",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -164,11 +180,11 @@
     "group": 2,
     "datacardId": "wyrmblade.locus",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Barbed tail",
      "Locus blades"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "GUNNER",
@@ -178,6 +194,7 @@
      "Flamer",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -188,8 +205,8 @@
     "group": 2,
     "datacardId": "wyrmblade.neophyte-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -199,6 +216,7 @@
      "Grenade launcher",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -209,8 +227,8 @@
     "group": 2,
     "datacardId": "wyrmblade.neophyte-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "GUNNER",
@@ -220,6 +238,7 @@
      "Webber",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -230,8 +249,8 @@
     "group": 2,
     "datacardId": "wyrmblade.neophyte-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HEAVY GUNNER",
@@ -241,6 +260,7 @@
      "Heavy stubber",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -251,8 +271,8 @@
     "group": 2,
     "datacardId": "wyrmblade.neophyte-heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HEAVY GUNNER",
@@ -262,6 +282,7 @@
      "Mining laser",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -272,8 +293,8 @@
     "group": 2,
     "datacardId": "wyrmblade.neophyte-heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "HEAVY GUNNER",
@@ -283,6 +304,7 @@
      "Seismic cannon",
      "Gun butt"
     ],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -293,14 +315,15 @@
     "group": 2,
     "datacardId": "wyrmblade.neophyte-heavy-gunner",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "ICON BEARER",
     "datacardAnchor": "Neophyte-Icon-Bearer",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "wyrmblade.g2e9.opt1",
@@ -328,14 +351,15 @@
     "group": 2,
     "datacardId": "wyrmblade.neophyte-icon-bearer",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    },
    {
     "role": "SANCTUS SNIPER",
     "datacardAnchor": "Sanctus-Sniper",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -346,17 +370,18 @@
     "group": 2,
     "datacardId": "wyrmblade.sanctus-sniper",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Sanctus sniper rifle",
      "Fists"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "SANCTUS TALON",
     "datacardAnchor": "Sanctus-Talon",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
@@ -367,16 +392,17 @@
     "group": 2,
     "datacardId": "wyrmblade.sanctus-talon",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Sanctus bio-dagger"
-    ],
-    "uniqueUnlessRole": true
+    ]
    },
    {
     "role": "WARRIOR",
     "datacardAnchor": "Neophyte-Warrior",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "wyrmblade.g2e12.opt1",
@@ -404,8 +430,8 @@
     "group": 2,
     "datacardId": "wyrmblade.neophyte-warrior",
     "isLeader": false,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": false
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
    }
   ],
   "leaderList": [
@@ -414,6 +440,7 @@
     "datacardAnchor": "Neophyte-Leader",
     "count": 1,
     "fixedWeapons": [],
+    "fixedChoiceGroups": [],
     "loadouts": [
      {
       "id": "wyrmblade.g1.opt1",
@@ -439,14 +466,20 @@
       "choices": [
        {
         "id": "wyrmblade.g1.g1o1",
-        "label": "Bolt pistol, master-crafted autopistol",
+        "label": "Bolt pistol",
         "weapons": [
-         "Bolt pistol",
-         "Master-crafted autopistol"
+         "Bolt pistol"
         ]
        },
        {
         "id": "wyrmblade.g1.g1o2",
+        "label": "master-crafted autopistol",
+        "weapons": [
+         "Master-crafted autopistol"
+        ]
+       },
+       {
+        "id": "wyrmblade.g1.g1o3",
         "label": "web pistol",
         "weapons": [
          "Web pistol"
@@ -460,14 +493,20 @@
       "choices": [
        {
         "id": "wyrmblade.g1.g2o1",
-        "label": "Chainsword, power maul",
+        "label": "Chainsword",
         "weapons": [
-         "Chainsword",
-         "Power maul"
+         "Chainsword"
         ]
        },
        {
         "id": "wyrmblade.g1.g2o2",
+        "label": "power maul",
+        "weapons": [
+         "Power maul"
+        ]
+       },
+       {
+        "id": "wyrmblade.g1.g2o3",
         "label": "power pick",
         "weapons": [
          "Power pick"
@@ -484,8 +523,8 @@
     "group": 1,
     "datacardId": "wyrmblade.neophyte-leader",
     "isLeader": true,
-    "alwaysWeapons": [],
-    "uniqueUnlessRole": true
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
    }
   ],
   "constraints": [
@@ -513,6 +552,14 @@
   ],
   "footnotes": {
    "*": "These operatives count as two selections each."
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "These operatives count as two selections each.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
   },
   "designerNotes": [],
   "rawText": "1 WYRMBLADE NEOPHYTE LEADER operative with one of the following options:\n\nAutogun; gun butt\n\nShotgun; gun butt\n\nOr one option from each of the following:\n\nBolt pistol, master-crafted autopistol or web pistol\n\nChainsword, power maul or power pick\n\n13 WYRMBLADE operatives selected from the following list:\n\nKELERMORPH*\n\nLOCUS*\n\nGUNNER with flamer and gun butt\n\nGUNNER with grenade launcher and gun butt\n\nGUNNER with webber and gun butt\n\nHEAVY GUNNER with heavy stubber and gun butt\n\nHEAVY GUNNER with mining laser and gun butt\n\nHEAVY GUNNER with seismic cannon and gun butt\n\nICON BEARER with one of the following options:\n\nAutogun; gun butt\n\nShotgun; gun butt\n\nSANCTUS SNIPER*\n\nSANCTUS TALON*\n\nWARRIOR with one of the following options:\n\nAutogun; gun butt\n\nShotgun; gun butt\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two GUNNER operatives, up to two HEAVY GUNNER operatives and up to two CULT AGENT operatives.\n\n*These operatives count as two selections each."
