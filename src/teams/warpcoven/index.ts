@@ -76,7 +76,6 @@ import {
   placeTeamMarker,
   ployUsed,
   removeMarker,
-  removeToken,
   ruleTag,
   shortQuote,
   uniqueAction,

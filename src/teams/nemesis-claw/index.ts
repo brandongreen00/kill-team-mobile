@@ -168,9 +168,9 @@ function grantLethal(rules: HookEvents['onWeaponRules']['rules'], x: number): Ho
   return [...rules.filter((r) => r.id !== 'Lethal'), ruleTag('Lethal', best, `Lethal ${best}+`)];
 }
 
-/** Prescience points are a pure per-player count in `state.opState`. */
+/** Prescience points are a pure per-player count in `state.opState` (read-only: no mutation). */
 export function prescience(state: GameState, player: PlayerId): number {
-  return Number(bucket(state, PRESCIENCE)[player] ?? 0);
+  return Number((state.opState[PRESCIENCE] as Record<string, unknown> | undefined)?.[player] ?? 0);
 }
 function setPrescience(state: GameState, player: PlayerId, n: number): void {
   bucket(state, PRESCIENCE)[player] = Math.max(0, n);
@@ -271,6 +271,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (ev.ctx.attacker.player === T.player) return; // "Whenever an ENEMY operative is shooting"
     const seq = shootSeq(ev.state);
     if (!seq || seq.obscured) return;
+    if (seq.attackerId !== ev.ctx.attacker.id || seq.targetId !== target.id) return;
     if (!inMidnightClad(T, ev.state, target)) return;
     seq.obscured = true;
     log(ev.state, {
@@ -308,12 +309,14 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // "your opponent cannot re-roll their attack dice": the three re-roll weapon rules are
   // stripped from the enemy's weapon (this reaches fights and retaliations too, which have no
   // re-roll hook), and every granted re-roll is dropped from the shooting window.
-  reg.on('onWeaponRules', T.bind(A_SCREECHER, 12), (ev) => {
+  // Priority 45: after team rules (10), ploys (20) and equipment (30), so a re-roll granted by
+  // one of those is stripped too.
+  reg.on('onWeaponRules', T.bind(A_SCREECHER, 45), (ev) => {
     if (ev.operative.player === T.player) return;
     if (!screecherNear(T, ev.state, ev.operative)) return;
     ev.rules = ev.rules.filter((r) => r.id !== 'Balanced' && r.id !== 'Ceaseless' && r.id !== 'Relentless');
   });
-  reg.on('onRollAttack', T.bind(A_SCREECHER, 12), (ev) => {
+  reg.on('onRollAttack', T.bind(A_SCREECHER, 45), (ev) => {
     if (ev.ctx.attacker.player === T.player) return;
     if (!screecherNear(T, ev.state, ev.ctx.attacker)) return;
     ev.rerolls = [];
@@ -440,6 +443,11 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (usedThisTP(ev.state, `nemesisClaw.portent:${T.player}`)) return; // "not more than once per TP"
     const dmgN = currentNormalDamage(T, ev.state);
     if (dmgN <= 0 || ev.amount < dmgN) return;
+    // "Whenever an attack dice inflicts NORMAL Dmg on this operative": a shoot inflicts every
+    // unblocked dice at once, so at least one of them must be a normal success; a fight
+    // resolves one dice, whose damage is then exactly the Normal Dmg.
+    const seq = shootSeq(ev.state);
+    if (seq ? !seq.attack.dice.some((d) => d.state === 'normal') : ev.amount !== dmgN) return;
     if (dmgN < 3 && ev.target.wounds - ev.amount > 0) return;
     useOncePerTP(ev.state, `nemesisClaw.portent:${T.player}`);
     setPrescience(ev.state, T.player, prescience(ev.state, T.player) - 1);
@@ -738,21 +746,15 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
   // per-value exclusion on a RerollGrant, which the dice engine does not have.
 
   // ---- CHAIN SNARE --------------------------------------------------------
-  reg.on('canPerformAction', T.bind(EQ_CHAIN_SNARE, 30), (ev) => {
-    if (ev.action !== 'Fall Back') return;
+  // The roll is made when the snared operative is activated, not when it declares the Fall
+  // Back: `canPerformAction` is emitted by `availableActions` (a pure query the UI and the AI
+  // both run), and rolling there would consume the match's dice stream outside the reducer and
+  // break replay (architecture rule 2). The handler below therefore only READS the result.
+  reg.on('onActivationStart', T.bind(EQ_CHAIN_SNARE, 30), (ev) => {
     if (!hasEquipment(ev.state, T.player, EQ_CHAIN_SNARE)) return;
     if (ev.operative.player === T.player || !T.ctx) return;
-    const foe = ev.operative;
-    const key = `${foe.id}:tp${ev.state.turningPoint}`;
-    const rolled = bucket(ev.state, 'nemesisClaw.chainSnare');
-    const cached = rolled[key];
-    if (cached === false) return;
-    if (cached === true) {
-      ev.allowed = false;
-      ev.reason = 'Chain Snare: that operative cannot Fall Back during this activation';
-      return;
-    }
     if (usedThisTP(ev.state, `nemesisClaw.chainSnare:${T.player}`)) return;
+    const foe = ev.operative;
     // "while within control range of a friendly NEMESIS CLAW operative, if no other enemy
     //  operatives are within that friendly operative's control range"
     const snarer = T.friendlies(ev.state, KW).find(
@@ -761,15 +763,25 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
         T.enemies(ev.state).every((e) => e.id === foe.id || !inControlRange(T.ctx!, ev.state, o, e)),
     );
     if (!snarer) return;
-    // "roll two D6, or one D6 if that enemy operative has a higher Wounds stat"
+    // "roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that
+    //  friendly operative"
     const dice = (T.card(foe)?.wounds ?? 0) > (T.card(snarer)?.wounds ?? 0) ? 1 : 2;
     const results: number[] = [];
     for (let i = 0; i < dice; i++) results.push(T.ctx.rng.d6());
     recordRoll(ev.state, 'chainSnare', results, T.player, `CHAIN SNARE ${dice}D6 vs ${foe.letter}`);
-    const blocked = results.some((r) => r >= 4);
-    rolled[key] = blocked;
-    if (!blocked) return;
+    if (!results.some((r) => r >= 4)) return;
+    bucket(ev.state, 'nemesisClaw.chainSnare')[`${foe.id}:tp${ev.state.turningPoint}`] = true;
     useOncePerTP(ev.state, `nemesisClaw.chainSnare:${T.player}`);
+    log(ev.state, {
+      kind: 'action',
+      player: T.player,
+      text: `Chain Snare bites into ${foe.letter} — it cannot Fall Back during this activation`,
+    });
+  });
+  reg.on('canPerformAction', T.bind(EQ_CHAIN_SNARE, 30), (ev) => {
+    if (ev.action !== 'Fall Back') return;
+    const snared = (ev.state.opState['nemesisClaw.chainSnare'] ?? {}) as Record<string, unknown>;
+    if (snared[`${ev.operative.id}:tp${ev.state.turningPoint}`] !== true) return;
     ev.allowed = false;
     ev.reason = 'Chain Snare: that operative cannot Fall Back during this activation';
   });
@@ -779,12 +791,10 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     if (!hasEquipment(ev.state, T.player, EQ_GRISLY_TROPHY)) return;
     if (ev.operative.player === T.player) return;
     if (usedThisBattle(ev.state, `nemesisClaw.grisly:${T.player}`)) return;
-    const killer = currentAttacker(ev.state);
-    const holders = T.friendlies(ev.state, KW)
-      .filter((o) => !o.incapacitated && T.gap(o, ev.operative) <= 2 + 1e-6)
-      .sort((a, b) => (a.id === killer?.id ? -1 : b.id === killer?.id ? 1 : a.id < b.id ? -1 : 1));
-    const holder = holders[0];
-    if (!holder) return;
+    // "when a friendly NEMESIS CLAW operative incapacitates an enemy operative within 2" of it"
+    const holder = currentAttacker(ev.state);
+    if (!holder || !T.mineKw(holder, KW) || holder.incapacitated) return;
+    if (T.gap(holder, ev.operative) > 2 + 1e-6) return;
     useOncePerBattle(ev.state, `nemesisClaw.grisly:${T.player}`);
     giveToken(ev.state, holder, GRISLY_TROPHY_TOKEN, {
       sourceId: EQ_GRISLY_TROPHY,
