@@ -222,3 +222,56 @@ describe('damage, injured and APL clamping', () => {
     expect(aplOf(ctx, s, op)).toBe(3);
   });
 });
+
+describe('counteract is one free 1AP action, capped at 2" (core rules › Counteract)', () => {
+  function counteracting(): { s: GameState; ctx: GameContext; id: string } {
+    const ctx = testContext();
+    const s = battle(ctx, testMap(), 1);
+    const id = s.teams.p1.operativeIds[0]!;
+    s.operatives[id]!.expended = true;
+    s.operatives[id]!.ready = false;
+    s.operatives[id]!.order = 'engage';
+    s.activePlayer = 'p1';
+    const out = reduce(s, { t: 'Counteract', player: 'p1', operativeId: id }, ctx);
+    expect(out.ok).toBe(true);
+    return { s: out.state, ctx, id };
+  }
+
+  it('allows exactly one action, not an unlimited free turn', () => {
+    const { s, ctx, id } = counteracting();
+    const first = reduce(s, { t: 'PerformAction', operativeId: id, action: 'Reposition', params: { path: { points: [{ x: 4.5, y: 6 }] } } }, ctx);
+    expect(first.ok, first.reason).toBe(true);
+    const second = reduce(first.state, { t: 'PerformAction', operativeId: id, action: 'Dash', params: { path: { points: [{ x: 5.5, y: 6 }] } } }, ctx);
+    expect(second.ok).toBe(false);
+    expect(second.reason).toContain('only perform one action');
+  });
+
+  it('caps the move at 2", whatever the Move stat says', () => {
+    const { s, ctx, id } = counteracting();
+    const far = reduce(s, { t: 'PerformAction', operativeId: id, action: 'Reposition', params: { path: { points: [{ x: 8, y: 6 }] } } }, ctx);
+    expect(far.ok).toBe(false);
+    expect(far.reason).toContain('more than 2"');
+    const near = reduce(s, { t: 'PerformAction', operativeId: id, action: 'Reposition', params: { path: { points: [{ x: 4.9, y: 6 }] } } }, ctx);
+    expect(near.ok, near.reason).toBe(true);
+  });
+
+  it('does not count as an activation for the smoke-duration clock', () => {
+    const { s, ctx, id } = counteracting();
+    const before = s.activationsThisTP;
+    const out = reduce(s, { t: 'EndActivation', operativeId: id }, ctx);
+    // "Counteracting isn't an activation, it's instead of activating."
+    expect(out.state.activationsThisTP).toBe(before);
+  });
+});
+
+describe('performance invariants', () => {
+  it('shares the immutable map across intents instead of deep-cloning it', () => {
+    const ctx = testContext();
+    const s = battle(ctx, testMap());
+    const out = reduce(s, { t: 'AdvancePhase' }, ctx);
+    // A structuredClone of state.map would break the terrain-index cache on every intent
+    // and, when profiled, accounted for 36% of the engine's CPU.
+    expect(out.state.map).toBe(s.map);
+    expect(out.state.operatives).not.toBe(s.operatives);
+  });
+});

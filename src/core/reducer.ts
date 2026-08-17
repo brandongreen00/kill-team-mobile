@@ -34,7 +34,7 @@ import { advanceFight, startFight } from './sequences/fight.ts';
 import { baseWhollyWithin, baseGap } from './geometry.ts';
 import { baseTouchesHazardous } from './terrain.ts';
 import type { Intent } from './intents.ts';
-import type { GameState, OperativeState, PlayerId } from './types.ts';
+import type { GameState, KillzoneMap, OperativeState, PlayerId } from './types.ts';
 import { otherPlayer } from './types.ts';
 
 export interface ReduceOutcome {
@@ -312,7 +312,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       op.actionsThisActivation = [];
       next.activeOperativeId = op.id;
       next.activePlayer = intent.player;
-      next.opState['counteract'] = { operativeId: op.id };
+      next.opState['counteract'] = { operativeId: op.id, actionsUsed: 0 };
       log(next, { kind: 'action', player: intent.player, text: `${op.letter} counteracts` });
       return ok(next);
     }
@@ -333,12 +333,17 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       if (def.available && !def.available(ctx, next, op))
         return fail(`${def.name} is not available in this killzone (Close Quarters / terrain gated)`);
       const restrictionKey = def.treatedAs ?? def.id;
-      const counteracting = next.opState['counteract']?.['operativeId'] === op.id;
+      const counteract = next.opState['counteract'];
+      const counteracting = counteract?.['operativeId'] === op.id;
       if (!counteracting && op.actionsThisActivation.includes(restrictionKey))
         return fail(`action restrictions: ${restrictionKey} was already performed this activation`);
       const ap = counteracting ? 0 : actionCost(ctx, next, op, def);
       if (counteracting && def.ap !== 1) return fail('a counteraction must be a 1AP action');
       if (counteracting && def.id === 'Guard') return fail('a counteraction cannot be the Guard action');
+      // "you can select an expended friendly operative with an Engage order to perform a
+      // 1AP action (excluding Guard) for free" — ONE action, not an unlimited free turn.
+      if (counteracting && Number(counteract?.['actionsUsed'] ?? 0) > 0)
+        return fail('a counteracting operative can only perform one action');
       if (!counteracting && op.apSpent + ap > aplOf(ctx, next, op))
         return fail(`not enough AP for ${def.name}`);
       const hookEv = ctx.hooks.emit('canPerformAction', next, { state: next, operative: op, action: def.id, allowed: true });
@@ -357,6 +362,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       }
       op.apSpent += ap;
       op.actionsThisActivation.push(restrictionKey);
+      if (counteracting && counteract) counteract['actionsUsed'] = Number(counteract['actionsUsed'] ?? 0) + 1;
       if (def.id !== 'Guard') op.onGuard = false;
       removeIncapacitatedAfterAction(ctx, next);
       offerGuardInterrupt(ctx, next, op);
@@ -373,8 +379,12 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       ctx.hooks.emit('onActivationEnd', next, { state: next, operative: op });
       expireActivationEffects(next, op.id);
       next.activeOperativeId = undefined as unknown as string | undefined;
-      next.activationsThisTP += 1;
-      tickSmoke(next);
+      // "Counteracting isn't an activation, it's instead of activating" — so it does not
+      // count toward the activation clock a smoke grenade's duration is measured in.
+      if (!counteracting) {
+        next.activationsThisTP += 1;
+        tickSmoke(next);
+      }
       delete next.opState['counteract'];
       removeIncapacitated(ctx, next);
       next.activePlayer = otherPlayer(op.player);
@@ -440,6 +450,8 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
         if (!r.ok) return fail(r.reason ?? 'the interrupt fight is not possible');
         advanceFight(ctx, next);
       }
+      // "Once during each enemy operative's activation" — the window is spent either way.
+      delete next.opState['guardOffer'];
       log(next, { kind: 'action', player: intent.player, text: `${op.letter} interrupts with On Guard` });
       return ok(next);
     }
@@ -517,8 +529,17 @@ function ok(state: GameState): ReduceOutcome {
   return { state, ok: true };
 }
 
+/**
+ * The map is immutable for the whole battle — terrain changes go to `state.terrainState`
+ * and equipment to `state.placedFeatures` — so cloning it on every intent is pure waste
+ * (it was 36% of CPU in a profiled game) AND it defeated the terrain-index cache, which
+ * keys on map identity. Share the reference instead.
+ */
 function clone(state: GameState): GameState {
-  return structuredClone(state);
+  const { map, ...rest } = state;
+  const next = structuredClone(rest) as Omit<GameState, 'map'> & { map: KillzoneMap };
+  next.map = map;
+  return next as GameState;
 }
 
 function letterFor(i: number): string {

@@ -67,6 +67,16 @@ const engaged = (ctx: GameContext, state: GameState, op: OperativeState): boolea
 
 const did = (op: OperativeState, action: string): boolean => op.actionsThisActivation.includes(action);
 
+/**
+ * "That operative cannot move more than 2\", or must be set up wholly within 2\" if it's
+ * removed and set up again, while counteracting (this is not a change to its Move stat, and
+ * takes precedence over all other rules)."
+ */
+function withCounteractCap(state: GameState, op: OperativeState, opts: MoveOptions): MoveOptions {
+  const counteracting = state.opState['counteract']?.['operativeId'] === op.id;
+  return counteracting ? { ...opts, hardCap: 2 } : opts;
+}
+
 function moveCheck(
   ctx: GameContext,
   state: GameState,
@@ -75,7 +85,7 @@ function moveCheck(
   opts: MoveOptions,
 ): { ok: boolean; reason?: string } {
   if (!params.path) return { ok: false, reason: 'no path supplied' };
-  const v = validateMove(ctx, state, op, params.path, opts);
+  const v = validateMove(ctx, state, op, params.path, withCounteractCap(state, op, opts));
   return v.ok ? { ok: true } : { ok: false, reason: v.reason ?? 'illegal move' };
 }
 
@@ -88,7 +98,7 @@ function applyMove(
   label: string,
 ): { ok: boolean; reason?: string } {
   if (!params.path) return { ok: false, reason: 'no path supplied' };
-  const v = validateMove(ctx, state, op, params.path, opts);
+  const v = validateMove(ctx, state, op, params.path, withCounteractCap(state, op, opts));
   if (!v.ok) return { ok: false, reason: v.reason ?? 'illegal move' };
   op.pos = { ...v.endPos };
   op.z = v.endZ;
