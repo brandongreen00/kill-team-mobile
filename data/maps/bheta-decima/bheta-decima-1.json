@@ -243,10 +243,7 @@
     "x": 7.656,
     "y": 15.559,
     "rotDeg": 0,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9955
+    "flip": false
    }
   },
   {
@@ -324,12 +321,9 @@
     "x": 12.863,
     "y": 17.88,
     "rotDeg": 0,
-    "flip": true
+    "flip": false
    },
-   "groupId": "bheta-decima-1.g1",
-   "qa": {
-    "templateIoU": 0.5908
-   }
+   "groupId": "bheta-decima-1.g1"
   },
   {
    "id": "bheta-decima-1.A",
@@ -381,13 +375,10 @@
    "placement": {
     "x": 14.868,
     "y": 15.708,
-    "rotDeg": 270,
+    "rotDeg": 0,
     "flip": false
    },
-   "groupId": "bheta-decima-1.g1",
-   "qa": {
-    "templateIoU": 0.9832
-   }
+   "groupId": "bheta-decima-1.g1"
   },
   {
    "id": "bheta-decima-1.C2",
@@ -440,10 +431,7 @@
     "x": 23.156,
     "y": 15.559,
     "rotDeg": 0,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9955
+    "flip": false
    }
   },
   {
@@ -488,11 +476,8 @@
    "placement": {
     "x": 18.75,
     "y": 13.292,
-    "rotDeg": 270,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9998
    }
   },
   {
@@ -549,11 +534,8 @@
    "placement": {
     "x": 15.935,
     "y": 9.336,
-    "rotDeg": 180,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9524
    }
   },
   {
@@ -837,11 +819,8 @@
    "placement": {
     "x": 14.977,
     "y": 5.252,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9945
    }
   },
   {
@@ -887,10 +866,7 @@
     "x": 8.375,
     "y": 5.292,
     "rotDeg": 0,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9881
+    "flip": false
    }
   },
   {
@@ -936,10 +912,7 @@
     "x": 21.625,
     "y": 5.292,
     "rotDeg": 0,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9881
+    "flip": false
    }
   }
  ],
@@ -955,9 +928,7 @@
    "dropDepthP2": 6.0,
    "deployment": "short-edge",
    "p1Side": "right",
-   "centreSeamErrIn": 0.0208,
-   "templateIoUMin": 0.5908,
-   "templateIoUMedian": 0.9881
+   "centreSeamErrIn": 0.0208
   }
  },
  "hazardous": [

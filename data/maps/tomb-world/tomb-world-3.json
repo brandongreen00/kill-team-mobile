@@ -33,7 +33,7 @@
   "p2": [
    [
     {
-     "x": 15.719,
+     "x": 23.344,
      "y": 0.0
     },
     {
@@ -45,7 +45,7 @@
      "y": 23.875
     },
     {
-     "x": 15.719,
+     "x": 23.344,
      "y": 23.875
     }
    ]
@@ -234,9 +234,6 @@
     "y": 19.562,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -282,9 +279,6 @@
     "y": 15.75,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -328,11 +322,8 @@
    "placement": {
     "x": 10.0,
     "y": 15.75,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -378,9 +369,6 @@
     "y": 15.75,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -424,11 +412,8 @@
    "placement": {
     "x": 21.438,
     "y": 15.75,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -472,11 +457,8 @@
    "placement": {
     "x": 6.188,
     "y": 8.125,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -522,9 +504,6 @@
     "y": 8.125,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -568,11 +547,8 @@
    "placement": {
     "x": 17.625,
     "y": 8.125,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -618,9 +594,6 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -666,9 +639,6 @@
     "y": 11.938,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -714,9 +684,6 @@
     "y": 4.312,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -762,9 +729,6 @@
     "y": 19.562,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -810,9 +774,6 @@
     "y": 11.938,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -858,9 +819,6 @@
     "y": 4.312,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -906,9 +864,6 @@
     "y": 19.562,
     "rotDeg": 90,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -953,9 +908,6 @@
     "y": 20.475,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1000,9 +952,6 @@
     "y": 19.522,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1049,9 +998,6 @@
     "y": 19.542,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1096,9 +1042,6 @@
     "y": 11.917,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1143,9 +1086,6 @@
     "y": 4.292,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1190,9 +1130,6 @@
     "y": 4.272,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   }
  ],
@@ -1205,14 +1142,12 @@
    "pxPerInch": 24.6557,
    "pxPerInchY": 24.6557,
    "dropDepthP1": 4.2812,
-   "dropDepthP2": 11.9062,
+   "dropDepthP2": 4.2812,
    "deployment": "short-edge",
    "p1Side": "left",
    "centreSeamErrIn": 0.0406,
    "latticeStepPx": 94.0,
-   "wallThicknessPx": 9.0,
-   "templateIoUMin": 1.0,
-   "templateIoUMedian": 1.0
+   "wallThicknessPx": 9.0
   }
  }
 }

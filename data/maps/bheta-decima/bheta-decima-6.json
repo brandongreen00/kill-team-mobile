@@ -234,9 +234,6 @@
     "y": 17.792,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.991
    }
   },
   {
@@ -281,11 +278,8 @@
    "placement": {
     "x": 19.104,
     "y": 17.792,
-    "rotDeg": 90,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9701
+    "rotDeg": 0,
+    "flip": false
    }
   },
   {
@@ -333,10 +327,7 @@
     "rotDeg": 0,
     "flip": false
    },
-   "groupId": "bheta-decima-6.g2",
-   "qa": {
-    "templateIoU": 0.9998
-   }
+   "groupId": "bheta-decima-6.g2"
   },
   {
    "id": "bheta-decima-6.B2",
@@ -532,13 +523,10 @@
    "placement": {
     "x": 8.88,
     "y": 10.725,
-    "rotDeg": 180,
+    "rotDeg": 0,
     "flip": false
    },
-   "groupId": "bheta-decima-6.g2",
-   "qa": {
-    "templateIoU": 0.4935
-   }
+   "groupId": "bheta-decima-6.g2"
   },
   {
    "id": "bheta-decima-6.D",
@@ -1069,13 +1057,10 @@
    "placement": {
     "x": 5.393,
     "y": 10.912,
-    "rotDeg": 270,
-    "flip": true
+    "rotDeg": 0,
+    "flip": false
    },
-   "groupId": "bheta-decima-6.g2",
-   "qa": {
-    "templateIoU": 0.3597
-   }
+   "groupId": "bheta-decima-6.g2"
   },
   {
    "id": "bheta-decima-6.A2",
@@ -1149,9 +1134,6 @@
     "y": 11.767,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.7998
    }
   },
   {
@@ -1228,11 +1210,8 @@
    "placement": {
     "x": 18.965,
     "y": 10.406,
-    "rotDeg": 270,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9258
+    "rotDeg": 0,
+    "flip": false
    }
   },
   {
@@ -1279,9 +1258,6 @@
     "y": 4.292,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.991
    }
   },
   {
@@ -1328,9 +1304,6 @@
     "y": 4.292,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9912
    }
   }
  ],
@@ -1346,9 +1319,7 @@
    "dropDepthP2": 3.0,
    "deployment": "long-edge",
    "p1Side": "top",
-   "centreSeamErrIn": 1.2083,
-   "templateIoUMin": 0.3597,
-   "templateIoUMedian": 0.9701
+   "centreSeamErrIn": 1.2083
   }
  },
  "hazardous": [
