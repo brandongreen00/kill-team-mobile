@@ -5,7 +5,16 @@
 import { HookRegistry, type TeamModule } from './hooks.ts';
 import type { Rng } from './rng.ts';
 import { buildTerrainIndex, type TerrainIndex } from './terrain.ts';
-import type { Datacard, GameState, KillzoneMap, PlayerId } from './types.ts';
+import type { Datacard, GameState, KillzoneMap, PlayerId, Vec2 } from './types.ts';
+
+export interface PlaceEquipmentIntent {
+  player: PlayerId;
+  equipmentId: string;
+  itemIndex: number;
+  pos: Vec2;
+  rotDeg?: number;
+  z?: number;
+}
 
 export interface OpDef {
   id: string;
@@ -35,6 +44,14 @@ export interface GameContext {
   equipment: Map<string, EquipmentDef>;
   rng: Rng;
   hooks: HookRegistry;
+  /**
+   * Integration seams filled in by the equipment and ops layers. The reducer stays the single
+   * entry point; these keep it from importing every rule module directly.
+   */
+  placeEquipment?: (ctx: GameContext, state: GameState, intent: PlaceEquipmentIntent) => { ok: boolean; reason?: string };
+  playInitiativeCard?: (ctx: GameContext, state: GameState, player: PlayerId, cardId: string) => { ok: boolean; reason?: string };
+  scoreEndOfTurningPoint?: (ctx: GameContext, state: GameState) => void;
+  scoreEndOfBattle?: (ctx: GameContext, state: GameState) => void;
   /** Cached terrain index, invalidated when the map object or terrain state changes. */
   terrainCache?: { map: KillzoneMap; key: string; index: TerrainIndex };
 }

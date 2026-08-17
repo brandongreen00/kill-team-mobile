@@ -185,6 +185,41 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       return ok(next);
     }
 
+    case 'PlaceEquipment': {
+      if (!ctx.placeEquipment) return fail('equipment placement is not available in this build');
+      const res = ctx.placeEquipment(ctx, next, intent);
+      if (!res.ok) return fail(res.reason ?? 'that equipment cannot be set up there');
+      next.setup.equipmentPlaced[intent.player] = (next.setup.equipmentPlaced[intent.player] ?? 0) + 1;
+      next.setup.toAct = otherPlayer(intent.player);
+      return ok(next);
+    }
+
+    case 'SkipEquipmentPlacement': {
+      next.setup.toAct = otherPlayer(intent.player);
+      log(next, { kind: 'system', player: intent.player, text: 'no more equipment to set up' });
+      return ok(next);
+    }
+
+    case 'PlayInitiativeCard': {
+      if (!ctx.playInitiativeCard) return fail('initiative cards are not available in this build');
+      if (!next.teams[intent.player].initiativeCards.includes(intent.cardId))
+        return fail(`you do not hold the '${intent.cardId}' initiative card`);
+      const res = ctx.playInitiativeCard(ctx, next, intent.player, intent.cardId);
+      if (!res.ok) return fail(res.reason ?? 'that initiative card cannot be played now');
+      next.teams[intent.player].initiativeCards = next.teams[intent.player].initiativeCards.filter(
+        (c) => c !== intent.cardId,
+      );
+      return ok(next);
+    }
+
+    case 'PassInitiativeCards': {
+      next.opState['initiativeCards'] = {
+        ...(next.opState['initiativeCards'] ?? {}),
+        [`passed:${intent.player}`]: true,
+      };
+      return ok(next);
+    }
+
     case 'FinishSetup': {
       const missing = Object.values(next.operatives).filter((o) => o.pos.x < -50);
       if (missing.length > 0) return fail(`${missing.length} operatives are not deployed`);
@@ -533,9 +568,11 @@ function advancePhase(ctx: GameContext, state: GameState): void {
 
 function advanceTurningPoint(ctx: GameContext, state: GameState): void {
   endTurningPoint(ctx, state);
+  ctx.scoreEndOfTurningPoint?.(ctx, state);
   state.phase = 'endOfTP';
   if (state.turningPoint >= (state.maxTurningPoints || MAX_TURNING_POINTS)) {
     state.phase = 'battleEnd';
+    ctx.scoreEndOfBattle?.(ctx, state);
     state.winner = determineWinner(state);
     log(state, {
       kind: 'system',
