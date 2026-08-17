@@ -221,13 +221,27 @@ describe('DEATHWATCH data (pinned against data/teams/deathwatch.json)', () => {
     expect(picks).toHaveLength(5);
     expect(picks[0]!.datacardId).toBe(SERGEANT);
     expect(validateRosterFor(DATA, picks).ok).toBe(true);
-    // KNOWN DATA GAP, reported to the orchestrator: "can only include up to one GRAVIS
-    // operative" is scraped as `{kind:'maxCount', role:'GRAVIS'}`, but GRAVIS is a KEYWORD,
-    // not a selection role, so the shared validator's role match never fires and the printed
-    // default roster contains two GRAVIS operatives.
+  });
+
+  it('selection: "your kill team can only include up to one GRAVIS operative" — a cap on a keyword, not a list role', () => {
+    // GRAVIS is a datacard KEYWORD shared by the BOMBARD, BREACHER and HORDE-SLAYER rows; it is
+    // not one of the printed selection roles. The shared validator matched `entry.role` only, so
+    // this cap was dead and `defaultRoster` produced a two-GRAVIS kill team it then accepted.
     expect(DATA.selection.constraints).toContainEqual({ kind: 'maxCount', role: 'GRAVIS', max: 1 });
-    const gravis = picks.filter((p) => (DATA.datacards.find((c) => c.id === p.datacardId)?.keywords ?? []).includes('GRAVIS'));
-    expect(gravis).toHaveLength(2);
+    expect(DATA.selection.list.map((e) => e.role)).not.toContain('GRAVIS');
+    const gravisCards = DATA.datacards.filter((c) => c.keywords.includes('GRAVIS')).map((c) => c.id);
+    expect(gravisCards).toHaveLength(3);
+
+    const isGravis = (p: { datacardId: string }): boolean => gravisCards.includes(p.datacardId);
+    // The printed default roster now respects the cap.
+    expect(defaultRoster(DATA).filter(isGravis)).toHaveLength(1);
+    // And a roster that breaks it is rejected, quoting the printed requirement.
+    const picks = defaultRoster(DATA);
+    const second = gravisCards.find((id) => !picks.some((p) => p.datacardId === id))!;
+    const two = [...picks.filter((p) => !isGravis(p)), { datacardId: gravisCards[0]! }, { datacardId: second }];
+    const v = validateRosterFor(DATA, two);
+    expect(v.ok).toBe(false);
+    expect(v.errors.join(' ')).toContain('more than 1 GRAVIS');
   });
 });
 
