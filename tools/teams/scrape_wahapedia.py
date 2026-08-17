@@ -191,14 +191,16 @@ def parse_books(h: str) -> tuple[list[dict], str]:
             "version": vals[3], "lastUpdate": vals[4],
             "pdf": pdf.group(1) if pdf else None,
         })
-    # the team's own faction book is the version we quote
+    # The team's own faction book is the version we quote. Several team pages
+    # leave the Version cell empty and only print a Last update date, so that is
+    # the documented fallback.
     ver = ""
     for r in rows:
         if r["kind"].lower() == "faction":
-            ver = r["version"]
+            ver = r["version"] or r["lastUpdate"]
             break
     if not ver and rows:
-        ver = rows[0]["version"]
+        ver = rows[0]["version"] or rows[0]["lastUpdate"]
     return rows, ver
 
 
@@ -299,50 +301,77 @@ def split_marker(name: str) -> tuple[str, str]:
 def parse_abilities_actions(card_html: str) -> tuple[list[dict], list[dict], list[dict]]:
     """-> (abilities, unique actions, footnote notes).
 
-    Footnote notes are the `*Note that Torrent 0" means ...` blocks that sit in
-    the same column as the abilities but define/clarify a marked weapon rule
-    rather than granting an ability."""
-    m = re.search(r'(?s)<div class="wtOuterFrame Columns2">(.*?)<table class="dsKeywords"', card_html)
-    if not m:
+    The abilities/actions column is a `div.wtOuterFrame` AFTER the weapon
+    table's own wtOuterFrame. Three printed forms are handled:
+      * `<span class="redfont">Name</span><b>: </b>text`     (the usual one)
+      * `*<b>Skytorch:</b> text`                              (Vespid Swarmguard)
+      * `<h3 class="h_actions_ds">NAME<span>1AP</span></h3>`  (unique actions)
+    A block that is none of these but opens with a footnote marker is a
+    footnote NOTE (`*Note that Torrent 0" means ...`), kept separately."""
+    end = card_html.find('<table class="dsKeywords"')
+    if end < 0:
+        end = len(card_html)
+    seg = ""
+    for m in re.finditer(r'<div class="wtOuterFrame[^"]*">', card_html):
+        if m.start() >= end:
+            break
+        if 'class="wTable"' in card_html[m.end():m.end() + 600]:
+            continue
+        seg = card_html[m.end():end]
+        break
+    if not seg:
         return [], [], []
-    seg = m.group(1)
-    blocks = re.split(r'(?=<div class="BreakInsideAvoid" style="padding:2px 6px 10px 6px">)', seg)
+
     abilities: list[dict] = []
     actions: list[dict] = []
     footnotes: list[dict] = []
+
+    blocks = re.split(r'(?=<div class="BreakInsideAvoid"[^>]*style="padding:2px 6px 10px 6px">)', seg)
     for b in blocks:
         if not b.strip():
             continue
-        if 'class="redfont"' not in b and "h_actions_ds" not in b:
-            txt = text_of(b)
+        # --- unique actions -------------------------------------------------
+        hits = list(ACTION_HDR.finditer(b))
+        for n, hm in enumerate(hits):
+            after = b[hm.end(): hits[n + 1].start() if n + 1 < len(hits) else len(b)]
+            eff = [text_of(x) for x in re.findall(r'(?s)<div class="actionEffect">(.*?)</div>', after)]
+            cond = [text_of(x) for x in re.findall(r'(?s)<div class="actionConditions">(.*?)</div>', after)]
+            kws = [inline_text(k) for k in re.findall(r'(?s)<span class="kwb[^"]*">(.*?)</span>', hm.group(1))]
+            actions.append({
+                "name": inline_text(hm.group(1)),
+                "cost": inline_text(hm.group(2)),
+                "keywords": [k for k in kws if k],
+                "effect": eff, "conditions": cond, "text": text_of(after),
+            })
+        head = b[: hits[0].start()] if hits else b
+
+        # --- redfont abilities ----------------------------------------------
+        found = False
+        for am in re.finditer(r'(?s)<span class="redfont">(.*?)</span><b>:\s*</b>(.*?)'
+                              r'(?=<span class="redfont">|<div class="a_indent">|$)', head):
+            marker, nm = split_marker(inline_text(am.group(1)))
+            abilities.append({"name": nm, "marker": marker, "text": text_of(am.group(2))})
+            found = True
+        if found:
+            continue
+
+        # --- bold-name abilities --------------------------------------------
+        bm = re.match(r'(?s)\s*(?:<div[^>]*>\s*)*'
+                      r'(?:<span class="ast">(\*+)</span>|<sup\b[^>]*>\s*(?:<b>)?(\d+)(?:</b>)?\s*</sup>)?'
+                      r'\s*<b>\s*([^<:]{2,60}?)\s*:?\s*</b>\s*:?\s*(.*)$', head)
+        if bm and bm.group(3) and len(text_of(bm.group(4))) > 20:
+            marker = bm.group(1) or ("^" + bm.group(2) if bm.group(2) else "")
+            abilities.append({"name": bm.group(3).strip(), "marker": marker,
+                              "text": text_of(bm.group(4))})
+            continue
+
+        # --- footnote notes ---------------------------------------------------
+        if not hits:
+            txt = text_of(head)
             if txt:
                 marker, body = split_marker(txt)
                 if marker:
                     footnotes.append({"marker": marker, "text": body})
-            continue
-        if 'class="redfont"' in b:
-            for am in re.finditer(r'(?s)<span class="redfont">(.*?)</span><b>:\s*</b>(.*?)$', b):
-                body = am.group(2)
-                body = re.split(r'<div class="a_indent">', body)[0]
-                marker, nm = split_marker(inline_text(am.group(1)))
-                abilities.append({"name": nm, "marker": marker, "text": text_of(body)})
-        elif "h_actions_ds" in b:
-            hm = ACTION_HDR.search(b)
-            if not hm:
-                continue
-            after = b[hm.end():]
-            eff = [text_of(x) for x in re.findall(r'(?s)<div class="actionEffect">(.*?)</div>', after)]
-            cond = [text_of(x) for x in re.findall(r'(?s)<div class="actionConditions">(.*?)</div>', after)]
-            name_html = hm.group(1)
-            kws = [inline_text(k) for k in re.findall(r'(?s)<span class="kwb[^"]*">(.*?)</span>', name_html)]
-            actions.append({
-                "name": inline_text(name_html),
-                "cost": inline_text(hm.group(2)),
-                "keywords": [k for k in kws if k],
-                "effect": eff,
-                "conditions": cond,
-                "text": text_of(after),
-            })
     return abilities, actions, footnotes
 
 

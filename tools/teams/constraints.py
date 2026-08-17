@@ -16,10 +16,13 @@ from selection import num, slugify
 
 ROLE = r"[A-Z0-9][A-Z0-9'’\.\- ]*[A-Z0-9\.]"
 
+_ONCE = r"can only include each (?:operative|option)(?: on this list| above)? once"
 RE_UNIQUE_EXCEPT = re.compile(
-    r"(?i)other than (.+?) operatives?, your kill team can only include each operative on this list once")
-RE_UNIQUE = re.compile(
-    r"(?i)your kill team can only include each operative on this list once")
+    r"(?i)other than (.+?) operatives?, your kill team " + _ONCE)
+RE_UNIQUE = re.compile(r"(?i)your kill team " + _ONCE)
+RE_COUNTS_AS = re.compile(r"(?i)these operatives count as (\w+) selections? each")
+RE_NOT_BOTH = re.compile(
+    r"(?i)your kill team cannot include both an? (.+?) and an? ([^.]+)")
 RE_MAX_ROLE = re.compile(
     r"(?i)(?:include |and )?up to (\w+) (%s) operatives?(?:\s*\(([^)]*)\))?" % ROLE)
 RE_MAX_ITEM = re.compile(r"(?i)up to (\w+) ([a-z][^,.;]*?)(?=[,.;]|\s+and\s+up to|$)")
@@ -109,6 +112,18 @@ def parse_constraints(free_text: str, slug: str) -> tuple[list[dict], dict[str, 
 
             if RE_EXCLUSIVE.search(sent):
                 add({"kind": "exclusive", "group": marker or "*", "text": sent})
+                matched = True
+
+            mm = RE_COUNTS_AS.search(sent)
+            if mm and num(mm.group(1)) is not None:
+                add({"kind": "selectionCost", "group": marker or "*",
+                     "cost": num(mm.group(1))})
+                matched = True
+
+            mm = RE_NOT_BOTH.search(sent)
+            if mm:
+                add({"kind": "exclusiveItems",
+                     "items": [mm.group(1).strip(" ."), mm.group(2).strip(" .")]})
                 matched = True
 
             if RE_HALF.search(sent):

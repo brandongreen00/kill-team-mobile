@@ -341,6 +341,8 @@ def build_selection(raw: dict, cards: list[dict], anchor_to_card: dict[str, str]
             for c in constraints:
                 if c["kind"] == "halfSelection" and c["group"] == e["footnoteGroup"]:
                     e["selectionCost"] = 0.5
+                if c["kind"] == "selectionCost" and c["group"] == e["footnoteGroup"]:
+                    e["selectionCost"] = float(c["cost"])
             blk = fn_blocks.get(e["footnoteGroup"])
             if blk and blk.get("fixedWeapons") and not e["fixedWeapons"]:
                 e["fixedWeapons"] = list(blk["fixedWeapons"])
@@ -489,7 +491,26 @@ def resolve_rare(rare_sink: dict, teams: dict[str, dict], raws: dict[str, dict])
             "uses": sorted(set(s["usedBy"])),
         }
         if not definition:
+            # No printed definition anywhere. Record where the name IS mentioned
+            # so the team module author can find the governing rule. (`PSYCHIC`
+            # is the archetypal case: a tag rule with no standalone entry, read
+            # by other rules such as Anti-PSYKER and Weapons of the Witch Hunters.)
+            refs: list[str] = []
+            needle = s["name"].lower()
+            for team_id, raw in sorted(raws.items()):
+                for kind, blocks in (("faction rule", raw.get("factionRules", [])),
+                                     ("strategy ploy", raw.get("strategyPloys", [])),
+                                     ("firefight ploy", raw.get("firefightPloys", [])),
+                                     ("equipment", raw.get("equipment", []))):
+                    for b in blocks:
+                        if needle in (b.get("text") or "").lower():
+                            refs.append(f"{team_id}: {kind} '{b['name']}'")
+                for c in raw["datacards"]:
+                    for a in c.get("abilities", []):
+                        if needle in (a.get("text") or "").lower():
+                            refs.append(f"{team_id}: {c['name']} ability '{a['name']}'")
             out[rid]["unresolved"] = True
+            out[rid]["referencedIn"] = refs[:12]
     return out
 
 

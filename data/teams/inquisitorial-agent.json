@@ -6,7 +6,7 @@
  "archetypes": [
   "Any"
  ],
- "booksVersion": "",
+ "booksVersion": "June 2026",
  "books": [
   {
    "book": "Inquisitorial Agents",
@@ -18,7 +18,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/inquisitorial-agent/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:22+00:00",
  "source": "cache",
  "selection": {
   "leader": {

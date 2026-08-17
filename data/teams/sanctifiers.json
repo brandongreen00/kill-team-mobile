@@ -19,7 +19,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/sanctifiers/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:22+00:00",
  "source": "cache",
  "selection": {
   "leader": {
@@ -521,7 +521,7 @@
     {
      "id": "sanctifiers.sanctifier-cherub.cherub",
      "name": "Cherub",
-     "text": "Whenever determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhenever this operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".\n\nThis operative cannot use any weapons that aren’t on its datacard, or perform unique actions other than Incentivise.\n\nINCENTIVISE1AP\nSUPPORT. Select one other friendly SANCTIFIER operative (excluding CONFESSOR, DEATH CULT ASSASSIN, MIRACULIST and ORATOR) visible to and within 2\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+     "text": "Whenever determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhenever this operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".\n\nThis operative cannot use any weapons that aren’t on its datacard, or perform unique actions other than Incentivise."
     },
     {
      "id": "sanctifiers.sanctifier-cherub.fly",
@@ -529,7 +529,14 @@
      "text": "Whenever this operative is performing the Charge, Fall Back or Reposition action, it can FLY. If it does, don’t move it. Instead, remove it from the killzone and set it back up wholly within a distance equal to its Move stat horizontally of its original location (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, this distance cannot be measured over or through Wall terrain). Note that it gains no additional distance when performing the Charge action. It must be set up in a location it can be placed, and unless it’s the Charge action, it cannot be set up within control range of an enemy operative."
     }
    ],
-   "uniqueActions": [],
+   "uniqueActions": [
+    {
+     "id": "sanctifiers.sanctifier-cherub.act.incentivise",
+     "name": "INCENTIVISE",
+     "ap": 1,
+     "text": "SUPPORT. Select one other friendly SANCTIFIER operative (excluding CONFESSOR, DEATH CULT ASSASSIN, MIRACULIST and ORATOR) visible to and within 2\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
    "fluff": "Grown in flesh-vats, Cherubim are diminutive servitors that undertake a wide variety of ritual tasks and duties. Those that accompany Sanctifiers are often armed with incentivisers to disable fleeing foes."
   },
   {
@@ -701,8 +708,21 @@
      ]
     }
    ],
-   "abilities": [],
-   "uniqueActions": [],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-death-cult-assassin.bladed-stance",
+     "name": "Bladed Stance",
+     "text": "Whenever this operative is fighting or retaliating, you can resolve one of your successes before the normal order. If you do, that success must be used to block."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "sanctifiers.sanctifier-death-cult-assassin.act.trained-assassin",
+     "name": "TRAINED ASSASSIN",
+     "ap": 1,
+     "text": "Change this operative’s order.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
    "fluff": "Members of extreme sects within the Imperial Cult, Death Cult Assassins are cold-blooded slayers who view killing as an act of worship. In battle, they wield a variety of ritual weapons with skill and grace, leaving a trail of mutilated corpses in their wake."
   },
   {
@@ -1400,8 +1420,21 @@
      ]
     }
    ],
-   "abilities": [],
-   "uniqueActions": [],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-salvationist.conversion-field",
+     "name": "Conversion Field",
+     "text": "Whenever an operative more than 6\" from this operative is shooting a friendly SANCTIFIER operative within 6\" of this operative, improve that friendly operative’s Save stat by 1."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "sanctifiers.sanctifier-salvationist.act.medikit",
+     "name": "MEDIKIT",
+     "ap": 1,
+     "text": "Select one friendly SANCTIFIER operative within this operative’s control range to regain up to 2D3 lost wounds.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
    "fluff": "As medicae repair damaged bodies, Salvationists tend to tortured souls. They possess a variety of salves, unguents and soothing prayers with which they banish madness, reinforce flagging spirits and embolden their allies against the horrors they may encounter."
   }
  ],

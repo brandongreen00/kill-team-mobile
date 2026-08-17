@@ -367,14 +367,29 @@ def centroid(poly) -> tuple[float, float]:
 
 
 def rasterize(poly, res, bbox):
-    """Rasterize a polygon into a res x res boolean grid over bbox=(x0,y0,x1,y1)."""
-    from matplotlib.path import Path  # noqa: local import keeps import cost off the fast paths
+    """Rasterize a polygon into a res x res boolean grid over bbox=(x0,y0,x1,y1).
+
+    Even-odd scanline fill, vectorised over the grid; no plotting dependency.
+    """
     x0, y0, x1, y1 = bbox
     gx = np.linspace(x0, x1, res)
     gy = np.linspace(y0, y1, res)
-    X, Y = np.meshgrid(gx, gy)
-    pts = np.stack([X.ravel(), Y.ravel()], 1)
-    return Path(np.asarray(poly, float)).contains_points(pts).reshape(res, res)
+    P = np.asarray(poly, float)
+    xs, ys = P[:, 0], P[:, 1]
+    xs2, ys2 = np.roll(xs, -1), np.roll(ys, -1)
+    Y = gy[:, None]                                   # (res, 1)
+    crosses = ((ys[None, :] > Y) != (ys2[None, :] > Y))
+    with np.errstate(divide='ignore', invalid='ignore'):
+        xint = (xs2 - xs)[None, :] * (Y - ys[None, :]) / (ys2 - ys)[None, :] + xs[None, :]
+    out = np.zeros((res, res), bool)
+    for r in range(res):
+        c = crosses[r]
+        if not c.any():
+            continue
+        e = np.sort(xint[r][c])
+        idx = np.searchsorted(e, gx, side='right')
+        out[r] = (idx % 2) == 1
+    return out
 
 
 def iou(polyA, polyB, res=220) -> float:

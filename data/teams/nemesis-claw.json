@@ -7,7 +7,7 @@
   "Seek & Destroy",
   "Infiltration"
  ],
- "booksVersion": "",
+ "booksVersion": "June 2026",
  "books": [
   {
    "book": "Nemesis Claw",
@@ -19,7 +19,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/nemesis-claw/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:23+00:00",
  "source": "cache",
  "selection": {
   "leader": {
@@ -544,8 +544,21 @@
      ]
     }
    ],
-   "abilities": [],
-   "uniqueActions": [],
+   "abilities": [
+    {
+     "id": "nemesis-claw.night-lord-visionary.prescience",
+     "name": "Prescience",
+     "text": "PSYCHIC. In the Ready step of each Strategy phase, you gain D3 Prescience points. At the end of each turning point, discard your Prescience points. You can spend your Prescience points in the Firefight phase as follows (you cannot use each of the following rules more than once per turning point):\n\nForeboding: PSYCHIC. Whenever it’s your turn to activate a friendly operative, you can spend 1 of your Prescience points to skip that activation.\n\nPortent: PSYCHIC. Whenever an attack dice inflicts Normal Dmg on this operative, you can spend 1 of your Prescience points to ignore that inflicted damage.\n\nYou cannot gain or spend your Prescience points if this operative is incapacitated."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "nemesis-claw.night-lord-visionary.act.premonition",
+     "name": "PREMONITION",
+     "ap": 1,
+     "text": "PSYCHIC. Spend 1 of your Prescience points to gain 1CP.\n\nThis operative cannot perform this action while within control range of an enemy operative, or more than once per turning point."
+    }
+   ],
    "fluff": "It takes a singularly terrifying being to lead such a band of monsters to battle, yet the Visionary is equal to the task. Gifted with instinctual flickers of prescience, they foresee threats from within their Nemesis Claw and without, meeting them with shocking violence."
   },
   {
@@ -667,9 +680,21 @@
      "id": "nemesis-claw.night-lord-fearmonger.terrorchem",
      "name": "Terrorchem",
      "text": "In the Resolve Attack Dice step, if you inflict damage with any critical successes (including as a result of the Devastating weapon rule), the operative this weapon is being used against gains one of your Terrorchem tokens (if it doesn’t already have one)."
+    },
+    {
+     "id": "nemesis-claw.night-lord-fearmonger.poison-objective",
+     "name": "POISON OBJECTIVE",
+     "text": "Whenever an operative that has one of your Terrorchem tokens is activated, inflict D3 damage on it."
     }
    ],
-   "uniqueActions": [],
+   "uniqueActions": [
+    {
+     "id": "nemesis-claw.night-lord-fearmonger.act.poison-objective",
+     "name": "POISON OBJECTIVE",
+     "ap": 1,
+     "text": "Select one objective marker this operative controls to gain one of your Terrorchem tokens. It cannot be an objective marker within control range of an enemy operative, or one that already has one of your Terrorchem tokens. The first time an enemy operative that doesn’t have one of your Terrorchem tokens contests that objective marker, that operative gains that Terrorchem token, then inflict 2D3 damage on it (if it’s during an action, at the end of that action).\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
    "fluff": "The Fearmonger is not only a master of toxins and poisons, he also relishes the slow cruelties of their effects. Whether dispensing his vile concoctions in battle or infiltrating enemy encampments to taint rations, he spreads horror, suffering and death wherever he goes."
   },
   {

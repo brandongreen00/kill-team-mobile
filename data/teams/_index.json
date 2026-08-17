@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-17T03:55:38+00:00",
+ "generatedAt": "2026-08-17T03:59:23+00:00",
  "teams": [
   {
    "id": "angel-of-death",
@@ -230,7 +230,7 @@
     "Seek & Destroy",
     "Recon"
    ],
-   "booksVersion": "",
+   "booksVersion": "July 2026",
    "datacards": 4,
    "strategyPloys": 4,
    "firefightPloys": 4,
@@ -247,7 +247,7 @@
     "Infiltration",
     "Recon"
    ],
-   "booksVersion": "",
+   "booksVersion": "July 2026",
    "datacards": 11,
    "strategyPloys": 4,
    "firefightPloys": 4,
@@ -416,7 +416,7 @@
    "archetypes": [
     "Any"
    ],
-   "booksVersion": "",
+   "booksVersion": "June 2026",
    "datacards": 18,
    "strategyPloys": 4,
    "firefightPloys": 4,
@@ -501,7 +501,7 @@
     "Seek & Destroy",
     "Recon"
    ],
-   "booksVersion": "",
+   "booksVersion": "June 2026",
    "datacards": 9,
    "strategyPloys": 4,
    "firefightPloys": 4,
@@ -518,7 +518,7 @@
     "Seek & Destroy",
     "Infiltration"
    ],
-   "booksVersion": "",
+   "booksVersion": "June 2026",
    "datacards": 8,
    "strategyPloys": 4,
    "firefightPloys": 4,
@@ -671,7 +671,7 @@
     "Infiltration",
     "Recon"
    ],
-   "booksVersion": "",
+   "booksVersion": "June 2026",
    "datacards": 12,
    "strategyPloys": 4,
    "firefightPloys": 4,
@@ -688,7 +688,7 @@
     "Seek & Destroy",
     "Recon"
    ],
-   "booksVersion": "",
+   "booksVersion": "June 2026",
    "datacards": 8,
    "strategyPloys": 4,
    "firefightPloys": 4,
@@ -773,7 +773,7 @@
     "Seek & Destroy",
     "Security"
    ],
-   "booksVersion": "",
+   "booksVersion": "June 2026",
    "datacards": 7,
    "strategyPloys": 4,
    "firefightPloys": 4,
@@ -807,7 +807,7 @@
     "Infiltration",
     "Recon"
    ],
-   "booksVersion": "",
+   "booksVersion": "June 2026",
    "datacards": 8,
    "strategyPloys": 4,
    "firefightPloys": 4,

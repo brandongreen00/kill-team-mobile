@@ -19,7 +19,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/goremonger/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:23+00:00",
  "source": "cache",
  "selection": {
   "leader": {
@@ -83,6 +83,7 @@
     "group": 2,
     "datacardId": "goremonger.aspirant",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Autopistol",
      "Chainglaive"
@@ -104,6 +105,7 @@
     "group": 2,
     "datacardId": "goremonger.bloodtaker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Ritual blade"
@@ -125,6 +127,7 @@
     "group": 2,
     "datacardId": "goremonger.impaler",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Fleshskewer"
@@ -146,6 +149,7 @@
     "group": 2,
     "datacardId": "goremonger.inciter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Dual autopistols"
     ]
@@ -166,6 +170,7 @@
     "group": 2,
     "datacardId": "goremonger.skullclaimer",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Great chainaxe"
@@ -187,6 +192,7 @@
     "group": 2,
     "datacardId": "goremonger.stalker",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Pickrippers"
@@ -210,6 +216,7 @@
     "group": 1,
     "datacardId": "goremonger.blood-herald",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Icon of Khorne",
      "Chainblade"
@@ -218,9 +225,10 @@
   ],
   "constraints": [
    {
-    "kind": "custom",
-    "text": "Other than ASPIRANT operatives, your kill team can only include each operative above once.",
-    "hook": "goremonger.other-than-aspirant-operatives-your-kill"
+    "kind": "uniqueExcept",
+    "roles": [
+     "ASPIRANT"
+    ]
    }
   ],
   "footnotes": {},

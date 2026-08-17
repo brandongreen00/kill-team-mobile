@@ -1,0 +1,834 @@
+{
+ "killzone": "volkus",
+ "generatedBy": "tools/maps/extract_cards.py",
+ "generatedAt": "2026-08-17",
+ "heights": {
+  "volkus.strongholdA.top": {
+   "inches": 5.906,
+   "confidence": "community",
+   "provenance": "Tale of Painters, \"Review: Kill Team: Hivestorm Pt.1\" (2024-09): Stronghold A (promethium-tank build) \"footprint of approx. 18 x 13 cm, with a max. height of 15 cm\" -> 150mm / 25.4"
+  },
+  "volkus.strongholdA.level1": {
+   "inches": 3.0,
+   "confidence": "community",
+   "provenance": "Tale of Painters, Hivestorm review: Stronghold A has \"a floor at 3\u2033 height\""
+  },
+  "volkus.strongholdB.top": {
+   "inches": 7.48,
+   "confidence": "community",
+   "provenance": "Tale of Painters, Hivestorm review: Stronghold B \"footprint of approx. 19 x 19cm, a maximum height of 19 cm\" -> 190mm / 25.4"
+  },
+  "volkus.strongholdB.level1": {
+   "inches": 3.0,
+   "confidence": "community",
+   "provenance": "Tale of Painters, Hivestorm review: Stronghold B \"floors placed at 3\u2033 and 6\u2033 height\""
+  },
+  "volkus.strongholdB.level2": {
+   "inches": 6.0,
+   "confidence": "community",
+   "provenance": "Tale of Painters, Hivestorm review: Stronghold B \"floors placed at 3\u2033 and 6\u2033 height\""
+  },
+  "volkus.largeRuin.level1": {
+   "inches": 3.5,
+   "confidence": "community",
+   "provenance": "Tale of Painters, Hivestorm review: Manufactorum Ruins have \"a top floor (placed at 3.5\u2033 from the bottom)\". Killzones rules: for intervening and targeting lines this level is TREATED as the height of a stronghold\u2019s first upper level (3.0\") \u2014 see `treatAsZ`."
+  },
+  "volkus.largeRuin.top": {
+   "inches": 4.5,
+   "confidence": "assumed",
+   "provenance": "No published figure. Upper rampart modelled as 1\" of Light parapet above the 3.5\" floor. CONFIRM WITH OWNER."
+  },
+  "volkus.smallRuin.top": {
+   "inches": 2.0,
+   "confidence": "assumed",
+   "provenance": "No published figure; the small ruin is a low corner wall roughly two thirds the height of a stronghold\u2019s first floor. CONFIRM WITH OWNER."
+  },
+  "volkus.heavyRubble.top": {
+   "inches": 1.5,
+   "confidence": "assumed",
+   "provenance": "No published figure. Heavy rubble is modelled taller than a 32mm base is wide but below the 2\" jump/drop threshold. CONFIRM WITH OWNER."
+  },
+  "volkus.lightRubble.top": {
+   "inches": 1.0,
+   "confidence": "assumed",
+   "provenance": "No published figure. CONFIRM WITH OWNER."
+  },
+  "volkus.wreckage.top": {
+   "inches": 1.25,
+   "confidence": "assumed",
+   "provenance": "Piece L (long wreckage) is not in the core-book Volkus inventory and has no published rules entry. CONFIRM WITH OWNER."
+  },
+  "volkus.crates.top": {
+   "inches": 1.5,
+   "confidence": "assumed",
+   "provenance": "Piece N (cargo-crate stack) is not in the core-book Volkus inventory and has no published rules entry. CONFIRM WITH OWNER."
+  }
+ },
+ "pieces": [
+  {
+   "kind": "volkus.strongholdA",
+   "name": "Stronghold A",
+   "labels": [
+    "A"
+   ],
+   "inventoryCount": 1,
+   "notes": [
+    "Rules parts the map cards do not draw, so they are not in the extracted geometry: the broken vent (Blocking), the three barrel containers (Blocking + Heavy), the small broken ramparts on the Vantage edge (Insignificant + Exposed) and the fire steps (Vantage + Insignificant + Exposed).",
+    "For control range, ignore the door and any part under 2\" high when determining visibility (Killzones \u00a7Stronghold)."
+   ],
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 5.906,
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "source": "ink"
+    },
+    {
+     "role": "door",
+     "types": [
+      "Accessible",
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 5.906,
+     "blocksVisibility": true,
+     "solid": false,
+     "standable": false,
+     "source": "door"
+    },
+    {
+     "role": "floor",
+     "types": [
+      "Ceiling",
+      "Vantage",
+      "Light"
+     ],
+     "z0": 3.0,
+     "z1": 3.0,
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "source": "green"
+    }
+   ],
+   "footprints": {
+    "A": [
+     {
+      "x": -2.01,
+      "y": -3.235
+     },
+     {
+      "x": 0.26,
+      "y": -3.256
+     },
+     {
+      "x": 0.281,
+      "y": -2.36
+     },
+     {
+      "x": 1.198,
+      "y": -1.527
+     },
+     {
+      "x": 1.198,
+      "y": -0.318
+     },
+     {
+      "x": 2.219,
+      "y": 0.744
+     },
+     {
+      "x": 2.844,
+      "y": 0.744
+     },
+     {
+      "x": 3.364,
+      "y": 1.223
+     },
+     {
+      "x": 3.364,
+      "y": 2.307
+     },
+     {
+      "x": -2.01,
+      "y": 2.307
+     }
+    ]
+   }
+  },
+  {
+   "kind": "volkus.strongholdB",
+   "name": "Stronghold B",
+   "labels": [
+    "B"
+   ],
+   "inventoryCount": 1,
+   "notes": [
+    "The gap on the lower Vantage level is Accessible terrain; the cards do not mark where it is.",
+    "At most one friendly operative may be on the highest upper level at a time, and it must be placed to one side, not in the middle (Killzones \u00a7Stronghold H) \u2014 carried as `maxOperatives: 1` on that part."
+   ],
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 7.48,
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "source": "ink"
+    },
+    {
+     "role": "door",
+     "types": [
+      "Accessible",
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 7.48,
+     "blocksVisibility": true,
+     "solid": false,
+     "standable": false,
+     "source": "door"
+    },
+    {
+     "role": "floor",
+     "types": [
+      "Ceiling",
+      "Vantage",
+      "Light"
+     ],
+     "z0": 3.0,
+     "z1": 3.0,
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "source": "green"
+    },
+    {
+     "role": "floor",
+     "types": [
+      "Ceiling",
+      "Vantage",
+      "Light"
+     ],
+     "z0": 6.0,
+     "z1": 6.0,
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "maxOperatives": 1,
+     "source": "darkgreen"
+    }
+   ],
+   "footprints": {
+    "B": [
+     {
+      "x": -1.779,
+      "y": -2.336
+     },
+     {
+      "x": 0.366,
+      "y": -2.357
+     },
+     {
+      "x": 0.387,
+      "y": -4.378
+     },
+     {
+      "x": 1.825,
+      "y": -4.399
+     },
+     {
+      "x": 1.845,
+      "y": -2.586
+     },
+     {
+      "x": 0.762,
+      "y": -1.42
+     },
+     {
+      "x": 0.762,
+      "y": -0.461
+     },
+     {
+      "x": 1.845,
+      "y": 1.622
+     },
+     {
+      "x": 1.845,
+      "y": 3.164
+     },
+     {
+      "x": -1.779,
+      "y": 3.164
+     }
+    ]
+   }
+  },
+  {
+   "kind": "volkus.largeRuin",
+   "name": "Large Ruin",
+   "labels": [
+    "C",
+    "D"
+   ],
+   "inventoryCount": 2,
+   "notes": [
+    "For intervening and targeting lines the upper level counts as the same height as a stronghold\u2019s first upper level (3.0\") \u2014 carried as `treatAsZ`.",
+    "The door\u2019s viewpoint is Blocking and unbroken windows are Barred + Heavy; the cards do not draw either."
+   ],
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 3.5,
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "source": "ink"
+    },
+    {
+     "role": "door",
+     "types": [
+      "Accessible",
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 3.5,
+     "blocksVisibility": true,
+     "solid": false,
+     "standable": false,
+     "source": "door"
+    },
+    {
+     "role": "floor",
+     "types": [
+      "Ceiling",
+      "Vantage",
+      "Light"
+     ],
+     "z0": 3.5,
+     "z1": 3.5,
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "treatAsZ": 3.0,
+     "source": "green"
+    },
+    {
+     "role": "rampart",
+     "types": [
+      "Light"
+     ],
+     "z0": 3.5,
+     "z1": 4.5,
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": false,
+     "optional": true,
+     "source": "green_edge"
+    }
+   ],
+   "footprints": {
+    "C": [
+     {
+      "x": -1.728,
+      "y": -2.924
+     },
+     {
+      "x": 1.584,
+      "y": -2.945
+     },
+     {
+      "x": 1.605,
+      "y": -1.924
+     },
+     {
+      "x": 1.355,
+      "y": -1.716
+     },
+     {
+      "x": 1.355,
+      "y": -1.507
+     },
+     {
+      "x": 1.938,
+      "y": 0.034
+     },
+     {
+      "x": 1.605,
+      "y": 0.284
+     },
+     {
+      "x": 1.605,
+      "y": 0.451
+     },
+     {
+      "x": 2.146,
+      "y": 1.201
+     },
+     {
+      "x": 2.146,
+      "y": 1.576
+     },
+     {
+      "x": 1.605,
+      "y": 1.784
+     },
+     {
+      "x": 1.938,
+      "y": 2.868
+     },
+     {
+      "x": 0.792,
+      "y": 2.888
+     },
+     {
+      "x": 0.376,
+      "y": 2.555
+     },
+     {
+      "x": 0.084,
+      "y": 2.555
+     },
+     {
+      "x": -0.541,
+      "y": 2.888
+     },
+     {
+      "x": -1.728,
+      "y": 2.868
+     }
+    ],
+    "D": [
+     {
+      "x": -1.441,
+      "y": -3.497
+     },
+     {
+      "x": -1.254,
+      "y": -3.518
+     },
+     {
+      "x": -0.608,
+      "y": -2.872
+     },
+     {
+      "x": -0.9,
+      "y": -2.622
+     },
+     {
+      "x": -0.879,
+      "y": -2.143
+     },
+     {
+      "x": -0.087,
+      "y": -1.643
+     },
+     {
+      "x": 0.329,
+      "y": -1.643
+     },
+     {
+      "x": 0.496,
+      "y": -1.185
+     },
+     {
+      "x": 0.746,
+      "y": -1.185
+     },
+     {
+      "x": 1.371,
+      "y": -1.518
+     },
+     {
+      "x": 1.809,
+      "y": -1.289
+     },
+     {
+      "x": 1.809,
+      "y": -0.414
+     },
+     {
+      "x": 1.433,
+      "y": -0.081
+     },
+     {
+      "x": 1.433,
+      "y": 0.086
+     },
+     {
+      "x": 1.809,
+      "y": 0.836
+     },
+     {
+      "x": 1.809,
+      "y": 2.044
+     },
+     {
+      "x": -1.441,
+      "y": 2.044
+     }
+    ]
+   }
+  },
+  {
+   "kind": "volkus.smallRuin",
+   "name": "Small Ruin",
+   "labels": [
+    "E",
+    "F"
+   ],
+   "inventoryCount": 2,
+   "notes": [
+    "Killzones \u00a7Small Ruin: \"This is Heavy terrain.\""
+   ],
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 2.0,
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "source": "ink"
+    }
+   ],
+   "footprints": {
+    "E": [
+     {
+      "x": -0.104,
+      "y": -2.771
+     },
+     {
+      "x": 0.104,
+      "y": -2.771
+     },
+     {
+      "x": 0.104,
+      "y": 2.771
+     },
+     {
+      "x": -0.104,
+      "y": 2.771
+     }
+    ],
+    "F": [
+     {
+      "x": -0.104,
+      "y": -2.334
+     },
+     {
+      "x": 0.104,
+      "y": -2.334
+     },
+     {
+      "x": 0.104,
+      "y": 2.333
+     },
+     {
+      "x": -0.104,
+      "y": 2.333
+     }
+    ]
+   }
+  },
+  {
+   "kind": "volkus.heavyRubble",
+   "name": "Heavy Rubble",
+   "labels": [
+    "G",
+    "H"
+   ],
+   "inventoryCount": 2,
+   "notes": [
+    "Killzones \u00a7Heavy Rubble: \"This is Heavy terrain.\""
+   ],
+   "parts": [
+    {
+     "role": "rubble",
+     "types": [
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 1.5,
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "source": "green"
+    }
+   ],
+   "footprints": {
+    "G": [
+     {
+      "x": -1.479,
+      "y": -0.5
+     },
+     {
+      "x": 1.5,
+      "y": -0.479
+     },
+     {
+      "x": 1.479,
+      "y": 0.5
+     },
+     {
+      "x": -1.5,
+      "y": 0.479
+     }
+    ],
+    "H": [
+     {
+      "x": -0.479,
+      "y": -0.479
+     },
+     {
+      "x": 0.5,
+      "y": -0.459
+     },
+     {
+      "x": 0.479,
+      "y": 0.479
+     },
+     {
+      "x": -0.5,
+      "y": 0.458
+     }
+    ]
+   }
+  },
+  {
+   "kind": "volkus.lightRubble",
+   "name": "Light Rubble",
+   "labels": [
+    "I",
+    "J",
+    "K"
+   ],
+   "inventoryCount": 3,
+   "notes": [
+    "Killzones \u00a7Light Rubble: \"This is Light terrain.\""
+   ],
+   "parts": [
+    {
+     "role": "rubble",
+     "types": [
+      "Light"
+     ],
+     "z0": 0.0,
+     "z1": 1.0,
+     "blocksVisibility": false,
+     "solid": true,
+     "standable": false,
+     "source": "green"
+    }
+   ],
+   "footprints": {
+    "I": [
+     {
+      "x": -1.729,
+      "y": -1.0
+     },
+     {
+      "x": 1.75,
+      "y": -0.979
+     },
+     {
+      "x": 1.729,
+      "y": 1.0
+     },
+     {
+      "x": -1.75,
+      "y": 0.979
+     }
+    ],
+    "J": [
+     {
+      "x": -0.371,
+      "y": -0.393
+     },
+     {
+      "x": 0.358,
+      "y": -0.414
+     },
+     {
+      "x": 0.379,
+      "y": 0.399
+     },
+     {
+      "x": -0.371,
+      "y": 0.399
+     }
+    ],
+    "K": [
+     {
+      "x": -0.354,
+      "y": -0.312
+     },
+     {
+      "x": 0.375,
+      "y": -0.291
+     },
+     {
+      "x": 0.354,
+      "y": 0.313
+     },
+     {
+      "x": -0.375,
+      "y": 0.292
+     }
+    ]
+   }
+  },
+  {
+   "kind": "volkus.wreckage",
+   "name": "Wreckage",
+   "labels": [
+    "L"
+   ],
+   "inventoryCount": 1,
+   "notes": [
+    "Not in the core-book Volkus inventory (2x stronghold, 2x large ruin, 2x small ruin, 2x heavy rubble, 3x light rubble); shown on keys/VS1.png. Terrain type ASSUMED Light. CONFIRM WITH OWNER."
+   ],
+   "parts": [
+    {
+     "role": "rubble",
+     "types": [
+      "Light"
+     ],
+     "z0": 0.0,
+     "z1": 1.25,
+     "blocksVisibility": false,
+     "solid": true,
+     "standable": false,
+     "source": "green"
+    }
+   ],
+   "footprints": {
+    "L": [
+     {
+      "x": -0.933,
+      "y": -1.685
+     },
+     {
+      "x": 0.921,
+      "y": -1.706
+     },
+     {
+      "x": 0.942,
+      "y": 1.69
+     },
+     {
+      "x": -0.933,
+      "y": 1.69
+     }
+    ]
+   }
+  },
+  {
+   "kind": "volkus.beamRubble",
+   "name": "Rubble with Beams",
+   "labels": [
+    "M"
+   ],
+   "inventoryCount": 1,
+   "notes": [
+    "Not in the core-book Volkus inventory; shown on keys/VS1.png. Terrain type ASSUMED Light. CONFIRM WITH OWNER."
+   ],
+   "parts": [
+    {
+     "role": "rubble",
+     "types": [
+      "Light"
+     ],
+     "z0": 0.0,
+     "z1": 1.0,
+     "blocksVisibility": false,
+     "solid": true,
+     "standable": false,
+     "source": "green"
+    }
+   ],
+   "footprints": {
+    "M": [
+     {
+      "x": -0.808,
+      "y": -1.227
+     },
+     {
+      "x": 0.796,
+      "y": -1.248
+     },
+     {
+      "x": 0.817,
+      "y": 1.232
+     },
+     {
+      "x": -0.808,
+      "y": 1.232
+     }
+    ]
+   }
+  },
+  {
+   "kind": "volkus.crates",
+   "name": "Cargo Crates",
+   "labels": [
+    "N"
+   ],
+   "inventoryCount": 1,
+   "notes": [
+    "Not in the core-book Volkus inventory; shown on keys/VS1.png as a stack of shipping crates. Terrain type ASSUMED Heavy. CONFIRM WITH OWNER."
+   ],
+   "parts": [
+    {
+     "role": "crate",
+     "types": [
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 1.5,
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "source": "green"
+    }
+   ],
+   "footprints": {
+    "N": [
+     {
+      "x": -0.579,
+      "y": -1.186
+     },
+     {
+      "x": 0.567,
+      "y": -1.207
+     },
+     {
+      "x": 0.588,
+      "y": 1.189
+     },
+     {
+      "x": -0.579,
+      "y": 1.189
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -162,18 +162,8 @@
  },
  "objectives": [
   {
-   "id": "obj.p2",
-   "kind": "p2",
-   "pos": {
-    "x": 12.5,
-    "y": 17.75
-   },
-   "z": 3.0,
-   "onFeatureId": "bheta-decima-1.B"
-  },
-  {
-   "id": "obj.p2",
-   "kind": "p2",
+   "id": "obj.p1",
+   "kind": "p1",
    "pos": {
     "x": 17.5,
     "y": 9.75
@@ -184,6 +174,16 @@
   {
    "id": "obj.p2",
    "kind": "p2",
+   "pos": {
+    "x": 12.5,
+    "y": 17.75
+   },
+   "z": 3.0,
+   "onFeatureId": "bheta-decima-1.B"
+  },
+  {
+   "id": "obj.centre",
+   "kind": "centre",
    "pos": {
     "x": 15.042,
     "y": 5.25

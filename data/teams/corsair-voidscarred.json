@@ -19,7 +19,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/corsair-voidscarred/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:23+00:00",
  "source": "cache",
  "selection": {
   "leader": {
@@ -406,9 +406,11 @@
     ]
    },
    {
-    "kind": "custom",
-    "text": "Your kill team cannot include both a blaster and a wraithcannon.",
-    "hook": "corsair-voidscarred.your-kill-team-cannot-include-both"
+    "kind": "exclusiveItems",
+    "items": [
+     "blaster",
+     "wraithcannon"
+    ]
    }
   ],
   "footnotes": {

@@ -11,6 +11,12 @@ import type { Order, PlayerId, Vec2 } from './types.ts';
 export interface MovePath {
   /** Waypoints in order, starting at the operative's current position (exclusive). */
   points: Vec2[];
+  /**
+   * Elevation for each waypoint. Optional: when omitted the engine picks the surface closest
+   * to the operative's current elevation (i.e. it stays level rather than climbing). Supply it
+   * to climb onto or drop off terrain, or to walk UNDER Ceiling terrain.
+   */
+  zs?: number[];
   /** Elevation the operative ends at; the engine verifies it against the terrain. */
   endZ?: number;
   /** Optional facing for oval bases. */

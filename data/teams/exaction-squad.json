@@ -19,7 +19,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/exaction-squad/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:22+00:00",
  "source": "cache",
  "selection": {
   "leader": {
@@ -533,9 +533,21 @@
      "id": "exaction-squad.arbites-proctor-exactant.assault-shield",
      "name": "Assault Shield",
      "text": "If this operative has a dominator maul & assault shield, it has a 3+ Save stat."
+    },
+    {
+     "id": "exaction-squad.arbites-proctor-exactant.nuncio-aquila",
+     "name": "Nuncio-aquila",
+     "text": "Whenever an enemy operative is within 3\" of your Nuncio-aquila marker (or this operative if your Nuncio-aquila marker isn’t in the killzone), your opponent must spend 1 additional AP for that enemy operative to perform the Pick Up Marker and mission actions.\n\nWhenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of your Nuncio-aquila marker (or this operative if your Nuncio-aquila marker isn’t in the killzone). Note this isn’t a change to the APL stat, so any changes are cumulative with this."
     }
    ],
-   "uniqueActions": [],
+   "uniqueActions": [
+    {
+     "id": "exaction-squad.arbites-proctor-exactant.act.deploy-nuncio-aquila",
+     "name": "DEPLOY NUNCIO-AQUILA",
+     "ap": 0,
+     "text": "If your Nuncio-aquila marker isn’t in the killzone, place it within 6\" horizontally of this operative; otherwise, move your Nuncio-aquila marker up to 6\" horizontally. If this operative is removed from the killzone, remove your Nuncio-aquila marker from the killzone.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
    "fluff": "Exaction Squads are selected and led by Proctors-exactant. These experienced Arbitrators are ruthless tacticians and savvy fighters. They are also intimidating embodiments of Imperial justice and employ nuncio-aquilas to broadcast deafening orations that cow the guilty into submission."
   },
   {
@@ -692,7 +704,13 @@
      ]
     }
    ],
-   "abilities": [],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-chirurgant.medic",
+     "name": "Medic!",
+     "text": "The first time during each turning point that another friendly EXACTION SQUAD operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+    }
+   ],
    "uniqueActions": [
     {
      "id": "exaction-squad.arbites-chirurgant.act.medikit",

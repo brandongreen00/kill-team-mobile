@@ -265,7 +265,7 @@ def extract_objectives(img, frame):
             continue
         cy = (o[0].start + o[0].stop) / 2
         cx = (o[1].start + o[1].stop) / 2
-        r = max(h, w) / 2 + 3
+        r = max(h, w) / 2 - 4        # inside the white outline, on the owner disc
         ring = []
         for a in np.linspace(0, 2 * np.pi, 72, endpoint=False):
             py, px = int(round(cy + r * np.sin(a))), int(round(cx + r * np.cos(a)))
@@ -595,13 +595,11 @@ def _split_run(orient, i, j, length, chips, frame, lx, ly, used):
     mine.sort()
     mine = [(p, t) for p, t in mine if (orient, i, j, round(p, 2), t) not in used]
 
-    spans = [2 if t.endswith(('1', '2', '3', '4')) and t[0] == 'A' else 1 for _, t in mine]
     out, cursor = [], 0
-    for (pos, t), span in zip(mine, spans):
-        if cursor + span > length:
-            span = max(1, length - cursor)
-        if span <= 0:
+    for pos, t in mine:
+        if cursor >= length:
             break
+        span = min(2 if t.startswith('A') else 1, length - cursor)
         out.append((orient, i, j, cursor, span, t))
         cursor += span
     while cursor < length:                      # unlabelled remainder

@@ -106,9 +106,11 @@ export function validateMove(
 
   if (path.points.length === 0) return fail('no movement declared');
 
-  for (const next of path.points) {
+  for (let i = 0; i < path.points.length; i++) {
+    const next = path.points[i]!;
     const horizontal = dist(cur, next);
-    const targetZ = closestSurface(index, next, curZ);
+    const declaredZ = path.zs?.[i];
+    const targetZ = declaredZ !== undefined ? declaredZ : closestSurface(index, next, curZ);
     const dz = targetZ - curZ;
 
     // --- vertical handling ------------------------------------------------

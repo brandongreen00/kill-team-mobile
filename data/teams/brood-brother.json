@@ -19,7 +19,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/brood-brother/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:23+00:00",
  "source": "cache",
  "selection": {
   "leader": {
@@ -126,6 +126,7 @@
     "group": 2,
     "datacardId": "brood-brother.psychic-familiar",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Claws"
     ]
@@ -146,6 +147,7 @@
     "group": 2,
     "datacardId": "brood-brother.magus",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Bio dagger",
@@ -168,6 +170,7 @@
     "group": 2,
     "datacardId": "brood-brother.patriarch",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Claws"
     ]
@@ -188,6 +191,7 @@
     "group": 2,
     "datacardId": "brood-brother.primus",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Scoped needle pistol",
      "Bonesword & toxin injector claw"
@@ -209,6 +213,7 @@
     "group": 2,
     "datacardId": "brood-brother.trooper",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
@@ -230,6 +235,7 @@
     "group": 3,
     "datacardId": "brood-brother.agitator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Shock maul"
     ]
@@ -253,6 +259,7 @@
     "group": 3,
     "datacardId": "brood-brother.gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": []
    },
    {
@@ -274,6 +281,7 @@
     "group": 3,
     "datacardId": "brood-brother.gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": []
    },
    {
@@ -295,6 +303,7 @@
     "group": 3,
     "datacardId": "brood-brother.gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": []
    },
    {
@@ -316,6 +325,7 @@
     "group": 3,
     "datacardId": "brood-brother.gunner",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": []
    },
    {
@@ -334,6 +344,7 @@
     "group": 3,
     "datacardId": "brood-brother.iconward",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Large knife"
     ]
@@ -354,6 +365,7 @@
     "group": 3,
     "datacardId": "brood-brother.knife-fighter",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Poisoned fighting knives"
     ]
@@ -374,6 +386,7 @@
     "group": 3,
     "datacardId": "brood-brother.medic",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet",
@@ -396,6 +409,7 @@
     "group": 3,
     "datacardId": "brood-brother.sapper",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Demolition charge",
      "Bayonet"
@@ -417,6 +431,7 @@
     "group": 3,
     "datacardId": "brood-brother.sniper",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Sniper rifle",
      "Fists"
@@ -438,6 +453,7 @@
     "group": 3,
     "datacardId": "brood-brother.trooper",
     "isLeader": false,
+    "uniqueUnlessRole": false,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
@@ -459,6 +475,7 @@
     "group": 3,
     "datacardId": "brood-brother.veteran",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Combat shotgun",
      "Bayonet & claw"
@@ -480,6 +497,7 @@
     "group": 3,
     "datacardId": "brood-brother.vox-operator",
     "isLeader": false,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Lasgun",
      "Bayonet"
@@ -528,6 +546,7 @@
     "group": 1,
     "datacardId": "brood-brother.commander",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": []
    },
    {
@@ -546,6 +565,7 @@
     "group": 2,
     "datacardId": "brood-brother.magus",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Autopistol",
      "Bio dagger",
@@ -568,6 +588,7 @@
     "group": 2,
     "datacardId": "brood-brother.patriarch",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Claws"
     ]
@@ -588,6 +609,7 @@
     "group": 2,
     "datacardId": "brood-brother.primus",
     "isLeader": true,
+    "uniqueUnlessRole": true,
     "alwaysWeapons": [
      "Scoped needle pistol",
      "Bonesword & toxin injector claw"
@@ -596,9 +618,10 @@
   ],
   "constraints": [
    {
-    "kind": "custom",
-    "text": "Other than TROOPER operatives, your kill team can only include each option on this list once.",
-    "hook": "brood-brother.other-than-trooper-operatives-your-kill"
+    "kind": "uniqueExcept",
+    "roles": [
+     "TROOPER"
+    ]
    },
    {
     "kind": "groupCap",

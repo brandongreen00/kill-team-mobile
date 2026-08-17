@@ -19,7 +19,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/wyrmblade/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:23+00:00",
  "source": "cache",
  "selection": {
   "leader": {
@@ -151,7 +151,7 @@
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
-    "selectionCost": 1,
+    "selectionCost": 2,
     "footnoteGroup": "*",
     "requires": [],
     "rawText": "KELERMORPH*",
@@ -173,7 +173,7 @@
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
-    "selectionCost": 1,
+    "selectionCost": 2,
     "footnoteGroup": "*",
     "requires": [],
     "rawText": "LOCUS*",
@@ -363,7 +363,7 @@
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
-    "selectionCost": 1,
+    "selectionCost": 2,
     "footnoteGroup": "*",
     "requires": [],
     "rawText": "SANCTUS SNIPER*",
@@ -385,7 +385,7 @@
     "loadouts": [],
     "optionGroups": [],
     "loadoutMode": "fixed",
-    "selectionCost": 1,
+    "selectionCost": 2,
     "footnoteGroup": "*",
     "requires": [],
     "rawText": "SANCTUS TALON*",
@@ -545,9 +545,9 @@
     "max": 2
    },
    {
-    "kind": "custom",
-    "text": "These operatives count as two selections each.",
-    "hook": "wyrmblade.these-operatives-count-as-two-selections"
+    "kind": "selectionCost",
+    "group": "*",
+    "cost": 2
    }
   ],
   "footnotes": {

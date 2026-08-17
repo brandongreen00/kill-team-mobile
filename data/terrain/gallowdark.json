@@ -1,0 +1,404 @@
+{
+ "killzone": "gallowdark",
+ "generatedBy": "tools/maps/extract_cards.py",
+ "generatedAt": "2026-08-17",
+ "heights": {
+  "cq.wall.top": {
+   "inches": 2.362,
+   "confidence": "community",
+   "provenance": "Tale of Painters, \"Review: Kill Team: Into the Dark \u2013 Part 1\" (2022-09): \"the Gallowdark elements have a height of 6 cm\" -> 60mm / 25.4. Wall terrain blocks movement and visibility by rule regardless of height."
+  },
+  "cq.wall.double": {
+   "inches": 4.724,
+   "confidence": "community",
+   "provenance": "Tale of Painters, Into the Dark review: \"Two Gallowdark elements have a height of 12 cm\"."
+  },
+  "cq.teleportPad.top": {
+   "inches": 0.2,
+   "confidence": "photogrammetry",
+   "provenance": "Measured off keys/TW3.jpg (teleport pad product photo) against its own 3.8125\" square footprint: the pad is a shallow disc, ~5% of its width. It is Insignificant terrain, so the exact value never affects climb/drop."
+  },
+  "cq.light.top": {
+   "inches": 1.2,
+   "confidence": "assumed",
+   "provenance": "Sarcophagus / debris are Light terrain; no published height. CONFIRM WITH OWNER."
+  }
+ },
+ "pieces": [
+  {
+   "kind": "gallowdark.wallA1",
+   "name": "Long Wall",
+   "labels": [
+    "A1"
+   ],
+   "inventoryCount": 2,
+   "spanSquares": 2,
+   "lengthIn": 7.625,
+   "hasHatchway": false,
+   "hasBreachPoint": false,
+   "hasPillars": false,
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top"
+    }
+   ],
+   "footprints": {
+    "A1": [
+     {
+      "x": -3.813,
+      "y": -0.345
+     },
+     {
+      "x": 3.812,
+      "y": -0.345
+     },
+     {
+      "x": 3.812,
+      "y": 0.345
+     },
+     {
+      "x": -3.813,
+      "y": 0.345
+     }
+    ]
+   }
+  },
+  {
+   "kind": "gallowdark.wallA2",
+   "name": "Long Wall with Pillars",
+   "labels": [
+    "A2"
+   ],
+   "inventoryCount": 2,
+   "spanSquares": 2,
+   "lengthIn": 7.625,
+   "hasHatchway": false,
+   "hasBreachPoint": false,
+   "hasPillars": true,
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top"
+    }
+   ],
+   "footprints": {
+    "A2": [
+     {
+      "x": -3.812,
+      "y": -0.506
+     },
+     {
+      "x": 3.813,
+      "y": -0.506
+     },
+     {
+      "x": 3.813,
+      "y": 0.507
+     },
+     {
+      "x": -3.812,
+      "y": 0.507
+     }
+    ]
+   }
+  },
+  {
+   "kind": "gallowdark.wallA3",
+   "name": "Long Wall with Hatchway",
+   "labels": [
+    "A3"
+   ],
+   "inventoryCount": 2,
+   "spanSquares": 2,
+   "lengthIn": 7.625,
+   "hasHatchway": true,
+   "hasBreachPoint": false,
+   "hasPillars": false,
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top"
+    },
+    {
+     "role": "accessPoint",
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top",
+     "typesClosed": [
+      "Heavy",
+      "Wall"
+     ],
+     "typesOpen": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ]
+    }
+   ],
+   "footprints": {
+    "A3": [
+     {
+      "x": -3.813,
+      "y": -0.183
+     },
+     {
+      "x": 3.812,
+      "y": -0.183
+     },
+     {
+      "x": 3.812,
+      "y": 0.182
+     },
+     {
+      "x": -3.813,
+      "y": 0.182
+     }
+    ]
+   }
+  },
+  {
+   "kind": "gallowdark.wallA4",
+   "name": "Long Wall with Hatchway and Pillars",
+   "labels": [
+    "A4"
+   ],
+   "inventoryCount": 2,
+   "spanSquares": 2,
+   "lengthIn": 7.625,
+   "hasHatchway": true,
+   "hasBreachPoint": false,
+   "hasPillars": true,
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top"
+    },
+    {
+     "role": "accessPoint",
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top",
+     "typesClosed": [
+      "Heavy",
+      "Wall"
+     ],
+     "typesOpen": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ]
+    }
+   ],
+   "footprints": {
+    "A4": [
+     {
+      "x": -3.812,
+      "y": -0.182
+     },
+     {
+      "x": 3.813,
+      "y": -0.182
+     },
+     {
+      "x": 3.813,
+      "y": 0.183
+     },
+     {
+      "x": -3.812,
+      "y": 0.183
+     }
+    ]
+   }
+  },
+  {
+   "kind": "gallowdark.wallB1",
+   "name": "Short Wall",
+   "labels": [
+    "B1"
+   ],
+   "inventoryCount": 2,
+   "spanSquares": 1,
+   "lengthIn": 3.8125,
+   "hasHatchway": false,
+   "hasBreachPoint": false,
+   "hasPillars": false,
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top"
+    }
+   ],
+   "footprints": {
+    "B1": [
+     {
+      "x": -0.183,
+      "y": -1.907
+     },
+     {
+      "x": 0.182,
+      "y": -1.907
+     },
+     {
+      "x": 0.182,
+      "y": 1.906
+     },
+     {
+      "x": -0.183,
+      "y": 1.906
+     }
+    ]
+   }
+  },
+  {
+   "kind": "gallowdark.wallB2",
+   "name": "Short Wall with Hatchway",
+   "labels": [
+    "B2"
+   ],
+   "inventoryCount": 2,
+   "spanSquares": 1,
+   "lengthIn": 3.8125,
+   "hasHatchway": true,
+   "hasBreachPoint": false,
+   "hasPillars": false,
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top"
+    },
+    {
+     "role": "accessPoint",
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top",
+     "typesClosed": [
+      "Heavy",
+      "Wall"
+     ],
+     "typesOpen": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ]
+    }
+   ],
+   "footprints": {
+    "B2": [
+     {
+      "x": -1.906,
+      "y": -0.182
+     },
+     {
+      "x": 1.906,
+      "y": -0.182
+     },
+     {
+      "x": 1.906,
+      "y": 0.183
+     },
+     {
+      "x": -1.906,
+      "y": 0.183
+     }
+    ]
+   }
+  },
+  {
+   "kind": "gallowdark.wallB3",
+   "name": "Short Wall with Hatchway and Pillars",
+   "labels": [
+    "B3"
+   ],
+   "inventoryCount": 4,
+   "spanSquares": 1,
+   "lengthIn": 3.8125,
+   "hasHatchway": true,
+   "hasBreachPoint": false,
+   "hasPillars": true,
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top"
+    },
+    {
+     "role": "accessPoint",
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top",
+     "typesClosed": [
+      "Heavy",
+      "Wall"
+     ],
+     "typesOpen": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ]
+    }
+   ],
+   "footprints": {
+    "B3": [
+     {
+      "x": -1.906,
+      "y": -0.183
+     },
+     {
+      "x": 1.906,
+      "y": -0.183
+     },
+     {
+      "x": 1.906,
+      "y": 0.182
+     },
+     {
+      "x": -1.906,
+      "y": 0.182
+     }
+    ]
+   }
+  }
+ ]
+}

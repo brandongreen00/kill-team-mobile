@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-17T03:55:38+00:00",
+ "generatedAt": "2026-08-17T03:59:23+00:00",
  "universal": [
   "Accurate",
   "Balanced",
@@ -481,7 +481,21 @@
     "wolf-scouts:Wolf Scout Rune Priest Skjald:Runic stave",
     "wolf-scouts:Wolf Scout Rune Priest Skjald:Thunderclap"
    ],
-   "unresolved": true
+   "unresolved": true,
+   "referencedIn": [
+    "blades-of-khaine: faction rule 'Aspect Techniques'",
+    "brood-brother: Psychic Familiar ability 'Group Activation'",
+    "celestian-insidiants: faction rule 'Weapons of the Witch Hunters'",
+    "corsair-voidscarred: strategy ploy 'OUTCASTS'",
+    "corsair-voidscarred: firefight ploy 'CONTEMPTUOUS ADVENTURER'",
+    "corsair-voidscarred: equipment 'RUNES OF GUIDANCE'",
+    "exodite-dragon-masters: faction rule 'Mercurial Speed'",
+    "exodite-dragon-masters: strategy ploy 'RIDE THEM DOWN'",
+    "exodite-dragon-masters: firefight ploy 'RIDING MASTERY'",
+    "inquisitorial-agent: Sister of Silence Prosecutor ability 'Psychic Null'",
+    "inquisitorial-agent: Sister of Silence Vigilator ability 'Psychic Null'",
+    "inquisitorial-agent: Sister of Silence Witchseeker ability 'Psychic Null'"
+   ]
   },
   {
    "id": "PhaseSweep",
@@ -668,12 +682,11 @@
    "forms": [
     "Skytorch*"
    ],
-   "definition": "",
-   "definedIn": "",
+   "definition": "An operative can only use this weapon during the Skytorch Assault action. If it does, don’t select a valid target. Instead, shoot against each operative within its torch zone (excluding operatives wholly underneath Vantage terrain); they aren’t in cover or obscured. Roll each sequence separately in order of furthest operative to closest. The torch zone is the horizontal area between the operative’s current and previous location. A 28mm round Skytorch marker can be temporarily placed underneath this operative before it moves to help determine this. Torrent 0\" means you cannot select secondary targets outside of its torch zone, but this weapon still has the Torrent weapon rule for all other rules purposes, e.g. the Condensed Stronghold rule (see Killzone: Volkus, Kill Team Core Book).",
+   "definedIn": "vespid-stingwings: datacard ability (Vespid Swarmguard)",
    "uses": [
     "vespid-stingwings:Vespid Swarmguard:Flamer (skytorch)"
-   ],
-   "unresolved": true
+   ]
   },
   {
    "id": "Smash",

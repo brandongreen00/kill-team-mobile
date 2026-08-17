@@ -282,7 +282,8 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       if (next.activeOperativeId !== op.id) return fail('that operative is not the active operative');
       const def = getAction(intent.action);
       if (!def) return fail(`unknown action '${intent.action}'`);
-      if (def.available && !def.available(ctx, next, op)) return fail(`${def.name} is not available in this killzone`);
+      if (def.available && !def.available(ctx, next, op))
+        return fail(`${def.name} is not available in this killzone (Close Quarters / terrain gated)`);
       const restrictionKey = def.treatedAs ?? def.id;
       const counteracting = next.opState['counteract']?.['operativeId'] === op.id;
       if (!counteracting && op.actionsThisActivation.includes(restrictionKey))

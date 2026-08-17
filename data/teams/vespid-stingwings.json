@@ -19,7 +19,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/vespid-stingwings/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:23+00:00",
  "source": "cache",
  "selection": {
   "leader": {
@@ -346,8 +346,21 @@
      ]
     }
    ],
-   "abilities": [],
-   "uniqueActions": [],
+   "abilities": [
+    {
+     "id": "vespid-stingwings.oversight-drone.evasive-drone",
+     "name": "Evasive Drone",
+     "text": "This operative cannot perform any actions other than Aerial Guidance, Charge, Dash, Fall Back, Fight and Reposition.\n\nWhenever determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhenever determining what’s visible to this operative, the round disc at the top of the miniature is its head.\n\nWhenever this operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".\n\nWhenever an operative is shooting this operative, ignore the Piercing weapon rule."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "vespid-stingwings.oversight-drone.act.aerial-guidance",
+     "name": "AERIAL GUIDANCE",
+     "ap": 1,
+     "text": "SUPPORT. Until the start of this operative’s next activation, whenever another friendly VESPID STINGWING operative within 6\" of this operative is shooting an enemy operative visible to this operative, that friendly operative’s ranged weapons have the Lethal 5+ and Saturate weapon rules. This has no effect while this operative is within control range of an enemy operative.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
    "fluff": "The MV44 Oversight Drone is an adaptation of aerial reconnaissance units originally deployed by the Air caste to survey potentially hostile worlds before invasion. Linked directly to the kill team’s handler, it is an invaluable source of up-to-the-moment tactical intelligence. Meanwhile, its speed and agility make it a difficult target for enemy marksmen."
   },
   {
@@ -713,8 +726,21 @@
      ]
     }
    ],
-   "abilities": [],
-   "uniqueActions": [],
+   "abilities": [
+    {
+     "id": "vespid-stingwings.swarmguard.skytorch",
+     "name": "Skytorch",
+     "text": "An operative can only use this weapon during the Skytorch Assault action. If it does, don’t select a valid target. Instead, shoot against each operative within its torch zone (excluding operatives wholly underneath Vantage terrain); they aren’t in cover or obscured. Roll each sequence separately in order of furthest operative to closest. The torch zone is the horizontal area between the operative’s current and previous location. A 28mm round Skytorch marker can be temporarily placed underneath this operative before it moves to help determine this. Torrent 0\" means you cannot select secondary targets outside of its torch zone, but this weapon still has the Torrent weapon rule for all other rules purposes, e.g. the Condensed Stronghold rule (see Killzone: Volkus, Kill Team Core Book)."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "vespid-stingwings.swarmguard.act.skytorch-assault",
+     "name": "SKYTORCH ASSAULT",
+     "ap": 2,
+     "text": "Perform a free Reposition action with this operative. During that action, it must FLY and can move an additional 2\". Then perform a free Shoot action. You can only select a flamer (skytorch) for that Shoot action.\n\nThis operative cannot perform this action while it has a Conceal order, or while within control range of an enemy operative."
+    }
+   ],
    "fluff": "Though Vespids have some natural advantages in close combat, their teams risk being overrun by especially numerous or savage combatants. Driving back such enemies falls to the Swarmguard, whose T’au flamer projects roaring jets of chemical fire that can incinerate groups of foes, spreading panic and agony amidst enemy ranks."
   },
   {

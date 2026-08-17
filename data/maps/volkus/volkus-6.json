@@ -162,14 +162,13 @@
  },
  "objectives": [
   {
-   "id": "obj.p2",
-   "kind": "p2",
+   "id": "obj.p1",
+   "kind": "p1",
    "pos": {
-    "x": 14.979,
-    "y": 11.021
+    "x": 23.771,
+    "y": 13.771
    },
-   "z": 3.5,
-   "onFeatureId": "volkus-6.C"
+   "z": 0.0
   },
   {
    "id": "obj.p2",
@@ -179,6 +178,16 @@
     "y": 8.188
    },
    "z": 0.0
+  },
+  {
+   "id": "obj.centre",
+   "kind": "centre",
+   "pos": {
+    "x": 14.979,
+    "y": 11.021
+   },
+   "z": 3.5,
+   "onFeatureId": "volkus-6.C"
   }
  ],
  "features": [

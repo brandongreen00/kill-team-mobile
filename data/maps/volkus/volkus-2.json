@@ -160,7 +160,35 @@
    "y": 11.0
   }
  },
- "objectives": [],
+ "objectives": [
+  {
+   "id": "obj.p1",
+   "kind": "p1",
+   "pos": {
+    "x": 18.771,
+    "y": 12.771
+   },
+   "z": 0.0
+  },
+  {
+   "id": "obj.p2",
+   "kind": "p2",
+   "pos": {
+    "x": 11.229,
+    "y": 17.229
+   },
+   "z": 0.0
+  },
+  {
+   "id": "obj.centre",
+   "kind": "centre",
+   "pos": {
+    "x": 14.979,
+    "y": 3.771
+   },
+   "z": 0.0
+  }
+ ],
  "features": [
   {
    "id": "volkus-2.A",
@@ -1071,135 +1099,11 @@
      "blocksVisibility": true,
      "standable": false,
      "solid": true
-    },
-    {
-     "id": "volkus-2.E.p2",
-     "featureId": "volkus-2.E",
-     "poly": [
-      {
-       "x": 14.625,
-       "y": 3.792
-      },
-      {
-       "x": 15.292,
-       "y": 3.792
-      },
-      {
-       "x": 15.292,
-       "y": 4.208
-      },
-      {
-       "x": 14.625,
-       "y": 4.208
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.0,
-     "types": [
-      "Heavy"
-     ],
-     "role": "wall",
-     "blocksVisibility": true,
-     "standable": false,
-     "solid": true
-    },
-    {
-     "id": "volkus-2.E.p3",
-     "featureId": "volkus-2.E",
-     "poly": [
-      {
-       "x": 14.792,
-       "y": 3.25
-      },
-      {
-       "x": 15.167,
-       "y": 3.25
-      },
-      {
-       "x": 15.167,
-       "y": 3.375
-      },
-      {
-       "x": 14.792,
-       "y": 3.375
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.0,
-     "types": [
-      "Heavy"
-     ],
-     "role": "wall",
-     "blocksVisibility": true,
-     "standable": false,
-     "solid": true
-    },
-    {
-     "id": "volkus-2.E.p4",
-     "featureId": "volkus-2.E",
-     "poly": [
-      {
-       "x": 14.75,
-       "y": 4.208
-      },
-      {
-       "x": 15.208,
-       "y": 4.208
-      },
-      {
-       "x": 15.208,
-       "y": 4.292
-      },
-      {
-       "x": 14.75,
-       "y": 4.292
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.0,
-     "types": [
-      "Heavy"
-     ],
-     "role": "wall",
-     "blocksVisibility": true,
-     "standable": false,
-     "solid": true
-    },
-    {
-     "id": "volkus-2.E.p5",
-     "featureId": "volkus-2.E",
-     "poly": [
-      {
-       "x": 15.292,
-       "y": 3.792
-      },
-      {
-       "x": 15.417,
-       "y": 3.792
-      },
-      {
-       "x": 15.417,
-       "y": 4.083
-      },
-      {
-       "x": 15.292,
-       "y": 4.083
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.0,
-     "types": [
-      "Heavy"
-     ],
-     "role": "wall",
-     "blocksVisibility": true,
-     "standable": false,
-     "solid": true
     }
    ],
    "placement": {
-    "x": 14.104,
-    "y": 4.951,
+    "x": 12.177,
+    "y": 7.104,
     "rotDeg": 0,
     "flip": false
    }

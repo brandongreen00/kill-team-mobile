@@ -19,7 +19,7 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/death-korps/",
- "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "scrapedAt": "2026-08-17T03:59:22+00:00",
  "source": "cache",
  "selection": {
   "leader": {
@@ -1677,10 +1677,17 @@
     {
      "id": "death-korps.vox-operator.relay-orders",
      "name": "Relay Orders",
-     "text": "Once per turning point, when this operative receives a GUARDSMAN ORDER, if it’s not within control range of enemy operatives, it can relay that order. Whenever an order is relayed, all friendly DEATH KORPS operatives in the killzone receive that order, then subtract 1 from this operative’s APL stat until the end of its next activation.\n\nSIGNAL1AP\nSUPPORT. Select one other friendly DEATH KORPS operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+     "text": "Once per turning point, when this operative receives a GUARDSMAN ORDER, if it’s not within control range of enemy operatives, it can relay that order. Whenever an order is relayed, all friendly DEATH KORPS operatives in the killzone receive that order, then subtract 1 from this operative’s APL stat until the end of its next activation."
     }
    ],
-   "uniqueActions": [],
+   "uniqueActions": [
+    {
+     "id": "death-korps.vox-operator.act.signal",
+     "name": "SIGNAL",
+     "ap": 1,
+     "text": "SUPPORT. Select one other friendly DEATH KORPS operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
    "fluff": "Vox-operators are consummate professionals, accompanying their leaders wherever required whilst carrying heavy equipment, all to receive and transmit communications that are vital for their comrades and superiors to understand the inevitable confusion of battle."
   },
   {
