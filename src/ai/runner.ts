@@ -16,6 +16,7 @@ import { SeededRng } from '../core/rng.ts';
 import { aliveOperatives } from '../core/state.ts';
 import type { GameState, KillzoneMap, PlayerId } from '../core/types.ts';
 import { otherPlayer } from '../core/types.ts';
+import { resetAiCaches } from './caches.ts';
 import { deployPosition } from './deploy.ts';
 import type { Agent } from './types.ts';
 
@@ -56,6 +57,10 @@ export interface GameResult {
 export function playGame(opts: PlayGameOptions): GameResult {
   const started = Date.now();
   const ctx = opts.ctx;
+  // Module-level caches are keyed by ids that repeat across battles (operative ids, datacard
+  // ids, map ids, positions). A stale entry from the previous game could answer a query in
+  // this one, so every game starts from a clean slate.
+  resetAiCaches();
   // A fresh, seeded stream per game: the same seed replays byte-identically.
   ctx.rng = new SeededRng(opts.seed);
   for (const p of ['p1', 'p2'] as PlayerId[]) opts.agents[p].reset?.();

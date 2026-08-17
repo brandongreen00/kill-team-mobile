@@ -61,6 +61,11 @@ const FIELD_CACHE_MAX = 512;
 function opKey(state: GameState, op: OperativeState, step: number): string {
   return [
     state.map.id,
+    // The map object itself can differ between battles with the same id (a regenerated or
+    // edited layout), so the fingerprint includes its shape, not just its name.
+    state.map.features.length,
+    state.map.board.w,
+    state.map.board.h,
     Object.keys(state.terrainState).length,
     state.placedFeatures.length,
     op.datacardId,

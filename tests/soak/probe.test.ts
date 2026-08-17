@@ -2,7 +2,7 @@ import { it } from 'vitest';
 import { GreedyAgent, RandomLegalAgent } from '../../src/ai/baseline.ts';
 import { TacticalAgent } from '../../src/ai/agent.ts';
 import { playGame } from '../../src/ai/runner.ts';
-import { AI_ROSTER, aiContext, arenaMap, corridorMap, SCORING_OP_ID } from './fixtures.ts';
+import { AI_ROSTER, aiContext, arenaMap, corridorMap, CRIT_OP_ID, TAC_OP_P1, TAC_OP_P2 } from './fixtures.ts';
 import type { Agent } from '../../src/ai/types.ts';
 import type { PlayerId } from '../../src/core/types.ts';
 
@@ -36,8 +36,11 @@ it('probe', () => {
       ctx,
       map: maps[g % maps.length]!,
       seed: 1000 + g,
-      critOpId: SCORING_OP_ID,
-      rosters: { p1: AI_ROSTER, p2: AI_ROSTER },
+      critOpId: CRIT_OP_ID,
+      rosters: {
+        p1: { ...AI_ROSTER, tacOpId: TAC_OP_P1 },
+        p2: { ...AI_ROSTER, tacOpId: TAC_OP_P2 },
+      },
       agents,
     });
     ms += Date.now() - t0;

@@ -4,19 +4,17 @@
  * Synthetic killzones with real terrain (cover, obscuring blocks, Vantage, a Close Quarters
  * layout), synthetic datacards, and a synthetic scoring op.
  *
- * WHY A SYNTHETIC OP: `src/core/ops/**` (the real crit/tac/kill ops) is owned by another
- * agent and was not available when the AI landed. Without a scoring hook every game is a 0-0
- * draw, so the win-rate tests would measure nothing. `secureAndSlayOp` awards VP for objective
- * control and for kills — the two things Approved Ops actually pays for — through the same
- * `onEndOfTP` / `state.teams[].vp` channel the real ops use.
+ * Contexts come from `createGameContext`, so games are played with the REAL ops layer wired
+ * in (crit op scoring, the kill op, tac ops, initiative cards and equipment) — an acceptance
+ * run against a bare `makeContext` would be measuring a game with nothing to score.
  */
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { makeContext, type GameContext, type OpDef } from '../../src/core/context.ts';
+import type { GameContext } from '../../src/core/context.ts';
+import { createGameContext } from '../../src/core/game.ts';
 import { SeededRng } from '../../src/core/rng.ts';
-import { aliveOperatives, log, markerController } from '../../src/core/state.ts';
 import { parseWeaponRules } from '../../src/core/weaponRules.ts';
-import { otherPlayer, type Datacard, type KillzoneMap, type PlayerId, type TerrainFeature } from '../../src/core/types.ts';
+import type { Datacard, KillzoneMap, TerrainFeature } from '../../src/core/types.ts';
 import type { RosterSpec } from '../../src/ai/runner.ts';
 import { heavyBlock, makeCard, rect, testMap, vantagePlatform } from '../fixtures.ts';
 
@@ -200,64 +198,16 @@ export function realMaps(limit = 3): KillzoneMap[] {
 }
 
 // ---------------------------------------------------------------------------
-// Scoring op
+// Ops + context
 // ---------------------------------------------------------------------------
 
-export const SCORING_OP_ID = 'ai.secure-and-slay';
+/** Crit op used by the AI tests: Secure — objective control, the bread and butter of KT. */
+export const CRIT_OP_ID = 'crit.secure';
 
-/**
- * Synthetic crit op: at the end of each turning point score 1VP per objective marker you
- * control (max 2) and 1VP per enemy operative incapacitated since the last turning point.
- */
-export function secureAndSlayOp(getCtx: () => GameContext): OpDef {
-  return {
-    id: SCORING_OP_ID,
-    kind: 'crit',
-    name: 'Secure and Slay',
-    text: 'End of each turning point: 1VP per objective marker you control (max 2VP), and 2VP per enemy operative incapacitated during that turning point.',
-    register(reg, player: PlayerId) {
-      reg.on(
-        'onEndOfTP',
-        { id: `${SCORING_OP_ID}:${player}`, sourceText: 'Synthetic scoring op used by the AI tests.', player },
-        (ev) => {
-          const state = ev.state;
-          const ctx = getCtx();
-          let controlled = 0;
-          for (const marker of Object.values(state.markers)) {
-            if (marker.kind !== 'objective') continue;
-            if (markerController(ctx, state, marker) === player) controlled++;
-          }
-          const secure = Math.min(2, controlled);
-          const enemy = otherPlayer(player);
-          const dead = state.teams[enemy].startingSize - aliveOperatives(state, enemy).length;
-          const scratch = (state.opState[SCORING_OP_ID] ??= {}) as Record<string, number>;
-          const seen = scratch[`kills:${player}`] ?? 0;
-          const killVp = 2 * Math.max(0, dead - seen);
-          scratch[`kills:${player}`] = dead;
-          const vp = secure + killVp;
-          if (vp <= 0) return;
-          state.teams[player].vp += vp;
-          const byOp = (state.teams[player].vpByOp[SCORING_OP_ID] ??= []);
-          byOp.push(vp);
-          log(state, {
-            kind: 'score',
-            player,
-            text: `${SCORING_OP_ID}: +${vp}VP (${secure} secure, ${killVp} kills)`,
-          });
-        },
-      );
-    },
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Context
-// ---------------------------------------------------------------------------
+/** Tac ops for each side. Both teams have no archetypes, so any tac op is selectable. */
+export const TAC_OP_P1 = 'tac.dominate';
+export const TAC_OP_P2 = 'tac.rout';
 
 export function aiContext(seed = 1): GameContext {
-  const ctx = makeContext({ rng: new SeededRng(seed) });
-  for (const card of aiDatacards()) ctx.datacards.set(card.id, card);
-  for (const map of syntheticMaps()) ctx.maps.set(map.id, map);
-  ctx.ops.set(SCORING_OP_ID, secureAndSlayOp(() => ctx));
-  return ctx;
+  return createGameContext({ rng: new SeededRng(seed), datacards: aiDatacards(), maps: syntheticMaps() });
 }

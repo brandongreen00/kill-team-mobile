@@ -408,6 +408,11 @@ export const fightValue = (p: FightPlan): number =>
 
 const VALUE_CACHE = new Map<string, number>();
 
+/** Datacard ids repeat across battles with different stats — see src/ai/caches.ts. */
+export function clearValueCache(): void {
+  VALUE_CACHE.clear();
+}
+
 /** Rough worth of an operative, used to weight kills and losses. Datacards carry no points. */
 export function operativeValue(ctx: GameContext, op: OperativeState): number {
   const cached = VALUE_CACHE.get(op.datacardId);

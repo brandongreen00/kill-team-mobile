@@ -26,6 +26,8 @@ export interface EvalWeights {
   cp: number;
   /** Carrying a mission marker. */
   carry: number;
+  /** Op progress stamped on markers (secured / downloaded / claimed …). */
+  mission: number;
   /** Expected damage this kill team could deal right now. */
   threat: number;
   /** Expected damage this kill team could take right now. */
@@ -41,6 +43,7 @@ export const DEFAULT_WEIGHTS: EvalWeights = {
   wounds: 9,
   cp: 3,
   carry: 14,
+  mission: 26,
   threat: 2.2,
   exposure: 2.6,
   advance: 0.9,

@@ -15,8 +15,15 @@ import type { BaseShape, GameState, OperativeState, PlayerId, Poly, Vec2 } from 
 
 const GRID_CACHE = new Map<string, Vec2[]>();
 
-function zoneGrid(map: { id: string }, zoneKey: string, zone: Poly[], base: BaseShape, rot: number, step = 0.75): Vec2[] {
-  const key = `${map.id}|${zoneKey}|${JSON.stringify(base)}|${rot}|${step}`;
+function zoneGrid(
+  map: { id: string; features: unknown[] },
+  zoneKey: string,
+  zone: Poly[],
+  base: BaseShape,
+  rot: number,
+  step = 0.75,
+): Vec2[] {
+  const key = `${map.id}|${map.features.length}|${zoneKey}|${JSON.stringify(zone)}|${JSON.stringify(base)}|${rot}|${step}`;
   const hit = GRID_CACHE.get(key);
   if (hit) return hit;
   const points: Vec2[] = [];

@@ -6,18 +6,21 @@ untouched and still deployable.
 ## 1. Executive summary
 
 - **Done**: Phase 0 (TS/Vite/Preact scaffold, legacy app preserved at `/legacy/`, CI),
-  Phase 2 (the pure rules core — geometry, 2.5D terrain, visibility/cover/obscured,
-  movement, dice, all 23 universal weapon rules, actions, the shoot/fight sequences as
-  resumable decision-driven state machines, phases, reducer), Phase 1 (all 24 Approved Ops
-  killzone layouts extracted by script, with terrain templates and heights), Phase 4 (game
-  flow + world-anchored visible dice + reactive-window UI + targeting-line inspector), and
-  the team-data layer for all 48 kill teams.
-- **Partial / in flight at the end of the session**: Phase 3 ops, universal equipment,
-  Phase 7 AI, and the batch-1 team rule modules. Each has its own section below with the
-  exact resume point.
-- **Not started**: the remaining 40 team modules, the roster builder UI, PWA/offline.
-- **Gates**: `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm lint:rng` and `pnpm e2e`
-  (9 Playwright tests across iPhone SE / Pixel 7 / desktop) are green for the committed core.
+  Phase 1 (all 24 Approved Ops killzone layouts extracted by script, with terrain templates
+  and researched heights), Phase 2 (the pure rules core — geometry, 2.5D terrain,
+  visibility/cover/obscured, movement, dice, all 23 universal weapon rules, actions, the
+  shoot/fight sequences as resumable decision-driven state machines, phases, reducer),
+  Phase 3 (9 crit ops, 12 tac ops, kill op, primary op, initiative cards, 11 universal
+  equipment options), Phase 4 (game flow + world-anchored visible dice + reactive-window UI
+  + targeting-line inspector), and the team-data layer for all 48 kill teams.
+- **Partial**: Phase 5 teams — 4 of the 8 batch-1 rule modules are complete (Kasrkin, Angel
+  of Death, Plague Marines, Imperial Navy Breacher); the other four were in progress at the
+  end of the session. Phase 7 AI was still building.
+- **Not started**: the remaining 40 team modules, the roster builder UI that enforces the
+  structured selection rules, board pan/zoom gestures, PWA/offline.
+- **Gates**: `pnpm typecheck`, `pnpm test` (202 passing, 1 skipped), `pnpm build`,
+  `pnpm lint:rng` and `pnpm e2e` (9 Playwright tests across iPhone SE / Pixel 7 / desktop)
+  all green.
 - **Deploy**: `.github/workflows/deploy-pages.yml` builds `dist/` and asserts both
   `dist/index.html` and `dist/legacy/index.html` exist, so the previous app keeps working
   while the new one is finished.
@@ -154,8 +157,41 @@ rules by killzone. Highlights and the deliberate decisions:
 
 ## 5. Ops
 
-See §11 for status; `data/ops/**` + `src/core/ops/**`, with the kill-grade table pinned by a
-test and the Approved Ops battle sequence (initiative cards, secret primary op, 6VP cap).
+All implemented with automated scoring, per-turning-point caps and the 6VP-per-op cap.
+Printed text and parameters live in `data/ops/*.json`; the modules are `src/core/ops/**`.
+
+- **9 crit ops** — Secure, Loot, Transmission, Orb, Stake Claim, Energy Cells, Download,
+  Data, Reboot. The tournament companion groupings {1,2,3} {4,6,7} {5,8,9} are exposed as
+  `CRIT_OP_GROUPS` presets.
+- **12 tac ops**, three per archetype, with reveal timings, tokens, per-turning-point caps,
+  Flank driven by `map.flankLine`, Envoy and Flank as gambits, and the "ignored for the kill
+  op" interplay.
+- **Kill op** with the printed grade table, plus a documented extrapolation outside the
+  printed 5–14 starting sizes (O-001). **Primary op** as a secret turning-point-1 gambit
+  with the half-rounded-up bonus. **Initiative cards** with alternation from the roll-off
+  loser, a Re-roll played after modifiers superseding them, ties going to the player without
+  initiative, the turning-point-numbered card to the loser (none in TP4) and the setup
+  Re-roll card to the initiative player's opponent.
+- **11 universal equipment options**, 10 fully mechanical. Each item's own set-up
+  constraints are enforced (territory, killzone floor, >2" from other equipment terrain /
+  access points / Accessible terrain, the heavy barricade's 4"-of-drop-zone rule, the
+  ladders' upright-against-2"-terrain rule, and the Bheta-Decima Vantage exception).
+
+Secret simultaneous choices (Reboot numbers, Stake Claim, primary op, tac op) go through
+`PendingDecision` so pass-and-play can hide them. 48 tests in `tests/ops.test.ts` and
+`tests/equipment.test.ts`; status tables and decisions O-001…O-011 in `docs/OPS.md`.
+
+**Not fully mechanical, with reasons:**
+- *Portable Barricade's Portable clause* ("only provides cover while connected") — cover is
+  computed in `visibility.ts`, which has no part-exclusion hook. The Protective +1 Save
+  **is** connection-gated.
+- *Ladder climb discount* — unreachable today because `movement.ts` prefers staying level,
+  so a climb up cannot be planned without an explicit elevation. This is a movement bug on
+  my side, not the equipment's; the ladder is built with the right kind and starts working
+  when it is fixed.
+- *Energy Cells' AP surcharge* uses a nearest-pickable-marker heuristic, because
+  `onActionCost` does not know which marker is being picked up. Exact unless a tac-op marker
+  is closer than an objective.
 
 ## 6. Game flow and dice
 
@@ -207,8 +243,30 @@ structured selection rules, 49 registered rare weapon rules). The diff against t
 `factions.js` is in `docs/TEAM-DATA.md`; the notable corrections are 3 teams missing entirely
 (Spectre Squad, Hearthkyn Salvager, Exodite Dragon Masters), `Limited` losing its x
 everywhere, distance-prefixed `Devastating` flattened to plain Devastating, ~20 rare rules
-dropped outright, and 8 real stat errors. Team rule modules are tracked in
-`docs/TEAM-STATUS.md`.
+dropped outright, and 8 real stat errors.
+
+**Rule modules** (`src/teams/<slug>/index.ts`, tracked per row in `docs/TEAM-STATUS.md`).
+Every registration carries a short verbatim quote and its Wahapedia URL, which is what the
+in-app rule tooltip shows. Selection rules are enforced by one shared validator driven from
+the JSON, so a team only has to supply hooks.
+
+| team | faction rules | strategy ploys | firefight ploys | equipment | unique actions | rare rules | tests |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| kasrkin | 2/2 | 4/4 | 4/4 | 4/4 | 4/4 | Concealed Position | 26 |
+| angel-of-death | 2/2 | 4/4 | 4/4 | 4/4 | 1/1 | — | 17 |
+| plague-marines | 3/3 | 4/4 | 4/4 | 4/4 | 3/3 | Poison, Toxic, PSYCHIC | 18 |
+| imperial-navy-breacher | 2/2 | 4/4 | 4/4 | 4/4 | 7/7 | Shield; Detonate partial | 20 |
+
+Each has a bot-vs-bot soak on two maps with zero rejected intents. The trickiest rules and
+how they are modelled are in the per-team module headers.
+
+**Reminder-only, each justified in `docs/TEAM-STATUS.md`:** Kasrkin's Melta/Proximity Mine
+(needs a carried mine marker the Pick Up/Place Marker actions own), Angels of Death's Heroic
+Leader and Doctrine Warfare and Plague Marines' Icon of Contagion (all gate on a choice made
+before CP is paid, and the engine deducts CP before `onPloyUsed`), Breachers' Expendable
+(scoring lives in the ops layer) and half of Detonate (its "cannot be selected without a
+GHEISTSKULL" clause **is** enforced; the "shoot everything within 2" of the marker instead of
+a valid target" half needs a target-selection seam).
 
 ## 8. UI
 
@@ -245,7 +303,7 @@ Full list in `docs/DECISIONS.md`. The ones worth a look:
 4. **D-012** — for auto-resolved sequences the default cover-vs-obscured choice is *obscured*;
    a human is always asked.
 
-## 11. Status of the in-flight phases and how to resume
+## 11. Status and how to resume
 
 Work continues on the same branch. `docs/PROGRESS.md` is the running log; `docs/TEAM-STATUS.md`
 is the per-team resume point.

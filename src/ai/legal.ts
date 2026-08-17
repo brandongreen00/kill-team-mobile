@@ -19,6 +19,7 @@ import {
   enemiesInControlRange,
   gapBetween,
   markerController,
+  markersNear,
 } from '../core/state.ts';
 import type { GameState, OperativeState, PlayerId } from '../core/types.ts';
 import { otherPlayer } from '../core/types.ts';
@@ -184,10 +185,45 @@ export function actionCandidates(
         break;
       }
       default:
-        // Unique/mission actions registered by team or op modules: offered with no params.
-        push(out, ctx, state, op, def, {}, 'action', 1, def.name);
+        // Mission actions (ops) and team unique actions: the params are op-specific, so a
+        // small set of plausible ones is tried and the engine's own `check` decides which are
+        // legal. This is how the AI scores crit/tac ops without knowing any op by name.
+        out.push(...missionCandidates(ctx, state, op, def));
         break;
     }
+  }
+  return out;
+}
+
+/**
+ * Mission / unique actions. Ops record progress by stamping marker flags, so the param that
+ * matters is nearly always a marker the operative controls or an enemy nearby.
+ */
+function missionCandidates(ctx: GameContext, state: GameState, op: OperativeState, def: ActionDef): Candidate[] {
+  const attempts: ActionParams[] = [{}];
+  for (const marker of markersNear(ctx, state, op)) {
+    attempts.push({ markerId: marker.id });
+    attempts.push({ markerId: marker.id, markerPos: { ...op.pos } });
+  }
+  for (const enemy of aliveOperatives(state, otherPlayer(op.player))) {
+    if (gapBetween(ctx, op, enemy) > 6) continue;
+    attempts.push({ targetOperativeId: enemy.id, targetId: enemy.id });
+  }
+  for (const friend of aliveOperatives(state, op.player)) {
+    if (friend.id === op.id || gapBetween(ctx, op, friend) > 3) continue;
+    attempts.push({ targetOperativeId: friend.id, targetId: friend.id });
+  }
+  attempts.push({ targetPos: { ...op.pos }, markerPos: { ...op.pos } });
+
+  const out: Candidate[] = [];
+  const seen = new Set<string>();
+  for (const params of attempts) {
+    if (out.length >= 3) break;
+    const key = JSON.stringify(params);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    // Mission actions are the whole point of an op, so they outrank a marginal reposition.
+    push(out, ctx, state, op, def, params, 'action', 24, `${def.name}${params.markerId ? ` ${params.markerId}` : ''}`);
   }
   return out;
 }

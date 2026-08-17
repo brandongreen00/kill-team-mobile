@@ -8,12 +8,13 @@
  * `ResolveDecision` can never be rejected.
  */
 import { successes, type Die, type DicePool } from '../core/dice.ts';
+import { initiativeResult } from '../core/ops/initiativeCards.ts';
 import type { GameContext } from '../core/context.ts';
 import { defaultDecisionOption } from '../core/decisions.ts';
 import { effectiveRules } from '../core/sequences/shoot.ts';
 import { sideWeapon } from '../core/sequences/fight.ts';
 import { findProfile, weaponsOf } from '../core/state.ts';
-import type { GameState, PendingDecision, PlayerId, WeaponProfile } from '../core/types.ts';
+import { otherPlayer, type GameState, type PendingDecision, type PlayerId, type WeaponProfile } from '../core/types.ts';
 import type { FightSequence, ShootSequence } from '../core/sequences/types.ts';
 import { shootEstimate } from './combat.ts';
 
@@ -61,12 +62,55 @@ export function decideOption(
       return { optionId: has('auto') ? 'auto' : (enabled[0]?.id ?? 'auto') };
     case 'strikeOrBlock':
       return chooseStrikeOrBlock(ctx, state, decision) ?? fallback();
+    case 'initiativeCard':
+      return chooseInitiativeCard(state, decision);
+    case 'chooseInitiative':
+      // Activating first sets the tempo and takes contested objectives before the opponent
+      // can react. (Known weakness — see docs/AI.md: sometimes activating LAST is stronger.)
+      return { optionId: has(decision.who) ? decision.who : (enabled[0]?.id ?? decision.who) };
+    case 'primaryOp': {
+      // Chosen as a turning-point-1 gambit, before anything is scored: take the crit op, the
+      // one op both players can score every turning point.
+      const crit = enabled.find((o) => o.id.startsWith('crit.'));
+      return { optionId: (crit ?? enabled[0])?.id ?? 'pass' };
+    }
     default:
       return fallback();
   }
 }
 
 // ---------------------------------------------------------------------------
+
+/**
+ * Initiative cards: "each player alternates either using an initiative card to alter their
+ * roll result or passing". Spend a card only when it actually flips the roll-off, and spend
+ * the smallest one that does — cards are scarce (one per turning point, to the loser).
+ */
+function chooseInitiativeCard(state: GameState, decision: PendingDecision): DecisionChoice {
+  const me = decision.who;
+  const them = otherPlayer(me);
+  const mine = initiativeResult(state, me);
+  const theirs = initiativeResult(state, them);
+  // A tie is won by the player who does not currently have initiative.
+  const winningAlready = mine > theirs || (mine === theirs && state.initiative !== me);
+  const pass = decision.options.find((o) => o.id === 'pass');
+  if (winningAlready) return { optionId: pass?.id ?? 'pass' };
+
+  const needed = theirs - mine + (state.initiative === me ? 1 : 0);
+  let best: { id: string; delta: number } | null = null;
+  for (const option of decision.options) {
+    if (option.disabled || option.id === 'pass') continue;
+    const delta = Number(option.data?.['delta'] ?? NaN);
+    if (!Number.isFinite(delta) || delta <= 0) continue;
+    if (delta < needed) continue;
+    if (!best || delta < best.delta) best = { id: option.id, delta };
+  }
+  if (best) return { optionId: best.id, data: { cardId: best.id.split('|')[0] } };
+  // No modifier is big enough: a re-roll is the only way back into it.
+  const reroll = decision.options.find((o) => !o.disabled && o.id.endsWith('|reroll'));
+  if (reroll && theirs - mine >= 2) return { optionId: reroll.id, data: { cardId: reroll.id.split('|')[0] } };
+  return { optionId: pass?.id ?? 'pass' };
+}
 
 function shootSeq(state: GameState): ShootSequence | null {
   return state.sequence?.kind === 'shoot' ? state.sequence : null;

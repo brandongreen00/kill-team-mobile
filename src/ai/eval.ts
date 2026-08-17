@@ -103,6 +103,7 @@ export function evaluate(
   score += w.wounds * (a.health - b.health);
   score += w.cp * (a.cp - b.cp);
   score += w.carry * (a.carrying - b.carrying);
+  score += w.mission * (missionProgress(state, me) - missionProgress(state, them));
 
   if (!opts.fast && (w.threat !== 0 || w.exposure !== 0)) {
     score += w.threat * threatScore(ctx, state, me);
@@ -117,6 +118,21 @@ export function evaluate(
     else if (state.winner === them) score -= 4000;
   }
   return score;
+}
+
+/**
+ * Generic op progress: ops record who has done what by stamping the player id into a marker
+ * flag (`secured`, `downloadedBy`, `claimedBy`, …). Counting those is faction- and
+ * op-agnostic, and it gives mission actions a visible pay-off in the turning point they are
+ * performed rather than only when the op scores at the end of it.
+ */
+export function missionProgress(state: GameState, player: PlayerId): number {
+  let n = 0;
+  for (const marker of Object.values(state.markers)) {
+    for (const value of Object.values(marker.flags)) if (value === player) n++;
+  }
+  for (const effect of state.effects) if (effect.player === player && effect.source.kind === 'op') n++;
+  return n;
 }
 
 /** Negative distance from each operative to the objective it is closest to. */
@@ -215,6 +231,11 @@ export function cheapPositionScore(
 
 /** Static ranged threat of an operative's best weapon, cached per datacard. */
 const THREAT_CACHE = new Map<string, number>();
+
+/** Datacard ids repeat across battles with different stats — see src/ai/caches.ts. */
+export function clearThreatCache(): void {
+  THREAT_CACHE.clear();
+}
 
 function rangedThreat(ctx: GameContext, op: OperativeState): number {
   const cached = THREAT_CACHE.get(op.datacardId);
