@@ -1,0 +1,896 @@
+{
+ "generatedAt": "2026-08-17T04:08:59+00:00",
+ "universal": [
+  "Accurate",
+  "Balanced",
+  "Blast",
+  "Brutal",
+  "Ceaseless",
+  "Devastating",
+  "Heavy",
+  "Hot",
+  "Lethal",
+  "Limited",
+  "Piercing",
+  "PiercingCrits",
+  "Punishing",
+  "Range",
+  "Relentless",
+  "Rending",
+  "Saturate",
+  "Seek",
+  "SeekLight",
+  "Severe",
+  "Shock",
+  "Silent",
+  "Stun",
+  "Torrent"
+ ],
+ "rules": [
+  {
+   "id": "Aimed",
+   "name": "Aimed",
+   "teams": [
+    "exodite-dragon-masters"
+   ],
+   "forms": [
+    "Aimed*"
+   ],
+   "definition": "This operative cannot use this weapon during an activation in which it moved more than 3\", and it cannot move more than 3\" during an activation in which it used this weapon. This weapon rule has no effect on preventing the Guard action.",
+   "definedIn": "exodite-dragon-masters: datacard ability (Dragon Master Leystalker)",
+   "uses": [
+    "exodite-dragon-masters:Dragon Master Leystalker:Long rifle (stationary)"
+   ]
+  },
+  {
+   "id": "AntiPSYKER",
+   "name": "Anti-PSYKER",
+   "teams": [
+    "celestian-insidiants",
+    "novitiates"
+   ],
+   "forms": [
+    "Anti-PSYKER*"
+   ],
+   "definition": "Whenever this weapon is being used against an operative that has the PSYKER keyword, add 1 to both Dmg stats of this weapon and it has the Lethal 5+ weapon rule.",
+   "definedIn": "novitiates: datacard ability (Novitiate Condemnor)",
+   "uses": [
+    "celestian-insidiants:Insidiant Censor:Virge of admonition",
+    "celestian-insidiants:Insidiant Cremator:Null mace",
+    "celestian-insidiants:Insidiant Reliquarius:Condemnor stakethrower",
+    "celestian-insidiants:Insidiant Superior:Null mace",
+    "celestian-insidiants:Insidiant Superior:Relic condemnor stakethrower",
+    "celestian-insidiants:Insidiant Warrior:Condemnor stakethrower",
+    "celestian-insidiants:Insidiant Warrior:Null mace",
+    "novitiates:Novitiate Condemnor:Condemnor stakethrower",
+    "novitiates:Novitiate Condemnor:Null rod"
+   ]
+  },
+  {
+   "id": "Beam",
+   "name": "Beam",
+   "teams": [
+    "hearthkyn-salvager"
+   ],
+   "forms": [
+    "Beam*"
+   ],
+   "definition": "Whenever this operative is shooting with this weapon, each retained critical success immediately inflicts D3 damage on each other operative along one (and only one) beam line (roll separately for each operative), but the target isn’t affected. An operative is along a beam line if a targeting line can be drawn from this operative to its base, and that line crosses the base of the original target but doesn’t cross Heavy terrain.\n\nIn this example, Operative A is the target. Operatives B and C are along the beam line, but Operative D isn’t.",
+   "definedIn": "hearthkyn-salvager: datacard ability (Hearthkyn Gunner)",
+   "uses": [
+    "hearthkyn-salvager:Hearthkyn Gunner:EtaCarn plasma beamer"
+   ]
+  },
+  {
+   "id": "Bipod",
+   "name": "Bipod",
+   "teams": [
+    "hernkyn-yaegir"
+   ],
+   "forms": [
+    "Bipod*"
+   ],
+   "definition": "Whenever this operative is shooting with this weapon, if it hasn’t moved during the activation, or if it’s a counteraction, this weapon has the Ceaseless weapon rule. Note this operative isn’t restricted from moving after shooting.",
+   "definedIn": "hernkyn-yaegir: datacard ability (Yaegir Gunner)",
+   "uses": [
+    "hernkyn-yaegir:Yaegir Gunner:APM launcher (armour piercing)",
+    "hernkyn-yaegir:Yaegir Gunner:APM launcher (breaching)",
+    "hernkyn-yaegir:Yaegir Gunner:APM launcher (high explosive)"
+   ]
+  },
+  {
+   "id": "Blaze",
+   "name": "Blaze",
+   "teams": [
+    "sanctifiers"
+   ],
+   "forms": [
+    "Blaze*"
+   ],
+   "definition": "Some weapons in this team’s rules have the Blaze weapon rule below.\n\n*Blaze: If you inflict damage with any critical successes, the operative this weapon is being used against gains one of your Blaze tokens (if it doesn’t already have one). Whenever an operative that has one of your Blaze tokens is activated, inflict D3 damage on it. Then that operative’s controlling player selects one of the following:\n\nRoll one D6: on a 3+, remove that token.\n\nSubtract 1 from the operative’s APL stat until the end of that activation to remove that token.",
+   "definedIn": "sanctifiers: faction rule",
+   "uses": [
+    "sanctifiers:Sanctifier Conflagrator:Twin hand flamers (focused)",
+    "sanctifiers:Sanctifier Conflagrator:Twin hand flamers (twin torrent)",
+    "sanctifiers:Sanctifier Miraculist:Burning hands",
+    "sanctifiers:Sanctifier Miraculist:Holy light",
+    "sanctifiers:Sanctifier Miraculist:Wreathe in fire",
+    "sanctifiers:Sanctifier Missionary:Brazier of holy fire",
+    "sanctifiers:Sanctifier Missionary:Ministorum flamer",
+    "sanctifiers:Sanctifier Persecutor:Hand flamer",
+    "sanctifiers:Sanctifier Preacher:Hand flamer",
+    "sanctifiers:Sanctifier Reliquant:Hand flamer"
+   ]
+  },
+  {
+   "id": "BloodOffering",
+   "name": "Blood Offering",
+   "teams": [
+    "blooded"
+   ],
+   "forms": [
+    "Blood Offering*"
+   ],
+   "definition": "Whenever this operative is fighting or retaliating with this weapon, the first time you strike with a critical success during that sequence, you gain one Blooded token.",
+   "definedIn": "blooded: datacard ability (Traitor Butcher)",
+   "uses": [
+    "blooded:Traitor Butcher:Power weapon & cleaver"
+   ]
+  },
+  {
+   "id": "ConcealedPosition",
+   "name": "Concealed Position",
+   "teams": [
+    "brood-brother",
+    "death-korps",
+    "exaction-squad",
+    "farstalker-kinband",
+    "hernkyn-yaegir",
+    "kasrkin",
+    "kommandos",
+    "spectre-squad",
+    "tempestus-aquilons"
+   ],
+   "forms": [
+    "Concealed Position*"
+   ],
+   "definition": "This operative can only use this weapon the first time it’s performing the Shoot action during the battle.",
+   "definedIn": "brood-brother: datacard ability (Brood Brother Sniper)",
+   "uses": [
+    "brood-brother:Brood Brother Sniper:Sniper rifle (concealed)",
+    "death-korps:Death Korps Sniper:Long-las (concealed)",
+    "exaction-squad:Arbites Marksman:Executioner shotgun (concealed)",
+    "farstalker-kinband:Kroot Long-Sight:Kroot hunting rifle (concealed)",
+    "hernkyn-yaegir:Yaegir Riflekyn:Magna-coil rifle (concealed)",
+    "kasrkin:Kasrkin Sharpshooter:Hot-shot marksman rifle (concealed)",
+    "kommandos:Kommando Snipa Boy:Scoped big shoota (concealed)",
+    "spectre-squad:Spectre Sharpshooter:Long-las (concealed)",
+    "tempestus-aquilons:Aquilon Marksman:Hot‑shot long‑las (concealed)"
+   ]
+  },
+  {
+   "id": "Crush",
+   "name": "Crush",
+   "teams": [
+    "raveners"
+   ],
+   "forms": [
+    "Crush*"
+   ],
+   "definition": "Whenever you strike, you and your opponent roll-off, adding 1 to your result if the operative this weapon is being used against has a Wounds stat of 9 or less. If you win, inflict additional damage on that operative equal to the difference between the dice results (to a maximum of 3 additional damage).",
+   "definedIn": "raveners: datacard ability (Ravener Wrecker)",
+   "uses": [
+    "raveners:Ravener Wrecker:Scything talons & crushing claws"
+   ]
+  },
+  {
+   "id": "Custom",
+   "name": "Custom",
+   "teams": [
+    "phobos-strike-team"
+   ],
+   "forms": [
+    "Custom*"
+   ],
+   "definition": "At the end of the Select Operatives step, if this operative is selected for deployment, select up to two of the following weapon rules for this weapon to have for the battle: Balanced, Lethal 5+, Piercing Crits 1, Rending, Saturate.",
+   "definedIn": "phobos-strike-team: datacard ability (Infiltrator Veteran)",
+   "uses": [
+    "phobos-strike-team:Infiltrator Veteran:Custom bolt carbine"
+   ]
+  },
+  {
+   "id": "Detonate",
+   "name": "Detonate",
+   "teams": [
+    "death-korps",
+    "imperial-navy-breacher",
+    "phobos-strike-team",
+    "wrecka-krew"
+   ],
+   "forms": [
+    "Detonate*"
+   ],
+   "definition": "Don’t select a valid target. Instead, shoot against each operative within 2\" of your Mine marker, unless Heavy terrain is wholly intervening between that operative and that marker. Each of those operatives cannot be in cover or obscured. Roll each sequence separately in an order of your choice. This weapon cannot be selected if your Mine marker isn’t in the killzone. At the end of the action, remove your Mine marker from the killzone. In a killzone that uses the close quarters rules (e.g. Killzone: Tomb World), this weapon has the Lethal 5+ weapon rule.",
+   "definedIn": "death-korps: datacard ability (Death Korps Sapper)",
+   "uses": [
+    "death-korps:Death Korps Sapper:Remote detonator",
+    "imperial-navy-breacher:Navis Void-Jammer:Gheistskull detonator",
+    "phobos-strike-team:Infiltrator Saboteur:Remote detonator",
+    "wrecka-krew:Breaka Boy Demolisha:Tankhammer (detonate)"
+   ]
+  },
+  {
+   "id": "DimensionalBanishment",
+   "name": "Dimensional Banishment",
+   "teams": [
+    "canoptek-circle"
+   ],
+   "forms": [
+    "Dimensional Banishment*"
+   ],
+   "definition": "After this operative uses this weapon, if you inflicted damage or retained any critical successes, if the target wasn’t incapacitated, roll 2D6: if the result is higher than the target’s remaining wounds, the target is incapacitated (taking precedence over rules that prevent incapacitation, e.g. Medic!, FELLGOR RAVAGER Frenzy) and your opponent cannot place a Reanimation marker (HIEROTEK CIRCLE) for that operative, if relevant",
+   "definedIn": "canoptek-circle: datacard ability (Canoptek Tomb Crawler)",
+   "uses": [
+    "canoptek-circle:Canoptek Tomb Crawler:Transdimensional isolator"
+   ]
+  },
+  {
+   "id": "Drag",
+   "name": "Drag",
+   "teams": [
+    "goremonger"
+   ],
+   "forms": [
+    "Drag*"
+   ],
+   "definition": "Whenever this operative is shooting with this weapon, at the start of the Resolve Attack Dice step (before inflicting damage), you can move the target up to x\". X is your total number of successful unblocked attack dice, multiplied by 2. The target must be moved to a location it can be placed as close as possible to this operative, determined by the x\" you choose to use. The move must be done in one or more straight-line increments, and increments are always rounded up to the nearest inch. Whenever the target is dropping during that move, ignore the vertical distance.",
+   "definedIn": "goremonger: datacard ability (Goremonger Impaler)",
+   "uses": [
+    "goremonger:Goremonger Impaler:Fleshskewer (ranged)"
+   ]
+  },
+  {
+   "id": "Engineered",
+   "name": "Engineered",
+   "teams": [
+    "gellerpox-infected"
+   ],
+   "forms": [
+    "Engineered*"
+   ],
+   "definition": "At the end of the Select Operatives step, if this operative is selected for deployment, select up to two of the following improvements or weapon rules for this weapon to have for the battle: Add 1 to the Normal Dmg stat, add 1 to the Critical Dmg stat, Balanced, Brutal, Lethal 5+, Rending.",
+   "definedIn": "gellerpox-infected: datacard ability (Vulgrar Thrice-Cursed)",
+   "uses": [
+    "gellerpox-infected:Vulgrar Thrice-Cursed:Fleshmelded weapons"
+   ]
+  },
+  {
+   "id": "Explosive",
+   "name": "Explosive",
+   "teams": [
+    "kommandos",
+    "wrecka-krew"
+   ],
+   "forms": [
+    "Explosive*"
+   ],
+   "definition": "This operative can perform the Shoot action with this weapon while within control range of an enemy operative. Don’t select a valid target. Instead, this operative is always the primary target and cannot be in cover or obscured.",
+   "definedIn": "kommandos: datacard ability (Kommando Bomb Squig)",
+   "uses": [
+    "kommandos:Kommando Bomb Squig:Explosives",
+    "wrecka-krew:Wrecka Bomb Squig:Explosives"
+   ]
+  },
+  {
+   "id": "Feast",
+   "name": "Feast",
+   "teams": [
+    "gellerpox-infected"
+   ],
+   "forms": [
+    "Feast*"
+   ],
+   "definition": "Whenever this operative is using this weapon against a wounded operative, add 1 to the Atk stat of this weapon and it has the Lethal 5+ weapon rule.",
+   "definedIn": "gellerpox-infected: datacard ability (Cursemite)",
+   "uses": [
+    "gellerpox-infected:Cursemite:Bloodsucking proboscis"
+   ]
+  },
+  {
+   "id": "Flay",
+   "name": "Flay",
+   "teams": [
+    "hand-of-the-archon"
+   ],
+   "forms": [
+    "Flay*"
+   ],
+   "definition": "Whenever this operative is using this weapon, the first time you strike with a critical success during that sequence, you can select one friendly HAND OF THE ARCHON operative within 6\" of it to gain one of your Pain tokens.",
+   "definedIn": "hand-of-the-archon: datacard ability (Kabalite Flayer)",
+   "uses": [
+    "hand-of-the-archon:Kabalite Flayer:Pain sculptors"
+   ]
+  },
+  {
+   "id": "ForceImpact",
+   "name": "Force Impact",
+   "teams": [
+    "hearthkyn-salvager"
+   ],
+   "forms": [
+    "Force Impact*"
+   ],
+   "definition": "Whenever this operative is fighting with this weapon, if it’s performed the Charge action during the activation, this weapon has the Brutal weapon rule.",
+   "definedIn": "hearthkyn-salvager: datacard ability (Hearthkyn Jump Pack Warrior)",
+   "uses": [
+    "hearthkyn-salvager:Hearthkyn Jump Pack Warrior:Plasma weapon"
+   ]
+  },
+  {
+   "id": "Headtaker",
+   "name": "Headtaker",
+   "teams": [
+    "fellgor-ravager"
+   ],
+   "forms": [
+    "Headtaker*"
+   ],
+   "definition": "Whenever this operative incapacitates an operative with this weapon, roll one D3:\n\nThis operative regains a number of lost wounds equal to the result (unless it has a Frenzy token).\n\nUntil the end of the battle, add the result to the Critical Dmg stat of this operative’s skullcleaver (to a maximum of 8).",
+   "definedIn": "fellgor-ravager: datacard ability (Fellgor Gorehorn)",
+   "uses": [
+    "fellgor-ravager:Fellgor Gorehorn:Skullcleaver"
+   ]
+  },
+  {
+   "id": "HumblingCruelty",
+   "name": "Humbling Cruelty",
+   "teams": [
+    "void-dancer-troupe"
+   ],
+   "forms": [
+    "Humbling Cruelty*"
+   ],
+   "definition": "If the target of this weapon isn’t incapacitated but any of your attack dice inflict damage, the target gains one of your Humbling Cruelty tokens (if it doesn’t already have one). Whenever an enemy operative has one of your Humbling Cruelty tokens, subtract 2\" from its Move stat and worsen the Hit stat of its weapons by 1. This isn’t cumulative with being injured. At the end of that enemy operative’s next activation, remove its Humbling Cruelty token.",
+   "definedIn": "void-dancer-troupe: datacard ability (Death Jester)",
+   "uses": [
+    "void-dancer-troupe:Death Jester:Shrieker cannon (focused)",
+    "void-dancer-troupe:Death Jester:Shrieker cannon (sweeping)"
+   ]
+  },
+  {
+   "id": "Hypersense",
+   "name": "Hypersense",
+   "teams": [
+    "wyrmblade"
+   ],
+   "forms": [
+    "Hypersense*"
+   ],
+   "definition": "Whenever this operative is shooting with this weapon profile, enemy operatives cannot be obscured.",
+   "definedIn": "wyrmblade: datacard ability (Kelermorph)",
+   "uses": [
+    "wyrmblade:Kelermorph:Liberator autostubs (hypersense)"
+   ]
+  },
+  {
+   "id": "Magnify",
+   "name": "Magnify",
+   "teams": [
+    "hierotek-circle"
+   ],
+   "forms": [
+    "Magnify*"
+   ],
+   "definition": "Some HIEROTEK CIRCLE APPRENTEK and HIEROTEK CIRCLE CRYPTEK weapons in this team’s rules have the Magnify weapon rule below.\n\n*Magnify: Whenever this operative is performing the Shoot action with this weapon, if the target is visible to this operative, and another friendly HIEROTEK CIRCLE APPRENTEK or HIEROTEK CIRCLE CRYPTEK operative that has an Engage order and isn’t within control range of enemy operatives is visible to this operative, you can use this rule. If you do, treat that operative as the active operative for the purposes of determining a valid target, cover and obscured. If you do, this weapon has the Ceaseless weapon rule until the end of that action.",
+   "definedIn": "hierotek-circle: faction rule",
+   "uses": [
+    "hierotek-circle:Apprentek:Arcane conduit (ranged)",
+    "hierotek-circle:Chronomancer:Aeonstave (ranged)",
+    "hierotek-circle:Chronomancer:Entropic lance (ranged)",
+    "hierotek-circle:Psychomancer:Abyssal lance (ranged)",
+    "hierotek-circle:Technomancer:Staff of light (ranged)"
+   ]
+  },
+  {
+   "id": "Mindburn",
+   "name": "Mindburn",
+   "teams": [
+    "warpcoven"
+   ],
+   "forms": [
+    "Mindburn*"
+   ],
+   "definition": "In the Resolve Attack Dice step, if you inflict damage with any critical successes, the operative this weapon is being used against gains one of your Mindburn tokens (if it doesn’t already have one) until the end of its next activation, until it’s incapacitated or until a friendly operative uses this weapon again (whichever comes first). Whenever an operative has one of your Mindburn tokens, worsen the Hit stat of its weapons by 1 (this isn’t cumulative with being injured).",
+   "definedIn": "warpcoven: datacard ability (Sorcerer of Warpfire)",
+   "uses": [
+    "warpcoven:Sorcerer of Warpfire:Mindburn"
+   ]
+  },
+  {
+   "id": "NeutronBombardment",
+   "name": "Neutron Bombardment",
+   "teams": [
+    "vespid-stingwings"
+   ],
+   "forms": [
+    "Neutron Bombardment*"
+   ],
+   "definition": "Place one of your Neutron Fallout markers within the primary target’s control range.",
+   "definedIn": "vespid-stingwings: datacard ability (Vespid Skyblast)",
+   "uses": [
+    "vespid-stingwings:Vespid Skyblast:Neutron grenade launcher"
+   ]
+  },
+  {
+   "id": "NeutronFragment",
+   "name": "Neutron Fragment",
+   "teams": [
+    "vespid-stingwings"
+   ],
+   "forms": [
+    "Neutron Fragment*"
+   ],
+   "definition": "If the target of this weapon isn’t incapacitated but you resolve any attack dice, the target gains one of your Neutron Fragment tokens. Whenever an operative that has one of your Neutron Fragment tokens is activated, inflict D3 damage on it for each Neutron Fragment token it has (roll separately for each).",
+   "definedIn": "vespid-stingwings: datacard ability (Vespid Longsting)",
+   "uses": [
+    "vespid-stingwings:Vespid Longsting:Neutron rail rifle (aimed)",
+    "vespid-stingwings:Vespid Longsting:Neutron rail rifle (standard)"
+   ]
+  },
+  {
+   "id": "PSYCHIC",
+   "name": "PSYCHIC",
+   "teams": [
+    "brood-brother",
+    "chaos-cult",
+    "corsair-voidscarred",
+    "exodite-dragon-masters",
+    "fellgor-ravager",
+    "legionary",
+    "plague-marines",
+    "warpcoven",
+    "wolf-scouts"
+   ],
+   "forms": [
+    "PSYCHIC"
+   ],
+   "definition": "",
+   "definedIn": "",
+   "uses": [
+    "brood-brother:Magus:Force stave",
+    "chaos-cult:Mindwitch:Infernal gaze",
+    "corsair-voidscarred:Voidscarred Way Seeker:Freezing grasp",
+    "corsair-voidscarred:Voidscarred Way Seeker:Lightning strike",
+    "corsair-voidscarred:Voidscarred Way Seeker:Witch staff",
+    "exodite-dragon-masters:Dragon Master Stonesinger:Stone stave",
+    "fellgor-ravager:Fellgor Shaman:Tech-curse",
+    "legionary:Legionary Balefire Acolyte:Fell dagger",
+    "legionary:Legionary Balefire Acolyte:Fireblast",
+    "legionary:Legionary Balefire Acolyte:Life siphon",
+    "plague-marines:Malignant Plaguecaster:Corrupted staff",
+    "plague-marines:Malignant Plaguecaster:Entropy",
+    "plague-marines:Malignant Plaguecaster:Plague wind",
+    "warpcoven:Sorcerer of Destiny:Doombolt",
+    "warpcoven:Sorcerer of Destiny:Force stave",
+    "warpcoven:Sorcerer of Tempyrion:Fluxblast",
+    "warpcoven:Sorcerer of Tempyrion:Force stave",
+    "warpcoven:Sorcerer of Warpfire:Firestorm",
+    "warpcoven:Sorcerer of Warpfire:Force stave",
+    "warpcoven:Sorcerer of Warpfire:Mindburn",
+    "wolf-scouts:Wolf Scout Rune Priest Skjald:Jaws of the World Wolf",
+    "wolf-scouts:Wolf Scout Rune Priest Skjald:Runic stave",
+    "wolf-scouts:Wolf Scout Rune Priest Skjald:Thunderclap"
+   ],
+   "unresolved": true,
+   "referencedIn": [
+    "blades-of-khaine: faction rule 'Aspect Techniques'",
+    "brood-brother: Psychic Familiar ability 'Group Activation'",
+    "celestian-insidiants: faction rule 'Weapons of the Witch Hunters'",
+    "corsair-voidscarred: strategy ploy 'OUTCASTS'",
+    "corsair-voidscarred: firefight ploy 'CONTEMPTUOUS ADVENTURER'",
+    "corsair-voidscarred: equipment 'RUNES OF GUIDANCE'",
+    "exodite-dragon-masters: faction rule 'Mercurial Speed'",
+    "exodite-dragon-masters: strategy ploy 'RIDE THEM DOWN'",
+    "exodite-dragon-masters: firefight ploy 'RIDING MASTERY'",
+    "inquisitorial-agent: Sister of Silence Prosecutor ability 'Psychic Null'",
+    "inquisitorial-agent: Sister of Silence Vigilator ability 'Psychic Null'",
+    "inquisitorial-agent: Sister of Silence Witchseeker ability 'Psychic Null'"
+   ]
+  },
+  {
+   "id": "PhaseSweep",
+   "name": "Phase Sweep",
+   "teams": [
+    "deathwatch"
+   ],
+   "forms": [
+    "Phase Sweep*"
+   ],
+   "definition": "Whenever this operative performs the Fight action with this weapon profile, if it isn’t incapacitated, it can immediately perform a free Fight action afterwards, but you must select this weapon profile and it can only fight against each enemy operative within its control range once per activation or counteraction using this weapon profile. This takes precedence over action restrictions, and you can continue to perform free Fight actions until this operative is incapacitated or has fought against every enemy operative within its control range.",
+   "definedIn": "deathwatch: datacard ability (Deathwatch Blademaster Veteran)",
+   "uses": [
+    "deathwatch:Deathwatch Blademaster Veteran:Xenophase blade (phase sweep)"
+   ]
+  },
+  {
+   "id": "Poison",
+   "name": "Poison",
+   "teams": [
+    "plague-marines",
+    "raveners"
+   ],
+   "forms": [
+    "Poison*"
+   ],
+   "definition": "Some weapons in this team’s rules have the Poison weapon rule.\n\n*Poison: In the Resolve Attack Dice step, if you inflict damage with any successes, the operative this weapon is being used against (excluding friendly PLAGUE MARINE operatives) gains one of your Poison tokens (if it doesn’t already have one). Whenever an operative that has one of your Poison tokens is activated, inflict 1 damage on it.",
+   "definedIn": "plague-marines: faction rule",
+   "uses": [
+    "plague-marines:Malignant Plaguecaster:Corrupted staff",
+    "plague-marines:Malignant Plaguecaster:Entropy",
+    "plague-marines:Malignant Plaguecaster:Plague wind",
+    "plague-marines:Plague Marine Champion:Plague sword",
+    "plague-marines:Plague Marine Fighter:Flail of Corruption",
+    "plague-marines:Plague Marine Heavy Gunner:Plague spewer",
+    "plague-marines:Plague Marine Icon Bearer:Plague knife",
+    "plague-marines:Plague Marine Warrior:Plague knife",
+    "raveners:Ravener Felltalon:Toxic glands",
+    "raveners:Ravener Felltalon:Toxic scythes",
+    "raveners:Ravener Venomspitter:Venom bolt (blast)",
+    "raveners:Ravener Venomspitter:Venom bolt (focused)"
+   ]
+  },
+  {
+   "id": "Prey",
+   "name": "Prey",
+   "teams": [
+    "goremonger"
+   ],
+   "forms": [
+    "Prey*"
+   ],
+   "definition": "Whenever this operative is shooting with this weapon, in the Resolve Attack Dice step, after resolving the Drag weapon rule (if you choose to), you can discard any of your successful unblocked attack dice. In other words, you can choose not to inflict damage with any number of them.",
+   "definedIn": "goremonger: datacard ability (Goremonger Impaler)",
+   "uses": [
+    "goremonger:Goremonger Impaler:Fleshskewer (ranged)"
+   ]
+  },
+  {
+   "id": "Pulsa",
+   "name": "Pulsa",
+   "teams": [
+    "wrecka-krew"
+   ],
+   "forms": [
+    "Pulsa*"
+   ],
+   "definition": "Don’t select a valid target. Instead, place your Pulsa marker visible to this operative, or on Vantage terrain of a terrain feature that’s visible to this operative. That marker gains 1 Pulsa point, then roll attack dice: it gains 1 additional Pulsa point for each success (to a maximum of 3 additional points). Separately inflict D3 damage on each operative wholly within x\" of that marker, where x is that marker’s Pulsa points. Then the action ends.",
+   "definedIn": "wrecka-krew: datacard ability (Tankbusta Rokkiteer)",
+   "uses": [
+    "wrecka-krew:Tankbusta Rokkiteer:Pulsa rokkit"
+   ]
+  },
+  {
+   "id": "Repress",
+   "name": "Repress",
+   "teams": [
+    "exaction-squad"
+   ],
+   "forms": [
+    "Repress*"
+   ],
+   "definition": "Some weapons in this team’s rules have the Repress weapon rule below.\n\n*Repress: Whenever this operative is using this weapon:\n\nEach of your blocks can be allocated to block two unresolved successes (instead of one).\n\nIf this operative is retaliating, you resolve the first attack dice (i.e. defender instead of attacker).",
+   "definedIn": "exaction-squad: faction rule",
+   "uses": [
+    "exaction-squad:Arbites Proctor-exactant:Dominator maul & assault shield",
+    "exaction-squad:Arbites Subductor:Shock maul & assault shield"
+   ]
+  },
+  {
+   "id": "Riposte",
+   "name": "Riposte",
+   "teams": [
+    "novitiates"
+   ],
+   "forms": [
+    "Riposte*"
+   ],
+   "definition": "Whenever you block with a critical success, you can also inflict damage equal to the weapon’s Critical Dmg stat on the enemy operative in that sequence.",
+   "definedIn": "novitiates: datacard ability (Novitiate Duellist)",
+   "uses": [
+    "novitiates:Novitiate Duellist:Duelling blades"
+   ]
+  },
+  {
+   "id": "Ritual",
+   "name": "Ritual",
+   "teams": [
+    "goremonger"
+   ],
+   "forms": [
+    "Ritual*"
+   ],
+   "definition": "Whenever this operative is using this weapon, the first time you inflict damage on an operative within its control range during that sequence, you can increase this operative’s GORE TANK. Note this is cumulative with the normal rules for increasing its GORE TANK (i.e. if it incapacitates an operative within its control range).",
+   "definedIn": "goremonger: datacard ability (Goremonger Bloodtaker)",
+   "uses": [
+    "goremonger:Goremonger Bloodtaker:Ritual blade"
+   ]
+  },
+  {
+   "id": "Salvo",
+   "name": "Salvo",
+   "teams": [
+    "farstalker-kinband",
+    "tempestus-aquilons",
+    "wrecka-krew"
+   ],
+   "forms": [
+    "Salvo*"
+   ],
+   "definition": "Select up to two different valid targets that aren’t within control range of friendly operatives. Shoot with this weapon against both of them in an order of your choice (roll each sequence separately).",
+   "definedIn": "farstalker-kinband: datacard ability (Kroot Pistolier)",
+   "uses": [
+    "farstalker-kinband:Kroot Pistolier:Dual Kroot pistols (salvo)",
+    "tempestus-aquilons:Aquilon Gunfighter:Hot‑shot laspistols (salvo)",
+    "wrecka-krew:Wrecka Boss Nob:Two rokkit pistols (salvo)"
+   ]
+  },
+  {
+   "id": "Shield",
+   "name": "Shield",
+   "teams": [
+    "blooded",
+    "celestian-insidiants",
+    "deathwatch",
+    "imperial-navy-breacher",
+    "warpcoven"
+   ],
+   "forms": [
+    "Shield*"
+   ],
+   "definition": "Whenever this operative is fighting or retaliating with this weapon, each of your blocks can be allocated to block two unresolved successes (instead of one).",
+   "definedIn": "blooded: datacard ability (Traitor Trench Sweeper)",
+   "uses": [
+    "blooded:Traitor Trench Sweeper:Bayonet & shield",
+    "celestian-insidiants:Insidiant Abjuror:Blessed sword & praesidium protectiva (defensive)",
+    "deathwatch:Deathwatch Aegis Veteran:Power maul & storm shield",
+    "imperial-navy-breacher:Navis Endurant:Shield bash",
+    "warpcoven:Tzaangor Warrior:Tzaangor blade & shield"
+   ]
+  },
+  {
+   "id": "SiphonLife",
+   "name": "Siphon Life",
+   "teams": [
+    "legionary"
+   ],
+   "forms": [
+    "Siphon Life*"
+   ],
+   "definition": "When you select this weapon, you can use this rule. If you do, at the start of the Resolve Attack Dice step, select one friendly LEGIONARY operative visible to and within 6\" of this operative. For each attack dice you resolve during that step that inflicts damage, that friendly operative regains 1 lost wound, or D3 lost wounds if it was a critical success. You cannot use this weapon rule more than once per turning point.",
+   "definedIn": "legionary: datacard ability (Legionary Balefire Acolyte)",
+   "uses": [
+    "legionary:Legionary Balefire Acolyte:Fell dagger",
+    "legionary:Legionary Balefire Acolyte:Life siphon"
+   ]
+  },
+  {
+   "id": "Skytorch",
+   "name": "Skytorch",
+   "teams": [
+    "vespid-stingwings"
+   ],
+   "forms": [
+    "Skytorch*"
+   ],
+   "definition": "An operative can only use this weapon during the Skytorch Assault action. If it does, don’t select a valid target. Instead, shoot against each operative within its torch zone (excluding operatives wholly underneath Vantage terrain); they aren’t in cover or obscured. Roll each sequence separately in order of furthest operative to closest. The torch zone is the horizontal area between the operative’s current and previous location. A 28mm round Skytorch marker can be temporarily placed underneath this operative before it moves to help determine this. Torrent 0\" means you cannot select secondary targets outside of its torch zone, but this weapon still has the Torrent weapon rule for all other rules purposes, e.g. the Condensed Stronghold rule (see Killzone: Volkus, Kill Team Core Book).",
+   "definedIn": "vespid-stingwings: datacard ability (Vespid Swarmguard)",
+   "uses": [
+    "vespid-stingwings:Vespid Swarmguard:Flamer (skytorch)"
+   ]
+  },
+  {
+   "id": "Smash",
+   "name": "Smash",
+   "teams": [
+    "wrecka-krew"
+   ],
+   "forms": [
+    "Smash*"
+   ],
+   "definition": "Whenever you strike, you can move the enemy operative in a straight line increment of up to 1\". If you do, it must end the move further away from this operative and in a location it can be placed. Then move this operative in a straight line increment of up to 1\", but it must end that move within that enemy operative’s control range (if either isn’t possible, you cannot move them).",
+   "definedIn": "wrecka-krew: datacard ability (Breaka Boy Krusha)",
+   "uses": [
+    "wrecka-krew:Breaka Boy Krusha:Knucklebustas"
+   ]
+  },
+  {
+   "id": "Soulstrike",
+   "name": "Soulstrike",
+   "teams": [
+    "mandrakes"
+   ],
+   "forms": [
+    "Soulstrike*"
+   ],
+   "definition": "Some weapons in this team’s rules have the Soulstrike weapon rule below.\n\n*Soulstrike: Successful defence dice are determined differently. Each result that’s equal to or less than the target’s APL stat is a success and is retained. Each result that’s higher than the target’s APL stat is a fail and is discarded. Each result of 1 is always a critical success. Each other success is a normal success. Each result of 6 is always a fail.\n\nDesigner’s Note: Many of this kill team’s rules refer to an enemy operative’s APL stat. This would be the APL stat at the time the rule takes effect (i.e. including changes).",
+   "definedIn": "mandrakes: faction rule",
+   "uses": [
+    "mandrakes:Mandrake Abyssal:Balesurge (blast)",
+    "mandrakes:Mandrake Abyssal:Balesurge (burn)",
+    "mandrakes:Mandrake Chooser of The Flesh:Baleblast",
+    "mandrakes:Mandrake Dirgemaw:Baleblast",
+    "mandrakes:Mandrake Dirgemaw:Horrifying scream",
+    "mandrakes:Mandrake Nightfiend:Baleblast",
+    "mandrakes:Mandrake Shadeweaver:Baleblast",
+    "mandrakes:Mandrake Warrior:Baleblast"
+   ]
+  },
+  {
+   "id": "Stalk",
+   "name": "Stalk",
+   "teams": [
+    "blooded"
+   ],
+   "forms": [
+    "Stalk*"
+   ],
+   "definition": "Whenever this operative is fighting or retaliating with this weapon, if Light or Heavy terrain is within its control range, this weapon has the Lethal 5+ weapon rule.",
+   "definedIn": "blooded: datacard ability (Traitor Flenser)",
+   "uses": [
+    "blooded:Traitor Flenser:Skinning blades"
+   ]
+  },
+  {
+   "id": "Stinger",
+   "name": "Stinger",
+   "teams": [
+    "hand-of-the-archon"
+   ],
+   "forms": [
+    "Stinger*"
+   ],
+   "definition": "Whenever an enemy operative is incapacitated by this weapon, before it’s removed from the killzone, inflict D3 damage on each other operative visible to and within 2\" of it. Each operative subsequently incapacitated as a result of this weapon rule will cause this to happen again.",
+   "definedIn": "hand-of-the-archon: datacard ability (Kabalite Disciple of Yaelindra)",
+   "uses": [
+    "hand-of-the-archon:Kabalite Disciple of Yaelindra:Stinger pistol"
+   ]
+  },
+  {
+   "id": "Swipe",
+   "name": "Swipe",
+   "teams": [
+    "gellerpox-infected"
+   ],
+   "forms": [
+    "Swipe*"
+   ],
+   "definition": "Whenever this operative performs the Fight action and you select this weapon profile, if it isn’t incapacitated, it can immediately perform a free FIGHT action afterwards, but you must select this weapon profile and it can only fight against each enemy operative within its control range once per activation or counteraction using this weapon profile. This takes precedence over action restrictions, and you can continue to perform free FIGHT actions until this operative is incapacitated or has fought against every enemy operative within its control range.",
+   "definedIn": "gellerpox-infected: datacard ability (Bloatspawn)",
+   "uses": [
+    "gellerpox-infected:Bloatspawn:Mutant claw & tentacles (swiping)"
+   ]
+  },
+  {
+   "id": "TactualHunter",
+   "name": "Tactual Hunter",
+   "teams": [
+    "fellgor-ravager"
+   ],
+   "forms": [
+    "Tactual Hunter*"
+   ],
+   "definition": "Whenever this operative is fighting with this weapon against an expended operative, the first time you strike with a critical success during that sequence, you can immediately resolve another of your successes as a strike (before your opponent).",
+   "definedIn": "fellgor-ravager: datacard ability (Fellgor Mangler)",
+   "uses": [
+    "fellgor-ravager:Fellgor Mangler:Vicious claws"
+   ]
+  },
+  {
+   "id": "Tangle",
+   "name": "Tangle",
+   "teams": [
+    "hand-of-the-archon"
+   ],
+   "forms": [
+    "Tangle*"
+   ],
+   "definition": "Whenever this operative is fighting or retaliating with this weapon, each of your blocks can be allocated to block two unresolved successes (instead of one).",
+   "definedIn": "hand-of-the-archon: datacard ability (Kabalite Crimson Duellist)",
+   "uses": [
+    "hand-of-the-archon:Kabalite Crimson Duellist:Razorflail"
+   ]
+  },
+  {
+   "id": "Terrorchem",
+   "name": "Terrorchem",
+   "teams": [
+    "nemesis-claw"
+   ],
+   "forms": [
+    "Terrorchem*"
+   ],
+   "definition": "In the Resolve Attack Dice step, if you inflict damage with any critical successes (including as a result of the Devastating weapon rule), the operative this weapon is being used against gains one of your Terrorchem tokens (if it doesn’t already have one).",
+   "definedIn": "nemesis-claw: datacard ability (Night Lord Fearmonger)",
+   "uses": [
+    "nemesis-claw:Night Lord Fearmonger:Tainted blade",
+    "nemesis-claw:Night Lord Fearmonger:Terrorchem vial"
+   ]
+  },
+  {
+   "id": "Toxic",
+   "name": "Toxic",
+   "teams": [
+    "plague-marines"
+   ],
+   "forms": [
+    "Toxic*"
+   ],
+   "definition": "Whenever this operative is using this weapon against an enemy operative that has one of your Poison tokens, add 1 to both Dmg stats of this weapon.",
+   "definedIn": "plague-marines: datacard ability (Plague Marine Champion)",
+   "uses": [
+    "plague-marines:Plague Marine Champion:Plague sword",
+    "plague-marines:Plague Marine Warrior:Boltgun"
+   ]
+  },
+  {
+   "id": "TwinTorrent",
+   "name": "Twin Torrent",
+   "teams": [
+    "sanctifiers"
+   ],
+   "forms": [
+    "Twin Torrent^1"
+   ],
+   "definition": "Select up to two different valid targets that aren’t within control range of friendly operatives. Shoot with this weapon against both of them in an order of your choice (roll each sequence separately). Torrent 0\" means you cannot select secondary targets, but this weapon still has the Torrent weapon rule for all other rules purposes, e.g. the Condensed Stronghold rule (see Killzone: Volkus, Kill Team Core Book).",
+   "definedIn": "sanctifiers: datacard ability (Sanctifier Conflagrator)",
+   "uses": [
+    "sanctifiers:Sanctifier Conflagrator:Twin hand flamers (twin torrent)"
+   ]
+  },
+  {
+   "id": "ViciousBlows",
+   "name": "Vicious Blows",
+   "teams": [
+    "fellgor-ravager"
+   ],
+   "forms": [
+    "Vicious Blows*"
+   ],
+   "definition": "Whenever this operative is fighting, this weapon has the Ceaseless weapon rule.",
+   "definedIn": "fellgor-ravager: datacard ability (Fellgor Vandal)",
+   "uses": [
+    "fellgor-ravager:Fellgor Vandal:Mancrusher"
+   ]
+  },
+  {
+   "id": "Wreathed",
+   "name": "Wreathed",
+   "teams": [
+    "sanctifiers"
+   ],
+   "forms": [
+    "Wreathed^1"
+   ],
+   "definition": "This operative can perform the Shoot action with this weapon while within control range of an enemy operative. Don’t select a valid target. Instead, this operative is always the primary target, but only shoot against secondary targets and they cannot be in cover or obscured (in other words, determine Blast from this operative, but this operative isn’t affected).",
+   "definedIn": "sanctifiers: datacard ability (Sanctifier Miraculist)",
+   "uses": [
+    "sanctifiers:Sanctifier Miraculist:Wreathe in fire"
+   ]
+  },
+  {
+   "id": "ZealousRage",
+   "name": "Zealous Rage",
+   "teams": [
+    "novitiates"
+   ],
+   "forms": [
+    "Zealous Rage*"
+   ],
+   "definition": "Whenever this operative is fighting with this weapon, it has the Ceaseless weapon rule.",
+   "definedIn": "novitiates: datacard ability (Novitiate Penitent)",
+   "uses": [
+    "novitiates:Novitiate Penitent:Penitent eviscerator"
+   ]
+  }
+ ]
+}

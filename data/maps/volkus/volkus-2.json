@@ -1,0 +1,1684 @@
+{
+ "id": "volkus-2",
+ "killzone": "volkus",
+ "name": "Volkus 2",
+ "board": {
+  "w": 30.0,
+  "h": 22.0,
+  "grid": 1
+ },
+ "closeQuarters": false,
+ "dropZones": {
+  "p1": [
+   [
+    {
+     "x": 24.0,
+     "y": 0.0
+    },
+    {
+     "x": 30.0,
+     "y": 0.0
+    },
+    {
+     "x": 30.0,
+     "y": 22.0
+    },
+    {
+     "x": 24.0,
+     "y": 22.0
+    }
+   ]
+  ],
+  "p2": [
+   [
+    {
+     "x": 0.0,
+     "y": 0.0
+    },
+    {
+     "x": 6.0,
+     "y": 0.0
+    },
+    {
+     "x": 6.0,
+     "y": 22.0
+    },
+    {
+     "x": 0.0,
+     "y": 22.0
+    }
+   ]
+  ]
+ },
+ "territories": {
+  "p1": [
+   [
+    {
+     "x": 15.0,
+     "y": 0.0
+    },
+    {
+     "x": 30.0,
+     "y": 0.0
+    },
+    {
+     "x": 30.0,
+     "y": 22.0
+    },
+    {
+     "x": 15.0,
+     "y": 22.0
+    }
+   ]
+  ],
+  "p2": [
+   [
+    {
+     "x": 0.0,
+     "y": 0.0
+    },
+    {
+     "x": 15.0,
+     "y": 0.0
+    },
+    {
+     "x": 15.0,
+     "y": 22.0
+    },
+    {
+     "x": 0.0,
+     "y": 22.0
+    }
+   ]
+  ]
+ },
+ "killzoneEdges": {
+  "p1": [
+   {
+    "a": {
+     "x": 30.0,
+     "y": 22.0
+    },
+    "b": {
+     "x": 30.0,
+     "y": 0.0
+    }
+   }
+  ],
+  "p2": [
+   {
+    "a": {
+     "x": 0.0,
+     "y": 22.0
+    },
+    "b": {
+     "x": 0.0,
+     "y": 0.0
+    }
+   }
+  ],
+  "neutral": [
+   {
+    "a": {
+     "x": 0.0,
+     "y": 22.0
+    },
+    "b": {
+     "x": 30.0,
+     "y": 22.0
+    }
+   },
+   {
+    "a": {
+     "x": 0.0,
+     "y": 0.0
+    },
+    "b": {
+     "x": 30.0,
+     "y": 0.0
+    }
+   }
+  ]
+ },
+ "centreLine": {
+  "a": {
+   "x": 15.0,
+   "y": 0.0
+  },
+  "b": {
+   "x": 15.0,
+   "y": 22.0
+  }
+ },
+ "flankLine": {
+  "a": {
+   "x": 0.0,
+   "y": 11.0
+  },
+  "b": {
+   "x": 30.0,
+   "y": 11.0
+  }
+ },
+ "objectives": [
+  {
+   "id": "obj.p1",
+   "kind": "p1",
+   "pos": {
+    "x": 18.771,
+    "y": 12.771
+   },
+   "z": 0.0
+  },
+  {
+   "id": "obj.p2",
+   "kind": "p2",
+   "pos": {
+    "x": 11.229,
+    "y": 17.229
+   },
+   "z": 0.0
+  },
+  {
+   "id": "obj.centre",
+   "kind": "centre",
+   "pos": {
+    "x": 14.979,
+    "y": 3.771
+   },
+   "z": 0.0
+  }
+ ],
+ "features": [
+  {
+   "id": "volkus-2.A",
+   "kind": "volkus.strongholdA",
+   "label": "A",
+   "parts": [
+    {
+     "id": "volkus-2.A.p0",
+     "featureId": "volkus-2.A",
+     "poly": [
+      {
+       "x": 16.0,
+       "y": 10.792
+      },
+      {
+       "x": 24.0,
+       "y": 10.792
+      },
+      {
+       "x": 24.0,
+       "y": 11.0
+      },
+      {
+       "x": 16.0,
+       "y": 11.0
+      }
+     ],
+     "z0": 0.0,
+     "z1": 5.906,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.A.p1",
+     "featureId": "volkus-2.A",
+     "poly": [
+      {
+       "x": 16.0,
+       "y": 5.0
+      },
+      {
+       "x": 24.0,
+       "y": 5.0
+      },
+      {
+       "x": 24.0,
+       "y": 5.208
+      },
+      {
+       "x": 16.0,
+       "y": 5.208
+      }
+     ],
+     "z0": 0.0,
+     "z1": 5.906,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.A.p2",
+     "featureId": "volkus-2.A",
+     "poly": [
+      {
+       "x": 23.792,
+       "y": 5.208
+      },
+      {
+       "x": 24.0,
+       "y": 5.208
+      },
+      {
+       "x": 24.0,
+       "y": 10.792
+      },
+      {
+       "x": 23.792,
+       "y": 10.792
+      }
+     ],
+     "z0": 0.0,
+     "z1": 5.906,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.A.p3",
+     "featureId": "volkus-2.A",
+     "poly": [
+      {
+       "x": 16.0,
+       "y": 5.208
+      },
+      {
+       "x": 16.208,
+       "y": 5.208
+      },
+      {
+       "x": 16.208,
+       "y": 9.25
+      },
+      {
+       "x": 16.0,
+       "y": 9.25
+      }
+     ],
+     "z0": 0.0,
+     "z1": 5.906,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.A.p4",
+     "featureId": "volkus-2.A",
+     "poly": [
+      {
+       "x": 16.0,
+       "y": 10.417
+      },
+      {
+       "x": 16.208,
+       "y": 10.417
+      },
+      {
+       "x": 16.208,
+       "y": 10.792
+      },
+      {
+       "x": 16.0,
+       "y": 10.792
+      }
+     ],
+     "z0": 0.0,
+     "z1": 5.906,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.A.p5",
+     "featureId": "volkus-2.A",
+     "poly": [
+      {
+       "x": 16.188,
+       "y": 5.25
+      },
+      {
+       "x": 18.458,
+       "y": 5.229
+      },
+      {
+       "x": 18.479,
+       "y": 6.125
+      },
+      {
+       "x": 19.396,
+       "y": 6.958
+      },
+      {
+       "x": 19.396,
+       "y": 8.167
+      },
+      {
+       "x": 20.417,
+       "y": 9.229
+      },
+      {
+       "x": 21.042,
+       "y": 9.229
+      },
+      {
+       "x": 21.562,
+       "y": 9.708
+      },
+      {
+       "x": 21.562,
+       "y": 10.75
+      },
+      {
+       "x": 16.188,
+       "y": 10.792
+      }
+     ],
+     "z0": 3.0,
+     "z1": 3.0,
+     "types": [
+      "Ceiling",
+      "Vantage",
+      "Light"
+     ],
+     "role": "floor",
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false
+    }
+   ],
+   "placement": {
+    "x": 19.237,
+    "y": 8.292,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9925
+   }
+  },
+  {
+   "id": "volkus-2.B",
+   "kind": "volkus.strongholdB",
+   "label": "B",
+   "parts": [
+    {
+     "id": "volkus-2.B.p0",
+     "featureId": "volkus-2.B",
+     "poly": [
+      {
+       "x": 6.0,
+       "y": 19.792
+      },
+      {
+       "x": 14.0,
+       "y": 19.792
+      },
+      {
+       "x": 14.0,
+       "y": 20.0
+      },
+      {
+       "x": 6.0,
+       "y": 20.0
+      }
+     ],
+     "z0": 0.0,
+     "z1": 7.48,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.B.p1",
+     "featureId": "volkus-2.B",
+     "poly": [
+      {
+       "x": 6.0,
+       "y": 12.0
+      },
+      {
+       "x": 6.208,
+       "y": 12.0
+      },
+      {
+       "x": 6.208,
+       "y": 19.792
+      },
+      {
+       "x": 6.0,
+       "y": 19.792
+      }
+     ],
+     "z0": 0.0,
+     "z1": 7.48,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.B.p2",
+     "featureId": "volkus-2.B",
+     "poly": [
+      {
+       "x": 13.792,
+       "y": 12.0
+      },
+      {
+       "x": 14.0,
+       "y": 12.0
+      },
+      {
+       "x": 14.0,
+       "y": 19.792
+      },
+      {
+       "x": 13.792,
+       "y": 19.792
+      }
+     ],
+     "z0": 0.0,
+     "z1": 7.48,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.B.p3",
+     "featureId": "volkus-2.B",
+     "poly": [
+      {
+       "x": 6.208,
+       "y": 12.0
+      },
+      {
+       "x": 9.625,
+       "y": 12.0
+      },
+      {
+       "x": 9.625,
+       "y": 12.208
+      },
+      {
+       "x": 6.208,
+       "y": 12.208
+      }
+     ],
+     "z0": 0.0,
+     "z1": 7.48,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.B.p4",
+     "featureId": "volkus-2.B",
+     "poly": [
+      {
+       "x": 11.542,
+       "y": 12.0
+      },
+      {
+       "x": 13.792,
+       "y": 12.0
+      },
+      {
+       "x": 13.792,
+       "y": 12.208
+      },
+      {
+       "x": 11.542,
+       "y": 12.208
+      }
+     ],
+     "z0": 0.0,
+     "z1": 7.48,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.B.p5",
+     "featureId": "volkus-2.B",
+     "poly": [
+      {
+       "x": 9.625,
+       "y": 12.0
+      },
+      {
+       "x": 11.542,
+       "y": 12.0
+      },
+      {
+       "x": 11.542,
+       "y": 12.208
+      },
+      {
+       "x": 9.625,
+       "y": 12.208
+      }
+     ],
+     "z0": 0.0,
+     "z1": 7.48,
+     "types": [
+      "Accessible",
+      "Heavy"
+     ],
+     "role": "door",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": false
+    },
+    {
+     "id": "volkus-2.B.p6",
+     "featureId": "volkus-2.B",
+     "poly": [
+      {
+       "x": 6.208,
+       "y": 12.229
+      },
+      {
+       "x": 11.708,
+       "y": 12.229
+      },
+      {
+       "x": 11.729,
+       "y": 14.375
+      },
+      {
+       "x": 13.771,
+       "y": 14.417
+      },
+      {
+       "x": 13.75,
+       "y": 15.854
+      },
+      {
+       "x": 11.958,
+       "y": 15.854
+      },
+      {
+       "x": 11.167,
+       "y": 15.104
+      },
+      {
+       "x": 11.0,
+       "y": 15.104
+      },
+      {
+       "x": 10.979,
+       "y": 16.5
+      },
+      {
+       "x": 10.562,
+       "y": 16.792
+      },
+      {
+       "x": 10.458,
+       "y": 17.021
+      },
+      {
+       "x": 10.083,
+       "y": 17.021
+      },
+      {
+       "x": 9.979,
+       "y": 16.917
+      },
+      {
+       "x": 9.958,
+       "y": 14.812
+      },
+      {
+       "x": 9.792,
+       "y": 14.812
+      },
+      {
+       "x": 7.75,
+       "y": 15.854
+      },
+      {
+       "x": 6.188,
+       "y": 15.833
+      }
+     ],
+     "z0": 3.0,
+     "z1": 3.0,
+     "types": [
+      "Ceiling",
+      "Vantage",
+      "Light"
+     ],
+     "role": "floor",
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false
+    },
+    {
+     "id": "volkus-2.B.p7",
+     "featureId": "volkus-2.B",
+     "poly": [
+      {
+       "x": 11.729,
+       "y": 12.25
+      },
+      {
+       "x": 13.75,
+       "y": 12.229
+      },
+      {
+       "x": 13.771,
+       "y": 14.375
+      },
+      {
+       "x": 11.729,
+       "y": 14.375
+      }
+     ],
+     "z0": 6.0,
+     "z1": 6.0,
+     "types": [
+      "Ceiling",
+      "Vantage",
+      "Light"
+     ],
+     "role": "floor",
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "maxOperatives": 1
+    }
+   ],
+   "placement": {
+    "x": 10.504,
+    "y": 14.799,
+    "rotDeg": 270,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.7907
+   }
+  },
+  {
+   "id": "volkus-2.C",
+   "kind": "volkus.largeRuin",
+   "label": "C",
+   "parts": [
+    {
+     "id": "volkus-2.C.p0",
+     "featureId": "volkus-2.C",
+     "poly": [
+      {
+       "x": 6.0,
+       "y": 2.0
+      },
+      {
+       "x": 6.208,
+       "y": 2.0
+      },
+      {
+       "x": 6.208,
+       "y": 8.5
+      },
+      {
+       "x": 6.0,
+       "y": 8.5
+      }
+     ],
+     "z0": 0.0,
+     "z1": 3.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.C.p1",
+     "featureId": "volkus-2.C",
+     "poly": [
+      {
+       "x": 6.208,
+       "y": 2.0
+      },
+      {
+       "x": 6.375,
+       "y": 2.0
+      },
+      {
+       "x": 6.375,
+       "y": 2.208
+      },
+      {
+       "x": 6.208,
+       "y": 2.208
+      }
+     ],
+     "z0": 0.0,
+     "z1": 3.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.C.p2",
+     "featureId": "volkus-2.C",
+     "poly": [
+      {
+       "x": 8.25,
+       "y": 2.0
+      },
+      {
+       "x": 10.375,
+       "y": 2.0
+      },
+      {
+       "x": 10.375,
+       "y": 2.208
+      },
+      {
+       "x": 8.25,
+       "y": 2.208
+      }
+     ],
+     "z0": 0.0,
+     "z1": 3.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.C.p3",
+     "featureId": "volkus-2.C",
+     "poly": [
+      {
+       "x": 6.188,
+       "y": 2.25
+      },
+      {
+       "x": 9.5,
+       "y": 2.229
+      },
+      {
+       "x": 9.521,
+       "y": 3.25
+      },
+      {
+       "x": 9.271,
+       "y": 3.458
+      },
+      {
+       "x": 9.271,
+       "y": 3.667
+      },
+      {
+       "x": 9.854,
+       "y": 5.208
+      },
+      {
+       "x": 9.521,
+       "y": 5.458
+      },
+      {
+       "x": 9.521,
+       "y": 5.625
+      },
+      {
+       "x": 10.062,
+       "y": 6.375
+      },
+      {
+       "x": 10.062,
+       "y": 6.75
+      },
+      {
+       "x": 9.521,
+       "y": 6.958
+      },
+      {
+       "x": 9.854,
+       "y": 8.042
+      },
+      {
+       "x": 8.708,
+       "y": 8.062
+      },
+      {
+       "x": 8.292,
+       "y": 7.729
+      },
+      {
+       "x": 8.0,
+       "y": 7.729
+      },
+      {
+       "x": 7.375,
+       "y": 8.062
+      },
+      {
+       "x": 6.188,
+       "y": 8.042
+      }
+     ],
+     "z0": 3.5,
+     "z1": 3.5,
+     "types": [
+      "Ceiling",
+      "Vantage",
+      "Light"
+     ],
+     "role": "floor",
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "treatAsZ": 3.0
+    }
+   ],
+   "placement": {
+    "x": 8.191,
+    "y": 4.715,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "volkus-2.D",
+   "kind": "volkus.largeRuin",
+   "label": "D",
+   "parts": [
+    {
+     "id": "volkus-2.D.p0",
+     "featureId": "volkus-2.D",
+     "poly": [
+      {
+       "x": 23.792,
+       "y": 15.667
+      },
+      {
+       "x": 24.0,
+       "y": 15.667
+      },
+      {
+       "x": 24.0,
+       "y": 18.792
+      },
+      {
+       "x": 23.792,
+       "y": 18.792
+      }
+     ],
+     "z0": 0.0,
+     "z1": 3.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.D.p1",
+     "featureId": "volkus-2.D",
+     "poly": [
+      {
+       "x": 20.208,
+       "y": 13.0
+      },
+      {
+       "x": 24.0,
+       "y": 13.0
+      },
+      {
+       "x": 24.0,
+       "y": 13.208
+      },
+      {
+       "x": 20.208,
+       "y": 13.208
+      }
+     ],
+     "z0": 0.0,
+     "z1": 3.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.D.p2",
+     "featureId": "volkus-2.D",
+     "poly": [
+      {
+       "x": 23.792,
+       "y": 13.208
+      },
+      {
+       "x": 24.0,
+       "y": 13.208
+      },
+      {
+       "x": 24.0,
+       "y": 13.792
+      },
+      {
+       "x": 23.792,
+       "y": 13.792
+      }
+     ],
+     "z0": 0.0,
+     "z1": 3.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.D.p3",
+     "featureId": "volkus-2.D",
+     "poly": [
+      {
+       "x": 20.521,
+       "y": 15.708
+      },
+      {
+       "x": 20.896,
+       "y": 15.375
+      },
+      {
+       "x": 20.896,
+       "y": 15.208
+      },
+      {
+       "x": 20.521,
+       "y": 14.458
+      },
+      {
+       "x": 20.521,
+       "y": 13.25
+      },
+      {
+       "x": 23.75,
+       "y": 13.229
+      },
+      {
+       "x": 23.771,
+       "y": 18.792
+      },
+      {
+       "x": 23.583,
+       "y": 18.812
+      },
+      {
+       "x": 22.938,
+       "y": 18.167
+      },
+      {
+       "x": 23.229,
+       "y": 17.917
+      },
+      {
+       "x": 23.229,
+       "y": 17.458
+      },
+      {
+       "x": 22.417,
+       "y": 16.938
+      },
+      {
+       "x": 22.0,
+       "y": 16.938
+      },
+      {
+       "x": 21.833,
+       "y": 16.479
+      },
+      {
+       "x": 21.583,
+       "y": 16.479
+      },
+      {
+       "x": 20.958,
+       "y": 16.812
+      },
+      {
+       "x": 20.521,
+       "y": 16.583
+      }
+     ],
+     "z0": 3.5,
+     "z1": 3.5,
+     "types": [
+      "Ceiling",
+      "Vantage",
+      "Light"
+     ],
+     "role": "floor",
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "treatAsZ": 3.0
+    }
+   ],
+   "placement": {
+    "x": 22.509,
+    "y": 15.653,
+    "rotDeg": 180,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9949
+   }
+  },
+  {
+   "id": "volkus-2.E",
+   "kind": "volkus.smallRuin",
+   "label": "E",
+   "parts": [
+    {
+     "id": "volkus-2.E.p0",
+     "featureId": "volkus-2.E",
+     "poly": [
+      {
+       "x": 12.792,
+       "y": 3.0
+      },
+      {
+       "x": 13.0,
+       "y": 3.0
+      },
+      {
+       "x": 13.0,
+       "y": 8.542
+      },
+      {
+       "x": 12.792,
+       "y": 8.542
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.0,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.E.p1",
+     "featureId": "volkus-2.E",
+     "poly": [
+      {
+       "x": 10.125,
+       "y": 8.333
+      },
+      {
+       "x": 12.792,
+       "y": 8.333
+      },
+      {
+       "x": 12.792,
+       "y": 8.542
+      },
+      {
+       "x": 10.125,
+       "y": 8.542
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.0,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 12.177,
+    "y": 7.104,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "volkus-2.F",
+   "kind": "volkus.smallRuin",
+   "label": "F",
+   "parts": [
+    {
+     "id": "volkus-2.F.p0",
+     "featureId": "volkus-2.F",
+     "poly": [
+      {
+       "x": 18.0,
+       "y": 14.0
+      },
+      {
+       "x": 18.208,
+       "y": 14.0
+      },
+      {
+       "x": 18.208,
+       "y": 18.667
+      },
+      {
+       "x": 18.0,
+       "y": 18.667
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.0,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    },
+    {
+     "id": "volkus-2.F.p1",
+     "featureId": "volkus-2.F",
+     "poly": [
+      {
+       "x": 18.208,
+       "y": 18.458
+      },
+      {
+       "x": 19.5,
+       "y": 18.458
+      },
+      {
+       "x": 19.5,
+       "y": 18.667
+      },
+      {
+       "x": 18.208,
+       "y": 18.667
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.0,
+     "types": [
+      "Heavy"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 18.479,
+    "y": 17.448,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "volkus-2.H",
+   "kind": "volkus.heavyRubble",
+   "label": "H",
+   "parts": [
+    {
+     "id": "volkus-2.H.p0",
+     "featureId": "volkus-2.H",
+     "poly": [
+      {
+       "x": 22.979,
+       "y": 0.042
+      },
+      {
+       "x": 23.958,
+       "y": 0.021
+      },
+      {
+       "x": 23.979,
+       "y": 2.833
+      },
+      {
+       "x": 22.979,
+       "y": 2.833
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "rubble",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 23.474,
+    "y": 1.432,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "volkus-2.I",
+   "kind": "volkus.lightRubble",
+   "label": "I",
+   "parts": [
+    {
+     "id": "volkus-2.I.p0",
+     "featureId": "volkus-2.I",
+     "poly": [
+      {
+       "x": 14.25,
+       "y": 16.021
+      },
+      {
+       "x": 17.729,
+       "y": 16.042
+      },
+      {
+       "x": 17.708,
+       "y": 18.021
+      },
+      {
+       "x": 14.229,
+       "y": 18.0
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.0,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 15.979,
+    "y": 17.021,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9891
+   }
+  },
+  {
+   "id": "volkus-2.J",
+   "kind": "volkus.lightRubble",
+   "label": "J",
+   "parts": [
+    {
+     "id": "volkus-2.J.p0",
+     "featureId": "volkus-2.J",
+     "poly": [
+      {
+       "x": 14.604,
+       "y": 0.042
+      },
+      {
+       "x": 15.333,
+       "y": 0.021
+      },
+      {
+       "x": 15.354,
+       "y": 2.417
+      },
+      {
+       "x": 14.604,
+       "y": 2.417
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.0,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 14.974,
+    "y": 1.224,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "volkus-2.K",
+   "kind": "volkus.lightRubble",
+   "label": "K",
+   "parts": [
+    {
+     "id": "volkus-2.K.p0",
+     "featureId": "volkus-2.K",
+     "poly": [
+      {
+       "x": 15.979,
+       "y": 20.042
+      },
+      {
+       "x": 16.708,
+       "y": 20.021
+      },
+      {
+       "x": 16.729,
+       "y": 22.0
+      },
+      {
+       "x": 15.979,
+       "y": 22.0
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.0,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 16.349,
+    "y": 21.016,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "volkus-2.L",
+   "kind": "volkus.wreckage",
+   "label": "L",
+   "parts": [
+    {
+     "id": "volkus-2.L.p0",
+     "featureId": "volkus-2.L",
+     "poly": [
+      {
+       "x": 6.271,
+       "y": 16.333
+      },
+      {
+       "x": 8.125,
+       "y": 16.312
+      },
+      {
+       "x": 8.146,
+       "y": 19.708
+      },
+      {
+       "x": 6.271,
+       "y": 19.708
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.25,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 7.203,
+    "y": 18.016,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "volkus-2.M",
+   "kind": "volkus.beamRubble",
+   "label": "M",
+   "parts": [
+    {
+     "id": "volkus-2.M.p0",
+     "featureId": "volkus-2.M",
+     "poly": [
+      {
+       "x": 22.062,
+       "y": 8.25
+      },
+      {
+       "x": 23.667,
+       "y": 8.229
+      },
+      {
+       "x": 23.688,
+       "y": 10.708
+      },
+      {
+       "x": 22.062,
+       "y": 10.708
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.0,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 22.87,
+    "y": 9.474,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9995
+   }
+  },
+  {
+   "id": "volkus-2.N",
+   "kind": "volkus.crates",
+   "label": "N",
+   "parts": [
+    {
+     "id": "volkus-2.N.p0",
+     "featureId": "volkus-2.N",
+     "poly": [
+      {
+       "x": 12.521,
+       "y": 17.333
+      },
+      {
+       "x": 13.667,
+       "y": 17.312
+      },
+      {
+       "x": 13.688,
+       "y": 19.708
+      },
+      {
+       "x": 12.521,
+       "y": 19.708
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "crate",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 13.099,
+    "y": 18.516,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "volkus-2.G",
+   "kind": "volkus.heavyRubble",
+   "label": "G",
+   "parts": [
+    {
+     "id": "volkus-2.G.p0",
+     "featureId": "volkus-2.G",
+     "poly": [
+      {
+       "x": 9.958,
+       "y": 13.958
+      },
+      {
+       "x": 11.042,
+       "y": 13.958
+      },
+      {
+       "x": 11.042,
+       "y": 17.042
+      },
+      {
+       "x": 9.958,
+       "y": 17.042
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "rubble",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true,
+     "underRaisedLevel": true
+    }
+   ],
+   "placement": {
+    "x": 10.5,
+    "y": 15.5,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.8771
+   }
+  }
+ ],
+ "source": {
+  "card": "docs/context-pack/research/approved-ops/maps/Volkus2025-2.png",
+  "pxPerInch": 24.0,
+  "extractedAt": "2026-08-17",
+  "tool": "tools/maps/extract_cards.py",
+  "qa": {
+   "pxPerInch": 24.0,
+   "pxPerInchY": 24.0,
+   "dropDepthP1": 6.0,
+   "dropDepthP2": 6.0,
+   "deployment": "short-edge",
+   "p1Side": "right",
+   "centreSeamErrIn": 0.0208,
+   "templateIoUMin": 0.7907,
+   "templateIoUMedian": 1.0
+  }
+ }
+}

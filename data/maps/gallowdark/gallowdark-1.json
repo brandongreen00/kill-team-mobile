@@ -1,0 +1,1051 @@
+{
+ "id": "gallowdark-1",
+ "killzone": "gallowdark",
+ "name": "Gallowdark 1",
+ "board": {
+  "w": 27.625,
+  "h": 23.875,
+  "grid": 3.8125,
+  "border": 0.46875
+ },
+ "closeQuarters": true,
+ "dropZones": {
+  "p1": [
+   [
+    {
+     "x": 0.0,
+     "y": 19.562
+    },
+    {
+     "x": 27.625,
+     "y": 19.562
+    },
+    {
+     "x": 27.625,
+     "y": 23.875
+    },
+    {
+     "x": 0.0,
+     "y": 23.875
+    }
+   ]
+  ],
+  "p2": [
+   [
+    {
+     "x": 0.0,
+     "y": 0.0
+    },
+    {
+     "x": 27.625,
+     "y": 0.0
+    },
+    {
+     "x": 27.625,
+     "y": 4.312
+    },
+    {
+     "x": 0.0,
+     "y": 4.312
+    }
+   ]
+  ]
+ },
+ "territories": {
+  "p1": [
+   [
+    {
+     "x": 0.0,
+     "y": 11.938
+    },
+    {
+     "x": 27.625,
+     "y": 11.938
+    },
+    {
+     "x": 27.625,
+     "y": 23.875
+    },
+    {
+     "x": 0.0,
+     "y": 23.875
+    }
+   ]
+  ],
+  "p2": [
+   [
+    {
+     "x": 0.0,
+     "y": 0.0
+    },
+    {
+     "x": 27.625,
+     "y": 0.0
+    },
+    {
+     "x": 27.625,
+     "y": 11.938
+    },
+    {
+     "x": 0.0,
+     "y": 11.938
+    }
+   ]
+  ]
+ },
+ "killzoneEdges": {
+  "p1": [
+   {
+    "a": {
+     "x": 0.063,
+     "y": 23.875
+    },
+    "b": {
+     "x": 27.643,
+     "y": 23.875
+    }
+   }
+  ],
+  "p2": [
+   {
+    "a": {
+     "x": 0.063,
+     "y": 0.0
+    },
+    "b": {
+     "x": 27.643,
+     "y": 0.0
+    }
+   }
+  ],
+  "neutral": [
+   {
+    "a": {
+     "x": 0.0,
+     "y": 23.781
+    },
+    "b": {
+     "x": 0.0,
+     "y": 0.013
+    }
+   },
+   {
+    "a": {
+     "x": 27.625,
+     "y": 23.781
+    },
+    "b": {
+     "x": 27.625,
+     "y": 0.013
+    }
+   }
+  ]
+ },
+ "centreLine": {
+  "a": {
+   "x": 0.0,
+   "y": 11.938
+  },
+  "b": {
+   "x": 27.625,
+   "y": 11.938
+  }
+ },
+ "flankLine": {
+  "a": {
+   "x": 13.812,
+   "y": 0.0
+  },
+  "b": {
+   "x": 13.812,
+   "y": 23.875
+  }
+ },
+ "objectives": [
+  {
+   "id": "obj.p1",
+   "kind": "p1",
+   "pos": {
+    "x": 6.248,
+    "y": 15.73
+   },
+   "z": 0.0
+  },
+  {
+   "id": "obj.p2",
+   "kind": "p2",
+   "pos": {
+    "x": 23.364,
+    "y": 8.105
+   },
+   "z": 0.0
+  },
+  {
+   "id": "obj.centre",
+   "kind": "centre",
+   "pos": {
+    "x": 15.739,
+    "y": 11.917
+   },
+   "z": 0.0
+  }
+ ],
+ "features": [
+  {
+   "id": "gallowdark-1.A2-1",
+   "kind": "gallowdark.wallA2",
+   "label": "A2",
+   "parts": [
+    {
+     "id": "gallowdark-1.A2-1.wall",
+     "featureId": "gallowdark-1.A2-1",
+     "poly": [
+      {
+       "x": 0.469,
+       "y": 19.38
+      },
+      {
+       "x": 8.094,
+       "y": 19.38
+      },
+      {
+       "x": 8.094,
+       "y": 19.745
+      },
+      {
+       "x": 0.469,
+       "y": 19.745
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 4.281,
+    "y": 19.562,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.A3-1",
+   "kind": "gallowdark.wallA3",
+   "label": "A3",
+   "parts": [
+    {
+     "id": "gallowdark-1.A3-1.wall",
+     "featureId": "gallowdark-1.A3-1",
+     "poly": [
+      {
+       "x": 8.094,
+       "y": 19.38
+      },
+      {
+       "x": 15.719,
+       "y": 19.38
+      },
+      {
+       "x": 15.719,
+       "y": 19.745
+      },
+      {
+       "x": 8.094,
+       "y": 19.745
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 11.906,
+    "y": 19.562,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.B2-1",
+   "kind": "gallowdark.wallB2",
+   "label": "B2",
+   "parts": [
+    {
+     "id": "gallowdark-1.B2-1.wall",
+     "featureId": "gallowdark-1.B2-1",
+     "poly": [
+      {
+       "x": 15.719,
+       "y": 19.38
+      },
+      {
+       "x": 19.531,
+       "y": 19.38
+      },
+      {
+       "x": 19.531,
+       "y": 19.745
+      },
+      {
+       "x": 15.719,
+       "y": 19.745
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "gallowdark-1.B2-1.access",
+     "featureId": "gallowdark-1.B2-1",
+     "poly": [
+      {
+       "x": 17.193,
+       "y": 19.759
+      },
+      {
+       "x": 18.26,
+       "y": 19.759
+      },
+      {
+       "x": 18.26,
+       "y": 20.826
+      },
+      {
+       "x": 17.193,
+       "y": 20.826
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
+    }
+   ],
+   "placement": {
+    "x": 17.625,
+    "y": 19.562,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.B3-1",
+   "kind": "gallowdark.wallB3",
+   "label": "B3",
+   "parts": [
+    {
+     "id": "gallowdark-1.B3-1.wall",
+     "featureId": "gallowdark-1.B3-1",
+     "poly": [
+      {
+       "x": 0.469,
+       "y": 11.755
+      },
+      {
+       "x": 4.281,
+       "y": 11.755
+      },
+      {
+       "x": 4.281,
+       "y": 12.12
+      },
+      {
+       "x": 0.469,
+       "y": 12.12
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 2.375,
+    "y": 11.938,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.A2-2",
+   "kind": "gallowdark.wallA2",
+   "label": "A2",
+   "parts": [
+    {
+     "id": "gallowdark-1.A2-2.wall",
+     "featureId": "gallowdark-1.A2-2",
+     "poly": [
+      {
+       "x": 4.281,
+       "y": 11.755
+      },
+      {
+       "x": 11.906,
+       "y": 11.755
+      },
+      {
+       "x": 11.906,
+       "y": 12.12
+      },
+      {
+       "x": 4.281,
+       "y": 12.12
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 8.094,
+    "y": 11.938,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.A4-1",
+   "kind": "gallowdark.wallA4",
+   "label": "A4",
+   "parts": [
+    {
+     "id": "gallowdark-1.A4-1.wall",
+     "featureId": "gallowdark-1.A4-1",
+     "poly": [
+      {
+       "x": 19.531,
+       "y": 11.755
+      },
+      {
+       "x": 27.156,
+       "y": 11.755
+      },
+      {
+       "x": 27.156,
+       "y": 12.12
+      },
+      {
+       "x": 19.531,
+       "y": 12.12
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 23.344,
+    "y": 11.938,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.B3-2",
+   "kind": "gallowdark.wallB3",
+   "label": "B3",
+   "parts": [
+    {
+     "id": "gallowdark-1.B3-2.wall",
+     "featureId": "gallowdark-1.B3-2",
+     "poly": [
+      {
+       "x": 11.906,
+       "y": 4.13
+      },
+      {
+       "x": 15.719,
+       "y": 4.13
+      },
+      {
+       "x": 15.719,
+       "y": 4.495
+      },
+      {
+       "x": 11.906,
+       "y": 4.495
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 13.812,
+    "y": 4.312,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.A1-1",
+   "kind": "gallowdark.wallA1",
+   "label": "A1",
+   "parts": [
+    {
+     "id": "gallowdark-1.A1-1.wall",
+     "featureId": "gallowdark-1.A1-1",
+     "poly": [
+      {
+       "x": 15.719,
+       "y": 4.13
+      },
+      {
+       "x": 23.344,
+       "y": 4.13
+      },
+      {
+       "x": 23.344,
+       "y": 4.495
+      },
+      {
+       "x": 15.719,
+       "y": 4.495
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 19.531,
+    "y": 4.312,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.B3-3",
+   "kind": "gallowdark.wallB3",
+   "label": "B3",
+   "parts": [
+    {
+     "id": "gallowdark-1.B3-3.wall",
+     "featureId": "gallowdark-1.B3-3",
+     "poly": [
+      {
+       "x": 23.344,
+       "y": 4.13
+      },
+      {
+       "x": 27.156,
+       "y": 4.13
+      },
+      {
+       "x": 27.156,
+       "y": 4.495
+      },
+      {
+       "x": 23.344,
+       "y": 4.495
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 25.25,
+    "y": 4.312,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.B1-1",
+   "kind": "gallowdark.wallB1",
+   "label": "B1",
+   "parts": [
+    {
+     "id": "gallowdark-1.B1-1.wall",
+     "featureId": "gallowdark-1.B1-1",
+     "poly": [
+      {
+       "x": 11.724,
+       "y": 15.75
+      },
+      {
+       "x": 12.089,
+       "y": 15.75
+      },
+      {
+       "x": 12.089,
+       "y": 19.562
+      },
+      {
+       "x": 11.724,
+       "y": 19.562
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 11.906,
+    "y": 17.656,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.B3-4",
+   "kind": "gallowdark.wallB3",
+   "label": "B3",
+   "parts": [
+    {
+     "id": "gallowdark-1.B3-4.wall",
+     "featureId": "gallowdark-1.B3-4",
+     "poly": [
+      {
+       "x": 11.724,
+       "y": 11.938
+      },
+      {
+       "x": 12.089,
+       "y": 11.938
+      },
+      {
+       "x": 12.089,
+       "y": 15.75
+      },
+      {
+       "x": 11.724,
+       "y": 15.75
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 11.906,
+    "y": 13.844,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.B2-2",
+   "kind": "gallowdark.wallB2",
+   "label": "B2",
+   "parts": [
+    {
+     "id": "gallowdark-1.B2-2.wall",
+     "featureId": "gallowdark-1.B2-2",
+     "poly": [
+      {
+       "x": 11.724,
+       "y": 8.125
+      },
+      {
+       "x": 12.089,
+       "y": 8.125
+      },
+      {
+       "x": 12.089,
+       "y": 11.938
+      },
+      {
+       "x": 11.724,
+       "y": 11.938
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 11.906,
+    "y": 10.031,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.B1-2",
+   "kind": "gallowdark.wallB1",
+   "label": "B1",
+   "parts": [
+    {
+     "id": "gallowdark-1.B1-2.wall",
+     "featureId": "gallowdark-1.B1-2",
+     "poly": [
+      {
+       "x": 11.724,
+       "y": 4.312
+      },
+      {
+       "x": 12.089,
+       "y": 4.312
+      },
+      {
+       "x": 12.089,
+       "y": 8.125
+      },
+      {
+       "x": 11.724,
+       "y": 8.125
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 11.906,
+    "y": 6.219,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.A4-2",
+   "kind": "gallowdark.wallA4",
+   "label": "A4",
+   "parts": [
+    {
+     "id": "gallowdark-1.A4-2.wall",
+     "featureId": "gallowdark-1.A4-2",
+     "poly": [
+      {
+       "x": 19.349,
+       "y": 11.938
+      },
+      {
+       "x": 19.714,
+       "y": 11.938
+      },
+      {
+       "x": 19.714,
+       "y": 19.562
+      },
+      {
+       "x": 19.349,
+       "y": 19.562
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "gallowdark-1.A4-2.access",
+     "featureId": "gallowdark-1.A4-2",
+     "poly": [
+      {
+       "x": 18.227,
+       "y": 13.29
+      },
+      {
+       "x": 19.294,
+       "y": 13.29
+      },
+      {
+       "x": 19.294,
+       "y": 14.357
+      },
+      {
+       "x": 18.227,
+       "y": 14.357
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
+    }
+   ],
+   "placement": {
+    "x": 19.531,
+    "y": 15.75,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.A3-2",
+   "kind": "gallowdark.wallA3",
+   "label": "A3",
+   "parts": [
+    {
+     "id": "gallowdark-1.A3-2.wall",
+     "featureId": "gallowdark-1.A3-2",
+     "poly": [
+      {
+       "x": 19.349,
+       "y": 4.312
+      },
+      {
+       "x": 19.714,
+       "y": 4.312
+      },
+      {
+       "x": 19.714,
+       "y": 11.938
+      },
+      {
+       "x": 19.349,
+       "y": 11.938
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "gallowdark-1.A3-2.access",
+     "featureId": "gallowdark-1.A3-2",
+     "poly": [
+      {
+       "x": 18.227,
+       "y": 9.518
+      },
+      {
+       "x": 19.294,
+       "y": 9.518
+      },
+      {
+       "x": 19.294,
+       "y": 10.585
+      },
+      {
+       "x": 18.227,
+       "y": 10.585
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
+    }
+   ],
+   "placement": {
+    "x": 19.531,
+    "y": 8.125,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  }
+ ],
+ "source": {
+  "card": "docs/context-pack/research/approved-ops/maps/Gallowdark1.png",
+  "pxPerInch": 24.6557,
+  "extractedAt": "2026-08-17",
+  "tool": "tools/maps/extract_cards.py",
+  "qa": {
+   "pxPerInch": 24.6557,
+   "pxPerInchY": 24.6557,
+   "dropDepthP1": 4.3125,
+   "dropDepthP2": 4.3125,
+   "deployment": "long-edge",
+   "p1Side": "top",
+   "centreSeamErrIn": 0.0,
+   "latticeStepPx": 94.0,
+   "wallThicknessPx": 9.0,
+   "templateIoUMin": 1.0,
+   "templateIoUMedian": 1.0
+  }
+ }
+}

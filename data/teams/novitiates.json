@@ -1,0 +1,1501 @@
+{
+ "id": "novitiates",
+ "name": "Novitiates",
+ "faction": "Adepta Sororitas",
+ "grandFaction": "Imperium",
+ "archetypes": [
+  "Security",
+  "Recon"
+ ],
+ "booksVersion": "APRIL ’26",
+ "books": [
+  {
+   "book": "Novitiates",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "APRIL ’26",
+   "lastUpdate": "April 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_29-04_kt_teamrules_novitiates-kpn2dh2ljk-kkaiyhpput.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/novitiates/",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "SUPERIOR",
+   "datacardId": "novitiates.superior",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "novitiates.g1.opt1",
+     "label": "Plasma pistol; power weapon",
+     "weapons": [
+      "Plasma pistol",
+      "Power weapon"
+     ]
+    },
+    {
+     "id": "novitiates.g1.opt2",
+     "label": "Relic boltgun; gun butt",
+     "weapons": [
+      "Relic boltgun",
+      "Gun butt"
+     ]
+    },
+    {
+     "id": "novitiates.g1.opt3",
+     "label": "Relic bolt pistol; power weapon",
+     "weapons": [
+      "Relic bolt pistol",
+      "Power weapon"
+     ]
+    }
+   ],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "SUPERIOR"
+   ],
+   "inList": false
+  },
+  "slots": 9,
+  "totalOperatives": 10,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "SUPERIOR"
+    ],
+    "rawText": "1 NOVITIATE SUPERIOR operative with one of the following options:"
+   },
+   {
+    "index": 2,
+    "count": 9,
+    "kind": "list",
+    "roles": [
+     "CONDEMNOR",
+     "DIALOGUS",
+     "DUELLIST",
+     "EXACTOR",
+     "HOSPITALLER",
+     "MILITANT",
+     "PENITENT",
+     "PRECEPTOR",
+     "PRONATUS",
+     "PURGATUS",
+     "RELIQUARIUS"
+    ],
+    "rawText": "9 NOVITIATE operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "CONDEMNOR",
+    "datacardAnchor": "Novitiate-Condemnor",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CONDEMNOR",
+    "group": 2,
+    "datacardId": "novitiates.condemnor",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Condemnor stakethrower",
+     "Null rod"
+    ]
+   },
+   {
+    "role": "DIALOGUS",
+    "datacardAnchor": "Novitiate-Dialogus",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DIALOGUS",
+    "group": 2,
+    "datacardId": "novitiates.dialogus",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Dialogus stave"
+    ]
+   },
+   {
+    "role": "DUELLIST",
+    "datacardAnchor": "Novitiate-Duellist",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DUELLIST",
+    "group": 2,
+    "datacardId": "novitiates.duellist",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Duelling blades"
+    ]
+   },
+   {
+    "role": "EXACTOR",
+    "datacardAnchor": "Novitiate-Exactor",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "EXACTOR",
+    "group": 2,
+    "datacardId": "novitiates.exactor",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Neural whips"
+    ]
+   },
+   {
+    "role": "HOSPITALLER",
+    "datacardAnchor": "Novitiate-Hospitaller",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HOSPITALLER",
+    "group": 2,
+    "datacardId": "novitiates.hospitaller",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Surgical saw"
+    ]
+   },
+   {
+    "role": "MILITANT",
+    "datacardAnchor": "Novitiate-Militant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "novitiates.g2e6.opt1",
+      "label": "Autopistol; Novitiate blade",
+      "weapons": [
+       "Autopistol",
+       "Novitiate blade"
+      ]
+     },
+     {
+      "id": "novitiates.g2e6.opt2",
+      "label": "Autogun; gun butt",
+      "weapons": [
+       "Autogun",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MILITANT with one of the following options:",
+    "group": 2,
+    "datacardId": "novitiates.militant",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "PENITENT",
+    "datacardAnchor": "Novitiate-Penitent",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PENITENT",
+    "group": 2,
+    "datacardId": "novitiates.penitent",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Penitent eviscerator"
+    ]
+   },
+   {
+    "role": "PRECEPTOR",
+    "datacardAnchor": "Novitiate-Preceptor",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PRECEPTOR",
+    "group": 2,
+    "datacardId": "novitiates.preceptor",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Mace of the Righteous"
+    ]
+   },
+   {
+    "role": "PRONATUS",
+    "datacardAnchor": "Novitiate-Pronatus",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PRONATUS",
+    "group": 2,
+    "datacardId": "novitiates.pronatus",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Gun butt"
+    ]
+   },
+   {
+    "role": "PURGATUS",
+    "datacardAnchor": "Novitiate-Purgatus",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PURGATUS",
+    "group": 2,
+    "datacardId": "novitiates.purgatus",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": [
+     "Ministorum flamer",
+     "Gun butt"
+    ]
+   },
+   {
+    "role": "RELIQUARIUS",
+    "datacardAnchor": "Novitiate-Reliquarius",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "RELIQUARIUS",
+    "group": 2,
+    "datacardId": "novitiates.reliquarius",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Gun butt"
+    ]
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "SUPERIOR",
+    "datacardAnchor": "Novitiate-Superior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "novitiates.g1.opt1",
+      "label": "Plasma pistol; power weapon",
+      "weapons": [
+       "Plasma pistol",
+       "Power weapon"
+      ]
+     },
+     {
+      "id": "novitiates.g1.opt2",
+      "label": "Relic boltgun; gun butt",
+      "weapons": [
+       "Relic boltgun",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "novitiates.g1.opt3",
+      "label": "Relic bolt pistol; power weapon",
+      "weapons": [
+       "Relic bolt pistol",
+       "Power weapon"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 NOVITIATE SUPERIOR operative with one of the following options:",
+    "group": 1,
+    "datacardId": "novitiates.superior",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "MILITANT",
+     "PURGATUS"
+    ]
+   },
+   {
+    "kind": "maxCount",
+    "role": "PURGATUS",
+    "max": 2
+   }
+  ],
+  "footnotes": {},
+  "footnoteOptions": {},
+  "designerNotes": [],
+  "rawText": "1 NOVITIATE SUPERIOR operative with one of the following options:\n\nPlasma pistol; power weapon\n\nRelic boltgun; gun butt\n\nRelic bolt pistol; power weapon\n\n9 NOVITIATE operatives selected from the following list:\n\nCONDEMNOR\n\nDIALOGUS\n\nDUELLIST\n\nEXACTOR\n\nHOSPITALLER\n\nMILITANT with one of the following options:\n\nAutopistol; Novitiate blade\n\nAutogun; gun butt\n\nPENITENT\n\nPRECEPTOR\n\nPRONATUS\n\nPURGATUS\n\nRELIQUARIUS\n\nOther than MILITANT and PURGATUS operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two PURGATUS operatives."
+ },
+ "datacards": [
+  {
+   "id": "novitiates.superior",
+   "teamId": "novitiates",
+   "name": "Novitiate Superior",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "LEADER",
+    "SUPERIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Relic bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Relic boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.superior.inspirational-example",
+     "name": "Inspirational Example",
+     "text": "Whenever this operative incapacitates an enemy operative, you gain 1 Faith point, or 2 Faith points if that enemy operative had a Wounds stat of 12 or more. This rule has no effect when using the Glorious Martyrdom firefight ploy."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "A fully fledged Battle Sister of an Order Militant, a Superior has the task of leading Novitiates in battle. They make command decisions, steer the faith of their charges and serve as inspirational examples of how a warrior of the Adepta Sororitas acts at all times."
+  },
+  {
+   "id": "novitiates.condemnor",
+   "teamId": "novitiates",
+   "name": "Novitiate Condemnor",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "CONDEMNOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Condemnor stakethrower",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 2,
+         "raw": "Devastating 2"
+        },
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "AntiPSYKER",
+         "raw": "Anti-PSYKER*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Null rod",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "AntiPSYKER",
+         "raw": "Anti-PSYKER*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.condemnor.null-rod",
+     "name": "Null Rod",
+     "text": "PSYCHIC ranged weapons cannot inflict damage on this operative. For the effects of PSYCHIC actions, this operative cannot be selected and is never treated as being within those actions’ required distances. Whenever an operative is within 6\" of this operative:\n\nThat operative cannot perform PSYCHIC actions or use PSYCHIC additional rules.\n\nThat operative cannot use PSYCHIC ranged weapons.\n\nPSYCHIC melee weapons have no weapon rules and cannot have Dmg stats higher than 3/4."
+    },
+    {
+     "id": "novitiates.condemnor.anti-psyker",
+     "name": "Anti-PSYKER",
+     "text": "Whenever this weapon is being used against an operative that has the PSYKER keyword, add 1 to both Dmg stats of this weapon and it has the Lethal 5+ weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Sorcerers and witches are among the Adepta Sororitas’ most hated foes. Such psychic abominations are terrible threats to the Emperor’s realm, and cutting them down is a key priority. Novitiates Condemnor are especially equipped to deal with this kind of enemy."
+  },
+  {
+   "id": "novitiates.dialogus",
+   "teamId": "novitiates",
+   "name": "Novitiate Dialogus",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "DIALOGUS"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Dialogus stave",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "novitiates.dialogus.act.stirring-rhetoric",
+     "name": "STIRRING RHETORIC",
+     "ap": 1,
+     "text": "SUPPORT. Select one other friendly NOVITIATE operative visible to and within 6\" of this operative, or within 6\" of your Auto-broadcaster marker. Until the end of that operative’s next activation, add 1 to its APL stat (to a maximum of 3 after all APL stat changes have been totalled).\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "novitiates.dialogus.act.auto-broadcaster",
+     "name": "AUTO-BROADCASTER",
+     "ap": 0,
+     "text": "If your Auto-broadcaster marker isn’t in the killzone, place it within 8\" horizontally of this operative; otherwise, move your Auto-broadcaster marker up to 8\" horizontally. If this operative is removed from the killzone, remove your Auto-broadcaster marker from the killzone.\n\nWhenever an enemy operative within 3\" of your Auto-broadcaster marker is shooting, fighting or retaliating, your opponent cannot re-roll their attack dice.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "These Novitiates are in training to join the Orders Dialogus, while learning warfare under the guidance of experienced Battle Sisters. Their training in cryptography makes them of great value to kill teams – they can unlock obscure ciphers and find hidden patterns in communiques."
+  },
+  {
+   "id": "novitiates.duellist",
+   "teamId": "novitiates",
+   "name": "Novitiate Duellist",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "DUELLIST"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Duelling blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Riposte",
+         "raw": "Riposte*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.duellist.riposte",
+     "name": "Riposte",
+     "text": "Whenever you block with a critical success, you can also inflict damage equal to the weapon’s Critical Dmg stat on the enemy operative in that sequence."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Some Novitiates have a natural affinity for bladework, their reaction times and dexterity greater than that of their fellow warriors. They take to the field eager to prove their skill, wishing to claim the heads of the most capable enemies and emulate the warrior-saints of legend."
+  },
+  {
+   "id": "novitiates.exactor",
+   "teamId": "novitiates",
+   "name": "Novitiate Exactor",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "EXACTOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Neural whips",
+     "profiles": [
+      {
+       "name": "ranged",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 3,
+         "raw": "Range 3\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      },
+      {
+       "name": "melee",
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "novitiates.exactor.act.whip-into-frenzy",
+     "name": "WHIP INTO FRENZY",
+     "ap": 1,
+     "text": "Select one other friendly NOVITIATE operative (excluding SUPERIOR) visible to and within 3\" of this operative that isn’t currently benefitting from the effects of this action. Until the end of that operative’s next activation, add 1\" to its Move stat, it can perform two Fight actions during its next activation, and one of them can be free.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Some zealous Novitiates are given neural whips with which to inflict physical and mental anguish on the foe. On occasion, the bearer will turn these weapons on fellow Novitiates they feel are lacking in commitment and need to be dissuaded from lapses in bravery and faith."
+  },
+  {
+   "id": "novitiates.hospitaller",
+   "teamId": "novitiates",
+   "name": "Novitiate Hospitaller",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "MEDIC",
+    "HOSPITALLER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Surgical saw",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.hospitaller.medic",
+     "name": "Medic!",
+     "text": "The first time during each turning point that another friendly NOVITIATE operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "novitiates.hospitaller.act.chirurgeons-tools",
+     "name": "CHIRURGEON’S TOOLS",
+     "ap": 1,
+     "text": "Select one friendly NOVITIATE operative within this operative’s control range to regain up to 2D3 lost wounds. It cannot be an operative that the Medic! rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Curing the physical and spiritual ills of the Imperium’s battlefield wounded is an onerous task, one that requires countless hours of practice. Novitiates seeking admission into the Orders Hospitaller hone their skills in the field, aiding their fellow Novitiates in whichever way they can."
+  },
+  {
+   "id": "novitiates.militant",
+   "teamId": "novitiates",
+   "name": "Novitiate Militant",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "MILITANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autogun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Novitiate blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.militant.militant-faith",
+     "name": "Militant Faith",
+     "text": "Whenever this operative is shooting, fighting or retaliating, if you use an ACT OF FAITH during that sequence and an enemy operative is incapacitated, the Faith points spent on that ACT OF FAITH are refunded. If you use the Icon of Faith equipment, Faith points are only refunded for one of those ACTS OF FAITH (your choice)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Novitiates Militant are Battle Sisters in training. They have yet to earn the power armour and boltguns of fully fledged Battle Sisters, but are zealous warriors of the Emperor nonetheless, eager to join the ranks of their Order Militant."
+  },
+  {
+   "id": "novitiates.penitent",
+   "teamId": "novitiates",
+   "name": "Novitiate Penitent",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "PENITENT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Penitent eviscerator",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "ZealousRage",
+         "raw": "Zealous Rage*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.penitent.zealous-rage",
+     "name": "Zealous Rage",
+     "text": "Whenever this operative is fighting with this weapon, it has the Ceaseless weapon rule."
+    },
+    {
+     "id": "novitiates.penitent.absolution-through-destruction",
+     "name": "Absolution Through Destruction",
+     "text": "Whenever this operative performs the Fight action, if it isn’t incapacitated, it can immediately perform a free Fight action afterwards. This takes precedence over action restrictions, and you cannot perform more than two Fight actions in succession as a result of this rule. If this operative is benefitting from the effects of the Whip Into Frenzy action (see EXACTOR), this applies to each of the Fight actions from those effects."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Some Novitiates are ordered to wield brutal eviscerators as a mark of shame for minor transgressions. Urged to earn their redemption face-to -face with the enemy, such Sisters will fight with unrestrained fury to earn back their honour."
+  },
+  {
+   "id": "novitiates.preceptor",
+   "teamId": "novitiates",
+   "name": "Novitiate Preceptor",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "PRECEPTOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Mace of the Righteous",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.preceptor.unflinching-example",
+     "name": "Unflinching Example",
+     "text": "Whenever this operative incapacitates a ready enemy operative within its control range, you gain 1 Faith point, or 2 Faith points if that enemy operative had a Wounds stat of 12 or more."
+    },
+    {
+     "id": "novitiates.preceptor.glorious-hymnal",
+     "name": "Glorious Hymnal",
+     "text": "SUPPORT. Whenever a friendly NOVITIATE operative is within 3\" of this operative, that friendly operative’s weapons have the Severe weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "These Novitiates are expected to rigidly enforce their Order’s precepts, ensuring their fellows faithfully adhere to the prescribed standards. They are often chosen as their Superior’s second in command, and serve as exemplars by eagerly striding into the fray to smite the Emperor’s foes."
+  },
+  {
+   "id": "novitiates.pronatus",
+   "teamId": "novitiates",
+   "name": "Novitiate Pronatus",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "PRONATUS"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.pronatus.relic-seeker",
+     "name": "Relic Seeker",
+     "text": "Once during each of this operative’s activations, it can perform the Pick Up Marker, Place Marker or a mission action for 1 less AP."
+    },
+    {
+     "id": "novitiates.pronatus.divine-acquisition",
+     "name": "Divine Acquisition",
+     "text": "Once per turning point, when this operative performs a mission action that requires it to control an objective or mission marker, you gain a number of Faith points equal to the turning point number."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "To serve in the Orders Pronatus a candidate must learn everything there is to know of countless kinds of relics, as well being highly skilled warriors. They are expected to retrieve and guard highly precious – and sometimes extremely dangerous – artefacts."
+  },
+  {
+   "id": "novitiates.purgatus",
+   "teamId": "novitiates",
+   "name": "Novitiate Purgatus",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "PURGATUS"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Ministorum flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.purgatus.purge-with-flame",
+     "name": "Purge with Flame",
+     "text": "Once per turning point, you can use the inferno firefight ploy for 0CP if this is the specified friendly NOVITIATE operative."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Novitiates Purgatus have the holy duty of bringing cleansing flame to the enemies of Mankind. When they unleash their Ministorum flamers at the enemy, they leave little more than ash behind."
+  },
+  {
+   "id": "novitiates.reliquarius",
+   "teamId": "novitiates",
+   "name": "Novitiate Reliquarius",
+   "keywords": [
+    "NOVITIATE",
+    "IMPERIUM",
+    "ADEPTA SORORITAS",
+    "RELIQUARIUS"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "novitiates.reliquarius.icon-bearer",
+     "name": "Icon Bearer",
+     "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "novitiates.reliquarius.act.raise-icon",
+     "name": "RAISE ICON",
+     "ap": 1,
+     "text": "You gain 1 Faith point. If this operative controls an objective marker, you also gain a number of Faith points equal to the turning point number.\n\nThis operative cannot perform this action more than once per turning point, and cannot perform it while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Some Novitiates bear inspiring icons, such as an ornate tapestry, a reliquary containing a saint’s mortal remains or a simulacrum of a famous artefact. Novitiates who look upon such relics know the holy power of the God-Emperor is with them, and fight all the harder for it."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "novitiates.rule.acts-of-faith",
+   "name": "Acts of Faith",
+   "text": "In the Ready step of each Strategy phase, you gain a number of Faith points equal to half the number of friendly NOVITIATE operatives that haven’t been incapacitated (rounding up). Whenever a friendly NOVITIATE operative is shooting, fighting or retaliating, or an operative is shooting it, in the Roll Attack Dice (or Roll Defence Dice step if an operative is shooting it), you can spend your Faith points to use one ACT OF FAITH. You cannot use more than one ACT OF FAITH per sequence, and their costs and effects are as follows:\n\nGUIDANCE1 FAITH POINT\nYou can re-roll one of your dice.\n\nBLESSING2 FAITH POINTS\nYou can retain one of your normal successes as a critical success instead.\n\nINTERVENTION3 FAITH POINTS\nYou can retain one of your fails as a normal success instead of discarding it.",
+   "fluff": "Such is the zeal of the Adepta Sororitas that in their presence the Emperor’s divine will is made manifest."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "novitiates.sp.ardent-vengeance",
+   "name": "ARDENT VENGEANCE",
+   "text": "Whenever a friendly NOVITIATE operative is shooting against, fighting against or retaliating against an expended enemy operative, that friendly operative’s weapons have the Punishing weapon rule.",
+   "cp": 1,
+   "fluff": "The heretic, the mutant, the alien: the Adepta Sororitas purge all with equal fervour."
+  },
+  {
+   "id": "novitiates.sp.defenders-of-the-faith",
+   "name": "DEFENDERS OF THE FAITH",
+   "text": "Whenever an operative is shooting against, fighting against or retaliating against a friendly NOVITIATE operative that contests an objective marker, in the Resolve Attack Dice step of that sequence, you can halve the damage inflicted (rounding up and to a minimum of 2) on that friendly operative from one success.",
+   "cp": 1,
+   "fluff": "All who aspire to join the ranks of the Orders Militant must endure trials of suffering. Faith lends these warriors great resilience."
+  },
+  {
+   "id": "novitiates.sp.blessed-rejuvenation",
+   "name": "BLESSED REJUVENATION",
+   "text": "Whenever you spend Faith points, at the end of that action, the friendly operative you spent them on can regain up to D3 lost wounds. Note this ploy has no effect if that friendly operative was incapacitated during that action, or if the ACT OF FAITH doesn’t cost any Faith points, e.g. Auto-chastisers equipment.",
+   "cp": 1,
+   "fluff": "A devout Sister Novitiate may draw upon the wellspring of her faith to salve mind, body and spirit."
+  },
+  {
+   "id": "novitiates.sp.righteous-advance",
+   "name": "RIGHTEOUS ADVANCE",
+   "text": "Up to one third of the friendly NOVITIATE operatives in the killzone (rounding down, to a minimum of 1) can immediately perform a free Dash action in an order of your choice, but each that does so must end that move closer to its closest enemy operative, its closest objective marker or your opponent’s drop zone (you can choose separately for each). You cannot use this ploy during the first turning point.\n\nFirefight Ploys\nGLORIOUS MARTYRDOM\n\nThere is no greater honour than to die in service of the Emperor. Such a glorious end provides inspiration to those who witness it.\nUse this firefight ploy when a friendly NOVITIATE operative is incapacitated, before it’s removed from the killzone. For each enemy operative visible to and within 2\" of it, you gain 1 Faith point and inflict D3 damage on that enemy operative (roll separately for each).\n\nBLAZING INFERNO\n\nThe holy flamer is a potent instrument of the Emperor’s divine wrath. Heretic, witch, mutant or alien: none may hide from its searing wrath.\nUse this firefight ploy when a friendly NOVITIATE operative is shooting with a Ministorum flamer and you inflict damage with any critical successes. The target gains one of your Blaze tokens (if it doesn’t already have one). Whenever an operative that has one of your Blaze tokens is activated:\n\nInflict D3 damage on it.\n\nIts controlling player can subtract 1 from that operative’s APL stat until the end of that activation to remove that token. Note that this must be done before that operative performs any actions during that activation.\n\nBLINDING AURA\n\nFaith defies explanation. The most devout and righteous Sisters are said to manifest dazzling halos of light that blind the faithless.\nUse this firefight ploy when an enemy operative is performing the Shoot action and selects a friendly NOVITIATE operative as the valid target. Until the end of that activation/counteraction, while that friendly operative is more than 2\" from that enemy operative, your opponent cannot select it as a valid target. If there are no other valid targets that your opponent can select, that action ends (it’s not cancelled, so that operative has still performed it). Note this ploy has no effect if it’s not the selected operative, e.g. if it’s a secondary target from the Blast weapon rule.\n\nGUIDED BY FAITH\n\nWhispering a prayer, a Sister Novitiate beseeches the God-Emperor to guide her aim that she may swiftly slay her foe.\nUse this firefight ploy when a friendly NOVITIATE operative is performing the Shoot action and you’re selecting a ranged weapon. Until the end of that action, whenever that operative is shooting an operative within 6\" of it, that weapon has the Seek Light weapon rule.\n\nFaction Equipment\nThe following equipment options are available to NOVITIATE kill teams, alongside the universal equipment online. You cannot select each option more than once per battle.\n\nICON OF FAITH\n\nHoly icons of the Ecclesiarchy hold great significance to the Sisters who bear them, reinforcing their faith in the heart of battle.\nOnce per turning point, you can use up to two ACTS OF FAITH during a sequence, but each one must be different. This takes precedence over the normal ACTS OF FAITH rules.\n\nSANCTIFIED ROUNDS\n\nAnointed with the blood and tears of saints and blessed by high-ranking members of the clergy, this ammunition is anathema to the unholy.\nWhenever a friendly NOVITIATE operative is shooting with an autogun, autopistol, relic bolt pistol or relic boltgun, if you spend a Faith point, that weapon has the Piercing Crits 1 weapon rule until the end of that sequence.\n\nAUTO-CHASTISERS\n\nThese instruments of self-flagellation inflict blessed agonies upon the bearer, fanning the flames of their blazing zeal.\nOnce per turning point, when a friendly NOVITIATE operative is shooting, fighting or retaliating, in the Roll Attack Dice step, you can inflict 1-3 damage on that friendly operative (but not enough to incapacitate it). If you do, you can use one ACT OF FAITH for free during that sequence with a Faith points cost no more than the damage you inflicted from this rule.\n\nHOLY EMBROCATIONS\n\nHoly oils and salves dull the pain and focus the mind, enabling a Novitiate to shrug off wounds that would otherwise hobble them.\nYou can ignore any changes to the Move stat of friendly NOVITIATE operatives from being injured.",
+   "cp": 1,
+   "fluff": "Eager to prove themselves worthy, Sisters Novitiate hurl themselves into combat with scant regard for their own lives."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "novitiates.fp.glorious-martyrdom",
+   "name": "GLORIOUS MARTYRDOM",
+   "text": "Use this firefight ploy when a friendly NOVITIATE operative is incapacitated, before it’s removed from the killzone. For each enemy operative visible to and within 2\" of it, you gain 1 Faith point and inflict D3 damage on that enemy operative (roll separately for each).",
+   "cp": 1,
+   "fluff": "There is no greater honour than to die in service of the Emperor. Such a glorious end provides inspiration to those who witness it."
+  },
+  {
+   "id": "novitiates.fp.blazing-inferno",
+   "name": "BLAZING INFERNO",
+   "text": "Use this firefight ploy when a friendly NOVITIATE operative is shooting with a Ministorum flamer and you inflict damage with any critical successes. The target gains one of your Blaze tokens (if it doesn’t already have one). Whenever an operative that has one of your Blaze tokens is activated:\n\nInflict D3 damage on it.\n\nIts controlling player can subtract 1 from that operative’s APL stat until the end of that activation to remove that token. Note that this must be done before that operative performs any actions during that activation.",
+   "cp": 1,
+   "fluff": "The holy flamer is a potent instrument of the Emperor’s divine wrath. Heretic, witch, mutant or alien: none may hide from its searing wrath."
+  },
+  {
+   "id": "novitiates.fp.blinding-aura",
+   "name": "BLINDING AURA",
+   "text": "Use this firefight ploy when an enemy operative is performing the Shoot action and selects a friendly NOVITIATE operative as the valid target. Until the end of that activation/counteraction, while that friendly operative is more than 2\" from that enemy operative, your opponent cannot select it as a valid target. If there are no other valid targets that your opponent can select, that action ends (it’s not cancelled, so that operative has still performed it). Note this ploy has no effect if it’s not the selected operative, e.g. if it’s a secondary target from the Blast weapon rule.",
+   "cp": 1,
+   "fluff": "Faith defies explanation. The most devout and righteous Sisters are said to manifest dazzling halos of light that blind the faithless."
+  },
+  {
+   "id": "novitiates.fp.guided-by-faith",
+   "name": "GUIDED BY FAITH",
+   "text": "Use this firefight ploy when a friendly NOVITIATE operative is performing the Shoot action and you’re selecting a ranged weapon. Until the end of that action, whenever that operative is shooting an operative within 6\" of it, that weapon has the Seek Light weapon rule.\n\nFaction Equipment\nThe following equipment options are available to NOVITIATE kill teams, alongside the universal equipment online. You cannot select each option more than once per battle.\n\nICON OF FAITH\n\nHoly icons of the Ecclesiarchy hold great significance to the Sisters who bear them, reinforcing their faith in the heart of battle.\nOnce per turning point, you can use up to two ACTS OF FAITH during a sequence, but each one must be different. This takes precedence over the normal ACTS OF FAITH rules.\n\nSANCTIFIED ROUNDS\n\nAnointed with the blood and tears of saints and blessed by high-ranking members of the clergy, this ammunition is anathema to the unholy.\nWhenever a friendly NOVITIATE operative is shooting with an autogun, autopistol, relic bolt pistol or relic boltgun, if you spend a Faith point, that weapon has the Piercing Crits 1 weapon rule until the end of that sequence.\n\nAUTO-CHASTISERS\n\nThese instruments of self-flagellation inflict blessed agonies upon the bearer, fanning the flames of their blazing zeal.\nOnce per turning point, when a friendly NOVITIATE operative is shooting, fighting or retaliating, in the Roll Attack Dice step, you can inflict 1-3 damage on that friendly operative (but not enough to incapacitate it). If you do, you can use one ACT OF FAITH for free during that sequence with a Faith points cost no more than the damage you inflicted from this rule.\n\nHOLY EMBROCATIONS\n\nHoly oils and salves dull the pain and focus the mind, enabling a Novitiate to shrug off wounds that would otherwise hobble them.\nYou can ignore any changes to the Move stat of friendly NOVITIATE operatives from being injured.",
+   "cp": 1,
+   "fluff": "Whispering a prayer, a Sister Novitiate beseeches the God-Emperor to guide her aim that she may swiftly slay her foe."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "novitiates.eq.icon-of-faith",
+   "name": "ICON OF FAITH",
+   "text": "Once per turning point, you can use up to two ACTS OF FAITH during a sequence, but each one must be different. This takes precedence over the normal ACTS OF FAITH rules.",
+   "fluff": "Holy icons of the Ecclesiarchy hold great significance to the Sisters who bear them, reinforcing their faith in the heart of battle."
+  },
+  {
+   "id": "novitiates.eq.sanctified-rounds",
+   "name": "SANCTIFIED ROUNDS",
+   "text": "Whenever a friendly NOVITIATE operative is shooting with an autogun, autopistol, relic bolt pistol or relic boltgun, if you spend a Faith point, that weapon has the Piercing Crits 1 weapon rule until the end of that sequence.",
+   "fluff": "Anointed with the blood and tears of saints and blessed by high-ranking members of the clergy, this ammunition is anathema to the unholy."
+  },
+  {
+   "id": "novitiates.eq.auto-chastisers",
+   "name": "AUTO-CHASTISERS",
+   "text": "Once per turning point, when a friendly NOVITIATE operative is shooting, fighting or retaliating, in the Roll Attack Dice step, you can inflict 1-3 damage on that friendly operative (but not enough to incapacitate it). If you do, you can use one ACT OF FAITH for free during that sequence with a Faith points cost no more than the damage you inflicted from this rule.",
+   "fluff": "These instruments of self-flagellation inflict blessed agonies upon the bearer, fanning the flames of their blazing zeal."
+  },
+  {
+   "id": "novitiates.eq.holy-embrocations",
+   "name": "HOLY EMBROCATIONS",
+   "text": "You can ignore any changes to the Move stat of friendly NOVITIATE operatives from being injured.",
+   "fluff": "Holy oils and salves dull the pain and focus the mind, enabling a Novitiate to shrug off wounds that would otherwise hobble them."
+  }
+ ],
+ "markerGuide": "Blaze Token\n\nDivine Acquisition Token\n\nWhip Into Frenzy Token\n\nIcon of Faith Token\n\nMedic Token\n\nAuto-Chastisers Token\n\nFaith Points (Values 1 & 2)\n\nAuto-Broadcaster Marker",
+ "notes": [],
+ "rareWeaponRules": [
+  "AntiPSYKER",
+  "Riposte",
+  "ZealousRage"
+ ]
+}

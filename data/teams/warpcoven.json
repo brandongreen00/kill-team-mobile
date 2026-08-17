@@ -1,0 +1,1635 @@
+{
+ "id": "warpcoven",
+ "name": "Warpcoven",
+ "faction": "Thousand Sons",
+ "grandFaction": "Chaos",
+ "archetypes": [
+  "Security",
+  "Recon"
+ ],
+ "booksVersion": "January ’26",
+ "books": [
+  {
+   "book": "Warpcoven",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "January ’26",
+   "lastUpdate": "January 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_28-01_kt_teamrules_warpcoven-mckukwe3zm-ef6onhmf5i.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/warpcoven/",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": null,
+   "datacardId": null,
+   "count": 0,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "fixed",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [],
+   "inList": false
+  },
+  "slots": 5,
+  "totalOperatives": 5,
+  "groups": [
+   {
+    "index": 1,
+    "count": 5,
+    "kind": "list",
+    "roles": [
+     "SORCERER DESTINY",
+     "SORCERER TEMPYRION",
+     "SORCERER WARPFIRE",
+     "RUBRIC MARINE GUNNER",
+     "RUBRIC MARINE ICON BEARER",
+     "RUBRIC MARINE WARRIOR",
+     "TZAANGOR CHAMPION",
+     "TZAANGOR HORN BEARER",
+     "TZAANGOR ICON BEARER",
+     "TZAANGOR WARRIOR"
+    ],
+    "rawText": "5 WARPCOVEN operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "SORCERER DESTINY",
+    "datacardAnchor": "Sorcerer-of-Destiny",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.fn1o1",
+      "label": "Inferno bolt pistol",
+      "weapons": [
+       "Inferno bolt pistol"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o2",
+      "label": "Prosperine khopesh",
+      "weapons": [
+       "Prosperine khopesh"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o3",
+      "label": "Warpflame pistol",
+      "weapons": [
+       "Warpflame pistol"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": "^1",
+    "requires": [],
+    "rawText": "SORCERER DESTINY^1",
+    "group": 1,
+    "datacardId": "warpcoven.sorcerer-of-destiny",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "^1",
+    "alwaysWeapons": [
+     "Doombolt",
+     "Force stave"
+    ]
+   },
+   {
+    "role": "SORCERER TEMPYRION",
+    "datacardAnchor": "Sorcerer-of-Tempyrion",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.fn1o1",
+      "label": "Inferno bolt pistol",
+      "weapons": [
+       "Inferno bolt pistol"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o2",
+      "label": "Prosperine khopesh",
+      "weapons": [
+       "Prosperine khopesh"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o3",
+      "label": "Warpflame pistol",
+      "weapons": [
+       "Warpflame pistol"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": "^1",
+    "requires": [],
+    "rawText": "SORCERER TEMPYRION^1",
+    "group": 1,
+    "datacardId": "warpcoven.sorcerer-of-tempyrion",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "^1",
+    "alwaysWeapons": [
+     "Fluxblast",
+     "Force stave"
+    ]
+   },
+   {
+    "role": "SORCERER WARPFIRE",
+    "datacardAnchor": "Sorcerer-of-Warpfire",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.fn1o1",
+      "label": "Inferno bolt pistol",
+      "weapons": [
+       "Inferno bolt pistol"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o2",
+      "label": "Prosperine khopesh",
+      "weapons": [
+       "Prosperine khopesh"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o3",
+      "label": "Warpflame pistol",
+      "weapons": [
+       "Warpflame pistol"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": "^1",
+    "requires": [],
+    "rawText": "SORCERER WARPFIRE^1",
+    "group": 1,
+    "datacardId": "warpcoven.sorcerer-of-warpfire",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "^1",
+    "alwaysWeapons": [
+     "Firestorm",
+     "Mindburn",
+     "Force stave"
+    ]
+   },
+   {
+    "role": "RUBRIC MARINE GUNNER",
+    "datacardAnchor": "Rubric-Marine-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.g1e4.opt1",
+      "label": "Warpflamer; fists",
+      "weapons": [
+       "Warpflamer",
+       "Fists"
+      ]
+     },
+     {
+      "id": "warpcoven.g1e4.opt2",
+      "label": "Soulreaper cannon^2; fists",
+      "weapons": [
+       "Soulreaper cannon",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "RUBRIC MARINE GUNNER with one of the following options:",
+    "group": 1,
+    "datacardId": "warpcoven.rubric-marine-gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "RUBRIC MARINE ICON BEARER",
+    "datacardAnchor": "Rubric-Marine-Icon-Bearer",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "RUBRIC MARINE ICON BEARER",
+    "group": 1,
+    "datacardId": "warpcoven.rubric-marine-icon-bearer",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Inferno boltgun",
+     "Fists"
+    ]
+   },
+   {
+    "role": "RUBRIC MARINE WARRIOR",
+    "datacardAnchor": "Rubric-Marine-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "RUBRIC MARINE WARRIOR",
+    "group": 1,
+    "datacardId": "warpcoven.rubric-marine-warrior",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Inferno boltgun",
+     "Fists"
+    ]
+   },
+   {
+    "role": "TZAANGOR CHAMPION",
+    "datacardAnchor": "Tzaangor-Champion",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.g1e7.opt1",
+      "label": "Greataxe",
+      "weapons": [
+       "Greataxe"
+      ]
+     },
+     {
+      "id": "warpcoven.g1e7.opt2",
+      "label": "Greatblade",
+      "weapons": [
+       "Greatblade"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 0.5,
+    "footnoteGroup": "^3",
+    "requires": [],
+    "rawText": "TZAANGOR CHAMPION^3 with one of the following options:",
+    "group": 1,
+    "datacardId": "warpcoven.tzaangor-champion",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "TZAANGOR HORN BEARER",
+    "datacardAnchor": "Tzaangor-Horn-Bearer",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 0.5,
+    "footnoteGroup": "^3",
+    "requires": [],
+    "rawText": "TZAANGOR HORN BEARER^3",
+    "group": 1,
+    "datacardId": "warpcoven.tzaangor-horn-bearer",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Dagger"
+    ]
+   },
+   {
+    "role": "TZAANGOR ICON BEARER",
+    "datacardAnchor": "Tzaangor-Icon-Bearer",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 0.5,
+    "footnoteGroup": "^3",
+    "requires": [],
+    "rawText": "TZAANGOR ICON BEARER^3",
+    "group": 1,
+    "datacardId": "warpcoven.tzaangor-icon-bearer",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Dagger"
+    ]
+   },
+   {
+    "role": "TZAANGOR WARRIOR",
+    "datacardAnchor": "Tzaangor-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.g1e10.opt1",
+      "label": "Tzaangor blades",
+      "weapons": [
+       "Tzaangor blades"
+      ]
+     },
+     {
+      "id": "warpcoven.g1e10.opt2",
+      "label": "Tzaangor blade & shield",
+      "weapons": [
+       "Tzaangor blade & shield"
+      ]
+     },
+     {
+      "id": "warpcoven.g1e10.opt3",
+      "label": "Autopistol; chainsword",
+      "weapons": [
+       "Autopistol",
+       "Chainsword"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 0.5,
+    "footnoteGroup": "^3",
+    "requires": [],
+    "rawText": "TZAANGOR WARRIOR^3 with one of the following options:",
+    "group": 1,
+    "datacardId": "warpcoven.tzaangor-warrior",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   }
+  ],
+  "leaderList": [],
+  "constraints": [
+   {
+    "kind": "custom",
+    "text": "You must select at least one friendly SORCERER operative.",
+    "hook": "warpcoven.you-must-select-at-least-one"
+   },
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "WARRIOR"
+    ]
+   },
+   {
+    "kind": "maxItem",
+    "item": "warpflame pistol",
+    "max": 1
+   },
+   {
+    "kind": "maxItem",
+    "item": "soulreaper cannon",
+    "max": 1
+   },
+   {
+    "kind": "halfSelection",
+    "group": "^3",
+    "max": 1
+   }
+  ],
+  "footnotes": {
+   "^1": "With force stave, PSYCHIC weapons on their datacard and one of the following options:",
+   "^2": "Your kill team can only include up to one warpflame pistol and up to one soulreaper cannon.",
+   "^3": "These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total."
+  },
+  "footnoteOptions": {
+   "^1": {
+    "text": "With force stave, PSYCHIC weapons on their datacard and one of the following options:",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "warpcoven.fn1o1",
+      "label": "Inferno bolt pistol",
+      "weapons": [
+       "Inferno bolt pistol"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o2",
+      "label": "Prosperine khopesh",
+      "weapons": [
+       "Prosperine khopesh"
+      ]
+     },
+     {
+      "id": "warpcoven.fn1o3",
+      "label": "Warpflame pistol",
+      "weapons": [
+       "Warpflame pistol"
+      ]
+     }
+    ],
+    "unresolvedFixed": [
+     "force stave, PSYCHIC weapons on their datacard"
+    ]
+   },
+   "^2": {
+    "text": "Your kill team can only include up to one warpflame pistol and up to one soulreaper cannon.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   },
+   "^3": {
+    "text": "These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total.",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": []
+   }
+  },
+  "designerNotes": [],
+  "rawText": "5 WARPCOVEN operatives selected from the following list:\n\nSORCERER DESTINY^1\n\nSORCERER TEMPYRION^1\n\nSORCERER WARPFIRE^1\n\nRUBRIC MARINE GUNNER with one of the following options:\n\nWarpflamer; fists\n\nSoulreaper cannon^2; fists\n\nRUBRIC MARINE ICON BEARER\n\nRUBRIC MARINE WARRIOR\n\nTZAANGOR CHAMPION^3 with one of the following options:\n\nGreataxe\n\nGreatblade\n\nTZAANGOR HORN BEARER^3\n\nTZAANGOR ICON BEARER^3\n\nTZAANGOR WARRIOR^3 with one of the following options:\n\nTzaangor blades\n\nTzaangor blade & shield\n\nAutopistol; chainsword\n\nYou must select at least one friendly SORCERER operative. Other than WARRIOR operatives, your kill team can only include each operative on this list once.\n\n^1With force stave, PSYCHIC weapons on their datacard and one of the following options:\n\nInferno bolt pistol\n\nProsperine khopesh\n\nWarpflame pistol^2\n\n^2Your kill team can only include up to one warpflame pistol and up to one soulreaper cannon.\n\n^3These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total."
+ },
+ "datacards": [
+  {
+   "id": "warpcoven.sorcerer-of-destiny",
+   "teamId": "warpcoven",
+   "name": "Sorcerer of Destiny",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "PSYKER",
+    "SORCERER",
+    "DESTINY"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Doombolt",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 2,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Devastating",
+         "x": 2,
+         "raw": "Devastating 2"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Inferno bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Warpflame pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Force stave",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Prosperine khopesh",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "warpcoven.sorcerer-of-destiny.act.protected-by-fate",
+     "name": "PROTECTED BY FATE",
+     "ap": 1,
+     "text": "PSYCHIC. Select one friendly WARPCOVEN operative visible to this operative. Until the start of this operative’s next activation, until it’s incapacitated or until this action is performed again by a friendly operative (whichever comes first), whenever an operative is shooting that selected operative, you can re-roll any of your defence dice.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "warpcoven.sorcerer-of-destiny.act.ravage-destiny",
+     "name": "RAVAGE DESTINY",
+     "ap": 1,
+     "text": "PSYCHIC. Select one enemy operative visible to and within 9\" of this operative. Until the start of this operative’s next activation, until it’s incapacitated or until this action is performed again by a friendly operative (whichever comes first), whenever that enemy operative is shooting, fighting or retaliating, your opponent must re-roll their attack dice results of 6, and whenever determining control of a marker, treat that enemy operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Sorcerers are the leaders of the Thousand Sons Legion. They control forces of Rubric Marines, having yoked them to their will. Sorcerers direct them like puppeteers as bulwarks against their foes, channelling dark magics of manipulation through their own psychically attuned weapons."
+  },
+  {
+   "id": "warpcoven.sorcerer-of-tempyrion",
+   "teamId": "warpcoven",
+   "name": "Sorcerer of Tempyrion",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "PSYKER",
+    "SORCERER",
+    "TEMPYRION"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Fluxblast",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Inferno bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Warpflame pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Force stave",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Prosperine khopesh",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "warpcoven.sorcerer-of-tempyrion.act.reconstitution-ritual",
+     "name": "RECONSTITUTION RITUAL",
+     "ap": 1,
+     "text": "PSYCHIC. Select one friendly WARPCOVEN operative visible to and within 6\" of this operative. That operative regains up to 2D3 lost wounds.\n\nThis operative cannot perform this action while within control range of an enemy operative, or if a friendly operative has already performed this action during this turning point."
+    },
+    {
+     "id": "warpcoven.sorcerer-of-tempyrion.act.temporal-flux",
+     "name": "TEMPORAL FLUX",
+     "ap": 1,
+     "text": "PSYCHIC. Select one friendly WARPCOVEN operative visible to and within 6\" of this operative and place your Temporal Flux marker within that operative’s control range.\n\nAt the end of that operative’s next activation, if it hasn’t been incapacitated and is still wholly within 6\" of your Temporal Flux marker, remove that operative from the killzone and set it back up in a location it can be placed; when it's set back up, it must have your Temporal Flux marker within its control range (or as close as possible). Then remove your Temporal Flux marker from the killzone. If that operative isn't wholly within 6\" of your Temporal Flux marker (including if it’s incapacitated), remove that marker from the killzone.\n\nThis operative cannot perform this action while within control range of an enemy operative, or if your Temporal Flux marker is currently in the killzone."
+    }
+   ],
+   "fluff": "Sorcerers are the leaders of the Thousand Sons Legion. They control forces of Rubric Marines, having yoked them to their will. Sorcerers direct them like puppeteers as bulwarks against their foes, channelling dark magics of manipulation through their own psychically attuned weapons."
+  },
+  {
+   "id": "warpcoven.sorcerer-of-warpfire",
+   "teamId": "warpcoven",
+   "name": "Sorcerer of Warpfire",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "PSYKER",
+    "SORCERER",
+    "WARPFIRE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Firestorm",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "SeekLight",
+         "raw": "Seek Light"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Inferno bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Mindburn",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 1,
+       "dmgC": 1,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "SeekLight",
+         "raw": "Seek Light"
+        },
+        {
+         "id": "Mindburn",
+         "raw": "Mindburn*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Warpflame pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Force stave",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Prosperine khopesh",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "warpcoven.sorcerer-of-warpfire.mindburn",
+     "name": "Mindburn",
+     "text": "In the Resolve Attack Dice step, if you inflict damage with any critical successes, the operative this weapon is being used against gains one of your Mindburn tokens (if it doesn’t already have one) until the end of its next activation, until it’s incapacitated or until a friendly operative uses this weapon again (whichever comes first). Whenever an operative has one of your Mindburn tokens, worsen the Hit stat of its weapons by 1 (this isn’t cumulative with being injured)."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "warpcoven.sorcerer-of-warpfire.act.alight",
+     "name": "ALIGHT",
+     "ap": 1,
+     "text": "PSYCHIC. Select one enemy operative visible to this operative. Until the start of this operative’s next activation, until it’s incapacitated or until this action is performed again by a friendly operative (whichever comes first), that enemy operative gains one of your Alight tokens (if it doesn’t already have one). Whenever a friendly WARPCOVEN operative is shooting against, fighting against or retaliating against an enemy operative that has one of your Alight tokens, that friendly operative’s weapons have the Ceaseless weapon rule.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Sorcerers are the leaders of the Thousand Sons Legion. They control forces of Rubric Marines, having yoked them to their will. Sorcerers direct them like puppeteers as bulwarks against their foes, channelling dark magics of manipulation through their own psychically attuned weapons."
+  },
+  {
+   "id": "warpcoven.rubric-marine-gunner",
+   "teamId": "warpcoven",
+   "name": "Rubric Marine Gunner",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "RUBRIC MARINE",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 2,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Soulreaper cannon",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Warpflamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "warpcoven.rubric-marine-gunner.sorcerous-automata",
+     "name": "Sorcerous Automata",
+     "text": "Whenever this operative is activated, subtract 1 from its APL stat until the end of that activation, unless a friendly WARPCOVEN SORCERER operative is within 9\" of it."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "With their armour’s servos infused with sorcery, the spirit within a Rubric Marine’s shell easily hefts the heaviest of arcane weapons. Their soulreaper cannons shoot streams of shells alight with magical power, while their warpflamers unleash gouts of iridescent fire."
+  },
+  {
+   "id": "warpcoven.rubric-marine-icon-bearer",
+   "teamId": "warpcoven",
+   "name": "Rubric Marine Icon Bearer",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "RUBRIC MARINE",
+    "ICON BEARER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 2,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Inferno boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "warpcoven.rubric-marine-icon-bearer.sorcerous-automata",
+     "name": "Sorcerous Automata",
+     "text": "Whenever this operative is activated, subtract 1 from its APL stat until the end of that activation, unless a friendly WARPCOVEN SORCERER operative is within 9\" of it."
+    },
+    {
+     "id": "warpcoven.rubric-marine-icon-bearer.icon-bearer",
+     "name": "Icon Bearer",
+     "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Rubric Marines and their masters ultimately serve the schemes of the Chaos God Tzeentch. Some of these arcane warriors bear sorcerous icons of the Changer of the Ways that crawl with coruscating energy, which the Sorcerers can draw upon to enhance their power."
+  },
+  {
+   "id": "warpcoven.rubric-marine-warrior",
+   "teamId": "warpcoven",
+   "name": "Rubric Marine Warrior",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "RUBRIC MARINE",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 2,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Inferno boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "warpcoven.rubric-marine-warrior.sorcerous-automata",
+     "name": "Sorcerous Automata",
+     "text": "Whenever this operative is activated, subtract 1 from its APL stat until the end of that activation, unless a friendly WARPCOVEN SORCERER operative is within 9\" of it."
+    },
+    {
+     "id": "warpcoven.rubric-marine-warrior.slow-and-purposeful",
+     "name": "Slow and Purposeful",
+     "text": "Whenever this operative is shooting, if it hasn’t performed the Charge or Reposition action during the activation, or if it’s a counteraction, its ranged weapons have the Ceaseless weapon rule. Note this operative isn’t restricted from performing these actions after shooting."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Rubric Marine Warriors are animated suits of power armour inhabited by the bound souls of their former occupants. With ruinous proficiency, they steadily fire bursts of eldritch shells from their inferno boltguns, advancing upon their psychic masters’ enemies."
+  },
+  {
+   "id": "warpcoven.tzaangor-champion",
+   "teamId": "warpcoven",
+   "name": "Tzaangor Champion",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "TZAANGOR",
+    "CHAMPION"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 10,
+   "weapons": [
+    {
+     "name": "Greataxe",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Greatblade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "warpcoven.tzaangor-champion.savage-brutality",
+     "name": "Savage Brutality",
+     "text": "The first time this operative performs the Fight action during each of its activations, if it isn’t incapacitated, it can immediately perform a free Fight action afterwards (you don’t have to select the same enemy operative to fight against). This takes precedence over action restrictions."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "These ferocious Tzaangor wield enormous two-handed blades or axes that can cleave enemy warriors in two. It takes fighters with great skill as well as aggression to carry such formidable weapons, and they cause as much terror as they do casualties."
+  },
+  {
+   "id": "warpcoven.tzaangor-horn-bearer",
+   "teamId": "warpcoven",
+   "name": "Tzaangor Horn Bearer",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "TZAANGOR",
+    "HORN BEARER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "warpcoven.tzaangor-horn-bearer.act.brayhorn",
+     "name": "BRAYHORN",
+     "ap": 0,
+     "text": "Until the Ready step of the next Strategy phase, add 1\" to the Move stat of friendly WARPCOVEN TZAANGOR operatives.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Often, a member of a Tzaangor flock will carry a daemonically mawed instrument, the piercing blasts of which stir its fellow creatures into a bestial frenzy. Their shrill cries echo and their horns clatter together as they vie to be first into the fray to hack their victims apart."
+  },
+  {
+   "id": "warpcoven.tzaangor-icon-bearer",
+   "teamId": "warpcoven",
+   "name": "Tzaangor Icon Bearer",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "TZAANGOR",
+    "ICON BEARER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "warpcoven.tzaangor-icon-bearer.herd-banner",
+     "name": "Herd Banner",
+     "text": "Whenever an attack dice inflicts Normal Dmg of 3 or more on a friendly WARPCOVEN TZAANGOR operative that’s visible to and within 3\" of this operative, subtract 1 from that inflicted damage."
+    },
+    {
+     "id": "warpcoven.tzaangor-icon-bearer.icon-bearer",
+     "name": "Icon Bearer",
+     "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Driven by a desire to accumulate arcane knowledge, Tzaangor hope to use such a prize to gain even more favour with Tzeentch. Particularly fervent Tzaangor carry sinuous icons and banners they believe draw their deity’s gaze and mutative blessings."
+  },
+  {
+   "id": "warpcoven.tzaangor-warrior",
+   "teamId": "warpcoven",
+   "name": "Tzaangor Warrior",
+   "keywords": [
+    "WARPCOVEN",
+    "CHAOS",
+    "TZAANGOR",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Tzaangor blade & shield",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Shield",
+         "raw": "Shield*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Tzaangor blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Balanced",
+         "raw": "Balanced"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "warpcoven.tzaangor-warrior.relic-hunters",
+     "name": "Relic Hunters",
+     "text": "Once per battle, one friendly WARPCOVEN TZAANGOR WARRIOR can perform the Pick Up Marker, Place Marker or a mission action for 1 less AP if that friendly operative is within your opponent’s territory."
+    },
+    {
+     "id": "warpcoven.tzaangor-warrior.shield",
+     "name": "Shield",
+     "text": "This operative has a 4+ Save stat, and whenever it’s fighting or retaliating with this weapon, each of your blocks can be allocated to block two unresolved successes (instead of one)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Tzaangor Warriors are mutated fusions of avian beasts and corrupted Humans. In thrall to Tzeentch, they serve the Thousand Sons as bestial shock troops, attacking with savage blows from ritual blades and tearing flesh with their jagged beaks."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "warpcoven.rule.boons-of-tzeentch",
+   "name": "Boons of Tzeentch",
+   "text": "Whenever you select a SORCERER operative for the battle, you must select a BOON OF TZEENTCH (below) for it to have for the battle. You cannot select each BOON OF TZEENTCH more than once per battle.\n\nIncorporeal Sight\n\nThe empyric energies given off by living creatures can be sensed by the Sorcerers of the Thousand Sons.\n\nThis operative’s ranged weapons have the Saturate weapon rule. Whenever this operative is shooting, enemy operatives cannot be obscured.\n\nTime-Walk\n\nThere are few greater boons than mastery over time itself.\n\nAdd 1\" to this operative’s Move stat.\n\nEchoes from the Warp\n\nAn ability to predict the future allows for stronger responses to enemy movement.\n\nOnce per battle, when you counteract with this operative, you can change its order, and it can perform an additional 1AP action for free during that counteraction, but both actions must be different.\n\nWarp Swell\n\nAn influx of warp power grants impetus to melee strikes.\n\nAdd 1 to the Normal Dmg stat of this operative’s melee weapons.\n\nMutant Appendage\n\nHorrific though they may appear, additional limbs are useful indeed.\n\nHaving an enemy operative within this operative’s control range doesn’t prevent it from performing the Pick Up Marker or mission actions. Once per activation, this operative can perform the Pick Up Marker, Place Marker or a mission action for 1 less AP.\n\nImmaterial Flight\n\nThe power of flight renders the recipient highly elusive.\n\nOnce per turning point, when this operative is performing the Charge or Reposition action during its activation, it can FLY. If it does, don’t move it. Instead, remove it from the killzone and set it back up wholly within a distance equal to its Move stat horizontally of its original location. In a killzone that uses the close quarters rules (e.g. Killzone: Tomb World), this distance cannot be measured over or through Wall terrain, and that operative cannot be set up on the other side of an access point (in other words, it cannot FLY through an open hatchway). Note that it gains no additional distance when performing the Charge action. It must be set up in a location it can be placed, and unless it’s the Charge action, it cannot be set up within control range of an enemy operative.\n\nTwist of Fate\n\nWhat greater boon than the ability to bend fate to one’s own will.\n\nThis operative’s PSYCHIC ranged weapons have the Piercing Crits 1 weapon rule.\n\nAstral Bombardment\n\nThe truly blessed drink deeply of the Warp’s entropic power, wielding its destructive energies with abandon.\n\nSelect one of this operative’s PSYCHIC ranged weapons. That weapon has the Devastating 1 weapon rule. If you select a doombolt, it has the 2\" Devastating 2 weapon rule instead of Devastating 2. If you select firestorm or mindburn (SORCERER WARPFIRE), whenever that operative performs the Shoot action, select the Seek Light or Devastating 1 weapon rule for that weapon to have until the end of the action (it cannot have both).\n\nMaster of the Immaterium\n\nThe gift of forbidden arcane knowledge grants the recipient terrible psychic power.\n\nAdd 3\" to the distance requirements of this operative’s PSYCHIC actions that have a distance requirement. Note that for the SORCERER TEMPYRION’s Temporal Flux action, this boon only affects the distance in the first effect of that rule.",
+   "fluff": "Warpcoven Sorcerers are dedicated followers of Tzeentch, and have earned many great boons from their patron deity, from beneficial mutations to diabolical knowledge."
+  },
+  {
+   "id": "warpcoven.rule.astartes",
+   "name": "Astartes",
+   "text": "During each friendly HERETIC ASTARTES operative’s activation, it can perform either two Shoot actions or two Fight actions. If it’s two Shoot actions and a soulreaper cannon or a warpflamer is selected for both, 1 additional AP must be spent for the second action. You cannot select the same PSYCHIC ranged weapon more than once per activation.\n\nEach friendly WARPCOVEN HERETIC ASTARTES operative can counteract regardless of its order.",
+   "fluff": "These genetically modified superhumans are made for one purpose: war."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "warpcoven.sp.aetherial-warding",
+   "name": "AETHERIAL WARDING",
+   "text": "Whenever an operative is shooting a friendly WARPCOVEN operative, weapons with the Piercing 1 weapon rule have the Piercing Crits 1 weapon rule instead.",
+   "cp": 1,
+   "fluff": "The Sorcerers of the Thousand Sons ward their warriors with spells, shielding them with a barrier of empyric force."
+  },
+  {
+   "id": "warpcoven.sp.fate-itself-is-my-weapon",
+   "name": "FATE ITSELF IS MY WEAPON",
+   "text": "Roll two D6 and reserve them (put them to one side). In the Firefight phase of this turning point, whenever an operative is shooting, fighting or retaliating, after you or your opponent roll their attack dice, but before re-rolls, you can use one of your reserved dice to replace one of the D6 rolled for that sequence (yours or your opponent's); that replacement dice cannot be re-rolled or retained as a success if it’s not, and is discarded at the end of that sequence. Then, if the combined result of both reserved dice was less than 9, discard the other dice. You cannot use more than one reserved dice per sequence. Discard any remaining reserved dice at the end of the turning point.",
+   "cp": 1,
+   "fluff": "By manipulating the skeins of fate, a Sorcerer may stay the blade of a foe, or ensure their own warriors land a killing strike."
+  },
+  {
+   "id": "warpcoven.sp.brotherhood-of-sorcerers",
+   "name": "BROTHERHOOD OF SORCERERS",
+   "text": "Friendly WARPCOVEN SORCERER operatives’ PSYCHIC weapons have the Balanced weapon rule, or Ceaseless if another friendly WARPCOVEN SORCERER operative is within 9\" of that operative.",
+   "cp": 1,
+   "fluff": "By forming covens bound by blood and magick, the Sorcerers of the Thousand Sons greatly increase the potency of their psychic powers."
+  },
+  {
+   "id": "warpcoven.sp.savage-herd",
+   "name": "SAVAGE HERD",
+   "text": "Friendly WARPCOVEN TZAANGOR operatives’ melee weapons have the Accurate 1 weapon rule. Whenever a friendly WARPCOVEN TZAANGOR operative is assisted by a friendly WARPCOVEN operative, or is fighting while visible to and within 6\" of a friendly WARPCOVEN SORCERER operative, that friendly WARPCOVEN TZAANGOR operative’s melee weapons also have the Severe weapon rule.\n\nFirefight Ploys\nALL IS DUST\n\nNo longer warriors of flesh and blood, the Rubricae are possessed of an unnatural resilience.\nUse this firefight ploy when an attack dice inflicts Normal Dmg on a friendly WARPCOVEN RUBRIC MARINE operative. That attack dice inflicts 1 damage instead.\n\nCAPRICIOUS PLAN\n\nSorcerers dart from skirmish to firefight in the furtherance of their unknowable schemes, their goals and ambitions indecipherable to even the most insightful of foes.\nUse this firefight ploy at the end of a friendly WARPCOVEN SORCERER operative’s activation. That friendly operative can immediately perform a free Dash action (even if it’s performed an action that prevents it from performing the Dash action), or you can change its order instead.\n\nPSYCHIC CABAL\n\nPooling their power, a coven of Sorcerers may share their learnings, rendering their psychic powers even more deadly.\nUse this firefight ploy when a friendly WARPCOVEN SORCERER operative is activated. Select one other friendly WARPCOVEN SORCERER operative visible to and within 9\" of that operative, then select one of that other friendly operative’s PSYCHIC unique actions or PSYCHIC ranged weapons for that first friendly operative to have until the end of its activation. You cannot select a PSYCHIC ranged weapon that has been used by that other friendly operative during this turning point, and that other friendly operative cannot use the selected weapon during this turning point.\n\nMUTANT HERD\n\nTzaangor herds share an instinctive understanding, coordinating their attacks with eerie precision.\nUse this firefight ploy when a friendly WARPCOVEN TZAANGOR operative is activated. Select one other ready friendly WARPCOVEN TZAANGOR operative visible to and within 2\" of it to activate at the same time. Complete their activations action by action in any order.\n\nFaction Equipment\nENSORCELLED ROUNDS\n\nThe placing of hexes and casting of dark magicks enhance the lethality of autopistol and bolt rounds.\nFriendly WARPCOVEN operatives’ inferno boltguns, inferno bolt pistols and autopistols have the Devastating 1 weapon rule.\n\nDAEMONMAW WEAPONS\n\nThe weapons of the Rubricae have been warped by millennia spent immersed in the immaterium. Daemonic maws erupt around gun muzzles, their razor beaks serving as effective melee weapons.\nAdd 1 to the Atk stat of friendly WARPCOVEN RUBRIC MARINE operatives’ melee weapons. Whenever a friendly WARPCOVEN RUBRIC MARINE operative is retaliating, its melee weapons have the Accurate 1 weapon rule.\n\nARCANE ROBES\n\nPowerful defensive wards in the Sorcerer’s cloaks allow them to deflect attacks, absorbing the force of the most powerful strikes.\nOnce per turning point, whenever an attack dice would inflict Critical Dmg on a friendly WARPCOVEN SORCERER operative, you can use this rule. If you do, that attack dice inflicts Normal Dmg instead.\n\nSORCEROUS SCROLLS\n\nRare and dangerous scrolls from the vaults of Prospero allow the Sorcerers to beseech Tzeentch for even greater power.\nOnce per battle, when a friendly WARPCOVEN SORCERER operative is activated or counteracts, you can select a different BOON OF TZEENTCH for it to have until the end of the battle (it loses any it previously had). It cannot be the same BOON OF TZEENTCH any other friendly operative has. Note that if you use this rule when a friendly operative counteracts and you select Echoes from the Warp, it can be used immediately to change the operative’s order and perform a free action during that counteraction.",
+   "cp": 1,
+   "fluff": "Though bestial of form, the Tzaangor possess great cunning to match their savagery, particularly when fighting in the presence of a powerful Sorcerer."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "warpcoven.fp.all-is-dust",
+   "name": "ALL IS DUST",
+   "text": "Use this firefight ploy when an attack dice inflicts Normal Dmg on a friendly WARPCOVEN RUBRIC MARINE operative. That attack dice inflicts 1 damage instead.",
+   "cp": 1,
+   "fluff": "No longer warriors of flesh and blood, the Rubricae are possessed of an unnatural resilience."
+  },
+  {
+   "id": "warpcoven.fp.capricious-plan",
+   "name": "CAPRICIOUS PLAN",
+   "text": "Use this firefight ploy at the end of a friendly WARPCOVEN SORCERER operative’s activation. That friendly operative can immediately perform a free Dash action (even if it’s performed an action that prevents it from performing the Dash action), or you can change its order instead.",
+   "cp": 1,
+   "fluff": "Sorcerers dart from skirmish to firefight in the furtherance of their unknowable schemes, their goals and ambitions indecipherable to even the most insightful of foes."
+  },
+  {
+   "id": "warpcoven.fp.psychic-cabal",
+   "name": "PSYCHIC CABAL",
+   "text": "Use this firefight ploy when a friendly WARPCOVEN SORCERER operative is activated. Select one other friendly WARPCOVEN SORCERER operative visible to and within 9\" of that operative, then select one of that other friendly operative’s PSYCHIC unique actions or PSYCHIC ranged weapons for that first friendly operative to have until the end of its activation. You cannot select a PSYCHIC ranged weapon that has been used by that other friendly operative during this turning point, and that other friendly operative cannot use the selected weapon during this turning point.",
+   "cp": 1,
+   "fluff": "Pooling their power, a coven of Sorcerers may share their learnings, rendering their psychic powers even more deadly."
+  },
+  {
+   "id": "warpcoven.fp.mutant-herd",
+   "name": "MUTANT HERD",
+   "text": "Use this firefight ploy when a friendly WARPCOVEN TZAANGOR operative is activated. Select one other ready friendly WARPCOVEN TZAANGOR operative visible to and within 2\" of it to activate at the same time. Complete their activations action by action in any order.\n\nFaction Equipment\nENSORCELLED ROUNDS\n\nThe placing of hexes and casting of dark magicks enhance the lethality of autopistol and bolt rounds.\nFriendly WARPCOVEN operatives’ inferno boltguns, inferno bolt pistols and autopistols have the Devastating 1 weapon rule.\n\nDAEMONMAW WEAPONS\n\nThe weapons of the Rubricae have been warped by millennia spent immersed in the immaterium. Daemonic maws erupt around gun muzzles, their razor beaks serving as effective melee weapons.\nAdd 1 to the Atk stat of friendly WARPCOVEN RUBRIC MARINE operatives’ melee weapons. Whenever a friendly WARPCOVEN RUBRIC MARINE operative is retaliating, its melee weapons have the Accurate 1 weapon rule.\n\nARCANE ROBES\n\nPowerful defensive wards in the Sorcerer’s cloaks allow them to deflect attacks, absorbing the force of the most powerful strikes.\nOnce per turning point, whenever an attack dice would inflict Critical Dmg on a friendly WARPCOVEN SORCERER operative, you can use this rule. If you do, that attack dice inflicts Normal Dmg instead.\n\nSORCEROUS SCROLLS\n\nRare and dangerous scrolls from the vaults of Prospero allow the Sorcerers to beseech Tzeentch for even greater power.\nOnce per battle, when a friendly WARPCOVEN SORCERER operative is activated or counteracts, you can select a different BOON OF TZEENTCH for it to have until the end of the battle (it loses any it previously had). It cannot be the same BOON OF TZEENTCH any other friendly operative has. Note that if you use this rule when a friendly operative counteracts and you select Echoes from the Warp, it can be used immediately to change the operative’s order and perform a free action during that counteraction.",
+   "cp": 1,
+   "fluff": "Tzaangor herds share an instinctive understanding, coordinating their attacks with eerie precision."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "warpcoven.eq.ensorcelled-rounds",
+   "name": "ENSORCELLED ROUNDS",
+   "text": "Friendly WARPCOVEN operatives’ inferno boltguns, inferno bolt pistols and autopistols have the Devastating 1 weapon rule.",
+   "fluff": "The placing of hexes and casting of dark magicks enhance the lethality of autopistol and bolt rounds."
+  },
+  {
+   "id": "warpcoven.eq.daemonmaw-weapons",
+   "name": "DAEMONMAW WEAPONS",
+   "text": "Add 1 to the Atk stat of friendly WARPCOVEN RUBRIC MARINE operatives’ melee weapons. Whenever a friendly WARPCOVEN RUBRIC MARINE operative is retaliating, its melee weapons have the Accurate 1 weapon rule.",
+   "fluff": "The weapons of the Rubricae have been warped by millennia spent immersed in the immaterium. Daemonic maws erupt around gun muzzles, their razor beaks serving as effective melee weapons."
+  },
+  {
+   "id": "warpcoven.eq.arcane-robes",
+   "name": "ARCANE ROBES",
+   "text": "Once per turning point, whenever an attack dice would inflict Critical Dmg on a friendly WARPCOVEN SORCERER operative, you can use this rule. If you do, that attack dice inflicts Normal Dmg instead.",
+   "fluff": "Powerful defensive wards in the Sorcerer’s cloaks allow them to deflect attacks, absorbing the force of the most powerful strikes."
+  },
+  {
+   "id": "warpcoven.eq.sorcerous-scrolls",
+   "name": "SORCEROUS SCROLLS",
+   "text": "Once per battle, when a friendly WARPCOVEN SORCERER operative is activated or counteracts, you can select a different BOON OF TZEENTCH for it to have until the end of the battle (it loses any it previously had). It cannot be the same BOON OF TZEENTCH any other friendly operative has. Note that if you use this rule when a friendly operative counteracts and you select Echoes from the Warp, it can be used immediately to change the operative’s order and perform a free action during that counteraction.",
+   "fluff": "Rare and dangerous scrolls from the vaults of Prospero allow the Sorcerers to beseech Tzeentch for even greater power."
+  }
+ ],
+ "markerGuide": "",
+ "notes": [
+  "SORCERER DESTINY: footnote ^1 also grants ['force stave, PSYCHIC weapons on their datacard'] — not a named datacard weapon, left for the team module",
+  "SORCERER TEMPYRION: footnote ^1 also grants ['force stave, PSYCHIC weapons on their datacard'] — not a named datacard weapon, left for the team module",
+  "SORCERER WARPFIRE: footnote ^1 also grants ['force stave, PSYCHIC weapons on their datacard'] — not a named datacard weapon, left for the team module",
+  "no datacard in this team carries the LEADER keyword — the leader is not marked on the source page"
+ ],
+ "rareWeaponRules": [
+  "Mindburn",
+  "PSYCHIC",
+  "Shield"
+ ]
+}

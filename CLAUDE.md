@@ -1,62 +1,108 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code sessions in this repository. **Read this in full before changing anything**,
+then `docs/PROGRESS.md` (what is done / next) and `docs/DECISIONS.md` (every judgement call).
 
 ## Project
 
-A static, client-only web app for playing Warhammer 40K Kill Team on a phone. Pure HTML/CSS/JS — no framework, no bundler, no package manager. The repo IS the deployable site: `.github/workflows/deploy-pages.yml` uploads the repo root to GitHub Pages on every push to `main`.
+A phone-first **and** desktop-friendly digital tabletop for **Warhammer 40,000 Kill Team, 3rd edition
+(KT24)** — current rules = Core Book June 2026 + Approved Ops 2025. Static build, deployed to GitHub
+Pages. No server, no runtime network access: all rules/map/team data is bundled at build time.
+
+The repository is mid-overhaul from a plain-JS app to TypeScript + Vite. The old app lives in
+`public/legacy/` and ships at `/kill-team-mobile/legacy/` until the new app reaches setup → deploy →
+shoot/fight → scoring parity; it is deleted in the final QA phase.
 
 ## Commands
 
-There is no build, install, or test runner. To work on the app:
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | Vite dev server |
+| `pnpm build` | Production build into `dist/` (this is what Pages deploys) |
+| `pnpm typecheck` | `tsc --noEmit`, strict |
+| `pnpm test` | Vitest unit + acceptance tests |
+| `pnpm lint:rng` | Fails if `Math.random` appears outside `src/core/rng.ts` |
+| `pnpm e2e` | Playwright smoke on phone + desktop viewports |
+| `pnpm maps:extract` | Re-extract `data/maps/**` from the official Approved Ops card PNGs |
+| `pnpm maps:overlay` | Render extraction overlays into `docs/maps/overlays/` for visual review |
+| `pnpm teams:scrape` / `pnpm teams:normalise` | Rebuild `data/teams/**` from Wahapedia (build-time only) |
 
-- **Run locally**: open `index.html` in a browser, or serve the repo root with any static server (e.g. `python3 -m http.server`). Opening `game.html` directly via `file://` works but `sessionStorage` is unavailable in some headless contexts — `game.js` already falls back to the default `tomb-1` map in that case.
-- **Lint / CI check**: `.github/workflows/pr-check.yml` runs `node --check` on every tracked `*.js` file and verifies tracked `*.html` files are non-empty. Reproduce locally with `for f in $(git ls-files '*.js'); do node --check "$f" || echo "FAIL $f"; done`. That is the entire test suite.
-- **Deploy**: automatic on push to `main`. There is no staging.
+CI (`.github/workflows/pr-check.yml`) runs typecheck → rng lint → tests → build, and asserts both
+`dist/index.html` and `dist/legacy/index.html` exist.
 
-## Architecture
+## Non-negotiable architecture rules
 
-### Page → script topology
+1. **The rules core is pure.** Everything under `src/core/` is deterministic TypeScript with no DOM,
+   React or I/O imports. It is the only code allowed to mutate game state, and only through validated
+   **intents**: `reduce(state, intent, ctx)`. UI and AI drive it through the same channel. **Illegal
+   intents are rejected into `state.rejected` + the log — never thrown.** Acceptance tests assert the
+   rejected count is zero for AI-driven games.
+2. **Seeded, injectable RNG.** `src/core/rng.ts`. A battle replays byte-identically from
+   `(rosters, map, seed, intents[])`. `pnpm lint:rng` enforces it.
+3. **Reactive windows are first class.** The reducer emits `PendingDecision { who, kind, options }`
+   and blocks until an intent resolves it: rerolls (Ceaseless/Balanced/Relentless/Command Re-roll),
+   cover-vs-obscured, defence allocation, strike-or-block, On Guard interrupts, firefight ploys.
+   Never add a rule that assumes the active player does everything.
+4. **Distances are inches, base-to-base.** `gap(a,b) = max(0, dist(centres) − r_a − r_b)`; ovals are
+   modelled as ellipses with facing. Base sizes are stored in mm and converted once
+   (`MM_PER_INCH = 25.4`). **Board origin is bottom-left, +y up**, x along the long edge — the y-flip
+   happens exactly once, in `src/ui/Board.tsx`'s `worldTransform`.
+5. **Rules as data + hooks.** The kernel knows no faction. Team rules, ploys, equipment, killzone
+   rules and ops register typed handlers in `src/core/hooks.ts`. An unknown hook name is a build
+   error (`assertHookName`); an unknown weapon rule is a data-lint failure
+   (`assertKnownRules`). Never a silent no-op.
+6. **Terrain is 2.5D.** Every terrain *part* is an extruded polygon `{ poly, z0, z1, types }`.
+   Visibility, cover, obscured, climb/drop/jump, Vantage and Ceiling all read that one model.
+7. **Everything the player sees derives from state.** No hidden mutable module variables.
+8. **Tests are the spec.** Every rule test quotes the rule text it pins.
 
-Each HTML page is a screen. They share `styles.css` and load only the JS they need; load order matters because everything communicates through two browser globals, `window.KT` (board/map data) and `window.KT_RULES` (rules math):
+## Layout
 
-| Page | Scripts (in order) | Role |
-| --- | --- | --- |
-| `index.html` | — | Main menu, links only |
-| `maps.html` | `maps-data.js` | Pick a battlefield, writes `sessionStorage['kt.mapId']` |
-| `map-creator.html` | `maps-data.js`, `map-creator.js` | Canvas-based editor; saves custom maps to `localStorage['kt.customMaps']` via `KT.saveCustomMap` |
-| `roster.html` | `factions.js`, `presets.js` (inline script) | Build kill teams; saves to `localStorage['kt.rosters.v1']`; faction cards offer one-tap preset loadouts |
-| `game.html` | `factions.js`, `presets.js`, `tacops.js`, `maps-data.js`, `rules.js`, `game.js`, `ai.js` | The actual game runtime (incl. solo mode vs the AI) |
+```
+src/core/       pure rules core — types, rng, geometry, terrain, visibility, movement, dice,
+                weaponRules, actions, phases, reducer, decisions, hooks, context, init,
+                sequences/{shoot,fight}.ts, ops/*, equipment/*
+src/teams/      one module per kill team: rules/ploys/equipment/unique actions as hooks (+ tests)
+src/ai/         legal-intent enumeration, evaluation, search
+src/ui/         Preact app: App, Board (SVG), dice overlays, flow screens
+data/           maps/, terrain/, teams/, ops/, equipment/ — generated, committed
+tools/          maps/ (card extraction), teams/ (scrape+normalise), lint/
+tests/          vitest;  e2e/  playwright
+docs/           PROGRESS.md DECISIONS.md TEAM-STATUS.md RULES-COVERAGE.md MAPS.md UI.md AI.md
+```
 
-`game.js` reads the chosen map from `sessionStorage['kt.mapId']` and the rosters players pick from `localStorage['kt.rosters.v1']`. There is no server, no API, no auth — all state is per-browser.
+## How to…
 
-### Module responsibilities
+**Add a kill team.** `data/teams/<slug>.json` (from `pnpm teams:scrape && pnpm teams:normalise`),
+then `src/teams/<slug>/index.ts` exporting a `TeamModule` that registers faction rules, 4 strategy
+ploys, 4 firefight ploys, 4 equipment options and unique actions as hooks, plus
+`src/teams/<slug>/<slug>.test.ts` with one test per rule quoting its text. Update
+`docs/TEAM-STATUS.md`. Rare weapon rules go through `registerRareWeaponRule`.
 
-- **`factions.js`** — `window.FACTIONS` array. **Vendored from `brandongreen00/ballistica-imperialis` (`src/data/factions.js`)**, sourced from wahapedia.ru/kill-team3. Treat it as data, not code: prefer pulling updates from upstream over hand-editing. Schema is documented in the file header (operatives, weapons, ploys, equipment, attacker/defender effect IDs).
-- **`rules.js`** — Pure Kill Team rule math, no DOM. Exposes `window.KT_RULES`: dice (`rollAttack`, `rollDefence`, `allocateSavesOptimally`), weapon-rule parsing (`parseWeaponRules`), LoS / cover (`shootEnv`, `lightCoverIntervening`, `losBlockedByWalls`), action validation (`validateReposition`/`Dash`/`Charge`/`FallBack`), and `KT_RULES.constants` for all magic numbers (engagement range, AP costs, dash inches, etc.). Add new mechanics here if they have no UI.
-- **`maps-data.js`** — `window.KT`. Owns the 28"×24" Tomb-World board geometry, the built-in `TOMB_MAPS`, the piece-based map model (`PIECES`, `compileMap`, `compilePieces` → walls + terrain + objectives + deploy zones), and custom map persistence. The `compileMap` step converts the authored `pieces` array into the runtime `walls` / `terrain` arrays the game and rules consume.
-- **`map-creator.js`** — Canvas editor that writes the same piece-based map shape; `KT.saveCustomMap` round-trips through `localStorage`.
-- **`presets.js`** — `window.KT_PRESETS`: community-best-loadout preset rosters (same shape as saved rosters; weapon choices may be arrays for multi-weapon loadouts). Selectable directly on game.html's team picker and importable in roster.html.
-- **`tacops.js`** — `window.KT_OPS`: the faction→archetype map (all 44 teams, wahapedia-verified), 8 automatable universal Tac Ops (2 per archetype), and the Secure/Loot/Transmission crit ops. Data + pure helpers only; scoring lives in game.js's ops engine.
-- **`ai.js`** — `window.KT_AI`, the solo-mode opponent. Runs on a heartbeat, driving the game through `window.__kt_ai_api` (a narrow surface exported by game.js) so every AI action goes through the same validation as human input. Movement uses a 0.5" Dijkstra reachability field over `effectiveWalls`. Tuned defaults target the Plague Marines preset.
-- **`game.js`** — Everything else: roster→unit construction, the `state` machine (`teams → initiative → deploy → combat → over`), the per-TP strategy sequence (initiative roll-off, CP, ploys sheet), the ops engine (crit op + tac op scoring, mission actions), Guard/Counteract flows, canvas rendering, the activation panel, shoot/fight modals, and VP scoring. Single closure, single `state` object; UI is rerendered from state.
+**Re-extract maps.** `pnpm maps:extract && pnpm maps:overlay`, then review
+`docs/maps/overlays/*.png` against the source cards and update the QA table in `docs/MAPS.md`.
+Terrain heights live in `data/terrain/<killzone>.json` with `provenance` + `confidence`; the engine
+must never hard-code a height.
 
-### Testing beyond `node --check`
+**Run an AI soak.** `pnpm soak` plays bot-vs-bot games across maps and asserts zero rejected intents
+and no exceptions.
 
-`tools/ui-review/` has a Playwright harness (needs `npm install` there once):
-- `npm run capture` — screenshots + axe audits of every screen across phone profiles.
-- `node ai-test.mjs` — headless AI soak: plays a full 4-TP game (AI Red vs a scripted passive Blue) and reports page errors, movement, and scoring.
-- `game.js` exposes `window.__kt_test` (jump straight to combat states) and `window.__kt_ai_api` (the AI's action surface) for scripting.
+## Rules invariants worth remembering
 
-### Coordinate system & key invariants
+- 4 turning points; Strategy phase (Initiative → Ready → Gambit) then Firefight phase.
+- CP: 2 at Select Operatives, then 1/TP each, 2/TP for the player without initiative from TP2.
+- APL changes clamp to ±1; Move can never be reduced below 4"; injured = −2" Move and Hit worsened 1.
+- Control range = **visible to and within 1"**, mutual. Cover is denied within 2" of the shooter.
+  Obscured ignores Heavy terrain within 1" of *either* operative.
+- Counteract: expended Engage operative, one free 1AP action excluding Guard, ≤2" move, once per TP,
+  and it is **not** an activation (so action restrictions do not apply).
+- **Close Quarters (Condensed Environment, Guard/On Guard, Hatchway Fight) is gated to Gallowdark AND
+  Tomb World** — `map.closeQuarters` (owner decision, `docs/DECISIONS.md` D-002). Do not make Guard
+  universal.
+- Objective markers are 40mm; all other markers 20mm.
 
-- **All distances are in inches.** The board is 28×24, drawn on a 720×720 canvas — never mix pixel and inch units in game logic.
-- **Team A = Blue (orange map half), Team B = Red (grey map half).** Display palette in `game.js` (`TEAM_INFO`); the deployment half is determined by `map.split` (`'vertical'` or `'horizontal'`) in `maps-data.js`'s `deployZone`.
-- **Operative bases** carry `{ d }` (round, mm) or `{ w, h }` (oval, mm). Convert via `MM_PER_INCH = 25.4`. Round bases render as circles; ovals are currently always drawn long-axis-horizontal regardless of facing.
-- **Walls vs. terrain** — Walls block LoS and movement (full cover). Terrain pieces give light cover when intervening AND within 1" of the target, unless the target is within 2" of the shooter (`COVER_FAR_THRESHOLD`). Hatchways/breaches mutate the wall set at runtime via `state.combat.pieceState.open`; always feed `effectiveWalls(map, openPieces)` into LoS checks rather than reading `map.walls` directly.
-- **Game structure** — 4 turning points (`KT_RULES.constants.MAX_TURNING_POINTS`); per-TP initiative roll-off (ties go to the player without initiative); CP: 2 at battle start + 1/TP, 2/TP for the non-initiative player from TP2. Movement legs round UP to whole inches.
-- **Letter codes** in `assignLetters` keep operative letters unique within a team; duplicates become `T1`, `T2`, etc. Don't rely on `unit.letter` being stable across reorderings.
+## IP
 
-### When changing rules vs. UI
-
-Rule changes that should be testable in isolation belong in `rules.js` (no DOM access; consume via `KT_RULES`). UI flows, modals, canvas rendering, and the phase machine belong in `game.js`. New constants go in `KT_RULES.constants` so both layers see the same number.
+Public repo, MIT licence on the code. Game data needed to run the app (stats, names, short rule text)
+is vendored as the previous app did; **raw Wahapedia HTML and long verbatim rules dumps are
+gitignored** (`docs/context-pack/`, `docs/rules-source/`). Personal, non-commercial use.

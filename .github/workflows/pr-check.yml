@@ -3,42 +3,28 @@ name: PR Check
 on:
   pull_request:
     branches: [main]
+  push:
+    branches-ignore: [main]
 
 jobs:
-  syntax:
-    name: JS / HTML syntax
+  checks:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-
-      - name: Check JavaScript syntax
-        run: |
-          set -e
-          shopt -s nullglob
-          fail=0
-          for f in $(git ls-files '*.js'); do
-            echo "checking $f"
-            if ! node --check "$f"; then fail=1; fi
-          done
-          if [ "$fail" -ne 0 ]; then
-            echo "::error::One or more JS files failed node --check"
-            exit 1
-          fi
-
-      - name: Check HTML files exist and are non-empty
-        run: |
-          set -e
-          missing=0
-          for f in $(git ls-files '*.html'); do
-            if [ ! -s "$f" ]; then
-              echo "::error file=$f::HTML file is empty"
-              missing=1
-            fi
-          done
-          exit "$missing"
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Determinism lint (no Math.random outside rng.ts)
+        run: pnpm lint:rng
+      - name: Unit tests
+        run: pnpm test
+      - name: Build
+        run: pnpm build
+      - name: Legacy app still ships
+        run: test -s dist/legacy/index.html

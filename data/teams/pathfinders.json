@@ -1,0 +1,1713 @@
+{
+ "id": "pathfinders",
+ "name": "Pathfinders",
+ "faction": "T’au Empire",
+ "grandFaction": "Xenos",
+ "archetypes": [
+  "Infiltration",
+  "Recon"
+ ],
+ "booksVersion": "January ’26",
+ "books": [
+  {
+   "book": "Pathfinders",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "January ’26",
+   "lastUpdate": "January 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_28-01_kt_teamrules_pathfinders-vpiombenfv-fobu7lopgx.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/pathfinders/",
+ "scrapedAt": "2026-08-17T04:08:59+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "SHAS’UI",
+   "datacardId": "pathfinders.shas-ui-pathfinder",
+   "count": 1,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "fixed",
+   "fixedWeapons": [],
+   "alwaysWeapons": [
+    "Pulse carbine",
+    "Gun butt"
+   ],
+   "choices": [
+    "SHAS’UI"
+   ],
+   "inList": false
+  },
+  "slots": 11,
+  "totalOperatives": 12,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "SHAS’UI"
+    ],
+    "rawText": "1 PATHFINDER SHAS’UI operative"
+   },
+   {
+    "index": 2,
+    "count": 11,
+    "kind": "list",
+    "roles": [
+     "ASSAULT GRENADIER",
+     "BLOODED",
+     "COMMS SPECIALIST",
+     "DRONE CONTROLLER",
+     "MARKSMAN",
+     "MEDICAL TECHNICIAN",
+     "SHAS’LA",
+     "TRANSPECTRAL INTERFERENCE",
+     "WEAPONS EXPERT",
+     "MB3 RECON DRONE",
+     "MV31 PULSE ACCELERATOR DRONE",
+     "MV33 GRAV-INHIBITOR DRONE",
+     "MV1 GUN DRONE",
+     "MV4 SHIELD DRONE",
+     "MV7 MARKER DRONE"
+    ],
+    "rawText": "11 PATHFINDER operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "ASSAULT GRENADIER",
+    "datacardAnchor": "Assault-Grenadier-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ASSAULT GRENADIER",
+    "group": 2,
+    "datacardId": "pathfinders.assault-grenadier-pathfinder",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Fusion grenade",
+     "Pulse carbine",
+     "Gun butt"
+    ]
+   },
+   {
+    "role": "BLOODED",
+    "datacardAnchor": "Blooded-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BLOODED",
+    "group": 2,
+    "datacardId": "pathfinders.blooded-pathfinder",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Suppressed pulse carbine",
+     "Bionic arm"
+    ]
+   },
+   {
+    "role": "COMMS SPECIALIST",
+    "datacardAnchor": "Comms-Specialist-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "COMMS SPECIALIST",
+    "group": 2,
+    "datacardId": "pathfinders.comms-specialist-pathfinder",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Pulse carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "DRONE CONTROLLER",
+    "datacardAnchor": "Drone-Controller-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DRONE CONTROLLER",
+    "group": 2,
+    "datacardId": "pathfinders.drone-controller-pathfinder",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Pulse carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "MARKSMAN",
+    "datacardAnchor": "Marksman-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MARKSMAN",
+    "group": 2,
+    "datacardId": "pathfinders.marksman-pathfinder",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Marksman rail rifle",
+     "Gun butt"
+    ]
+   },
+   {
+    "role": "MEDICAL TECHNICIAN",
+    "datacardAnchor": "Medical-Technician-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MEDICAL TECHNICIAN",
+    "group": 2,
+    "datacardId": "pathfinders.medical-technician-pathfinder",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Pulse carbine",
+     "Gun butt"
+    ]
+   },
+   {
+    "role": "SHAS’LA",
+    "datacardAnchor": "Shas-la-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SHAS’LA",
+    "group": 2,
+    "datacardId": "pathfinders.shas-la-pathfinder",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": [
+     "Pulse carbine",
+     "Gun butt"
+    ]
+   },
+   {
+    "role": "TRANSPECTRAL INTERFERENCE",
+    "datacardAnchor": "Transpectral-Interference-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "TRANSPECTRAL INTERFERENCE",
+    "group": 2,
+    "datacardId": "pathfinders.transpectral-interference-pathfinder",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Pulse carbine",
+     "Gun butt"
+    ]
+   },
+   {
+    "role": "WEAPONS EXPERT",
+    "datacardAnchor": "Weapons-Expert-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [
+     "Fists"
+    ],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "pathfinders.g2e9.opt1",
+      "label": "Ion rifle; gun butt",
+      "weapons": [
+       "Ion rifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "pathfinders.g2e9.opt2",
+      "label": "Rail rifle; gun butt",
+      "weapons": [
+       "Rail rifle",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WEAPONS EXPERT equipped with fists and one of the following:",
+    "group": 2,
+    "datacardId": "pathfinders.weapons-expert-pathfinder",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "MB3 RECON DRONE",
+    "datacardAnchor": "MB3-Recon-Drone",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 2,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MB3 RECON DRONE (counts as two selections)",
+    "group": 2,
+    "datacardId": "pathfinders.mb3-recon-drone",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Burst cannon",
+     "Ram"
+    ]
+   },
+   {
+    "role": "MV31 PULSE ACCELERATOR DRONE",
+    "datacardAnchor": "MV31-Pulse-Accelerator-Drone",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MV31 PULSE ACCELERATOR DRONE",
+    "group": 2,
+    "datacardId": "pathfinders.mv31-pulse-accelerator-drone",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Ram"
+    ]
+   },
+   {
+    "role": "MV33 GRAV-INHIBITOR DRONE",
+    "datacardAnchor": "MV33-Grav-inhibitor-Drone",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MV33 GRAV-INHIBITOR DRONE",
+    "group": 2,
+    "datacardId": "pathfinders.mv33-grav-inhibitor-drone",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Ram"
+    ]
+   },
+   {
+    "role": "MV1 GUN DRONE",
+    "datacardAnchor": "MV1-Gun-Drone",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MV1 GUN DRONE",
+    "group": 2,
+    "datacardId": "pathfinders.mv1-gun-drone",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Twin pulse carbine",
+     "Ram"
+    ]
+   },
+   {
+    "role": "MV4 SHIELD DRONE",
+    "datacardAnchor": "MV4-Shield-Drone",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MV4 SHIELD DRONE",
+    "group": 2,
+    "datacardId": "pathfinders.mv4-shield-drone",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Ram"
+    ]
+   },
+   {
+    "role": "MV7 MARKER DRONE",
+    "datacardAnchor": "MV7-Marker-Drone",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MV7 MARKER DRONE",
+    "group": 2,
+    "datacardId": "pathfinders.mv7-marker-drone",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Ram"
+    ]
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "SHAS’UI",
+    "datacardAnchor": "Shas-ui-Pathfinder",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 PATHFINDER SHAS’UI operative",
+    "group": 1,
+    "datacardId": "pathfinders.shas-ui-pathfinder",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Pulse carbine",
+     "Gun butt"
+    ]
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "SHAS’LA",
+     "WEAPONS EXPERT"
+    ]
+   },
+   {
+    "kind": "maxCount",
+    "role": "WEAPONS EXPERT",
+    "max": 2
+   }
+  ],
+  "footnotes": {},
+  "footnoteOptions": {},
+  "designerNotes": [
+   "Some PATHFINDER rules refer to a ‘pulse weapon’. The following weapons are pulse weapons: burst cannon, pulse carbine, suppressed pulse carbine, twin pulse carbine."
+  ],
+  "rawText": "1 PATHFINDER SHAS’UI operative\n\n11 PATHFINDER operatives selected from the following list:\n\nASSAULT GRENADIER\n\nBLOODED\n\nCOMMS SPECIALIST\n\nDRONE CONTROLLER\n\nMARKSMAN\n\nMEDICAL TECHNICIAN\n\nSHAS’LA\n\nTRANSPECTRAL INTERFERENCE\n\nWEAPONS EXPERT equipped with fists and one of the following:\n\nIon rifle; gun butt\n\nRail rifle; gun butt\n\nMB3 RECON DRONE (counts as two selections)\n\nMV31 PULSE ACCELERATOR DRONE\n\nMV33 GRAV-INHIBITOR DRONE\n\nMV1 GUN DRONE\n\nMV4 SHIELD DRONE\n\nMV7 MARKER DRONE\n\nOther than SHAS’LA and WEAPONS EXPERT operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two WEAPONS EXPERT operatives."
+ },
+ "datacards": [
+  {
+   "id": "pathfinders.shas-ui-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Shas’ui Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "LEADER",
+    "SHAS’UI"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Pulse carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.shas-ui-pathfinder.art-of-war",
+     "name": "Art of War",
+     "text": "STRATEGIC GAMBIT if this operative is in the killzone. Select one of the following and apply its rules until the end of the turning point. You cannot select each option more than once per battle:\n\nMont’ka: Add 1\" to the Move stat of friendly PATHFINDER operatives.\n\nKauyon: Friendly PATHFINDER operatives can perform a free Markerlight action during their activation if they have a Conceal order."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.shas-ui-pathfinder.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    }
+   ],
+   "fluff": "Shas’ui Pathfinders are veteran warriors who have fought in many campaigns. They have passed dangerous trials of fire to reach the rank, and are dynamic and accomplished tacticians more than capable of leading their team to victory."
+  },
+  {
+   "id": "pathfinders.shas-la-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Shas’la Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "SHAS’LA"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Pulse carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.shas-la-pathfinder.group-activation",
+     "name": "Group Activation",
+     "text": "Whenever this operative is expended, you must then activate one other ready friendly PATHFINDER SHAS’LA operative (if able) before your opponent activates. When that other operative is expended, your opponent then activates as normal (in other words, you cannot activate more than two operatives in succession with this rule)."
+    },
+    {
+     "id": "pathfinders.shas-la-pathfinder.fearless-on-the-frontline",
+     "name": "Fearless on the Frontline",
+     "text": "This operative can perform the Markerlight action while within control range of an enemy operative (taking precedence over the Markerlight action’s normal conditions). In addition, this operative can perform the Fall Back action for 1 less AP."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.shas-la-pathfinder.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    }
+   ],
+   "fluff": "Even the rank-and-file of Pathfinder teams are selfless adherents to the Greater Good, eagerly volunteering themselves for the most dangerous missions. They operate close to the enemy to learn all they can of them, as well as engaging them when necessary."
+  },
+  {
+   "id": "pathfinders.blooded-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Blooded Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "BLOODED"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Suppressed pulse carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bionic arm",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.blooded-pathfinder.veteran",
+     "name": "Veteran",
+     "text": "During a turning point in which you have used a friendly SHAS’UI operative’s Art of War STRATEGIC GAMBIT and you selected Mont’ka, this operative can use Kauyon instead during its activation (and vice versa)."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.blooded-pathfinder.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    }
+   ],
+   "fluff": "Many experienced and respected Pathfinders earn the personal name of Mont’yr, which translates as ‘Blooded’. Many bear highly advanced bionics in place of lost limbs, and are entrusted with specialist technology such as suppressed weapons."
+  },
+  {
+   "id": "pathfinders.drone-controller-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Drone Controller Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "DRONE CONTROLLER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Pulse carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.drone-controller-pathfinder.drone-controller",
+     "name": "Drone Controller",
+     "text": "Whenever this operative is in the killzone:\n\nAdd 2\" to the Move stat of friendly PATHFINDER DRONE operatives.\n\nThe Saviour Protocols firefight ploy costs you 0CP."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.drone-controller-pathfinder.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    },
+    {
+     "id": "pathfinders.drone-controller-pathfinder.act.remote-pilot",
+     "name": "REMOTE PILOT",
+     "ap": 1,
+     "text": "One friendly PATHFINDER DRONE operative can immediately perform one free action, but it cannot move more than 2\" during that action. That action can be one that’s normally restricted by its Drone rule (this takes precedence over that rule).\n\nThis operative cannot perform this action while within control range of an enemy operative. This operative can perform this action more than once during its activation, but if it does, the same DRONE operative cannot perform the same free action more than once per activation."
+    }
+   ],
+   "fluff": "Drone Controller Pathfinders receive additional training in remote piloting the drones that frequently accompany their teams. With careful work and patience they can manipulate a drone to carry out complex tasks that the drones cannot complete using solely their programming."
+  },
+  {
+   "id": "pathfinders.transpectral-interference-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Transpectral Interference Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "TRANSPECTRAL INTERFERENCE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Pulse carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.transpectral-interference-pathfinder.multi-dimensional-vision",
+     "name": "Multi-Dimensional Vision",
+     "text": "Whenever this operative is shooting, enemy operatives cannot be obscured."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.transpectral-interference-pathfinder.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    },
+    {
+     "id": "pathfinders.transpectral-interference-pathfinder.act.system-jam",
+     "name": "SYSTEM JAM",
+     "ap": 1,
+     "text": "Select one enemy operative visible to this operative. Until the end of that operative’s next activation, subtract 1 from its APL stat.\n\nThis operative cannot perform this action while it has a Conceal order, or while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Transpectral Interference Pathfinders are tasked with jamming enemy communications through the use of complex signal scramblers that can shut down electrical systems."
+  },
+  {
+   "id": "pathfinders.assault-grenadier-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Assault Grenadier Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "ASSAULT GRENADIER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Fusion grenade",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Devastating",
+         "x": 2,
+         "raw": "Devastating 2"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Pulse carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.assault-grenadier-pathfinder.grenadier-specialist",
+     "name": "Grenadier Specialist",
+     "text": "This operative can use frag and krak grenades (see universal equipment). Doing so doesn’t count towards any limited uses you have (i.e. if you also select those grenades from equipment for other operatives). Whenever it’s doing so, improve the Hit stat of that weapon by 1."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.assault-grenadier-pathfinder.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    }
+   ],
+   "fluff": "The most hot-blooded Pathfinders are trained to carry out extremely dangerous attacks against enemy positions, using their grenades to stun enemy troops and destroy bunkers. They are also outfitted with advanced helmets that render them immune to enemy efforts to stun them in turn."
+  },
+  {
+   "id": "pathfinders.comms-specialist-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Comms Specialist Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "COMMS SPECIALIST"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Pulse carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.comms-specialist-pathfinder.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    },
+    {
+     "id": "pathfinders.comms-specialist-pathfinder.act.signal",
+     "name": "SIGNAL",
+     "ap": 1,
+     "text": "SUPPORT. Select one other friendly PATHFINDER operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Communications Specialists are found in most Pathfinder kill teams, providing a connection with the team’s Commanders, other kill teams and vital support assets."
+  },
+  {
+   "id": "pathfinders.medical-technician-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Medical Technician Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "MEDIC",
+    "MEDICAL TECHNICIAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Pulse carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.medical-technician-pathfinder.medic",
+     "name": "Medic!",
+     "text": "The first time during each turning point that another friendly PATHFINDER operative (excluding DRONE) would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.medical-technician-pathfinder.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    },
+    {
+     "id": "pathfinders.medical-technician-pathfinder.act.medikit",
+     "name": "MEDIKIT",
+     "ap": 0,
+     "text": "Select one friendly PATHFINDER operative (excluding DRONE) within this operative’s control range to regain up to 2D3 lost wounds. It cannot be an operative that the Medic! rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "In a Pathfinder kill team, the lives of the T’au are often in the hands of a Medical Technician. These selfless healers brave storms of enemy fire to reach the wounded."
+  },
+  {
+   "id": "pathfinders.weapons-expert-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Weapons Expert Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "WEAPONS EXPERT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Ion rifle",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        }
+       ]
+      },
+      {
+       "name": "overcharge",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Rail rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 2,
+         "raw": "Devastating 2"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Weapons Experts Pathfinders wield their kill team’s heavy weapons. Their task is a relatively simple one – to kill or destroy what their Shas’ui orders them to or what they deem to be an important target."
+  },
+  {
+   "id": "pathfinders.marksman-pathfinder",
+   "teamId": "pathfinders",
+   "name": "Marksman Pathfinder",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "MARKSMAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Marksman rail rifle",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 2,
+         "raw": "Devastating 2"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "dart round",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.marksman-pathfinder.inertial-dampener",
+     "name": "Inertial Dampener",
+     "text": "You can ignore any changes to the Hit stat of this operative’s marksman rail rifle."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Marksman Pathfinders carry customised rail rifles with advanced optics and sophisticated inertial dampeners to ensure incredible accuracy. These Pathfinders are also issued with experimental dart ammunition that is all but inaudible to the foe when fired."
+  },
+  {
+   "id": "pathfinders.mb3-recon-drone",
+   "teamId": "pathfinders",
+   "name": "MB3 Recon Drone",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "MB3 RECON",
+    "DRONE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32,
+    "note": "flying base"
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 4,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Burst cannon",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Punishing",
+         "raw": "Punishing"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Punishing",
+         "raw": "Punishing"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Ram",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.mb3-recon-drone.analyse",
+     "name": "Analyse",
+     "text": "Whenever this operative performs the Markerlight action, each other enemy operative that’s both visible to this operative and within 3\" of the enemy operative you selected for that action also gains one of your Markerlight tokens."
+    },
+    {
+     "id": "pathfinders.mb3-recon-drone.drone",
+     "name": "Drone",
+     "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back, Fight, Markerlight, Reposition and Shoot. It cannot use any weapons that aren’t on its datacard.\n\nWhenever determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhenever determining what’s visible to this operative, the round disc at the top of the miniature is its head."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.mb3-recon-drone.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    }
+   ],
+   "fluff": "These large drones are capable of collecting swathes of vital battlefield data that can make the difference between victory and defeat. Being larger, they can also be mounted with heavier weaponry – their burst cannon can effectively suppress or cut down enemy infantry."
+  },
+  {
+   "id": "pathfinders.mv1-gun-drone",
+   "teamId": "pathfinders",
+   "name": "MV1 Gun Drone",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "MV1 GUN",
+    "DRONE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32,
+    "note": "flying base"
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Twin pulse carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Ram",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.mv1-gun-drone.drone",
+     "name": "Drone",
+     "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back, Fight, Reposition and Shoot. It cannot use any weapons that aren’t on its datacard.\n\nWhenever determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhenever determining what’s visible to this operative, the round disc at the top of the miniature is its head."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Using anti-gravitic motors and jet-thrusters, Gun Drones hover over the landscape, moving quickly to engage the enemy and record battlefield data. On kill team missions they can distract enemies while the Pathfinders carry out their tasks as well as partake in attacks alongside the T’au warriors they serve."
+  },
+  {
+   "id": "pathfinders.mv4-shield-drone",
+   "teamId": "pathfinders",
+   "name": "MV4 Shield Drone",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "MV4 SHIELD",
+    "DRONE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32,
+    "note": "flying base"
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Ram",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.mv4-shield-drone.drone",
+     "name": "Drone",
+     "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back, Fight and Reposition. It cannot use any weapons that aren’t on its datacard.\n\nWhenever determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhenever determining what’s visible to this operative, the round disc at the top of the miniature is its head."
+    },
+    {
+     "id": "pathfinders.mv4-shield-drone.shield-generator",
+     "name": "Shield Generator",
+     "text": "This operative ignores the Piercing weapon rule.\n\nOnce per turning point, when an attack dice inflicts Normal Dmg on this operative, you can ignore that inflicted damage.\n\nYou can use the Saviour Protocols firefight ploy for 0CP if this is the specified DRONE operative."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Shield Drones are fitted with shield generators rather than weaponry. It is their task to protect the Pathfinders they accompany. Their saviour protocols ensure that should a T’au come under direct threat, the Shield Drone will move with remarkable speed to protect them from harm."
+  },
+  {
+   "id": "pathfinders.mv7-marker-drone",
+   "teamId": "pathfinders",
+   "name": "MV7 Marker Drone",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "MV7 MARKER",
+    "DRONE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32,
+    "note": "flying base"
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Ram",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.mv7-marker-drone.high-intensity-markerlight",
+     "name": "High-intensity Markerlight",
+     "text": "Whenever this operative performs the Markerlight action, the selected enemy operative gains two of your Markerlight tokens (instead of one)."
+    },
+    {
+     "id": "pathfinders.mv7-marker-drone.drone",
+     "name": "Drone",
+     "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back, Fight, Markerlight and Reposition. It cannot use any weapons that aren’t on its datacard.\n\nWhen determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhen determining what’s visible to this operative, the round disc at the top of the miniature is its head."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.mv7-marker-drone.act.markerlight",
+     "name": "MARKERLIGHT",
+     "ap": 1,
+     "text": "See the Markerlights faction rule."
+    }
+   ],
+   "fluff": "The high-intensity markerlights used by Marker Drones are vital for the synergy of T’au forces. They indicate priority targets both for the Pathfinders they are alongside as well as other powerful T’au assets. Whatever they pick out will soon be obliterated by overwhelming firepower."
+  },
+  {
+   "id": "pathfinders.mv31-pulse-accelerator-drone",
+   "teamId": "pathfinders",
+   "name": "MV31 Pulse Accelerator Drone",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "MV31 PULSE ACCELERATOR",
+    "DRONE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32,
+    "note": "flying base"
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Ram",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.mv31-pulse-accelerator-drone.drone",
+     "name": "Drone",
+     "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back, Fight, Pulse Accelerator and Reposition. It cannot use any weapons that aren’t on its datacard.\n\nWhen determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhen determining what’s visible to this operative, the round disc at the top of the miniature is its head."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "pathfinders.mv31-pulse-accelerator-drone.act.pulse-accelerator",
+     "name": "PULSE ACCELERATOR",
+     "ap": 0,
+     "text": "Until the start of this operative’s next activation or until it’s incapacitated (whichever comes first), whenever another friendly PATHFINDER operative is shooting with a pulse weapon within 3\" of this operative, that weapon has the Lethal 5+ and Severe weapon rules."
+    }
+   ],
+   "fluff": "Pulse Accelerator Drones boost the pulse weapons carried by Pathfinders, making the technology much more powerful and giving them a vital edge against the enemy."
+  },
+  {
+   "id": "pathfinders.mv33-grav-inhibitor-drone",
+   "teamId": "pathfinders",
+   "name": "MV33 Grav-inhibitor Drone",
+   "keywords": [
+    "PATHFINDER",
+    "T'AU EMPIRE",
+    "MV33 GRAV-INHIBITOR",
+    "DRONE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32,
+    "note": "flying base"
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Ram",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "pathfinders.mv33-grav-inhibitor-drone.drone",
+     "name": "Drone",
+     "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back, Fight and Reposition. It cannot use any weapons that aren’t on its datacard.\n\nWhen determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhen determining what’s visible to this operative, the round disc at the top of the miniature is its head."
+    },
+    {
+     "id": "pathfinders.mv33-grav-inhibitor-drone.grav-inhibitor",
+     "name": "Grav-inhibitor",
+     "text": "Whenever an enemy operative performs an action in which it moves (excluding Dash), if it would move visible to and within 6\" of this operative, treat the distance as an additional 2\" and ignore the additional distances from the Obstructing and Accessible terrain rules.\n\nWhenever an enemy operative is fighting or retaliating while visible to and within 6\" of this operative, worsen the Hit stat of that enemy operative’s melee weapons by 1. This is cumulative with being injured."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Grav-inhibitor Drones are capable of manipulating gravity around and significantly slow the progress of oncoming enemy troops. On countless occasions have Pathfinder kill teams escaped almost certain death thanks to the technology carried by these drones."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "pathfinders.rule.markerlights",
+   "name": "Markerlights",
+   "text": "Some PATHFINDER operatives (indicated on their datacard) can perform the Markerlight unique action:\n\nMARKERLIGHT1AP\nSelect one enemy operative visible to this operative. That enemy operative gains one of your Markerlight tokens (to a maximum of four).\n\nAn operative cannot perform this action while within control range of an enemy operative. If an operative (excluding MB3 RECON DRONE) would perform the Shoot action (excluding Guard) and this action during the same activation, only the target of that Shoot action can be selected for this action (and vice versa).\n\nOnce during each of their activations, whenever an enemy operative that has any of your Markerlight tokens performs the Dash, Charge, Fall Back or Reposition action, remove one of those tokens.\n\nWhile only some PATHFINDER operatives can perform the Markerlight action, all PATHFINDER operatives can benefit from its effects. Whenever a friendly PATHFINDER operative is shooting with a weapon from its datacard (excluding ASSAULT GRENADIER’s fusion grenade), it has additional rules determined by the number of your Markerlight tokens the target has. These are cumulative, so if an enemy operative has two of your Markerlight tokens, the friendly operative shooting it has the rules for 1 and 2 tokens during that sequence.\n\nMARKER­LIGHT TOKENS\nADDITIONAL RULES\n\n1\nSaturate and Balanced weapon rules.\n\n2\nImprove the Hit stat of that friendly operative’s ranged weapons by 1 (to a maximum of 3+).\n\n3\nThe target cannot be obscured.\n\n4\nSeek Light weapon rule.",
+   "fluff": "Markerlights are laser targeting systems that feed information to the weapon-mounted scopes and helmet targeting systems of nearby T’au units."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "pathfinders.sp.recon-sweep",
+   "name": "RECON SWEEP",
+   "text": "Select one killzone edge (excluding your own). Each friendly PATHFINDER operative that’s wholly within 6\" of that edge can immediately perform a free Dash action in an order of your choice, but each that does so must end that move wholly within 6\" of a killzone edge (excluding your own). You cannot use this ploy during the first turning point.",
+   "cp": 1,
+   "fluff": "Pathfinders are tasked with reconnaissance roles and are skilled at crossing difficult terrain to outflank unsuspecting targets."
+  },
+  {
+   "id": "pathfinders.sp.suppressing-fire",
+   "name": "SUPPRESSING FIRE",
+   "text": "Whenever an enemy operative is performing the Shoot action, if the target (the primary target if the weapon has the Blast or Torrent weapon rules) isn’t the closest valid target, your opponent cannot re-roll their attack dice. Ignore friendly PATHFINDER operatives that have a Conceal order or are obscured when determining this.",
+   "cp": 1,
+   "fluff": "T’au Pathfinders lay down a punishing blizzard of fire, forcing their enemies to take cover and fire back in scattered, desperate bursts."
+  },
+  {
+   "id": "pathfinders.sp.bonded",
+   "name": "BONDED",
+   "text": "Whenever a friendly PATHFINDER operative (excluding DRONE) is shooting or retaliating with a ranged weapon (see Point-Blank Fusillade firefight ploy), if it’s within 3\" of another friendly PATHFINDER operative (excluding DRONE), that first friendly operative’s ranged weapons have the Accurate 1 weapon rule.",
+   "cp": 1,
+   "fluff": "Often trained together from youth and bonded by blood ritual, Fire Warrior teams possess an uncanny degree of coordination."
+  },
+  {
+   "id": "pathfinders.sp.take-cover",
+   "name": "TAKE COVER",
+   "text": "Whenever an operative is shooting a friendly PATHFINDER operative, if you can retain any cover saves, improve that friendly operative’s Save stat by 1.\n\nFirefight Ploys\nA WORTHY CAUSE\n\nAny action that furthers the Greater Good must be undertaken swiftly and without question, no matter how dangerous.\nUse this firefight ploy at the start of the Firefight phase. One friendly PATHFINDER operative (excluding DRONE) can immediately perform a free mission action.\n\nSUPPORTING FIRE\n\nT’au Pathfinders are expert sharpshooters and can grant covering fire even to allies engaged in close combat.\nUse this firefight ploy when a friendly PATHFINDER operative is performing the Shoot action and you’re selecting a valid target within 6\" of it. Having other friendly PATHFINDER operatives within an enemy operative’s control range doesn’t prevent that enemy operative from being selected.\n\nSAVIOUR PROTOCOLS\n\nT’au drones are hard-coded to prioritise the safety of their operators, and will automatically interpose themselves between a T’au warrior and an incoming attack.\nUse this firefight ploy when a friendly PATHFINDER operative (excluding DRONE) is selected as the valid target of a Shoot action. Select one friendly PATHFINDER DRONE operative visible to and within 3\" of that first friendly operative to become the valid target instead (even if it wouldn’t normally be valid for this). That friendly DRONE operative is only in cover or obscured if the original target was. This ploy has no effect if the ranged weapon has the Blast or Torrent weapon rule.\n\nPOINT-BLANK FUSILLADE\n\nWielding their ranged weapons with practised skill, Pathfinders are capable of utilising them even at close quarters.\nUse this firefight ploy when a friendly PATHFINDER operative (excluding DRONE) is retaliating, if it wasn’t within control range of enemy operatives at the start of that activation/counteraction. You can use one of its ranged weapons as a melee weapon (excluding a weapon that has the word ‘grenade’ in its name) during that sequence. If you do, you cannot block during that sequence, and the following weapon rules have no effect on its weapons until the end of that sequence: Devastating, Piercing, Torrent. If that friendly operative is ready, has an Engage order and is retaliating with a pulse weapon, you resolve the first attack dice (i.e. defender instead of attacker).\n\nFaction Equipment\nTARGET ANALYSIS OPTIC\n\nAdvanced optics enhance the effectiveness of markerlights, ensuring the bearer’s shots find their mark with unerring accuracy.\nOnce per turning point, when a friendly PATHFINDER operative (excluding DRONE) is performing the Shoot action and you’re selecting a valid target, you can use this rule. If you do, until the end of that action, if the target has at least one of your Markerlight tokens, it’s treated as having one more. If the ranged weapon has the Blast or Torrent weapon rule, only the primary target is affected.\n\nHIGH-INTENSITY MARKERLIGHT\n\nThis markerlight is exceptionally effective, its beam traceable even through obscuring smoke, debris and soft cover.\nUp to twice per turning point, when a friendly PATHFINDER operative (excluding MV7 MARKER DRONE) performs the Markerlight action, you can use this rule. If you do, the enemy operative you select gains two of your Markerlight tokens (instead of one).\n\nPHOTON GRENADE\n\nUpon reaching their destination, photon grenades release bright pulses of multispectrum light that blind and shock those caught in the blast.\nOnce per turning point, a friendly PATHFINDER operative that has the Markerlight action on their datacard (excluding DRONE) can perform the following unique action:\n\nPHOTON GRENADE1AP\nSelect one enemy operative visible to this operative and roll one D6: on a 3+, until the end of that operative’s next activation, subtract 2\" from its Move stat.\n\nAn operative cannot perform this action while within control range of an enemy operative.\n\nORBITAL SURVEY UPLINK\n\nSo effective are the scanning matrices of T’au voidships that they can detect and illuminate a single infantry target, even from orbit.\nOnce per turning point, when a friendly PATHFINDER operative performs the Markerlight action, you can use this rule. If you do, you can select one enemy operative in the killzone to gain one of your Markerlight tokens instead (it doesn’t need to be visible). This isn’t cumulative with the High-intensity Markerlight or Analyse rules.",
+   "cp": 1,
+   "fluff": "Pathfinders are lightly armoured and equipped for mobility. They must use surrounding terrain to their advantage in order to survive."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "pathfinders.fp.a-worthy-cause",
+   "name": "A WORTHY CAUSE",
+   "text": "Use this firefight ploy at the start of the Firefight phase. One friendly PATHFINDER operative (excluding DRONE) can immediately perform a free mission action.",
+   "cp": 1,
+   "fluff": "Any action that furthers the Greater Good must be undertaken swiftly and without question, no matter how dangerous."
+  },
+  {
+   "id": "pathfinders.fp.supporting-fire",
+   "name": "SUPPORTING FIRE",
+   "text": "Use this firefight ploy when a friendly PATHFINDER operative is performing the Shoot action and you’re selecting a valid target within 6\" of it. Having other friendly PATHFINDER operatives within an enemy operative’s control range doesn’t prevent that enemy operative from being selected.",
+   "cp": 1,
+   "fluff": "T’au Pathfinders are expert sharpshooters and can grant covering fire even to allies engaged in close combat."
+  },
+  {
+   "id": "pathfinders.fp.saviour-protocols",
+   "name": "SAVIOUR PROTOCOLS",
+   "text": "Use this firefight ploy when a friendly PATHFINDER operative (excluding DRONE) is selected as the valid target of a Shoot action. Select one friendly PATHFINDER DRONE operative visible to and within 3\" of that first friendly operative to become the valid target instead (even if it wouldn’t normally be valid for this). That friendly DRONE operative is only in cover or obscured if the original target was. This ploy has no effect if the ranged weapon has the Blast or Torrent weapon rule.",
+   "cp": 1,
+   "fluff": "T’au drones are hard-coded to prioritise the safety of their operators, and will automatically interpose themselves between a T’au warrior and an incoming attack."
+  },
+  {
+   "id": "pathfinders.fp.point-blank-fusillade",
+   "name": "POINT-BLANK FUSILLADE",
+   "text": "Use this firefight ploy when a friendly PATHFINDER operative (excluding DRONE) is retaliating, if it wasn’t within control range of enemy operatives at the start of that activation/counteraction. You can use one of its ranged weapons as a melee weapon (excluding a weapon that has the word ‘grenade’ in its name) during that sequence. If you do, you cannot block during that sequence, and the following weapon rules have no effect on its weapons until the end of that sequence: Devastating, Piercing, Torrent. If that friendly operative is ready, has an Engage order and is retaliating with a pulse weapon, you resolve the first attack dice (i.e. defender instead of attacker).\n\nFaction Equipment\nTARGET ANALYSIS OPTIC\n\nAdvanced optics enhance the effectiveness of markerlights, ensuring the bearer’s shots find their mark with unerring accuracy.\nOnce per turning point, when a friendly PATHFINDER operative (excluding DRONE) is performing the Shoot action and you’re selecting a valid target, you can use this rule. If you do, until the end of that action, if the target has at least one of your Markerlight tokens, it’s treated as having one more. If the ranged weapon has the Blast or Torrent weapon rule, only the primary target is affected.\n\nHIGH-INTENSITY MARKERLIGHT\n\nThis markerlight is exceptionally effective, its beam traceable even through obscuring smoke, debris and soft cover.\nUp to twice per turning point, when a friendly PATHFINDER operative (excluding MV7 MARKER DRONE) performs the Markerlight action, you can use this rule. If you do, the enemy operative you select gains two of your Markerlight tokens (instead of one).\n\nPHOTON GRENADE\n\nUpon reaching their destination, photon grenades release bright pulses of multispectrum light that blind and shock those caught in the blast.\nOnce per turning point, a friendly PATHFINDER operative that has the Markerlight action on their datacard (excluding DRONE) can perform the following unique action:\n\nPHOTON GRENADE1AP\nSelect one enemy operative visible to this operative and roll one D6: on a 3+, until the end of that operative’s next activation, subtract 2\" from its Move stat.\n\nAn operative cannot perform this action while within control range of an enemy operative.\n\nORBITAL SURVEY UPLINK\n\nSo effective are the scanning matrices of T’au voidships that they can detect and illuminate a single infantry target, even from orbit.\nOnce per turning point, when a friendly PATHFINDER operative performs the Markerlight action, you can use this rule. If you do, you can select one enemy operative in the killzone to gain one of your Markerlight tokens instead (it doesn’t need to be visible). This isn’t cumulative with the High-intensity Markerlight or Analyse rules.",
+   "cp": 1,
+   "fluff": "Wielding their ranged weapons with practised skill, Pathfinders are capable of utilising them even at close quarters."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "pathfinders.eq.target-analysis-optic",
+   "name": "TARGET ANALYSIS OPTIC",
+   "text": "Once per turning point, when a friendly PATHFINDER operative (excluding DRONE) is performing the Shoot action and you’re selecting a valid target, you can use this rule. If you do, until the end of that action, if the target has at least one of your Markerlight tokens, it’s treated as having one more. If the ranged weapon has the Blast or Torrent weapon rule, only the primary target is affected.",
+   "fluff": "Advanced optics enhance the effectiveness of markerlights, ensuring the bearer’s shots find their mark with unerring accuracy."
+  },
+  {
+   "id": "pathfinders.eq.high-intensity-markerlight",
+   "name": "HIGH-INTENSITY MARKERLIGHT",
+   "text": "Up to twice per turning point, when a friendly PATHFINDER operative (excluding MV7 MARKER DRONE) performs the Markerlight action, you can use this rule. If you do, the enemy operative you select gains two of your Markerlight tokens (instead of one).",
+   "fluff": "This markerlight is exceptionally effective, its beam traceable even through obscuring smoke, debris and soft cover."
+  },
+  {
+   "id": "pathfinders.eq.photon-grenade",
+   "name": "PHOTON GRENADE",
+   "text": "Once per turning point, a friendly PATHFINDER operative that has the Markerlight action on their datacard (excluding DRONE) can perform the following unique action:\n\nPHOTON GRENADE1AP\nSelect one enemy operative visible to this operative and roll one D6: on a 3+, until the end of that operative’s next activation, subtract 2\" from its Move stat.\n\nAn operative cannot perform this action while within control range of an enemy operative.",
+   "fluff": "Upon reaching their destination, photon grenades release bright pulses of multispectrum light that blind and shock those caught in the blast."
+  },
+  {
+   "id": "pathfinders.eq.orbital-survey-uplink",
+   "name": "ORBITAL SURVEY UPLINK",
+   "text": "Once per turning point, when a friendly PATHFINDER operative performs the Markerlight action, you can use this rule. If you do, you can select one enemy operative in the killzone to gain one of your Markerlight tokens instead (it doesn’t need to be visible). This isn’t cumulative with the High-intensity Markerlight or Analyse rules.",
+   "fluff": "So effective are the scanning matrices of T’au voidships that they can detect and illuminate a single infantry target, even from orbit."
+  }
+ ],
+ "markerGuide": "Markerlight tokens (Values 1 & 2)\n\nSaviour Protocols tokens\n\nFusion Grenade token\n\nMedic token\n\nMulti-dimensional token\n\nPulse Accelerator token\n\nMont’ka token\n\nKauyon token\n\nTarget Analysis Optic token\n\nHighintensity Markerlight token\n\nPhoton Grenade token\n\nOrbital Survey Uplink token",
+ "notes": [
+  "Medical Technician Pathfinder: unique action 'MEDIKIT' has no AP cost on the page",
+  "MV31 Pulse Accelerator Drone: unique action 'PULSE ACCELERATOR' has no AP cost on the page"
+ ],
+ "rareWeaponRules": []
+}

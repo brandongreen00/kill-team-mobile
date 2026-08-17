@@ -1,0 +1,1813 @@
+{
+ "id": "legionary",
+ "name": "Legionary",
+ "faction": "Chaos Space Marines",
+ "grandFaction": "Chaos",
+ "archetypes": [
+  "Seek & Destroy",
+  "Security"
+ ],
+ "booksVersion": "October ’25",
+ "books": [
+  {
+   "book": "Legionaries",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "October ’25",
+   "lastUpdate": "October 2025",
+   "pdf": "https://assets.warhammer-community.com/eng_29-10_kill_team_team_rules_legionaries-e5hsbsasn6-l5akyfyeyu.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/legionary/",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": null,
+   "datacardId": null,
+   "count": 1,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "ASPIRING CHAMPION",
+    "CHOSEN"
+   ],
+   "inList": false
+  },
+  "slots": 5,
+  "totalOperatives": 6,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "list",
+    "roles": [
+     "ASPIRING CHAMPION",
+     "CHOSEN"
+    ],
+    "rawText": "1 LEGIONARY operative selected from the following list:"
+   },
+   {
+    "index": 2,
+    "count": 5,
+    "kind": "list",
+    "roles": [
+     "ANOINTED",
+     "BALEFIRE ACOLYTE",
+     "BUTCHER",
+     "ICON BEARER",
+     "SHRIVETALON",
+     "WARRIOR",
+     "GUNNER",
+     "HEAVY GUNNER"
+    ],
+    "rawText": "5 LEGIONARY operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "ANOINTED",
+    "datacardAnchor": "Legionary-Anointed",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ANOINTED",
+    "group": 2,
+    "datacardId": "legionary.anointed",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Daemonic claw"
+    ]
+   },
+   {
+    "role": "BALEFIRE ACOLYTE",
+    "datacardAnchor": "Legionary-Balefire-Acolyte",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BALEFIRE ACOLYTE",
+    "group": 2,
+    "datacardId": "legionary.balefire-acolyte",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Fireblast",
+     "Life siphon",
+     "Fell dagger"
+    ]
+   },
+   {
+    "role": "BUTCHER",
+    "datacardAnchor": "Legionary-Butcher",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BUTCHER",
+    "group": 2,
+    "datacardId": "legionary.butcher",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Double-handed chainaxe"
+    ]
+   },
+   {
+    "role": "ICON BEARER",
+    "datacardAnchor": "Legionary-Icon-Bearer",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "legionary.g2e4.opt1",
+      "label": "Boltgun; fists",
+      "weapons": [
+       "Boltgun",
+       "Fists"
+      ]
+     },
+     {
+      "id": "legionary.g2e4.opt2",
+      "label": "Bolt pistol; chainsword",
+      "weapons": [
+       "Bolt pistol",
+       "Chainsword"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ICON BEARER with one of the following options:",
+    "group": 2,
+    "datacardId": "legionary.icon-bearer",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "SHRIVETALON",
+    "datacardAnchor": "Legionary-Shrivetalon",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SHRIVETALON",
+    "group": 2,
+    "datacardId": "legionary.shrivetalon",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Flensing blades"
+    ]
+   },
+   {
+    "role": "WARRIOR",
+    "datacardAnchor": "Legionary-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "legionary.g2e6.opt1",
+      "label": "Boltgun; fists",
+      "weapons": [
+       "Boltgun",
+       "Fists"
+      ]
+     },
+     {
+      "id": "legionary.g2e6.opt2",
+      "label": "Bolt pistol; chainsword",
+      "weapons": [
+       "Bolt pistol",
+       "Chainsword"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WARRIOR with one of the following options:",
+    "group": 2,
+    "datacardId": "legionary.warrior",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Legionary-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "legionary.g2e7.opt1",
+      "label": "Bolt pistol; flamer; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Flamer",
+       "Fists"
+      ]
+     },
+     {
+      "id": "legionary.g2e7.opt2",
+      "label": "Bolt pistol; meltagun; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Meltagun",
+       "Fists"
+      ]
+     },
+     {
+      "id": "legionary.g2e7.opt3",
+      "label": "Bolt pistol; plasma gun; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Plasma gun",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with one of the following options:",
+    "group": 2,
+    "datacardId": "legionary.gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Legionary-Heavy-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "legionary.g2e8.opt1",
+      "label": "Bolt pistol; heavy bolter; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Heavy bolter",
+       "Fists"
+      ]
+     },
+     {
+      "id": "legionary.g2e8.opt2",
+      "label": "Bolt pistol; missile launcher; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Missile launcher",
+       "Fists"
+      ]
+     },
+     {
+      "id": "legionary.g2e8.opt3",
+      "label": "Bolt pistol; reaper chaincannon; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Reaper chaincannon",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER with one of the following options:",
+    "group": 2,
+    "datacardId": "legionary.heavy-gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "ASPIRING CHAMPION",
+    "datacardAnchor": "Legionary-Aspiring-Champion",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [
+     {
+      "id": "legionary.g1e1.g1",
+      "label": "Plasma pistol or tainted bolt pistol",
+      "choices": [
+       {
+        "id": "legionary.g1e1.g1o1",
+        "label": "Plasma pistol",
+        "weapons": [
+         "Plasma pistol"
+        ]
+       },
+       {
+        "id": "legionary.g1e1.g1o2",
+        "label": "tainted bolt pistol",
+        "weapons": [
+         "Tainted bolt pistol"
+        ]
+       }
+      ]
+     },
+     {
+      "id": "legionary.g1e1.g2",
+      "label": "Power fist, power maul, power weapon or tainted chainsword",
+      "choices": [
+       {
+        "id": "legionary.g1e1.g2o1",
+        "label": "Power fist",
+        "weapons": [
+         "Power fist"
+        ]
+       },
+       {
+        "id": "legionary.g1e1.g2o2",
+        "label": "power maul",
+        "weapons": [
+         "Power maul"
+        ]
+       },
+       {
+        "id": "legionary.g1e1.g2o3",
+        "label": "power weapon",
+        "weapons": [
+         "Power weapon"
+        ]
+       },
+       {
+        "id": "legionary.g1e1.g2o4",
+        "label": "tainted chainsword",
+        "weapons": [
+         "Tainted chainsword"
+        ]
+       }
+      ]
+     }
+    ],
+    "loadoutMode": "combine",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ASPIRING CHAMPION with one option from each of the following:",
+    "group": 1,
+    "datacardId": "legionary.aspiring-champion",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "CHOSEN",
+    "datacardAnchor": "Legionary-Chosen",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "legionary.g1e2.opt1",
+      "label": "Plasma pistol; daemon blade",
+      "weapons": [
+       "Plasma pistol",
+       "Daemon blade"
+      ]
+     },
+     {
+      "id": "legionary.g1e2.opt2",
+      "label": "Tainted bolt pistol; daemon blade",
+      "weapons": [
+       "Tainted bolt pistol",
+       "Daemon blade"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CHOSEN with one of the following options:",
+    "group": 1,
+    "datacardId": "legionary.chosen",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "WARRIOR"
+    ]
+   }
+  ],
+  "footnotes": {},
+  "footnoteOptions": {},
+  "designerNotes": [],
+  "rawText": "1 LEGIONARY operative selected from the following list:\n\nASPIRING CHAMPION with one option from each of the following:\n\nPlasma pistol or tainted bolt pistol\n\nPower fist, power maul, power weapon or tainted chainsword\n\nCHOSEN with one of the following options:\n\nPlasma pistol; daemon blade\n\nTainted bolt pistol; daemon blade\n\n5 LEGIONARY operatives selected from the following list:\n\nANOINTED\n\nBALEFIRE ACOLYTE\n\nBUTCHER\n\nICON BEARER with one of the following options:\n\nBoltgun; fists\n\nBolt pistol; chainsword\n\nSHRIVETALON\n\nWARRIOR with one of the following options:\n\nBoltgun; fists\n\nBolt pistol; chainsword\n\nGUNNER with one of the following options:\n\nBolt pistol; flamer; fists\n\nBolt pistol; meltagun; fists\n\nBolt pistol; plasma gun; fists\n\nHEAVY GUNNER with one of the following options:\n\nBolt pistol; heavy bolter; fists\n\nBolt pistol; missile launcher; fists\n\nBolt pistol; reaper chaincannon; fists\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
+ },
+ "datacards": [
+  {
+   "id": "legionary.aspiring-champion",
+   "teamId": "legionary",
+   "name": "Legionary Aspiring Champion",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "LEADER",
+    "ASPIRING CHAMPION"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Tainted bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power fist",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power maul",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Tainted chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "legionary.aspiring-champion.in-the-eyes-of-the-gods",
+     "name": "In the Eyes of the Gods",
+     "text": "Once during each of this operative’s activations, if it incapacitates an enemy operative, add 1 to its APL stat until the end of that activation."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Aspiring Champions are the strongest and most merciless of their brothers. These blood-soaked warriors enforce their will through brutal acts of might, seeking to become favoured of the gods."
+  },
+  {
+   "id": "legionary.chosen",
+   "teamId": "legionary",
+   "name": "Legionary Chosen",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "LEADER",
+    "CHOSEN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Tainted bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Daemon blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "legionary.chosen.daemonic-aura",
+     "name": "Daemonic Aura",
+     "text": "Whenever an enemy operative performs the Fall Back action while within control range of this operative, you can use this rule. If you do, roll one D6: on a 3+, that enemy operative cannot perform that action during that activation/counteraction (the AP spent on it is refunded)."
+    },
+    {
+     "id": "legionary.chosen.soul-gorge",
+     "name": "Soul Gorge",
+     "text": "After this operative fights or retaliates, if it isn’t incapacitated, but it incapacitated an enemy operative during that sequence, it regains up to D3+1 lost wounds."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Chosen are amongst the most experienced and dedicated Heretic Astartes. They are favoured within their bitter brotherhoods, wearing baroque armour and equipped with the finest wargear. They are more hard-bitten and callous than even others of their kind."
+  },
+  {
+   "id": "legionary.anointed",
+   "teamId": "legionary",
+   "name": "Legionary Anointed",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "ANOINTED"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Daemonic claw",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "legionary.anointed.unleash-daemon",
+     "name": "Unleash Daemon",
+     "text": "Once per battle, when this operative is activated, you can use this rule. If you do, until the end of the battle:\n\nThis operative cannot perform the Pick Up Marker or mission actions (excluding Operate Hatch). If it’s carrying a marker, it must immediately perform the Place Marker action for 0AP (this takes precedence over all other rules).\n\nNormal and Critical Dmg of 4 or more inflicts 1 less damage on this operative. If this operative has the NURGLE keyword, you cannot reduce the damage of an attack dice by more than 1. In other words, you cannot use both rules to reduce Normal Dmg of 4 or more by 2.\n\nIts daemonic claw has the Ceaseless and Lethal 5+ weapon rules."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Some Heretic Astartes thirst for power at any cost, and offer themselves wholly to Chaos. They become willing hosts to the immaterial creatures of the warp. This is a slow and painful process, and those in the early stages are known as Anointed due to their mutations."
+  },
+  {
+   "id": "legionary.balefire-acolyte",
+   "teamId": "legionary",
+   "name": "Legionary Balefire Acolyte",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "PSYKER",
+    "BALEFIRE ACOLYTE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fireblast",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Devastating",
+         "x": 1,
+         "dist": 1.0,
+         "raw": "1\" Devastating 1"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Life siphon",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "SiphonLife",
+         "raw": "Siphon Life*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fell dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        },
+        {
+         "id": "SiphonLife",
+         "raw": "Siphon Life*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "legionary.balefire-acolyte.siphon-life",
+     "name": "Siphon Life",
+     "text": "When you select this weapon, you can use this rule. If you do, at the start of the Resolve Attack Dice step, select one friendly LEGIONARY operative visible to and within 6\" of this operative. For each attack dice you resolve during that step that inflicts damage, that friendly operative regains 1 lost wound, or D3 lost wounds if it was a critical success. You cannot use this weapon rule more than once per turning point."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Balefire Acolytes are psykers blessed by the Chaos Gods with the dark power of the empyrean, which they turn indiscriminately upon the foe. Many also carry blades made even deadlier thanks to the power of the warp they are infused with."
+  },
+  {
+   "id": "legionary.butcher",
+   "teamId": "legionary",
+   "name": "Legionary Butcher",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "BUTCHER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Double-handed chainaxe",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "legionary.butcher.devastating-onslaught",
+     "name": "Devastating Onslaught",
+     "text": "Whenever this operative is fighting or retaliating, enemy operatives cannot assist.\n\nAt the end of each enemy operative’s activation or counteraction, you can select one enemy operative within 2\" of this operative. This operative can perform a free Charge action (you can change its order to Engage to do so), but it cannot move more than 2\" and must end that move within control range of that selected operative."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Bloodthirsty madmen, Butchers are Heretic Astartes that fight without subtlety of any kind in combat. They deal furious strikes with their enormous chain axes, which can carve enemies to pieces."
+  },
+  {
+   "id": "legionary.gunner",
+   "teamId": "legionary",
+   "name": "Legionary Gunner",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Meltagun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma gun",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Armed with flamers, Heretic Astartes burn through swathes of light enemy infantry. With meltaguns they destroy armoured bunkers and with plasma guns they pose a threat to the heaviest enemy troops."
+  },
+  {
+   "id": "legionary.heavy-gunner",
+   "teamId": "legionary",
+   "name": "Legionary Heavy Gunner",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "HEAVY GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Heavy bolter",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Missile launcher",
+     "profiles": [
+      {
+       "name": "frag",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        }
+       ]
+      },
+      {
+       "name": "krak",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Reaper chaincannon",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Punishing",
+         "raw": "Punishing"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Punishing",
+         "raw": "Punishing"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Heretic Astartes bearing heavy weapons provide devastating anti-infantry and anti-armour firepower, dominating large swathes of any killzone."
+  },
+  {
+   "id": "legionary.icon-bearer",
+   "teamId": "legionary",
+   "name": "Legionary Icon Bearer",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "ICON BEARER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "legionary.icon-bearer.icon-bearer",
+     "name": "Icon Bearer",
+     "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
+    },
+    {
+     "id": "legionary.icon-bearer.favoured-of-the-dark-gods",
+     "name": "Favoured of the Dark Gods",
+     "text": "In the Ready step of each Strategy phase, if this operative controls an objective marker that isn’t tainted, that objective marker is tainted for the battle and you gain 1CP. Note that if any operative (including enemy operatives) has tainted an objective marker, you cannot taint that objective marker."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Many Heretic Astartes kill teams include Icon Bearers – warriors bearing totems, banners or standards dedicated to the glory of the Dark Gods."
+  },
+  {
+   "id": "legionary.shrivetalon",
+   "teamId": "legionary",
+   "name": "Legionary Shrivetalon",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "SHRIVETALON"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Flensing blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "legionary.shrivetalon.vicious-reflexes",
+     "name": "Vicious Reflexes",
+     "text": "Whenever this operative is retaliating, you resolve the first attack dice (i.e. defender instead of attacker)."
+    },
+    {
+     "id": "legionary.shrivetalon.horrifying-dismemberment",
+     "name": "Horrifying Dismemberment",
+     "text": "Whenever this operative incapacitates an enemy operative while fighting or retaliating, select one other enemy operative visible to and within 3\" of either this operative or the incapacitated enemy operative. Subtract 1 from that enemy operative’s APL stat until the end of its next activation."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "legionary.shrivetalon.act.grisly-mark",
+     "name": "GRISLY MARK",
+     "ap": 2,
+     "text": "Place your Grisly marker within this operative’s control range.\n\nThis operative cannot perform this action more than once per battle, and cannot perform it while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Inflicting pain and torture becomes a near addiction for some Heretic Astartes. Those who embrace this propensity become known as Shrivetalons, and they stalk the battlefield looking for enemies to torment."
+  },
+  {
+   "id": "legionary.warrior",
+   "teamId": "legionary",
+   "name": "Legionary Warrior",
+   "keywords": [
+    "LEGIONARY",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "legionary.warrior.infernal-pact",
+     "name": "Infernal Pact",
+     "text": "Once per battle, when a friendly LEGIONARY WARRIOR operative is activated, you can use this rule. If you do, change that operative’s Marks of Chaos keyword."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Heretic Astartes are post-human warriors with the natural strength, speed, resilience and mental acuity of such beings. Now they have turned against the Imperium."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "legionary.rule.marks-of-chaos",
+   "name": "Marks of Chaos",
+   "text": "Whenever you select a LEGIONARY operative for the battle, you must select one of the following keywords for it to have for that battle: KHORNE, NURGLE, SLAANESH, TZEENTCH, UNDIVIDED. Each operative’s keyword can be different, but a BALEFIRE ACOLYTE operative cannot have the KHORNE keyword.\n\nFriendly LEGIONARY operatives have an additional rule determined by this keyword. In addition, LEGIONARY ploys have additional benefits for operatives with the relevant keyword.\n\nKHORNE\nWrathful Onslaught\nThis operative’s melee weapons have the Severe weapon rule.\n\nNURGLE\nDisgusting Vigour\nWhenever Normal Dmg of 3 or more is inflicted on this operative, roll one D6: on a 5+, subtract 1 from that inflicted damage.\n\nSLAANESH\nUnnatural Agility\nAdd 1\" to this operative’s Move stat.\n\nTZEENTCH\nEmpyreal Guidance\nThis operative’s ranged weapons have the Severe weapon rule.\n\nUNDIVIDED\nVicious Reavers\nWhenever this operative is shooting against, fighting against or retaliating against an enemy operative within 6\" of it, this operative’s weapons have the Ceaseless weapon rule.",
+   "fluff": "By making dark pacts with the Ruinous Powers, Legionaries may increase their own might. Yet such bargains rarely come without a cost."
+  },
+  {
+   "id": "legionary.rule.astartes",
+   "name": "Astartes",
+   "text": "During each friendly LEGIONARY operative’s activation, it can perform either two Shoot actions or two Fight actions. If it’s two Shoot actions, a bolt pistol, boltgun or tainted bolt pistol must be selected for at least one of them.\n\nEach friendly LEGIONARY operative can counteract regardless of its order.",
+   "fluff": "These genetically modified superhumans are made for one purpose: war."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "legionary.sp.implacable",
+   "name": "IMPLACABLE",
+   "text": "Whenever an operative is shooting a friendly LEGIONARY operative, weapons with the Piercing 1 weapon rule have the Piercing Crits 1 weapon rule instead.\n\nYou can ignore any changes to the stats of friendly LEGIONARY NURGLE operatives from being injured (including their weapons’ stats).",
+   "cp": 1,
+   "fluff": "Empowered by their transhuman might and the gifts of their daemonic patrons, Legionaries are monstrously resilient."
+  },
+  {
+   "id": "legionary.sp.quicksilver-speed",
+   "name": "QUICKSILVER SPEED",
+   "text": "Whenever a friendly LEGIONARY operative that performed an action in which it moved during this turning point is fighting, worsen the Hit stat of the enemy operative’s melee weapons by 1.\n\nWhenever an operative is shooting a friendly LEGIONARY SLAANESH operative more than 6\" from it that performed an action in which it moved during this turning point, worsen the Hit stat of the enemy operative’s weapons by 1.\n\nIn all cases for this ploy, this isn’t cumulative with being injured.",
+   "cp": 1,
+   "fluff": "Some amongst the Heretic Astartes are possessed of a fleetness of foot and inhuman agility with which they beguile and confound the foe."
+  },
+  {
+   "id": "legionary.sp.fickle-fates",
+   "name": "FICKLE FATES",
+   "text": "Whenever a friendly LEGIONARY operative is shooting a ready enemy operative, that friendly operative’s ranged weapons have the Balanced weapon rule.\n\nWhenever an operative is shooting a ready friendly LEGIONARY TZEENTCH operative, in the Roll Defence Dice step, if you retain any critical successes, you can retain one of your fails as a normal success instead of discarding it.",
+   "cp": 1,
+   "fluff": "With superhuman reactions, a Heretic Astartes warrior can use even fractional glimpses of future events to devastating effect."
+  },
+  {
+   "id": "legionary.sp.blood-for-the-blood-god",
+   "name": "BLOOD FOR THE BLOOD GOD",
+   "text": "Whenever a friendly LEGIONARY operative (excluding KHORNE) is fighting, the first time you strike during that sequence, inflict 1 additional damage (to a maximum of 7). \n\nAdd 1 to both Dmg stats of friendly LEGIONARY KHORNE operatives’ melee weapons (to a maximum of 7).\n\nFirefight Ploys\nUNENDING BLOODSHED\n\nEven when on the verge of death, the devotees of Khorne spend their last vestiges of energy to kill in the Blood God’s name.\nUse this firefight ploy when a friendly LEGIONARY KHORNE operative is incapacitated while fighting or retaliating. You can strike the enemy operative in that sequence with one of your unresolved successes before it’s removed from the killzone.\n\nMALIGNANT AURA\n\nThose who swear themselves to Nurgle may be granted his favour. Some are even able to project an miasmic aura of decay.\nUse this firefight ploy when a friendly LEGIONARY NURGLE operative is performing the Shoot action, when you select a valid target. Until the end of that action, whenever that friendly operative is shooting an enemy operative within 3\" of it (i.e. including secondary targets, if any), that friendly operative’s ranged weapons have the Piercing 1 weapon rule.\n\nSICKENING CAPTIVATION\n\nSlaanesh bestows upon the loyal the power to nauseate their foes, using dazzling speed, sickening perfumed auras and horrific sonic projections.\nUse this firefight ploy during a friendly LEGIONARY SLAANESH operative’s activation, before or after it performs an action. Select one enemy operative visible to and within 4\" of that friendly operative. Until the end of that enemy operative’s next activation, subtract 1 from its APL stat.\n\nMUTABILITY AND CHANGE\n\nTzeentch bestows upon his most devoted followers all manner of bizarre mutations, some of which may even prove beneficial.\nUse this firefight ploy when a friendly LEGIONARY TZEENTCH operative is activated. Until the end of that operative’s activation, add 1 to its APL stat, but it cannot perform the same action more than once during that activation. If it’s a WARRIOR operative, that operative’s Marks of Chaos keyword cannot be changed during this turning point (see Infernal Pact additional rule).\n\nFaction Equipment\nWARDED ARMOUR\n\nDaubed with profane icons, emblazoned with infernal scripture and blessed by the Ruinous Powers, this power armour possesses unholy resilience.\nSTRATEGIC GAMBIT. Select one friendly LEGIONARY operative. Until the Ready step of the next Strategy phase, change that operative’s Save stat to 2+.\n\nMALEFIC BLADES\n\nRedolent with daemonic energies, this blade hungers for blood.\nFriendly LEGIONARY operatives have the following melee weapon for the battle:\n\nMalefic blade\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nMalefic blade\n5\n\n3+\n\n3/4\n\nTAINTED ROUNDS\n\nSubjected to fell rituals, these bolt rounds are infused with corruption.\nOnce per turning point, when a friendly LEGIONARY operative is performing the Shoot action and you select a bolt pistol or boltgun, you can use this rule. If you do, until the end of that action, that weapon has the Rending weapon rule.\n\nCHAOS TALISMANS\n\nThose who carry the talismans of the Ruinous Powers may be granted great gifts, though they invariably come at a price.\nSTRATEGIC GAMBIT. Select one Marks of Chaos keyword. Once during each of their activations, when a friendly LEGIONARY operative that has that keyword is shooting, fighting or retaliating, if you roll two or more fails, you can inflict D3 damage on that friendly operative to discard one of them and retain the other as a normal success instead. Note that if it’s the Shoot action and that damage incapacitates that friendly operative, the action doesn’t end (continue the sequence with your successful attack dice).",
+   "cp": 1,
+   "fluff": "Bloodthirsty, battle-hungry and filled with unbridled fury, Legionaries strike with rage-fuelled might.",
+   "weapons": [
+    {
+     "name": "Malefic blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "legionary.fp.unending-bloodshed",
+   "name": "UNENDING BLOODSHED",
+   "text": "Use this firefight ploy when a friendly LEGIONARY KHORNE operative is incapacitated while fighting or retaliating. You can strike the enemy operative in that sequence with one of your unresolved successes before it’s removed from the killzone.",
+   "cp": 1,
+   "fluff": "Even when on the verge of death, the devotees of Khorne spend their last vestiges of energy to kill in the Blood God’s name."
+  },
+  {
+   "id": "legionary.fp.malignant-aura",
+   "name": "MALIGNANT AURA",
+   "text": "Use this firefight ploy when a friendly LEGIONARY NURGLE operative is performing the Shoot action, when you select a valid target. Until the end of that action, whenever that friendly operative is shooting an enemy operative within 3\" of it (i.e. including secondary targets, if any), that friendly operative’s ranged weapons have the Piercing 1 weapon rule.",
+   "cp": 1,
+   "fluff": "Those who swear themselves to Nurgle may be granted his favour. Some are even able to project an miasmic aura of decay."
+  },
+  {
+   "id": "legionary.fp.sickening-captivation",
+   "name": "SICKENING CAPTIVATION",
+   "text": "Use this firefight ploy during a friendly LEGIONARY SLAANESH operative’s activation, before or after it performs an action. Select one enemy operative visible to and within 4\" of that friendly operative. Until the end of that enemy operative’s next activation, subtract 1 from its APL stat.",
+   "cp": 1,
+   "fluff": "Slaanesh bestows upon the loyal the power to nauseate their foes, using dazzling speed, sickening perfumed auras and horrific sonic projections."
+  },
+  {
+   "id": "legionary.fp.mutability-and-change",
+   "name": "MUTABILITY AND CHANGE",
+   "text": "Use this firefight ploy when a friendly LEGIONARY TZEENTCH operative is activated. Until the end of that operative’s activation, add 1 to its APL stat, but it cannot perform the same action more than once during that activation. If it’s a WARRIOR operative, that operative’s Marks of Chaos keyword cannot be changed during this turning point (see Infernal Pact additional rule).\n\nFaction Equipment\nWARDED ARMOUR\n\nDaubed with profane icons, emblazoned with infernal scripture and blessed by the Ruinous Powers, this power armour possesses unholy resilience.\nSTRATEGIC GAMBIT. Select one friendly LEGIONARY operative. Until the Ready step of the next Strategy phase, change that operative’s Save stat to 2+.\n\nMALEFIC BLADES\n\nRedolent with daemonic energies, this blade hungers for blood.\nFriendly LEGIONARY operatives have the following melee weapon for the battle:\n\nMalefic blade\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nMalefic blade\n5\n\n3+\n\n3/4\n\nTAINTED ROUNDS\n\nSubjected to fell rituals, these bolt rounds are infused with corruption.\nOnce per turning point, when a friendly LEGIONARY operative is performing the Shoot action and you select a bolt pistol or boltgun, you can use this rule. If you do, until the end of that action, that weapon has the Rending weapon rule.\n\nCHAOS TALISMANS\n\nThose who carry the talismans of the Ruinous Powers may be granted great gifts, though they invariably come at a price.\nSTRATEGIC GAMBIT. Select one Marks of Chaos keyword. Once during each of their activations, when a friendly LEGIONARY operative that has that keyword is shooting, fighting or retaliating, if you roll two or more fails, you can inflict D3 damage on that friendly operative to discard one of them and retain the other as a normal success instead. Note that if it’s the Shoot action and that damage incapacitates that friendly operative, the action doesn’t end (continue the sequence with your successful attack dice).",
+   "cp": 1,
+   "fluff": "Tzeentch bestows upon his most devoted followers all manner of bizarre mutations, some of which may even prove beneficial.",
+   "weapons": [
+    {
+     "name": "Malefic blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "equipment": [
+  {
+   "id": "legionary.eq.warded-armour",
+   "name": "WARDED ARMOUR",
+   "text": "STRATEGIC GAMBIT. Select one friendly LEGIONARY operative. Until the Ready step of the next Strategy phase, change that operative’s Save stat to 2+.",
+   "fluff": "Daubed with profane icons, emblazoned with infernal scripture and blessed by the Ruinous Powers, this power armour possesses unholy resilience."
+  },
+  {
+   "id": "legionary.eq.malefic-blades",
+   "name": "MALEFIC BLADES",
+   "text": "Friendly LEGIONARY operatives have the following melee weapon for the battle:\n\nMalefic blade\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nMalefic blade\n5\n\n3+\n\n3/4",
+   "fluff": "Redolent with daemonic energies, this blade hungers for blood.",
+   "weapons": [
+    {
+     "name": "Malefic blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "legionary.eq.tainted-rounds",
+   "name": "TAINTED ROUNDS",
+   "text": "Once per turning point, when a friendly LEGIONARY operative is performing the Shoot action and you select a bolt pistol or boltgun, you can use this rule. If you do, until the end of that action, that weapon has the Rending weapon rule.",
+   "fluff": "Subjected to fell rituals, these bolt rounds are infused with corruption."
+  },
+  {
+   "id": "legionary.eq.chaos-talismans",
+   "name": "CHAOS TALISMANS",
+   "text": "STRATEGIC GAMBIT. Select one Marks of Chaos keyword. Once during each of their activations, when a friendly LEGIONARY operative that has that keyword is shooting, fighting or retaliating, if you roll two or more fails, you can inflict D3 damage on that friendly operative to discard one of them and retain the other as a normal success instead. Note that if it’s the Shoot action and that damage incapacitates that friendly operative, the action doesn’t end (continue the sequence with your successful attack dice).",
+   "fluff": "Those who carry the talismans of the Ruinous Powers may be granted great gifts, though they invariably come at a price."
+  }
+ ],
+ "markerGuide": "Mark of Chaos Khorne Token\n\nMark of Chaos Slaanesh Token\n\nTainted Rounds Token\n\nMark of Chaos Nurgle Token\n\nMark of Chaos Undivided Token\n\nWarded Armour Token\n\nMark of Chaos Tzeentch Token\n\nUnleash Daemon Token\n\nGrisly Marker",
+ "notes": [],
+ "rareWeaponRules": [
+  "PSYCHIC",
+  "SiphonLife"
+ ]
+}

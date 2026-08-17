@@ -1,0 +1,1688 @@
+{
+ "id": "spectre-squad",
+ "name": "Spectre Squad",
+ "faction": "Astra Militarum",
+ "grandFaction": "Imperium",
+ "archetypes": [
+  "Infiltration",
+  "Recon"
+ ],
+ "booksVersion": "June 2026",
+ "books": [
+  {
+   "book": "Spectre Squad",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "",
+   "lastUpdate": "June 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_17-06_kill_team_team_rules_spectre_squad_online_rules-fmam5py97r-crpssgvbua.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/spectre-squad/",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "VETERAN SERGEANT",
+   "datacardId": "spectre-squad.veteran-sergeant",
+   "count": 1,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "fixed",
+   "fixedWeapons": [],
+   "alwaysWeapons": [
+    "Scoped lascarbine",
+    "Bionic arm"
+   ],
+   "choices": [
+    "VETERAN SERGEANT"
+   ],
+   "inList": false
+  },
+  "slots": 10,
+  "totalOperatives": 11,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "VETERAN SERGEANT"
+    ],
+    "rawText": "1 SPECTRE SQUAD VETERAN SERGEANT"
+   },
+   {
+    "index": 2,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "VOX-RELAY BEACON"
+    ],
+    "rawText": "1 SPECTRE SQUAD VOX-RELAY BEACON"
+   },
+   {
+    "index": 3,
+    "count": 9,
+    "kind": "list",
+    "roles": [
+     "FIELD MEDICAE",
+     "GRENADIER",
+     "GUIDE",
+     "GUNNER",
+     "HEAVY GUNNER",
+     "LOADER",
+     "SHARPSHOOTER",
+     "STUB-GUNNER",
+     "TROOPER",
+     "VOX-OPERATOR"
+    ],
+    "rawText": "9 SPECTRE SQUAD operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "VOX-RELAY BEACON",
+    "datacardAnchor": "Spectre-Vox-Relay-Beacon",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 SPECTRE SQUAD VOX-RELAY BEACON",
+    "group": 2,
+    "datacardId": "spectre-squad.vox-relay-beacon",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "FIELD MEDICAE",
+    "datacardAnchor": "Spectre-Field-Medicae",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "FIELD MEDICAE*",
+    "group": 3,
+    "datacardId": "spectre-squad.field-medicae",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
+   },
+   {
+    "role": "GRENADIER",
+    "datacardAnchor": "Spectre-Grenadier",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "GRENADIER*",
+    "group": 3,
+    "datacardId": "spectre-squad.grenadier",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
+   },
+   {
+    "role": "GUIDE",
+    "datacardAnchor": "Spectre-Guide",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "GUIDE*",
+    "group": 3,
+    "datacardId": "spectre-squad.guide",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Spectre-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.g3e4.opt1",
+      "label": "Meltagun; fists",
+      "weapons": [
+       "Meltagun",
+       "Fists"
+      ]
+     },
+     {
+      "id": "spectre-squad.g3e4.opt2",
+      "label": "Plasma gun; fists",
+      "weapons": [
+       "Plasma gun",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with one of the following options:",
+    "group": 3,
+    "datacardId": "spectre-squad.gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Gun butt"
+    ]
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Spectre-Heavy-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER",
+    "group": 3,
+    "datacardId": "spectre-squad.heavy-gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Laspistol",
+     "Missile launcher",
+     "Fists"
+    ]
+   },
+   {
+    "role": "LOADER",
+    "datacardAnchor": "Spectre-Loader",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "LOADER",
+    "group": 3,
+    "datacardId": "spectre-squad.loader",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Laspistol",
+     "Fists"
+    ]
+   },
+   {
+    "role": "SHARPSHOOTER",
+    "datacardAnchor": "Spectre-Sharpshooter",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SHARPSHOOTER",
+    "group": 3,
+    "datacardId": "spectre-squad.sharpshooter",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Long-las",
+     "Gun butt"
+    ]
+   },
+   {
+    "role": "STUB-GUNNER",
+    "datacardAnchor": "Spectre-Stub-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "STUB-GUNNER",
+    "group": 3,
+    "datacardId": "spectre-squad.stub-gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Autostubber",
+     "Fists"
+    ]
+   },
+   {
+    "role": "TROOPER",
+    "datacardAnchor": "Spectre-Trooper",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "TROOPER*",
+    "group": 3,
+    "datacardId": "spectre-squad.trooper",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
+   },
+   {
+    "role": "VOX-OPERATOR",
+    "datacardAnchor": "Spectre-Vox-Operator",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "VOX-OPERATOR*",
+    "group": 3,
+    "datacardId": "spectre-squad.vox-operator",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "loadoutFromFootnote": "*",
+    "alwaysWeapons": []
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "VETERAN SERGEANT",
+    "datacardAnchor": "Spectre-Veteran-Sergeant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 SPECTRE SQUAD VETERAN SERGEANT",
+    "group": 1,
+    "datacardId": "spectre-squad.veteran-sergeant",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Scoped lascarbine",
+     "Bionic arm"
+    ]
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "TROOPER"
+    ]
+   }
+  ],
+  "footnotes": {
+   "*": "With one of the following options:"
+  },
+  "footnoteOptions": {
+   "*": {
+    "text": "With one of the following options:",
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "spectre-squad.fn1o1",
+      "label": "Lasrifle; gun butt",
+      "weapons": [
+       "Lasrifle",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "spectre-squad.fn1o2",
+      "label": "Lascarbine; gun butt",
+      "weapons": [
+       "Lascarbine",
+       "Gun butt"
+      ]
+     }
+    ]
+   }
+  },
+  "designerNotes": [],
+  "rawText": "1 SPECTRE SQUAD VETERAN SERGEANT\n\n1 SPECTRE SQUAD VOX-RELAY BEACON\n\n9 SPECTRE SQUAD operatives selected from the following list:\n\nFIELD MEDICAE*\n\nGRENADIER*\n\nGUIDE*\n\nGUNNER with one of the following options:\n\nMeltagun; fists\n\nPlasma gun; fists\n\nHEAVY GUNNER\n\nLOADER\n\nSHARPSHOOTER\n\nSTUB-GUNNER\n\nTROOPER*\n\nVOX-OPERATOR*\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once.\n\n*With one of the following options:\n\nLasrifle; gun butt\n\nLascarbine; gun butt"
+ },
+ "datacards": [
+  {
+   "id": "spectre-squad.veteran-sergeant",
+   "teamId": "spectre-squad",
+   "name": "Spectre Veteran Sergeant",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "LEADER",
+    "VETERAN SERGEANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Scoped lascarbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bionic arm",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "spectre-squad.veteran-sergeant.act.issue-mission",
+     "name": "ISSUE MISSION",
+     "ap": 0,
+     "text": "Select one expended friendly SPECTRE SQUAD operative (excluding VOX-RELAY BEACON) visible to this operative that hasn’t interrupted an enemy operative’s activation with the Elite Fieldcraft faction rule this turning point. Until the end of the turning point, that friendly operative can do so even though it’s expended (taking precedence over the normal rules). However, if it does, it cannot counteract during the turning point, or perform the Reposition action if it’s already done so this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Battle-scarred unit commanders, the Veteran Sergeants of Spectre Squads have an ironclad grasp of skirmish and reconnaissance tactics, alongside being skilled warriors in their own right."
+  },
+  {
+   "id": "spectre-squad.vox-relay-beacon",
+   "teamId": "spectre-squad",
+   "name": "Spectre Vox-Relay Beacon",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "VOX-RELAY BEACON"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 1,
+   "move": 0,
+   "save": 5,
+   "wounds": 3,
+   "weapons": [],
+   "abilities": [
+    {
+     "id": "spectre-squad.vox-relay-beacon.pre-deploy",
+     "name": "Pre-Deploy",
+     "text": "In the Set Up Operatives step, this operative can be set up outside of your drop zone. It must be set up in a location it can be placed, wholly within your territory and more than 2\" from markers and equipment terrain features."
+    },
+    {
+     "id": "spectre-squad.vox-relay-beacon.expendable",
+     "name": "Expendable",
+     "text": "This operative cannot perform any actions other than Signal. It cannot counteract, retaliate or assist in a fight.\n\nThis operative cannot contest markers or areas of the killzone, and is ignored for your opponent’s kill/elimination op (when it’s incapacitated, and when determining your starting number of operatives). It’s also ignored for victory conditions and scoring VPs if either require operatives to ‘escape’, ‘survive’ or be incapacitated by enemy operatives (if it escapes/survives/is incapacitated, determining how many operatives must escape/survive/be incapacitated, etc.).\n\nOperatives can move through this operative. Your opponent can ignore this operative’s control range at any time. Whenever a friendly SPECTRE SQUAD operative is performing the Shoot action and you’re selecting a valid target, you can ignore this operative’s control range. Note that control range wouldn’t be mutual when ignored."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "spectre-squad.vox-relay-beacon.act.signal",
+     "name": "SIGNAL",
+     "ap": 1,
+     "text": "Select one other friendly SPECTRE SQUAD operative within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ]
+  },
+  {
+   "id": "spectre-squad.field-medicae",
+   "teamId": "spectre-squad",
+   "name": "Spectre Field Medicae",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "FIELD MEDICAE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Lascarbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Lasrifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "spectre-squad.field-medicae.medic",
+     "name": "Medic!",
+     "text": "The first time during each turning point that another friendly SPECTRE SQUAD operative (excluding VOX-RELAY BEACON) would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "spectre-squad.field-medicae.act.medikit",
+     "name": "MEDIKIT",
+     "ap": 0,
+     "text": "Select one friendly SPECTRE SQUAD operative (excluding VOX-RELAY BEACON) within this operative’s control range to regain up to 2D3 lost wounds. It cannot be an operative that the Medic! rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Operating far from support as they do, Spectre Squads require on-the-spot medical support. This is provided by their dedicated and courageous Field Medicae, who willingly dash into harm’s way to preserve Imperial lives."
+  },
+  {
+   "id": "spectre-squad.grenadier",
+   "teamId": "spectre-squad",
+   "name": "Spectre Grenadier",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "GRENADIER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Lascarbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Lasrifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "spectre-squad.grenadier.grenadier",
+     "name": "Grenadier",
+     "text": "This operative can use frag, krak, and smoke grenades (see universal equipment). Doing so doesn’t count towards any limited uses you have (i.e. if you also select those grenades from equipment for other operatives). Whenever this operative is using a frag or krak grenade, improve the Hit stat of that weapon by 1."
+    },
+    {
+     "id": "spectre-squad.grenadier.melta-mine",
+     "name": "Melta Mine",
+     "text": "This operative is carrying your Melta Mine marker. It can perform the Pick Up Marker action on that marker, and whenever it performs the Place Marker action on that marker, it can immediately perform a free Dash action. That marker cannot be placed within an enemy operative’s control range (if this operative is incapacitated while carrying that marker and that marker cannot be placed, it’s removed with this operative)."
+    },
+    {
+     "id": "spectre-squad.grenadier.proximity-mine",
+     "name": "Proximity Mine",
+     "text": "The first time your Melta Mine marker is within another operative’s control range, remove that marker and inflict 2D6+3 damage on that operative; if it isn’t incapacitated, end its action (if any), even if that action’s effects aren’t fulfilled. If it cannot be placed, move it the minimum amount to do so. Note that this operative is ignored for these effects (i.e. it cannot set it off or take damage from that marker)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Entrusted with an array of explosives that range from anti-personnel grenades to bulky melta charges, Grenadiers couple explosive punch with short-ranged versatility."
+  },
+  {
+   "id": "spectre-squad.guide",
+   "teamId": "spectre-squad",
+   "name": "Spectre Guide",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "GUIDE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Lascarbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Lasrifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "spectre-squad.guide.prepared-killzone",
+     "name": "Prepared Killzone",
+     "text": "You can select one additional equipment option, but it must be an Ammo Cache or an equipment terrain feature (see universal equipment)."
+    },
+    {
+     "id": "spectre-squad.guide.scout-terrain",
+     "name": "Scout Terrain",
+     "text": "Terrain features within your territory or within 3\" of this operative are scouted for friendly SPECTRE SQUAD operatives. Once in each of their activations, friendly SPECTRE SQUAD operatives can do one of the following:\n\nIgnore the first vertical distance of 2\" it moves during one climb up if the terrain feature is scouted for friendly SPECTRE SQUAD operatives.\n\nPerform the Operate Hatch action for 1 less AP if the access point is scouted for friendly SPECTRE SQUAD operatives."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The duty of a Spectre Guide is to know or read the terrain as though they had been born to it. They scout the way ahead, ward against enemy ambushes and help with fire coordination."
+  },
+  {
+   "id": "spectre-squad.gunner",
+   "teamId": "spectre-squad",
+   "name": "Spectre Gunner",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Meltagun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma gun",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "When numerous armed foes are encountered or furious suppressing fire is required, Stub-Gunners level their autostubbers and unleash a clattering storm of rounds. The resultant carnage is impressive to behold."
+  },
+  {
+   "id": "spectre-squad.heavy-gunner",
+   "teamId": "spectre-squad",
+   "name": "Spectre Heavy Gunner",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "HEAVY GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Laspistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Missile launcher",
+     "profiles": [
+      {
+       "name": "frag",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        }
+       ]
+      },
+      {
+       "name": "krak",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "spectre-squad.heavy-gunner.weapons-team",
+     "name": "Weapons Team",
+     "text": "Whenever this operative is activated, if a friendly LOADER operative is within its control range, all profiles of its missile launcher have the Heavy (Dash only) weapon rule instead of the Heavy weapon rule until the end of that activation."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "When a Spectre Squad faces enemy vehicles or monstrous foes, the final killing shot often falls to their Heavy Gunner’s missile launcher."
+  },
+  {
+   "id": "spectre-squad.loader",
+   "teamId": "spectre-squad",
+   "name": "Spectre Loader",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "LOADER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Laspistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "spectre-squad.loader.weapon-assist",
+     "name": "Weapon Assist",
+     "text": "Whenever another friendly SPECTRE SQUAD operative within control range of this operative is shooting, you can re-roll one of your attack dice."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "spectre-squad.loader.act.load-weapon",
+     "name": "LOAD WEAPON",
+     "ap": 1,
+     "text": "Select one friendly SPECTRE SQUAD operative within this operative’s control range and not within 3\" of enemy operatives. That friendly operative can immediately perform a free Shoot action (excluding Guard), and you can change its order to do so.\n\nThis operative cannot perform this action while within control range of an enemy operative, while counteracting, or during an activation in which it performed the Charge, Dash or Shoot action (or vice versa)."
+    }
+   ],
+   "fluff": "The main duty of the Loader is to ensure that the squad’s Heavy Gunner always has another round ready to fire. Their secondary task is to also keep the rest of the squad well supplied."
+  },
+  {
+   "id": "spectre-squad.sharpshooter",
+   "teamId": "spectre-squad",
+   "name": "Spectre Sharpshooter",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "SHARPSHOOTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Long-las",
+     "profiles": [
+      {
+       "name": "concealed",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "ConcealedPosition",
+         "raw": "Concealed Position*"
+        }
+       ]
+      },
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      },
+      {
+       "name": "stationary",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "spectre-squad.sharpshooter.concealed-position",
+     "name": "Concealed Position",
+     "text": "This operative can only use this weapon\nthe first time it’s performing the Shoot action during the battle."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Armed with a long-las, a Spectre Sharpshooter is an expert sniper. They eliminate their targets with swift and silent lethality before repositioning for the next shot – a virtual ghost amid the fire and thunder of battle."
+  },
+  {
+   "id": "spectre-squad.stub-gunner",
+   "teamId": "spectre-squad",
+   "name": "Spectre Stub-Gunner",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "STUB-GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Autostubber",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        }
+       ]
+      },
+      {
+       "name": "suppressive",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 5,
+       "dmgN": 0,
+       "dmgC": 0,
+       "rules": [
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "SeekLight",
+         "raw": "Seek Light"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "spectre-squad.stub-gunner.suppressive-fire",
+     "name": "Suppressive Fire",
+     "text": "Whenever an enemy operative is visible to and within 3\" of this operative, if this operative has an Engage order and isn’t within control range of any other enemy operatives, subtract 1 from the Atk stat of that enemy operative’s weapons (to a minimum of 1). This rule has no effect if this operative performed the Charge action during this turning point."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "When numerous armed foes are encountered or furious suppressing fire is required, Stub-Gunners level their autostubbers and unleash a clattering storm of rounds. The resultant carnage is impressive to behold."
+  },
+  {
+   "id": "spectre-squad.trooper",
+   "teamId": "spectre-squad",
+   "name": "Spectre Trooper",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "TROOPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Lascarbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Lasrifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "spectre-squad.trooper.cool-headed",
+     "name": "Cool-Headed",
+     "text": "Once per turning point, one friendly SPECTRE SQUAD operative with this rule can interrupt an enemy operative’s activation with the Elite Fieldcraft faction rule for 0 Fieldcraft points (taking precedence over the normal rules)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Armed with precision lasrifles or lascarbines, Spectre Troopers are potent marksmen. When territory must be seized, they move swiftly up while maintaining cover and concealment."
+  },
+  {
+   "id": "spectre-squad.vox-operator",
+   "teamId": "spectre-squad",
+   "name": "Spectre Vox-Operator",
+   "keywords": [
+    "SPECTRE SQUAD",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "VOX-OPERATOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Lascarbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Lasrifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "spectre-squad.vox-operator.act.signal",
+     "name": "SIGNAL",
+     "ap": 1,
+     "text": "SUPPORT. Select one other friendly SPECTRE SQUAD operative (excluding VOX-RELAY BEACON) visible to this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "As well as handling the squad’s heavily encoded vox-traffic, Spectre Vox-Operators focus on gathering intelligence and enhancing tactical unity in the heat of combat."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "spectre-squad.rule.elite-fieldcraft",
+   "name": "Elite Fieldcraft",
+   "text": "In the Ready step of each Strategy phase, you gain 1 Fieldcraft point, or 2 if a friendly SPECTRE SQUAD VOX-OPERATOR operative is in the killzone and isn’t within control range of enemy operatives. At the end of each turning point, discard your Fieldcraft points. After an enemy operative that has an Engage order performs an action during its activation, you can spend 1 of your Fieldcraft points to interrupt that activation. If you do, a ready friendly SPECTRE SQUAD operative that isn’t within control range of any other enemy operatives can perform a free Shoot (excluding Guard), Dash or Reposition action.\n\nYou cannot interrupt each enemy operative’s activation more than once per activation (including Guard), and each friendly operative cannot perform more than one free action per turning point as a result of this rule.\n\nIf it’s the Shoot action, you can change that friendly operative’s order to perform this action. You cannot select any other enemy operative as a valid target during that action. Being within that enemy operative’s control range (but no others) doesn’t prevent that friendly operative from performing that action, in which case follow the rules for a point-blank shot from the Guard action.\n\nIf it’s the Reposition action, that friendly operative cannot perform that action again during the turning point. If it’s the Dash or Reposition action, that friendly operative cannot end this move closer to that enemy operative or your opponent’s drop zone (unless it ends that move wholly within your drop zone). In a killzone that uses the close quarters rules (e.g. Killzone: Tomb World), ignore Wall terrain when determining closer and you cannot teleport.",
+   "fluff": "Veteran combatants and expert scouts, Spectre Squad operatives are highly skilled in reactive warfare, reading their enemies’ movements and using the terrain to outmanoeuvre and ambush them."
+  },
+  {
+   "id": "spectre-squad.rule.camo-cloaks",
+   "name": "Camo Cloaks",
+   "text": "Whenever an operative is shooting a friendly SPECTRE SQUAD operative (excluding VOX-RELAY BEACON), if you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain.",
+   "fluff": "Though not as advanced as camelioline, the camouflage cloaks issued to Spectre Squads help to conceal them in dense terrain, especially when coupled with the operatives’ veteran skills in evading detection."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "spectre-squad.sp.disappear",
+   "name": "DISAPPEAR",
+   "text": "One friendly SPECTRE SQUAD operative can immediately perform a free Reposition action. It cannot end that move closer to enemy operatives or your opponent’s drop zone (unless it ends that move wholly within your drop zone) and it cannot perform that action again during the turning point. In a killzone that uses the close quarters rules (e.g. Killzone: Tomb World), ignore Wall terrain when determining closer.",
+   "cp": 1,
+   "fluff": "Spectres know many ways to fade out of sight and rapidly reposition."
+  },
+  {
+   "id": "spectre-squad.sp.hidden-engagement",
+   "name": "HIDDEN ENGAGEMENT",
+   "text": "Whenever a friendly SPECTRE SQUAD operative is shooting, if it’s in cover from the target’s perspective, that friendly operative’s weapons have the Balanced weapon rule. Note that your opponent still determines the targeting lines for this (i.e. they decide which point of their operative’s base targeting lines are drawn from).",
+   "cp": 1,
+   "fluff": "Long experience and intensive training aid these operatives in picking off their targets from concealed positions."
+  },
+  {
+   "id": "spectre-squad.sp.ambushing-volley",
+   "name": "AMBUSHING VOLLEY",
+   "text": "Whenever a friendly SPECTRE SQUAD operative is activated, if it’s more than 3\" from enemy operatives and isn’t a valid target for enemy operatives before determining its order, its ranged weapons (excluding the suppressive profile of an autostubber) have the Devastating 1 weapon rule until the end of that activation. If that weapon already had the Devastating x weapon rule, add 1 to the x of its Devastating x weapon rule instead.",
+   "cp": 1,
+   "fluff": "Having identified their target’s weak points, Spectres burst from ambush with their guns blazing to finish off the foe."
+  },
+  {
+   "id": "spectre-squad.sp.patience",
+   "name": "PATIENCE",
+   "text": "In the Firefight phase of this turning point, you can do one of the following:\n\nWhen it’s your turn to activate a friendly operative, you can skip that activation. You cannot do this until after your opponent’s first activation.\n\nWhen a friendly SPECTRE SQUAD operative performs the Shoot or Fight action during its activation, if it’s the last friendly operative to be activated during this turning point, its weapons have the Relentless weapon rule for that action.\n\nFirefight Ploys\nDODGE\n\nNo soldier lives to become a Spectre without supreme survival instincts.\nUse this firefight ploy during a friendly SPECTRE SQUAD operative’s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP.\n\nSILENT KILLERS\n\nThese operatives can quietly eliminate foes without raising the alarm.\nUse this firefight ploy during a friendly SPECTRE SQUAD operative’s activation before or after it performs an action, if it has a Conceal order and isn’t a valid target for enemy operatives. Until the end of that activation, it can perform the Charge action while it has a Conceal order, and the first time it strikes you can inflict 3 additional damage, but cannot resolve any other successes during that sequence.\n\nSHARP REACTIONS\n\nThese veteran operatives fight in a swift and responsive fashion.\nUse this firefight ploy after an enemy operative that has a Conceal order performs an action during its activation, if it’s within 8\" of a friendly SPECTRE SQUAD operative. You can use the Elite Fieldcraft faction rule to interrupt that activation with that friendly SPECTRE SQUAD operative regardless of that enemy operative’s order (taking precedence over the normal rules).\n\nPREPARED DEFENCE\n\nSpectres always have an escape route and defensive measures in place.\nUse this firefight ploy when a friendly SPECTRE SQUAD operative that has a Conceal order or is ready is retaliating. You can do one of the following:\n\nAt the start of the Resolve Attack Dice step, you can resolve one of your successes before the normal order. If you do, that success must be used to block.\n\nWhen you block, that block can be allocated to block two unresolved successes (instead of one).\n\nYou cannot use this ploy during an activation in which you’ve interrupted with the Elite Fieldcraft faction rule.\n\nFaction Equipment\nSNIPER OVERWATCH\n\nThe Spectres coordinate with snipers that have moved up to encircle the battlefield, calling in and spotting shots from flanking positions.\nOnce per turning point, a friendly SPECTRE SQUAD operative can use the following ranged weapon:\n\nSniper Overwatch\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nSniper Overwatch\n4\n\n3+\n\n3/3\n\nWR\n\nDevastating 2, Heavy (Dash only), Saturate, Silent\n\nTVID-FEED TRIANGULATION\n\nBy sharing the vid-feed data from their helm cameras, the Spectres are able to triangulate optimal firing solutions on their foes.\nOnce per turning point, when a friendly SPECTRE SQUAD operative is performing the Shoot action and you’re selecting a valid target, you can use this rule. If you do, that target cannot be obscured if either of the following are true:\n\nIt’s also a valid target for another friendly SPECTRE SQUAD operative.\n\nIt’s within 6\" of a friendly VOX-RELAY BEACON operative.\n\nSTARSHELL FLARE\n\nWhile starshells are commonly used by the Imperial Guard for battlefield illumination, these wily veterans employ them to stun and distract.\nSTRATEGIC GAMBIT. One friendly SPECTRE SQUAD operative can immediately perform a free Stun Grenade action. Performing this action using this rule doesn’t count towards its action limits (i.e. if you also select that grenade from equipment). When an enemy operative’s APL stat is changed as a result of this STRATEGIC GAMBIT, you cannot use this equipment for the rest of the battle.\n\nADVANCED CAMOUFLAGE\n\nThese Spectres employ cunning means of concealing themselves.\nFriendly SPECTRE SQUAD operatives (excluding VOX-RELAY BEACON) can perform the following unique action:\n\nADVANCED CAMOUFLAGE1AP\nUntil the start of this operative’s next activation, while it has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".\n\nThis operative cannot perform this action while visible to and within 3\" of an enemy operative.",
+   "cp": 1,
+   "fluff": "Bloody experience has taught these operatives the merits of patience.",
+   "weapons": [
+    {
+     "name": "Sniper Overwatch",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "spectre-squad.fp.dodge",
+   "name": "DODGE",
+   "text": "Use this firefight ploy during a friendly SPECTRE SQUAD operative’s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP.",
+   "cp": 1,
+   "fluff": "No soldier lives to become a Spectre without supreme survival instincts."
+  },
+  {
+   "id": "spectre-squad.fp.silent-killers",
+   "name": "SILENT KILLERS",
+   "text": "Use this firefight ploy during a friendly SPECTRE SQUAD operative’s activation before or after it performs an action, if it has a Conceal order and isn’t a valid target for enemy operatives. Until the end of that activation, it can perform the Charge action while it has a Conceal order, and the first time it strikes you can inflict 3 additional damage, but cannot resolve any other successes during that sequence.",
+   "cp": 1,
+   "fluff": "These operatives can quietly eliminate foes without raising the alarm."
+  },
+  {
+   "id": "spectre-squad.fp.sharp-reactions",
+   "name": "SHARP REACTIONS",
+   "text": "Use this firefight ploy after an enemy operative that has a Conceal order performs an action during its activation, if it’s within 8\" of a friendly SPECTRE SQUAD operative. You can use the Elite Fieldcraft faction rule to interrupt that activation with that friendly SPECTRE SQUAD operative regardless of that enemy operative’s order (taking precedence over the normal rules).",
+   "cp": 1,
+   "fluff": "These veteran operatives fight in a swift and responsive fashion."
+  },
+  {
+   "id": "spectre-squad.fp.prepared-defence",
+   "name": "PREPARED DEFENCE",
+   "text": "Use this firefight ploy when a friendly SPECTRE SQUAD operative that has a Conceal order or is ready is retaliating. You can do one of the following:\n\nAt the start of the Resolve Attack Dice step, you can resolve one of your successes before the normal order. If you do, that success must be used to block.\n\nWhen you block, that block can be allocated to block two unresolved successes (instead of one).\n\nYou cannot use this ploy during an activation in which you’ve interrupted with the Elite Fieldcraft faction rule.\n\nFaction Equipment\nSNIPER OVERWATCH\n\nThe Spectres coordinate with snipers that have moved up to encircle the battlefield, calling in and spotting shots from flanking positions.\nOnce per turning point, a friendly SPECTRE SQUAD operative can use the following ranged weapon:\n\nSniper Overwatch\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nSniper Overwatch\n4\n\n3+\n\n3/3\n\nWR\n\nDevastating 2, Heavy (Dash only), Saturate, Silent\n\nTVID-FEED TRIANGULATION\n\nBy sharing the vid-feed data from their helm cameras, the Spectres are able to triangulate optimal firing solutions on their foes.\nOnce per turning point, when a friendly SPECTRE SQUAD operative is performing the Shoot action and you’re selecting a valid target, you can use this rule. If you do, that target cannot be obscured if either of the following are true:\n\nIt’s also a valid target for another friendly SPECTRE SQUAD operative.\n\nIt’s within 6\" of a friendly VOX-RELAY BEACON operative.\n\nSTARSHELL FLARE\n\nWhile starshells are commonly used by the Imperial Guard for battlefield illumination, these wily veterans employ them to stun and distract.\nSTRATEGIC GAMBIT. One friendly SPECTRE SQUAD operative can immediately perform a free Stun Grenade action. Performing this action using this rule doesn’t count towards its action limits (i.e. if you also select that grenade from equipment). When an enemy operative’s APL stat is changed as a result of this STRATEGIC GAMBIT, you cannot use this equipment for the rest of the battle.\n\nADVANCED CAMOUFLAGE\n\nThese Spectres employ cunning means of concealing themselves.\nFriendly SPECTRE SQUAD operatives (excluding VOX-RELAY BEACON) can perform the following unique action:\n\nADVANCED CAMOUFLAGE1AP\nUntil the start of this operative’s next activation, while it has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".\n\nThis operative cannot perform this action while visible to and within 3\" of an enemy operative.",
+   "cp": 1,
+   "fluff": "Spectres always have an escape route and defensive measures in place.",
+   "weapons": [
+    {
+     "name": "Sniper Overwatch",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "equipment": [
+  {
+   "id": "spectre-squad.eq.sniper-overwatch",
+   "name": "SNIPER OVERWATCH",
+   "text": "Once per turning point, a friendly SPECTRE SQUAD operative can use the following ranged weapon:\n\nSniper Overwatch\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nSniper Overwatch\n4\n\n3+\n\n3/3\n\nWR\n\nDevastating 2, Heavy (Dash only), Saturate, Silent",
+   "fluff": "The Spectres coordinate with snipers that have moved up to encircle the battlefield, calling in and spotting shots from flanking positions.",
+   "weapons": [
+    {
+     "name": "Sniper Overwatch",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "spectre-squad.eq.tvid-feed-triangulation",
+   "name": "TVID-FEED TRIANGULATION",
+   "text": "Once per turning point, when a friendly SPECTRE SQUAD operative is performing the Shoot action and you’re selecting a valid target, you can use this rule. If you do, that target cannot be obscured if either of the following are true:\n\nIt’s also a valid target for another friendly SPECTRE SQUAD operative.\n\nIt’s within 6\" of a friendly VOX-RELAY BEACON operative.",
+   "fluff": "By sharing the vid-feed data from their helm cameras, the Spectres are able to triangulate optimal firing solutions on their foes."
+  },
+  {
+   "id": "spectre-squad.eq.starshell-flare",
+   "name": "STARSHELL FLARE",
+   "text": "STRATEGIC GAMBIT. One friendly SPECTRE SQUAD operative can immediately perform a free Stun Grenade action. Performing this action using this rule doesn’t count towards its action limits (i.e. if you also select that grenade from equipment). When an enemy operative’s APL stat is changed as a result of this STRATEGIC GAMBIT, you cannot use this equipment for the rest of the battle.",
+   "fluff": "While starshells are commonly used by the Imperial Guard for battlefield illumination, these wily veterans employ them to stun and distract."
+  },
+  {
+   "id": "spectre-squad.eq.advanced-camouflage",
+   "name": "ADVANCED CAMOUFLAGE",
+   "text": "Friendly SPECTRE SQUAD operatives (excluding VOX-RELAY BEACON) can perform the following unique action:\n\nADVANCED CAMOUFLAGE1AP\nUntil the start of this operative’s next activation, while it has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".\n\nThis operative cannot perform this action while visible to and within 3\" of an enemy operative.",
+   "fluff": "These Spectres employ cunning means of concealing themselves."
+  }
+ ],
+ "markerGuide": "Advanced Camouflage token\n\nMedic token\n\nCoolheaded token\n\nIssue Mission token\n\nMelta Mine marker\n\nFieldcraft Points\n\nPatience token\n\nStarshell Flare token\n\nTvid-feed Triangulation token\n\nSniper Overwatch token",
+ "notes": [],
+ "rareWeaponRules": [
+  "ConcealedPosition"
+ ]
+}

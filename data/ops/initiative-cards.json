@@ -1,0 +1,42 @@
+{
+  "source": "Approved Ops 2025 — game sequence steps 1 and 4, wahapedia.ru/kill-team3 — extracted 2026-08-17.",
+  "rules": "To determine initiative during each turning point (including the first), the players roll off (but don't re-roll ties). Starting with the loser of the roll-off, each player alternates either using an initiative card to alter their roll result or passing, until they both pass in succession.\nIf player(s) would use their kill team's rules to affect the roll-off, they must do so before playing initiative cards, starting with the player that's losing the roll off.\nThe Re-roll initiative card allows the player to re-roll their initiative roll. The remaining initiative cards modify the player's roll result up or down (this can take it above 6 or below 1). If a player uses the Re-roll initiative card after they've modified their roll result, the new result supersedes their modification(s) used so far.\nThe winner of the roll-off decides who has initiative. Excluding the fourth turning point, the loser of the roll-off gains an initiative card equal to the turning point number. If the roll-off is a tie, the player who doesn't currently have initiative is the winner. Note that it's the loser of the roll-off that gains the initiative card, not the player without initiative.",
+  "cards": [
+    {
+      "id": "ic.reroll",
+      "name": "Re-roll",
+      "kind": "reroll",
+      "text": "Re-roll your initiative roll. A Re-roll played after modifiers supersedes them.",
+      "grantedAt": "setup",
+      "grantedTo": "the opponent of the player with initiative (they take the other drop zone)"
+    },
+    {
+      "id": "ic.plus1",
+      "name": "+1/-1",
+      "kind": "modifier",
+      "magnitude": 1,
+      "text": "Modify your initiative roll result by +1 or -1 (this can take it above 6 or below 1).",
+      "grantedAt": "end of the first turning point's roll-off",
+      "grantedTo": "the loser of the roll-off"
+    },
+    {
+      "id": "ic.plus2",
+      "name": "+2/-2",
+      "kind": "modifier",
+      "magnitude": 2,
+      "text": "Modify your initiative roll result by +2 or -2 (this can take it above 6 or below 1).",
+      "grantedAt": "end of the second turning point's roll-off",
+      "grantedTo": "the loser of the roll-off"
+    },
+    {
+      "id": "ic.plus3",
+      "name": "+3/-3",
+      "kind": "modifier",
+      "magnitude": 3,
+      "text": "Modify your initiative roll result by +3 or -3 (this can take it above 6 or below 1).",
+      "grantedAt": "end of the third turning point's roll-off",
+      "grantedTo": "the loser of the roll-off"
+    }
+  ],
+  "cardForTurningPoint": { "1": "ic.plus1", "2": "ic.plus2", "3": "ic.plus3" }
+}

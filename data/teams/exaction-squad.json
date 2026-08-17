@@ -1,0 +1,1610 @@
+{
+ "id": "exaction-squad",
+ "name": "Exaction Squad",
+ "faction": "Agents of the Imperium",
+ "grandFaction": "Imperium",
+ "archetypes": [
+  "Seek & Destroy",
+  "Security"
+ ],
+ "booksVersion": "January ’26",
+ "books": [
+  {
+   "book": "Exaction Squad",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "January ’26",
+   "lastUpdate": "June 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_17-06_kill_team_team_rules_exaction_squad_online_rules-w6tqairoed-qhpndqu8fq.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/exaction-squad/",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "PROCTOR-EXACTANT",
+   "datacardId": "exaction-squad.arbites-proctor-exactant",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "exaction-squad.g1.opt1",
+     "label": "Combat shotgun; repression baton",
+     "weapons": [
+      "Combat shotgun",
+      "Repression baton"
+     ]
+    },
+    {
+     "id": "exaction-squad.g1.opt2",
+     "label": "Shotpistol; dominator maul & assault shield",
+     "weapons": [
+      "Shotpistol",
+      "Dominator maul & assault shield"
+     ]
+    }
+   ],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "PROCTOR-EXACTANT"
+   ],
+   "inList": false
+  },
+  "slots": 10,
+  "totalOperatives": 11,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "PROCTOR-EXACTANT"
+    ],
+    "rawText": "1 EXACTION SQUAD PROCTOR-EXACTANT operative with one of the following options:"
+   },
+   {
+    "index": 2,
+    "count": 10,
+    "kind": "list",
+    "roles": [
+     "CASTIGATOR",
+     "CHIRURGANT",
+     "LEASHMASTER",
+     "R-VR CYBER-MASTIFF",
+     "MALOCATOR",
+     "MARKSMAN",
+     "REVELATUM",
+     "SUBDUCTOR",
+     "VIGILANT",
+     "VOX-SIGNIFIER",
+     "GUNNER"
+    ],
+    "rawText": "10 EXACTION SQUAD operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "CASTIGATOR",
+    "datacardAnchor": "Arbites-Castigator",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CASTIGATOR",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-castigator",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Combat shotgun",
+     "Excruciator maul"
+    ]
+   },
+   {
+    "role": "CHIRURGANT",
+    "datacardAnchor": "Arbites-Chirurgant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CHIRURGANT",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-chirurgant",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Combat shotgun",
+     "Repression baton"
+    ]
+   },
+   {
+    "role": "LEASHMASTER",
+    "datacardAnchor": "Arbites-Leashmaster",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "LEASHMASTER",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-leashmaster",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Combat shotgun",
+     "Shotpistol",
+     "Repression baton"
+    ]
+   },
+   {
+    "role": "R-VR CYBER-MASTIFF",
+    "datacardAnchor": "R-VR-Cyber-mastiff",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "R-VR CYBER-MASTIFF",
+    "group": 2,
+    "datacardId": "exaction-squad.r-vr-cyber-mastiff",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Mechanical bite"
+    ]
+   },
+   {
+    "role": "MALOCATOR",
+    "datacardAnchor": "Arbites-Malocator",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MALOCATOR",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-malocator",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Combat shotgun",
+     "Repression baton"
+    ]
+   },
+   {
+    "role": "MARKSMAN",
+    "datacardAnchor": "Arbites-Marksman",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MARKSMAN",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-marksman",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Executioner shotgun",
+     "Repression baton"
+    ]
+   },
+   {
+    "role": "REVELATUM",
+    "datacardAnchor": "Arbites-Revelatum",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "REVELATUM",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-revelatum",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Scoped shotpistol",
+     "Repression baton"
+    ]
+   },
+   {
+    "role": "SUBDUCTOR",
+    "datacardAnchor": "Arbites-Subductor",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SUBDUCTOR",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-subductor",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": [
+     "Shotpistol",
+     "Shock maul & assault shield"
+    ]
+   },
+   {
+    "role": "VIGILANT",
+    "datacardAnchor": "Arbites-Vigilant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "VIGILANT",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-vigilant",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": [
+     "Combat shotgun",
+     "Repression baton"
+    ]
+   },
+   {
+    "role": "VOX-SIGNIFIER",
+    "datacardAnchor": "Arbites-Vox-signifier",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "VOX-SIGNIFIER",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-vox-signifier",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Combat shotgun",
+     "Repression baton"
+    ]
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Arbites-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "exaction-squad.g2e11.opt1",
+      "label": "Grenade launcher; repression baton",
+      "weapons": [
+       "Grenade launcher",
+       "Repression baton"
+      ]
+     },
+     {
+      "id": "exaction-squad.g2e11.opt2",
+      "label": "Heavy stubber; repression baton",
+      "weapons": [
+       "Heavy stubber",
+       "Repression baton"
+      ]
+     },
+     {
+      "id": "exaction-squad.g2e11.opt3",
+      "label": "Webber; repression baton",
+      "weapons": [
+       "Webber",
+       "Repression baton"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with one of the following options:",
+    "group": 2,
+    "datacardId": "exaction-squad.arbites-gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "PROCTOR-EXACTANT",
+    "datacardAnchor": "Arbites-Proctor-exactant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "exaction-squad.g1.opt1",
+      "label": "Combat shotgun; repression baton",
+      "weapons": [
+       "Combat shotgun",
+       "Repression baton"
+      ]
+     },
+     {
+      "id": "exaction-squad.g1.opt2",
+      "label": "Shotpistol; dominator maul & assault shield",
+      "weapons": [
+       "Shotpistol",
+       "Dominator maul & assault shield"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 EXACTION SQUAD PROCTOR-EXACTANT operative with one of the following options:",
+    "group": 1,
+    "datacardId": "exaction-squad.arbites-proctor-exactant",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "GUNNER",
+     "SUBDUCTOR",
+     "VIGILANT"
+    ]
+   },
+   {
+    "kind": "maxCount",
+    "role": "GUNNER",
+    "max": 2
+   },
+   {
+    "kind": "distinctOptions",
+    "role": "GUNNER"
+   },
+   {
+    "kind": "maxCount",
+    "role": "SUBDUCTOR",
+    "max": 4
+   }
+  ],
+  "footnotes": {},
+  "footnoteOptions": {},
+  "designerNotes": [],
+  "rawText": "1 EXACTION SQUAD PROCTOR-EXACTANT operative with one of the following options:\n\nCombat shotgun; repression baton\n\nShotpistol; dominator maul & assault shield\n\n10 EXACTION SQUAD operatives selected from the following list:\n\nCASTIGATOR\n\nCHIRURGANT\n\nLEASHMASTER\n\nR-VR CYBER-MASTIFF\n\nMALOCATOR\n\nMARKSMAN\n\nREVELATUM\n\nSUBDUCTOR\n\nVIGILANT\n\nVOX-SIGNIFIER\n\nGUNNER with one of the following options:\n\nGrenade launcher; repression baton\n\nHeavy stubber; repression baton\n\nWebber; repression baton\n\nOther than GUNNER, SUBDUCTOR and VIGILANT operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two GUNNER operatives (each must have a different option) and up to four SUBDUCTOR operatives."
+ },
+ "datacards": [
+  {
+   "id": "exaction-squad.arbites-proctor-exactant",
+   "teamId": "exaction-squad",
+   "name": "Arbites Proctor-exactant",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "LEADER",
+    "PROCTOR-EXACTANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Combat shotgun",
+     "profiles": [
+      {
+       "name": "close range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 2,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Shotpistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Dominator maul & assault shield",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "Repress",
+         "raw": "Repress*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Repression baton",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-proctor-exactant.assault-shield",
+     "name": "Assault Shield",
+     "text": "If this operative has a dominator maul & assault shield, it has a 3+ Save stat."
+    },
+    {
+     "id": "exaction-squad.arbites-proctor-exactant.nuncio-aquila",
+     "name": "Nuncio-aquila",
+     "text": "Whenever an enemy operative is within 3\" of your Nuncio-aquila marker (or this operative if your Nuncio-aquila marker isn’t in the killzone), your opponent must spend 1 additional AP for that enemy operative to perform the Pick Up Marker and mission actions.\n\nWhenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of your Nuncio-aquila marker (or this operative if your Nuncio-aquila marker isn’t in the killzone). Note this isn’t a change to the APL stat, so any changes are cumulative with this."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "exaction-squad.arbites-proctor-exactant.act.deploy-nuncio-aquila",
+     "name": "DEPLOY NUNCIO-AQUILA",
+     "ap": 0,
+     "text": "If your Nuncio-aquila marker isn’t in the killzone, place it within 6\" horizontally of this operative; otherwise, move your Nuncio-aquila marker up to 6\" horizontally. If this operative is removed from the killzone, remove your Nuncio-aquila marker from the killzone.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Exaction Squads are selected and led by Proctors-exactant. These experienced Arbitrators are ruthless tacticians and savvy fighters. They are also intimidating embodiments of Imperial justice and employ nuncio-aquilas to broadcast deafening orations that cow the guilty into submission."
+  },
+  {
+   "id": "exaction-squad.arbites-castigator",
+   "teamId": "exaction-squad",
+   "name": "Arbites Castigator",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "CASTIGATOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Combat shotgun",
+     "profiles": [
+      {
+       "name": "close range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 2,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Excruciator maul",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-castigator.engendered-focus",
+     "name": "Engendered Focus",
+     "text": "You can ignore any changes to this operative’s stats (including its weapons’ stats, but excluding its Save stat)."
+    },
+    {
+     "id": "exaction-squad.arbites-castigator.zealous-dedication",
+     "name": "Zealous Dedication",
+     "text": "Whenever an attack dice inflicts damage of 3 or more on this operative, roll one D6: on a 5+, subtract 1 from that inflicted damage."
+    },
+    {
+     "id": "exaction-squad.arbites-castigator.castigators-arrest",
+     "name": "Castigator’s Arrest",
+     "text": "Whenever an enemy operative is within control range of this operative, if no other enemy operatives are within this operative’s control range, that enemy operative cannot perform the Fall Back action."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "It is the Castigator’s role to ensure that the guilty receive due punishment, their hood-like helms steeling their resolve against curses and pleas alike. Once the quarry is located, the Castigotor is charged with their subdual by any means - a task they perform with zealous dedication."
+  },
+  {
+   "id": "exaction-squad.arbites-chirurgant",
+   "teamId": "exaction-squad",
+   "name": "Arbites Chirurgant",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "MEDIC",
+    "CHIRURGANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Combat shotgun",
+     "profiles": [
+      {
+       "name": "close range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 2,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Repression baton",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-chirurgant.medic",
+     "name": "Medic!",
+     "text": "The first time during each turning point that another friendly EXACTION SQUAD operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "exaction-squad.arbites-chirurgant.act.medikit",
+     "name": "MEDIKIT",
+     "ap": 1,
+     "text": "Select one friendly EXACTION SQUAD operative within this operative’s control range to regain up to 2D3 lost wounds. It cannot be an operative that the Medic! rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "These Arbitrators are highly skilled medical specialists, used to treating debilitating wounds inflicted by those resisting detention. They are also skilled in the tactical questioning of prisoners and have studied the limits to which the body can be pushed to elicit answers."
+  },
+  {
+   "id": "exaction-squad.arbites-gunner",
+   "teamId": "exaction-squad",
+   "name": "Arbites Gunner",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Grenade launcher",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Heavy stubber",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash Only)"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash Only)"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Webber",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 12,
+         "raw": "Range 12\""
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Repression baton",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Gunners provide substantial firepower to Exaction Squad operations using weapons such as heavy stubbers - rapid-firing cannons whose solid shot can scythe through mobs. More specialist weapons may fire chemicals that paralyse, or grenades that crack open doors and armour alike."
+  },
+  {
+   "id": "exaction-squad.arbites-leashmaster",
+   "teamId": "exaction-squad",
+   "name": "Arbites Leashmaster",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "LEASHMASTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Combat shotgun",
+     "profiles": [
+      {
+       "name": "close range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 2,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Shotpistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Repression baton",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-leashmaster.handler",
+     "name": "Handler",
+     "text": "Whenever this operative is activated, you can activate a ready friendly EXACTION SQUAD R-VR CYBER-MASTIFF operative at the same time. Complete their activations action by action in any order."
+    },
+    {
+     "id": "exaction-squad.arbites-leashmaster.attack-pattern",
+     "name": "Attack Pattern",
+     "text": "STRATEGIC GAMBIT in the first turning point. Select two of the following attack patterns for a friendly EXACTION SQUAD R-VR CYBER-MASTIFF operative to have for the battle:\n\nAggressive: Its melee weapons have the Relentless weapon rule.\n\nSwift: Add 2\" to its Move stat.\n\nDefensive: Improve its Save stat by 1."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "exaction-squad.arbites-leashmaster.act.r-vr-command",
+     "name": "R-VR COMMAND",
+     "ap": 0,
+     "text": "Select one friendly EXACTION SQUAD R-VR CYBER-MASTIFF operative and change one of its attack pattern."
+    }
+   ],
+   "fluff": "Leashmasters are specialists who command the caniform servitors known as Cyber-mastiffs. They direct override the construct’s basic protocols with advanced commands, and broadcast shouted orders to their guilt-ridden prey via the Cyber-mastiff’s emitters."
+  },
+  {
+   "id": "exaction-squad.r-vr-cyber-mastiff",
+   "teamId": "exaction-squad",
+   "name": "R-VR Cyber-mastiff",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "R-VR CYBER-MASTIFF"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Mechanical bite",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.r-vr-cyber-mastiff.beast",
+     "name": "Beast",
+     "text": "This operative cannot perform any actions other than Apprehend, Charge, Dash, Fall Back, Fight, Guard, Reposition, Pick Up Marker and Place Marker. It cannot use any weapons that aren’t on its datacard."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "exaction-squad.r-vr-cyber-mastiff.act.apprehend",
+     "name": "APPREHEND",
+     "ap": 0,
+     "text": "Select one enemy operative within this operative’s control range. Until that enemy operative is no longer within this operative’s control range, or until this operative performs this action again (whichever comes first), worsen the Hit stat of that enemy operative’s weapons by 1 (this isn’t cumulative with being injured); in addition, that enemy operative cannot perform the Fall Back action.\n\nThis operative cannot perform this action unless an enemy operative is within its control range."
+    }
+   ],
+   "fluff": "Arbitrators employ many servo-constructs for intimidation, security and pursuit. The Rantal-class Venatus Reclamotor is an advanced Cyber-mastiff used by Exaction Squads. The R-VR’s detectors enable them to track their prey, while their iron jaws can break bones or kill on command."
+  },
+  {
+   "id": "exaction-squad.arbites-malocator",
+   "teamId": "exaction-squad",
+   "name": "Arbites Malocator",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "MALOCATOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Combat shotgun",
+     "profiles": [
+      {
+       "name": "close range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 2,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Repression baton",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-malocator.acute-focus",
+     "name": "Acute Focus",
+     "text": "Once during each of this operative’s activations, it can perform the Pick Up Marker, Place Marker, Veriscant or a mission action for 1 less AP."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "exaction-squad.arbites-malocator.act.veriscant",
+     "name": "VERISCANT",
+     "ap": 1,
+     "text": "Select one enemy operative visible to this operative. Until the start of this operative’s next activation, until it’s incapacitated or until it performs this action again (whichever comes first), whenever a friendly EXACTION SQUAD operative is shooting against, fighting against or retaliating against that enemy operative, that friendly operative’s weapons have the Lethal 5+ and Severe weapon rules.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Technically gifted, Malocators carry bio-sample extractors to gather trace evidence on their team’s quarry. They operate with an icy calm under fire, scrutinising evidence via their veriscant multi-lens array and informing their team of enemy weaknesses."
+  },
+  {
+   "id": "exaction-squad.arbites-marksman",
+   "teamId": "exaction-squad",
+   "name": "Arbites Marksman",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "MARKSMAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Executioner shotgun",
+     "profiles": [
+      {
+       "name": "concealed",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 0,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "ConcealedPosition",
+         "raw": "Concealed Position*"
+        }
+       ]
+      },
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": []
+      },
+      {
+       "name": "stationary",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 0,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Repression baton",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-marksman.concealed-position",
+     "name": "Concealed Position",
+     "text": "This operative can only use this weapon the first time it’s performing the Shoot action during the battle."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "exaction-squad.arbites-marksman.act.optics",
+     "name": "OPTICS",
+     "ap": 1,
+     "text": "Until the start of this operative’s next activation:\n\nThe concealed and stationary profiles of its executioner shotgun have the Lethal 5+ weapon rule.\n\nWhenever it’s shooting with its executioner shotgun, enemy operatives cannot be obscured.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "The rabble-rouser lurking behind those they incite, the heavily armed bodyguard or the fleeing criminal about to escape - such are the targets of the Marksman. Their long-barrelled shotguns fire shells so powerful that they leave wounds more akin to gory craters than bullet holes."
+  },
+  {
+   "id": "exaction-squad.arbites-revelatum",
+   "teamId": "exaction-squad",
+   "name": "Arbites Revelatum",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "REVELATUM"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Scoped shotpistol",
+     "profiles": [
+      {
+       "name": "short range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Repression baton",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-revelatum.first-in-the-field",
+     "name": "First in the Field",
+     "text": "STRATEGIC GAMBIT in the first turning point. If this operative is wholly within your drop zone, it can immediately perform a free Reposition action."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "exaction-squad.arbites-revelatum.act.spot",
+     "name": "SPOT",
+     "ap": 1,
+     "text": "Select one enemy operative visible to and within 8\" of this operative. Until the end of the turning point, whenever a friendly EXACTION SQUAD operative is shooting that enemy operative, you can use this effect. If you do:\n\nThat friendly operative’s ranged weapons have the Seek Light weapon rule.\n\nThat enemy operative cannot be obscured.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Revelatums reconnoitre their target’s movements in advance of the rest of the team, scouting hideouts and ascertaining criminal contacts. They then lead other Arbitrators straight to the guilty, using their soulguilt scanners to identify threats to their fellow officers."
+  },
+  {
+   "id": "exaction-squad.arbites-subductor",
+   "teamId": "exaction-squad",
+   "name": "Arbites Subductor",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "SUBDUCTOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 3,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Shotpistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shock maul & assault shield",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "Repress",
+         "raw": "Repress*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-subductor.stubborn-subjugator",
+     "name": "Stubborn Subjugator",
+     "text": "You can ignore any changes to the Hit stat of this operative’s melee weapons."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Subductors possess one of the most recognisable - and feared - silhouettes to the Imperium’s criminal classes. Bearing Subjugation-pattern assault shields and crackling shock mauls, they are brutal front line brawlers capable of crushing the most stubborn dissent."
+  },
+  {
+   "id": "exaction-squad.arbites-vigilant",
+   "teamId": "exaction-squad",
+   "name": "Arbites Vigilant",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "VIGILANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Combat shotgun",
+     "profiles": [
+      {
+       "name": "close range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 2,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Repression baton",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exaction-squad.arbites-vigilant.close-quarters-vigilance",
+     "name": "Close Quarters Vigilance",
+     "text": "This operative can perform the Shoot action (excluding Guard) while within control range of an enemy operative, but only if it hasn’t performed the Charge action during the activation, or if it’s a counteraction. Note this operative isn’t restricted from performing the Charge action after performing the Shoot action."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Vigilants brutally sweep the guilty from existence with the signature combat shotgun of the Adeptus Arbites. These grim men and women are ever-alert to malfeasance and unwavering in its punishment, unleashing devastating blasts at close range."
+  },
+  {
+   "id": "exaction-squad.arbites-vox-signifier",
+   "teamId": "exaction-squad",
+   "name": "Arbites Vox-signifier",
+   "keywords": [
+    "EXACTION SQUAD",
+    "IMPERIUM",
+    "ADEPTUS ARBITES",
+    "VOX-SIGNIFIER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Combat shotgun",
+     "profiles": [
+      {
+       "name": "close range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 2,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Repression baton",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "exaction-squad.arbites-vox-signifier.act.signal",
+     "name": "SIGNAL",
+     "ap": 1,
+     "text": "SUPPORT. Select one other friendly EXACTION SQUAD operative visible to this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "The team’s Vox-signifier listens for coded missives from mission command on their powerful precinct vox-relay. They issue updates to the rest of the Exaction Squad arising from changes to mission priorities and new intelligence - likely painfully extracted from prisoners."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "exaction-squad.rule.ruthless-efficiency",
+   "name": "Ruthless Efficiency",
+   "text": "Whenever a friendly EXACTION SQUAD operative is shooting (excluding with frag or krak grenades) and you’re selecting a valid target, you can use this rule. If you do, having other friendly EXACTION SQUAD operatives within an enemy operative’s control range doesn’t prevent that enemy operative from being selected.",
+   "fluff": "A target, whether marked to be apprehended or eliminated, stands little chance of escaping the attention of an Adeptus Arbites Exaction Squad."
+  },
+  {
+   "id": "exaction-squad.rule.marked-for-justice",
+   "name": "Marked for Justice",
+   "text": "STRATEGIC GAMBIT. Select one enemy operative to be your mark for the turning point. Whenever a friendly EXACTION SQUAD operative is shooting against, fighting against or retaliating against your mark, that friendly operative’s weapons have the Punishing weapon rule. Whenever your mark is incapacitated, you can select a new enemy operative to be your mark for the turning point (and can continue to do so during this turning point).",
+   "fluff": "Exaction Squads prioritise their targets, focusing their ire on those marked for immediate punishment before moving on to the next transgressor."
+  },
+  {
+   "id": "exaction-squad.rule.repress",
+   "name": "Repress",
+   "text": "Some weapons in this team’s rules have the Repress weapon rule below.\n\n*Repress: Whenever this operative is using this weapon:\n\nEach of your blocks can be allocated to block two unresolved successes (instead of one).\n\nIf this operative is retaliating, you resolve the first attack dice (i.e. defender instead of attacker).",
+   "fluff": "Experienced in suppressing riots, rebellions and various other kinds of unrest, the Adeptus Arbites are resilient in the face of any oncoming foe, no matter their origin."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "exaction-squad.sp.guilt-reveals-itself",
+   "name": "GUILT REVEALS ITSELF",
+   "text": "Whenever you’re selecting a valid target for a friendly EXACTION SQUAD operative, enemy operatives within 4\" of it cannot be in cover (instead of 2\"). While this can allow such operatives to be targeted (assuming they’re visible), it doesn’t remove their cover save (if any), unless the friendly EXACTION SQUAD operative is within 2\" as normal.",
+   "cp": 1,
+   "fluff": "Exaction Squads are relentless in their pursuit of the condemned. Few escape their clutches."
+  },
+  {
+   "id": "exaction-squad.sp.inviolate-jurisdiction",
+   "name": "INVIOLATE JURISDICTION",
+   "text": "Whenever an operative is shooting a friendly EXACTION SQUAD operative that’s within 2\" of an objective marker or an enemy operative, you can re-roll one of your defence dice.",
+   "cp": 1,
+   "fluff": "Emboldened by the authority they hold, Exaction Squads will fight with zealous determination to hold key positions against the foe."
+  },
+  {
+   "id": "exaction-squad.sp.dispense-justice",
+   "name": "DISPENSE JUSTICE",
+   "text": "Whenever a friendly EXACTION SQUAD operative is fighting or retaliating, if it hasn’t moved more than its Move stat during the activation, or if it’s a counteraction, its melee weapons have the Ceaseless weapon rule.",
+   "cp": 1,
+   "fluff": "In pursuit of the guilty, Arbitrators are focused, disciplined and utterly determined."
+  },
+  {
+   "id": "exaction-squad.sp.terminal-decree",
+   "name": "TERMINAL DECREE",
+   "text": "Whenever a friendly EXACTION SQUAD operative is shooting an enemy operative within 6\" of it, or whenever a friendly EXACTION SQUAD GUNNER operative is shooting, that friendly operative’s ranged weapons have the Balanced weapon rule.\n\nFirefight Ploys\nLONG ARM OF THE EMPEROR'S LAW\n\nNo one escapes the merciless judgement of the Adeptus Arbites.\nUse this firefight ploy when a friendly EXACTION SQUAD operative is performing the Shoot action and you select a weapon with the Range x weapon rule (excluding frag or krak grenade). Until the end of that action, add 3\" to x.\n\nEXACT PUNISHMENT\n\nTo strike against an Arbitrator is an offence punishable by immediate termination.\nUse this firefight ploy after an enemy operative shoots against or fights against a friendly EXACTION SQUAD operative within 6\" of it, and that friendly operative isn’t incapacitated as a result. That friendly operative can immediately perform either a free Shoot or a free Fight action, but you cannot select any other enemy operative as a valid target or to fight against during that action (note that secondary targets from the Blast weapon rule can still be targeted).\n\nBRUTAL BACKUP\n\nWhen combating the most belligerent of foes, Arbitrators may combine their considerable might to bludgeon the guilty with baton and maul.\nUse this firefight ploy during a friendly EXACTION SQUAD operative’s activation, before or after it performs an action. Select one enemy operative within its control range. One other friendly EXACTION SQUAD operative can immediately perform a free Fight action, but you cannot select any other enemy operative to fight against during that action.\n\nEXECUTION ORDER\n\nThose who have earned the ire of the Imperium are marked by the Adeptus Arbites for execution, their termination prioritised.\nUse this firefight ploy when an enemy operative performs a mission action (excluding Operate Hatch). Alternatively, use it at the end of the Firefight phase and select one enemy operative that controls an objective marker.\n\nIn either case, the next time your opponent would activate that enemy operative, you can interrupt that activation and activate a ready friendly EXACTION SQUAD operative. If you do, during that activation, that friendly operative must shoot against or fight against that enemy operative, and cannot do so against any other enemy operatives until it does (if this isn’t possible, that friendly operative’s activation is cancelled).\n\nAfter completing that friendly operative’s activation, continue that enemy operative’s activation (if possible). You cannot use this ploy again until that enemy operative is activated or incapacitated. \n\nFaction Equipment\nREINFORCED MIRROR-VISOR\n\nThis armoured visor is designed to shield the wearer from blinding and disorientating weapons or devices.\nYou can ignore any changes to the APL stat of friendly EXACTION SQUAD operatives, and they aren’t affected by enemy operatives’ Shock weapon rule.\n\nMANACLES\n\nThese adamantine manacles prevent captive subjects from escaping custody.\nWhenever an enemy operative would perform the Fall Back action while within control range of a friendly EXACTION SQUAD operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point..\n\nSTROBING PHOSPHOR-LUMEN\n\nThe brilliant white, flickering light of this rotating lumen device has the effect of disorientating foes caught in its beam.\nWhenever an enemy operative is shooting against, fighting against or retaliating against a friendly EXACTION SQUAD operative within 2\" of it, your opponent cannot re-roll their attack dice results of 1.\n\nSPECIAL ISSUE SHELLS\n\nArbites shotguns can be loaded with a wide range of specialist ammunition, including but not limited to incendiary rounds and armour-piercing slugs.\nUp to twice per turning point, when a friendly EXACTION SQUAD operative is performing the Shoot action and you select a combat shotgun, executioner shotgun, scoped shotpistol or shotpistol, you can use this rule. If you do, select one of the following weapon rules for that weapon to have until the end of that action:\n\nSaturate.\n\nPiercing 1, but only if the target has a Save stat of 3+ or better.\n\nTorrent 1\", but you cannot select more than one secondary target.",
+   "cp": 1,
+   "fluff": "A dangerous quarry has been judged guilty of heinous crimes against the Imperium and must be terminated with extreme prejudice."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "exaction-squad.fp.long-arm-of-the-emperors-law",
+   "name": "LONG ARM OF THE EMPEROR'S LAW",
+   "text": "Use this firefight ploy when a friendly EXACTION SQUAD operative is performing the Shoot action and you select a weapon with the Range x weapon rule (excluding frag or krak grenade). Until the end of that action, add 3\" to x.",
+   "cp": 1,
+   "fluff": "No one escapes the merciless judgement of the Adeptus Arbites."
+  },
+  {
+   "id": "exaction-squad.fp.exact-punishment",
+   "name": "EXACT PUNISHMENT",
+   "text": "Use this firefight ploy after an enemy operative shoots against or fights against a friendly EXACTION SQUAD operative within 6\" of it, and that friendly operative isn’t incapacitated as a result. That friendly operative can immediately perform either a free Shoot or a free Fight action, but you cannot select any other enemy operative as a valid target or to fight against during that action (note that secondary targets from the Blast weapon rule can still be targeted).",
+   "cp": 1,
+   "fluff": "To strike against an Arbitrator is an offence punishable by immediate termination."
+  },
+  {
+   "id": "exaction-squad.fp.brutal-backup",
+   "name": "BRUTAL BACKUP",
+   "text": "Use this firefight ploy during a friendly EXACTION SQUAD operative’s activation, before or after it performs an action. Select one enemy operative within its control range. One other friendly EXACTION SQUAD operative can immediately perform a free Fight action, but you cannot select any other enemy operative to fight against during that action.",
+   "cp": 1,
+   "fluff": "When combating the most belligerent of foes, Arbitrators may combine their considerable might to bludgeon the guilty with baton and maul."
+  },
+  {
+   "id": "exaction-squad.fp.execution-order",
+   "name": "EXECUTION ORDER",
+   "text": "Use this firefight ploy when an enemy operative performs a mission action (excluding Operate Hatch). Alternatively, use it at the end of the Firefight phase and select one enemy operative that controls an objective marker.\n\nIn either case, the next time your opponent would activate that enemy operative, you can interrupt that activation and activate a ready friendly EXACTION SQUAD operative. If you do, during that activation, that friendly operative must shoot against or fight against that enemy operative, and cannot do so against any other enemy operatives until it does (if this isn’t possible, that friendly operative’s activation is cancelled).\n\nAfter completing that friendly operative’s activation, continue that enemy operative’s activation (if possible). You cannot use this ploy again until that enemy operative is activated or incapacitated. \n\nFaction Equipment\nREINFORCED MIRROR-VISOR\n\nThis armoured visor is designed to shield the wearer from blinding and disorientating weapons or devices.\nYou can ignore any changes to the APL stat of friendly EXACTION SQUAD operatives, and they aren’t affected by enemy operatives’ Shock weapon rule.\n\nMANACLES\n\nThese adamantine manacles prevent captive subjects from escaping custody.\nWhenever an enemy operative would perform the Fall Back action while within control range of a friendly EXACTION SQUAD operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point..\n\nSTROBING PHOSPHOR-LUMEN\n\nThe brilliant white, flickering light of this rotating lumen device has the effect of disorientating foes caught in its beam.\nWhenever an enemy operative is shooting against, fighting against or retaliating against a friendly EXACTION SQUAD operative within 2\" of it, your opponent cannot re-roll their attack dice results of 1.\n\nSPECIAL ISSUE SHELLS\n\nArbites shotguns can be loaded with a wide range of specialist ammunition, including but not limited to incendiary rounds and armour-piercing slugs.\nUp to twice per turning point, when a friendly EXACTION SQUAD operative is performing the Shoot action and you select a combat shotgun, executioner shotgun, scoped shotpistol or shotpistol, you can use this rule. If you do, select one of the following weapon rules for that weapon to have until the end of that action:\n\nSaturate.\n\nPiercing 1, but only if the target has a Save stat of 3+ or better.\n\nTorrent 1\", but you cannot select more than one secondary target.",
+   "cp": 1,
+   "fluff": "Those who have earned the ire of the Imperium are marked by the Adeptus Arbites for execution, their termination prioritised."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "exaction-squad.eq.reinforced-mirror-visor",
+   "name": "REINFORCED MIRROR-VISOR",
+   "text": "You can ignore any changes to the APL stat of friendly EXACTION SQUAD operatives, and they aren’t affected by enemy operatives’ Shock weapon rule.",
+   "fluff": "This armoured visor is designed to shield the wearer from blinding and disorientating weapons or devices."
+  },
+  {
+   "id": "exaction-squad.eq.manacles",
+   "name": "MANACLES",
+   "text": "Whenever an enemy operative would perform the Fall Back action while within control range of a friendly EXACTION SQUAD operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point..",
+   "fluff": "These adamantine manacles prevent captive subjects from escaping custody."
+  },
+  {
+   "id": "exaction-squad.eq.strobing-phosphor-lumen",
+   "name": "STROBING PHOSPHOR-LUMEN",
+   "text": "Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly EXACTION SQUAD operative within 2\" of it, your opponent cannot re-roll their attack dice results of 1.",
+   "fluff": "The brilliant white, flickering light of this rotating lumen device has the effect of disorientating foes caught in its beam."
+  },
+  {
+   "id": "exaction-squad.eq.special-issue-shells",
+   "name": "SPECIAL ISSUE SHELLS",
+   "text": "Up to twice per turning point, when a friendly EXACTION SQUAD operative is performing the Shoot action and you select a combat shotgun, executioner shotgun, scoped shotpistol or shotpistol, you can use this rule. If you do, select one of the following weapon rules for that weapon to have until the end of that action:\n\nSaturate.\n\nPiercing 1, but only if the target has a Save stat of 3+ or better.\n\nTorrent 1\", but you cannot select more than one secondary target.",
+   "fluff": "Arbites shotguns can be loaded with a wide range of specialist ammunition, including but not limited to incendiary rounds and armour-piercing slugs."
+  }
+ ],
+ "markerGuide": "Medic token\n\nApprehend token\n\nMarked for Justice token\n\nVeriscant token\n\nSpot token\n\nAggressive token\n\nSwift token\n\nDefensive token\n\nNuncio-aquila token",
+ "notes": [
+  "R-VR Cyber-mastiff: unique action 'APPREHEND' has no AP cost on the page"
+ ],
+ "rareWeaponRules": [
+  "ConcealedPosition",
+  "Repress"
+ ]
+}

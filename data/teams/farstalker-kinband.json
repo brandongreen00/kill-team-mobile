@@ -1,0 +1,1362 @@
+{
+ "id": "farstalker-kinband",
+ "name": "Farstalker Kinband",
+ "faction": "T’au Empire",
+ "grandFaction": "Xenos",
+ "archetypes": [
+  "Infiltration",
+  "Recon"
+ ],
+ "booksVersion": "July 2026",
+ "books": [
+  {
+   "book": "Farstalker Kinband",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "",
+   "lastUpdate": "July 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_22-07_kill_team_team_rules_farstalker_kinband-d5j2c72vs0-mulu2ghc6b.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/farstalker-kinband/",
+ "scrapedAt": "2026-08-17T04:08:59+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "KILL-BROKER",
+   "datacardId": "farstalker-kinband.kroot-kill-broker",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "farstalker-kinband.g1.opt1",
+     "label": "Kroot rifle; ritual blade",
+     "weapons": [
+      "Kroot rifle",
+      "Ritual blade"
+     ]
+    },
+    {
+     "id": "farstalker-kinband.g1.opt2",
+     "label": "Pulse weapon; ritual blade",
+     "weapons": [
+      "Pulse weapon",
+      "Ritual blade"
+     ]
+    }
+   ],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "KILL-BROKER"
+   ],
+   "inList": false
+  },
+  "slots": 11,
+  "totalOperatives": 12,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "KILL-BROKER"
+    ],
+    "rawText": "1 FARSTALKER KINBAND KILL-BROKER operative with one of the following options:"
+   },
+   {
+    "index": 2,
+    "count": 11,
+    "kind": "list",
+    "roles": [
+     "BOW-HUNTER",
+     "COLD-BLOOD",
+     "CUT-SKIN",
+     "HOUND",
+     "LONG-SIGHT",
+     "PISTOLIER",
+     "STALKER",
+     "TRACKER",
+     "HEAVY GUNNER",
+     "WARRIOR"
+    ],
+    "rawText": "11 FARSTALKER KINBAND operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "BOW-HUNTER",
+    "datacardAnchor": "Kroot-Bow-Hunter",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BOW-HUNTER",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-bow-hunter",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Accelerator bow",
+     "Blade"
+    ]
+   },
+   {
+    "role": "COLD-BLOOD",
+    "datacardAnchor": "Kroot-Cold-Blood",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "COLD-BLOOD",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-cold-blood",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Kroot rifle",
+     "Blade"
+    ]
+   },
+   {
+    "role": "CUT-SKIN",
+    "datacardAnchor": "Kroot-Cut-Skin-1",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CUT-SKIN",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-cut-skin",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Cut-skin's blades"
+    ]
+   },
+   {
+    "role": "HOUND",
+    "datacardAnchor": "Kroot-Hound",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HOUND",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-hound",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": [
+     "Ripping fangs"
+    ]
+   },
+   {
+    "role": "LONG-SIGHT",
+    "datacardAnchor": "Kroot-Long-Sight",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "LONG-SIGHT",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-long-sight",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Kroot hunting rifle",
+     "Blade"
+    ]
+   },
+   {
+    "role": "PISTOLIER",
+    "datacardAnchor": "Kroot-Pistolier",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PISTOLIER",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-pistolier",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Dual Kroot pistols",
+     "Blade"
+    ]
+   },
+   {
+    "role": "STALKER",
+    "datacardAnchor": "Kroot-Stalker",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "STALKER",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-stalker",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Kroot scattergun",
+     "Stalker's blade"
+    ]
+   },
+   {
+    "role": "TRACKER",
+    "datacardAnchor": "Kroot-Tracker",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "TRACKER",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-tracker",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Kroot rifle",
+     "Blade"
+    ]
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Kroot-Heavy-Gunner-1",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "farstalker-kinband.g2e9.opt1",
+      "label": "Dvorgite skinner; blade",
+      "weapons": [
+       "Dvorgite skinner",
+       "Blade"
+      ]
+     },
+     {
+      "id": "farstalker-kinband.g2e9.opt2",
+      "label": "Londaxi tribalest; blade",
+      "weapons": [
+       "Londaxi tribalest",
+       "Blade"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER with one of the following options:",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-heavy-gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "WARRIOR",
+    "datacardAnchor": "Kroot-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "farstalker-kinband.g2e10.opt1",
+      "label": "Kroot rifle; blade",
+      "weapons": [
+       "Kroot rifle",
+       "Blade"
+      ]
+     },
+     {
+      "id": "farstalker-kinband.g2e10.opt2",
+      "label": "Kroot scattergun; blade",
+      "weapons": [
+       "Kroot scattergun",
+       "Blade"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WARRIOR with one of the following options:",
+    "group": 2,
+    "datacardId": "farstalker-kinband.kroot-warrior",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": []
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "KILL-BROKER",
+    "datacardAnchor": "Kroot-Kill-Broker",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "farstalker-kinband.g1.opt1",
+      "label": "Kroot rifle; ritual blade",
+      "weapons": [
+       "Kroot rifle",
+       "Ritual blade"
+      ]
+     },
+     {
+      "id": "farstalker-kinband.g1.opt2",
+      "label": "Pulse weapon; ritual blade",
+      "weapons": [
+       "Pulse weapon",
+       "Ritual blade"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 FARSTALKER KINBAND KILL-BROKER operative with one of the following options:",
+    "group": 1,
+    "datacardId": "farstalker-kinband.kroot-kill-broker",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "HOUND",
+     "WARRIOR"
+    ]
+   },
+   {
+    "kind": "maxCount",
+    "role": "HOUND",
+    "max": 2
+   }
+  ],
+  "footnotes": {},
+  "footnoteOptions": {},
+  "designerNotes": [],
+  "rawText": "1 FARSTALKER KINBAND KILL-BROKER operative with one of the following options:\n\nKroot rifle; ritual blade\n\nPulse weapon; ritual blade\n\n11 FARSTALKER KINBAND operatives selected from the following list:\n\nBOW-HUNTER\n\nCOLD-BLOOD\n\nCUT-SKIN\n\nHOUND\n\nLONG-SIGHT\n\nPISTOLIER\n\nSTALKER\n\nTRACKER\n\nHEAVY GUNNER with one of the following options:\n\nDvorgite skinner; blade\n\nLondaxi tribalest; blade\n\nWARRIOR with one of the following options:\n\nKroot rifle; blade\n\nKroot scattergun; blade\n\nOther than HOUND and WARRIOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two HOUND operatives."
+ },
+ "datacards": [
+  {
+   "id": "farstalker-kinband.kroot-kill-broker",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Kill-Broker",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "LEADER",
+    "KROOT",
+    "KILL-BROKER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Kroot rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Pulse weapon",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Ritual blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "farstalker-kinband.kroot-kill-broker.call-the-kill",
+     "name": "Call The Kill",
+     "text": "STRATEGIC GAMBIT if this operative is in the killzone. Select one enemy operative to be your mark for the turning point. Whenever a friendly FARSTALKER KINBAND operative is shooting against, fighting against or retaliating against your mark, that friendly operative’s weapons have the Balanced weapon rule. Whenever your mark is incapacitated, you can select a new enemy operative to be your mark for the turning point (and can continue to do so during this turning point)."
+    },
+    {
+     "id": "farstalker-kinband.kroot-kill-broker.victory-shriek",
+     "name": "Victory Shriek",
+     "text": "Whenever your mark is incapacitated, you can select one friendly FARSTALKER KINBAND operative within 6\" of this operative. Until the end of the battle, that operative’s weapons have the Balanced weapon rule. Each friendly operative can only be selected for this rule once per battle."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Farstalker Kinbands are led by Kill-brokers. These Kroot are not only expert tacticians and skilled fighters, but also able negotiators, ensuring their kin receive just rewards for their services."
+  },
+  {
+   "id": "farstalker-kinband.kroot-bow-hunter",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Bow-Hunter",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "BOW-HUNTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Accelerator bow",
+     "profiles": [
+      {
+       "name": "fused arrow",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "glide arrow",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      },
+      {
+       "name": "voltaic arrow",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "farstalker-kinband.kroot-bow-hunter.act.energise",
+     "name": "ENERGISE",
+     "ap": 1,
+     "text": "Until the end of the turning point or until this operative has shot with its accelerator bow (whichever comes first), all profiles of its accelerator bow have the Lethal 5+ weapon rule.\n\nT his operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "The accelerator bows wielded by these Kroot are distinctive weapons, with a Kroot rifle at their core. When fired, the bow’s curves crackle with energy, charging the loaded arrow’s head. Effects on struck enemies vary depending on the material the arrowhead is made from."
+  },
+  {
+   "id": "farstalker-kinband.kroot-cold-blood",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Cold-Blood",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "COLD-BLOOD"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Kroot rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "farstalker-kinband.kroot-cold-blood.hardy",
+     "name": "Hardy",
+     "text": "Whenever an attack dice would inflict Critical Dmg on this operative, you can choose for that attack dice to inflict Normal Dmg instead."
+    },
+    {
+     "id": "farstalker-kinband.kroot-cold-blood.cold-blooded",
+     "name": "Cold-blooded",
+     "text": "Whenever this operative is shooting against, fighting against or retaliating against a wounded enemy operative, this operative’s weapons have the Lethal 5+ weapon rule; if that enemy operative is also injured, this operative’s weapons also have the Rending weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Cold-bloods have fought as mercenaries for many years indeed. They have seen and experienced much, and little inspires fear in them. The knowledge they have gained makes them adept with different ammunition types, selecting the optimum shot for each kill they wish to make."
+  },
+  {
+   "id": "farstalker-kinband.kroot-cut-skin",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Cut-Skin",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "CUT-SKIN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Cut-skin's blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "farstalker-kinband.kroot-cut-skin.vicious-duellist",
+     "name": "Vicious Duellist",
+     "text": "Whenever this operative is fighting or retaliating, for each attack dice your opponent discards as a fail, inflict 1 damage on the enemy operative in that sequence."
+    },
+    {
+     "id": "farstalker-kinband.kroot-cut-skin.savage-assault",
+     "name": "Savage Assault",
+     "text": "The first time this operative performs the Fight action during each of its activations, if neither it nor the enemy operative in that sequence is incapacitated, this operative can immediately perform a free FIGHT action afterwards, but you cannot select any other enemy operative to fight against during that action (and only if it’s still valid to fight against). This takes precedence over action restrictions."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "These Kroot have fully embraced close-combat fighting. Swift and ferocious, Cut-skins launch a flurry of savage blows against their foes, giving the enemy no opportunity to strike back before they are cut down."
+  },
+  {
+   "id": "farstalker-kinband.kroot-heavy-gunner",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Heavy Gunner",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "HEAVY GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Dvorgite skinner",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 5,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Londaxi tribalest",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Kroot will fight for or against almost any race in the galaxy. In the process they are paid with – or steal – exotic weapons such as Dvorgite skinners, which charge biological material to create a searing stream of energy, or Londaxi tribalests – antiarmour weapons that fire solid shots at high speeds."
+  },
+  {
+   "id": "farstalker-kinband.kroot-hound",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Hound",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "HOUND"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 8,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Ripping fangs",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "farstalker-kinband.kroot-hound.beast",
+     "name": "Beast",
+     "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back, Fight, Gather, Guard, Reposition, Pick Up Marker and Place Marker. It cannot use any weapons that aren’t on its datacard"
+    },
+    {
+     "id": "farstalker-kinband.kroot-hound.bad-tempered",
+     "name": "Bad-tempered",
+     "text": "Whenever an enemy operative performs the Fight action, if this operative is a valid operative to fight against, you can force them to select this operative to fight against instead. Whenever an enemy operative ends the Charge action (you can change its order to Engage to do so) within control range of another friendly FARSTALKER KINBAND operative within 3\" of this operative, if this operative isn’t within control range of enemy operatives, this operative can immediately perform a free Charge action, but must end that move within control range of that enemy operative."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "farstalker-kinband.kroot-hound.act.gather",
+     "name": "GATHER",
+     "ap": 1,
+     "text": "Perform a free Dash or Reposition action with this operative. During that move, it can perform a free Pick Up Marker or Place Marker action (you can determine control during that action to do so), and any remaining move distance it had from the Dash or Reposition action can be used after it does so."
+    }
+   ],
+   "fluff": "Fast, nimble, ferocious and incredibly loyal to their Kroot masters, Kroot Hounds are natural companions to the Farstalker Kinbands. These beasts can steal into narrow passageways, recover objects and rip foes apart with their beaked jaws."
+  },
+  {
+   "id": "farstalker-kinband.kroot-long-sight",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Long-Sight",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "LONG-SIGHT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Kroot hunting rifle",
+     "profiles": [
+      {
+       "name": "concealed",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        },
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "ConcealedPosition",
+         "raw": "Concealed Position*"
+        }
+       ]
+      },
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      },
+      {
+       "name": "stationary",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        },
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "farstalker-kinband.kroot-long-sight.concealed-position",
+     "name": "Concealed Position",
+     "text": "This operative can only use this weapon the first time it’s performing the Shoot action during the battle."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "farstalker-kinband.kroot-long-sight.act.long-sight",
+     "name": "LONG-SIGHT",
+     "ap": 1,
+     "text": "Until the start of this operative’s next activation:\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "The finest shots in Farstalker Kinbands, Long-sights carry long-barrelled Kroot hunting rifles. They will gladly conceal themselves in position for days at a time to make the perfect shot. Few in their sights ever live to tell the tale."
+  },
+  {
+   "id": "farstalker-kinband.kroot-pistolier",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Pistolier",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "PISTOLIER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Dual Kroot pistols",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      },
+      {
+       "name": "salvo",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Salvo",
+         "raw": "Salvo*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "farstalker-kinband.kroot-pistolier.quick-draw",
+     "name": "Quick Draw",
+     "text": "Once per turning point, when an enemy operative is performing the Shoot action and this operative is selected as the valid target (or if it will be a secondary target from the Blast weapon rule), if this operative is ready, you can interrupt that action to use this rule. If you do, this operative can immediately perform a free Shoot action with its dual Kroot pistols (focused) against that enemy operative (you can change its order to Engage to do so), but that enemy operative must be a valid target."
+    },
+    {
+     "id": "farstalker-kinband.kroot-pistolier.salvo",
+     "name": "Salvo",
+     "text": "Select up to two different valid targets that aren’t within control range of friendly operatives. Shoot with this weapon against both of them in an order of your choice (roll each sequence separately)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Cool under pressure and comfortable fighting close to the enemy, Kroot Pistoliers are dexterous and quick-thinking fighters. Once in optimum range, they unleash a fusillade from their pistols that is almost impossible to escape."
+  },
+  {
+   "id": "farstalker-kinband.kroot-stalker",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Stalker",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "STALKER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Kroot scattergun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Stalker's blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Balanced",
+         "raw": "Balanced"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "farstalker-kinband.kroot-stalker.stalker",
+     "name": "Stalker",
+     "text": "This operative can perform the Charge action while it has a Conceal order."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "farstalker-kinband.kroot-stalker.act.stealth-attack",
+     "name": "STEALTH ATTACK",
+     "ap": 2,
+     "text": "Perform a free Charge action with this operative, but don’t exceed its Move stat (i.e. don’t add 2\"). Then immediately perform a free Fight action with this operative. The first time you strike during that action, you can immediately resolve another of your successes as a strike (before your opponent).\n\nThis operative cannot perform this action while it has an Engage order, while within control range of an enemy operative, or if it isn’t within 1\" of Light or Heavy terrain."
+    }
+   ],
+   "fluff": "Even among Kroot, these warriors are particularly able infiltrators and hunters. They possess an almost preternatural understanding of terrain and the art of concealment, able to get extremely close to an enemy before moving in for the kill."
+  },
+  {
+   "id": "farstalker-kinband.kroot-tracker",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Tracker",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "TRACKER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Kroot rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "farstalker-kinband.kroot-tracker.act.marked-for-the-hunt",
+     "name": "MARKED FOR THE HUNT",
+     "ap": 1,
+     "text": "Remove your Pech’ra marker from the killzone (if any). Then place your Pech’ra marker visible to this operative, or on Vantage terrain of a terrain feature that’s visible to this operative. Whenever a friendly FARSTALKER KINBAND operative is shooting an enemy operative that has that marker within its control range, that friendly operative’s ranged weapons have the Seek Light weapon rule.\n\nAt the start of this operative’s next activation or if it’s removed from the killzone (whichever comes first), remove your Pech’ra marker from the killzone.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "farstalker-kinband.kroot-tracker.act.from-the-eye-above",
+     "name": "FROM THE EYE ABOVE",
+     "ap": 1,
+     "text": "SUPPORT. Select one other friendly FARSTALKER KINBAND operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "These Kroot share a very strong personal bond with their Pech’ra – a bird that hails from Pech itself. The two work in a synchronised manner to aid their Kinband. The Pech’ra can not only distract enemies, but also warn the Kroot of the foe’s presence."
+  },
+  {
+   "id": "farstalker-kinband.kroot-warrior",
+   "teamId": "farstalker-kinband",
+   "name": "Kroot Warrior",
+   "keywords": [
+    "FARSTALKER KINBAND",
+    "T’AU EMPIRE",
+    "KROOT",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Kroot rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Kroot scattergun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "farstalker-kinband.kroot-warrior.ready-for-anything",
+     "name": "Ready for Anything",
+     "text": "Once per turning point, during a friendly WARRIOR operative’s activation, you can use the Meat, Piercing Shot or Toxin Shot rule for that operative. Doing so doesn’t count for its once per turning point limit."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Kroot Warriors are fierce fighters, expert hunters and relentless trackers. Those of Farstalker Kindreds have spent many years as mercenaries, gaining much experience in war as well as consuming genetic material for the betterment of their kind’s future."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "farstalker-kinband.rule.farstalker",
+   "name": "Farstalker",
+   "text": "In the Ready step of each Strategy phase, you can change the order of up to three friendly FARSTALKER KINBAND operatives that are not within control range of enemy operatives.\n\nWhenever it’s your turn to counteract, you can change the order of one friendly FARSTALKER KINBAND operative that’s not within control range of enemy operatives instead. This still counts as you counteracting (so activation alternates back to your opponent afterwards), but doesn’t count as that friendly operative’s counteraction for this turning point.",
+   "fluff": "Farstalker Kindbands move and fight instinctively, reacting to developing battlefield conditions with an inhuman speed of thought."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "farstalker-kinband.sp.cut-throats",
+   "name": "CUT-THROATS",
+   "text": "Add 1 to the Atk stat of friendly FARSTALKER KINBAND operatives’ melee weapons (to a maximum of 5).",
+   "cp": 1,
+   "fluff": "Kroot warriors are lethal melee combatants. Their bladed weapons are capable of tearing through exposed flesh with ease."
+  },
+  {
+   "id": "farstalker-kinband.sp.prey",
+   "name": "PREY",
+   "text": "Whenever a friendly FARSTALKER KINBAND operative is shooting during an activation in which it hasn’t performed the Charge, Fall Back or Reposition action, its ranged weapons have the Balanced and Severe weapon rules; if the weapon already has the Balanced weapon rule, it has the Ceaseless and Severe weapon rules instead. Note that operative isn’t restricted from performing those actions after shooting.",
+   "cp": 1,
+   "fluff": "When a Kroot Farstalker has selected their target, the hunter’s focus is directed fully towards bringing down their chosen prey."
+  },
+  {
+   "id": "farstalker-kinband.sp.rogue",
+   "name": "ROGUE",
+   "text": "Whenever an operative is shooting a friendly FARSTALKER KINBAND operative:\n\nIgnore the Saturate weapon rule.\n\nIf you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain.",
+   "cp": 1,
+   "fluff": "Kroot Farstalkers are naturally gifted hunters, using cover and shadow to their advantage as they close in upon their prey."
+  },
+  {
+   "id": "farstalker-kinband.sp.bound",
+   "name": "BOUND",
+   "text": "During each friendly FARSTALKER KINBAND operative’s activation, you can ignore the first vertical distance of 2\" they move during one climb up.\n\nFirefight Ploys\nSAVAGE AMBUSH\n\nKroot Farstalkers are ambush predators, relying upon stealth, speed and bursts of savage violence to take down their enemies.\nUse this firefight ploy during the Fight action when a ready friendly FARSTALKER KINBAND operative that has Light or Heavy terrain within its control range is selected to fight against. In the Resolve Attack Dice step of that sequence, you resolve the first attack dice (i.e. defender instead of attacker).\n\nPOACH\n\nFarstalker Kindbands avoid protracted fights, using their speed and dexterity to advance upon and seize their objectives as swiftly as possible.\nUse this firefight ploy during a friendly FARSTALKER KINBAND operative’s activation. Until the end of that activation, that operative doesn’t have to control a marker to perform the Pick Up Marker or mission actions that usually require this (taking precedence over that action’s conditions – it only needs to contest the marker).\n\nSLIP AWAY\n\nLithe and agile, the Kroot melt away from a fight using the same speed with which they strike.\nUse this firefight ploy during a friendly FARSTALKER KINBAND operative’s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP.\n\nVENGEANCE FOR THE KINBAND\n\nFarstalker Kinbands are bonded by blood. The death of an ally awakes within the survivors a vengeful fury.\nUse this firefight ploy when a friendly FARSTALKER KINBAND operative is incapacitated by an enemy operative. Until the end of the battle, whenever another friendly FARSTALKER KINBAND operative is shooting against, fighting against or retaliating against that enemy operative, that other friendly operative’s weapons have the Relentless weapon rule. You cannot use this ploy again during the battle until that enemy operative is incapacitated.\n\nFaction Equipment\nPIERCING SHOT\n\nThe Kroot make use of many forms of specially craf ted ammunition. Bullets tipped with hardened alloys can punch through cover and armour alike.\nOnce per turning point, when a friendly FARSTALKER KINBAND operative is performing the Shoot action and you select a Kroot rifle, Kroot scattergun or dual Kroot pistols (focused), you can use this rule. If you do, until the end of that action, that weapon has the Piercing 1 weapon rule. You cannot use the Piercing Shot and Toxin Shot rule during the same action.\n\nMEAT\n\nKroot physiologies are far more resilient than their wiry frames suggest. The ingestion of raw meat only serves to bolster their regenerative abilities.\nOnce per turning point, when a friendly FARSTALKER KINBAND operative (excluding HOUND) is activated, if it’s not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+1 lost wounds.\n\nTOXIN SHOT\n\nKroot toxin bullets contain reservoirs of venom\nextracted from various alien fauna, all of which is incredibly lethal.\nOnce per turning point, when a friendly FARSTALKER KINBAND operative is performing the Shoot action and you select a Kroot rifle, Kroot scattergun or dual Kroot pistols (focused), you can use this rule. If you do, until the end of that action, that weapon has the Lethal 5+ and Stun weapon rules. You cannot use the Piercing Shot and Toxin Shot rule during the same action\n\nTROPHY\n\nKroot Farstalkers seek to cut down the most powerful of foes. They will aggressively pursue any enemy they judge worthy and harvest trophies from the corpse.\nOnce per battle, during a friendly FARSTALKER KINBAND operative’s activation (excluding HOUND), before or after it performs an action, if it’s not within control range of enemy operatives, you can use this rule. If you do, add 1 to that friendly operative’s APL stat until the end of its activation.",
+   "cp": 1,
+   "fluff": "The long, muscular legs of the Kroot allow them to cover great distances in a single, bounding leap."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "farstalker-kinband.fp.savage-ambush",
+   "name": "SAVAGE AMBUSH",
+   "text": "Use this firefight ploy during the Fight action when a ready friendly FARSTALKER KINBAND operative that has Light or Heavy terrain within its control range is selected to fight against. In the Resolve Attack Dice step of that sequence, you resolve the first attack dice (i.e. defender instead of attacker).",
+   "cp": 1,
+   "fluff": "Kroot Farstalkers are ambush predators, relying upon stealth, speed and bursts of savage violence to take down their enemies."
+  },
+  {
+   "id": "farstalker-kinband.fp.poach",
+   "name": "POACH",
+   "text": "Use this firefight ploy during a friendly FARSTALKER KINBAND operative’s activation. Until the end of that activation, that operative doesn’t have to control a marker to perform the Pick Up Marker or mission actions that usually require this (taking precedence over that action’s conditions – it only needs to contest the marker).",
+   "cp": 1,
+   "fluff": "Farstalker Kindbands avoid protracted fights, using their speed and dexterity to advance upon and seize their objectives as swiftly as possible."
+  },
+  {
+   "id": "farstalker-kinband.fp.slip-away",
+   "name": "SLIP AWAY",
+   "text": "Use this firefight ploy during a friendly FARSTALKER KINBAND operative’s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP.",
+   "cp": 1,
+   "fluff": "Lithe and agile, the Kroot melt away from a fight using the same speed with which they strike."
+  },
+  {
+   "id": "farstalker-kinband.fp.vengeance-for-the-kinband",
+   "name": "VENGEANCE FOR THE KINBAND",
+   "text": "Use this firefight ploy when a friendly FARSTALKER KINBAND operative is incapacitated by an enemy operative. Until the end of the battle, whenever another friendly FARSTALKER KINBAND operative is shooting against, fighting against or retaliating against that enemy operative, that other friendly operative’s weapons have the Relentless weapon rule. You cannot use this ploy again during the battle until that enemy operative is incapacitated.\n\nFaction Equipment\nPIERCING SHOT\n\nThe Kroot make use of many forms of specially craf ted ammunition. Bullets tipped with hardened alloys can punch through cover and armour alike.\nOnce per turning point, when a friendly FARSTALKER KINBAND operative is performing the Shoot action and you select a Kroot rifle, Kroot scattergun or dual Kroot pistols (focused), you can use this rule. If you do, until the end of that action, that weapon has the Piercing 1 weapon rule. You cannot use the Piercing Shot and Toxin Shot rule during the same action.\n\nMEAT\n\nKroot physiologies are far more resilient than their wiry frames suggest. The ingestion of raw meat only serves to bolster their regenerative abilities.\nOnce per turning point, when a friendly FARSTALKER KINBAND operative (excluding HOUND) is activated, if it’s not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+1 lost wounds.\n\nTOXIN SHOT\n\nKroot toxin bullets contain reservoirs of venom\nextracted from various alien fauna, all of which is incredibly lethal.\nOnce per turning point, when a friendly FARSTALKER KINBAND operative is performing the Shoot action and you select a Kroot rifle, Kroot scattergun or dual Kroot pistols (focused), you can use this rule. If you do, until the end of that action, that weapon has the Lethal 5+ and Stun weapon rules. You cannot use the Piercing Shot and Toxin Shot rule during the same action\n\nTROPHY\n\nKroot Farstalkers seek to cut down the most powerful of foes. They will aggressively pursue any enemy they judge worthy and harvest trophies from the corpse.\nOnce per battle, during a friendly FARSTALKER KINBAND operative’s activation (excluding HOUND), before or after it performs an action, if it’s not within control range of enemy operatives, you can use this rule. If you do, add 1 to that friendly operative’s APL stat until the end of its activation.",
+   "cp": 1,
+   "fluff": "Farstalker Kinbands are bonded by blood. The death of an ally awakes within the survivors a vengeful fury."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "farstalker-kinband.eq.piercing-shot",
+   "name": "PIERCING SHOT",
+   "text": "Once per turning point, when a friendly FARSTALKER KINBAND operative is performing the Shoot action and you select a Kroot rifle, Kroot scattergun or dual Kroot pistols (focused), you can use this rule. If you do, until the end of that action, that weapon has the Piercing 1 weapon rule. You cannot use the Piercing Shot and Toxin Shot rule during the same action.",
+   "fluff": "The Kroot make use of many forms of specially craf ted ammunition. Bullets tipped with hardened alloys can punch through cover and armour alike."
+  },
+  {
+   "id": "farstalker-kinband.eq.meat",
+   "name": "MEAT",
+   "text": "Once per turning point, when a friendly FARSTALKER KINBAND operative (excluding HOUND) is activated, if it’s not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+1 lost wounds.",
+   "fluff": "Kroot physiologies are far more resilient than their wiry frames suggest. The ingestion of raw meat only serves to bolster their regenerative abilities."
+  },
+  {
+   "id": "farstalker-kinband.eq.toxin-shot",
+   "name": "TOXIN SHOT",
+   "text": "Once per turning point, when a friendly FARSTALKER KINBAND operative is performing the Shoot action and you select a Kroot rifle, Kroot scattergun or dual Kroot pistols (focused), you can use this rule. If you do, until the end of that action, that weapon has the Lethal 5+ and Stun weapon rules. You cannot use the Piercing Shot and Toxin Shot rule during the same action",
+   "fluff": "Kroot toxin bullets contain reservoirs of venom\nextracted from various alien fauna, all of which is incredibly lethal."
+  },
+  {
+   "id": "farstalker-kinband.eq.trophy",
+   "name": "TROPHY",
+   "text": "Once per battle, during a friendly FARSTALKER KINBAND operative’s activation (excluding HOUND), before or after it performs an action, if it’s not within control range of enemy operatives, you can use this rule. If you do, add 1 to that friendly operative’s APL stat until the end of its activation.",
+   "fluff": "Kroot Farstalkers seek to cut down the most powerful of foes. They will aggressively pursue any enemy they judge worthy and harvest trophies from the corpse."
+  }
+ ],
+ "markerGuide": "Quick Draw token\n\nReady for Anything token\n\nCall the Kill token\n\nVengeance for the Kinband token\n\nVictory Shriek token\n\nPech’ra marker\n\nPiercing Shot token\n\nToxin Shot token\n\nMeat token\n\nTrophy token",
+ "notes": [],
+ "rareWeaponRules": [
+  "ConcealedPosition",
+  "Salvo"
+ ]
+}

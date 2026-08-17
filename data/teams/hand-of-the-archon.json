@@ -1,0 +1,1366 @@
+{
+ "id": "hand-of-the-archon",
+ "name": "Hand of the Archon",
+ "faction": "Drukhari",
+ "grandFaction": "Aeldari",
+ "archetypes": [
+  "Seek & Destroy",
+  "Recon"
+ ],
+ "booksVersion": "January ’26",
+ "books": [
+  {
+   "book": "Hand of the Archon",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "January ’26",
+   "lastUpdate": "January 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_28-01_kill_team_team_rules_hand_of_the_archon-ijq4ui6dxc-qnz6k5jaxl.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/hand-of-the-archon/",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "ARCHSYBARITE",
+   "datacardId": "hand-of-the-archon.kabalite-archsybarite",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "hand-of-the-archon.g1.opt1",
+     "label": "Blast pistol; venom blade",
+     "weapons": [
+      "Blast pistol",
+      "Venom blade"
+     ]
+    },
+    {
+     "id": "hand-of-the-archon.g1.opt2",
+     "label": "Splinter pistol; venom blade",
+     "weapons": [
+      "Splinter pistol",
+      "Venom blade"
+     ]
+    },
+    {
+     "id": "hand-of-the-archon.g1.opt3",
+     "label": "Splinter pistol; agoniser",
+     "weapons": [
+      "Splinter pistol",
+      "Agoniser"
+     ]
+    },
+    {
+     "id": "hand-of-the-archon.g1.opt4",
+     "label": "Splinter pistol; power weapon",
+     "weapons": [
+      "Splinter pistol",
+      "Power weapon"
+     ]
+    },
+    {
+     "id": "hand-of-the-archon.g1.opt5",
+     "label": "Splinter rifle; array of blades",
+     "weapons": [
+      "Splinter rifle",
+      "Array of blades"
+     ]
+    }
+   ],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "ARCHSYBARITE"
+   ],
+   "inList": false
+  },
+  "slots": 8,
+  "totalOperatives": 9,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "ARCHSYBARITE"
+    ],
+    "rawText": "1 HAND OF THE ARCHON ARCHSYBARITE operative with one of the following options:"
+   },
+   {
+    "index": 2,
+    "count": 8,
+    "kind": "list",
+    "roles": [
+     "AGENT",
+     "CRIMSON DUELLIST",
+     "DISCIPLE OF YAELINDRA",
+     "ELIXICANT",
+     "FLAYER",
+     "GUNNER",
+     "HEAVY GUNNER",
+     "SKYSPLINTER ASSASSIN"
+    ],
+    "rawText": "8 HAND OF THE ARCHON operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "AGENT",
+    "datacardAnchor": "Kabalite-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "AGENT",
+    "group": 2,
+    "datacardId": "hand-of-the-archon.kabalite-agent",
+    "isLeader": false,
+    "uniqueUnlessRole": false,
+    "alwaysWeapons": [
+     "Splinter rifle",
+     "Array of blades"
+    ]
+   },
+   {
+    "role": "CRIMSON DUELLIST",
+    "datacardAnchor": "Kabalite-Crimson-Duellist",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CRIMSON DUELLIST",
+    "group": 2,
+    "datacardId": "hand-of-the-archon.kabalite-crimson-duellist",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Splinter pistol",
+     "Razorflail"
+    ]
+   },
+   {
+    "role": "DISCIPLE OF YAELINDRA",
+    "datacardAnchor": "Kabalite-Disciple-of-Yaelindra",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DISCIPLE OF YAELINDRA",
+    "group": 2,
+    "datacardId": "hand-of-the-archon.kabalite-disciple-of-yaelindra",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Stinger pistol",
+     "Array of blades"
+    ]
+   },
+   {
+    "role": "ELIXICANT",
+    "datacardAnchor": "Kabalite-Elixicant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ELIXICANT",
+    "group": 2,
+    "datacardId": "hand-of-the-archon.kabalite-elixicant",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Splinter rifle",
+     "Stim-needler",
+     "Array of blades"
+    ]
+   },
+   {
+    "role": "FLAYER",
+    "datacardAnchor": "Kabalite-Flayer",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "FLAYER",
+    "group": 2,
+    "datacardId": "hand-of-the-archon.kabalite-flayer",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Pain sculptors"
+    ]
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Kabalite-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "hand-of-the-archon.g2e6.opt1",
+      "label": "Blaster; array of blades",
+      "weapons": [
+       "Blaster",
+       "Array of blades"
+      ]
+     },
+     {
+      "id": "hand-of-the-archon.g2e6.opt2",
+      "label": "Shredder; array of blades",
+      "weapons": [
+       "Shredder",
+       "Array of blades"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with one of the following options:",
+    "group": 2,
+    "datacardId": "hand-of-the-archon.kabalite-gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Kabalite-Heavy-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "hand-of-the-archon.g2e7.opt1",
+      "label": "Dark lance; array of blades",
+      "weapons": [
+       "Dark lance",
+       "Array of blades"
+      ]
+     },
+     {
+      "id": "hand-of-the-archon.g2e7.opt2",
+      "label": "Splinter cannon; array of blades",
+      "weapons": [
+       "Splinter cannon",
+       "Array of blades"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER with one of the following options:",
+    "group": 2,
+    "datacardId": "hand-of-the-archon.kabalite-heavy-gunner",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   },
+   {
+    "role": "SKYSPLINTER ASSASSIN",
+    "datacardAnchor": "Kabalite-Skysplinter-Assassin",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SKYSPLINTER ASSASSIN",
+    "group": 2,
+    "datacardId": "hand-of-the-archon.kabalite-skysplinter-assassin",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Razorwing",
+     "Shardcarbine",
+     "Array of blades"
+    ]
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "ARCHSYBARITE",
+    "datacardAnchor": "Kabalite-Archsybarite",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "hand-of-the-archon.g1.opt1",
+      "label": "Blast pistol; venom blade",
+      "weapons": [
+       "Blast pistol",
+       "Venom blade"
+      ]
+     },
+     {
+      "id": "hand-of-the-archon.g1.opt2",
+      "label": "Splinter pistol; venom blade",
+      "weapons": [
+       "Splinter pistol",
+       "Venom blade"
+      ]
+     },
+     {
+      "id": "hand-of-the-archon.g1.opt3",
+      "label": "Splinter pistol; agoniser",
+      "weapons": [
+       "Splinter pistol",
+       "Agoniser"
+      ]
+     },
+     {
+      "id": "hand-of-the-archon.g1.opt4",
+      "label": "Splinter pistol; power weapon",
+      "weapons": [
+       "Splinter pistol",
+       "Power weapon"
+      ]
+     },
+     {
+      "id": "hand-of-the-archon.g1.opt5",
+      "label": "Splinter rifle; array of blades",
+      "weapons": [
+       "Splinter rifle",
+       "Array of blades"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 HAND OF THE ARCHON ARCHSYBARITE operative with one of the following options:",
+    "group": 1,
+    "datacardId": "hand-of-the-archon.kabalite-archsybarite",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "AGENT"
+    ]
+   },
+   {
+    "kind": "maxItem",
+    "item": "darklight weapons (blast pistol",
+    "max": 2
+   }
+  ],
+  "footnotes": {},
+  "footnoteOptions": {},
+  "designerNotes": [],
+  "rawText": "1 HAND OF THE ARCHON ARCHSYBARITE operative with one of the following options:\n\nBlast pistol; venom blade\n\nSplinter pistol; venom blade\n\nSplinter pistol; agoniser\n\nSplinter pistol; power weapon\n\nSplinter rifle; array of blades\n\n8 HAND OF THE ARCHON operatives selected from the following list:\n\nAGENT\n\nCRIMSON DUELLIST\n\nDISCIPLE OF YAELINDRA\n\nELIXICANT\n\nFLAYER\n\nGUNNER with one of the following options:\n\nBlaster; array of blades\n\nShredder; array of blades\n\nHEAVY GUNNER with one of the following options:\n\nDark lance; array of blades\n\nSplinter cannon; array of blades\n\nSKYSPLINTER ASSASSIN\n\nOther than AGENT operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two darklight weapons (blast pistol, blaster and dark lance are darklight weapons)."
+ },
+ "datacards": [
+  {
+   "id": "hand-of-the-archon.kabalite-archsybarite",
+   "teamId": "hand-of-the-archon",
+   "name": "Kabalite Archsybarite",
+   "keywords": [
+    "HAND OF THE ARCHON",
+    "AELDARI",
+    "DRUKHARI",
+    "LEADER",
+    "ARCHSYBARITE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Blast pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Splinter pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Splinter rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Agoniser",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Array of blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Venom blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 4,
+         "raw": "Lethal 4+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "hand-of-the-archon.kabalite-archsybarite.cunning",
+     "name": "Cunning",
+     "text": "In the Gambit step of each Strategy phase, if this operative is in the killzone and you pass at the first opportunity, you gain 1CP. Ignore each STRATEGIC GAMBIT from the mission pack (if any) when determining this."
+    },
+    {
+     "id": "hand-of-the-archon.kabalite-archsybarite.torturous-vision",
+     "name": "Torturous Vision",
+     "text": "Once during each of this operative’s activations, if it doesn’t have any of your Pain tokens when it performs either the Fight or Shoot action, it can gain one of your Pain tokens when you select a valid target or an enemy operative to fight against."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Those who wield superiority among their Archon’s elite have risen to power through ruthlessness and manipulative scheming. They are also dread combatants, for expert bladework and athletic strength are required to maintain authority."
+  },
+  {
+   "id": "hand-of-the-archon.kabalite-agent",
+   "teamId": "hand-of-the-archon",
+   "name": "Kabalite Agent",
+   "keywords": [
+    "HAND OF THE ARCHON",
+    "AELDARI",
+    "DRUKHARI",
+    "AGENT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Splinter rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Array of blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "hand-of-the-archon.kabalite-agent.sadistic-competition",
+     "name": "Sadistic Competition",
+     "text": "Once per turning point, when a friendly HAND OF THE ARCHON operative gains one of your Pain tokens, one friendly HAND OF THE ARCHON AGENT operative that doesn’t have one of your Pain tokens can also gain one."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Well equipped and with murderous talents honed by survival in Commorragh, Agents of Hand of the Archon kill teams are malevolent enforcers. Any prey they cannot painfully cut down with their splinter rifles, they slice apart with graceful sweeps of their numerous blades."
+  },
+  {
+   "id": "hand-of-the-archon.kabalite-crimson-duellist",
+   "teamId": "hand-of-the-archon",
+   "name": "Kabalite Crimson Duellist",
+   "keywords": [
+    "HAND OF THE ARCHON",
+    "AELDARI",
+    "DRUKHARI",
+    "CRIMSON DUELLIST"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Splinter pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Razorflail",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Tangle",
+         "raw": "Tangle*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "hand-of-the-archon.kabalite-crimson-duellist.brutal-display",
+     "name": "Brutal Display",
+     "text": "Once per turning point, when this operative incapacitates an enemy operative within its control range, you can select one other enemy operative visible to and within 6\" of either this operative or the incapacitated enemy operative. Until the start of the next turning point, that other enemy operative cannot control markers or perform the Pick Up Marker or mission actions."
+    },
+    {
+     "id": "hand-of-the-archon.kabalite-crimson-duellist.crimson-duellist",
+     "name": "Crimson Duellist",
+     "text": "This operative can perform two Fight actions during its activation."
+    },
+    {
+     "id": "hand-of-the-archon.kabalite-crimson-duellist.tangle",
+     "name": "Tangle",
+     "text": "Whenever this operative is fighting or retaliating with this weapon, each of your blocks can be allocated to block two unresolved successes (instead of one)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Crimson Duellists are vicious murder-artists who work with a gory palette of their enemies’ viscera. Masters of various weapons, many hunt with the ostentatious razorflail, performing signature kills when their Archon requires a highly visible display of power."
+  },
+  {
+   "id": "hand-of-the-archon.kabalite-disciple-of-yaelindra",
+   "teamId": "hand-of-the-archon",
+   "name": "Kabalite Disciple of Yaelindra",
+   "keywords": [
+    "HAND OF THE ARCHON",
+    "AELDARI",
+    "DRUKHARI",
+    "DISCIPLE OF YAELINDRA"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Stinger pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Stinger",
+         "raw": "Stinger*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Array of blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "hand-of-the-archon.kabalite-disciple-of-yaelindra.stinger",
+     "name": "Stinger",
+     "text": "Whenever an enemy operative is incapacitated by this weapon, before it’s removed from the killzone, inflict D3 damage on each other operative visible to and within 2\" of it. Each operative subsequently incapacitated as a result of this weapon rule will cause this to happen again."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "hand-of-the-archon.kabalite-disciple-of-yaelindra.act.torment-grenade",
+     "name": "TORMENT GRENADE",
+     "ap": 1,
+     "text": "Select one enemy operative visible to and within 6\" of this operative. That operative and each other operative within 1\" of it takes a poison test.\n\nFor an operative to take a poison test, roll one D6, adding 1 to the result if that operative has a Save stat of 4+ or worse: on a 3+, inflict D3 damage on that operative and it gains one of your Poison tokens (if it doesn’t already have one). Whenever an operative that has one of your Poison tokens is activated, inflict D3 damage on it.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Yaelindra founded an infamous cult of poisoners, said to concoct the most potent toxins known to the Dark City. Her adepts weaponise deadly venoms, lacing them into torment grenades or delivering them via hollow slivers fired by stinger pistols with horrific results."
+  },
+  {
+   "id": "hand-of-the-archon.kabalite-elixicant",
+   "teamId": "hand-of-the-archon",
+   "name": "Kabalite Elixicant",
+   "keywords": [
+    "HAND OF THE ARCHON",
+    "AELDARI",
+    "DRUKHARI",
+    "ELIXICANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Splinter rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Stim-needler",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 0,
+       "dmgC": 0,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 3,
+         "raw": "Range 3\""
+        },
+        {
+         "id": "Lethal",
+         "x": 3,
+         "raw": "Lethal 3+"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Array of blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "hand-of-the-archon.kabalite-elixicant.combat-drugs",
+     "name": "Combat Drugs",
+     "text": "At the end of the Select Operatives step, if this operative is selected for deployment, select one of the following COMBAT DRUG rules for friendly HAND OF THE ARCHON operatives to have for the battle:\n\nPainbringer: Whenever an attack dice inflicts damage of 3 or more on this operative, roll one D6: on a 6, subtract 1 from that inflicted damage.\n\nAdrenalight: In the Ready step of each Strategy phase, you can select one friendly operative that has this COMBAT DRUG to gain one of your Pain tokens.\n\nHypex: You can ignore any changes to this operative’s Move stat from being injured."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "hand-of-the-archon.kabalite-elixicant.act.administer-drug",
+     "name": "ADMINISTER DRUG",
+     "ap": 1,
+     "text": "Select one friendly HAND OF THE ARCHON operative visible to and within 3\" of this operative, then select one of the following for that friendly operative:\n\nIt regains up to 2D3 lost wounds.\n\nSelect a different COMBAT DRUG rule for it to have for the battle (this replaces its previous one).\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Elixicants are expert applicators of the various products of their Kabal’s biochemical industries. Such stimulants, virulent narcotics and arcane synthetic hormones invigorate their fellow Kabalites in varying ways. To the enemy, however, they offer only slow and painful death."
+  },
+  {
+   "id": "hand-of-the-archon.kabalite-flayer",
+   "teamId": "hand-of-the-archon",
+   "name": "Kabalite Flayer",
+   "keywords": [
+    "HAND OF THE ARCHON",
+    "AELDARI",
+    "DRUKHARI",
+    "FLAYER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Pain sculptors",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Flay",
+         "raw": "Flay*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "hand-of-the-archon.kabalite-flayer.insensible-to-pain",
+     "name": "Insensible to Pain",
+     "text": "Normal and Critical Dmg of 3 or more inflicts 1 less damage on this operative."
+    },
+    {
+     "id": "hand-of-the-archon.kabalite-flayer.flay",
+     "name": "Flay",
+     "text": "Whenever this operative is using this weapon, the first time you strike with a critical success during that sequence, you can select one friendly HAND OF THE ARCHON operative within 6\" of it to gain one of your Pain tokens."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Drukhari hunger for others’ pain, and Flayers are gruesomely adept at generating it in their victims. Their murders are neither swift nor clean, and with every pleasing scream they elicit from their foes, they unleash waves of empowering agony."
+  },
+  {
+   "id": "hand-of-the-archon.kabalite-gunner",
+   "teamId": "hand-of-the-archon",
+   "name": "Kabalite Gunner",
+   "keywords": [
+    "HAND OF THE ARCHON",
+    "AELDARI",
+    "DRUKHARI",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Blaster",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shredder",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Array of blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "From the darklight caress of blasters to the mesh of monofilament barbs unleashed by shredders, specialist Gunners of the Kabals revel in unleashing torment on the move. Such warriors may earn these potent weapons through skill, or kill their way to the position."
+  },
+  {
+   "id": "hand-of-the-archon.kabalite-heavy-gunner",
+   "teamId": "hand-of-the-archon",
+   "name": "Kabalite Heavy Gunner",
+   "keywords": [
+    "HAND OF THE ARCHON",
+    "AELDARI",
+    "DRUKHARI",
+    "HEAVY GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Dark lance",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 6,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Splinter cannon",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Array of blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Drukhari weapons technology is far in advance of most races’ capabilities, and Kabalite Heavy Gunners wield armaments of hellish power. Dark lances fire midnight beams that can vaporise foes, while splinter cannons scythe through the enemy with poisoned shards."
+  },
+  {
+   "id": "hand-of-the-archon.kabalite-skysplinter-assassin",
+   "teamId": "hand-of-the-archon",
+   "name": "Kabalite Skysplinter Assassin",
+   "keywords": [
+    "HAND OF THE ARCHON",
+    "AELDARI",
+    "DRUKHARI",
+    "SKYSPLINTER ASSASSIN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Razorwing",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 1,
+       "dmgC": 2,
+       "rules": [
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Seek",
+         "raw": "Seek"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shardcarbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 2,
+       "dmgC": 2,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 2,
+         "raw": "Devastating 2"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Array of blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "hand-of-the-archon.kabalite-skysplinter-assassin.merciless-hunter",
+     "name": "Merciless Hunter",
+     "text": "If this operative doesn’t perform the Mark unique action (see other side of card) during its activation, it can perform two Shoot actions during its activation, but a razorwing must be selected for one (and only one) of those actions."
+    },
+    {
+     "id": "hand-of-the-archon.kabalite-skysplinter-assassin.omen",
+     "name": "Omen",
+     "text": "In the Select Operatives step, when you’re selecting equipment, you can select one enemy operative or one other friendly HAND OF THE ARCHON operative (reveal your selection when you reveal equipment). Whenever attack or defence dice are rolled for that operative:\n\nIf it’s an enemy operative, your opponent must re-roll their dice results of 6.\n\nIf it’s a friendly operative, you can re-roll any of your dice results of 1."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "hand-of-the-archon.kabalite-skysplinter-assassin.act.mark",
+     "name": "MARK",
+     "ap": 1,
+     "text": "Select one enemy operative visible to this operative. Until the end of the turning point, whenever this operative is shooting that enemy operative you can use this effect. If you do:\n\nThis operative’s ranged weapons have the Seek Light weapon rule.\n\nThat enemy operative cannot be obscured.\n\nThis operative cannot perform this action while within control range of an enemy operative"
+    }
+   ],
+   "fluff": "Used to scouting ahead, these operatives stand apart from their comrades and are seen as harbouring secret agendas. Such paranoia is a tool they know how to use in their favour, and the ominous sight of their razorwings haunts both foes and so-called ‘allies’ alike."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "hand-of-the-archon.rule.power-from-pain",
+   "name": "Power From Pain",
+   "text": "After a friendly HAND OF THE ARCHON operative performs an action, it gains one of your Pain tokens if:\n\nAn enemy operative was injured during that action, but was not incapacitated.\n\nAn enemy operative was incapacitated during that action. If that enemy operative had a Wounds stat of 12 or more, that friendly operative gains two of your Pain tokens instead.\n\nYou can spend friendly operatives’ Pain tokens on invigorations when the ‘when’ condition is met. You cannot use more than one invigoration per activation or counteraction, except Stimulated Senses, which can be used once per activation or counteraction in addition to another invigorations.",
+   "fluff": "The Drukhari feed on the souls of their slain and tortured victims, drawing sustenance from the terrible agonies they inflict."
+  },
+  {
+   "id": "hand-of-the-archon.rule.invigorations",
+   "name": "Invigorations",
+   "text": "Dark Animus\nWhen: During the operative’s activation, before or after it performs an action.\nEffect: Until the start of the operative’s next activation, add 1 to its APL stat.\n\nAccelerated Rejuvenation\nWhen: During the operative’s activation or counteraction, before or after it performs an action.\nEffect: The operative regains D3+1 lost wounds.\n\nVitalised Surge\nWhen: After the operative incapacitates an enemy operative and that enemy operative is removed from the killzone.\nEffect: The operative can immediately perform a free Dash action, even if it’s performed an action that prevents it from performing the Dash action.\n\nStimulated Senses\nWhen: After rolling your attack or defence dice for the operative.\nEffect: You can re-roll any of your dice results of one result (e.g. results of 2)."
+  },
+  {
+   "id": "hand-of-the-archon.rule.rifles",
+   "name": "Rifles",
+   "text": "Whenever a friendly HAND OF THE ARCHON operative is shooting with a splinter rifle during an activation in which it hasn’t performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule. Note that operative isn’t restricted from performing those actions after shooting.",
+   "fluff": "The long-barrelled splinter rifles carried by Kabalite Warriors are incredibly accurate in the hands of a skilled user."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "hand-of-the-archon.sp.blade-artists",
+   "name": "BLADE ARTISTS",
+   "text": "Friendly HAND OF THE ARCHON operatives’ melee weapons have the Rending weapon rule.",
+   "cp": 1,
+   "fluff": "The Drukhari have made a macabre art form of melee combat, slaughtering their victims with flensing strikes and heart-piercing thrusts."
+  },
+  {
+   "id": "hand-of-the-archon.sp.from-darkness-death",
+   "name": "FROM DARKNESS, DEATH",
+   "text": "Whenever a friendly HAND OF THE ARCHON operative is activated, before you determine its order, you can select one enemy operative that friendly operative isn’t a valid target for. Until the end of that activation, the first time that friendly operative is shooting against or fighting against that enemy operative, you can retain one of your normal successes as a critical success instead.",
+   "cp": 1,
+   "fluff": "Honour is an alien concept to the Drukhari. They make use of distraction and misdirection to butcher unsuspecting foes from the shadows."
+  },
+  {
+   "id": "hand-of-the-archon.sp.merciless-sadists",
+   "name": "MERCILESS SADISTS",
+   "text": "Whenever a friendly HAND OF THE ARCHON operative is shooting against or fighting against a wounded enemy operative, that friendly operative’s weapons have the Balanced weapon rule.",
+   "cp": 1,
+   "fluff": "The Drukhari are sustained by the agony of others and are devoid of pity. There is no act of depraved torture to which they will not stoop."
+  },
+  {
+   "id": "hand-of-the-archon.sp.denizens-of-night",
+   "name": "DENIZENS OF NIGHT",
+   "text": "Whenever an enemy operative is shooting a friendly HAND OF THE ARCHON operative that’s more than 2\" from enemy operatives, if Heavy or Light terrain is intervening, or any part of that friendly operative’s base is underneath Vantage terrain, you can re-roll one of your defence dice.\n\nFirefight Ploys\nCRUEL DECEPTION\n\nThe denizens of the Dark City are well versed in deceit and betrayal. In battle, they put these talents to good use, hitting their foes hard before melting away into the shadows.\nUse this firefight ploy during a friendly HAND OF THE ARCHON operative’s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP.\n\nHEINOUS ARROGANCE\n\nTo the conceited Drukhari, all opponents are little more than vermin – to be ignored or exterminated.\nUse this firefight ploy when it’s your turn to activate a friendly operative. You can skip that activation.\n\nDEVIOUS SCHEME\n\nSchemers all, the Drukhari are used to staying one step ahead of their opponents and confounding their every move.\nUse this firefight ploy after an opponent uses a firefight ploy (excluding one that costs 0CP). The next time they would use that ploy, they must spend 1 additional CP to do so (at which point this effect ends). You cannot use this ploy again during the battle until its effect has ended.\n\nPREY ON THE WOUNDED\n\nDrukhari are drawn to agony, seeking out the injured to land a killing blow.\nUse this firefight ploy after rolling your attack dice for a friendly HAND OF THE ARCHON operative, if it’s shooting against or fighting against a wounded enemy operative. You can re-roll any of your attack dice.\n\nFaction Equipment\nCHAIN SNARE\n\nComposed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder’s target, preventing them from fleeing.\nWhenever an enemy operative would perform the Fall Back action while within control range of a friendly HAND OF THE ARCHON operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.\n\nTOXIN COATING\n\nDrukhari raiders are known to coat their blades in venom, ensuring that even the slightest nick of blade against flesh is fatal.\nUp to twice per turning point, whenever a friendly HAND OF THE ARCHON operative is fighting or retaliating and you’re selecting a melee weapon, you can use this rule. If you do, until the end of that sequence, that operative’s melee weapon has the Lethal 5+ weapon rule.\n\nWICKED BLADES\n\nLight yet deadly, the jagged edge of this blade has been crafted to ensure maximum agony as it’s plunged into the flesh of a victim.\nAdd 1 to the Atk stat of friendly HAND OF THE ARCHON operatives’ array of blades.\n\nREFINED POISON\n\nSplinter rounds are infused with exquisitely lethal concoctions distilled from the potent venoms and toxins of deadly flora and fauna.\nUp to twice per turning point, whenever a friendly HAND OF THE ARCHON operative is performing the Shoot action and you select a shardcarbine, splinter cannon, splinter pistol, splinter rifle or stinger pistol, you can use this rule. If you do, until the end of that action, add 1 to the Normal Dmg stat of that weapon.",
+   "cp": 1,
+   "fluff": "Hailing from Commorragh – the Dark City – the Drukhari are born and raised in shadow, and use it to conceal their movements."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "hand-of-the-archon.fp.cruel-deception",
+   "name": "CRUEL DECEPTION",
+   "text": "Use this firefight ploy during a friendly HAND OF THE ARCHON operative’s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP.",
+   "cp": 1,
+   "fluff": "The denizens of the Dark City are well versed in deceit and betrayal. In battle, they put these talents to good use, hitting their foes hard before melting away into the shadows."
+  },
+  {
+   "id": "hand-of-the-archon.fp.heinous-arrogance",
+   "name": "HEINOUS ARROGANCE",
+   "text": "Use this firefight ploy when it’s your turn to activate a friendly operative. You can skip that activation.",
+   "cp": 1,
+   "fluff": "To the conceited Drukhari, all opponents are little more than vermin – to be ignored or exterminated."
+  },
+  {
+   "id": "hand-of-the-archon.fp.devious-scheme",
+   "name": "DEVIOUS SCHEME",
+   "text": "Use this firefight ploy after an opponent uses a firefight ploy (excluding one that costs 0CP). The next time they would use that ploy, they must spend 1 additional CP to do so (at which point this effect ends). You cannot use this ploy again during the battle until its effect has ended.",
+   "cp": 1,
+   "fluff": "Schemers all, the Drukhari are used to staying one step ahead of their opponents and confounding their every move."
+  },
+  {
+   "id": "hand-of-the-archon.fp.prey-on-the-wounded",
+   "name": "PREY ON THE WOUNDED",
+   "text": "Use this firefight ploy after rolling your attack dice for a friendly HAND OF THE ARCHON operative, if it’s shooting against or fighting against a wounded enemy operative. You can re-roll any of your attack dice.\n\nFaction Equipment\nCHAIN SNARE\n\nComposed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder’s target, preventing them from fleeing.\nWhenever an enemy operative would perform the Fall Back action while within control range of a friendly HAND OF THE ARCHON operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.\n\nTOXIN COATING\n\nDrukhari raiders are known to coat their blades in venom, ensuring that even the slightest nick of blade against flesh is fatal.\nUp to twice per turning point, whenever a friendly HAND OF THE ARCHON operative is fighting or retaliating and you’re selecting a melee weapon, you can use this rule. If you do, until the end of that sequence, that operative’s melee weapon has the Lethal 5+ weapon rule.\n\nWICKED BLADES\n\nLight yet deadly, the jagged edge of this blade has been crafted to ensure maximum agony as it’s plunged into the flesh of a victim.\nAdd 1 to the Atk stat of friendly HAND OF THE ARCHON operatives’ array of blades.\n\nREFINED POISON\n\nSplinter rounds are infused with exquisitely lethal concoctions distilled from the potent venoms and toxins of deadly flora and fauna.\nUp to twice per turning point, whenever a friendly HAND OF THE ARCHON operative is performing the Shoot action and you select a shardcarbine, splinter cannon, splinter pistol, splinter rifle or stinger pistol, you can use this rule. If you do, until the end of that action, add 1 to the Normal Dmg stat of that weapon.",
+   "cp": 1,
+   "fluff": "Drukhari are drawn to agony, seeking out the injured to land a killing blow."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "hand-of-the-archon.eq.chain-snare",
+   "name": "CHAIN SNARE",
+   "text": "Whenever an enemy operative would perform the Fall Back action while within control range of a friendly HAND OF THE ARCHON operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.",
+   "fluff": "Composed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder’s target, preventing them from fleeing."
+  },
+  {
+   "id": "hand-of-the-archon.eq.toxin-coating",
+   "name": "TOXIN COATING",
+   "text": "Up to twice per turning point, whenever a friendly HAND OF THE ARCHON operative is fighting or retaliating and you’re selecting a melee weapon, you can use this rule. If you do, until the end of that sequence, that operative’s melee weapon has the Lethal 5+ weapon rule.",
+   "fluff": "Drukhari raiders are known to coat their blades in venom, ensuring that even the slightest nick of blade against flesh is fatal."
+  },
+  {
+   "id": "hand-of-the-archon.eq.wicked-blades",
+   "name": "WICKED BLADES",
+   "text": "Add 1 to the Atk stat of friendly HAND OF THE ARCHON operatives’ array of blades.",
+   "fluff": "Light yet deadly, the jagged edge of this blade has been crafted to ensure maximum agony as it’s plunged into the flesh of a victim."
+  },
+  {
+   "id": "hand-of-the-archon.eq.refined-poison",
+   "name": "REFINED POISON",
+   "text": "Up to twice per turning point, whenever a friendly HAND OF THE ARCHON operative is performing the Shoot action and you select a shardcarbine, splinter cannon, splinter pistol, splinter rifle or stinger pistol, you can use this rule. If you do, until the end of that action, add 1 to the Normal Dmg stat of that weapon.",
+   "fluff": "Splinter rounds are infused with exquisitely lethal concoctions distilled from the potent venoms and toxins of deadly flora and fauna."
+  }
+ ],
+ "markerGuide": "Pain tokens (Values 1 & 2)\n\nOmen token\n\nToxin Coating token\n\nBrutal Display token\n\nHypex token\n\nRefined Poison token\n\nPoison token\n\nPainbringer token\n\nSadistic Competition token",
+ "notes": [],
+ "rareWeaponRules": [
+  "Flay",
+  "Stinger",
+  "Tangle"
+ ]
+}

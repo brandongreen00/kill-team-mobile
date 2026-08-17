@@ -1,0 +1,1315 @@
+{
+ "id": "tomb-world-5",
+ "killzone": "tomb-world",
+ "name": "Tomb World 5",
+ "board": {
+  "w": 27.625,
+  "h": 23.875,
+  "grid": 3.8125,
+  "border": 0.46875
+ },
+ "closeQuarters": true,
+ "dropZones": {
+  "p1": [
+   [
+    {
+     "x": 0.0,
+     "y": 0.0
+    },
+    {
+     "x": 27.625,
+     "y": 0.0
+    },
+    {
+     "x": 27.625,
+     "y": 4.312
+    },
+    {
+     "x": 0.0,
+     "y": 4.312
+    }
+   ]
+  ],
+  "p2": [
+   [
+    {
+     "x": 0.0,
+     "y": 19.562
+    },
+    {
+     "x": 27.625,
+     "y": 19.562
+    },
+    {
+     "x": 27.625,
+     "y": 23.875
+    },
+    {
+     "x": 0.0,
+     "y": 23.875
+    }
+   ]
+  ]
+ },
+ "territories": {
+  "p1": [
+   [
+    {
+     "x": 0.0,
+     "y": 0.0
+    },
+    {
+     "x": 27.625,
+     "y": 0.0
+    },
+    {
+     "x": 27.625,
+     "y": 11.938
+    },
+    {
+     "x": 0.0,
+     "y": 11.938
+    }
+   ]
+  ],
+  "p2": [
+   [
+    {
+     "x": 0.0,
+     "y": 11.938
+    },
+    {
+     "x": 27.625,
+     "y": 11.938
+    },
+    {
+     "x": 27.625,
+     "y": 23.875
+    },
+    {
+     "x": 0.0,
+     "y": 23.875
+    }
+   ]
+  ]
+ },
+ "killzoneEdges": {
+  "p1": [
+   {
+    "a": {
+     "x": 0.063,
+     "y": 0.0
+    },
+    "b": {
+     "x": 27.643,
+     "y": 0.0
+    }
+   }
+  ],
+  "p2": [
+   {
+    "a": {
+     "x": 0.063,
+     "y": 23.875
+    },
+    "b": {
+     "x": 27.643,
+     "y": 23.875
+    }
+   }
+  ],
+  "neutral": [
+   {
+    "a": {
+     "x": 0.0,
+     "y": 23.821
+    },
+    "b": {
+     "x": 0.0,
+     "y": 0.054
+    }
+   },
+   {
+    "a": {
+     "x": 27.625,
+     "y": 23.821
+    },
+    "b": {
+     "x": 27.625,
+     "y": 0.054
+    }
+   }
+  ]
+ },
+ "centreLine": {
+  "a": {
+   "x": 0.0,
+   "y": 11.938
+  },
+  "b": {
+   "x": 27.625,
+   "y": 11.938
+  }
+ },
+ "flankLine": {
+  "a": {
+   "x": 13.812,
+   "y": 0.0
+  },
+  "b": {
+   "x": 13.812,
+   "y": 23.875
+  }
+ },
+ "objectives": [
+  {
+   "id": "obj.p1",
+   "kind": "p1",
+   "pos": {
+    "x": 23.364,
+    "y": 8.105
+   },
+   "z": 0.0
+  },
+  {
+   "id": "obj.p2",
+   "kind": "p2",
+   "pos": {
+    "x": 5.802,
+    "y": 15.73
+   },
+   "z": 0.0
+  },
+  {
+   "id": "obj.centre",
+   "kind": "centre",
+   "pos": {
+    "x": 15.05,
+    "y": 11.917
+   },
+   "z": 0.0
+  }
+ ],
+ "features": [
+  {
+   "id": "tomb-world-5.A1-1",
+   "kind": "tomb-world.wallA1",
+   "label": "A1",
+   "parts": [
+    {
+     "id": "tomb-world-5.A1-1.wall",
+     "featureId": "tomb-world-5.A1-1",
+     "poly": [
+      {
+       "x": 4.281,
+       "y": 19.38
+      },
+      {
+       "x": 11.906,
+       "y": 19.38
+      },
+      {
+       "x": 11.906,
+       "y": 19.745
+      },
+      {
+       "x": 4.281,
+       "y": 19.745
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 8.094,
+    "y": 19.562,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.A3-1",
+   "kind": "tomb-world.wallA3",
+   "label": "A3",
+   "parts": [
+    {
+     "id": "tomb-world-5.A3-1.wall",
+     "featureId": "tomb-world-5.A3-1",
+     "poly": [
+      {
+       "x": 11.906,
+       "y": 15.567
+      },
+      {
+       "x": 19.531,
+       "y": 15.567
+      },
+      {
+       "x": 19.531,
+       "y": 15.933
+      },
+      {
+       "x": 11.906,
+       "y": 15.933
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 15.719,
+    "y": 15.75,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.A3-2",
+   "kind": "tomb-world.wallA3",
+   "label": "A3",
+   "parts": [
+    {
+     "id": "tomb-world-5.A3-2.wall",
+     "featureId": "tomb-world-5.A3-2",
+     "poly": [
+      {
+       "x": 19.531,
+       "y": 15.567
+      },
+      {
+       "x": 27.156,
+       "y": 15.567
+      },
+      {
+       "x": 27.156,
+       "y": 15.933
+      },
+      {
+       "x": 19.531,
+       "y": 15.933
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 23.344,
+    "y": 15.75,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.A4-1",
+   "kind": "tomb-world.wallA4",
+   "label": "A4",
+   "parts": [
+    {
+     "id": "tomb-world-5.A4-1.wall",
+     "featureId": "tomb-world-5.A4-1",
+     "poly": [
+      {
+       "x": 0.469,
+       "y": 11.755
+      },
+      {
+       "x": 8.094,
+       "y": 11.755
+      },
+      {
+       "x": 8.094,
+       "y": 12.12
+      },
+      {
+       "x": 0.469,
+       "y": 12.12
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 4.281,
+    "y": 11.938,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.B4-1",
+   "kind": "tomb-world.wallB4",
+   "label": "B4",
+   "parts": [
+    {
+     "id": "tomb-world-5.B4-1.wall",
+     "featureId": "tomb-world-5.B4-1",
+     "poly": [
+      {
+       "x": 19.531,
+       "y": 11.755
+      },
+      {
+       "x": 23.344,
+       "y": 11.755
+      },
+      {
+       "x": 23.344,
+       "y": 12.12
+      },
+      {
+       "x": 19.531,
+       "y": 12.12
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 21.438,
+    "y": 11.938,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.A4-2",
+   "kind": "tomb-world.wallA4",
+   "label": "A4",
+   "parts": [
+    {
+     "id": "tomb-world-5.A4-2.wall",
+     "featureId": "tomb-world-5.A4-2",
+     "poly": [
+      {
+       "x": 0.469,
+       "y": 4.13
+      },
+      {
+       "x": 8.094,
+       "y": 4.13
+      },
+      {
+       "x": 8.094,
+       "y": 4.495
+      },
+      {
+       "x": 0.469,
+       "y": 4.495
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 4.281,
+    "y": 4.312,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.B3-1",
+   "kind": "tomb-world.wallB3",
+   "label": "B3",
+   "parts": [
+    {
+     "id": "tomb-world-5.B3-1.wall",
+     "featureId": "tomb-world-5.B3-1",
+     "poly": [
+      {
+       "x": 11.906,
+       "y": 4.13
+      },
+      {
+       "x": 15.719,
+       "y": 4.13
+      },
+      {
+       "x": 15.719,
+       "y": 4.495
+      },
+      {
+       "x": 11.906,
+       "y": 4.495
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 13.812,
+    "y": 4.312,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.B4-2",
+   "kind": "tomb-world.wallB4",
+   "label": "B4",
+   "parts": [
+    {
+     "id": "tomb-world-5.B4-2.wall",
+     "featureId": "tomb-world-5.B4-2",
+     "poly": [
+      {
+       "x": 15.719,
+       "y": 4.13
+      },
+      {
+       "x": 19.531,
+       "y": 4.13
+      },
+      {
+       "x": 19.531,
+       "y": 4.495
+      },
+      {
+       "x": 15.719,
+       "y": 4.495
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 17.625,
+    "y": 4.312,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.A1-2",
+   "kind": "tomb-world.wallA1",
+   "label": "A1",
+   "parts": [
+    {
+     "id": "tomb-world-5.A1-2.wall",
+     "featureId": "tomb-world-5.A1-2",
+     "poly": [
+      {
+       "x": 19.531,
+       "y": 4.13
+      },
+      {
+       "x": 27.156,
+       "y": 4.13
+      },
+      {
+       "x": 27.156,
+       "y": 4.495
+      },
+      {
+       "x": 19.531,
+       "y": 4.495
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 23.344,
+    "y": 4.312,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.A2-1",
+   "kind": "tomb-world.wallA2",
+   "label": "A2",
+   "parts": [
+    {
+     "id": "tomb-world-5.A2-1.wall",
+     "featureId": "tomb-world-5.A2-1",
+     "poly": [
+      {
+       "x": 7.911,
+       "y": 4.312
+      },
+      {
+       "x": 8.276,
+       "y": 4.312
+      },
+      {
+       "x": 8.276,
+       "y": 11.938
+      },
+      {
+       "x": 7.911,
+       "y": 11.938
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 8.094,
+    "y": 8.125,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.B3-2",
+   "kind": "tomb-world.wallB3",
+   "label": "B3",
+   "parts": [
+    {
+     "id": "tomb-world-5.B3-2.wall",
+     "featureId": "tomb-world-5.B3-2",
+     "poly": [
+      {
+       "x": 11.724,
+       "y": 15.75
+      },
+      {
+       "x": 12.089,
+       "y": 15.75
+      },
+      {
+       "x": 12.089,
+       "y": 19.562
+      },
+      {
+       "x": 11.724,
+       "y": 19.562
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 11.906,
+    "y": 17.656,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.A2-2",
+   "kind": "tomb-world.wallA2",
+   "label": "A2",
+   "parts": [
+    {
+     "id": "tomb-world-5.A2-2.wall",
+     "featureId": "tomb-world-5.A2-2",
+     "poly": [
+      {
+       "x": 11.724,
+       "y": 8.125
+      },
+      {
+       "x": 12.089,
+       "y": 8.125
+      },
+      {
+       "x": 12.089,
+       "y": 15.75
+      },
+      {
+       "x": 11.724,
+       "y": 15.75
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 11.906,
+    "y": 11.938,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.B2-1",
+   "kind": "tomb-world.wallB2",
+   "label": "B2",
+   "parts": [
+    {
+     "id": "tomb-world-5.B2-1.wall",
+     "featureId": "tomb-world-5.B2-1",
+     "poly": [
+      {
+       "x": 11.724,
+       "y": 4.312
+      },
+      {
+       "x": 12.089,
+       "y": 4.312
+      },
+      {
+       "x": 12.089,
+       "y": 8.125
+      },
+      {
+       "x": 11.724,
+       "y": 8.125
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 11.906,
+    "y": 6.219,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.B1-1",
+   "kind": "tomb-world.wallB1",
+   "label": "B1",
+   "parts": [
+    {
+     "id": "tomb-world-5.B1-1.wall",
+     "featureId": "tomb-world-5.B1-1",
+     "poly": [
+      {
+       "x": 19.349,
+       "y": 11.938
+      },
+      {
+       "x": 19.714,
+       "y": 11.938
+      },
+      {
+       "x": 19.714,
+       "y": 15.75
+      },
+      {
+       "x": 19.349,
+       "y": 15.75
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 19.531,
+    "y": 13.844,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.B2-2",
+   "kind": "tomb-world.wallB2",
+   "label": "B2",
+   "parts": [
+    {
+     "id": "tomb-world-5.B2-2.wall",
+     "featureId": "tomb-world-5.B2-2",
+     "poly": [
+      {
+       "x": 19.349,
+       "y": 8.125
+      },
+      {
+       "x": 19.714,
+       "y": 8.125
+      },
+      {
+       "x": 19.714,
+       "y": 11.938
+      },
+      {
+       "x": 19.349,
+       "y": 11.938
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 19.531,
+    "y": 10.031,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.B1-2",
+   "kind": "tomb-world.wallB1",
+   "label": "B1",
+   "parts": [
+    {
+     "id": "tomb-world-5.B1-2.wall",
+     "featureId": "tomb-world-5.B1-2",
+     "poly": [
+      {
+       "x": 19.349,
+       "y": 4.312
+      },
+      {
+       "x": 19.714,
+       "y": 4.312
+      },
+      {
+       "x": 19.714,
+       "y": 8.125
+      },
+      {
+       "x": 19.349,
+       "y": 8.125
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 19.531,
+    "y": 6.219,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.C3",
+   "kind": "tomb-world.debris",
+   "label": "C3",
+   "parts": [
+    {
+     "id": "tomb-world-5.C3.light",
+     "featureId": "tomb-world-5.C3",
+     "poly": [
+      {
+       "x": 18.639,
+       "y": 18.63
+      },
+      {
+       "x": 20.464,
+       "y": 18.63
+      },
+      {
+       "x": 20.464,
+       "y": 20.455
+      },
+      {
+       "x": 18.639,
+       "y": 20.455
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.2,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 19.552,
+    "y": 19.542,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.C1",
+   "kind": "tomb-world.sarcophagus",
+   "label": "C1",
+   "parts": [
+    {
+     "id": "tomb-world-5.C1.light",
+     "featureId": "tomb-world-5.C1",
+     "poly": [
+      {
+       "x": 6.553,
+       "y": 14.493
+      },
+      {
+       "x": 9.716,
+       "y": 14.493
+      },
+      {
+       "x": 9.716,
+       "y": 17.007
+      },
+      {
+       "x": 6.553,
+       "y": 17.007
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.2,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 8.134,
+    "y": 15.75,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.T-1",
+   "kind": "tomb-world.teleportPad",
+   "label": "T",
+   "parts": [
+    {
+     "id": "tomb-world-5.T-1.pad",
+     "featureId": "tomb-world-5.T-1",
+     "poly": [
+      {
+       "x": 20.383,
+       "y": 12.749
+      },
+      {
+       "x": 22.695,
+       "y": 12.749
+      },
+      {
+       "x": 22.695,
+       "y": 15.061
+      },
+      {
+       "x": 20.383,
+       "y": 15.061
+      }
+     ],
+     "z0": 0.0,
+     "z1": 0.2,
+     "types": [
+      "Exposed",
+      "Insignificant",
+      "Vantage"
+     ],
+     "role": "teleportPad",
+     "blocksVisibility": false,
+     "standable": true,
+     "solid": false
+    }
+   ],
+   "placement": {
+    "x": 21.539,
+    "y": 13.905,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.C5",
+   "kind": "tomb-world.debris",
+   "label": "C5",
+   "parts": [
+    {
+     "id": "tomb-world-5.C5.light",
+     "featureId": "tomb-world-5.C5",
+     "poly": [
+      {
+       "x": 15.719,
+       "y": 11.126
+      },
+      {
+       "x": 17.503,
+       "y": 11.126
+      },
+      {
+       "x": 17.503,
+       "y": 12.749
+      },
+      {
+       "x": 15.719,
+       "y": 12.749
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.2,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 16.611,
+    "y": 11.938,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9143
+   }
+  },
+  {
+   "id": "tomb-world-5.T-2",
+   "kind": "tomb-world.teleportPad",
+   "label": "T",
+   "parts": [
+    {
+     "id": "tomb-world-5.T-2.pad",
+     "featureId": "tomb-world-5.T-2",
+     "poly": [
+      {
+       "x": 1.239,
+       "y": 8.936
+      },
+      {
+       "x": 3.551,
+       "y": 8.936
+      },
+      {
+       "x": 3.551,
+       "y": 11.248
+      },
+      {
+       "x": 1.239,
+       "y": 11.248
+      }
+     ],
+     "z0": 0.0,
+     "z1": 0.2,
+     "types": [
+      "Exposed",
+      "Insignificant",
+      "Vantage"
+     ],
+     "role": "teleportPad",
+     "blocksVisibility": false,
+     "standable": true,
+     "solid": false
+    }
+   ],
+   "placement": {
+    "x": 2.395,
+    "y": 10.092,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "tomb-world-5.C2",
+   "kind": "tomb-world.debris",
+   "label": "C2",
+   "parts": [
+    {
+     "id": "tomb-world-5.C2.light",
+     "featureId": "tomb-world-5.C2",
+     "poly": [
+      {
+       "x": 14.543,
+       "y": 7.192
+      },
+      {
+       "x": 16.976,
+       "y": 7.192
+      },
+      {
+       "x": 16.976,
+       "y": 9.017
+      },
+      {
+       "x": 14.543,
+       "y": 9.017
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.2,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 15.759,
+    "y": 8.105,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9905
+   }
+  },
+  {
+   "id": "tomb-world-5.C4",
+   "kind": "tomb-world.debris",
+   "label": "C4",
+   "parts": [
+    {
+     "id": "tomb-world-5.C4.light",
+     "featureId": "tomb-world-5.C4",
+     "poly": [
+      {
+       "x": 3.47,
+       "y": 7.273
+      },
+      {
+       "x": 5.133,
+       "y": 7.273
+      },
+      {
+       "x": 5.133,
+       "y": 8.936
+      },
+      {
+       "x": 3.47,
+       "y": 8.936
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.2,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true
+    }
+   ],
+   "placement": {
+    "x": 4.302,
+    "y": 8.105,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  }
+ ],
+ "source": {
+  "card": "docs/context-pack/research/approved-ops/maps/Tomb-World5.png",
+  "pxPerInch": 24.6557,
+  "extractedAt": "2026-08-17",
+  "tool": "tools/maps/extract_cards.py",
+  "qa": {
+   "pxPerInch": 24.6557,
+   "pxPerInchY": 24.6557,
+   "dropDepthP1": 4.3125,
+   "dropDepthP2": 4.3125,
+   "deployment": "long-edge",
+   "p1Side": "bottom",
+   "centreSeamErrIn": 0.0,
+   "latticeStepPx": 94.0,
+   "wallThicknessPx": 9.0,
+   "templateIoUMin": 0.9143,
+   "templateIoUMedian": 1.0
+  }
+ }
+}

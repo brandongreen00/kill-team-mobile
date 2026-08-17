@@ -1,0 +1,1546 @@
+{
+ "id": "phobos-strike-team",
+ "name": "Phobos Strike Team",
+ "faction": "Space Marines",
+ "grandFaction": "Imperium",
+ "archetypes": [
+  "Infiltration",
+  "Recon"
+ ],
+ "booksVersion": "November ’25",
+ "books": [
+  {
+   "book": "Phobos Strike Team",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "November ’25",
+   "lastUpdate": "November 2025",
+   "pdf": "https://assets.warhammer-community.com/eng_19-11_kill_team_team_rules_phobos_strike_team-d53iqehptd-9wvgjlxnfx.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/phobos-strike-team/",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": null,
+   "datacardId": null,
+   "count": 1,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "INFILTRATOR SERGEANT",
+    "INCURSOR SERGEANT",
+    "REIVER SERGEANT"
+   ],
+   "inList": false
+  },
+  "slots": 5,
+  "totalOperatives": 6,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "list",
+    "roles": [
+     "INFILTRATOR SERGEANT",
+     "INCURSOR SERGEANT",
+     "REIVER SERGEANT"
+    ],
+    "rawText": "1 PHOBOS STRIKE TEAM operative selected from the following list:"
+   },
+   {
+    "index": 2,
+    "count": 5,
+    "kind": "list",
+    "roles": [
+     "INFILTRATOR COMMSMAN",
+     "INFILTRATOR HELIX ADEPT",
+     "INFILTRATOR SABOTEUR",
+     "INFILTRATOR VETERAN",
+     "INFILTRATOR VOXBREAKER",
+     "INFILTRATOR WARRIOR",
+     "INCURSOR MARKSMAN",
+     "INCURSOR MINELAYER",
+     "INCURSOR WARRIOR",
+     "REIVER WARRIOR"
+    ],
+    "rawText": "5 PHOBOS STRIKE TEAM operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "INFILTRATOR COMMSMAN",
+    "datacardAnchor": "Infiltrator-Commsman",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INFILTRATOR COMMSMAN",
+    "group": 2,
+    "datacardId": "phobos-strike-team.infiltrator-commsman",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Marksman bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "INFILTRATOR HELIX ADEPT",
+    "datacardAnchor": "Infiltrator-Helix-Adept",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INFILTRATOR HELIX ADEPT",
+    "group": 2,
+    "datacardId": "phobos-strike-team.infiltrator-helix-adept",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Marksman bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "INFILTRATOR SABOTEUR",
+    "datacardAnchor": "Infiltrator-Saboteur",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INFILTRATOR SABOTEUR",
+    "group": 2,
+    "datacardId": "phobos-strike-team.infiltrator-saboteur",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Marksman bolt carbine",
+     "Remote detonator",
+     "Fists"
+    ]
+   },
+   {
+    "role": "INFILTRATOR VETERAN",
+    "datacardAnchor": "Infiltrator-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INFILTRATOR VETERAN",
+    "group": 2,
+    "datacardId": "phobos-strike-team.infiltrator-veteran",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Custom bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "INFILTRATOR VOXBREAKER",
+    "datacardAnchor": "Infiltrator-Voxbreaker",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INFILTRATOR VOXBREAKER",
+    "group": 2,
+    "datacardId": "phobos-strike-team.infiltrator-voxbreaker",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Marksman bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "INFILTRATOR WARRIOR",
+    "datacardAnchor": "Infiltrator-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INFILTRATOR WARRIOR",
+    "group": 2,
+    "datacardId": "phobos-strike-team.infiltrator-warrior",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Marksman bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "INCURSOR MARKSMAN",
+    "datacardAnchor": "Incursor-Marksman",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INCURSOR MARKSMAN",
+    "group": 2,
+    "datacardId": "phobos-strike-team.incursor-marksman",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Stalker marksman bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "INCURSOR MINELAYER",
+    "datacardAnchor": "Incursor-Minelayer",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INCURSOR MINELAYER",
+    "group": 2,
+    "datacardId": "phobos-strike-team.incursor-minelayer",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Occulus bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "INCURSOR WARRIOR",
+    "datacardAnchor": "Incursor-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INCURSOR WARRIOR",
+    "group": 2,
+    "datacardId": "phobos-strike-team.incursor-warrior",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Occulus bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "REIVER WARRIOR",
+    "datacardAnchor": "Reiver-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "phobos-strike-team.g2e10.opt1",
+      "label": "Special issue bolt pistol; combat knife",
+      "weapons": [
+       "Special issue bolt pistol",
+       "Combat knife"
+      ]
+     },
+     {
+      "id": "phobos-strike-team.g2e10.opt2",
+      "label": "Bolt carbine; fists",
+      "weapons": [
+       "Bolt carbine",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "REIVER WARRIOR with one of the following options:",
+    "group": 2,
+    "datacardId": "phobos-strike-team.reiver-warrior",
+    "isLeader": false,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "INFILTRATOR SERGEANT",
+    "datacardAnchor": "Infiltrator-Sergeant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INFILTRATOR SERGEANT",
+    "group": 1,
+    "datacardId": "phobos-strike-team.infiltrator-sergeant",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Marksman bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "INCURSOR SERGEANT",
+    "datacardAnchor": "Incursor-Sergeant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "INCURSOR SERGEANT",
+    "group": 1,
+    "datacardId": "phobos-strike-team.incursor-sergeant",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": [
+     "Marksman bolt carbine",
+     "Fists"
+    ]
+   },
+   {
+    "role": "REIVER SERGEANT",
+    "datacardAnchor": "Reiver-Sergeant",
+    "count": 1,
+    "fixedWeapons": [],
+    "fixedChoiceGroups": [],
+    "loadouts": [
+     {
+      "id": "phobos-strike-team.g1e3.opt1",
+      "label": "Special issue bolt pistol; combat knife",
+      "weapons": [
+       "Special issue bolt pistol",
+       "Combat knife"
+      ]
+     },
+     {
+      "id": "phobos-strike-team.g1e3.opt2",
+      "label": "Bolt carbine; fists",
+      "weapons": [
+       "Bolt carbine",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "REIVER SERGEANT with one of the following options:",
+    "group": 1,
+    "datacardId": "phobos-strike-team.reiver-sergeant",
+    "isLeader": true,
+    "uniqueUnlessRole": true,
+    "alwaysWeapons": []
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "WARRIOR"
+    ]
+   }
+  ],
+  "footnotes": {},
+  "footnoteOptions": {},
+  "designerNotes": [],
+  "rawText": "1 PHOBOS STRIKE TEAM operative selected from the following list:\n\nINFILTRATOR SERGEANT\n\nINCURSOR SERGEANT\n\nREIVER SERGEANT with one of the following options:\n\nSpecial issue bolt pistol; combat knife\n\nBolt carbine; fists\n\n5 PHOBOS STRIKE TEAM operatives selected from the following list:\n\nINFILTRATOR COMMSMAN\n\nINFILTRATOR HELIX ADEPT\n\nINFILTRATOR SABOTEUR\n\nINFILTRATOR VETERAN\n\nINFILTRATOR VOXBREAKER\n\nINFILTRATOR WARRIOR\n\nINCURSOR MARKSMAN\n\nINCURSOR MINELAYER\n\nINCURSOR WARRIOR\n\nREIVER WARRIOR with one of the following options:\n\nSpecial issue bolt pistol; combat knife\n\nBolt carbine; fists\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
+ },
+ "datacards": [
+  {
+   "id": "phobos-strike-team.infiltrator-sergeant",
+   "teamId": "phobos-strike-team",
+   "name": "Infiltrator Sergeant",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "LEADER",
+    "INFILTRATOR",
+    "SERGEANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 13,
+   "weapons": [
+    {
+     "name": "Marksman bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.infiltrator-sergeant.tactical-advantage",
+     "name": "Tactical Advantage",
+     "text": "You can do each of the following once per battle:\n\nWhen rolling-off to decide initiative, if this operative is in the killzone, you can re-roll your dice.\n\nYou can use a firefight ploy for 0CP if this is the specified PHOBOS STRIKE TEAM operative (including Command Re-roll if the attack or defence dice was rolled for this operative), or the Patient Ambush firefight ploy for 0CP if this operative is ready and not within control range of enemy operatives."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Exemplar to their brothers; strategic and tactical leader of exceptional skill; deadly enemy to the Emperor’s foes: the Infiltrator Sergeant must be all of these things, for it is by his words and actions that the Phobos Strike Team stands or falls."
+  },
+  {
+   "id": "phobos-strike-team.infiltrator-commsman",
+   "teamId": "phobos-strike-team",
+   "name": "Infiltrator Commsman",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "INFILTRATOR",
+    "COMMSMAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Marksman bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.infiltrator-commsman.strategic-oversight",
+     "name": "Strategic Oversight",
+     "text": "In the Ready step of each Strategy phase, when you gain CP, if this operative is in the killzone and not within control range of enemy operatives, you can use this rule. If you do, roll one D6: on a 4+, you gain one additional CP."
+    },
+    {
+     "id": "phobos-strike-team.infiltrator-commsman.comms-array",
+     "name": "Comms Array",
+     "text": "Once per turning point, during a friendly PHOBOS STRIKE TEAM operative’s activation or counteraction, before or after it performs an action, if this operative is in the killzone, you can change one strategy ploy you’ve used this turning point (it doesn’t cost you any CP to do so)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The Infiltrator Commsman acts as a strategic nexus upon the battlefield, a conduit through which vox-exchanges and intelligence inloads pass like lightning. The presence of such a battle-brother increases the strike team’s versatility and swiftness of action."
+  },
+  {
+   "id": "phobos-strike-team.infiltrator-helix-adept",
+   "teamId": "phobos-strike-team",
+   "name": "Infiltrator Helix Adept",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "MEDIC",
+    "INFILTRATOR",
+    "HELIX ADEPT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Marksman bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.infiltrator-helix-adept.medic",
+     "name": "Medic!",
+     "text": "The first time during each turning point that another friendly PHOBOS STRIKE TEAM operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has D3 wounds remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "phobos-strike-team.infiltrator-helix-adept.act.helix-gauntlet",
+     "name": "HELIX GAUNTLET",
+     "ap": 1,
+     "text": "Select one friendly PHOBOS STRIKE TEAM operative within this operative’s control range to regain up to D3+3 lost wounds. It cannot be an operative that the Medic! rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Operating as they do – far behind enemy lines without support – Phobos Strike Teams require the medicae support of Helix Adepts to get wounded battle-brothers back into the fight, and to reclaim the gene-seed of the slain for the Chapter."
+  },
+  {
+   "id": "phobos-strike-team.infiltrator-saboteur",
+   "teamId": "phobos-strike-team",
+   "name": "Infiltrator Saboteur",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "INFILTRATOR",
+    "SABOTEUR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Marksman bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Remote detonator",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "Detonate",
+         "raw": "Detonate*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.infiltrator-saboteur.plant-explosives",
+     "name": "Plant Explosives",
+     "text": "This operative is carrying your Explosives marker. It can perform the Pick Up Marker action on that marker, and whenever it performs the Place Marker action on that marker, it can immediately perform a free Dash action."
+    },
+    {
+     "id": "phobos-strike-team.infiltrator-saboteur.detonate",
+     "name": "Detonate",
+     "text": "Don’t select a valid target. Instead, shoot against each operative within 2\" of your Explosives marker, unless Heavy terrain is wholly intervening between that operative and that marker. Each of those operatives cannot be in cover or obscured. Roll each sequence separately in an order of your choice. This weapon cannot be selected if your Explosives marker isn’t in the killzone. At the end of the action, remove your Explosives marker from the killzone. In a killzone that uses the close quarters rules (e.g. Killzone: Tomb World), this weapon has the Lethal 5+ weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Carrying a deadly array of melta charges, super-krak munitions and even anti-plant canisters into battle, the Infiltrator Saboteur is well prepared to rig any target for destruction. This task completed, they fall back swiftly before triggering a blast like the Emperor’s wrath."
+  },
+  {
+   "id": "phobos-strike-team.infiltrator-veteran",
+   "teamId": "phobos-strike-team",
+   "name": "Infiltrator Veteran",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "INFILTRATOR",
+    "VETERAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Custom bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Custom",
+         "raw": "Custom*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.infiltrator-veteran.custom",
+     "name": "Custom",
+     "text": "At the end of the Select Operatives step, if this operative is selected for deployment, select up to two of the following weapon rules for this weapon to have for the battle: Balanced, Lethal 5+, Piercing Crits 1, Rending, Saturate."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The most experienced Infiltrator battle-brothers stalk their enemies like armoured gheists, wielding weaponry selected from their Chapter’s most rarefied armouries, each one augmented through the careful attentions of master artificers. So-armed, they can act as the nemeses of any foe."
+  },
+  {
+   "id": "phobos-strike-team.infiltrator-voxbreaker",
+   "teamId": "phobos-strike-team",
+   "name": "Infiltrator Voxbreaker",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "INFILTRATOR",
+    "VOXBREAKER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Marksman bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.infiltrator-voxbreaker.voxbreak",
+     "name": "Voxbreak",
+     "text": "Whenever an enemy operative is within 6\" of this operative, your opponent cannot re-roll their attack or defence dice for that operative."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "phobos-strike-team.infiltrator-voxbreaker.act.auspex-scan",
+     "name": "AUSPEX SCAN",
+     "ap": 1,
+     "text": "Until the start of this operative’s next activation or until it’s incapacitated (whichever comes first), whenever a friendly PHOBOS STRIKE TEAM operative is shooting an enemy operative within 8\" of this operative, that enemy operative cannot be obscured; if that friendly operative is an INCURSOR, its ranged weapons also have the Seek Light weapon rule.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "The Voxbreaker makes war in both the physical and dataspectral realms. Not only does their specialised equipment allow them to scan and isolate enemy threats, but they can also break into the foe’s communications and plunder them for strategic intelligence."
+  },
+  {
+   "id": "phobos-strike-team.infiltrator-warrior",
+   "teamId": "phobos-strike-team",
+   "name": "Infiltrator Warrior",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "INFILTRATOR",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Marksman bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.infiltrator-warrior.vanguard",
+     "name": "Vanguard",
+     "text": "Once per turning point, one friendly PHOBOS STRIKE TEAM operative with this rule can perform the Pick Up Marker or a mission action for 1 less AP."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The Infiltrators who fight as part of Phobos Strike Teams are swift and aggressive in thought and deed, even by the standards of their warrior brotherhood. Few foes can long evade their pinpoint volleys or the bone-crushing blows of their armoured fists."
+  },
+  {
+   "id": "phobos-strike-team.incursor-sergeant",
+   "teamId": "phobos-strike-team",
+   "name": "Incursor Sergeant",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "LEADER",
+    "INCURSOR",
+    "SERGEANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 13,
+   "weapons": [
+    {
+     "name": "Marksman bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.incursor-sergeant.tactical-advantage",
+     "name": "Tactical Advantage",
+     "text": "You can do each of the following once per battle:\n\nWhen rolling-off to decide initiative, if this operative is in the killzone, you can re-roll your dice.\n\nYou can use a firefight ploy for 0CP if this is the specified PHOBOS STRIKE TEAM operative (including Command Re-roll if the attack or defence dice was rolled for this operative), or the Patient Ambush firefight ploy for 0CP if this operative is ready and not within control range of enemy operatives."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Tending towards aggressive and dynamic strategies, Incursor Sergeants lead Phobos Strike Teams in furious covert offensives that leave enemy command structures and logistical chains in tatters, ripe for planetary onslaught by a full-blown Space Marine strike force."
+  },
+  {
+   "id": "phobos-strike-team.incursor-marksman",
+   "teamId": "phobos-strike-team",
+   "name": "Incursor Marksman",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "INCURSOR",
+    "MARKSMAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Stalker marksman bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.incursor-marksman.track-target",
+     "name": "Track Target",
+     "text": "This operative can perform the Guard action regardless of the killzone (see close quarters rules, Kill Team Core Book). It can perform the Guard action while it has a Conceal order, but when you perform the free Shoot or Fight action during the interruption, you must change its order to Engage."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "As though the combination of a highly trained Space Marine and a potent mark of bolt carbine were not deadly enough, the Incursor Marksman employs his Divinator-class auspex to precognitively track where his targets will be, then places killing shots accordingly."
+  },
+  {
+   "id": "phobos-strike-team.incursor-minelayer",
+   "teamId": "phobos-strike-team",
+   "name": "Incursor Minelayer",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "INCURSOR",
+    "MINELAYER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Occulus bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.incursor-minelayer.haywire-mine",
+     "name": "Haywire Mine",
+     "text": "This operative is carrying your Haywire Mine marker. It can perform the Pick Up Marker action on that marker, but that marker cannot be placed within an enemy operative’s control range (if this operative is incapacitated while carrying that marker and that marker cannot be placed, it’s removed with this operative)."
+    },
+    {
+     "id": "phobos-strike-team.incursor-minelayer.proximity-mine",
+     "name": "Proximity Mine",
+     "text": "The first time your Haywire Mine marker is within another operative’s control range, remove that marker, subtract 1 from that operative’s APL stat until the end of its next activation, and inflict 2D3+3 damage on it; if it isn’t incapacitated, end its action (if any), even if that action’s effects aren’t fulfilled. If it cannot be placed, move it the minimum amount to do so. Note that this operative is ignored for these effects (i.e. it cannot set it off or take damage from that marker)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Some Incursors carry heavy haywire mines into battle, planting them at pre-cogitated nexuses of probable enemy movement. The electrophantasmic blasts of these weapons can banish machine spirits from enemy wargear and cripple augmetic enhancements."
+  },
+  {
+   "id": "phobos-strike-team.incursor-warrior",
+   "teamId": "phobos-strike-team",
+   "name": "Incursor Warrior",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "INCURSOR",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Occulus bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.incursor-warrior.vanguard",
+     "name": "Vanguard",
+     "text": "Once per turning point, one friendly PHOBOS STRIKE TEAM operative with this rule can perform the Pick Up Marker or a mission action for 1 less AP."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Incursors are potent offensive skirmishers. They use oracular auspexes slaved to their occulus bolt carbines to spot enemy targets, even through solid walls. They then press swiftly upon their foes’ positions before engaging in bloody, one-sided firefights with the outmanoeuvred enemy."
+  },
+  {
+   "id": "phobos-strike-team.reiver-sergeant",
+   "teamId": "phobos-strike-team",
+   "name": "Reiver Sergeant",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "LEADER",
+    "REIVER",
+    "SERGEANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 13,
+   "weapons": [
+    {
+     "name": "Bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Accurate",
+         "x": 1,
+         "raw": "Accurate 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Special issue bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Combat knife",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.reiver-sergeant.grav-chute-and-grapnel-launcher",
+     "name": "Grav-chute and Grapnel Launcher",
+     "text": "Whenever this operative is climbing up, you can treat the vertical distance as 2\" (regardless of how far the operative actually moves vertically). Whenever this operative is dropping, ignore the vertical distance."
+    },
+    {
+     "id": "phobos-strike-team.reiver-sergeant.tactical-advantage",
+     "name": "Tactical Advantage",
+     "text": "You can do each of the following once per battle:\n\nWhen rolling-off to decide initiative, if this operative is in the killzone, you can re-roll your dice.\n\nYou can use a firefight ploy for 0CP if this is the specified PHOBOS STRIKE TEAM operative (including Command Re-roll if the attack or defence dice was rolled for this operative), or the Patient Ambush firefight ploy for 0CP if this operative is ready and not within control range of enemy operatives."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Reiver Sergeants are masters of psychological warfare and terror tactics. Their remit is to wield their Phobos Strike Team like a scalpel, slicing apart the tenuous strands of enemy morale until the foe’s forces are reduced to a nerveless and broken tangle."
+  },
+  {
+   "id": "phobos-strike-team.reiver-warrior",
+   "teamId": "phobos-strike-team",
+   "name": "Reiver Warrior",
+   "keywords": [
+    "PHOBOS STRIKE TEAM",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "REIVER",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Accurate",
+         "x": 1,
+         "raw": "Accurate 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Special issue bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Combat knife",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "phobos-strike-team.reiver-warrior.grav-chute-and-grapnel-launcher",
+     "name": "Grav-chute and Grapnel Launcher",
+     "text": "Whenever this operative is climbing up, you can treat the vertical distance as 2\" (regardless of how far the operative actually moves vertically). Whenever this operative is dropping, ignore the vertical distance."
+    },
+    {
+     "id": "phobos-strike-team.reiver-warrior.vanguard",
+     "name": "Vanguard",
+     "text": "Once per turning point, one friendly PHOBOS STRIKE TEAM operative with this rule can perform the Pick Up Marker or a mission action for 1 less AP."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Bursting from the shadows amidst vox-amplified howls, Reivers fall upon their horrified victims with pistols booming and blades swinging. As their foes reel from the disorienting blasts of their shock grenades, the Reivers make short and bloody work of their victims."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "phobos-strike-team.rule.omni-scrambler",
+   "name": "Omni-Scrambler",
+   "text": "STRATEGIC GAMBIT if a friendly INFILTRATOR operative is in the killzone. Select one enemy operative visible to a friendly INFILTRATOR operative, or within 6\" of a friendly VOXBREAKER operative. In the following Firefight phase, that enemy operative cannot be activated or perform actions until one of the following is true:\n\nYour opponent has activated a number of enemy operatives equal to the number of friendly INFILTRATOR operatives in the killzone when this STRATEGIC GAMBIT was used.\n\nIt’s the last enemy operative to be activated.",
+   "fluff": "Backpack-mounted omni-scramblers serve to disrupt enemy communications."
+  },
+  {
+   "id": "phobos-strike-team.rule.terror",
+   "name": "Terror",
+   "text": "Whenever an enemy operative is within 3\" of friendly REIVER operatives, your opponent must spend 1 additional AP for that enemy operative to perform the Pick Up Marker and mission actions.\n\nWhenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of friendly REIVER operatives. Note this isn’t a change to the APL stat, so any changes are cumulative with this.",
+   "fluff": "Dedicated terror troops, Space Marine Reivers utilise skull masks, shock grenades and vox-enhanced roars to terrify their victims."
+  },
+  {
+   "id": "phobos-strike-team.rule.astartes",
+   "name": "Astartes",
+   "text": "During each friendly PHOBOS STRIKE TEAM operative’s activation, it can perform either two Shoot actions or two Fight actions. If it’s two Shoot actions, a bolt weapon must be selected for at least one of them. A bolt weapon is any ranged weapon that includes ‘bolt’ in its name, e.g. marksman bolt carbine, special issue bolt pistol, etc.\n\nEach friendly PHOBOS STRIKE TEAM operative can counteract regardless of its order.",
+   "fluff": "These genetically modified superhumans are made for one purpose: war."
+  },
+  {
+   "id": "phobos-strike-team.rule.multi-spectrum-array",
+   "name": "Multi-Spectrum Array",
+   "text": "Whenever a friendly INCURSOR operative is shooting, enemy operatives cannot be obscured.",
+   "fluff": "Feeding into the auto-senses of the bearer’s armour, the multi-spectrum array’s powerful augurs help to reveal hidden foes."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "phobos-strike-team.sp.guerrilla-warfare",
+   "name": "GUERRILLA WARFARE",
+   "text": "Friendly PHOBOS STRIKE TEAM operatives can perform the following unique action:\n\nGUERRILLA WARFARE1AP\nChange this operative’s order.\n\nAn operative cannot perform this action while within control range of an enemy operative.",
+   "cp": 1,
+   "fluff": "Phobos Strike Teams utilise stealth and ambush tactics to overwhelm their foes, striking when least expected."
+  },
+  {
+   "id": "phobos-strike-team.sp.and-they-shall-know-no-fear",
+   "name": "AND THEY SHALL KNOW NO FEAR",
+   "text": "You can ignore any changes to the stats of friendly PHOBOS STRIKE TEAM operatives from being injured (including their weapons’ stats).",
+   "cp": 1,
+   "fluff": "Space Marines possess superhuman courage and are utterly unflinching in the face of terrifying horrors and overwhelming odds."
+  },
+  {
+   "id": "phobos-strike-team.sp.deadly-shots",
+   "name": "DEADLY SHOTS",
+   "text": "Whenever a friendly PHOBOS STRIKE TEAM operative is shooting during an activation in which it hasn’t performed the Charge, Fall Back or Reposition action, or against an operative that isn’t in cover and is more than 6\" from it, that friendly operative’s ranged weapons have the Balanced weapon rule. Note that for the first requirement, that operative isn’t restricted from performing those actions after shooting.",
+   "cp": 1,
+   "fluff": "Space Marines spend countless hours perfecting their marksmanship."
+  },
+  {
+   "id": "phobos-strike-team.sp.lethal-assaults",
+   "name": "LETHAL ASSAULTS",
+   "text": "Whenever a friendly PHOBOS STRIKE TEAM operative is fighting, its melee weapons have the Balanced weapon rule. If that friendly operative is doing so during an activation in which it performed the Charge action, its melee weapons also have the Lethal 5+ weapon rule.\n\nFirefight Ploys\nPATIENT AMBUSH\n\nA Phobos Strike Team may lay in wait for hours, days or even weeks before launching an assault upon an unsuspecting enemy.\nUse this firefight ploy when it’s your turn to activate a friendly operative. You can skip that activation.\n\nCRITICAL SHOT\n\nA well-placed bolt round can fell even the most resilient of foes.\nUse this firefight ploy when you resolve a critical success for a friendly PHOBOS STRIKE TEAM operative that’s shooting with a bolt weapon. Inflict D3 additional damage.\n\nTRANSHUMAN PHYSIOLOGY\n\nThe genetically modified physiology of a Space Marine is capable of resisting wounds that would kill a lesser being.\nUse this firefight ploy when an operative is shooting a friendly PHOBOS STRIKE TEAM operative, in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead.\n\nSTEALTH ASSAULT\n\nThe silenced servos of Phobos-pattern power armour allow a Space Marine to strike swiftly and overwhelm a surprised foe.\nUse this firefight ploy when a friendly PHOBOS STRIKE TEAM operative that has a Conceal order is activated, is given an Engage order, performs the Charge and then the Fight action, and you’re resolving your first attack dice from this activation. After doing so, you can immediately resolve another of your attack dice (before your opponent). The operative cannot have performed any other actions during this activation (but can do so after resolving this ploy).\n\nFaction Equipment\nPURITY SEALS\n\nAwarded by the Chapter’s Chaplains, purity seals are inscribed with blessings and inspire the bearer to fight with increased vigour.\nOnce per turning point, when a friendly PHOBOS STRIKE TEAM operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nADDITIONAL UTILITY GRENADES\n\nSome Space Marines opt to carry additional smoke grenades, shock grenades and other forms of hand-held explosives.\nThis equipment allows you to select four utility grenades from the utility grenades equipment (see universal equipment). You cannot also select that equipment as normal (i.e. to give you six).\n\nCOMBAT BLADES\n\nThese blades are tough, thick and possess a razor-sharp cutting edge.\nFriendly PHOBOS STRIKE TEAM operatives have the following melee weapon:\n\nCombat blade\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCombat blade\n5\n\n3+\n\n3/4\n\nSPECIAL ISSUE AMMUNITION\n\nSpace Marine bolt weapons can be loaded with a variety of special ammunition.\nOnce per turning point, when a friendly PHOBOS STRIKE TEAM operative is performing the Shoot action and you select a bolt carbine, marksman bolt carbine or occulus bolt carbine, you can use this rule. If you do, until the end of the turning point, that weapon has the Piercing 1 weapon rule.",
+   "cp": 1,
+   "fluff": "Space Marine warriors strike down their foes with incredible power and precision.",
+   "weapons": [
+    {
+     "name": "Combat blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "phobos-strike-team.fp.patient-ambush",
+   "name": "PATIENT AMBUSH",
+   "text": "Use this firefight ploy when it’s your turn to activate a friendly operative. You can skip that activation.",
+   "cp": 1,
+   "fluff": "A Phobos Strike Team may lay in wait for hours, days or even weeks before launching an assault upon an unsuspecting enemy."
+  },
+  {
+   "id": "phobos-strike-team.fp.critical-shot",
+   "name": "CRITICAL SHOT",
+   "text": "Use this firefight ploy when you resolve a critical success for a friendly PHOBOS STRIKE TEAM operative that’s shooting with a bolt weapon. Inflict D3 additional damage.",
+   "cp": 1,
+   "fluff": "A well-placed bolt round can fell even the most resilient of foes."
+  },
+  {
+   "id": "phobos-strike-team.fp.transhuman-physiology",
+   "name": "TRANSHUMAN PHYSIOLOGY",
+   "text": "Use this firefight ploy when an operative is shooting a friendly PHOBOS STRIKE TEAM operative, in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead.",
+   "cp": 1,
+   "fluff": "The genetically modified physiology of a Space Marine is capable of resisting wounds that would kill a lesser being."
+  },
+  {
+   "id": "phobos-strike-team.fp.stealth-assault",
+   "name": "STEALTH ASSAULT",
+   "text": "Use this firefight ploy when a friendly PHOBOS STRIKE TEAM operative that has a Conceal order is activated, is given an Engage order, performs the Charge and then the Fight action, and you’re resolving your first attack dice from this activation. After doing so, you can immediately resolve another of your attack dice (before your opponent). The operative cannot have performed any other actions during this activation (but can do so after resolving this ploy).\n\nFaction Equipment\nPURITY SEALS\n\nAwarded by the Chapter’s Chaplains, purity seals are inscribed with blessings and inspire the bearer to fight with increased vigour.\nOnce per turning point, when a friendly PHOBOS STRIKE TEAM operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nADDITIONAL UTILITY GRENADES\n\nSome Space Marines opt to carry additional smoke grenades, shock grenades and other forms of hand-held explosives.\nThis equipment allows you to select four utility grenades from the utility grenades equipment (see universal equipment). You cannot also select that equipment as normal (i.e. to give you six).\n\nCOMBAT BLADES\n\nThese blades are tough, thick and possess a razor-sharp cutting edge.\nFriendly PHOBOS STRIKE TEAM operatives have the following melee weapon:\n\nCombat blade\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCombat blade\n5\n\n3+\n\n3/4\n\nSPECIAL ISSUE AMMUNITION\n\nSpace Marine bolt weapons can be loaded with a variety of special ammunition.\nOnce per turning point, when a friendly PHOBOS STRIKE TEAM operative is performing the Shoot action and you select a bolt carbine, marksman bolt carbine or occulus bolt carbine, you can use this rule. If you do, until the end of the turning point, that weapon has the Piercing 1 weapon rule.",
+   "cp": 1,
+   "fluff": "The silenced servos of Phobos-pattern power armour allow a Space Marine to strike swiftly and overwhelm a surprised foe.",
+   "weapons": [
+    {
+     "name": "Combat blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "equipment": [
+  {
+   "id": "phobos-strike-team.eq.purity-seals",
+   "name": "PURITY SEALS",
+   "text": "Once per turning point, when a friendly PHOBOS STRIKE TEAM operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.",
+   "fluff": "Awarded by the Chapter’s Chaplains, purity seals are inscribed with blessings and inspire the bearer to fight with increased vigour."
+  },
+  {
+   "id": "phobos-strike-team.eq.additional-utility-grenades",
+   "name": "ADDITIONAL UTILITY GRENADES",
+   "text": "This equipment allows you to select four utility grenades from the utility grenades equipment (see universal equipment). You cannot also select that equipment as normal (i.e. to give you six).",
+   "fluff": "Some Space Marines opt to carry additional smoke grenades, shock grenades and other forms of hand-held explosives."
+  },
+  {
+   "id": "phobos-strike-team.eq.combat-blades",
+   "name": "COMBAT BLADES",
+   "text": "Friendly PHOBOS STRIKE TEAM operatives have the following melee weapon:\n\nCombat blade\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCombat blade\n5\n\n3+\n\n3/4",
+   "fluff": "These blades are tough, thick and possess a razor-sharp cutting edge.",
+   "weapons": [
+    {
+     "name": "Combat blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "phobos-strike-team.eq.special-issue-ammunition",
+   "name": "SPECIAL ISSUE AMMUNITION",
+   "text": "Once per turning point, when a friendly PHOBOS STRIKE TEAM operative is performing the Shoot action and you select a bolt carbine, marksman bolt carbine or occulus bolt carbine, you can use this rule. If you do, until the end of the turning point, that weapon has the Piercing 1 weapon rule.",
+   "fluff": "Space Marine bolt weapons can be loaded with a variety of special ammunition."
+  }
+ ],
+ "markerGuide": "Omniscrambler Token\n\nRemote Detonator Token\n\nExplosives Marker\n\nSpecial Issue Ammunition Token\n\nTactical Advantage Token\n\nAuspex Scan Token\n\nHaywire Mine Marker\n\nMedic Token\n\nVanguard Token\n\nPurity Seals Token",
+ "notes": [],
+ "rareWeaponRules": [
+  "Custom",
+  "Detonate"
+ ]
+}
