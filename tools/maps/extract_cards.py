@@ -413,7 +413,14 @@ def volkus_features(img, frame, objectives):
 
     chips = {t: (cx, cy) for t, cx, cy, _ in chip_list}
 
-    green_blobs = list(G.component_masks(green, 40))
+    green_blobs = []
+    for blob in G.component_masks(green, 40):
+        inside = {t: c for t, c in chips.items()
+                  if blob[int(round(c[1])), int(round(c[0]))]}
+        if len(inside) > 1:
+            green_blobs.extend(G.split_blob_by_chips(blob, inside).values())
+        else:
+            green_blobs.append(blob)
     dgreen_blobs = list(G.component_masks(dgreen, 40))
     ink_blobs = list(G.component_masks(ink, 60))
 
@@ -507,41 +514,62 @@ def bheta_features(img, frame, objectives):
     green = C.mask_any(img, C.GREEN_MID, tol=5) & interior
     # the label chips sit on the decks and punch notches out of them
     green = heal_chips(green, [b for _, _, _, b in chip_list])
+
     chips = {}
     for idx, (t, cx, cy, _) in enumerate(chip_list):
         chips['%s#%d' % (t, idx)] = (cx, cy)
 
-    out = []
+    pieces, orphans = [], []
     for blob in G.component_masks(green, 120):
-        ys, xs = np.where(blob)
-        pts = np.stack([xs, ys], 1).astype(float)
-        # the deck may carry more than one chip when gantries are drawn touching
-        inside = [k for k, (cx, cy) in chips.items()
-                  if blob[int(round(cy)), int(round(cx))]]
+        inside = {k: c for k, c in chips.items()
+                  if blob[int(round(c[1])), int(round(c[0]))]}
         if not inside:
-            k = min(chips, key=lambda k: np.min((pts[:, 0] - chips[k][0]) ** 2 +
-                                                (pts[:, 1] - chips[k][1]) ** 2))
-            inside = [k]
-        polys = G.blob_polys(blob, frame)
+            orphans.append(blob)
+            continue
+        if len(inside) > 1:
+            # gantries drawn deck-to-deck: split them, then group them
+            group = 'g%d' % len(pieces)
+            for k, sub in G.split_blob_by_chips(blob, inside).items():
+                pieces.append(dict(key=k, mask=sub, group=group))
+        else:
+            pieces.append(dict(key=next(iter(inside)), mask=blob, group=None))
+
+    out = []
+    for pc in pieces:
+        label = pc['key'].split('#')[0]
+        kind = T.LABEL_TO_KIND.get(('bheta-decima', label))
+        if kind is None:
+            continue
+        polys = G.blob_polys(pc['mask'], frame)
         if not polys:
             continue
         poly = polys[0][0]
-        for k in inside:
-            label = k.split('#')[0]
-            kind = T.LABEL_TO_KIND.get(('bheta-decima', label))
-            if kind is None:
-                continue
-            spec = T.PIECES[kind]
-            parts = []
-            for pspec in spec['parts']:
-                if pspec.get('optional'):
-                    continue
-                if pspec['from_'] == 'green':
-                    parts.append((pspec, poly))
-            out.append(dict(label=label, kind=kind, parts=parts,
-                            groupKey=id(blob) if len(inside) > 1 else None,
-                            shared=len(inside) > 1))
+        spec = T.PIECES[kind]
+        parts = []
+        for pspec in spec['parts']:
+            if pspec['from_'] == 'green':
+                parts.append((pspec, poly))
+            elif pspec['from_'] == 'green_inner':
+                inner = _inner_blob(pc['mask'], orphans)
+                if inner is not None:
+                    ip = G.blob_polys(inner, frame)
+                    if ip:
+                        parts.append((pspec, ip[0][0]))
+        out.append(dict(label=label, kind=kind, parts=parts,
+                        groupKey=pc['group'], shared=pc['group'] is not None))
     return out
+
+
+def _inner_blob(outer, orphans):
+    """A chipless blob wholly inside another one is that piece's inner detail
+    (the thermometric condenser's inner ledge)."""
+    ys, xs = np.where(outer)
+    bb = (xs.min(), ys.min(), xs.max(), ys.max())
+    for o in orphans:
+        oy, ox = np.where(o)
+        if bb[0] <= ox.min() and ox.max() <= bb[2] and bb[1] <= oy.min() and oy.max() <= bb[3]:
+            return o
+    return None
 
 
 def bheta_hazard(img, frame):
@@ -870,9 +898,7 @@ def _finish_open(raw, mapId, group=False):
         feat = dict(id=fid, kind=f['kind'], label=f['label'], parts=parts,
                     placement=dict(x=round(cx, 3), y=round(cy, 3), rotDeg=0, flip=False))
         if group and f.get('shared'):
-            gk = f['groupKey']
-            groups.setdefault(gk, 'g%d' % len(groups))
-            feat['groupId'] = '%s.%s' % (mapId, groups[gk])
+            feat['groupId'] = '%s.%s' % (mapId, f['groupKey'])
         feats.append(feat)
     # deduplicate ids when a letter appears twice on one card (Bheta gantries)
     seen = defaultdict(int)

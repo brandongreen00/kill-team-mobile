@@ -309,6 +309,22 @@ export class TacticalAgent implements Agent {
     return decline?.intent ?? best?.intent ?? { t: 'DeclineCounteract', player };
   }
 
+  /** STRATEGIC GAMBITs: only worth using when the team module prices them above passing. */
+  private chooseGambit(ctx: GameContext, state: GameState, player: PlayerId, gambits: Candidate[]): Intent {
+    const pass = gambits.find((c) => c.intent.t === 'PassGambit');
+    const baseline = this.score(ctx, state, player);
+    let best: { intent: Intent; score: number } | null = null;
+    for (const cand of this.beamOf(gambits.filter((c) => c.intent.t === 'UseGambit'))) {
+      const outcome = this.evaluateCandidate(ctx, state, player, cand, 'gambit');
+      if (!outcome) continue;
+      const score = outcome.score + cand.hint;
+      if (!best || score > best.score) best = { intent: cand.intent, score };
+      if (this.exhausted()) break;
+    }
+    if (best && best.score > baseline) return best.intent;
+    return pass?.intent ?? { t: 'PassGambit', player };
+  }
+
   private chooseInterrupt(ctx: GameContext, state: GameState, player: PlayerId): Intent {
     const options = interruptCandidates(ctx, state, player);
     const attacks = options.filter((c) => c.intent.t === 'OnGuardInterrupt');

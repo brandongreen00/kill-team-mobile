@@ -178,7 +178,7 @@
     "y": 11.0
    },
    "z": 3.0,
-   "onFeatureId": "bheta-decima-5.D2"
+   "onFeatureId": "bheta-decima-5.D"
   },
   {
    "id": "obj.centre",
@@ -233,11 +233,8 @@
    "placement": {
     "x": 7.495,
     "y": 16.786,
-    "rotDeg": 90,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9399
+    "rotDeg": 0,
+    "flip": false
    }
   },
   {
@@ -282,11 +279,8 @@
    "placement": {
     "x": 18.203,
     "y": 16.682,
-    "rotDeg": 90,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9841
+    "rotDeg": 0,
+    "flip": false
    }
   },
   {
@@ -341,9 +335,6 @@
     "y": 15.559,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -542,105 +533,10 @@
      "blocksVisibility": true,
      "standable": true,
      "solid": false
-    }
-   ],
-   "placement": {
-    "x": 7.51,
-    "y": 11.002,
-    "rotDeg": 180,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.2764
-   }
-  },
-  {
-   "id": "bheta-decima-5.D2",
-   "kind": "bheta.condenser",
-   "label": "D",
-   "parts": [
-    {
-     "id": "bheta-decima-5.D2.p0",
-     "featureId": "bheta-decima-5.D2",
-     "poly": [
-      {
-       "x": 5.729,
-       "y": 11.417
-      },
-      {
-       "x": 5.729,
-       "y": 10.542
-      },
-      {
-       "x": 6.021,
-       "y": 9.917
-      },
-      {
-       "x": 6.458,
-       "y": 9.479
-      },
-      {
-       "x": 7.083,
-       "y": 9.188
-      },
-      {
-       "x": 7.958,
-       "y": 9.188
-      },
-      {
-       "x": 8.583,
-       "y": 9.479
-      },
-      {
-       "x": 9.021,
-       "y": 9.917
-      },
-      {
-       "x": 9.312,
-       "y": 10.542
-      },
-      {
-       "x": 9.312,
-       "y": 11.417
-      },
-      {
-       "x": 9.021,
-       "y": 12.042
-      },
-      {
-       "x": 8.583,
-       "y": 12.479
-      },
-      {
-       "x": 7.958,
-       "y": 12.771
-      },
-      {
-       "x": 7.083,
-       "y": 12.771
-      },
-      {
-       "x": 6.458,
-       "y": 12.479
-      },
-      {
-       "x": 6.021,
-       "y": 12.042
-      }
-     ],
-     "z0": 0.0,
-     "z1": 3.0,
-     "types": [
-      "Heavy"
-     ],
-     "role": "wall",
-     "blocksVisibility": true,
-     "standable": false,
-     "solid": true
     },
     {
-     "id": "bheta-decima-5.D2.p1",
-     "featureId": "bheta-decima-5.D2",
+     "id": "bheta-decima-5.D.p2",
+     "featureId": "bheta-decima-5.D",
      "poly": [
       {
        "x": 5.729,
@@ -707,27 +603,23 @@
        "y": 12.042
       }
      ],
-     "z0": 3.0,
+     "z0": 2.75,
      "z1": 3.0,
      "types": [
-      "Accessible",
-      "Vantage",
-      "Light"
+      "Exposed",
+      "Insignificant"
      ],
-     "role": "floor",
-     "blocksVisibility": true,
+     "role": "ledge",
+     "blocksVisibility": false,
      "standable": true,
      "solid": false
     }
    ],
    "placement": {
-    "x": 7.521,
-    "y": 10.979,
-    "rotDeg": 180,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 1.0
+    "x": 7.513,
+    "y": 10.996,
+    "rotDeg": 0,
+    "flip": false
    }
   },
   {
@@ -774,9 +666,6 @@
     "y": 11.042,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -823,9 +712,6 @@
     "y": 11.042,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9912
    }
   },
   {
@@ -872,9 +758,6 @@
     "y": 9.792,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -919,11 +802,8 @@
    "placement": {
     "x": 7.453,
     "y": 5.245,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9381
    }
   },
   {
@@ -968,11 +848,8 @@
    "placement": {
     "x": 21.188,
     "y": 4.292,
-    "rotDeg": 90,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9867
+    "rotDeg": 0,
+    "flip": false
    }
   }
  ],
@@ -988,9 +865,7 @@
    "dropDepthP2": 3.0,
    "deployment": "long-edge",
    "p1Side": "top",
-   "centreSeamErrIn": 0.0208,
-   "templateIoUMin": 0.2764,
-   "templateIoUMedian": 0.9889
+   "centreSeamErrIn": 0.0208
   }
  },
  "hazardous": [

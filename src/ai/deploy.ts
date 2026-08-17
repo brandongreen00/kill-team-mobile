@@ -15,8 +15,8 @@ import type { BaseShape, GameState, OperativeState, PlayerId, Poly, Vec2 } from 
 
 const GRID_CACHE = new Map<string, Vec2[]>();
 
-function zoneGrid(map: { id: string }, zone: Poly[], base: BaseShape, rot: number, step = 0.75): Vec2[] {
-  const key = `${map.id}|${JSON.stringify(base)}|${rot}|${step}|${zone.length}`;
+function zoneGrid(map: { id: string }, zoneKey: string, zone: Poly[], base: BaseShape, rot: number, step = 0.75): Vec2[] {
+  const key = `${map.id}|${zoneKey}|${JSON.stringify(base)}|${rot}|${step}`;
   const hit = GRID_CACHE.get(key);
   if (hit) return hit;
   const points: Vec2[] = [];
@@ -43,7 +43,7 @@ export function deployPosition(ctx: GameContext, state: GameState, op: Operative
   const zone = state.map.dropZones[zoneKey];
   if (!zone || zone.length === 0) return null;
   const c = card(ctx, op);
-  const grid = zoneGrid(state.map, zone, c.base, op.rot);
+  const grid = zoneGrid(state.map, zoneKey, zone, c.base, op.rot);
   if (grid.length === 0) return null;
   const index = terrain(ctx, state);
   const objectives = Object.values(state.markers).filter((m) => m.kind === 'objective');

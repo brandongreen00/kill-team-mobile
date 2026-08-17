@@ -11,7 +11,9 @@ import { HookRegistry, type PloyDef, type RuleBinding, type TeamEquipmentDef, ty
 import {
   addEffect,
   aliveOperatives,
+  aplOf,
   card,
+  enemiesInControlRange,
   gapBetween,
   log,
   operative,
@@ -193,20 +195,28 @@ export function clearEffects(state: GameState, rule: string): void {
 export const FREE_ACTION_RULE = 'teamFreeAction';
 
 /**
- * Kill Team's "perform a free 1AP action" is modelled as one extra AP for that operative,
- * restricted to the actions the rule names. The bonus is always the LAST AP the operative
- * spends, so `canPerformAction` refuses anything outside `only` (and any move action when
- * the rule says it cannot move) once the operative is spending it.
+ * Kill Team's "…can immediately perform a free 1AP action" is modelled as one extra AP for
+ * that operative, restricted to the actions the rule names. The bonus is always the LAST AP
+ * the operative spends, so `canPerformAction` refuses anything outside `only` (and any move
+ * action when the rule says it cannot move) once the operative is spending it.
  *
- * The engine has no intent for "perform an action outside your activation", so a grant made
- * during the Strategy phase lands on that operative's next activation instead of resolving
- * immediately (docs/DECISIONS.md D-013).
+ * The engine has no intent for performing an action outside an activation, so a grant made in
+ * the Strategy phase lands on that operative's next activation instead of resolving on the
+ * spot (docs/DECISIONS.md D-013).
  */
 export function grantFreeAction(
+  ctx: GameContext,
   state: GameState,
   op: OperativeState,
-  spec: { sourceId: string; sourceText: string; kind?: ActiveEffect['source']['kind']; only?: string[]; noMove?: boolean },
+  spec: {
+    sourceId: string;
+    sourceText: string;
+    kind?: ActiveEffect['source']['kind'];
+    only?: string[];
+    noMove?: boolean;
+  },
 ): void {
+  const threshold = aplOf(ctx, state, op); // AP the operative already had
   op.aplMods.push(1);
   effect(state, {
     rule: FREE_ACTION_RULE,
@@ -214,7 +224,11 @@ export function grantFreeAction(
     sourceText: spec.sourceText,
     operativeId: op.id,
     player: op.player,
-    data: { ...(spec.only ? { only: spec.only } : {}), ...(spec.noMove ? { noMove: true } : {}) },
+    data: {
+      threshold,
+      ...(spec.only ? { only: spec.only } : {}),
+      ...(spec.noMove ? { noMove: true } : {}),
+    },
     expiry: { kind: 'endOfActivation', operativeId: op.id },
   });
   log(state, {
@@ -240,10 +254,9 @@ export function registerFreeActionEngine(reg: HookRegistry, player: PlayerId, so
     if (ev.operative.player !== player) return;
     const eff = effectOn(ev.state, ev.operative.id, FREE_ACTION_RULE);
     if (!eff) return;
-    const base = card2(ev.state, ev.operative);
-    // Only bites once the operative is spending the bonus AP.
-    if (ev.operative.apSpent < base) return;
-    const only = (eff.data?.['only'] as string[] | undefined) ?? undefined;
+    const threshold = Number(eff.data?.['threshold'] ?? 0);
+    if (ev.operative.apSpent < threshold) return; // still spending its own AP
+    const only = eff.data?.['only'] as string[] | undefined;
     const noMove = Boolean(eff.data?.['noMove']);
     if (only && !only.includes(ev.action)) {
       ev.allowed = false;
@@ -253,15 +266,6 @@ export function registerFreeActionEngine(reg: HookRegistry, player: PlayerId, so
       ev.reason = 'it cannot move during that action';
     }
   });
-}
-
-/** APL the operative would have without the free-action bonus. */
-function card2(state: GameState, op: OperativeState): number {
-  const bonus = op.aplMods.filter((m) => m > 0).length > 0 ? 1 : 0;
-  const raw = op.aplMods.reduce((a, b) => a + b, 0);
-  const clamped = Math.max(-1, Math.min(1, raw));
-  // apSpent is compared against (APL - 1); we only need the threshold, not the card.
-  return Math.max(0, clamped + 2 - bonus);
 }
 
 // ---------------------------------------------------------------------------
@@ -548,26 +552,11 @@ export function uniqueAction(
   };
 }
 
-/** Actions that may not be performed within control range of an enemy — a very common rider. */
+/** Actions that may not be performed within control range of an enemy — a common rider. */
 export function notEngaged(ctx: GameContext, state: GameState, op: OperativeState): { ok: boolean; reason?: string } {
-  const engaged = enemies(state, op.player).some((e) => {
-    const idx = require0(ctx, state, op, e);
-    return idx;
-  });
-  return engaged ? { ok: false, reason: 'within control range of an enemy operative' } : { ok: true };
+  return enemiesInControlRange(ctx, state, op).length > 0
+    ? { ok: false, reason: 'within control range of an enemy operative' }
+    : { ok: true };
 }
 
-function require0(ctx: GameContext, state: GameState, a: OperativeState, b: OperativeState): boolean {
-  // Local import avoids a cycle with state.ts's control-range helper set.
-  return inControl(ctx, state, a, b);
-}
-
-let inControlImpl: ((ctx: GameContext, state: GameState, a: OperativeState, b: OperativeState) => boolean) | null = null;
-export function setControlRangeImpl(fn: typeof inControlImpl): void {
-  inControlImpl = fn;
-}
-function inControl(ctx: GameContext, state: GameState, a: OperativeState, b: OperativeState): boolean {
-  return inControlImpl ? inControlImpl(ctx, state, a, b) : false;
-}
-
-export { operative, aliveOperatives, card, log, weaponsOf };
+export { operative, aliveOperatives, card, log, weaponsOf, enemiesInControlRange, aplOf };

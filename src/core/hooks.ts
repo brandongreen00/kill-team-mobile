@@ -42,6 +42,7 @@ export const HOOK_NAMES = [
   'canPerformAction',
   'onMoveDistance',
   'onMoveRules',
+  'onSetUpAgain',
   'availableWeapons',
   'onWeaponRules',
   'onSelectWeapon',
@@ -162,6 +163,8 @@ export interface HookEvents {
     /** e.g. FLY: remove and set up again. */
     teleport: boolean;
   };
+  /** Rules that remove and set an operative up again (FLY, teleport, ops) may cap the distance. */
+  onSetUpAgain: { state: GameState; operative: OperativeState; maxInches: number; reason?: string };
   availableWeapons: { state: GameState; operative: OperativeState; weapons: string[] };
   /**
    * The weapon rules in effect for one use of a weapon, after the killzone's own changes

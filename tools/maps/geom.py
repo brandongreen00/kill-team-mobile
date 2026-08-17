@@ -14,7 +14,11 @@ def rect_decompose(mask: np.ndarray, min_px: int = 12):
     decomposition recovers the individual wall segments instead of one filled
     blob with a hole in it.
     """
-    m = mask.copy()
+    ys, xs = np.where(mask)
+    if not len(ys):
+        return []
+    oy, ox = int(ys.min()), int(xs.min())
+    m = mask[oy:ys.max() + 1, ox:xs.max() + 1].copy()
     out = []
     while m.any():
         r = _largest_rect(m)
@@ -23,7 +27,7 @@ def rect_decompose(mask: np.ndarray, min_px: int = 12):
         y0, x0, y1, x1 = r
         if (y1 - y0) * (x1 - x0) < min_px:
             break
-        out.append((x0, y0, x1, y1))
+        out.append((x0 + ox, y0 + oy, x1 + ox, y1 + oy))
         m[y0:y1, x0:x1] = False
     return out
 
@@ -98,3 +102,30 @@ def component_masks(mask, min_px=1):
         blob = lab == i
         if blob.sum() >= min_px:
             yield blob
+
+
+def split_blob_by_chips(blob, chips):
+    """Split one traced blob between the label chips printed on it.
+
+    Two terrain pieces drawn touching (Bheta-Decima gantries, a Volkus rubble
+    piece against a ruin) trace as a single component. Both are drawn as
+    axis-aligned rectangles, so a rectangle decomposition recovers the pieces;
+    each rectangle goes to the chip inside it, or failing that to the nearest.
+    """
+    rects = rect_decompose(blob, min_px=30)
+    out = {k: np.zeros_like(blob) for k in chips}
+    for (x0, y0, x1, y1) in rects:
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        owner = None
+        for k, (px, py) in chips.items():
+            if x0 <= px < x1 and y0 <= py < y1:
+                owner = k
+                break
+        if owner is None:
+            owner = min(chips, key=lambda k: (chips[k][0] - cx) ** 2 + (chips[k][1] - cy) ** 2)
+        out[owner][y0:y1, x0:x1] = True
+    for k in list(out):
+        out[k] &= blob
+        if not out[k].any():
+            del out[k]
+    return out

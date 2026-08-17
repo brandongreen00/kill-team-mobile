@@ -187,7 +187,7 @@
     "y": 11.292
    },
    "z": 3.0,
-   "onFeatureId": "bheta-decima-3.D2"
+   "onFeatureId": "bheta-decima-3.D"
   }
  ],
  "features": [
@@ -233,11 +233,8 @@
    "placement": {
     "x": 5.203,
     "y": 16.578,
-    "rotDeg": 90,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9639
+    "rotDeg": 0,
+    "flip": false
    }
   },
   {
@@ -284,9 +281,6 @@
     "y": 17.792,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -333,9 +327,6 @@
     "y": 17.792,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -390,9 +381,6 @@
     "y": 12.101,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9999
    }
   },
   {
@@ -591,105 +579,10 @@
      "blocksVisibility": true,
      "standable": true,
      "solid": false
-    }
-   ],
-   "placement": {
-    "x": 14.959,
-    "y": 11.286,
-    "rotDeg": 180,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.2764
-   }
-  },
-  {
-   "id": "bheta-decima-3.D2",
-   "kind": "bheta.condenser",
-   "label": "D",
-   "parts": [
-    {
-     "id": "bheta-decima-3.D2.p0",
-     "featureId": "bheta-decima-3.D2",
-     "poly": [
-      {
-       "x": 13.229,
-       "y": 11.75
-      },
-      {
-       "x": 13.229,
-       "y": 10.875
-      },
-      {
-       "x": 13.521,
-       "y": 10.25
-      },
-      {
-       "x": 13.958,
-       "y": 9.812
-      },
-      {
-       "x": 14.583,
-       "y": 9.521
-      },
-      {
-       "x": 15.458,
-       "y": 9.521
-      },
-      {
-       "x": 16.083,
-       "y": 9.812
-      },
-      {
-       "x": 16.521,
-       "y": 10.25
-      },
-      {
-       "x": 16.812,
-       "y": 10.875
-      },
-      {
-       "x": 16.812,
-       "y": 11.75
-      },
-      {
-       "x": 16.521,
-       "y": 12.375
-      },
-      {
-       "x": 16.083,
-       "y": 12.812
-      },
-      {
-       "x": 15.458,
-       "y": 13.104
-      },
-      {
-       "x": 14.583,
-       "y": 13.104
-      },
-      {
-       "x": 13.958,
-       "y": 12.812
-      },
-      {
-       "x": 13.521,
-       "y": 12.375
-      }
-     ],
-     "z0": 0.0,
-     "z1": 3.0,
-     "types": [
-      "Heavy"
-     ],
-     "role": "wall",
-     "blocksVisibility": true,
-     "standable": false,
-     "solid": true
     },
     {
-     "id": "bheta-decima-3.D2.p1",
-     "featureId": "bheta-decima-3.D2",
+     "id": "bheta-decima-3.D.p2",
+     "featureId": "bheta-decima-3.D",
      "poly": [
       {
        "x": 13.229,
@@ -756,27 +649,23 @@
        "y": 12.375
       }
      ],
-     "z0": 3.0,
+     "z0": 2.75,
      "z1": 3.0,
      "types": [
-      "Accessible",
-      "Vantage",
-      "Light"
+      "Exposed",
+      "Insignificant"
      ],
-     "role": "floor",
-     "blocksVisibility": true,
+     "role": "ledge",
+     "blocksVisibility": false,
      "standable": true,
      "solid": false
     }
    ],
    "placement": {
-    "x": 15.021,
-    "y": 11.312,
-    "rotDeg": 180,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 1.0
+    "x": 14.977,
+    "y": 11.294,
+    "rotDeg": 0,
+    "flip": false
    }
   },
   {
@@ -831,9 +720,6 @@
     "y": 9.101,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9999
    }
   },
   {
@@ -879,10 +765,7 @@
     "x": 8.875,
     "y": 11.333,
     "rotDeg": 0,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9881
+    "flip": false
    }
   },
   {
@@ -929,9 +812,6 @@
     "y": 11.292,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -976,11 +856,8 @@
    "placement": {
     "x": 18.203,
     "y": 5.495,
-    "rotDeg": 90,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9638
+    "rotDeg": 0,
+    "flip": false
    }
   }
  ],
@@ -996,9 +873,7 @@
    "dropDepthP2": 4.0,
    "deployment": "short-edge",
    "p1Side": "right",
-   "centreSeamErrIn": 0.0208,
-   "templateIoUMin": 0.2764,
-   "templateIoUMedian": 0.9999
+   "centreSeamErrIn": 0.0208
   }
  },
  "hazardous": [
