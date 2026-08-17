@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.cache/
+out/
+*.log
+.DS_Store
+
+# Context pack: verbatim rules dumps, raw page HTML and the official card/diagram images
+# are GW IP and are NOT redistributable. The whole pack stays local; tools/*/README.md
+# documents the source URLs so any session can re-fetch it.
+docs/context-pack/
+docs/rules-source/
+.cache/wahapedia/

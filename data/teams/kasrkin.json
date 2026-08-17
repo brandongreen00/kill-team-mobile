@@ -1,0 +1,1376 @@
+{
+ "id": "kasrkin",
+ "name": "Kasrkin",
+ "faction": "Astra Militarum",
+ "grandFaction": "Imperium",
+ "archetypes": [
+  "Seek & Destroy",
+  "Security"
+ ],
+ "booksVersion": "APRIL ’26",
+ "books": [
+  {
+   "book": "Kasrkin",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "APRIL ’26",
+   "lastUpdate": "April 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_29-04_kt_teamrules_kasrkin-9s2gsy4iq7-hexyjwjqrx.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/kasrkin/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "SERGEANT",
+   "datacardId": "kasrkin.sergeant",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "kasrkin.g1.opt1",
+     "label": "Bolt pistol; power weapon",
+     "weapons": [
+      "Bolt pistol",
+      "Power weapon"
+     ]
+    },
+    {
+     "id": "kasrkin.g1.opt2",
+     "label": "Hot-shot lasgun; gun butt",
+     "weapons": [
+      "Hot-shot lasgun",
+      "Gun butt"
+     ]
+    },
+    {
+     "id": "kasrkin.g1.opt3",
+     "label": "Hot-shot laspistol; power weapon",
+     "weapons": [
+      "Hot-shot laspistol",
+      "Power weapon"
+     ]
+    },
+    {
+     "id": "kasrkin.g1.opt4",
+     "label": "Plasma pistol; chainsword",
+     "weapons": [
+      "Plasma pistol",
+      "Chainsword"
+     ]
+    }
+   ],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "SERGEANT"
+   ]
+  },
+  "slots": 9,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "SERGEANT"
+    ],
+    "rawText": "1 KASRKIN SERGEANT operative with one of the following options:"
+   },
+   {
+    "index": 2,
+    "count": 9,
+    "kind": "list",
+    "roles": [
+     "COMBAT MEDIC",
+     "DEMO-TROOPER",
+     "GUNNER",
+     "GUNNER",
+     "GUNNER",
+     "GUNNER",
+     "GUNNER",
+     "RECON-TROOPER",
+     "SHARPSHOOTER",
+     "TROOPER",
+     "VOX-TROOPER"
+    ],
+    "rawText": "9 KASRKIN operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "COMBAT MEDIC",
+    "datacardAnchor": "Kasrkin-Combat-Medic",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "COMBAT MEDIC",
+    "group": 2,
+    "datacardId": "kasrkin.combat-medic",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hot-shot lasgun",
+     "Gun butt"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "DEMO-TROOPER",
+    "datacardAnchor": "Kasrkin-Demo-Trooper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DEMO-TROOPER",
+    "group": 2,
+    "datacardId": "kasrkin.demo-trooper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hot-shot laspistol",
+     "Gun butt"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Kasrkin-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Flamer",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "GUNNER with flamer and gun butt*",
+    "group": 2,
+    "datacardId": "kasrkin.gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Kasrkin-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Grenade launcher",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "GUNNER with grenade launcher and gun butt*",
+    "group": 2,
+    "datacardId": "kasrkin.gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Kasrkin-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Hot-shot volley gun",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "GUNNER with hot-shot volley gun and gun butt*",
+    "group": 2,
+    "datacardId": "kasrkin.gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Kasrkin-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Meltagun",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "GUNNER with meltagun and gun butt*",
+    "group": 2,
+    "datacardId": "kasrkin.gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Kasrkin-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Plasma gun",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "GUNNER with plasma gun and gun butt*",
+    "group": 2,
+    "datacardId": "kasrkin.gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "RECON-TROOPER",
+    "datacardAnchor": "Kasrkin-Recon-Trooper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "RECON-TROOPER",
+    "group": 2,
+    "datacardId": "kasrkin.recon-trooper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hot-shot lasgun",
+     "Gun butt"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SHARPSHOOTER",
+    "datacardAnchor": "Kasrkin-Sharpshooter",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "SHARPSHOOTER*",
+    "group": 2,
+    "datacardId": "kasrkin.sharpshooter",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hot-shot marksman rifle",
+     "Gun butt"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "TROOPER",
+    "datacardAnchor": "Kasrkin-Trooper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "TROOPER",
+    "group": 2,
+    "datacardId": "kasrkin.trooper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hot-shot lasgun",
+     "Gun butt"
+    ],
+    "uniqueUnlessRole": false
+   },
+   {
+    "role": "VOX-TROOPER",
+    "datacardAnchor": "Kasrkin-Vox-Trooper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "VOX-TROOPER",
+    "group": 2,
+    "datacardId": "kasrkin.vox-trooper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hot-shot lasgun",
+     "Gun butt"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "SERGEANT",
+    "datacardAnchor": "Kasrkin-Sergeant",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "kasrkin.g1.opt1",
+      "label": "Bolt pistol; power weapon",
+      "weapons": [
+       "Bolt pistol",
+       "Power weapon"
+      ]
+     },
+     {
+      "id": "kasrkin.g1.opt2",
+      "label": "Hot-shot lasgun; gun butt",
+      "weapons": [
+       "Hot-shot lasgun",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "kasrkin.g1.opt3",
+      "label": "Hot-shot laspistol; power weapon",
+      "weapons": [
+       "Hot-shot laspistol",
+       "Power weapon"
+      ]
+     },
+     {
+      "id": "kasrkin.g1.opt4",
+      "label": "Plasma pistol; chainsword",
+      "weapons": [
+       "Plasma pistol",
+       "Chainsword"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 KASRKIN SERGEANT operative with one of the following options:",
+    "group": 1,
+    "datacardId": "kasrkin.sergeant",
+    "isLeader": true,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "TROOPER"
+    ]
+   },
+   {
+    "kind": "groupCap",
+    "group": "*",
+    "max": 4
+   }
+  ],
+  "footnotes": {
+   "*": "You cannot select more than four of these operatives combined."
+  },
+  "designerNotes": [
+   "Some KASRKIN rules refer to a ‘hot-shot weapon’. This is a ranged weapon that includes ‘hot-shot’ in its name, e.g. hot-shot lasgun, all profiles of a hot-shot marksman rifle, etc."
+  ],
+  "rawText": "1 KASRKIN SERGEANT operative with one of the following options:\n\nBolt pistol; power weapon\n\nHot-shot lasgun; gun butt\n\nHot-shot laspistol; power weapon\n\nPlasma pistol; chainsword\n\n9 KASRKIN operatives selected from the following list:\n\nCOMBAT MEDIC\n\nDEMO-TROOPER\n\nGUNNER with flamer and gun butt*\n\nGUNNER with grenade launcher and gun butt*\n\nGUNNER with hot-shot volley gun and gun butt*\n\nGUNNER with meltagun and gun butt*\n\nGUNNER with plasma gun and gun butt*\n\nRECON-TROOPER\n\nSHARPSHOOTER*\n\nTROOPER\n\nVOX-TROOPER\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once.\n\n* You cannot select more than four of these operatives combined."
+ },
+ "datacards": [
+  {
+   "id": "kasrkin.sergeant",
+   "teamId": "kasrkin",
+   "name": "Kasrkin Sergeant",
+   "keywords": [
+    "KASRKIN",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "LEADER",
+    "SERGEANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Hot-shot lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Hot-shot laspistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "kasrkin.sergeant.veteran-leadership",
+     "name": "Veteran Leadership",
+     "text": "Whenever this operative is in the killzone and you use the SKILL AT ARMS STRATEGIC GAMBIT, you can select one additional SKILL AT ARMS but they cannot be the same."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "kasrkin.sergeant.act.tactical-command",
+     "name": "TACTICAL COMMAND",
+     "ap": 0,
+     "text": "Select one friendly KASRKIN operative, then select one SKILL AT ARMS for that operative to have until the Ready step of the next Strategy phase. This can be in addition to any SKILL AT ARMS it already has, but they cannot be the same.\n\nAlternatively, instead of resolving the above effect, if your Clearance Sweep marker is in the killzone, you can remove it and place it again.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Leaders of Kasrkin kill teams, sergeants are extremely skilled and experienced soldiers who lead from the front. They experience all the same hardships as those who follow them, and are unflappable figures of authority who know how to get the best out of their troops."
+  },
+  {
+   "id": "kasrkin.combat-medic",
+   "teamId": "kasrkin",
+   "name": "Kasrkin Combat Medic",
+   "keywords": [
+    "KASRKIN",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "MEDIC",
+    "COMBAT MEDIC"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Hot-shot lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "kasrkin.combat-medic.medic",
+     "name": "Medic!",
+     "text": "The first time during each turning point that another friendly KASRKIN operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "kasrkin.combat-medic.act.medikit",
+     "name": "MEDIKIT",
+     "ap": 0,
+     "text": "Select one friendly KASRKIN operative within this operative’s control range to regain up to 2D3 lost wounds. It cannot be an operative that the Medic! rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Though the Kasrkin place great pride in being able to fight on, even if wounded, many kill teams include combat medics. These Kasrkin have additional training and equipment to treat the injured and return them to the fight as soon as possible."
+  },
+  {
+   "id": "kasrkin.demo-trooper",
+   "teamId": "kasrkin",
+   "name": "Kasrkin Demo-Trooper",
+   "keywords": [
+    "KASRKIN",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "DEMO-TROOPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Hot-shot laspistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "kasrkin.demo-trooper.melta-mine",
+     "name": "Melta Mine",
+     "text": "This operative is carrying your Melta Mine marker. It can perform the Pick Up Marker action on that marker, and whenever it performs the Place Marker action on that marker, it can immediately perform a free Dash action. That marker cannot be placed within an enemy operative’s control range (if this operative is incapacitated while carrying that marker and that marker cannot be placed, it’s removed with this operative)."
+    },
+    {
+     "id": "kasrkin.demo-trooper.proximity-mine",
+     "name": "Proximity Mine",
+     "text": "The first time your Melta Mine marker is within another operative’s control range, remove that marker and inflict 2D6+3 damage on that operative; if it isn’t incapacitated, end its action (if any), even if that action’s effects aren’t fulfilled. If it cannot be placed, move it the minimum amount to do so. Note that this operative is ignored for these effects (i.e. it cannot set it off or take damage from that marker)."
+    },
+    {
+     "id": "kasrkin.demo-trooper.blast-padding",
+     "name": "Blast Padding",
+     "text": "Whenever an operative is shooting this operative with a weapon that has the Blast or Torrent weapon rule (excluding weapons that have a sweeping profile), you can re-roll one of your defence dice. In addition, this operative isn’t affected by the x\" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Clad in heavier armour and carrying a devastating melta mine, these Kasrkin serve in a necessary but incredibly dangerous role. It is their job – often under enemy fire – to place, prepare and detonate a melta mine, blasting their way into an armoured bunker or through fortress walls."
+  },
+  {
+   "id": "kasrkin.gunner",
+   "teamId": "kasrkin",
+   "name": "Kasrkin Gunner",
+   "keywords": [
+    "KASRKIN",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Grenade launcher",
+     "profiles": [
+      {
+       "name": "frag",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        }
+       ]
+      },
+      {
+       "name": "krak",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Hot-shot volley gun",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Meltagun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma gun",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "These specialists receive additional training in using a range of different weapons, whether they be flamers for burning foes from cover, hot-shot volley guns for scything through enemy heavy infantry, or meltaguns for burning into the toughest armour."
+  },
+  {
+   "id": "kasrkin.recon-trooper",
+   "teamId": "kasrkin",
+   "name": "Kasrkin Recon-Trooper",
+   "keywords": [
+    "KASRKIN",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "RECON-TROOPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Hot-shot lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "kasrkin.recon-trooper.reconnoitre-killzone",
+     "name": "Reconnoitre Killzone",
+     "text": "The Relocate strategy ploy costs you 0CP if this operative is the selected friendly KASRKIN operative."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "kasrkin.recon-trooper.act.auspex-scan",
+     "name": "AUSPEX SCAN",
+     "ap": 1,
+     "text": "Until the start of this operative’s next activation or until it’s incapacitated (whichever comes first), whenever an enemy operative is within 8\" of this operative, that enemy operative is being scanned. Whenever a friendly KASRKIN operative is shooting an enemy operative that’s being scanned, that enemy operative cannot be obscured\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "With their advanced auspex systems, these Kasrkin are the eyes and ears of their kill teams. They can detect enemy troops and ambushes from significant distances, and can scan local terrain and analyse ambient sounds for dangers."
+  },
+  {
+   "id": "kasrkin.sharpshooter",
+   "teamId": "kasrkin",
+   "name": "Kasrkin Sharpshooter",
+   "keywords": [
+    "KASRKIN",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "SHARPSHOOTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Hot-shot marksman rifle",
+     "profiles": [
+      {
+       "name": "concealed",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "ConcealedPosition",
+         "raw": "Concealed Position*"
+        }
+       ]
+      },
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      },
+      {
+       "name": "stationary",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "kasrkin.sharpshooter.camo-cloak",
+     "name": "Camo Cloak",
+     "text": "Whenever an operative is shooting this operative:\n\nIgnore the Saturate weapon rule.\n\nIf you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain."
+    },
+    {
+     "id": "kasrkin.sharpshooter.concealed-position",
+     "name": "Concealed Position",
+     "text": "This operative can only use this weapon the first time it’s performing the Shoot action during the battle."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "These patient, keen-eyed Kasrkin are skilled snipers. With their hot-shot marksman rifles they can kill key targets and provide covering fire for the rest of their kill team. Thanks to their camo cloaks, Sharpshooters can infiltrate contested areas and remain hidden for protracted periods."
+  },
+  {
+   "id": "kasrkin.trooper",
+   "teamId": "kasrkin",
+   "name": "Kasrkin Trooper",
+   "keywords": [
+    "KASRKIN",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "TROOPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Hot-shot lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "kasrkin.trooper.adaptive-equipment",
+     "name": "Adaptive Equipment",
+     "text": "You can do each of the following once per turning point:\n\nOne friendly KASRKIN TROOPER operative can perform the Smoke Grenade action.\n\nOne friendly KASRKIN TROOPER operative can perform the Stun Grenade action.\n\nThe rules for these actions are found in universal equipment. Performing these actions using this rule doesn’t count towards their action limits (i.e. if you also select those grenades from equipment)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The rank and file of Kasrkin squads, these soldiers are consummate professionals. Many have seen action in the harshest of killzones and emerged victorious."
+  },
+  {
+   "id": "kasrkin.vox-trooper",
+   "teamId": "kasrkin",
+   "name": "Kasrkin Vox-Trooper",
+   "keywords": [
+    "KASRKIN",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "VOX-TROOPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Hot-shot lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "kasrkin.vox-trooper.act.battle-comms",
+     "name": "BATTLE COMMS",
+     "ap": 1,
+     "text": "Select one other friendly KASRKIN operative. Until the end of that operative’s next activation, add 1 to its APL stat (to a maximum of 3 after all APL stat changes have been totalled).\n\nThis operative can perform this action twice during its activation, but cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Carrying advanced vox systems, these Kasrkin are their kill team’s link with higher command. It is their job to relay orders and intelligence between senior officers and their comrades, all of whom wear their own vox-links for quick, intra-squad communication."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "kasrkin.rule.skill-at-arms",
+   "name": "Skill at Arms",
+   "text": "STRATEGIC GAMBIT. Select a SKILL AT ARMS for friendly KASRKIN operatives to have until the Ready step of the next Strategy phase.\n\nLight ’Em Up\n\nEstablishing overlapping fields of fire as they advance, the Kasrkin react to any enemy movement with a lethal volley of fire.\n\nFriendly KASRKIN operatives’ ranged weapons have the Severe weapon rule.\n\nStrike Fast\n\nKasrkin pride themselves upon their physical fitness and can cover ground swiftly, even when carrying heavy combat gear.\n\nWhenever a friendly KASRKIN operative is performing the Reposition action, add 1\" to its Move stat.\n\nIce In Your Veins\n\nAll Cadians are subjected to a lifetime of war. Those chosen to join the ranks of the elite Kasrkin are amongst the hardiest.\n\nWhenever a friendly KASRKIN operative is fighting or retaliating, or an operative is shooting it, the first time an attack dice inflicts Normal Dmg of 3 or more on this operative during that sequence, that dice inflicts 1 less damage on it.\n\nFor Cadia!\n\nAll Kasrkin strive to uphold the honour of their dead homeworld.\n\nAdd 1 to the Atk stat of friendly KASRKIN operatives’ melee weapons (to a maximum of 4). Whenever a friendly KASRKIN operative is fighting, the first time you strike during that sequence, inflict 1 additional damage.",
+   "fluff": "The Kasrkin go where they are needed. Battle-hardened, uncompromising and equipped with the best weapons available, these elites pursue their objectives with professionalism, hard-won experience and rigid determination."
+  },
+  {
+   "id": "kasrkin.rule.rapid-fire",
+   "name": "Rapid Fire",
+   "text": "Each friendly KASRKIN operative that doesn’t perform an action in which it moves during its activation can perform two Shoot actions (excluding Guard) during that activation, but a bolt pistol, hot-shot lasgun or hot-shot laspistol must be selected for both of those actions.",
+   "fluff": "Ruthlessly drilled and murderously efficient, Kasrkin lay down hails of high-powered fire against the foe."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "kasrkin.sp.elimination-pattern",
+   "name": "ELIMINATION PATTERN",
+   "text": "Whenever a friendly KASRKIN operative is shooting with a hot-shot weapon against an operative that cannot retain any cover saves or is being scanned (see RECON-TROOPER), that weapon has the Piercing Crits 1 weapon rule, or Piercing 1 instead if it’s a hot-shot volley gun.",
+   "cp": 1,
+   "fluff": "Having already outmanoeuvred the foe, the Kasrkin attempt to fell their target in a single volley."
+  },
+  {
+   "id": "kasrkin.sp.engage-from-cover",
+   "name": "ENGAGE FROM COVER",
+   "text": "Whenever an operative is shooting a friendly KASRKIN operative that’s in cover, you can re-roll one of your defence dice.",
+   "cp": 1,
+   "fluff": "Kasrkin are used to being outnumbered and outgunned, using cover to avoid incoming fire as they engage."
+  },
+  {
+   "id": "kasrkin.sp.clearance-sweep",
+   "name": "CLEARANCE SWEEP",
+   "text": "Place your Clearance Sweep marker in the killzone. Whenever a friendly KASRKIN operative within 5\" horizontally of that marker is shooting an operative also within 5\" horizontally of that marker, that friendly operative’s weapons have the Ceaseless weapon rule. In the Ready step of the next Strategy phase, remove that marker.",
+   "cp": 1,
+   "fluff": "The Kasrkin advance steadily towards their objectives, clearing the battlefield of enemies quadrant by quadrant."
+  },
+  {
+   "id": "kasrkin.sp.relocate",
+   "name": "RELOCATE",
+   "text": "Select one friendly KASRKIN operative that’s more than 3\" from enemy operatives. That operative, and each other friendly KASRKIN operative that’s both within 3\" of that operative and more than 3\" from enemy operatives, can immediately perform a free Dash action in an order of your choice. You cannot use this ploy during the first turning point.\n\nFirefight Ploys\nSEIZE THE INITIATIVE\n\nKasrkin squads are bold and decisive, acting with speed and clarity even in the confusion of battle.\nUse this firefight ploy at the start of the Firefight phase. One friendly KASRKIN operative can immediately perform a 1AP action for free, but it cannot move during that action. You cannot use this ploy if you’re the player with initiative.\n\nNEUTRALISE TARGET\n\nDesignating an exposed enemy operative as a priority target, this operative levels their weapon and fires a volley of rounds.\nUse this firefight ploy after rolling your attack dice for a friendly KASRKIN operative, if it’s shooting an operative that either cannot retain any cover saves or is being scanned (see RECON-TROOPER). You can re-roll any of your attack dice.\n\nCOVER RETREAT\n\nShould a Kasrkin soldier need to retreat, their allies may lay down a withering barrage of covering fire.\nUse this firefight ploy when a friendly KASRKIN operative performs the Fall Back action while visible to and within 6\" of another friendly KASRKIN operative that’s not within control range of enemy operatives. After that friendly operative has finished moving, but before that Fall Back action ends, that other friendly operative can immediately perform a free Shoot action (you can change its order to Engage to do so).\n\nGIVE NO GROUND\n\nHardened by a lifetime spent defending the Imperium from the horrific denizens of the Eye of Terror, the Kasrkin demonstrate unwavering discipline in the face of the enemy.\nUse this firefight ploy during a friendly KASRKIN operative’s activation, or at the end of the Firefight phase. Select one of your mission markers or an objective marker. Until the end of that activation or until the start of the next turning point respectively, if the total APL of friendly KASRKIN operatives that contest that marker is 2, and the total APL of enemy operatives that contest it is the same, friendly KASRKIN operatives control that marker.\n\nFaction Equipment\nFOREGRIP\n\nFitted under the barrel of the gun, this foregrip helps stabilise the bearer’s weapon, improving its handling at close range.\nWhenever a friendly KASRKIN operative is shooting an operative within 3\" of it, ranged weapons on its datacard (excluding weapons that include ‘pistol’ in their name, e.g. hot-shot laspistol, all profiles of a plasma pistol, etc.) have the Accurate 1 weapon rule.\n\nRELICS OF CADIA\n\nSmall personal effects remind the Kasrkin of their homeworld, those they have lost, and that which they fight for.\nOnce per turning point, when a friendly KASRKIN operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nLONG-RANGE SCOPE\n\nThis weapon is fitted with a marksman’s scope, enabling great accuracy even at long range.\nWhenever a friendly KASRKIN operative is shooting an operative more than 6\" from it, that friendly operative’s hot-shot weapons have the Saturate weapon rule.\n\nCOMBAT DAGGERS\n\nWhen close combat is required, the Kasrkin turn to their combat daggers in order to silence the enemy.\nFriendly KASRKIN operatives have the following melee weapon:\n\nCombat dagger\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCombat dagger\n3\n\n4+\n\n3/4",
+   "cp": 1,
+   "fluff": "The Kasrkin are always on the move, advancing swiftly across the battlefield to take up new firing positions.",
+   "weapons": [
+    {
+     "name": "Combat dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "kasrkin.fp.seize-the-initiative",
+   "name": "SEIZE THE INITIATIVE",
+   "text": "Use this firefight ploy at the start of the Firefight phase. One friendly KASRKIN operative can immediately perform a 1AP action for free, but it cannot move during that action. You cannot use this ploy if you’re the player with initiative.",
+   "cp": 1,
+   "fluff": "Kasrkin squads are bold and decisive, acting with speed and clarity even in the confusion of battle."
+  },
+  {
+   "id": "kasrkin.fp.neutralise-target",
+   "name": "NEUTRALISE TARGET",
+   "text": "Use this firefight ploy after rolling your attack dice for a friendly KASRKIN operative, if it’s shooting an operative that either cannot retain any cover saves or is being scanned (see RECON-TROOPER). You can re-roll any of your attack dice.",
+   "cp": 1,
+   "fluff": "Designating an exposed enemy operative as a priority target, this operative levels their weapon and fires a volley of rounds."
+  },
+  {
+   "id": "kasrkin.fp.cover-retreat",
+   "name": "COVER RETREAT",
+   "text": "Use this firefight ploy when a friendly KASRKIN operative performs the Fall Back action while visible to and within 6\" of another friendly KASRKIN operative that’s not within control range of enemy operatives. After that friendly operative has finished moving, but before that Fall Back action ends, that other friendly operative can immediately perform a free Shoot action (you can change its order to Engage to do so).",
+   "cp": 1,
+   "fluff": "Should a Kasrkin soldier need to retreat, their allies may lay down a withering barrage of covering fire."
+  },
+  {
+   "id": "kasrkin.fp.give-no-ground",
+   "name": "GIVE NO GROUND",
+   "text": "Use this firefight ploy during a friendly KASRKIN operative’s activation, or at the end of the Firefight phase. Select one of your mission markers or an objective marker. Until the end of that activation or until the start of the next turning point respectively, if the total APL of friendly KASRKIN operatives that contest that marker is 2, and the total APL of enemy operatives that contest it is the same, friendly KASRKIN operatives control that marker.\n\nFaction Equipment\nFOREGRIP\n\nFitted under the barrel of the gun, this foregrip helps stabilise the bearer’s weapon, improving its handling at close range.\nWhenever a friendly KASRKIN operative is shooting an operative within 3\" of it, ranged weapons on its datacard (excluding weapons that include ‘pistol’ in their name, e.g. hot-shot laspistol, all profiles of a plasma pistol, etc.) have the Accurate 1 weapon rule.\n\nRELICS OF CADIA\n\nSmall personal effects remind the Kasrkin of their homeworld, those they have lost, and that which they fight for.\nOnce per turning point, when a friendly KASRKIN operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nLONG-RANGE SCOPE\n\nThis weapon is fitted with a marksman’s scope, enabling great accuracy even at long range.\nWhenever a friendly KASRKIN operative is shooting an operative more than 6\" from it, that friendly operative’s hot-shot weapons have the Saturate weapon rule.\n\nCOMBAT DAGGERS\n\nWhen close combat is required, the Kasrkin turn to their combat daggers in order to silence the enemy.\nFriendly KASRKIN operatives have the following melee weapon:\n\nCombat dagger\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCombat dagger\n3\n\n4+\n\n3/4",
+   "cp": 1,
+   "fluff": "Hardened by a lifetime spent defending the Imperium from the horrific denizens of the Eye of Terror, the Kasrkin demonstrate unwavering discipline in the face of the enemy.",
+   "weapons": [
+    {
+     "name": "Combat dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "equipment": [
+  {
+   "id": "kasrkin.eq.foregrip",
+   "name": "FOREGRIP",
+   "text": "Whenever a friendly KASRKIN operative is shooting an operative within 3\" of it, ranged weapons on its datacard (excluding weapons that include ‘pistol’ in their name, e.g. hot-shot laspistol, all profiles of a plasma pistol, etc.) have the Accurate 1 weapon rule.",
+   "fluff": "Fitted under the barrel of the gun, this foregrip helps stabilise the bearer’s weapon, improving its handling at close range."
+  },
+  {
+   "id": "kasrkin.eq.relics-of-cadia",
+   "name": "RELICS OF CADIA",
+   "text": "Once per turning point, when a friendly KASRKIN operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.",
+   "fluff": "Small personal effects remind the Kasrkin of their homeworld, those they have lost, and that which they fight for."
+  },
+  {
+   "id": "kasrkin.eq.long-range-scope",
+   "name": "LONG-RANGE SCOPE",
+   "text": "Whenever a friendly KASRKIN operative is shooting an operative more than 6\" from it, that friendly operative’s hot-shot weapons have the Saturate weapon rule.",
+   "fluff": "This weapon is fitted with a marksman’s scope, enabling great accuracy even at long range."
+  },
+  {
+   "id": "kasrkin.eq.combat-daggers",
+   "name": "COMBAT DAGGERS",
+   "text": "Friendly KASRKIN operatives have the following melee weapon:\n\nCombat dagger\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCombat dagger\n3\n\n4+\n\n3/4",
+   "fluff": "When close combat is required, the Kasrkin turn to their combat daggers in order to silence the enemy.",
+   "weapons": [
+    {
+     "name": "Combat dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "markerGuide": "Medic token\n\nTactical Command token\n\nAuspex Scan token\n\nMelta Mine marker\n\nRelics of Cadia token\n\nClearance Sweep marker",
+ "notes": [],
+ "rareWeaponRules": [
+  "ConcealedPosition"
+ ]
+}

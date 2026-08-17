@@ -1,0 +1,1487 @@
+{
+ "id": "sanctifiers",
+ "name": "Sanctifiers",
+ "faction": "Agents of the Imperium",
+ "grandFaction": "Imperium",
+ "archetypes": [
+  "Seek & Destroy",
+  "Security"
+ ],
+ "booksVersion": "February ’26",
+ "books": [
+  {
+   "book": "Sanctifiers",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "February ’26",
+   "lastUpdate": "February 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_25-02_kt_teamrules_sanctifiers-3vpsecfbfe-vclbyfaed7.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/sanctifiers/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "CONFESSOR",
+   "datacardId": "sanctifiers.sanctifier-confessor",
+   "count": 1,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "fixed",
+   "fixedWeapons": [],
+   "alwaysWeapons": [
+    "Mace of Censure"
+   ],
+   "choices": [
+    "CONFESSOR"
+   ]
+  },
+  "slots": 10,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "CONFESSOR"
+    ],
+    "rawText": "1 SANCTIFIER CONFESSOR operative"
+   },
+   {
+    "index": 2,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "CHERUB"
+    ],
+    "rawText": "1 SANCTIFIER CHERUB operative"
+   },
+   {
+    "index": 3,
+    "count": 9,
+    "kind": "list",
+    "roles": [
+     "CONFLAGRATOR",
+     "DEATH CULT ASSASSIN",
+     "DRILL ABBOT",
+     "MIRACULIST",
+     "MISSIONARY",
+     "MISSIONARY",
+     "PERSECUTOR",
+     "PREACHER",
+     "RELIQUANT",
+     "SALVATIONIST"
+    ],
+    "rawText": "9 SANCTIFIER operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "CHERUB",
+    "datacardAnchor": "Sanctifier-Cherub",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 SANCTIFIER CHERUB operative",
+    "group": 2,
+    "datacardId": "sanctifiers.sanctifier-cherub",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Incentiviser"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "CONFLAGRATOR",
+    "datacardAnchor": "Sanctifier-Conflagrator",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CONFLAGRATOR",
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-conflagrator",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Twin hand flamers",
+     "Gun butts"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "DEATH CULT ASSASSIN",
+    "datacardAnchor": "Sanctifier-Death-Cult-Assassin",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DEATH CULT ASSASSIN",
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-death-cult-assassin",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Throwing knives",
+     "Ritual blades"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "DRILL ABBOT",
+    "datacardAnchor": "Sanctifier-Drill-Abbot",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DRILL ABBOT",
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-drill-abbot",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Great hammer"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "MIRACULIST",
+    "datacardAnchor": "Sanctifier-Miraculist",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MIRACULIST",
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-miraculist",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Holy light",
+     "Wreathe in fire",
+     "Burning hands",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "MISSIONARY",
+    "datacardAnchor": "Sanctifier-Missionary",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "sanctifiers.g3e5.opt1",
+      "label": "Ministorum flamer; brazier of holy fire",
+      "weapons": [
+       "Ministorum flamer",
+       "Brazier of holy fire"
+      ],
+      "footnoteGroup": "*"
+     },
+     {
+      "id": "sanctifiers.g3e5.opt2",
+      "label": "Ministorum flamer; gun butt; holy relic",
+      "weapons": [
+       "Ministorum flamer",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MISSIONARY with one of the following options:",
+    "notes": [
+     "unresolved weapon(s) in option 'Ministorum flamer; gun butt; holy relic': ['holy relic']"
+    ],
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-missionary",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "MISSIONARY",
+    "datacardAnchor": "Sanctifier-Missionary",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "sanctifiers.g3e6.opt1",
+      "label": "Meltagun; chainsword; holy relic",
+      "weapons": [
+       "Meltagun",
+       "Chainsword"
+      ]
+     },
+     {
+      "id": "sanctifiers.g3e6.opt2",
+      "label": "Plasma gun; chainsword; brazier of holy fire",
+      "weapons": [
+       "Plasma gun",
+       "Chainsword",
+       "Brazier of holy fire"
+      ],
+      "footnoteGroup": "*"
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MISSIONARY with one of the following options:",
+    "notes": [
+     "unresolved weapon(s) in option 'Meltagun; chainsword; holy relic': ['holy relic']"
+    ],
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-missionary",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "PERSECUTOR",
+    "datacardAnchor": "Sanctifier-Persecutor",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PERSECUTOR",
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-persecutor",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hand flamer",
+     "Eviscerator"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "PREACHER",
+    "datacardAnchor": "Sanctifier-Preacher",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PREACHER",
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-preacher",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hand flamer",
+     "Chainsword"
+    ],
+    "uniqueUnlessRole": false
+   },
+   {
+    "role": "RELIQUANT",
+    "datacardAnchor": "Sanctifier-Reliquant",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "RELIQUANT",
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-reliquant",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hand flamer",
+     "Gun butt"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SALVATIONIST",
+    "datacardAnchor": "Sanctifier-Salvationist",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SALVATIONIST",
+    "group": 3,
+    "datacardId": "sanctifiers.sanctifier-salvationist",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Soulstave"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "CONFESSOR",
+    "datacardAnchor": "Sanctifier-Confessor",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 SANCTIFIER CONFESSOR operative",
+    "group": 1,
+    "datacardId": "sanctifiers.sanctifier-confessor",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Mace of Censure"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "PREACHER"
+    ]
+   },
+   {
+    "kind": "maxCount",
+    "role": "PREACHER",
+    "max": 4
+   },
+   {
+    "kind": "maxItem",
+    "item": "brazier of holy fire",
+    "max": 1,
+    "group": "*"
+   }
+  ],
+  "footnotes": {
+   "*": "You cannot select an option that includes a brazier of holy fire more than once per battle."
+  },
+  "designerNotes": [],
+  "rawText": "1 SANCTIFIER CONFESSOR operative\n\n1 SANCTIFIER CHERUB operative\n\n9 SANCTIFIER operatives selected from the following list:\n\nCONFLAGRATOR\n\nDEATH CULT ASSASSIN\n\nDRILL ABBOT\n\nMIRACULIST\n\nMISSIONARY with one of the following options:\n\nMinistorum flamer; brazier of holy fire*\n\nMinistorum flamer; gun butt; holy relic\n\nMISSIONARY with one of the following options:\n\nMeltagun; chainsword; holy relic\n\nPlasma gun; chainsword; brazier of holy fire*\n\nPERSECUTOR\n\nPREACHER\n\nRELIQUANT\n\nSALVATIONIST\n\nOther than PREACHER operatives, your kill team can only include each operative on this list once. Your kill team can only include up to four PREACHER operatives.\n\n* You cannot select an option that includes a brazier of holy fire more than once per battle."
+ },
+ "datacards": [
+  {
+   "id": "sanctifiers.sanctifier-confessor",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Confessor",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "LEADER",
+    "CONFESSOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 10,
+   "weapons": [
+    {
+     "name": "Mace of Censure",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-confessor.lead-the-procession",
+     "name": "Lead the Procession",
+     "text": "In each turning point after the first, whenever this operative is an ORATOR and performs the Charge, Fall Back or Reposition action during its activation, you can use this rule before it moves. If you do, determine each other friendly SANCTIFIER operative that’s benefitting from the SERMON and is visible to this operative (or vice versa). After this operative ends that action, each of those friendly SANCTIFIER operatives can immediately perform a free Charge, Fall Back or Reposition action in an order of your choice (choose separately for each), but each cannot move more than or be removed and set up more than 3\" and must end that move in a location where they are still benefitting from the SERMON. If this operative is incapacitated before this rule is fully resolved, e.g. from the Guard action’s interruption (see close quarters rules, Kill Team Core Book), don’t remove it from the killzone until this rule has been resolved."
+    },
+    {
+     "id": "sanctifiers.sanctifier-confessor.commanding-declamation",
+     "name": "Commanding Declamation",
+     "text": "Whenever an enemy operative would perform an action during an activation or counteraction while visible to and within 6\" of this operative, you can use this rule. If you do, roll one D6: if the result is higher than that enemy operative’s APL stat:\n\nIt cannot perform that action during that activation/counteraction (the AP spent on it isn’t refunded). If it’s a counteraction, that counteraction ends.\n\nYou cannot use this rule again during the battle."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Amongst the most zealous of the Imperium’s clergy, Confessors are wandering priests with decades of experience in rooting out traitors and heretics. They are skilled orators possessed of towering charisma."
+  },
+  {
+   "id": "sanctifiers.sanctifier-cherub",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Cherub",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "CHERUB"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 5,
+   "wounds": 5,
+   "weapons": [
+    {
+     "name": "Incentiviser",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 1,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-cherub.cherub",
+     "name": "Cherub",
+     "text": "Whenever determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhenever this operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".\n\nThis operative cannot use any weapons that aren’t on its datacard, or perform unique actions other than Incentivise.\n\nINCENTIVISE1AP\nSUPPORT. Select one other friendly SANCTIFIER operative (excluding CONFESSOR, DEATH CULT ASSASSIN, MIRACULIST and ORATOR) visible to and within 2\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "sanctifiers.sanctifier-cherub.fly",
+     "name": "Fly",
+     "text": "Whenever this operative is performing the Charge, Fall Back or Reposition action, it can FLY. If it does, don’t move it. Instead, remove it from the killzone and set it back up wholly within a distance equal to its Move stat horizontally of its original location (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, this distance cannot be measured over or through Wall terrain). Note that it gains no additional distance when performing the Charge action. It must be set up in a location it can be placed, and unless it’s the Charge action, it cannot be set up within control range of an enemy operative."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Grown in flesh-vats, Cherubim are diminutive servitors that undertake a wide variety of ritual tasks and duties. Those that accompany Sanctifiers are often armed with incentivisers to disable fleeing foes."
+  },
+  {
+   "id": "sanctifiers.sanctifier-conflagrator",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Conflagrator",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "CONFLAGRATOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Twin hand flamers",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      },
+      {
+       "name": "twin torrent",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 0,
+         "raw": "Torrent 0\""
+        },
+        {
+         "id": "TwinTorrent",
+         "raw": "Twin Torrent^1"
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butts",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-conflagrator.twin-torrent",
+     "name": "Twin Torrent",
+     "text": "Select up to two different valid targets that aren’t within control range of friendly operatives. Shoot with this weapon against both of them in an order of your choice (roll each sequence separately). Torrent 0\" means you cannot select secondary targets, but this weapon still has the Torrent weapon rule for all other rules purposes, e.g. the Condensed Stronghold rule (see Killzone: Volkus, Kill Team Core Book)."
+    },
+    {
+     "id": "sanctifiers.sanctifier-conflagrator.sanctification-rack",
+     "name": "Sanctification Rack",
+     "text": "This operative can perform the Sanctification Orb action (see faction equipment). Doing so in this manner doesn’t count towards the once per turning point limit (i.e. if you also select that equipment for other operatives)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "It is said by many a Ministorum Priest that the taint of heresy can only be cleansed in fire. Conflagrators believe wholeheartedly in this credo, wielding hand flamers into battle and incinerating the corrupt without mercy."
+  },
+  {
+   "id": "sanctifiers.sanctifier-death-cult-assassin",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Death Cult Assassin",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "DEATH CULT ASSASSIN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Throwing knives",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Ritual blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Members of extreme sects within the Imperial Cult, Death Cult Assassins are cold-blooded slayers who view killing as an act of worship. In battle, they wield a variety of ritual weapons with skill and grace, leaving a trail of mutilated corpses in their wake."
+  },
+  {
+   "id": "sanctifiers.sanctifier-drill-abbot",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Drill Abbot",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "DRILL ABBOT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Great hammer",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-drill-abbot.schola-progenium-disciplinarian",
+     "name": "Schola Progenium Disciplinarian",
+     "text": "Whenever a friendly SANCTIFIER operative is within 6\" of this operative, you can ignore any changes to that operative’s stats from being injured (including its weapons’ stats)."
+    },
+    {
+     "id": "sanctifiers.sanctifier-drill-abbot.null-skull",
+     "name": "Null Skull",
+     "text": "Whenever an enemy operative is within 4\" of this operative, that enemy operative’s APL stat cannot be added to (remove all positive APL stat changes it has). If an enemy operative that’s more than 4\" from this operative has a positive APL stat change and your opponent spends its final AP to move that operative within 4\" of this operative, this can cause your opponent to have spent more AP than its APL stat – this is permitted in this situation."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Drill Abbots are tasked by the Schola Progenium with turning recruits into fanatical warriors. Veterans of frontline combat, they are commonly recruited to serve within Sanctifier bands as enforcers of military discipline amongst often ad hoc units."
+  },
+  {
+   "id": "sanctifiers.sanctifier-persecutor",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Persecutor",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "PERSECUTOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Hand flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Eviscerator",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-persecutor.merciless-castigation",
+     "name": "Merciless Castigation",
+     "text": "The first time this operative performs the Fight action during each of its activations, if neither it nor the enemy operative in that sequence is incapacitated, this operative can immediately perform a free Fight action afterwards, but you cannot select any other enemy operative to fight against during that action (and only if it’s still valid to fight against). This takes precedence over action restrictions."
+    },
+    {
+     "id": "sanctifiers.sanctifier-persecutor.fanatical-retribution",
+     "name": "Fanatical Retribution",
+     "text": "If this operative is incapacitated during the Fight action, you can strike the enemy operative in that sequence with one of your unresolved successes before this operative is removed from the killzone."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Possessed of frightening zeal, Persecutors relentlessly pursue their heretic prey. Once caught, they butcher and incinerate their victim with a two-handed eviscerator, affixed with a hand flamer."
+  },
+  {
+   "id": "sanctifiers.sanctifier-miraculist",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Miraculist",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "MIRACULIST"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Holy light",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Wreathe in fire",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Wreathed",
+         "raw": "Wreathed^1"
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Burning hands",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 1,
+       "hit": 2,
+       "dmgN": 7,
+       "dmgC": 8,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 2,
+       "hit": 5,
+       "dmgN": 1,
+       "dmgC": 2,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-miraculist.wreathed",
+     "name": "Wreathed",
+     "text": "This operative can perform the Shoot action with this weapon while within control range of an enemy operative. Don’t select a valid target. Instead, this operative is always the primary target, but only shoot against secondary targets and they cannot be in cover or obscured (in other words, determine Blast from this operative, but this operative isn’t affected)."
+    },
+    {
+     "id": "sanctifiers.sanctifier-miraculist.miracle",
+     "name": "Miracle",
+     "text": "The first time this operative would be incapacitated during the battle, it’s not incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. All remaining attack dice are discarded (including yours if this operative is fighting or retaliating), then this operative can immediately perform a free Dash or Fall Back action (for the latter, it cannot move more than 3\"), even if it’s performed an action that prevents it from performing those actions."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "On occasion, a Confessor will encounter an individual in whom they believe the Emperor’s divine power is made manifest. These strange beings display unnatural powers and insight that often prove invaluable."
+  },
+  {
+   "id": "sanctifiers.sanctifier-missionary",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Missionary",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "MISSIONARY"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Brazier of holy fire",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 4,
+         "raw": "Range 4\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      },
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Meltagun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Ministorum flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma gun",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-missionary.holy-relic",
+     "name": "Holy Relic",
+     "text": "If this operative has a holy relic, it’s always benefitting from the SERMON."
+    },
+    {
+     "id": "sanctifiers.sanctifier-missionary.spread-the-word-of-the-god-emperor",
+     "name": "Spread the Word of the God-Emperor",
+     "text": "Whenever this operative is more than 6\" from other friendly operatives, its weapons have the Severe weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Missionaries are tasked with spreading the Imperial faith beyond the boundaries of the Imperium. Most are veterans of countless border conflicts, and as such bear a variety of military equipment acquired along the way."
+  },
+  {
+   "id": "sanctifiers.sanctifier-preacher",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Preacher",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "PREACHER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Hand flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-preacher.defend-the-faith",
+     "name": "Defend the Faith",
+     "text": "Whenever this operative controls an objective marker, it’s benefitting from the SERMON."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Preachers are responsible for tending to the spiritual needs of the Imperium’s countless worlds, and are commonly attached to military units to bolster their resolve. They are also tasked with rooting out psykers, mutants and heretics, and overseeing their execution."
+  },
+  {
+   "id": "sanctifiers.sanctifier-reliquant",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Reliquant",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "RELIQUANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Hand flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        },
+        {
+         "id": "Blaze",
+         "raw": "Blaze*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "sanctifiers.sanctifier-reliquant.cult-icon",
+     "name": "Cult Icon",
+     "text": "Whenever determining control of a marker within 4\" of this operative, treat the total APL stat of friendly SANCTIFIER operatives that contest it as 1 higher if at least one friendly SANCTIFIER operative contests that marker. Note this isn’t a change to the APL stat, so any changes are cumulative with this."
+    },
+    {
+     "id": "sanctifiers.sanctifier-reliquant.imperial-cult-devotion",
+     "name": "Imperial Cult Devotion",
+     "text": "Once per turning point, when a ready friendly SANCTIFIER operative is incapacitated while visible to and within 6\" of this operative, you can use this rule. If you do, before that operative is removed from the killzone, it can perform one free action (excluding Fight), and you can change its order to do so. It’s then removed from the killzone as normal."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Sanctifier Reliquants bear to battle relics harvested from the bodies of Imperial martyrs. When borne aloft, these invaluable symbols inspire the faithful, inflaming their zeal and banishing fear and doubt from their minds."
+  },
+  {
+   "id": "sanctifiers.sanctifier-salvationist",
+   "teamId": "sanctifiers",
+   "name": "Sanctifier Salvationist",
+   "keywords": [
+    "SANCTIFIER",
+    "IMPERIUM",
+    "ADEPTUS MINISTORUM",
+    "MEDIC",
+    "SALVATIONIST"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Soulstave",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "As medicae repair damaged bodies, Salvationists tend to tortured souls. They possess a variety of salves, unguents and soothing prayers with which they banish madness, reinforce flagging spirits and embolden their allies against the horrors they may encounter."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "sanctifiers.rule.blaze",
+   "name": "Blaze",
+   "text": "Some weapons in this team’s rules have the Blaze weapon rule below.\n\n*Blaze: If you inflict damage with any critical successes, the operative this weapon is being used against gains one of your Blaze tokens (if it doesn’t already have one). Whenever an operative that has one of your Blaze tokens is activated, inflict D3 damage on it. Then that operative’s controlling player selects one of the following:\n\nRoll one D6: on a 3+, remove that token.\n\nSubtract 1 from the operative’s APL stat until the end of that activation to remove that token.",
+   "fluff": "Only in holy fire can deviance be absolved. With flamer and burning hands the faithful purge the malignant taint of heresy."
+  },
+  {
+   "id": "sanctifiers.rule.ministorum-sermon",
+   "name": "Ministorum Sermon",
+   "text": "STRATEGIC GAMBIT. Select one friendly SANCTIFIER operative. If a friendly CONFESSOR operative hasn’t been incapacitated, you must select it. Until you use this STRATEGIC GAMBIT again during the battle, that operative has the ORATOR keyword.\n\nWhenever a friendly SANCTIFIER operative is within 3\" of a friendly ORATOR operative (or 6\" if the ORATOR is a CONFESSOR), that friendly SANCTIFIER operative is benefitting from the SERMON.\n\nWhenever a friendly SANCTIFIER operative is activated within 3\" of a friendly ORATOR operative (or 6\" if the ORATOR is a CONFESSOR), that friendly SANCTIFIER operative is benefitting from the SERMON until the end of that activation (i.e. even if it then moves more than the distance requirement from the ORATOR operative).\n\nWhenever a friendly SANCTIFIER operative is benefitting from the SERMON, Normal and Critical Dmg of 4 or more inflicts 1 less damage on it.",
+   "fluff": "A mighty orator booms out an impassioned sermon. The fire and brimstone words inflame the zeal of their followers, enabling them to shrug off wounds and remain in the fight."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "sanctifiers.sp.the-emperor-protects",
+   "name": "THE EMPEROR PROTECTS",
+   "text": "Whenever an operative is shooting a friendly SANCTIFIER operative that’s benefitting from the SERMON, you can re-roll any of your defence dice results of one result (e.g. results of 2).",
+   "cp": 1,
+   "fluff": "The most dedicated adherents to the Imperial Creed believe that the Emperor protects. They hurl themselves into battle, confident that their faith will shield them."
+  },
+  {
+   "id": "sanctifiers.sp.fervent-brawl",
+   "name": "FERVENT BRAWL",
+   "text": "Whenever a friendly SANCTIFIER operative that’s benefitting from the SERMON is fighting or retaliating, its melee weapons have the Ceaseless weapon rule.",
+   "cp": 1,
+   "fluff": "With the intolerant diatribes of the priesthood ringing in their ears, the Sanctifiers fight with a tireless fury."
+  },
+  {
+   "id": "sanctifiers.sp.zealous-persecution",
+   "name": "ZEALOUS PERSECUTION",
+   "text": "Whenever a friendly SANCTIFIER operative is fighting during an activation in which it performed the Charge action, its melee weapons have the Lethal 5+ weapon rule.",
+   "cp": 1,
+   "fluff": "The longer that heresy is allowed to persist, the more indelible the mark it leaves. It must be scoured swiftly and without mercy."
+  },
+  {
+   "id": "sanctifiers.sp.rally-the-flock",
+   "name": "RALLY THE FLOCK",
+   "text": "Each friendly SANCTIFIER operative (excluding ORATOR) that’s benefitting from the SERMON can immediately perform a free Dash or Fall Back action in an order of your choice (choose separately for each and, for the latter, it cannot move more than 3\"). Each that does so must end that move closer and visible to (or vice versa) to a friendly ORATOR operative. You cannot use this ploy during the first turning point.\n\nFirefight Ploys\nROSARIUS\n\nA sacred symbol of office, the Rosarius contains a powerful conversion field generator capable of turning aside incoming blows.\nUse this firefight ploy when an attack dice inflicts Normal Dmg on a friendly SANCTIFIER operative. Ignore that inflicted damage.\n\nARDENT ERADICATION\n\nFor those who stand against the Imperial faith there is only one punishment: death.\nUse this firefight ploy after rolling your attack dice for a friendly SANCTIFIER operative, if it’s shooting against or fighting against an enemy operative that’s within 3\" of a friendly ORATOR operative (or 6\" if the ORATOR is a CONFESSOR). You can re-roll any of your attack dice.\n\nREDEEMED THROUGH FIRE\n\nThere are few more blessed deaths than fiery martyrdom. Such a sacrifice stokes smouldering resolve in the hearts of fellow Sanctifiers.\nUse this firefight ploy when a friendly SANCTIFIER operative that has a weapon with the Blaze weapon rule is incapacitated, before it’s removed from the killzone. Each enemy operative visible to and within 2\" of it gains one of your Blaze tokens (if it doesn’t already have one).\n\nUNWAVERING DEVOTION\n\nLow ranking Sanctifiers will gladly hurl themselves into the path of bullet or blade if doing so will preserve their blessed superiors and ensure victory.\nUse this firefight ploy when a friendly SANCTIFIER ORATOR or SANCTIFIER MIRACULIST operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly SANCTIFIER operative (excluding CONFESSOR, MIRACULIST and ORATOR) visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that other operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that other operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.\n\nFaction Equipment\nSANCTIFICATION ORBS\n\nThese spherical devices contain flammable oils. They shatter, ignite and detonate upon impact with their target, coating the foe in burning liquid.\nOnce per turning point, one friendly SANCTIFIER operative (excluding CHERUB, DEATH CULT ASSASSIN and MIRACULIST) can perform the following unique action:\n\nSANCTIFICATION ORB1AP\nSelect one enemy operative visible to and within 6\" of this operative. That operative and each other enemy operative within 1\" of it takes a doused test. For an operative to take a doused test, roll one D6: on a 3+, it gains one of your Doused tokens.\n\nWhenever a friendly SANCTIFIER operative is shooting an operative that has one of your Doused tokens with a weapon that has the Blaze weapon rule, that weapon also has the Seek weapon rule.\n\nAfter a friendly SANCTIFIER operative uses a weapon that has the Blaze weapon rule against an enemy operative that has one of your Doused tokens, remove that token (even if the Seek weapon rule wasn’t used).\n\nThis operative cannot perform this action while within control range of an enemy operative.\n\nPURITY SEALS\n\nAffixed to clothing, armour and wargear by way of wax seals, these pieces of parchment are inscribed with holy prayers and blessings.\nOnce per turning point, when a friendly SANCTIFIER operative is shooting or fighting, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nECCLESIARCHY TEXTS\n\nThe orators of the Adeptus Ministorum carry with them many a fiery prayer and excoriating psalm scribed on tattered vellum, designed to inspire their allies and diminish the foe.\nIn the Ready step of each Strategy phase, roll 3D6: if the result is less than the remaining wounds of a friendly ORATOR operative, you gain 1CP. Note that this is done before the Gambit step, so if there isn’t a valid ORATOR operative, you cannot use this rule during that turning point (e.g. during the first turning point).\n\nIMPERIAL CULT SYMBOLS\n\nWhether carved from stone or wrought in solid gold, blessed religious symbols bestow upon their bearers both fortune and favour.\nOnce per turning point, when an operative is shooting a friendly SANCTIFIER operative that’s benefitting from the SERMON, when you collect your defence dice, you can use this rule. If you do, change one of the attacker’s retained critical successes to a normal success (any weapon rules they’ve already resolved aren’t affected, e.g. Piercing Crits).",
+   "cp": 1,
+   "fluff": "An orator’s voice booms above the thunderous din of combat, drawing the faithful back into formation."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "sanctifiers.fp.rosarius",
+   "name": "ROSARIUS",
+   "text": "Use this firefight ploy when an attack dice inflicts Normal Dmg on a friendly SANCTIFIER operative. Ignore that inflicted damage.",
+   "cp": 1,
+   "fluff": "A sacred symbol of office, the Rosarius contains a powerful conversion field generator capable of turning aside incoming blows."
+  },
+  {
+   "id": "sanctifiers.fp.ardent-eradication",
+   "name": "ARDENT ERADICATION",
+   "text": "Use this firefight ploy after rolling your attack dice for a friendly SANCTIFIER operative, if it’s shooting against or fighting against an enemy operative that’s within 3\" of a friendly ORATOR operative (or 6\" if the ORATOR is a CONFESSOR). You can re-roll any of your attack dice.",
+   "cp": 1,
+   "fluff": "For those who stand against the Imperial faith there is only one punishment: death."
+  },
+  {
+   "id": "sanctifiers.fp.redeemed-through-fire",
+   "name": "REDEEMED THROUGH FIRE",
+   "text": "Use this firefight ploy when a friendly SANCTIFIER operative that has a weapon with the Blaze weapon rule is incapacitated, before it’s removed from the killzone. Each enemy operative visible to and within 2\" of it gains one of your Blaze tokens (if it doesn’t already have one).",
+   "cp": 1,
+   "fluff": "There are few more blessed deaths than fiery martyrdom. Such a sacrifice stokes smouldering resolve in the hearts of fellow Sanctifiers."
+  },
+  {
+   "id": "sanctifiers.fp.unwavering-devotion",
+   "name": "UNWAVERING DEVOTION",
+   "text": "Use this firefight ploy when a friendly SANCTIFIER ORATOR or SANCTIFIER MIRACULIST operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly SANCTIFIER operative (excluding CONFESSOR, MIRACULIST and ORATOR) visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that other operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that other operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.\n\nFaction Equipment\nSANCTIFICATION ORBS\n\nThese spherical devices contain flammable oils. They shatter, ignite and detonate upon impact with their target, coating the foe in burning liquid.\nOnce per turning point, one friendly SANCTIFIER operative (excluding CHERUB, DEATH CULT ASSASSIN and MIRACULIST) can perform the following unique action:\n\nSANCTIFICATION ORB1AP\nSelect one enemy operative visible to and within 6\" of this operative. That operative and each other enemy operative within 1\" of it takes a doused test. For an operative to take a doused test, roll one D6: on a 3+, it gains one of your Doused tokens.\n\nWhenever a friendly SANCTIFIER operative is shooting an operative that has one of your Doused tokens with a weapon that has the Blaze weapon rule, that weapon also has the Seek weapon rule.\n\nAfter a friendly SANCTIFIER operative uses a weapon that has the Blaze weapon rule against an enemy operative that has one of your Doused tokens, remove that token (even if the Seek weapon rule wasn’t used).\n\nThis operative cannot perform this action while within control range of an enemy operative.\n\nPURITY SEALS\n\nAffixed to clothing, armour and wargear by way of wax seals, these pieces of parchment are inscribed with holy prayers and blessings.\nOnce per turning point, when a friendly SANCTIFIER operative is shooting or fighting, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nECCLESIARCHY TEXTS\n\nThe orators of the Adeptus Ministorum carry with them many a fiery prayer and excoriating psalm scribed on tattered vellum, designed to inspire their allies and diminish the foe.\nIn the Ready step of each Strategy phase, roll 3D6: if the result is less than the remaining wounds of a friendly ORATOR operative, you gain 1CP. Note that this is done before the Gambit step, so if there isn’t a valid ORATOR operative, you cannot use this rule during that turning point (e.g. during the first turning point).\n\nIMPERIAL CULT SYMBOLS\n\nWhether carved from stone or wrought in solid gold, blessed religious symbols bestow upon their bearers both fortune and favour.\nOnce per turning point, when an operative is shooting a friendly SANCTIFIER operative that’s benefitting from the SERMON, when you collect your defence dice, you can use this rule. If you do, change one of the attacker’s retained critical successes to a normal success (any weapon rules they’ve already resolved aren’t affected, e.g. Piercing Crits).",
+   "cp": 1,
+   "fluff": "Low ranking Sanctifiers will gladly hurl themselves into the path of bullet or blade if doing so will preserve their blessed superiors and ensure victory."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "sanctifiers.eq.sanctification-orbs",
+   "name": "SANCTIFICATION ORBS",
+   "text": "Once per turning point, one friendly SANCTIFIER operative (excluding CHERUB, DEATH CULT ASSASSIN and MIRACULIST) can perform the following unique action:\n\nSANCTIFICATION ORB1AP\nSelect one enemy operative visible to and within 6\" of this operative. That operative and each other enemy operative within 1\" of it takes a doused test. For an operative to take a doused test, roll one D6: on a 3+, it gains one of your Doused tokens.\n\nWhenever a friendly SANCTIFIER operative is shooting an operative that has one of your Doused tokens with a weapon that has the Blaze weapon rule, that weapon also has the Seek weapon rule.\n\nAfter a friendly SANCTIFIER operative uses a weapon that has the Blaze weapon rule against an enemy operative that has one of your Doused tokens, remove that token (even if the Seek weapon rule wasn’t used).\n\nThis operative cannot perform this action while within control range of an enemy operative.",
+   "fluff": "These spherical devices contain flammable oils. They shatter, ignite and detonate upon impact with their target, coating the foe in burning liquid."
+  },
+  {
+   "id": "sanctifiers.eq.purity-seals",
+   "name": "PURITY SEALS",
+   "text": "Once per turning point, when a friendly SANCTIFIER operative is shooting or fighting, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.",
+   "fluff": "Affixed to clothing, armour and wargear by way of wax seals, these pieces of parchment are inscribed with holy prayers and blessings."
+  },
+  {
+   "id": "sanctifiers.eq.ecclesiarchy-texts",
+   "name": "ECCLESIARCHY TEXTS",
+   "text": "In the Ready step of each Strategy phase, roll 3D6: if the result is less than the remaining wounds of a friendly ORATOR operative, you gain 1CP. Note that this is done before the Gambit step, so if there isn’t a valid ORATOR operative, you cannot use this rule during that turning point (e.g. during the first turning point).",
+   "fluff": "The orators of the Adeptus Ministorum carry with them many a fiery prayer and excoriating psalm scribed on tattered vellum, designed to inspire their allies and diminish the foe."
+  },
+  {
+   "id": "sanctifiers.eq.imperial-cult-symbols",
+   "name": "IMPERIAL CULT SYMBOLS",
+   "text": "Once per turning point, when an operative is shooting a friendly SANCTIFIER operative that’s benefitting from the SERMON, when you collect your defence dice, you can use this rule. If you do, change one of the attacker’s retained critical successes to a normal success (any weapon rules they’ve already resolved aren’t affected, e.g. Piercing Crits).",
+   "fluff": "Whether carved from stone or wrought in solid gold, blessed religious symbols bestow upon their bearers both fortune and favour."
+  }
+ ],
+ "markerGuide": "Blaze token\n\nCommanding Declamation token\n\nBurning Hands token\n\nOrator token\n\nHoly Light token\n\nMiracle token\n\nDoused token\n\nWreathe in Fire token\n\nImperial Cult Devotion token\n\nPurity Seals\n\nImperial Cult Symbols token\n\nSanctification Orbs token",
+ "notes": [],
+ "rareWeaponRules": [
+  "Blaze",
+  "TwinTorrent",
+  "Wreathed"
+ ]
+}

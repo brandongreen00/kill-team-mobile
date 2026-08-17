@@ -1,0 +1,819 @@
+{
+ "generatedAt": "2026-08-17T03:50:02+00:00",
+ "teams": [
+  {
+   "id": "angel-of-death",
+   "name": "Angel of Death",
+   "faction": "Space Marines",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 9,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 5,
+   "notes": 0
+  },
+  {
+   "id": "battleclade",
+   "name": "Battleclade",
+   "faction": "Adeptus Mechanicus",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 7,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 9,
+   "notes": 0
+  },
+  {
+   "id": "blades-of-khaine",
+   "name": "Blades of Khaine",
+   "faction": "Craftworlds",
+   "grandFaction": "Aeldari",
+   "archetypes": [
+    "*"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 6,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 0,
+   "notes": 0
+  },
+  {
+   "id": "blooded",
+   "name": "Blooded",
+   "faction": "Cultists",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Infiltration"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 13,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 13,
+   "notes": 0
+  },
+  {
+   "id": "brood-brother",
+   "name": "Brood Brother",
+   "faction": "Genestealer Cults",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Security",
+    "Infiltration"
+   ],
+   "booksVersion": "February ’26",
+   "datacards": 15,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 9,
+   "notes": 0
+  },
+  {
+   "id": "canoptek-circle",
+   "name": "Canoptek Circle",
+   "faction": "Necrons",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Security",
+    "Recon"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 5,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 7,
+   "notes": 0
+  },
+  {
+   "id": "celestian-insidiants",
+   "name": "Celestian Insidiants",
+   "faction": "Adepta Sororitas",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 8,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 8,
+   "notes": 0
+  },
+  {
+   "id": "chaos-cult",
+   "name": "Chaos Cult",
+   "faction": "Cultists",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Infiltration"
+   ],
+   "booksVersion": "June ’25",
+   "datacards": 7,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 13,
+   "notes": 0
+  },
+  {
+   "id": "corsair-voidscarred",
+   "name": "Corsair Voidscarred",
+   "faction": "Corsairs",
+   "grandFaction": "Aeldari",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 11,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 8,
+   "notes": 0
+  },
+  {
+   "id": "death-korps",
+   "name": "Death Korps",
+   "faction": "Astra Militarum",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 12,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 13,
+   "notes": 0
+  },
+  {
+   "id": "deathwatch",
+   "name": "Deathwatch",
+   "faction": "Space Marines",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 11,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 0,
+   "notes": 0
+  },
+  {
+   "id": "elucidian-starstrider",
+   "name": "Elucidian Starstrider",
+   "faction": "Agents of the Imperium",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Security",
+    "Recon"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 7,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 0,
+   "notes": 0
+  },
+  {
+   "id": "exaction-squad",
+   "name": "Exaction Squad",
+   "faction": "Agents of the Imperium",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 12,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 10,
+   "notes": 1
+  },
+  {
+   "id": "exodite-dragon-masters",
+   "name": "Exodite Dragon Masters",
+   "faction": "Exodites",
+   "grandFaction": "Aeldari",
+   "archetypes": [
+    "Seek & Destroy",
+    "Recon"
+   ],
+   "booksVersion": "",
+   "datacards": 4,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 5,
+   "notes": 1
+  },
+  {
+   "id": "farstalker-kinband",
+   "name": "Farstalker Kinband",
+   "faction": "T’au Empire",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "",
+   "datacards": 11,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 11,
+   "notes": 0
+  },
+  {
+   "id": "fellgor-ravager",
+   "name": "Fellgor Ravager",
+   "faction": "Cultists",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Recon"
+   ],
+   "booksVersion": "November ’25",
+   "datacards": 11,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 9,
+   "notes": 0
+  },
+  {
+   "id": "gellerpox-infected",
+   "name": "Gellerpox Infected",
+   "faction": "Chaos Daemons",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "October ’25",
+   "datacards": 9,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 0,
+   "notes": 2
+  },
+  {
+   "id": "goremonger",
+   "name": "Goremonger",
+   "faction": "World Eaters",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Recon"
+   ],
+   "booksVersion": "November ’25",
+   "datacards": 7,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 7,
+   "notes": 0
+  },
+  {
+   "id": "hand-of-the-archon",
+   "name": "Hand of the Archon",
+   "faction": "Drukhari",
+   "grandFaction": "Aeldari",
+   "archetypes": [
+    "Seek & Destroy",
+    "Recon"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 9,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 8,
+   "notes": 0
+  },
+  {
+   "id": "hearthkyn-salvager",
+   "name": "Hearthkyn Salvager",
+   "faction": "Leagues of Votann",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Security",
+    "Recon"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 11,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 9,
+   "notes": 0
+  },
+  {
+   "id": "hernkyn-yaegir",
+   "name": "Hernkyn Yaegir",
+   "faction": "Leagues of Votann",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Infiltration"
+   ],
+   "booksVersion": "November ’25",
+   "datacards": 8,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 9,
+   "notes": 0
+  },
+  {
+   "id": "hierotek-circle",
+   "name": "Hierotek Circle",
+   "faction": "Necrons",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Security",
+    "Recon"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 9,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 7,
+   "notes": 0
+  },
+  {
+   "id": "hunter-clade",
+   "name": "Hunter Clade",
+   "faction": "Adeptus Mechanicus",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Recon"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 14,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 9,
+   "notes": 1
+  },
+  {
+   "id": "imperial-navy-breacher",
+   "name": "Imperial Navy Breacher",
+   "faction": "Agents of the Imperium",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 11,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 10,
+   "notes": 0
+  },
+  {
+   "id": "inquisitorial-agent",
+   "name": "Inquisitorial Agent",
+   "faction": "Agents of the Imperium",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Any"
+   ],
+   "booksVersion": "",
+   "datacards": 18,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 11,
+   "notes": 1
+  },
+  {
+   "id": "kasrkin",
+   "name": "Kasrkin",
+   "faction": "Astra Militarum",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 8,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 9,
+   "notes": 0
+  },
+  {
+   "id": "kommandos",
+   "name": "Kommandos",
+   "faction": "Orks",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Infiltration"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 11,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 9,
+   "notes": 0
+  },
+  {
+   "id": "legionary",
+   "name": "Legionary",
+   "faction": "Chaos Space Marines",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "October ’25",
+   "datacards": 10,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 5,
+   "notes": 0
+  },
+  {
+   "id": "mandrakes",
+   "name": "Mandrakes",
+   "faction": "Drukhari",
+   "grandFaction": "Aeldari",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 6,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 8,
+   "notes": 0
+  },
+  {
+   "id": "murderwing",
+   "name": "Murderwing",
+   "faction": "Chaos Space Marines",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Recon"
+   ],
+   "booksVersion": "",
+   "datacards": 9,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 5,
+   "notes": 0
+  },
+  {
+   "id": "nemesis-claw",
+   "name": "Nemesis Claw",
+   "faction": "Chaos Space Marines",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Infiltration"
+   ],
+   "booksVersion": "",
+   "datacards": 8,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 5,
+   "notes": 0
+  },
+  {
+   "id": "novitiates",
+   "name": "Novitiates",
+   "faction": "Adepta Sororitas",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Security",
+    "Recon"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 12,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 9,
+   "notes": 0
+  },
+  {
+   "id": "pathfinders",
+   "name": "Pathfinders",
+   "faction": "T’au Empire",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 16,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 11,
+   "notes": 2
+  },
+  {
+   "id": "phobos-strike-team",
+   "name": "Phobos Strike Team",
+   "faction": "Space Marines",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "November ’25",
+   "datacards": 13,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 5,
+   "notes": 0
+  },
+  {
+   "id": "plague-marines",
+   "name": "Plague Marines",
+   "faction": "Death Guard",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 7,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 5,
+   "notes": 0
+  },
+  {
+   "id": "ratlings",
+   "name": "Ratlings",
+   "faction": "Astra Militarum",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Security",
+    "Infiltration"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 13,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 10,
+   "notes": 0
+  },
+  {
+   "id": "raveners",
+   "name": "Raveners",
+   "faction": "Tyranids",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Infiltration"
+   ],
+   "booksVersion": "November ’25",
+   "datacards": 6,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 4,
+   "notes": 0
+  },
+  {
+   "id": "sanctifiers",
+   "name": "Sanctifiers",
+   "faction": "Agents of the Imperium",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "February ’26",
+   "datacards": 11,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 10,
+   "notes": 0
+  },
+  {
+   "id": "scout-squad",
+   "name": "Scout Squad",
+   "faction": "Space Marines",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 6,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 8,
+   "notes": 0
+  },
+  {
+   "id": "spectre-squad",
+   "name": "Spectre Squad",
+   "faction": "Astra Militarum",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "",
+   "datacards": 12,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 10,
+   "notes": 0
+  },
+  {
+   "id": "tempestus-aquilons",
+   "name": "Tempestus Aquilons",
+   "faction": "Astra Militarum",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Recon"
+   ],
+   "booksVersion": "",
+   "datacards": 8,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 10,
+   "notes": 0
+  },
+  {
+   "id": "vespid-stingwings",
+   "name": "Vespid Stingwings",
+   "faction": "T’au Empire",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Recon"
+   ],
+   "booksVersion": "November ’25",
+   "datacards": 7,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 10,
+   "notes": 0
+  },
+  {
+   "id": "void-dancer-troupe",
+   "name": "Void-dancer Troupe",
+   "faction": "Harlequins",
+   "grandFaction": "Aeldari",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "October ’25",
+   "datacards": 4,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 7,
+   "notes": 0
+  },
+  {
+   "id": "warpcoven",
+   "name": "Warpcoven",
+   "faction": "Thousand Sons",
+   "grandFaction": "Chaos",
+   "archetypes": [
+    "Security",
+    "Recon"
+   ],
+   "booksVersion": "January ’26",
+   "datacards": 10,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 5,
+   "notes": 1
+  },
+  {
+   "id": "wolf-scouts",
+   "name": "Wolf Scouts",
+   "faction": "Space Marines",
+   "grandFaction": "Imperium",
+   "archetypes": [
+    "Seek & Destroy",
+    "Recon"
+   ],
+   "booksVersion": "APRIL ’26",
+   "datacards": 8,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 1,
+   "notes": 0
+  },
+  {
+   "id": "wrecka-krew",
+   "name": "Wrecka Krew",
+   "faction": "Orks",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Security"
+   ],
+   "booksVersion": "",
+   "datacards": 7,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 7,
+   "notes": 2
+  },
+  {
+   "id": "wyrmblade",
+   "name": "Wyrmblade",
+   "faction": "Genestealer Cults",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Seek & Destroy",
+    "Infiltration"
+   ],
+   "booksVersion": "November ’25",
+   "datacards": 9,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 13,
+   "notes": 0
+  },
+  {
+   "id": "xv26-stealth-battlesuits",
+   "name": "XV26 Stealth Battlesuits",
+   "faction": "T’au Empire",
+   "grandFaction": "Xenos",
+   "archetypes": [
+    "Infiltration",
+    "Recon"
+   ],
+   "booksVersion": "",
+   "datacards": 8,
+   "strategyPloys": 4,
+   "firefightPloys": 4,
+   "equipment": 4,
+   "slots": 6,
+   "notes": 0
+  }
+ ]
+}

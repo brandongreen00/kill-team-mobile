@@ -1,0 +1,2020 @@
+{
+ "id": "inquisitorial-agent",
+ "name": "Inquisitorial Agent",
+ "faction": "Agents of the Imperium",
+ "grandFaction": "Imperium",
+ "archetypes": [
+  "Any"
+ ],
+ "booksVersion": "",
+ "books": [
+  {
+   "book": "Inquisitorial Agents",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "",
+   "lastUpdate": "June 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_17-06_kill_team_team_rules_inquisitorial_agents_online_rules-fptr16sizq-dnjndug2ax.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/inquisitorial-agent/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "INTERROGATOR",
+   "datacardId": "inquisitorial-agent.interrogator-agent",
+   "count": 1,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "fixed",
+   "fixedWeapons": [],
+   "alwaysWeapons": [
+    "Extended stock relic autopistol",
+    "Fists"
+   ],
+   "choices": [
+    "INTERROGATOR"
+   ]
+  },
+  "slots": 11,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "INTERROGATOR"
+    ],
+    "rawText": "1 INQUISITORIAL AGENT INTERROGATOR operative"
+   },
+   {
+    "index": 2,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "TOME-SKULL"
+    ],
+    "rawText": "1 INQUISITORIAL AGENT TOME-SKULL operative"
+   },
+   {
+    "index": 3,
+    "count": 5,
+    "kind": "list",
+    "roles": [
+     "AUTOSAVANT",
+     "QUESTKEEPER",
+     "DEATH WORLD VETERAN",
+     "ENLIGHTENER",
+     "HEXORCIST",
+     "MYSTIC",
+     "PENAL LEGIONNAIRE",
+     "PISTOLIER",
+     "GUN SERVITOR"
+    ],
+    "rawText": "5 INQUISITORIAL AGENT operatives selected from the following list:"
+   },
+   {
+    "index": 4,
+    "count": 5,
+    "kind": "fixed",
+    "roles": [
+     ""
+    ],
+    "rawText": "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups)."
+   }
+  ],
+  "list": [
+   {
+    "role": "TOME-SKULL",
+    "datacardAnchor": "Tome-Skull",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 INQUISITORIAL AGENT TOME-SKULL operative",
+    "group": 2,
+    "datacardId": "inquisitorial-agent.tome-skull",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "AUTOSAVANT",
+    "datacardAnchor": "Autosavant-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "AUTOSAVANT",
+    "group": 3,
+    "datacardId": "inquisitorial-agent.autosavant-agent",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Mechanical appendages"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "QUESTKEEPER",
+    "datacardAnchor": "Questkeeper-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "QUESTKEEPER",
+    "group": 3,
+    "datacardId": "inquisitorial-agent.questkeeper-agent",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Eviscerator"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "DEATH WORLD VETERAN",
+    "datacardAnchor": "Death-World-Veteran-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DEATH WORLD VETERAN",
+    "group": 3,
+    "datacardId": "inquisitorial-agent.death-world-veteran-agent",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Knife",
+     "Polearm"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "ENLIGHTENER",
+    "datacardAnchor": "Enlightener-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ENLIGHTENER",
+    "group": 3,
+    "datacardId": "inquisitorial-agent.enlightener-agent",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Paired blades"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "HEXORCIST",
+    "datacardAnchor": "Hexorcist-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEXORCIST",
+    "group": 3,
+    "datacardId": "inquisitorial-agent.hexorcist-agent",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Shotgun",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "MYSTIC",
+    "datacardAnchor": "Mystic-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MYSTIC",
+    "group": 3,
+    "datacardId": "inquisitorial-agent.mystic-agent",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "PENAL LEGIONNAIRE",
+    "datacardAnchor": "Penal-Legionnaire-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PENAL LEGIONNAIRE",
+    "group": 3,
+    "datacardId": "inquisitorial-agent.penal-legionnaire-agent",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Hand flamer",
+     "Chainsword"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "PISTOLIER",
+    "datacardAnchor": "Pistolier-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PISTOLIER",
+    "group": 3,
+    "datacardId": "inquisitorial-agent.pistolier-agent",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Scoped plasma pistol",
+     "Suppressed autopistol",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUN SERVITOR",
+    "datacardAnchor": "Requisitioned-Gun-Servitor",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "inquisitorial-agent.g3e9.opt1",
+      "label": "Heavy bolter; servo-claw",
+      "weapons": [
+       "Heavy bolter",
+       "Servo claw"
+      ]
+     },
+     {
+      "id": "inquisitorial-agent.g3e9.opt2",
+      "label": "Multi-melta; servo-claw",
+      "weapons": [
+       "Multi-melta",
+       "Servo claw"
+      ]
+     },
+     {
+      "id": "inquisitorial-agent.g3e9.opt3",
+      "label": "Plasma cannon; servo-claw",
+      "weapons": [
+       "Plasma cannon",
+       "Servo claw"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUN SERVITOR with one of the following options:",
+    "group": 3,
+    "datacardId": "inquisitorial-agent.requisitioned-gun-servitor",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "",
+    "datacardAnchor": "",
+    "count": 5,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups).",
+    "group": 4,
+    "datacardId": "",
+    "isLeader": false,
+    "uniqueUnlessRole": true
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "INTERROGATOR",
+    "datacardAnchor": "Interrogator-Agent",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 INQUISITORIAL AGENT INTERROGATOR operative",
+    "group": 1,
+    "datacardId": "inquisitorial-agent.interrogator-agent",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Extended stock relic autopistol",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": []
+   },
+   {
+    "kind": "maxCount",
+    "role": "GUN SERVITOR",
+    "max": 2
+   },
+   {
+    "kind": "custom",
+    "text": "Your kill team (including any REQUISITIONED operatives) cannot include more than one weapon with the Piercing 2 weapon rule, and cannot include more than three weapons with the Piercing X (excluding Piercing Crits X) weapon rule combined.",
+    "hook": "inquisitorial-agent.your-kill-team-including-any-requisitioned"
+   }
+  ],
+  "footnotes": {},
+  "designerNotes": [],
+  "rawText": "1 INQUISITORIAL AGENT INTERROGATOR operative\n\n1 INQUISITORIAL AGENT TOME-SKULL operative\n\n5 INQUISITORIAL AGENT operatives selected from the following list:\n\nAUTOSAVANT\n\nQUESTKEEPER\n\nDEATH WORLD VETERAN\n\nENLIGHTENER\n\nHEXORCIST\n\nMYSTIC\n\nPENAL LEGIONNAIRE\n\nPISTOLIER\n\nGUN SERVITOR with one of the following options:\n\nHeavy bolter; servo-claw\n\nMulti-melta; servo-claw\n\nPlasma cannon; servo-claw\n\n5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups).\n\nYour kill team can only include each operative on this list once, unless you’re not including any REQUISITIONED operatives, in which case you can include up to two GUN SERVITOR operatives, but each one must have different options. Your kill team (including any REQUISITIONED operatives) cannot include more than one weapon with the Piercing 2 weapon rule, and cannot include more than three weapons with the Piercing X (excluding Piercing Crits X) weapon rule combined."
+ },
+ "datacards": [
+  {
+   "id": "inquisitorial-agent.interrogator-agent",
+   "teamId": "inquisitorial-agent",
+   "name": "Interrogator Agent",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "LEADER",
+    "INTERROGATOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Extended stock relic autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 12,
+         "raw": "Range 12\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.interrogator-agent.inquisitorial-tomes",
+     "name": "Inquisitorial Tomes",
+     "text": "STRATEGIC GAMBIT if this operative is in the killzone and/or when this operative is activated. Select one of the following INQUISITORIAL TOME rules for this operative to have, and one for a friendly INQUISITORIAL AGENT TOME-SKULL operative to have (they can be the same, and ignore the rule you didn’t select for each operative):\n\nDenunciation: Whenever a friendly INQUISITORIAL AGENT operative is shooting against, fighting against or retaliating against an enemy operative within 2\" of friendly operatives with this rule, add 1 to the Atk stat of that friendly operative’s weapons.\n\nSanctification: Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly INQUISITORIAL AGENT operative within 2\" of friendly operatives with this rule, subtract 1 from the Atk stat of that enemy operative’s weapons."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Ruthless, resourceful and skilled in all manner of clandestine and war-making skills, Interrogators are selected by the Inquisitor they serve for their dogged determination and unflagging loyalty, and are on the path to becoming Inquisitors themselves."
+  },
+  {
+   "id": "inquisitorial-agent.tome-skull",
+   "teamId": "inquisitorial-agent",
+   "name": "Tome-Skull",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "TOME-SKULL"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 5,
+   "weapons": [],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.tome-skull.consecrated-tome",
+     "name": "Consecrated Tome",
+     "text": "This operative can have an INQUISITORIAL TOME rule (see INTERROGATOR). Note it keeps that rule even if that friendly INTERROGATOR operative is removed from the killzone."
+    },
+    {
+     "id": "inquisitorial-agent.tome-skull.machine",
+     "name": "Machine",
+     "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back and Reposition.\n\nIt cannot retaliate or assist in a fight.\n\nWhenever determining control of a marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhenever this operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"."
+    },
+    {
+     "id": "inquisitorial-agent.tome-skull.expendable",
+     "name": "Expendable",
+     "text": "This operative is ignored for your opponent’s kill/elimination op (when it’s incapacitated, and when determining your starting number of operatives). It’s also ignored for victory conditions and scoring VPs if either require operatives to ‘escape’, ‘survive’ or be incapacitated by enemy operatives (if it escapes/survives/is incapacitated, determining how many operatives must escape/survive/be incapacitated, etc.)."
+    },
+    {
+     "id": "inquisitorial-agent.tome-skull.group-activation",
+     "name": "Group Activation",
+     "text": "Whenever this operative is expended, you must then activate a ready friendly INQUISITORIAL AGENT INTERROGATOR operative (if able) before your opponent activates. The same is true in reverse (INTERROGATOR followed by TOME-SKULL). When that other operative is expended, your opponent then activates as normal."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "These familiars are specialised servo-skulls designed to secure and hold open a treasured volume. The books chosen by Interrogators for a Tome-skull to bear into the field are seeped in holy power and filled with arcane lore, sanctifying ground and renouncing daemonic spirits."
+  },
+  {
+   "id": "inquisitorial-agent.autosavant-agent",
+   "teamId": "inquisitorial-agent",
+   "name": "Autosavant Agent",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "AUTOSAVANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Mechanical appendages",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 1,
+       "dmgC": 2,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.autosavant-agent.scrivener",
+     "name": "Scrivener",
+     "text": "Each subsequent time your opponent uses each ploy during the battle (excluding Command Re-roll), if this operative is in the killzone, you gain 1CP (to a maximum of 2CP per turning point)."
+    },
+    {
+     "id": "inquisitorial-agent.autosavant-agent.irrefutable-report",
+     "name": "Irrefutable Report",
+     "text": "Whenever this operative contests an objective marker or one of your mission markers, it always controls that marker. This takes precedence over all other rules."
+    },
+    {
+     "id": "inquisitorial-agent.autosavant-agent.lightly-armed",
+     "name": "Lightly Armed",
+     "text": "This operative cannot use any weapons that aren’t on its datacard, or perform unique actions."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Little remains of the original Human the Autosavant once was. Much of their form has been replaced with bionics dedicated to the recording of information. Whether in their base of operations or the heat of battle, they never cease their scribblings of every word and deed they witness."
+  },
+  {
+   "id": "inquisitorial-agent.death-world-veteran-agent",
+   "teamId": "inquisitorial-agent",
+   "name": "Death World Veteran Agent",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "DEATH WORLD VETERAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Knife",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 1,
+       "hit": 2,
+       "dmgN": 5,
+       "dmgC": 7,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Polearm",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.death-world-veteran-agent.hunter",
+     "name": "Hunter",
+     "text": "This operative can perform the Charge action while it has a Conceal order."
+    },
+    {
+     "id": "inquisitorial-agent.death-world-veteran-agent.weathered",
+     "name": "Weathered",
+     "text": "Once per turning point, when this operative is fighting or retaliating, in the Resolve Attack Dice step, you can ignore the damage inflicted on it from one normal success."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Every Inquisitor knows that death worlds produce the toughest soldiers in the Imperium. Many go to great lengths to draft experienced death worlders, for these warriors’ fighting skills are vital for hunting down the heretic."
+  },
+  {
+   "id": "inquisitorial-agent.enlightener-agent",
+   "teamId": "inquisitorial-agent",
+   "name": "Enlightener Agent",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "ENLIGHTENER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Paired blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Balanced",
+         "raw": "Balanced"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.enlightener-agent.no-escape",
+     "name": "No Escape",
+     "text": "Whenever an enemy operative would perform the Fall Back action while within control range of this operative, you can use this rule. If you do, roll one D6, subtracting 1 from the result if that enemy operative has a higher Wounds stat than this operative, and adding 1 if that enemy operative is wounded: on a 4+, that enemy operative cannot perform that action during that activation/counteraction (the AP spent on it isn’t refunded)."
+    },
+    {
+     "id": "inquisitorial-agent.enlightener-agent.extract-information",
+     "name": "Extract Information",
+     "text": "Whenever an enemy operative is incapacitated within this operative’s control range, you gain 1CP."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Known to some as Excruciators or Truth-Peelers, these sadistic individuals are highly valued by Inquisitors for their utter lack of mercy and uncanny skill in extracting valuable information, even from the most uncooperative of prisoners."
+  },
+  {
+   "id": "inquisitorial-agent.hexorcist-agent",
+   "teamId": "inquisitorial-agent",
+   "name": "Hexorcist Agent",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "HEXORCIST"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Shotgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.hexorcist-agent.hexorcise",
+     "name": "Hexorcise",
+     "text": "Whenever an enemy operative is visible to and within 6\" of this operative, your opponent cannot re-roll their attack or defence dice for that operative."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "inquisitorial-agent.hexorcist-agent.act.chasten",
+     "name": "CHASTEN",
+     "ap": 1,
+     "text": "Select one enemy operative that’s a valid target for this operative and within 6\" of it, then select one additional rule (including a unique action) that enemy operative has on its datacard (excluding a weapon rule or a rule that states it is ignored for the kill/elimination op). Until the end of that enemy operative’s next activation, it’s treated as not having that additional rule.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Hexorcists are holy men and women that are often mistaken for priests by the uninitiated. They believe that the Imperial Faith will only be spread at the barrel of a gun, and are experienced enough in the galaxy’s many horrors to know they must fight tooth and nail for it."
+  },
+  {
+   "id": "inquisitorial-agent.mystic-agent",
+   "teamId": "inquisitorial-agent",
+   "name": "Mystic Agent",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "PSYKER",
+    "MYSTIC"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Seek",
+         "raw": "Seek"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.mystic-agent.icon-bearer",
+     "name": "Icon Bearer",
+     "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
+    },
+    {
+     "id": "inquisitorial-agent.mystic-agent.lightly-armed",
+     "name": "Lightly Armed",
+     "text": "This operative cannot use any weapons that aren’t on its datacard."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "inquisitorial-agent.mystic-agent.act.scry",
+     "name": "SCRY",
+     "ap": 1,
+     "text": "PSYCHIC. Select one friendly INQUISITORIAL AGENT operative within 6\" of this operative, then select one of the following effects to last until the start of this operative’s next activation, until it’s incapacitated or until it performs this action again (whichever comes first):\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Using their empyric senses to ‘see’ hidden truths and the souls of those they hunt, Mystics engage in the most arcane of missions. They provide vital support to their team, scrying the future for dangers or creating shields of psychic energy."
+  },
+  {
+   "id": "inquisitorial-agent.penal-legionnaire-agent",
+   "teamId": "inquisitorial-agent",
+   "name": "Penal Legionnaire Agent",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "PENAL LEGIONNAIRE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Hand flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.penal-legionnaire-agent.chem-mask",
+     "name": "Chem-mask",
+     "text": "You can ignore any changes to this operative’s APL stat, and any changes to its stats from being injured. This operative isn’t affected by enemy operatives’ Shock and Stun weapon rules."
+    },
+    {
+     "id": "inquisitorial-agent.penal-legionnaire-agent.cruel",
+     "name": "Cruel",
+     "text": "Whenever this operative is shooting against, fighting against or retaliating against a wounded enemy operative, this operative’s weapons have the Relentless weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "There are few better sources of expendable fighters with unusual skills and a need for repentance than an Imperial Penal Legion. These hardened criminals are useful with a blade and have nothing left to lose – perfect for the kind of suicidal missions Inquisitorial Agents must face in the Emperor’s service."
+  },
+  {
+   "id": "inquisitorial-agent.pistolier-agent",
+   "teamId": "inquisitorial-agent",
+   "name": "Pistolier Agent",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "PISTOLIER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Scoped plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 12,
+         "raw": "Range 12\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 12,
+         "raw": "Range 12\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Suppressed autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.pistolier-agent.pistolier",
+     "name": "Pistolier",
+     "text": "You can ignore any changes to the Hit stat of this operative’s ranged weapons."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "inquisitorial-agent.pistolier-agent.act.pistol-barrage",
+     "name": "PISTOL BARRAGE",
+     "ap": 1,
+     "text": "Perform two free Shoot actions with this operative (this takes precedence over action restrictions). You must select a profile of its scoped plasma pistol for one action and its suppressed autopistol for the other (in any order).\n\nThis operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa)."
+    }
+   ],
+   "fluff": "Sometimes known as Desperadoes, these Agents are skilled killers who have honed their talents in the crime-ridden underbowels of hive worlds. Alongside the quick draw they have learned the value of the silent kill, as well as the ostentatiously explosive."
+  },
+  {
+   "id": "inquisitorial-agent.questkeeper-agent",
+   "teamId": "inquisitorial-agent",
+   "name": "Questkeeper Agent",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "QUESTKEEPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Eviscerator",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.questkeeper-agent.irrepressible-purpose",
+     "name": "Irrepressible Purpose",
+     "text": "If this operative is incapacitated while fighting or retaliating, you can strike the enemy operative in that sequence with one of your unresolved successes before this operative removed from the killzone."
+    },
+    {
+     "id": "inquisitorial-agent.questkeeper-agent.zealot",
+     "name": "Zealot",
+     "text": "Whenever an attack dice inflicts damage of 3 or more on this operative, roll one D6: on a 5+, subtract 1 from that inflicted damage."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Questkeepers – known also as Knight-Errants, Penitents and many other names – are fanatical zealots dedicated to the Imperial Creed. With an intense hatred for foes of the Emperor, they execute sworn quests to slaughter heretics and traitors."
+  },
+  {
+   "id": "inquisitorial-agent.requisitioned-gun-servitor",
+   "teamId": "inquisitorial-agent",
+   "name": "Requisitioned Gun Servitor",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "INQUISITION",
+    "GUN SERVITOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 1,
+   "move": 5,
+   "save": 4,
+   "wounds": 11,
+   "weapons": [
+    {
+     "name": "Heavy bolter",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Multi-melta",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma cannon",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Servo claw",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.requisitioned-gun-servitor.lobotomised",
+     "name": "Lobotomised",
+     "text": "Whenever this operative is activated, if it’s visible to and within 3\" of another friendly INQUISITORIAL AGENT operative (excluding GUN SERVITOR) or vice versa, add 1 to this operative’s APL stat until the end of that activation."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "More machine than Human, Gun Servitors are commonplace across the Imperium, and lobotomised to the extent that they lack any kind of capacity for independent thought. Used to fulfil mundane and difficult tasks, they carry hefty loads often including heavy weapons."
+  },
+  {
+   "id": "inquisitorial-agent.sister-of-silence-prosecutor",
+   "teamId": "inquisitorial-agent",
+   "name": "Sister of Silence Prosecutor",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "ANATHEMA PSYKANA",
+    "SISTER OF SILENCE",
+    "PROSECUTOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 3,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.sister-of-silence-prosecutor.psychic-null",
+     "name": "Psychic Null",
+     "text": "PSYCHIC ranged weapons cannot inflict damage on this operative. For the effects of PSYCHIC actions, this operative cannot be selected and is never treated as being within those actions’ required distances. Whenever an operative is within 6\" of this operative:\n\nThat operative cannot perform PSYCHIC actions or use PSYCHIC additional rules.\n\nThat operative cannot use PSYCHIC ranged weapons.\n\nPSYCHIC melee weapons have no weapon rules and cannot have Dmg stats higher than 3/4."
+    }
+   ],
+   "uniqueActions": []
+  },
+  {
+   "id": "inquisitorial-agent.sister-of-silence-vigilator",
+   "teamId": "inquisitorial-agent",
+   "name": "Sister of Silence Vigilator",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "ANATHEMA PSYKANA",
+    "SISTER OF SILENCE",
+    "VIGILATOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 3,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Executioner greatblade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.sister-of-silence-vigilator.psychic-null",
+     "name": "Psychic Null",
+     "text": "PSYCHIC ranged weapons cannot inflict damage on this operative. For the effects of PSYCHIC actions, this operative cannot be selected and is never treated as being within those actions’ required distances. Whenever an operative is within 6\" of this operative:\n\nThat operative cannot perform PSYCHIC actions or use PSYCHIC additional rules.\n\nThat operative cannot use PSYCHIC ranged weapons.\n\nPSYCHIC melee weapons have no weapon rules and cannot have Dmg stats higher than 3/4."
+    }
+   ],
+   "uniqueActions": []
+  },
+  {
+   "id": "inquisitorial-agent.sister-of-silence-witchseeker",
+   "teamId": "inquisitorial-agent",
+   "name": "Sister of Silence Witchseeker",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "ANATHEMA PSYKANA",
+    "SISTER OF SILENCE",
+    "WITCHSEEKER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 3,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.sister-of-silence-witchseeker.psychic-null",
+     "name": "Psychic Null",
+     "text": "PSYCHIC ranged weapons cannot inflict damage on this operative. For the effects of PSYCHIC actions, this operative cannot be selected and is never treated as being within those actions’ required distances. Whenever an operative is within 6\" of this operative:\n\nThat operative cannot perform PSYCHIC actions or use PSYCHIC additional rules.\n\nThat operative cannot use PSYCHIC ranged weapons.\n\nPSYCHIC melee weapons have no weapon rules and cannot have Dmg stats higher than 3/4."
+    }
+   ],
+   "uniqueActions": []
+  },
+  {
+   "id": "inquisitorial-agent.tempestus-scion-gunner",
+   "teamId": "inquisitorial-agent",
+   "name": "Tempestus Scion Gunner",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "TEMPESTUS SCION",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Grenade launcher",
+     "profiles": [
+      {
+       "name": "frag",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        }
+       ]
+      },
+      {
+       "name": "krak",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Hot-shot volley gun",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Meltagun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma gun",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": []
+  },
+  {
+   "id": "inquisitorial-agent.tempestus-scion-medic",
+   "teamId": "inquisitorial-agent",
+   "name": "Tempestus Scion Medic",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "TEMPESTUS SCION",
+    "MEDIC"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Hot-shot lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.tempestus-scion-medic.medic",
+     "name": "Medic!",
+     "text": "The first time during each turning point that another friendly INQUISITORIAL AGENT operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "inquisitorial-agent.tempestus-scion-medic.act.medikit",
+     "name": "MEDIKIT",
+     "ap": 1,
+     "text": "Select one friendly INQUISITORIAL AGENT operative within this operative’s control range to regain up to 2D3 lost wounds. It cannot be an operative that the Medic! rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ]
+  },
+  {
+   "id": "inquisitorial-agent.tempestus-scion-trooper",
+   "teamId": "inquisitorial-agent",
+   "name": "Tempestus Scion Trooper",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "TEMPESTUS SCION",
+    "TROOPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Hot-shot lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "inquisitorial-agent.tempestus-scion-trooper.adaptive-equipment",
+     "name": "Adaptive Equipment",
+     "text": "You can do each of the following once per turning point:\n\nOne friendly INQUISITORIAL AGENT TEMPESTUS SCION TROOPER operative can perform the Smoke Grenadeaction.\n\nOne friendly INQUISITORIAL AGENT TEMPESTUS SCION TROOPER operative can perform the Stun Grenadeaction.\n\nThe rules for these actions are found in universal equipment. Performing these actions using this rule doesn’t count towards their action limits (i.e. if you also select those grenades from equipment)."
+    }
+   ],
+   "uniqueActions": []
+  },
+  {
+   "id": "inquisitorial-agent.tempestus-scion-vox-operator",
+   "teamId": "inquisitorial-agent",
+   "name": "Tempestus Scion Vox-Operator",
+   "keywords": [
+    "INQUISITORIAL AGENT",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "TEMPESTUS SCION",
+    "VOX-OPERATOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Hot-shot lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "inquisitorial-agent.tempestus-scion-vox-operator.act.signal",
+     "name": "SIGNAL",
+     "ap": 1,
+     "text": "SUPPORT. Select one other friendly INQUISITORIAL AGENT operative in the killzone. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative can perform this action twice during its activation, but cannot perform this action while within control range of an enemy operative."
+    }
+   ]
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "inquisitorial-agent.rule.inquisitorial-requisition",
+   "name": "Inquisitorial Requisition",
+   "text": "REQUISITIONED operatives can be taken from one of the following groups to supplement an INQUISITORIAL AGENT kill team, as specified in this kill team’s selection rules:\n\nDEATH KORPS\n\nEXACTION SQUAD\n\nIMPERIAL NAVY BREACHER\n\nKASRKIN\n\nSISTER OF SILENCE\n\nTEMPESTUS SCION\n\nThese operatives have their faction keyword replaced in all instances on their datacards with INQUISITORIAL AGENT (unless they already have it). You cannot use ploys and equipment associated with a REQUISITIONED operative’s former faction keyword, and you cannot use a REQUISITIONED operative’s former faction rules unless specified on their Inquisitorial Requisition card (it only applies to those REQUISITIONED operatives). Note that with their new faction keyword, REQUISITIONED operatives can interact with the INQUISITORIAL AGENT rules.\n\nFor example, a REQUISITIONED VOX-OPERATOR operative from the DEATH KORPS group would have its DEATH KORPS keyword replaced in all instances on its datacard with INQUISITORIAL AGENT. This allows you to select any other friendly INQUISITORIAL AGENT operative for its Signal unique action. However, the Guardsman Orders faction rule isn’t permitted, so its Relay Orders additional rule would be ignored. It would now also be a valid operative for the INQUISITORIAL AGENT MYSTIC operative’s Scry unique action.\n\nInquisitorial Requisition\n\nDeath Korps\n\n6 DEATH KORPS operatives selected from the following list:\n\nBRUISER\n\nCONFIDANT with one of the following options:\n\nBoltgun or lasgun; bayonet\n\nBolt pistol or relic laspistol; chainsword\n\nGUNNER with flamer and bayonet*\n\nGUNNER with grenade launcher and bayonet*\n\nGUNNER with meltagun and bayonet*\n\nGUNNER with plasma gun and bayonet*\n\nMEDIC\n\nSAPPER\n\nSNIPER*\n\nTROOPER\n\nVETERAN\n\nVOX-OPERATOR\n\nZEALOT\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once.\n\n* You cannot select more than three of these operatives combined.\n\nExaction Squad\n\n5 EXACTION SQUAD operatives selected from the following list:\n\nCASTIGATOR\n\nCHIRURGANT\n\nGUNNER with one of the following options:\n\nGrenade launcher; repression baton\n\nHeavy stubber; repression baton\n\nWebber; repression baton\n\nLEASHMASTER\n\nMALOCATOR\n\nMARKSMAN\n\nREVELATUM\n\nR-VR CYBER-MASTIFF\n\nSUBDUCTOR\n\nVIGILANT\n\nVOX-SIGNIFIER\n\nOther than SUBDUCTOR and VIGILANT operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two SUBDUCTOR operatives.\n\nPermitted EXACTION SQUAD faction rules: Ruthless Efficiency, Repress.\n\nImperial Navy Breacher\n\n5 IMPERIAL NAVY BREACHER operatives selected from the following list:\n\nARMSMAN\n\nAXEJACK\n\nC.A.T. UNIT*\n\nENDURANT\n\nGHEISTSKULL*\n\nGRENADIER\n\nHATCHCUTTER\n\nSURVEYOR\n\nVOID-JAMMER\n\nGUNNER with one of the following options:\n\nNavis las-volley; gun butt\n\nMeltagun; gun butt\n\nPlasma gun; gun butt\n\nOther than ARMSMAN operatives, your kill team can only include each operative on this list once. Your kill team can only include a GHEISTSKULL operative if it also includes a VOID-JAMMER operative, and it can only include a C.A.T. UNIT operative if it also includes a SURVEYOR operative.\n\n* These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total.\n\nPermitted IMPERIAL NAVY BREACHER faction rule: Void Armour.\n\nKasrkin\n\n5 KASRKIN operatives selected from the following list:\n\nMEDIC KASRKIN\n\nDEMO-TROOPER\n\nGUNNER KASRKIN with flamer and gun butt*\n\nGUNNER with grenade launcher and gun butt*\n\nGUNNER with hot-shot volley gun and gun butt*\n\nGUNNER with meltagun and gun butt*\n\nGUNNER with plasma gun and gun butt*\n\nRECON-TROOPER KASRKIN\n\nSHARPSHOOTER KASRKIN*\n\nTROOPER KASRKIN\n\nVOX-TROOPER KASRKIN\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once.\n\n* You cannot select more than two of these operatives combined.\n\nSister of Silence\n\n5 SISTER OF SILENCE operatives selected from the following list:\n\nPROSECUTOR\n\nVIGILATOR\n\nWITCHSEEKER\n\nTempestus Scion\n\n5 TEMPESTUS SCION operatives selected from the following list:\n\nGUNNER with flamer and gun butt\n\nGUNNER with grenade launcher and gun butt\n\nGUNNER with hot-shot volley gun and gun butt\n\nGUNNER with meltagun and gun butt\n\nGUNNER with plasma gun and gun butt\n\nMEDIC\n\nTROOPER\n\nVOX-OPERATOR\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two GUNNER operatives.",
+   "fluff": "Few authorities in the Imperium have greater jurisdiction than the Inquisition. An Inquisitor can, on a whim, requisition forces from virtually any of the Imperium’s military branches."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "inquisitorial-agent.sp.denounce",
+   "name": "DENOUNCE",
+   "text": "Select one enemy operative and roll one D3. In the Firefight phase of this turning point, that enemy operative cannot be activated or perform actions until it’s the last enemy operative to be activated, or your opponent has activated a number of enemy operatives equal to the result of the D3 (whichever comes first). This ploy costs you 1 additional CP for each previous time you’ve used it during the battle (e.g. 1CP the first time you would use it, 2CP the second time, etc.).",
+   "cp": 1,
+   "fluff": "None escape the long arm of the Inquisition. Those denounced and proclaimed guilty quail before its vengeful Agents."
+  },
+  {
+   "id": "inquisitorial-agent.sp.intense-scrutiny",
+   "name": "INTENSE SCRUTINY",
+   "text": "Whenever you’re selecting a valid target for a friendly INQUISITORIAL AGENT operative, enemy operatives within 4\" of it cannot be in cover (instead of 2\"). While this can allow such operatives to be targeted (assuming they’re visible), it doesn’t remove their cover save (if any), unless the friendly INQUISITORIAL AGENT operative is within 2\" as normal.",
+   "cp": 1,
+   "fluff": "There is no hiding from the all-seeing eyes of the Inquisition."
+  },
+  {
+   "id": "inquisitorial-agent.sp.quarry",
+   "name": "QUARRY",
+   "text": "Select one enemy operative to be your quarry for the turning point. Whenever a friendly INQUISITORIAL AGENT operative is shooting against, fighting against or retaliating against your quarry, that friendly operative’s weapons have the Ceaseless weapon rule. Whenever your quarry is incapacitated, you can select a new enemy operative to be your quarry (and can continue to do so during this turning point).",
+   "cp": 1,
+   "fluff": "For those judged guilty, there is no escape. Once marked for execution, the Inquisition’s quarry is doomed."
+  },
+  {
+   "id": "inquisitorial-agent.sp.irrefutable-jurisdiction",
+   "name": "IRREFUTABLE JURISDICTION",
+   "text": "Whenever an operative is shooting a friendly INQUISITORIAL AGENT operative that’s within 3\" of an objective marker, you can re-roll one of your defence dice. If that friendly operative contests that marker, you can re-roll any of your defence dice results of one result instead (e.g. results of 2).\n\nFirefight Ploys\nABSOLUTE AUTHORITY1CP\n\nAll who know of the Inquisition fear its limitless reach. Those unfortunate enough to draw the ire of its Agents are often stricken by fear.\nUse this firefight ploy during the battle, when an opponent uses a strategy or firefight ploy (excluding Command Re-roll or one that costs 0CP). Their ploy isn’t used, the CP spent on it is refunded and they cannot use that ploy again during this turning point. This ploy cannot be used to stop the same ploy more than once per battle.\n\nRELENTLESS IN PURSUIT1CP\n\nThe Inquisition pursues its foes with dogged and relentless determination.\nUse this firefight ploy when an enemy operative within 2\" of a ready friendly INQUISITORIAL AGENT operative performs an action in which it moves. After it moves, that friendly INQUISITORIAL AGENT operative can either perform a free Reposition action, but must end that move within 2\" of that enemy operative, or a free Charge action, but must end that move within control range of that enemy operative. If neither is possible, that friendly operative cannot perform those actions, this ploy isn’t used and the CP spent on it is refunded.\n\nTHE EMPEROR'S WILL1CP\n\nThe Agents of the Inquisition enforce the Emperor’s will. This authority emboldens them in their duties.\nUse this firefight ploy when a friendly INQUISITORIAL AGENT operative is activated. Until the end of that operative’s activation, you can ignore any changes to its stats (including its weapons’ stats).\n\nINTIMIDATING PRESENCE1CP\n\nThose that bear the sigils and authority of the Inquisition are rightly feared, even by the mightiest of foes.\nUse this firefight ploy when an enemy operative visible to and within 3\" of a friendly INQUISITORIAL AGENT operative, or visible to and within 6\" of a friendly MYSTIC operative, performs the Pick Up Marker or a mission action (excluding Operate Hatch). Your opponent must spend 1 additional AP for that enemy operative to perform that action (if they cannot or choose not to, the AP spent on it is refunded).\n\nFaction Equipment\nINQUISITORIAL ROSETTE\n\nA symbol of an Inquisitor’s near-boundless authority, the rosette is feared by all.\nOnce per battle, when a friendly INQUISITORIAL AGENT operative is activated, if you’ve used the Quarry strategy ploy during this turning point, you can use this rule. If you do, you can select a new enemy operative to be your quarry until the end of the turning point.\n\nCOMBAT DAGGERS\n\nIn the press of melee combat, a simple dagger can be the difference between life and death.\nFriendly INQUISITORIAL AGENT operatives have the following melee weapon. Whenever a friendly SISTER OF SILENCE operative is using it, add 1 to its Atk stat.\n\nCombat dagger\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCombat dagger\n3\n\n4+\n\n3/4\n\nARMOURED BODYSUITS\n\nLightweight yet tough, these form-fitting bodysuits provide an extra layer of protection to the wearer.\nWhenever an operative is shooting a friendly INQUISITORIAL AGENT operative (excluding TOME-SKULL) that has a 5+ Save stat, you can retain one of your defence dice results of 4 as a normal success.\n\nSERVO-SKULL\n\nServo-skulls are diminutive floating servitors that can be crafted and programmed to assist their operators with a wide range of tasks.\nOnce per battle, one friendly INQUISITORIAL AGENT operative can perform a mission action for 1 less AP.",
+   "cp": 1,
+   "fluff": "The Agents of the Inquisition are emboldened by their near-limitless authority, and will bow before neither traitor nor xenos.",
+   "weapons": [
+    {
+     "name": "Combat dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "inquisitorial-agent.fp.absolute-authority1cp",
+   "name": "ABSOLUTE AUTHORITY1CP",
+   "text": "Use this firefight ploy during the battle, when an opponent uses a strategy or firefight ploy (excluding Command Re-roll or one that costs 0CP). Their ploy isn’t used, the CP spent on it is refunded and they cannot use that ploy again during this turning point. This ploy cannot be used to stop the same ploy more than once per battle.",
+   "cp": 1,
+   "fluff": "All who know of the Inquisition fear its limitless reach. Those unfortunate enough to draw the ire of its Agents are often stricken by fear."
+  },
+  {
+   "id": "inquisitorial-agent.fp.relentless-in-pursuit1cp",
+   "name": "RELENTLESS IN PURSUIT1CP",
+   "text": "Use this firefight ploy when an enemy operative within 2\" of a ready friendly INQUISITORIAL AGENT operative performs an action in which it moves. After it moves, that friendly INQUISITORIAL AGENT operative can either perform a free Reposition action, but must end that move within 2\" of that enemy operative, or a free Charge action, but must end that move within control range of that enemy operative. If neither is possible, that friendly operative cannot perform those actions, this ploy isn’t used and the CP spent on it is refunded.",
+   "cp": 1,
+   "fluff": "The Inquisition pursues its foes with dogged and relentless determination."
+  },
+  {
+   "id": "inquisitorial-agent.fp.the-emperors-will1cp",
+   "name": "THE EMPEROR'S WILL1CP",
+   "text": "Use this firefight ploy when a friendly INQUISITORIAL AGENT operative is activated. Until the end of that operative’s activation, you can ignore any changes to its stats (including its weapons’ stats).",
+   "cp": 1,
+   "fluff": "The Agents of the Inquisition enforce the Emperor’s will. This authority emboldens them in their duties."
+  },
+  {
+   "id": "inquisitorial-agent.fp.intimidating-presence1cp",
+   "name": "INTIMIDATING PRESENCE1CP",
+   "text": "Use this firefight ploy when an enemy operative visible to and within 3\" of a friendly INQUISITORIAL AGENT operative, or visible to and within 6\" of a friendly MYSTIC operative, performs the Pick Up Marker or a mission action (excluding Operate Hatch). Your opponent must spend 1 additional AP for that enemy operative to perform that action (if they cannot or choose not to, the AP spent on it is refunded).\n\nFaction Equipment\nINQUISITORIAL ROSETTE\n\nA symbol of an Inquisitor’s near-boundless authority, the rosette is feared by all.\nOnce per battle, when a friendly INQUISITORIAL AGENT operative is activated, if you’ve used the Quarry strategy ploy during this turning point, you can use this rule. If you do, you can select a new enemy operative to be your quarry until the end of the turning point.\n\nCOMBAT DAGGERS\n\nIn the press of melee combat, a simple dagger can be the difference between life and death.\nFriendly INQUISITORIAL AGENT operatives have the following melee weapon. Whenever a friendly SISTER OF SILENCE operative is using it, add 1 to its Atk stat.\n\nCombat dagger\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCombat dagger\n3\n\n4+\n\n3/4\n\nARMOURED BODYSUITS\n\nLightweight yet tough, these form-fitting bodysuits provide an extra layer of protection to the wearer.\nWhenever an operative is shooting a friendly INQUISITORIAL AGENT operative (excluding TOME-SKULL) that has a 5+ Save stat, you can retain one of your defence dice results of 4 as a normal success.\n\nSERVO-SKULL\n\nServo-skulls are diminutive floating servitors that can be crafted and programmed to assist their operators with a wide range of tasks.\nOnce per battle, one friendly INQUISITORIAL AGENT operative can perform a mission action for 1 less AP.",
+   "cp": 1,
+   "fluff": "Those that bear the sigils and authority of the Inquisition are rightly feared, even by the mightiest of foes.",
+   "weapons": [
+    {
+     "name": "Combat dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "equipment": [
+  {
+   "id": "inquisitorial-agent.eq.inquisitorial-rosette",
+   "name": "INQUISITORIAL ROSETTE",
+   "text": "Once per battle, when a friendly INQUISITORIAL AGENT operative is activated, if you’ve used the Quarry strategy ploy during this turning point, you can use this rule. If you do, you can select a new enemy operative to be your quarry until the end of the turning point.",
+   "fluff": "A symbol of an Inquisitor’s near-boundless authority, the rosette is feared by all."
+  },
+  {
+   "id": "inquisitorial-agent.eq.combat-daggers",
+   "name": "COMBAT DAGGERS",
+   "text": "Friendly INQUISITORIAL AGENT operatives have the following melee weapon. Whenever a friendly SISTER OF SILENCE operative is using it, add 1 to its Atk stat.\n\nCombat dagger\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCombat dagger\n3\n\n4+\n\n3/4",
+   "fluff": "In the press of melee combat, a simple dagger can be the difference between life and death.",
+   "weapons": [
+    {
+     "name": "Combat dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "inquisitorial-agent.eq.armoured-bodysuits",
+   "name": "ARMOURED BODYSUITS",
+   "text": "Whenever an operative is shooting a friendly INQUISITORIAL AGENT operative (excluding TOME-SKULL) that has a 5+ Save stat, you can retain one of your defence dice results of 4 as a normal success.",
+   "fluff": "Lightweight yet tough, these form-fitting bodysuits provide an extra layer of protection to the wearer."
+  },
+  {
+   "id": "inquisitorial-agent.eq.servo-skull",
+   "name": "SERVO-SKULL",
+   "text": "Once per battle, one friendly INQUISITORIAL AGENT operative can perform a mission action for 1 less AP.",
+   "fluff": "Servo-skulls are diminutive floating servitors that can be crafted and programmed to assist their operators with a wide range of tasks."
+  }
+ ],
+ "markerGuide": "Denounce token\n\nMedic token\n\nChasten token\n\nServo-skull token\n\nDenunciation token\n\nProtection token\n\nQuarry token\n\nTome-skull marker\n\nSanctification token\n\nGuidance token\n\nWeathered token\n\nInquisitorial Rosette token",
+ "notes": [
+  "selection entry '' could not be linked to a datacard (anchor none)"
+ ],
+ "rareWeaponRules": []
+}

@@ -1,0 +1,1850 @@
+{
+ "id": "death-korps",
+ "name": "Death Korps",
+ "faction": "Astra Militarum",
+ "grandFaction": "Imperium",
+ "archetypes": [
+  "Seek & Destroy",
+  "Security"
+ ],
+ "booksVersion": "APRIL ’26",
+ "books": [
+  {
+   "book": "Death Korps",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "APRIL ’26",
+   "lastUpdate": "April 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_29-04_kill_team_team_rules_death_korps-t7f9rdqq5a-uzoyjhayvf.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/death-korps/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "WATCHMASTER",
+   "datacardId": "death-korps.watchmaster",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "death-korps.g1.opt1",
+     "label": "Boltgun; bayonet",
+     "weapons": [
+      "Boltgun",
+      "Bayonet"
+     ]
+    }
+   ],
+   "optionGroups": [
+    {
+     "id": "death-korps.g1.g1",
+     "label": "Bolt pistol, plasma pistol or relic laspistol",
+     "choices": [
+      {
+       "id": "death-korps.g1.g1o1",
+       "label": "Bolt pistol, plasma pistol",
+       "weapons": [
+        "Bolt pistol",
+        "Plasma pistol"
+       ]
+      },
+      {
+       "id": "death-korps.g1.g1o2",
+       "label": "relic laspistol",
+       "weapons": [
+        "Relic laspistol"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "death-korps.g1.g2",
+     "label": "Chainsword or power weapon",
+     "choices": [
+      {
+       "id": "death-korps.g1.g2o1",
+       "label": "Chainsword",
+       "weapons": [
+        "Chainsword"
+       ]
+      },
+      {
+       "id": "death-korps.g1.g2o2",
+       "label": "power weapon",
+       "weapons": [
+        "Power weapon"
+       ]
+      }
+     ]
+    }
+   ],
+   "loadoutMode": "either",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "WATCHMASTER"
+   ]
+  },
+  "slots": 13,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "WATCHMASTER"
+    ],
+    "rawText": "1 DEATH KORPS WATCHMASTER operative with the following:"
+   },
+   {
+    "index": 2,
+    "count": 4,
+    "kind": "fixed",
+    "roles": [
+     "TROOPER"
+    ],
+    "rawText": "4 TROOPER operatives*"
+   },
+   {
+    "index": 3,
+    "count": 9,
+    "kind": "list",
+    "roles": [
+     "BRUISER",
+     "CONFIDANT",
+     "GUNNER",
+     "GUNNER",
+     "GUNNER",
+     "GUNNER",
+     "MEDIC",
+     "SAPPER",
+     "SNIPER",
+     "SPOTTER",
+     "TROOPER",
+     "VETERAN",
+     "VOX-OPERATOR",
+     "ZEALOT"
+    ],
+    "rawText": "9 DEATH KORPS operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "TROOPER",
+    "datacardAnchor": "Death-Korps-Trooper",
+    "count": 4,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "4 TROOPER operatives*",
+    "group": 2,
+    "datacardId": "death-korps.trooper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": false
+   },
+   {
+    "role": "BRUISER",
+    "datacardAnchor": "Death-Korps-Bruiser",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BRUISER",
+    "group": 3,
+    "datacardId": "death-korps.bruiser",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Trench club"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "CONFIDANT",
+    "datacardAnchor": "Death-Korps-Confidant",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "death-korps.g3e2.opt1",
+      "label": "Boltgun or lasgun; bayonet",
+      "weapons": [
+       "Bayonet"
+      ]
+     },
+     {
+      "id": "death-korps.g3e2.opt2",
+      "label": "Bolt pistol or relic laspistol; chainsword",
+      "weapons": [
+       "Chainsword"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CONFIDANT with one of the following options:",
+    "notes": [
+     "unresolved weapon(s) in option 'Boltgun or lasgun; bayonet': ['Boltgun or lasgun']",
+     "unresolved weapon(s) in option 'Bolt pistol or relic laspistol; chainsword': ['Bolt pistol or relic laspistol']"
+    ],
+    "group": 3,
+    "datacardId": "death-korps.confidant",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Boltgun",
+     "Lasgun",
+     "Relic laspistol"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Death-Korps-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Bayonet",
+     "Flamer"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with bayonet and flamer",
+    "group": 3,
+    "datacardId": "death-korps.gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Death-Korps-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Bayonet",
+     "Grenade launcher"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with bayonet and grenade launcher",
+    "group": 3,
+    "datacardId": "death-korps.gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Death-Korps-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Bayonet",
+     "Meltagun"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with bayonet and meltagun",
+    "group": 3,
+    "datacardId": "death-korps.gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Death-Korps-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Bayonet",
+     "Plasma gun"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with bayonet and plasma gun",
+    "group": 3,
+    "datacardId": "death-korps.gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "MEDIC",
+    "datacardAnchor": "Death-Korps-Medic",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MEDIC",
+    "group": 3,
+    "datacardId": "death-korps.medic",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SAPPER",
+    "datacardAnchor": "Death-Korps-Sapper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SAPPER",
+    "group": 3,
+    "datacardId": "death-korps.sapper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Remote detonator",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SNIPER",
+    "datacardAnchor": "Death-Korps-Sniper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SNIPER",
+    "group": 3,
+    "datacardId": "death-korps.sniper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Long-las",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SPOTTER",
+    "datacardAnchor": "Death-Korps-Spotter",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SPOTTER",
+    "group": 3,
+    "datacardId": "death-korps.spotter",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Mortar barrage",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "TROOPER",
+    "datacardAnchor": "Death-Korps-Trooper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "TROOPER",
+    "group": 3,
+    "datacardId": "death-korps.trooper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": false
+   },
+   {
+    "role": "VETERAN",
+    "datacardAnchor": "Death-Korps-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "VETERAN",
+    "group": 3,
+    "datacardId": "death-korps.veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bionic arm"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "VOX-OPERATOR",
+    "datacardAnchor": "Death-Korps-Vox-Operator",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "VOX-OPERATOR",
+    "group": 3,
+    "datacardId": "death-korps.vox-operator",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "ZEALOT",
+    "datacardAnchor": "Death-Korps-Zealot",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ZEALOT",
+    "group": 3,
+    "datacardId": "death-korps.zealot",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "WATCHMASTER",
+    "datacardAnchor": "Death-Korps-Watchmaster",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "death-korps.g1.opt1",
+      "label": "Boltgun; bayonet",
+      "weapons": [
+       "Boltgun",
+       "Bayonet"
+      ]
+     }
+    ],
+    "optionGroups": [
+     {
+      "id": "death-korps.g1.g1",
+      "label": "Bolt pistol, plasma pistol or relic laspistol",
+      "choices": [
+       {
+        "id": "death-korps.g1.g1o1",
+        "label": "Bolt pistol, plasma pistol",
+        "weapons": [
+         "Bolt pistol",
+         "Plasma pistol"
+        ]
+       },
+       {
+        "id": "death-korps.g1.g1o2",
+        "label": "relic laspistol",
+        "weapons": [
+         "Relic laspistol"
+        ]
+       }
+      ]
+     },
+     {
+      "id": "death-korps.g1.g2",
+      "label": "Chainsword or power weapon",
+      "choices": [
+       {
+        "id": "death-korps.g1.g2o1",
+        "label": "Chainsword",
+        "weapons": [
+         "Chainsword"
+        ]
+       },
+       {
+        "id": "death-korps.g1.g2o2",
+        "label": "power weapon",
+        "weapons": [
+         "Power weapon"
+        ]
+       }
+      ]
+     }
+    ],
+    "loadoutMode": "either",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 DEATH KORPS WATCHMASTER operative with the following:",
+    "notes": [
+     "unresolved fixed weapon(s) 'the following': ['the following']"
+    ],
+    "group": 1,
+    "datacardId": "death-korps.watchmaster",
+    "isLeader": true,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "TROOPER"
+    ]
+   },
+   {
+    "kind": "maxItem",
+    "item": "times",
+    "max": 4
+   }
+  ],
+  "footnotes": {
+   "*": "Up to four times, instead of selecting one of these TROOPER operatives, you can select one DEATH KORPS ploy to cost you 0CP for the battle."
+  },
+  "designerNotes": [],
+  "rawText": "1 DEATH KORPS WATCHMASTER operative with the following:\n\nBoltgun; bayonet\n\nOr one option from each of the following:\n\nBolt pistol, plasma pistol or relic laspistol\n\nChainsword or power weapon\n\n4 TROOPER operatives*\n\n9 DEATH KORPS operatives selected from the following list:\n\nBRUISER\n\nCONFIDANT with one of the following options:\n\nBoltgun or lasgun; bayonet\n\nBolt pistol or relic laspistol; chainsword\n\nGUNNER with bayonet and flamer\n\nGUNNER with bayonet and grenade launcher\n\nGUNNER with bayonet and meltagun\n\nGUNNER with bayonet and plasma gun\n\nMEDIC\n\nSAPPER\n\nSNIPER\n\nSPOTTER\n\nTROOPER\n\nVETERAN\n\nVOX-OPERATOR\n\nZEALOT\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once.\n\n* Up to four times, instead of selecting one of these TROOPER operatives, you can select one DEATH KORPS ploy to cost you 0CP for the battle."
+ },
+ "datacards": [
+  {
+   "id": "death-korps.watchmaster",
+   "teamId": "death-korps",
+   "name": "Death Korps Watchmaster",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "LEADER",
+    "WATCHMASTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Relic laspistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.watchmaster.adaptive-orders",
+     "name": "Adaptive Orders",
+     "text": "If this operative doesn’t issue a GUARDSMAN ORDER as a STRATEGIC GAMBIT, you can use the Inspirational Leadership firefight ploy for 0CP during this operative’s activation."
+    },
+    {
+     "id": "death-korps.watchmaster.bring-it-down",
+     "name": "Bring it Down!",
+     "text": "STRATEGIC GAMBIT if this operative is in the killzone. Select one enemy operative. Whenever a friendly DEATH KORPS operative is shooting against, fighting against or retaliating against that enemy operative, that friendly operative’s weapons have the Punishing weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Watchmasters command squads of Death Korps in battle. Calm under pressure and unphased by the horrors of war, they are solid combat leaders who will fight tooth and nail to achieve victory as well as see their comrades survive to fight another day."
+  },
+  {
+   "id": "death-korps.bruiser",
+   "teamId": "death-korps",
+   "name": "Death Korps Bruiser",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "BRUISER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Trench club",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.bruiser.bruiser",
+     "name": "Bruiser",
+     "text": "Once per turning point, when this operative is fighting or retaliating, in the Resolve Attack Dice step, you can ignore the damage inflicted on it from one normal success. If this operative is incapacitated during the Fight action, you can strike the enemy operative in that sequence with one of your unresolved successes before this operative is removed from the killzone."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "For some, war and fighting just agrees with them. Bruisers are such people. They look the galaxy’s endless malevolent threats in the eye with a trench club in their hand, ready to bludgeon anything and everything to death."
+  },
+  {
+   "id": "death-korps.confidant",
+   "teamId": "death-korps",
+   "name": "Death Korps Confidant",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "CONFIDANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Relic laspistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.confidant.second-in-command",
+     "name": "Second in Command",
+     "text": "If a friendly WATCHMASTER operative is incapacitated and removed from the killzone, you can use this rule. If you do, until the end of the battle, this operative can issue a GUARDSMAN ORDER as a STRATEGIC GAMBIT (even though it’s not a WATCHMASTER operative)."
+    },
+    {
+     "id": "death-korps.confidant.directive",
+     "name": "Directive",
+     "text": "Whenever this operative is activated, if you haven’t used the Second in Command rule during the battle, you can select one other ready friendly DEATH KORPS operative visible to and within 6\" of it. When this operative is expended, activate that other friendly operative before your opponent activates (if that operative is a TROOPER, ignore its Group Activation rule)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Even the best Watchmasters need to call on solid tactical advice – and their Confidants are experts. Experienced troops and capable leaders themselves, they can be trusted to carry out the Watchmaster’s orders in the field as well as contribute to the formulation of a solid battle plan."
+  },
+  {
+   "id": "death-korps.gunner",
+   "teamId": "death-korps",
+   "name": "Death Korps Gunner",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Grenade launcher",
+     "profiles": [
+      {
+       "name": "frag",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        }
+       ]
+      },
+      {
+       "name": "krak",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Meltagun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma gun",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "With experience and skills in wielding a whole host of specialist weapons, Death Korps Gunners are called whether a Watchmaster needs a xenos nest burned to nothing, a bunker reduced to melted sludge or to bring down heavy enemy infantry that lasguns are insufficient for."
+  },
+  {
+   "id": "death-korps.medic",
+   "teamId": "death-korps",
+   "name": "Death Korps Medic",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "MEDIC"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.medic.medic",
+     "name": "Medic!",
+     "text": "The first time during each turning point that another friendly DEATH KORPS operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "death-korps.medic.act.medikit",
+     "name": "MEDIKIT",
+     "ap": 1,
+     "text": "Select one friendly DEATH KORPS operative within this operative’s control range to regain up to 2D3 lost wounds. It cannot be an operative that the Medic! rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "The efforts of the Medic is all that stands between life and miserable death for the troops of his squad. Equipped with little more than basic medical equipment, they strive to keep their comrades alive in the most hazardous conditions."
+  },
+  {
+   "id": "death-korps.sapper",
+   "teamId": "death-korps",
+   "name": "Death Korps Sapper",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "SAPPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Remote detonator",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "Detonate",
+         "raw": "Detonate*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.sapper.mine-layer",
+     "name": "Mine Layer",
+     "text": "This operative is carrying your Mine marker. It can perform the Pick Up Marker action on that marker, and whenever it performs the Place Marker action on that marker, it can immediately perform a free Dash action."
+    },
+    {
+     "id": "death-korps.sapper.detonate",
+     "name": "Detonate",
+     "text": "Don’t select a valid target. Instead, shoot against each operative within 2\" of your Mine marker, unless Heavy terrain is wholly intervening between that operative and that marker. Each of those operatives cannot be in cover or obscured. Roll each sequence separately in an order of your choice. This weapon cannot be selected if your Mine marker isn’t in the killzone. At the end of the action, remove your Mine marker from the killzone. In a killzone that uses the close quarters rules (e.g. Killzone: Tomb World), this weapon has the Lethal 5+ weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Whether blowing up ammo dumps or cracking open defences, many kill teams need explosives experts. Death Korps Sappers are such troops. Naturally daring, they often have to put themselves in harm’s way to plant their remote mines at the optimum point to blow their target into smithereens."
+  },
+  {
+   "id": "death-korps.sniper",
+   "teamId": "death-korps",
+   "name": "Death Korps Sniper",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "SNIPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Long-las",
+     "profiles": [
+      {
+       "name": "concealed",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "ConcealedPosition",
+         "raw": "Concealed Position*"
+        }
+       ]
+      },
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      },
+      {
+       "name": "stationary",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.sniper.concealed-position",
+     "name": "Concealed Position",
+     "text": "This operative can only use this weapon the first time it’s performing the Shoot action during the battle."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Expert marksmen, their skills honed in the harsh conditions of numerous battlefields, Death Korps Snipers are sharpshooters who specialise in cutting down key enemy troops at extreme ranges – all unseen by the foe."
+  },
+  {
+   "id": "death-korps.spotter",
+   "teamId": "death-korps",
+   "name": "Death Korps Spotter",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "SPOTTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Mortar barrage",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "death-korps.spotter.act.spot",
+     "name": "SPOT",
+     "ap": 1,
+     "text": "SUPPORT. Select one enemy operative visible to this operative. Until the end of the turning point, whenever a friendly DEATH KORPS operative within 3\" of this operative is shooting that enemy operative, you can use this effect. If you do:\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "To direct battle-winning heavy fire, forward observers form a part of kill teams. Spotters possess great focus, accurately guiding salvoes of mortar fire from safe lines even when under immense pressure. With this they can stymie enemy attacks or pin them down in their defences."
+  },
+  {
+   "id": "death-korps.trooper",
+   "teamId": "death-korps",
+   "name": "Death Korps Trooper",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "TROOPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.trooper.group-activation",
+     "name": "Group Activation",
+     "text": "Whenever this operative is expended, you must then activate one other ready friendly DEATH KORPS TROOPER operative (if able) before your opponent activates. When that other operative is expended, your opponent then activates as normal (in other words, you cannot activate more than two operatives in succession with this rule)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "These Troopers have a great deal of combat experience, gained over harsh fighting for months or even years. Armed with lasguns and bayonets, they have faced down terrible danger time and time again."
+  },
+  {
+   "id": "death-korps.veteran",
+   "teamId": "death-korps",
+   "name": "Death Korps Veteran",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "VETERAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bionic arm",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.veteran.veteran-guardsman",
+     "name": "Veteran Guardsman",
+     "text": "Whenever this operative is activated, it can receive one GUARDSMAN ORDER."
+    },
+    {
+     "id": "death-korps.veteran.bionics",
+     "name": "Bionics",
+     "text": "Normal Dmg of 3 or more inflicts 1 less damage on this operative."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Death Korps Veterans are resilient above and beyond even their peers. These troops are steel in body as well as in mind, with bionics in the place of body parts lost in battle. Despite the horrific wounds they have suffered, they fight on still, unbowed."
+  },
+  {
+   "id": "death-korps.vox-operator",
+   "teamId": "death-korps",
+   "name": "Death Korps Vox-Operator",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "VOX-OPERATOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.vox-operator.relay-orders",
+     "name": "Relay Orders",
+     "text": "Once per turning point, when this operative receives a GUARDSMAN ORDER, if it’s not within control range of enemy operatives, it can relay that order. Whenever an order is relayed, all friendly DEATH KORPS operatives in the killzone receive that order, then subtract 1 from this operative’s APL stat until the end of its next activation.\n\nSIGNAL1AP\nSUPPORT. Select one other friendly DEATH KORPS operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Vox-operators are consummate professionals, accompanying their leaders wherever required whilst carrying heavy equipment, all to receive and transmit communications that are vital for their comrades and superiors to understand the inevitable confusion of battle."
+  },
+  {
+   "id": "death-korps.zealot",
+   "teamId": "death-korps",
+   "name": "Death Korps Zealot",
+   "keywords": [
+    "DEATH KORPS",
+    "IMPERIUM",
+    "ASTRA MILITARUM",
+    "ZEALOT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "death-korps.zealot.the-emperor-protects",
+     "name": "The Emperor Protects",
+     "text": "Whenever an operative is shooting this operative, you can re-roll any of your defence dice."
+    },
+    {
+     "id": "death-korps.zealot.uplifting-primer",
+     "name": "Uplifting Primer",
+     "text": "SUPPORT. Whenever a friendly DEATH KORPS operative is within 3\" of this operative, that friendly operative’s weapons have the Severe weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Death Korps Zealots are deeply spiritual warriors, often claiming their survival through the horrifying battlefields they’ve experienced is only thanks to the direct intervention of the Emperor himself."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "death-korps.rule.guardsmen-orders",
+   "name": "Guardsmen Orders",
+   "text": "STRATEGIC GAMBIT and SUPPORT. A friendly DEATH KORPS WATCHMASTER operative can issue a GUARDSMAN ORDER. Whenever it does, select one GUARDSMAN ORDER for all friendly DEATH KORPS operatives within 6\" of it to receive.\n\nWhenever a friendly operative receives a GUARDSMAN ORDER, apply its rules until the end of the turning point. Operatives cannot benefit from more than one GUARDSMAN ORDER at once; they only benefit from the most recent order they received during the turning point.\n\nTake Aim!\n\nOutfitted and trained for attritional infantry combat, the soldiers of Krieg have undertaken endless hours of lasgun drills.\n\nRanged weapons of operatives that received this order (excluding mortar barrage and remote detonator) have the Ceaseless weapon rule.\n\nFix Bayonets!\n\nThe kind of warfare undertaken by the Death Korps of Krieg requires their troopers to be well versed in close-quarters fighting and trench clearance.\n\nMelee weapons of operatives that received this order have the Ceaseless weapon rule.\n\nDig In!\n\nObstinate to the last, the soldiers of Krieg establish defensive positions and hold them with grim determination.\n\nWhenever an operative is shooting a friendly operative that’s received this order, if you can retain any cover saves, you can re-roll any of your defence dice results of one result (e.g. results of 2).\n\nMove! Move! Move!\n\nResponding to a barked order from their Watchmaster, the soldiers of Krieg pick up the pace and hustle towards their next objective.\n\nWhenever an operative that’s received this order is performing the Reposition action, add 1\" to its Move stat.",
+   "fluff": "The soldiers of the Death Korps of Krieg are unquestioningly loyal to their officers, following barked orders with a speed and efficiency that is the envy of many other regiments."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "death-korps.sp.siege-warfare",
+   "name": "SIEGE WARFARE",
+   "text": "Friendly DEATH KORPS operatives’ ranged weapons have the Saturate and Accurate 1 weapon rules.",
+   "cp": 1,
+   "fluff": "Death Korps infantry are at home in the dreadful grind of siege warfare, repelling their foes with overlapping fields of withering fire."
+  },
+  {
+   "id": "death-korps.sp.take-cover",
+   "name": "TAKE COVER",
+   "text": "Whenever an operative is shooting a friendly DEATH KORPS operative, if you can retain any cover saves, improve that friendly operative’s Save stat by 1.",
+   "cp": 1,
+   "fluff": "Used to fighting in the close confines of trenches and tunnels, Krieg soldiers make excellent use of whatever meagre cover they can find."
+  },
+  {
+   "id": "death-korps.sp.clear-the-line",
+   "name": "CLEAR THE LINE",
+   "text": "Friendly DEATH KORPS operatives’ melee weapons have the Accurate 1 weapon rule. Whenever a friendly DEATH KORPS operative is fighting wholly within your territory, or whenever it’s retaliating, its melee weapons also have the Severe weapon rule.",
+   "cp": 1,
+   "fluff": "Should the enemy break through, the soldiers of Krieg are disciplined enough to retain their composure and repel the foe."
+  },
+  {
+   "id": "death-korps.sp.regroup",
+   "name": "REGROUP",
+   "text": "SUPPORT. Select one friendly DEATH KORPS operative that’s more than 3\" from enemy operatives. Each other friendly DEATH KORPS operative within 5\" of that operative and not within control range of enemy operatives can immediately perform a free Dash action in an order of your choice, but each that does so must end that move closer to that operative. Note that a Comms Device from universal equipment only affects the second distance of this rule.\n\nYou cannot use this ploy and the Chronometer faction equipment STRATEGIC GAMBIT during the same turning point.\n\nFirefight Ploys\nINSPIRATIONAL LEADERSHIP\n\nThe greatest officers lead by example, issuing orders with calm precision even as they cut down their foes.\nSUPPORT. Use this firefight ploy during a friendly DEATH KORPS WATCHMASTER or DEATH KORPS CONFIDANT operative’s activation, before or after it performs an action. It issues a GUARDSMAN ORDER.\n\nCOMBINED ARMS\n\nPrecisely coordinated fire is capable of taking down even the most potent of enemies.\nUse this firefight ploy after rolling your attack dice for a friendly DEATH KORPS operative, if it’s shooting an enemy operative that’s been shot by another friendly DEATH KORPS operative during this turning point. You can re-roll any of your attack dice.\n\nIN LIFE, SHAME\n\nThe Cult of Krieg demand sacrifice in the name of the Emperor, so those who are yet to give their lives must atone by achieving ever greater feats upon the battlefield.\nUse this firefight ploy when a friendly DEATH KORPS operative is activated and given an Engage order. It receives every GUARDSMAN ORDER. This takes precedence over the normal rule that operatives cannot benefit from more than one GUARDSMAN ORDER at once.\n\nIN DEATH, ATONEMENT\n\nAll soldiers of Krieg are destined to die in battle. The Cult of Sacrifice teaches that in death they will earn forgiveness for the sins of their forebears.\nUse this firefight ploy when a ready friendly DEATH KORPS operative is incapacitated, if it isn’t within control range of enemy operatives. Before it’s removed from the killzone, it can immediately perform one free action and you can change its order to do so. Note that friendly operative is injured for the duration of that action.\n\nFaction Equipment\nCHRONOMETER\n\nKrieg combat operations are performed to strict schedules. Synchronised chronometers ensure operatives adhere to the time frames laid down by command.\nOnce per battle STRATEGIC GAMBIT in the first or second turning point. Each friendly DEATH KORPS operative wholly within your territory can immediately perform a free Dash action in an order of your choice, but each that does so must end that move closer to an opponent’s drop zone or killzone edge.\n\nYou cannot use this STRATEGIC GAMBIT and the Regroup strategy ploy during the same turning point.\n\nCOMM-BEADS\n\nVox-casters and receivers allow Death Korps soldiers to remain in contact even as they are separated in the confusion of battle.\nWhenever a friendly DEATH KORPS WATCHMASTER or friendly DEATH KORPS CONFIDANT operative issues a GUARDSMAN ORDER, you can use this rule. If you do, instead of each friendly DEATH KORPS operative within 6\" of it receiving that order, you can select one friendly DEATH KORPS operative to receive that order.\n\nHAND AXES\n\nIssued primarily as tools rather than weapons, these sharp-bladed axes can be utilised in melee should close confines prevent the use of bayonets.\nFriendly DEATH KORPS operatives have the following melee weapon:\n\nHand axe\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nHand axe\n3\n\n4+\n\n3/4\n\nGAS BOMBARDMENT\n\nCalling for artillery support, the Death Korps request a chemical barrage, knowing full well that even enviro-sealed uniforms will not protect them from the poisonous fumes.\nOnce per battle STRATEGIC GAMBIT. Place your Gas marker in the killzone; it cannot be placed underneath Vantage terrain. Whenever an operative is within 3\" of that marker, subtract 1 from its APL stat. In the Ready step of the next Strategy phase, remove that marker. Note that an operative’s APL stat is only changed while it’s within 3\" of that marker. If it moves more than 3\" from that marker, its APL stat is no longer changed by this rule.",
+   "cp": 1,
+   "fluff": "Even in the confusion of combat, the Death Korps of Krieg retain their focus, returning to formation as they destroy the enemy with accurate las fire.",
+   "weapons": [
+    {
+     "name": "Hand axe",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "death-korps.fp.inspirational-leadership",
+   "name": "INSPIRATIONAL LEADERSHIP",
+   "text": "SUPPORT. Use this firefight ploy during a friendly DEATH KORPS WATCHMASTER or DEATH KORPS CONFIDANT operative’s activation, before or after it performs an action. It issues a GUARDSMAN ORDER.",
+   "cp": 1,
+   "fluff": "The greatest officers lead by example, issuing orders with calm precision even as they cut down their foes."
+  },
+  {
+   "id": "death-korps.fp.combined-arms",
+   "name": "COMBINED ARMS",
+   "text": "Use this firefight ploy after rolling your attack dice for a friendly DEATH KORPS operative, if it’s shooting an enemy operative that’s been shot by another friendly DEATH KORPS operative during this turning point. You can re-roll any of your attack dice.",
+   "cp": 1,
+   "fluff": "Precisely coordinated fire is capable of taking down even the most potent of enemies."
+  },
+  {
+   "id": "death-korps.fp.in-life-shame",
+   "name": "IN LIFE, SHAME",
+   "text": "Use this firefight ploy when a friendly DEATH KORPS operative is activated and given an Engage order. It receives every GUARDSMAN ORDER. This takes precedence over the normal rule that operatives cannot benefit from more than one GUARDSMAN ORDER at once.",
+   "cp": 1,
+   "fluff": "The Cult of Krieg demand sacrifice in the name of the Emperor, so those who are yet to give their lives must atone by achieving ever greater feats upon the battlefield."
+  },
+  {
+   "id": "death-korps.fp.in-death-atonement",
+   "name": "IN DEATH, ATONEMENT",
+   "text": "Use this firefight ploy when a ready friendly DEATH KORPS operative is incapacitated, if it isn’t within control range of enemy operatives. Before it’s removed from the killzone, it can immediately perform one free action and you can change its order to do so. Note that friendly operative is injured for the duration of that action.\n\nFaction Equipment\nCHRONOMETER\n\nKrieg combat operations are performed to strict schedules. Synchronised chronometers ensure operatives adhere to the time frames laid down by command.\nOnce per battle STRATEGIC GAMBIT in the first or second turning point. Each friendly DEATH KORPS operative wholly within your territory can immediately perform a free Dash action in an order of your choice, but each that does so must end that move closer to an opponent’s drop zone or killzone edge.\n\nYou cannot use this STRATEGIC GAMBIT and the Regroup strategy ploy during the same turning point.\n\nCOMM-BEADS\n\nVox-casters and receivers allow Death Korps soldiers to remain in contact even as they are separated in the confusion of battle.\nWhenever a friendly DEATH KORPS WATCHMASTER or friendly DEATH KORPS CONFIDANT operative issues a GUARDSMAN ORDER, you can use this rule. If you do, instead of each friendly DEATH KORPS operative within 6\" of it receiving that order, you can select one friendly DEATH KORPS operative to receive that order.\n\nHAND AXES\n\nIssued primarily as tools rather than weapons, these sharp-bladed axes can be utilised in melee should close confines prevent the use of bayonets.\nFriendly DEATH KORPS operatives have the following melee weapon:\n\nHand axe\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nHand axe\n3\n\n4+\n\n3/4\n\nGAS BOMBARDMENT\n\nCalling for artillery support, the Death Korps request a chemical barrage, knowing full well that even enviro-sealed uniforms will not protect them from the poisonous fumes.\nOnce per battle STRATEGIC GAMBIT. Place your Gas marker in the killzone; it cannot be placed underneath Vantage terrain. Whenever an operative is within 3\" of that marker, subtract 1 from its APL stat. In the Ready step of the next Strategy phase, remove that marker. Note that an operative’s APL stat is only changed while it’s within 3\" of that marker. If it moves more than 3\" from that marker, its APL stat is no longer changed by this rule.",
+   "cp": 1,
+   "fluff": "All soldiers of Krieg are destined to die in battle. The Cult of Sacrifice teaches that in death they will earn forgiveness for the sins of their forebears.",
+   "weapons": [
+    {
+     "name": "Hand axe",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "equipment": [
+  {
+   "id": "death-korps.eq.chronometer",
+   "name": "CHRONOMETER",
+   "text": "Once per battle STRATEGIC GAMBIT in the first or second turning point. Each friendly DEATH KORPS operative wholly within your territory can immediately perform a free Dash action in an order of your choice, but each that does so must end that move closer to an opponent’s drop zone or killzone edge.\n\nYou cannot use this STRATEGIC GAMBIT and the Regroup strategy ploy during the same turning point.",
+   "fluff": "Krieg combat operations are performed to strict schedules. Synchronised chronometers ensure operatives adhere to the time frames laid down by command."
+  },
+  {
+   "id": "death-korps.eq.comm-beads",
+   "name": "COMM-BEADS",
+   "text": "Whenever a friendly DEATH KORPS WATCHMASTER or friendly DEATH KORPS CONFIDANT operative issues a GUARDSMAN ORDER, you can use this rule. If you do, instead of each friendly DEATH KORPS operative within 6\" of it receiving that order, you can select one friendly DEATH KORPS operative to receive that order.",
+   "fluff": "Vox-casters and receivers allow Death Korps soldiers to remain in contact even as they are separated in the confusion of battle."
+  },
+  {
+   "id": "death-korps.eq.hand-axes",
+   "name": "HAND AXES",
+   "text": "Friendly DEATH KORPS operatives have the following melee weapon:\n\nHand axe\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nHand axe\n3\n\n4+\n\n3/4",
+   "fluff": "Issued primarily as tools rather than weapons, these sharp-bladed axes can be utilised in melee should close confines prevent the use of bayonets.",
+   "weapons": [
+    {
+     "name": "Hand axe",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "death-korps.eq.gas-bombardment",
+   "name": "GAS BOMBARDMENT",
+   "text": "Once per battle STRATEGIC GAMBIT. Place your Gas marker in the killzone; it cannot be placed underneath Vantage terrain. Whenever an operative is within 3\" of that marker, subtract 1 from its APL stat. In the Ready step of the next Strategy phase, remove that marker. Note that an operative’s APL stat is only changed while it’s within 3\" of that marker. If it moves more than 3\" from that marker, its APL stat is no longer changed by this rule.",
+   "fluff": "Calling for artillery support, the Death Korps request a chemical barrage, knowing full well that even enviro-sealed uniforms will not protect them from the poisonous fumes."
+  }
+ ],
+ "markerGuide": "Remote Detonator token\n\nBruiser token\n\nMove Move Move token\n\nSpot token\n\nTake Aim token\n\nDig In token\n\nMedic token\n\nFix Bayonets token\n\nMine marker\n\nGas marker",
+ "notes": [],
+ "rareWeaponRules": [
+  "ConcealedPosition",
+  "Detonate"
+ ]
+}

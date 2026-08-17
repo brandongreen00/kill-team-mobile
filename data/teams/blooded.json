@@ -1,0 +1,1803 @@
+{
+ "id": "blooded",
+ "name": "Blooded",
+ "faction": "Cultists",
+ "grandFaction": "Chaos",
+ "archetypes": [
+  "Seek & Destroy",
+  "Infiltration"
+ ],
+ "booksVersion": "APRIL ’26",
+ "books": [
+  {
+   "book": "Blooded",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "APRIL ’26",
+   "lastUpdate": "April 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_29-04_kill_team_team_rules_blooded-djvqgciu6s-zvnlalulmo.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/blooded/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "CHIEFTAIN",
+   "datacardId": "blooded.traitor-chieftain",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "blooded.g1.opt1",
+     "label": "Autopistol or laspistol; chainsword or power weapon",
+     "weapons": []
+    },
+    {
+     "id": "blooded.g1.opt2",
+     "label": "Bolt pistol; chainsword",
+     "weapons": [
+      "Bolt pistol",
+      "Chainsword"
+     ]
+    },
+    {
+     "id": "blooded.g1.opt3",
+     "label": "Boltgun; bayonet",
+     "weapons": [
+      "Boltgun",
+      "Bayonet"
+     ]
+    },
+    {
+     "id": "blooded.g1.opt4",
+     "label": "Plasma pistol; improvised blade",
+     "weapons": [
+      "Plasma pistol",
+      "Improvised blade"
+     ],
+     "footnoteGroup": "^2"
+    }
+   ],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [
+    "Autopistol",
+    "Laspistol",
+    "Power weapon"
+   ],
+   "choices": [
+    "CHIEFTAIN"
+   ]
+  },
+  "slots": 13,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "CHIEFTAIN"
+    ],
+    "rawText": "1 BLOODED CHIEFTAIN operative with one of the following options:"
+   },
+   {
+    "index": 2,
+    "count": 9,
+    "kind": "list",
+    "roles": [
+     "BRIMSTONE GRENADIER",
+     "BUTCHER",
+     "COMMSMAN",
+     "CORPSEMAN",
+     "FLENSER",
+     "GUNNER",
+     "GUNNER",
+     "GUNNER",
+     "GUNNER",
+     "SHARPSHOOTER",
+     "THUG",
+     "TRENCH SWEEPER",
+     "TROOPER"
+    ],
+    "rawText": "9 BLOODED operatives selected from the following list:"
+   },
+   {
+    "index": 3,
+    "count": 4,
+    "kind": "list",
+    "roles": [
+     "ENFORCER",
+     "OGRYN",
+     "TROOPER"
+    ],
+    "rawText": "4 BLOODED operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "BRIMSTONE GRENADIER",
+    "datacardAnchor": "Traitor-Brimstone-Grenadier",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BRIMSTONE GRENADIER",
+    "group": 2,
+    "datacardId": "blooded.traitor-brimstone-grenadier",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Diabolyk bomb",
+     "Lasgun",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "BUTCHER",
+    "datacardAnchor": "Traitor-Butcher",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BUTCHER",
+    "group": 2,
+    "datacardId": "blooded.traitor-butcher",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Power weapon & cleaver"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "COMMSMAN",
+    "datacardAnchor": "Traitor-Commsman",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "COMMSMAN",
+    "group": 2,
+    "datacardId": "blooded.traitor-commsman",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "CORPSEMAN",
+    "datacardAnchor": "Traitor-Corpseman",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "CORPSEMAN",
+    "group": 2,
+    "datacardId": "blooded.traitor-corpseman",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bayonet",
+     "Stimm needle"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "FLENSER",
+    "datacardAnchor": "Traitor-Flenser",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "FLENSER",
+    "group": 2,
+    "datacardId": "blooded.traitor-flenser",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Skinning blades"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Traitor-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Bayonet",
+     "Flamer"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "^1",
+    "requires": [],
+    "rawText": "GUNNER with bayonet and flamer^1",
+    "group": 2,
+    "datacardId": "blooded.traitor-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Traitor-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Bayonet",
+     "Grenade launcher"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "^1",
+    "requires": [],
+    "rawText": "GUNNER with bayonet and grenade launcher^1",
+    "group": 2,
+    "datacardId": "blooded.traitor-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Traitor-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Bayonet",
+     "Meltagun"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "^1",
+    "requires": [],
+    "rawText": "GUNNER with bayonet and meltagun^1",
+    "group": 2,
+    "datacardId": "blooded.traitor-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Traitor-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Bayonet",
+     "Plasma gun"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "^1,2",
+    "requires": [],
+    "rawText": "GUNNER with bayonet and plasma gun^1,2",
+    "group": 2,
+    "datacardId": "blooded.traitor-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SHARPSHOOTER",
+    "datacardAnchor": "Traitor-Sharpshooter",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "^1",
+    "requires": [],
+    "rawText": "SHARPSHOOTER^1",
+    "group": 2,
+    "datacardId": "blooded.traitor-sharpshooter",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Long-las",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "THUG",
+    "datacardAnchor": "Traitor-Thug",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "THUG",
+    "group": 2,
+    "datacardId": "blooded.traitor-thug",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Heavy club"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "TRENCH SWEEPER",
+    "datacardAnchor": "Traitor-Trench-Sweeper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "TRENCH SWEEPER",
+    "group": 2,
+    "datacardId": "blooded.traitor-trench-sweeper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Shotgun",
+     "Bayonet & shield"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "TROOPER",
+    "datacardAnchor": "Traitor-Trooper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "TROOPER",
+    "group": 2,
+    "datacardId": "blooded.traitor-trooper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": false
+   },
+   {
+    "role": "ENFORCER",
+    "datacardAnchor": "Traitor-Enforcer",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 2,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ENFORCER (counts as two selections)",
+    "group": 3,
+    "datacardId": "blooded.traitor-enforcer",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Power fist"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "OGRYN",
+    "datacardAnchor": "Traitor-Ogryn",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 2,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "OGRYN (counts as two selections)",
+    "group": 3,
+    "datacardId": "blooded.traitor-ogryn",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Power maul & mutant claw"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "TROOPER",
+    "datacardAnchor": "Traitor-Trooper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "TROOPER",
+    "group": 3,
+    "datacardId": "blooded.traitor-trooper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lasgun",
+     "Bayonet"
+    ],
+    "uniqueUnlessRole": false
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "CHIEFTAIN",
+    "datacardAnchor": "Traitor-Chieftain",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "blooded.g1.opt1",
+      "label": "Autopistol or laspistol; chainsword or power weapon",
+      "weapons": []
+     },
+     {
+      "id": "blooded.g1.opt2",
+      "label": "Bolt pistol; chainsword",
+      "weapons": [
+       "Bolt pistol",
+       "Chainsword"
+      ]
+     },
+     {
+      "id": "blooded.g1.opt3",
+      "label": "Boltgun; bayonet",
+      "weapons": [
+       "Boltgun",
+       "Bayonet"
+      ]
+     },
+     {
+      "id": "blooded.g1.opt4",
+      "label": "Plasma pistol; improvised blade",
+      "weapons": [
+       "Plasma pistol",
+       "Improvised blade"
+      ],
+      "footnoteGroup": "^2"
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 BLOODED CHIEFTAIN operative with one of the following options:",
+    "notes": [
+     "unresolved weapon(s) in option 'Autopistol or laspistol; chainsword or power weapon': ['Autopistol or laspistol', 'chainsword or power weapon']"
+    ],
+    "group": 1,
+    "datacardId": "blooded.traitor-chieftain",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Autopistol",
+     "Laspistol",
+     "Power weapon"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "TROOPER"
+    ]
+   },
+   {
+    "kind": "groupCap",
+    "group": "^1",
+    "max": 3
+   },
+   {
+    "kind": "exclusive",
+    "group": "^2",
+    "text": "You cannot select this option and this operative."
+   },
+   {
+    "kind": "custom",
+    "text": "In other words, you can only have one operative with a plasma weapon.",
+    "hook": "blooded.in-other-words-you-can-only"
+   }
+  ],
+  "footnotes": {
+   "^1": "You cannot select more than three of these operatives combined.",
+   "^2": "You cannot select this option and this operative. In other words, you can only have one operative with a plasma weapon."
+  },
+  "designerNotes": [],
+  "rawText": "1 BLOODED CHIEFTAIN operative with one of the following options:\n\nAutopistol or laspistol; chainsword or power weapon\n\nBolt pistol; chainsword\n\nBoltgun; bayonet\n\nPlasma pistol; improvised blade^2\n\n9 BLOODED operatives selected from the following list:\n\nBRIMSTONE GRENADIER\n\nBUTCHER\n\nCOMMSMAN\n\nCORPSEMAN\n\nFLENSER\n\nGUNNER with bayonet and flamer^1\n\nGUNNER with bayonet and grenade launcher^1\n\nGUNNER with bayonet and meltagun^1\n\nGUNNER with bayonet and plasma gun^1,2\n\nSHARPSHOOTER^1\n\nTHUG\n\nTRENCH SWEEPER\n\nTROOPER\n\n4 BLOODED operatives selected from the following list:\n\nENFORCER (counts as two selections)\n\nOGRYN (counts as two selections)\n\nTROOPER\n\nOther than TROOPER operatives, your kill team can only include each operative on this list once.\n\n^1 You cannot select more than three of these operatives combined.\n\n^2 You cannot select this option and this operative. In other words, you can only have one operative with a plasma weapon."
+ },
+ "datacards": [
+  {
+   "id": "blooded.traitor-chieftain",
+   "teamId": "blooded",
+   "name": "Traitor Chieftain",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "LEADER",
+    "CHIEFTAIN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Laspistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Improvised blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-chieftain.blooded-icon",
+     "name": "Blooded Icon",
+     "text": "Once per turning point, when a friendly BLOODED operative that has one of your Blooded tokens is incapacitated, if this operative is within 6\" of it, you can regain that token."
+    },
+    {
+     "id": "blooded.traitor-chieftain.lead-with-strength",
+     "name": "Lead With Strength",
+     "text": "Whenever this operative has one of your Blooded tokens or is wholly within your opponent’s territory, treat it as if it’s under the GAZE OF THE GODS."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Through force of will, threat of violence and sheer charisma, Chieftains rule over kill teams of Blooded and lead them to war. Their position gives them the pick of the battlefield riches, ensuring they charge into the fray wielding the most potent of weapons and wargear."
+  },
+  {
+   "id": "blooded.traitor-brimstone-grenadier",
+   "teamId": "blooded",
+   "name": "Traitor Brimstone Grenadier",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "BRIMSTONE GRENADIER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Diabolyk bomb",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Devastating",
+         "x": 2,
+         "raw": "Devastating 2"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-brimstone-grenadier.grenadier",
+     "name": "Grenadier",
+     "text": "This operative can use frag and krak grenades (see universal equipment). Doing so doesn’t count towards any limited uses you have (i.e. if you also select those grenades from equipment for other operatives). Whenever it’s doing so, improve the Hit stat of that weapon by 1."
+    },
+    {
+     "id": "blooded.traitor-brimstone-grenadier.explosive-demise",
+     "name": "Explosive Demise",
+     "text": "If this operative is incapacitated, before it’s removed from the killzone, you can use this rule. If you do, roll two D6, or one D6 if this operative is within control range of an enemy operative. If any result is a 4+, inflict D3+2 damage on each operative visible to and within 2\" of this operative (roll separately for each). If this operative hasn’t used its diabolyk bomb during the battle, inflict D6+2 damage instead."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Brimstone Grenadiers have an unhealthy penchant for explosive slaughter, and think nothing of wielding unstable explosives capable of showering their victims with unclean alchemical acids and poisons, or even swallowing them up in roiling clouds of infernal warp sorcery."
+  },
+  {
+   "id": "blooded.traitor-butcher",
+   "teamId": "blooded",
+   "name": "Traitor Butcher",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "BUTCHER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Power weapon & cleaver",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "BloodOffering",
+         "raw": "Blood Offering*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-butcher.unholy-sustenance",
+     "name": "Unholy Sustenance",
+     "text": "Whenever this operative is fighting or retaliating, if it incapacitates the enemy operative in that sequence, it regains up to D3 lost wounds. This is cumulative with the Symbols of Bloody Worship equipment."
+    },
+    {
+     "id": "blooded.traitor-butcher.blood-offering",
+     "name": "Blood Offering",
+     "text": "Whenever this operative is fighting or retaliating with this weapon, the first time you strike with a critical success during that sequence, you gain one Blooded token."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Some amongst the Militarum Traitoris shrug off their humanity altogether, taking monstrous pleasure in hacking their enemies apart at close quarters and devouring chunks of hot, bloody flesh – sometimes while their luckless victims are still screaming their last."
+  },
+  {
+   "id": "blooded.traitor-commsman",
+   "teamId": "blooded",
+   "name": "Traitor Commsman",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "COMMSMAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "blooded.traitor-commsman.act.signal",
+     "name": "SIGNAL",
+     "ap": 1,
+     "text": "SUPPORT. Select one other friendly BLOODED operative (excluding OGRYN) visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "blooded.traitor-commsman.act.sacrilegious-actuation",
+     "name": "SACRILEGIOUS ACTUATION",
+     "ap": 1,
+     "text": "You gain one Blooded token.\n\nThis operative cannot perform this action while within control range of an enemy operative, or if it doesn’t have one of your Blooded tokens."
+    }
+   ],
+   "fluff": "Acting as the mouthpieces for their tyrannical masters, Traitor Commsmen spit relayed orders through the corrupted vox networks of Blooded kill teams, broadcasting amplified exhortations for their comrades to fight harder in the name of the blessed Octed."
+  },
+  {
+   "id": "blooded.traitor-corpseman",
+   "teamId": "blooded",
+   "name": "Traitor Corpseman",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "CORPSEMAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Stimm needle",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 5,
+       "dmgN": 1,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-corpseman.stimm-rules",
+     "name": "STIMM Rules",
+     "text": "Rejuvenated: The operative regains up to 2D3 lost wounds.\n\nEnraged: The operative’s melee weapons have the Relentless weapon rule.\n\nFortified: Whenever an attack dice inflicts damage of 3 or more on the operative, roll one D6: on a 5+, subtract 1 from that inflicted damage."
+    },
+    {
+     "id": "blooded.traitor-corpseman.regular-dosage",
+     "name": "Regular Dosage",
+     "text": "At the end of the Select Operatives step, if this operative is selected for deployment, you can select one other friendly BLOODED operative to gain one STIMM rule for the battle (excluding Rejuvenated)."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "blooded.traitor-corpseman.act.stimms",
+     "name": "STIMMS",
+     "ap": 1,
+     "text": "Select one friendly BLOODED operative within this operative’s control range, then select the Rejuvenated STIMM rule, or one other STIMM rule for that operative to have for the battle. You cannot select each STIMM rule for each operative more than once per battle.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Having cast aside the ethics and oaths of the true medicae, these twisted field surgeons specialise in concocting potent combat stimulants. These they dole out to drive their comrades into a savage battle-frenzy, and also to control them through increasing dependency."
+  },
+  {
+   "id": "blooded.traitor-enforcer",
+   "teamId": "blooded",
+   "name": "Traitor Enforcer",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "ENFORCER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power fist",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-enforcer.gruelling-disciplinarian",
+     "name": "Gruelling Disciplinarian",
+     "text": "Whenever a friendly BLOODED operative is activated within 6\" of this operative, you can ignore any changes to that operative’s stats from being injured until the end of its activation (including its weapons’ stats)."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "blooded.traitor-enforcer.act.enforce",
+     "name": "ENFORCE",
+     "ap": 1,
+     "text": "Select one other friendly BLOODED operative visible to and within 3\" of this operative. That operative can immediately perform a 1AP action for free, but it cannot move more than 2\" during that action. If the selected friendly operative is a COMMSMAN, it cannot perform the Sacrilegious Actuation or Signal actions.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Enforcers are sadistic morale officers. Some began as allegedly incorruptible Commissars, tempted or broken by diabolical artifice. Others are petty tyrants risen from the ranks and garbed mockingly in the tattered garb – or even the flayed hides – of their former masters."
+  },
+  {
+   "id": "blooded.traitor-flenser",
+   "teamId": "blooded",
+   "name": "Traitor Flenser",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "FLENSER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Skinning blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Stalk",
+         "raw": "Stalk*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-flenser.stalk",
+     "name": "Stalk",
+     "text": "Whenever this operative is fighting or retaliating with this weapon, if Light or Heavy terrain is within its control range, this weapon has the Lethal 5+ weapon rule."
+    },
+    {
+     "id": "blooded.traitor-flenser.wretched",
+     "name": "Wretched",
+     "text": "This operative can perform the Charge action while it has a Conceal order. If this operative is incapacitated during the Fight action, you can strike the enemy operative in that sequence with one of your unresolved successes before this operative is removed from the killzone."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Even their fellow Traitor Guardsmen look askance at Flensers, who mutter and cackle as they clash their skinning blades together in anticipation of the torments they will inflict in the Dark Gods’ names. Many have died beneath their wicked knives, but few swiftly."
+  },
+  {
+   "id": "blooded.traitor-gunner",
+   "teamId": "blooded",
+   "name": "Traitor Gunner",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Grenade launcher",
+     "profiles": [
+      {
+       "name": "frag",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        }
+       ]
+      },
+      {
+       "name": "krak",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Meltagun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma gun",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Where Imperial Guardsmen may be issued special weapons such as flamers or plasma guns, renegades claim them from their victims as trophies, bearing them as symbols of power and status. Wielding such a potent weapon assists them in offering more gory sacrifices to the Gods."
+  },
+  {
+   "id": "blooded.traitor-ogryn",
+   "teamId": "blooded",
+   "name": "Traitor Ogryn",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "OGRYN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 40
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 16,
+   "weapons": [
+    {
+     "name": "Power maul & mutant claw",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-ogryn.avalanche-of-muscle",
+     "name": "Avalanche of Muscle",
+     "text": "Whenever this operative ends its move during the Charge action, you can inflict D3 damage on one enemy operative within its control range."
+    },
+    {
+     "id": "blooded.traitor-ogryn.chem-enhanced",
+     "name": "Chem-enhanced",
+     "text": "You can ignore any changes to this operative’s APL stat and it’s not affected by enemy operatives’ Shock and Stun weapon rules."
+    },
+    {
+     "id": "blooded.traitor-ogryn.brute",
+     "name": "Brute",
+     "text": "Whenever your opponent is selecting a valid target, if this operative has a Conceal order, it cannot use Light terrain for cover. While this can allow this operative to be targeted (assuming it’s visible), it doesn’t remove its cover save (if any)."
+    },
+    {
+     "id": "blooded.traitor-ogryn.slow-witted",
+     "name": "Slow-witted",
+     "text": "You must spend 1 additional AP for this operative to perform the Pick Up Marker and mission actions (excluding Operate Hatch)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Savage brutes even before turning traitor, Ogryns sworn to Chaos are quick to earn mutant blessings through their strength and savagery. However, they are slow-witted and easily exploited as bodyguards, living shields or crude line breakers by their more cunning Human comrades."
+  },
+  {
+   "id": "blooded.traitor-sharpshooter",
+   "teamId": "blooded",
+   "name": "Traitor Sharpshooter",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "SHARPSHOOTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Long-las",
+     "profiles": [
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      },
+      {
+       "name": "stationary",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 1,
+         "raw": "Devastating 1"
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-sharpshooter.camo-cloak",
+     "name": "Camo Cloak",
+     "text": "Whenever an operative is shooting this operative, if you can retain any cover saves, you can retain one additional cover save. This isn’t cumulative with improved cover saves from Vantage terrain."
+    },
+    {
+     "id": "blooded.traitor-sharpshooter.a-name-whispered-in-blood",
+     "name": "A Name Whispered In Blood",
+     "text": "STRATEGIC GAMBIT in the first turning point. Select one enemy operative. Whenever this operative is shooting that enemy operative, treat this operative as if it has one of your Blooded tokens and is under the GAZE OF THE GODS."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Skilled marksmen are often scorned by the Blooded for their unwillingness to seek glory at close quarters. Yet Sharpshooters know their own worth, offering up the departed souls of each new victim as they pick them off with their longlas."
+  },
+  {
+   "id": "blooded.traitor-thug",
+   "teamId": "blooded",
+   "name": "Traitor Thug",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "THUG"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Heavy club",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-thug.tough",
+     "name": "Tough",
+     "text": "Whenever this operative is fighting or retaliating, or an operative is shooting it, Normal Dmg of 3 or more inflicts 1 less damage on it."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Amongst the Militarum Traitoris, strength and brutality count for more than discipline or loyalty. Many are the Thugs amongst their ragged ranks – violent men and woman who have become virtual ogres thanks to their inner savagery and the taint of heresy."
+  },
+  {
+   "id": "blooded.traitor-trench-sweeper",
+   "teamId": "blooded",
+   "name": "Traitor Trench Sweeper",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "TRENCH SWEEPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Shotgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bayonet & shield",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Shield",
+         "raw": "Shield*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-trench-sweeper.shield",
+     "name": "Shield",
+     "text": "Whenever this operative is fighting or retaliating with this weapon, each of your blocks can be allocated to block two unresolved successes (instead of one)."
+    },
+    {
+     "id": "blooded.traitor-trench-sweeper.shielding",
+     "name": "Shielding",
+     "text": "Whenever this operative is activated, you can use this rule. If you do, until the start of this operative’s next activation:\n\nSubtract 2\" from its Move stat.\n\nWhenever an operative is shooting this operative, you can re-roll any of your defence dice."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Trench Sweepers are that rarest of things – a traitor still loyal to their comrades. Retaining something of their former discipline, they focus on shielding their direct superiors during the advance, before surging ahead to clear a bloody path at close quarters."
+  },
+  {
+   "id": "blooded.traitor-trooper",
+   "teamId": "blooded",
+   "name": "Traitor Trooper",
+   "keywords": [
+    "BLOODED",
+    "CHAOS",
+    "TROOPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Lasgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bayonet",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "blooded.traitor-trooper.group-activation",
+     "name": "Group Activation",
+     "text": "Whenever this operative is expended, you must then activate one other ready friendly BLOODED TROOPER operative (if able) before your opponent activates. When that other operative is expended, your opponent then activates as normal (in other words, you cannot activate more than two operatives in succession with this rule)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Even the troopers of the Blooded are hardened killers, tempered amidst the fires of heresy and consumed by a selfish desire to claw their way to power. Cruel and driven, they will risk everything to catch the eye of a Dark God."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "blooded.rule.blooded",
+   "name": "Blooded",
+   "text": "You gain one Blooded token:\n\nIn the Ready step of each Strategy phase.\n\nThe first time an enemy operative is incapacitated during each turning point.\n\nThe first time a friendly operative is incapacitated within 6\" of an enemy operative during each turning point.\n\nAs a STRATEGIC GAMBIT, you can assign any of your unassigned Blooded tokens to friendly BLOODED operatives. Each operative cannot have more than one of your Blooded tokens. Then, if four or more friendly operatives in the killzone have one of your Blooded tokens, you can select one of them to be under the GAZE OF THE GODS until the end of the turning point.\n\nWhenever a friendly BLOODED operative has one of your Blooded tokens, its weapons have the Accurate 1 weapon rule. If that friendly BLOODED operative is under the GAZE OF THE GODS, you can retain one of your normal successes as a result of the Accurate 1 weapon rule as a critical success instead.",
+   "fluff": "he Blooded seek to earn the favour of malign warp entities by hurling themselves into combat and slaying the most potent foes. Should they die in the attempt, their souls may serve as acceptable sacrifices."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "blooded.sp.glory-kill",
+   "name": "GLORY KILL",
+   "text": "Select one enemy operative. Until the end of the turning point, whenever a friendly BLOODED operative is shooting against, fighting against or retaliating against that enemy operative, that shooting, fighting or retaliating operative’s weapons have the Ceaseless weapon rule, or Relentless if it has one of your Blooded tokens.",
+   "cp": 1,
+   "fluff": "By bringing down the strongest and most capable of enemies, the Blooded may provide a worthy offering to the Ruinous Powers."
+  },
+  {
+   "id": "blooded.sp.reckless-aspirant",
+   "name": "RECKLESS ASPIRANT",
+   "text": "Whenever a friendly BLOODED operative that’s wholly within your opponent’s territory and doesn’t have one of your Blooded tokens is shooting or fighting, its weapons have the Accurate 1 weapon rule.\n\nWhenever a friendly BLOODED operative that has one of your Blooded tokens is wholly within your opponent’s territory, its weapons have the Punishing weapon rule.",
+   "cp": 1,
+   "fluff": "No coward can earn glory. The Blooded are willing to risk life and limb in pursuit of malefic warp powers."
+  },
+  {
+   "id": "blooded.sp.malevolent-grit",
+   "name": "MALEVOLENT GRIT",
+   "text": "Whenever an operative is shooting a friendly BLOODED operative that has one of your Blooded tokens or is wholly within your opponent’s territory, you can re-roll one of your defence dice.",
+   "cp": 1,
+   "fluff": "Those that have earned the favour of the Dark Gods of Chaos may draw upon the warp to predict and avoid the bullets of their foes."
+  },
+  {
+   "id": "blooded.sp.bitter-demise",
+   "name": "BITTER DEMISE",
+   "text": "Whenever a friendly BLOODED operative is incapacitated, before it’s removed from the killzone, roll one D3: on a 3 (or 2+ if that friendly operative has one of your Blooded tokens), inflict damage equal to the result on one enemy operative visible to and within 2\" of that friendly operative.\n\nFirefight Ploys\nCALLOUS DISREGARD\n\nPity is a trait of the weak. The Blooded will gladly turn their guns upon their own kin if doing so will ensure the destruction of an enemy.\nUse this firefight ploy when a friendly BLOODED operative performs the Shoot action and you’re selecting a valid target. Having other friendly BLOODED operatives within an enemy operative’s control range doesn’t prevent that enemy operative from being selected. Until the end of that action, whenever you discard an attack dice as a fail, inflict damage equal to the dice result on one friendly operative of your choice within control range of the target.\n\nMOMENT OF REPUTE\n\nWhen infused with a portion of the Dark Gods’ power, the Blooded are lent infernal speed and aggression.\nUse this firefight ploy during the activation of a friendly BLOODED operative that’s under the GAZE OF THE GODS, before or after it performs an action. Until the end of that operative’s activation, add 1 to its APL stat.\n\nREWARD EARNED\n\nThe surest way to earn the attention of the Ruinous Powers is to draw blood in their name.\nUse this firefight ploy when an enemy operative is incapacitated by a friendly BLOODED operative within 2\" of it that has one of your Blooded tokens. You gain one Blooded token.\n\nDARK FAVOUR\n\nThose who have spilled the blood of the foe and earned the favour of their infernal patron may be spared from death, as long as another pays the price in their stead.\nUse this firefight ploy when a friendly BLOODED operative that has one of your Blooded tokens is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly BLOODED operative visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that other operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that other operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.\n\nFaction Equipment\nCHAOS SIGIL\n\nThe disquieting sigils carried by the Blooded bend reality and thin the veil between realspace and the ever-shifting tides of the warp.\nThe Reward Earned firefight ploy costs you 0CP.\n\nSINISTER TROPHIES\n\nThe Blooded adorn their armour with severed heads affixed to rusty spikes, cloaks and tabards of flayed skin, and all manner of other grisly trophies hacked from the corpses of their victims.\nWhenever an enemy operative is shooting against, fighting against or retaliating against a friendly BLOODED operative that has one of your Blooded tokens and is within 2\" of it, your opponent cannot re-roll their attack dice results of 1.\n\nSYMBOLS OF BLOODY WORSHIP\n\nDesperate to garner the favour of malefic warp entities, the Blooded will daub their armour with bloody runes and take risks to be imbued with malevolent power.\nWhenever a friendly BLOODED operative ends an action, if it wasn’t incapacitated but inflicted damage on any enemy operatives during that action, it regains 1 lost wound.\n\nWICKED BLADES\n\nThe Ruinous Powers respect nothing so much as the lethal arena of close combat, and so the Blooded seek to plunge their wickedly sharp weapons into the flesh of their foes.\nAdd 1 to both Dmg stats of each friendly BLOODED operative’s bayonet, bayonet & shield and improvised blade for the battle.",
+   "cp": 1,
+   "fluff": "Consumed by hatred, the Blooded spit, curse and lash out as they die, screaming aggrieved words of heresy as they land a final strike upon the foe."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "blooded.fp.callous-disregard",
+   "name": "CALLOUS DISREGARD",
+   "text": "Use this firefight ploy when a friendly BLOODED operative performs the Shoot action and you’re selecting a valid target. Having other friendly BLOODED operatives within an enemy operative’s control range doesn’t prevent that enemy operative from being selected. Until the end of that action, whenever you discard an attack dice as a fail, inflict damage equal to the dice result on one friendly operative of your choice within control range of the target.",
+   "cp": 1,
+   "fluff": "Pity is a trait of the weak. The Blooded will gladly turn their guns upon their own kin if doing so will ensure the destruction of an enemy."
+  },
+  {
+   "id": "blooded.fp.moment-of-repute",
+   "name": "MOMENT OF REPUTE",
+   "text": "Use this firefight ploy during the activation of a friendly BLOODED operative that’s under the GAZE OF THE GODS, before or after it performs an action. Until the end of that operative’s activation, add 1 to its APL stat.",
+   "cp": 1,
+   "fluff": "When infused with a portion of the Dark Gods’ power, the Blooded are lent infernal speed and aggression."
+  },
+  {
+   "id": "blooded.fp.reward-earned",
+   "name": "REWARD EARNED",
+   "text": "Use this firefight ploy when an enemy operative is incapacitated by a friendly BLOODED operative within 2\" of it that has one of your Blooded tokens. You gain one Blooded token.",
+   "cp": 1,
+   "fluff": "The surest way to earn the attention of the Ruinous Powers is to draw blood in their name."
+  },
+  {
+   "id": "blooded.fp.dark-favour",
+   "name": "DARK FAVOUR",
+   "text": "Use this firefight ploy when a friendly BLOODED operative that has one of your Blooded tokens is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly BLOODED operative visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that other operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that other operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.\n\nFaction Equipment\nCHAOS SIGIL\n\nThe disquieting sigils carried by the Blooded bend reality and thin the veil between realspace and the ever-shifting tides of the warp.\nThe Reward Earned firefight ploy costs you 0CP.\n\nSINISTER TROPHIES\n\nThe Blooded adorn their armour with severed heads affixed to rusty spikes, cloaks and tabards of flayed skin, and all manner of other grisly trophies hacked from the corpses of their victims.\nWhenever an enemy operative is shooting against, fighting against or retaliating against a friendly BLOODED operative that has one of your Blooded tokens and is within 2\" of it, your opponent cannot re-roll their attack dice results of 1.\n\nSYMBOLS OF BLOODY WORSHIP\n\nDesperate to garner the favour of malefic warp entities, the Blooded will daub their armour with bloody runes and take risks to be imbued with malevolent power.\nWhenever a friendly BLOODED operative ends an action, if it wasn’t incapacitated but inflicted damage on any enemy operatives during that action, it regains 1 lost wound.\n\nWICKED BLADES\n\nThe Ruinous Powers respect nothing so much as the lethal arena of close combat, and so the Blooded seek to plunge their wickedly sharp weapons into the flesh of their foes.\nAdd 1 to both Dmg stats of each friendly BLOODED operative’s bayonet, bayonet & shield and improvised blade for the battle.",
+   "cp": 1,
+   "fluff": "Those who have spilled the blood of the foe and earned the favour of their infernal patron may be spared from death, as long as another pays the price in their stead."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "blooded.eq.chaos-sigil",
+   "name": "CHAOS SIGIL",
+   "text": "The Reward Earned firefight ploy costs you 0CP.",
+   "fluff": "The disquieting sigils carried by the Blooded bend reality and thin the veil between realspace and the ever-shifting tides of the warp."
+  },
+  {
+   "id": "blooded.eq.sinister-trophies",
+   "name": "SINISTER TROPHIES",
+   "text": "Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly BLOODED operative that has one of your Blooded tokens and is within 2\" of it, your opponent cannot re-roll their attack dice results of 1.",
+   "fluff": "The Blooded adorn their armour with severed heads affixed to rusty spikes, cloaks and tabards of flayed skin, and all manner of other grisly trophies hacked from the corpses of their victims."
+  },
+  {
+   "id": "blooded.eq.symbols-of-bloody-worship",
+   "name": "SYMBOLS OF BLOODY WORSHIP",
+   "text": "Whenever a friendly BLOODED operative ends an action, if it wasn’t incapacitated but inflicted damage on any enemy operatives during that action, it regains 1 lost wound.",
+   "fluff": "Desperate to garner the favour of malefic warp entities, the Blooded will daub their armour with bloody runes and take risks to be imbued with malevolent power."
+  },
+  {
+   "id": "blooded.eq.wicked-blades",
+   "name": "WICKED BLADES",
+   "text": "Add 1 to both Dmg stats of each friendly BLOODED operative’s bayonet, bayonet & shield and improvised blade for the battle.",
+   "fluff": "The Ruinous Powers respect nothing so much as the lethal arena of close combat, and so the Blooded seek to plunge their wickedly sharp weapons into the flesh of their foes."
+  }
+ ],
+ "markerGuide": "Blooded Token\n\nBlooded Icon Token\n\nEnraged Stimm Token\n\nA Name Whispered in Blood Token\n\nUnder The Gaze of The Gods Token\n\nFortified Stimm Token\n\nShielding Token\n\nDiabolyk Bomb Token\n\nGlory Kill Token",
+ "notes": [],
+ "rareWeaponRules": [
+  "BloodOffering",
+  "Shield",
+  "Stalk"
+ ]
+}

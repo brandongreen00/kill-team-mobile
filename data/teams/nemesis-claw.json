@@ -1,0 +1,1366 @@
+{
+ "id": "nemesis-claw",
+ "name": "Nemesis Claw",
+ "faction": "Chaos Space Marines",
+ "grandFaction": "Chaos",
+ "archetypes": [
+  "Seek & Destroy",
+  "Infiltration"
+ ],
+ "booksVersion": "",
+ "books": [
+  {
+   "book": "Nemesis Claw",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "",
+   "lastUpdate": "June 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_17-06_kill_team_team_rules_nemesis_claw_online_rules-oyryxud2oc-jylng5bujl.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/nemesis-claw/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "VISIONARY",
+   "datacardId": "nemesis-claw.night-lord-visionary",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "nemesis-claw.g1.opt1",
+     "label": "Bolt pistol; power fist",
+     "weapons": [
+      "Bolt pistol",
+      "Power fist"
+     ]
+    },
+    {
+     "id": "nemesis-claw.g1.opt2",
+     "label": "Bolt pistol; power maul",
+     "weapons": [
+      "Bolt pistol",
+      "Power maul"
+     ]
+    },
+    {
+     "id": "nemesis-claw.g1.opt3",
+     "label": "Bolt pistol; power weapon",
+     "weapons": [
+      "Bolt pistol",
+      "Power weapon"
+     ]
+    },
+    {
+     "id": "nemesis-claw.g1.opt4",
+     "label": "Plasma pistol; Nostraman chainblade",
+     "weapons": [
+      "Plasma pistol",
+      "Nostraman chainblade"
+     ]
+    }
+   ],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "VISIONARY"
+   ]
+  },
+  "slots": 5,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "VISIONARY"
+    ],
+    "rawText": "1 NEMESIS CLAW VISIONARY equipped with one of the following options:"
+   },
+   {
+    "index": 2,
+    "count": 5,
+    "kind": "list",
+    "roles": [
+     "FEARMONGER",
+     "GUNNER",
+     "HEAVY GUNNER",
+     "SCREECHER",
+     "SKINTHIEF",
+     "VENTRILOKAR",
+     "WARRIOR"
+    ],
+    "rawText": "5 NEMESIS CLAW operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "FEARMONGER",
+    "datacardAnchor": "Night-Lord-Fearmonger",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "FEARMONGER",
+    "group": 2,
+    "datacardId": "nemesis-claw.night-lord-fearmonger",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Scoped bolt pistol",
+     "Terrorchem vial",
+     "Tainted blade"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Night-Lord-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "nemesis-claw.g2e2.opt1",
+      "label": "Bolt pistol; flamer; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Flamer",
+       "Fists"
+      ]
+     },
+     {
+      "id": "nemesis-claw.g2e2.opt2",
+      "label": "Bolt pistol; meltagun; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Meltagun",
+       "Fists"
+      ]
+     },
+     {
+      "id": "nemesis-claw.g2e2.opt3",
+      "label": "Bolt pistol; plasma gun; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Plasma gun",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER equipped with one of the following options:",
+    "group": 2,
+    "datacardId": "nemesis-claw.night-lord-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Night-Lord-Heavy-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "nemesis-claw.g2e3.opt1",
+      "label": "Bolt pistol; heavy bolter; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Heavy bolter",
+       "Fists"
+      ]
+     },
+     {
+      "id": "nemesis-claw.g2e3.opt2",
+      "label": "Bolt pistol; missile launcher; fists",
+      "weapons": [
+       "Bolt pistol",
+       "Missile launcher",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER equipped with one of the following options:",
+    "group": 2,
+    "datacardId": "nemesis-claw.night-lord-heavy-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SCREECHER",
+    "datacardAnchor": "Night-Lord-Screecher",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SCREECHER",
+    "group": 2,
+    "datacardId": "nemesis-claw.night-lord-screecher",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Lightning claws"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SKINTHIEF",
+    "datacardAnchor": "Night-Lord-Skinthief",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SKINTHIEF",
+    "group": 2,
+    "datacardId": "nemesis-claw.night-lord-skinthief",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Nostraman chainglaive"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "VENTRILOKAR",
+    "datacardAnchor": "Night-Lord-Ventrilokar",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "VENTRILOKAR",
+    "group": 2,
+    "datacardId": "nemesis-claw.night-lord-ventrilokar",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Chainsword"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "WARRIOR",
+    "datacardAnchor": "Night-Lord-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "nemesis-claw.g2e7.opt1",
+      "label": "Bolt pistol; chainsword",
+      "weapons": [
+       "Bolt pistol",
+       "Chainsword"
+      ]
+     },
+     {
+      "id": "nemesis-claw.g2e7.opt2",
+      "label": "Boltgun; fists",
+      "weapons": [
+       "Boltgun",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WARRIOR equipped with one of the following options:",
+    "group": 2,
+    "datacardId": "nemesis-claw.night-lord-warrior",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": false
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "VISIONARY",
+    "datacardAnchor": "Night-Lord-Visionary",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "nemesis-claw.g1.opt1",
+      "label": "Bolt pistol; power fist",
+      "weapons": [
+       "Bolt pistol",
+       "Power fist"
+      ]
+     },
+     {
+      "id": "nemesis-claw.g1.opt2",
+      "label": "Bolt pistol; power maul",
+      "weapons": [
+       "Bolt pistol",
+       "Power maul"
+      ]
+     },
+     {
+      "id": "nemesis-claw.g1.opt3",
+      "label": "Bolt pistol; power weapon",
+      "weapons": [
+       "Bolt pistol",
+       "Power weapon"
+      ]
+     },
+     {
+      "id": "nemesis-claw.g1.opt4",
+      "label": "Plasma pistol; Nostraman chainblade",
+      "weapons": [
+       "Plasma pistol",
+       "Nostraman chainblade"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 NEMESIS CLAW VISIONARY equipped with one of the following options:",
+    "group": 1,
+    "datacardId": "nemesis-claw.night-lord-visionary",
+    "isLeader": true,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "WARRIOR"
+    ]
+   }
+  ],
+  "footnotes": {},
+  "designerNotes": [],
+  "rawText": "1 NEMESIS CLAW VISIONARY equipped with one of the following options:\n\nBolt pistol; power fist\n\nBolt pistol; power maul\n\nBolt pistol; power weapon\n\nPlasma pistol; Nostraman chainblade\n\n5 NEMESIS CLAW operatives selected from the following list:\n\nFEARMONGER\n\nGUNNER equipped with one of the following options:\n\nBolt pistol; flamer; fists\n\nBolt pistol; meltagun; fists\n\nBolt pistol; plasma gun; fists\n\nHEAVY GUNNER equipped with one of the following options:\n\nBolt pistol; heavy bolter; fists\n\nBolt pistol; missile launcher; fists\n\nSCREECHER\n\nSKINTHIEF\n\nVENTRILOKAR\n\nWARRIOR equipped with one of the following options:\n\nBolt pistol; chainsword\n\nBoltgun; fists\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once."
+ },
+ "datacards": [
+  {
+   "id": "nemesis-claw.night-lord-visionary",
+   "teamId": "nemesis-claw",
+   "name": "Night Lord Visionary",
+   "keywords": [
+    "NEMESIS CLAW",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "PSYKER",
+    "LEADER",
+    "VISIONARY"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Nostraman chainblade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power fist",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power maul",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "It takes a singularly terrifying being to lead such a band of monsters to battle, yet the Visionary is equal to the task. Gifted with instinctual flickers of prescience, they foresee threats from within their Nemesis Claw and without, meeting them with shocking violence."
+  },
+  {
+   "id": "nemesis-claw.night-lord-fearmonger",
+   "teamId": "nemesis-claw",
+   "name": "Night Lord Fearmonger",
+   "keywords": [
+    "NEMESIS CLAW",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "FEARMONGER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Scoped bolt pistol",
+     "profiles": [
+      {
+       "name": "short range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Terrorchem vial",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 0,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Terrorchem",
+         "raw": "Terrorchem*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Tainted blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Terrorchem",
+         "raw": "Terrorchem*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "nemesis-claw.night-lord-fearmonger.terrorchem",
+     "name": "Terrorchem",
+     "text": "In the Resolve Attack Dice step, if you inflict damage with any critical successes (including as a result of the Devastating weapon rule), the operative this weapon is being used against gains one of your Terrorchem tokens (if it doesn’t already have one)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The Fearmonger is not only a master of toxins and poisons, he also relishes the slow cruelties of their effects. Whether dispensing his vile concoctions in battle or infiltrating enemy encampments to taint rations, he spreads horror, suffering and death wherever he goes."
+  },
+  {
+   "id": "nemesis-claw.night-lord-gunner",
+   "teamId": "nemesis-claw",
+   "name": "Night Lord Gunner",
+   "keywords": [
+    "NEMESIS CLAW",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Meltagun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plasma gun",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "The effects of blazing promethium, hissing melta beams and searing bolts of plasma upon living beings are horrific in the extreme. Gunners embrace the power of these terror weapons and employ them to wreak maximum havoc among the foe."
+  },
+  {
+   "id": "nemesis-claw.night-lord-heavy-gunner",
+   "teamId": "nemesis-claw",
+   "name": "Night Lord Heavy Gunner",
+   "keywords": [
+    "NEMESIS CLAW",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "HEAVY GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Heavy bolter",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Missile launcher",
+     "profiles": [
+      {
+       "name": "frag",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        }
+       ]
+      },
+      {
+       "name": "krak",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "During every hunt there is a time for subterfuge, but there is also a time to hurl such subtlety aside in favour of mowing down screaming prey. Heavy Gunners do so with pummelling hails of bolt shells, or by blasting the foe to bloody tatters with tank-busting missiles."
+  },
+  {
+   "id": "nemesis-claw.night-lord-screecher",
+   "teamId": "nemesis-claw",
+   "name": "Night Lord Screecher",
+   "keywords": [
+    "NEMESIS CLAW",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "SCREECHER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Lightning claws",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "nemesis-claw.night-lord-screecher.screecher",
+     "name": "Screecher",
+     "text": "Whenever an enemy operative within 3\" of this operative is shooting, fighting or retaliating, your opponent cannot re-roll their attack dice."
+    },
+    {
+     "id": "nemesis-claw.night-lord-screecher.appetite-for-cruelty",
+     "name": "Appetite for Cruelty",
+     "text": "Whenever this operative is fighting against a wounded enemy operative, this operative’s lightning claws have the Lethal 4+ weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Having long preyed on those weaker than themselves, Screechers have degenerated into vicious and bestial beings. Amplified by the malevolent technologies of the Vox Noctis, Screechers’ screams paralyse their victims with terror, an effect their fellow Night Lords are quick to exploit."
+  },
+  {
+   "id": "nemesis-claw.night-lord-skinthief",
+   "teamId": "nemesis-claw",
+   "name": "Night Lord Skinthief",
+   "keywords": [
+    "NEMESIS CLAW",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "SKINTHIEF"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Nostraman chainglaive",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "nemesis-claw.night-lord-skinthief.flay-them-alive",
+     "name": "Flay Them Alive",
+     "text": "Once per turning point, when this operative incapacitates an enemy operative within its control range, you can select one other enemy operative visible to and within 6\" of either this operative or the incapacitated enemy operative. Until the start of the next turning point, that other enemy operative cannot control markers or perform the Pick Up Marker or mission actions."
+    },
+    {
+     "id": "nemesis-claw.night-lord-skinthief.tyrant-of-the-skinning-pits",
+     "name": "Tyrant of the Skinning Pits",
+     "text": "Whenever this operative is fighting or retaliating, Normal and Critical Dmg of 3 or more inflicts 1 less damage on it."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Brutal overseers of the Night Lords’ hideous skinning pits, these callous killers employ their authority to act as enforcers and lieutenants to the Visionaries. Woe betide any foe that lingers too long within range of their howling Nostraman chainglaives."
+  },
+  {
+   "id": "nemesis-claw.night-lord-ventrilokar",
+   "teamId": "nemesis-claw",
+   "name": "Night Lord Ventrilokar",
+   "keywords": [
+    "NEMESIS CLAW",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "PSYKER",
+    "VENTRILOKAR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "nemesis-claw.night-lord-ventrilokar.icon-bearer",
+     "name": "Icon Bearer",
+     "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "nemesis-claw.night-lord-ventrilokar.act.disconcerting-mimicry",
+     "name": "DISCONCERTING MIMICRY",
+     "ap": 1,
+     "text": "PSYCHIC. Select one enemy operative within 6\" of this operative, then select one of the following for that enemy operative (you can only select each option once per battle):\n\nUntil the end of its next activation, subtract 1 from its APL stat.\n\nChange its order.\n\nPerform a free Dash action with it (specify the location for your opponent to move it to).\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "The voice eater carried by the Ventrilokar is fashioned from the carrion remains of a slain Space Marine, whose omophagea has been tainted by dark sorcery. This deadalive puppet can mimic the voices of those whose flesh it consumes, as well as stealing – and muttering aloud – their deepest secrets."
+  },
+  {
+   "id": "nemesis-claw.night-lord-warrior",
+   "teamId": "nemesis-claw",
+   "name": "Night Lord Warrior",
+   "keywords": [
+    "NEMESIS CLAW",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "nemesis-claw.night-lord-warrior.cruel-tormenter",
+     "name": "Cruel Tormenter",
+     "text": "Whenever this operative is shooting against, fighting against or retaliating against an injured enemy operative, or an enemy operative that has a Wounds stat of 7 or less, this operative’s weapons have the Lethal 5+ weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Those Night Lords who fight as part of the Nemesis Claws are amongst the most psychotic and savage of all their twisted kind. Whether picking their victims off from range or eviscerating and flensing them at close quarters, they are diabolical foes."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "nemesis-claw.rule.astartes",
+   "name": "Astartes",
+   "text": "During each friendly NEMESIS CLAW operative’s activation, it can perform either two Shoot actions or two Fight actions. If it’s two Shoot actions, a bolt pistol, boltgun or scoped bolt pistol must be selected for at least one of them.\n\nEach friendly NEMESIS CLAW operative can counteract regardless of its order.",
+   "fluff": "These genetically modified superhumans are made for one purpose: war."
+  },
+  {
+   "id": "nemesis-claw.rule.in-midnight-clad",
+   "name": "In Midnight Clad",
+   "text": "Whenever an enemy operative is shooting a friendly NEMESIS CLAW operative, that friendly operative is obscured if both of the following are true:\n\nIt’s more than 8\" from enemy operatives it’s visible to.\n\nIt’s within 1\" of Heavy terrain that’s not lower than it, or any part of its base is underneath Vantage terrain.",
+   "fluff": "Night Lords are one with the darkness, employing it as an ally and a weapon."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "nemesis-claw.sp.we-have-come-for-you",
+   "name": "WE HAVE COME FOR YOU",
+   "text": "Whenever a friendly NEMESIS CLAW operative is activated, if the first action it performs during that activation is the Charge action, when it ends its move during that action, you can inflict D3 damage on one enemy operative within its control range.",
+   "cp": 1,
+   "fluff": "The Night Lords strike their foes swiftly, utilising shock, awe and terror to brutalise the enemy before they can lift a blade in response."
+  },
+  {
+   "id": "nemesis-claw.sp.the-black-hunt",
+   "name": "THE BLACK HUNT",
+   "text": "Whenever a friendly NEMESIS CLAW operative is shooting against, fighting against or retaliating against a wounded enemy operative, you can re-roll one of your attack dice.",
+   "cp": 1,
+   "fluff": "A terrible malice burns within the twin hearts of each Night Lord, and they enjoy nothing more than toying with their wounded prey."
+  },
+  {
+   "id": "nemesis-claw.sp.preysight",
+   "name": "PREYSIGHT",
+   "text": "Whenever a friendly NEMESIS CLAW operative performs the Shoot action, you can use this rule. If you do, until the end of that action, that friendly operative’s ranged weapons have the Range 6” and Seek Light weapon rules.",
+   "cp": 1,
+   "fluff": "The Night Lords seem able to sense the fear of cowering prey, hunting down the craven with unerring precision."
+  },
+  {
+   "id": "nemesis-claw.sp.return-to-darkness",
+   "name": "RETURN TO DARKNESS",
+   "text": "One friendly NEMESIS CLAW operative can immediately perform a free Fall Back or Reposition action, but it must end that move with Heavy terrain within its control range, or any part of its base underneath Vantage terrain. In addition, it cannot move more than 4\" during that action and it cannot end that move closer to enemy operatives (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, ignore Wall terrain when determining this).\n\nFirefight Ploys\nVOX SCREAM\n\nBy modulating the frequency of their helm-mounted vox-units, Night Lord operatives can unleash a terrifying scream with the ability to stun an opponent.\nUse this firefight ploy when your opponent would activate an enemy operative that’s visible to a friendly NEMESIS CLAW operative. Roll one D6; if the result is higher than that enemy operative’s APL stat, your opponent cannot activate it during this activation; if the result is less than or equal to that enemy operative’s APL stat, this ploy isn’t used, the CP spent on it is refunded and you cannot use this ploy again during this turning point. If there are no other enemy operatives eligible to be activated, this ploy has no effect.\n\nDEATH TO THE FALSE EMPEROR\n\nThe Night Lords, like all Heretic Astartes, bear a particular hatred for the corpse-worshipping soldiers of the Imperium.\nUse this firefight ploy after rolling your attack dice for a friendly NEMESIS CLAW operative, if it’s shooting against, fighting against or retaliating against an enemy operative that has the IMPERIUM keyword. That friendly operative’s weapons have the Ceaseless weapon rule until the end of that sequence; if that enemy operative also has the IMPERIUM ADEPTUS ASTARTES keyword, that friendly operative’s weapons have the Relentless weapon rule until the end of that sequence instead.\n\nPROCLIVITY FOR MURDER\n\nEach brutal kill a Night Lord performs serves to feed their bloodlust and drives them to further acts of terrible violence.\nUse this firefight ploy after a friendly NEMESIS CLAW operative incapacitates an enemy operative within its control range. That friendly operative can immediately perform a free Charge or Dash action (for the former, it cannot move more than 3\"), even if it’s performed an action that prevents it from performing those actions.\n\nDIRTY FIGHTER\n\nThe Night Lords have no respect for the concept of honour and will use whatever underhanded tactics they deem necessary.\nUse this firefight ploy when a friendly NEMESIS CLAW operative is retaliating, at the start of the Resolve Attack Dice step. You can resolve one of your successes before the normal order. If you do, you cannot resolve any other successes during that sequence.\n\nFaction Equipment\nFLAYED SKIN\n\nBedecked with the bloody hides of butchered victims, the Night Lords inspire abject terror and revulsion in their enemies.\nWhenever an enemy operative is shooting against, fighting against or retaliating against a friendly NEMESIS CLAW operative within 2\" of it, your opponent cannot re-roll their attack dice results of 1.\n\nCHAIN SNARE\n\nComposed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder’s target, preventing them from fleeing.\nWhenever an enemy operative would perform the Fall Back action while within control range of a friendly NEMESIS CLAW operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.\n\nGRISLY TROPHY\n\nSevered hands and limbs, eyeballs plucked from the skulls of screaming victims – these macabre trophies and more cause the Night Lords’ foes to waver.\nOnce per battle, when a friendly NEMESIS CLAW operative incapacitates an enemy operative within 2\" of it, you can use this rule. If you do, that friendly operative gains one of your Grisly Trophy tokens (if it doesn’t already have one). Whenever a friendly NEMESIS CLAW operative that has one of your Grisly Trophy tokens is visible to and within 2\" of an enemy operative, subtract 1 from the Atk stat of that enemy operative’s weapons.\n\nCOMMS JAMMERS\n\nThe Night Lords use jamming devices to sow chaos and confusion by preventing their panicked foes from communicating.\nWhenever an enemy operative is within 3\" of a friendly NEMESIS CLAW operative, that enemy operative’s APL stat cannot be added to. Note that this doesn’t affect APL stats that have already been changed.",
+   "cp": 1,
+   "fluff": "The Night Lords move from shadow to shadow with an agility and speed belied by their transhuman bulk."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "nemesis-claw.fp.vox-scream",
+   "name": "VOX SCREAM",
+   "text": "Use this firefight ploy when your opponent would activate an enemy operative that’s visible to a friendly NEMESIS CLAW operative. Roll one D6; if the result is higher than that enemy operative’s APL stat, your opponent cannot activate it during this activation; if the result is less than or equal to that enemy operative’s APL stat, this ploy isn’t used, the CP spent on it is refunded and you cannot use this ploy again during this turning point. If there are no other enemy operatives eligible to be activated, this ploy has no effect.",
+   "cp": 1,
+   "fluff": "By modulating the frequency of their helm-mounted vox-units, Night Lord operatives can unleash a terrifying scream with the ability to stun an opponent."
+  },
+  {
+   "id": "nemesis-claw.fp.death-to-the-false-emperor",
+   "name": "DEATH TO THE FALSE EMPEROR",
+   "text": "Use this firefight ploy after rolling your attack dice for a friendly NEMESIS CLAW operative, if it’s shooting against, fighting against or retaliating against an enemy operative that has the IMPERIUM keyword. That friendly operative’s weapons have the Ceaseless weapon rule until the end of that sequence; if that enemy operative also has the IMPERIUM ADEPTUS ASTARTES keyword, that friendly operative’s weapons have the Relentless weapon rule until the end of that sequence instead.",
+   "cp": 1,
+   "fluff": "The Night Lords, like all Heretic Astartes, bear a particular hatred for the corpse-worshipping soldiers of the Imperium."
+  },
+  {
+   "id": "nemesis-claw.fp.proclivity-for-murder",
+   "name": "PROCLIVITY FOR MURDER",
+   "text": "Use this firefight ploy after a friendly NEMESIS CLAW operative incapacitates an enemy operative within its control range. That friendly operative can immediately perform a free Charge or Dash action (for the former, it cannot move more than 3\"), even if it’s performed an action that prevents it from performing those actions.",
+   "cp": 1,
+   "fluff": "Each brutal kill a Night Lord performs serves to feed their bloodlust and drives them to further acts of terrible violence."
+  },
+  {
+   "id": "nemesis-claw.fp.dirty-fighter",
+   "name": "DIRTY FIGHTER",
+   "text": "Use this firefight ploy when a friendly NEMESIS CLAW operative is retaliating, at the start of the Resolve Attack Dice step. You can resolve one of your successes before the normal order. If you do, you cannot resolve any other successes during that sequence.\n\nFaction Equipment\nFLAYED SKIN\n\nBedecked with the bloody hides of butchered victims, the Night Lords inspire abject terror and revulsion in their enemies.\nWhenever an enemy operative is shooting against, fighting against or retaliating against a friendly NEMESIS CLAW operative within 2\" of it, your opponent cannot re-roll their attack dice results of 1.\n\nCHAIN SNARE\n\nComposed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder’s target, preventing them from fleeing.\nWhenever an enemy operative would perform the Fall Back action while within control range of a friendly NEMESIS CLAW operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.\n\nGRISLY TROPHY\n\nSevered hands and limbs, eyeballs plucked from the skulls of screaming victims – these macabre trophies and more cause the Night Lords’ foes to waver.\nOnce per battle, when a friendly NEMESIS CLAW operative incapacitates an enemy operative within 2\" of it, you can use this rule. If you do, that friendly operative gains one of your Grisly Trophy tokens (if it doesn’t already have one). Whenever a friendly NEMESIS CLAW operative that has one of your Grisly Trophy tokens is visible to and within 2\" of an enemy operative, subtract 1 from the Atk stat of that enemy operative’s weapons.\n\nCOMMS JAMMERS\n\nThe Night Lords use jamming devices to sow chaos and confusion by preventing their panicked foes from communicating.\nWhenever an enemy operative is within 3\" of a friendly NEMESIS CLAW operative, that enemy operative’s APL stat cannot be added to. Note that this doesn’t affect APL stats that have already been changed.",
+   "cp": 1,
+   "fluff": "The Night Lords have no respect for the concept of honour and will use whatever underhanded tactics they deem necessary."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "nemesis-claw.eq.flayed-skin",
+   "name": "FLAYED SKIN",
+   "text": "Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly NEMESIS CLAW operative within 2\" of it, your opponent cannot re-roll their attack dice results of 1.",
+   "fluff": "Bedecked with the bloody hides of butchered victims, the Night Lords inspire abject terror and revulsion in their enemies."
+  },
+  {
+   "id": "nemesis-claw.eq.chain-snare",
+   "name": "CHAIN SNARE",
+   "text": "Whenever an enemy operative would perform the Fall Back action while within control range of a friendly NEMESIS CLAW operative, if no other enemy operatives are within that friendly operative’s control range, you can use this rule. If you do, roll two D6, or one D6 if that enemy operative has a higher Wounds stat than that friendly operative. If any result is a 4+, that enemy operative cannot perform that action during that activation/counteraction (no AP are spent on it), and you cannot use this rule again during this turning point.",
+   "fluff": "Composed of hooked blades attached to a length of chain, this weapon bites into the flesh or armour of the wielder’s target, preventing them from fleeing."
+  },
+  {
+   "id": "nemesis-claw.eq.grisly-trophy",
+   "name": "GRISLY TROPHY",
+   "text": "Once per battle, when a friendly NEMESIS CLAW operative incapacitates an enemy operative within 2\" of it, you can use this rule. If you do, that friendly operative gains one of your Grisly Trophy tokens (if it doesn’t already have one). Whenever a friendly NEMESIS CLAW operative that has one of your Grisly Trophy tokens is visible to and within 2\" of an enemy operative, subtract 1 from the Atk stat of that enemy operative’s weapons.",
+   "fluff": "Severed hands and limbs, eyeballs plucked from the skulls of screaming victims – these macabre trophies and more cause the Night Lords’ foes to waver."
+  },
+  {
+   "id": "nemesis-claw.eq.comms-jammers",
+   "name": "COMMS JAMMERS",
+   "text": "Whenever an enemy operative is within 3\" of a friendly NEMESIS CLAW operative, that enemy operative’s APL stat cannot be added to. Note that this doesn’t affect APL stats that have already been changed.",
+   "fluff": "The Night Lords use jamming devices to sow chaos and confusion by preventing their panicked foes from communicating."
+  }
+ ],
+ "markerGuide": "Portent token\n\nTerrorchem token\n\nFlay Them Alive token\n\nDisconcerting Mimicry token\n\nPoison Objective token\n\nGrisly Trophy token\n\nPrescience points\n(Values 1 & 2)",
+ "notes": [],
+ "rareWeaponRules": [
+  "Terrorchem"
+ ]
+}

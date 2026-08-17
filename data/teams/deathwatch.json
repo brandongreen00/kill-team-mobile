@@ -1,0 +1,1458 @@
+{
+ "id": "deathwatch",
+ "name": "Deathwatch",
+ "faction": "Space Marines",
+ "grandFaction": "Imperium",
+ "archetypes": [
+  "Seek & Destroy",
+  "Security"
+ ],
+ "booksVersion": "January ’26",
+ "books": [
+  {
+   "book": "Deathwatch",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "January ’26",
+   "lastUpdate": "January 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_28-01_kill_team_team_rules_deathwatch-wngg7m6abd-uc8ksrsq97.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/deathwatch/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "WATCH SERGEANT",
+   "datacardId": "deathwatch.watch-sergeant",
+   "count": 1,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "fixed",
+   "fixedWeapons": [],
+   "alwaysWeapons": [
+    "Plasma pistol",
+    "Power weapon"
+   ],
+   "choices": [
+    "WATCH SERGEANT"
+   ]
+  },
+  "slots": 0,
+  "groups": [
+   {
+    "index": 1,
+    "count": 5,
+    "kind": "list",
+    "roles": [
+     "WATCH SERGEANT",
+     "AEGIS",
+     "BLADEMASTER",
+     "BOMBARD",
+     "BREACHER",
+     "DEMOLISHER",
+     "DISRUPTOR",
+     "GUNNER",
+     "HEADTAKER",
+     "HORDE-SLAYER",
+     "MARKSMAN"
+    ],
+    "rawText": "5 DEATHWATCH operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "AEGIS",
+    "datacardAnchor": "Deathwatch-Aegis-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "AEGIS",
+    "group": 1,
+    "datacardId": "deathwatch.aegis-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Power maul & storm shield"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "BLADEMASTER",
+    "datacardAnchor": "Deathwatch-Blademaster-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BLADEMASTER",
+    "group": 1,
+    "datacardId": "deathwatch.blademaster-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Special issue bolt pistol",
+     "Xenophase blade"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "BOMBARD",
+    "datacardAnchor": "Deathwatch-Bombard-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BOMBARD",
+    "group": 1,
+    "datacardId": "deathwatch.bombard-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Frag cannon",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "BREACHER",
+    "datacardAnchor": "Deathwatch-Breacher-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BREACHER",
+    "group": 1,
+    "datacardId": "deathwatch.breacher-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Auxiliary grenade launcher",
+     "Hellstorm bolt rifle",
+     "Melta bomb",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "DEMOLISHER",
+    "datacardAnchor": "Deathwatch-Demolisher-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DEMOLISHER",
+    "group": 1,
+    "datacardId": "deathwatch.demolisher-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Heavy thunder hammer"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "DISRUPTOR",
+    "datacardAnchor": "Deathwatch-Disruptor-Veteran-1",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DISRUPTOR",
+    "group": 1,
+    "datacardId": "deathwatch.disruptor-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Marksman bolt carbine",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Deathwatch-Gunner-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER",
+    "group": 1,
+    "datacardId": "deathwatch.gunner-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Heavy plasma incinerator",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "HEADTAKER",
+    "datacardAnchor": "Deathwatch-Headtaker-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEADTAKER",
+    "group": 1,
+    "datacardId": "deathwatch.headtaker-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Special issue bolt pistol",
+     "Combat knives"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "HORDE-SLAYER",
+    "datacardAnchor": "Deathwatch-Horde-Slayer-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HORDE-SLAYER",
+    "group": 1,
+    "datacardId": "deathwatch.horde-slayer-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Infernus heavy bolter",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "MARKSMAN",
+    "datacardAnchor": "Deathwatch-Marksman-Veteran",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MARKSMAN",
+    "group": 1,
+    "datacardId": "deathwatch.marksman-veteran",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Stalker bolt rifle",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "WATCH SERGEANT",
+    "datacardAnchor": "Deathwatch-Watch-Sergeant",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WATCH SERGEANT",
+    "group": 1,
+    "datacardId": "deathwatch.watch-sergeant",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Plasma pistol",
+     "Power weapon"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": []
+   },
+   {
+    "kind": "maxCount",
+    "role": "GRAVIS",
+    "max": 1
+   }
+  ],
+  "footnotes": {},
+  "designerNotes": [],
+  "rawText": "5 DEATHWATCH operatives selected from the following list:\n\nWATCH SERGEANT\n\nAEGIS\n\nBLADEMASTER\n\nBOMBARD\n\nBREACHER\n\nDEMOLISHER\n\nDISRUPTOR\n\nGUNNER\n\nHEADTAKER\n\nHORDE-SLAYER\n\nMARKSMAN\n\nYour kill team can only include each operative on this list once, and can only include up to one GRAVIS operative."
+ },
+ "datacards": [
+  {
+   "id": "deathwatch.watch-sergeant",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Watch Sergeant",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "LEADER",
+    "WATCH SERGEANT"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "deathwatch.watch-sergeant.adaptable-armoury",
+     "name": "Adaptable Armoury",
+     "text": "You can select one additional equipment option."
+    },
+    {
+     "id": "deathwatch.watch-sergeant.strategic-command",
+     "name": "Strategic Command",
+     "text": "You can do each of the following once per battle if this operative is in the killzone:\n\nUse a DEATHWATCH strategy ploy for 0CP.\n\nUse a DEATHWATCH firefight ploy for 0CP."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Watch Sergeants lead their kill teams in deadly offensives tailored to their xenos foe. They are linchpins of leadership for their battle-brothers, directing the adaptive tactics of the team to secure the mission’s goal."
+  },
+  {
+   "id": "deathwatch.aegis-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Aegis Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "AEGIS"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 2,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power maul & storm shield",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "Shield",
+         "raw": "Shield*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "deathwatch.aegis-veteran.shield",
+     "name": "Shield",
+     "text": "Whenever this operative is fighting or retaliating with this weapon, each of your blocks can be allocated to block two unresolved successes (instead of one)."
+    },
+    {
+     "id": "deathwatch.aegis-veteran.storm-shield",
+     "name": "Storm Shield",
+     "text": "Whenever an operative is shooting this operative, worsen the x of the Piercing weapon rule by 1 (if any). Note that Piercing 1 would therefore be ignored."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Aegis Veterans specialise in countering the deadliest of fighters. These duellists bleed the impetus from the enemy’s blows with crackling storm shields, deflecting strikes before countering with brutal swings of their power mauls."
+  },
+  {
+   "id": "deathwatch.blademaster-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Blademaster Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "BLADEMASTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Special issue bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Xenophase blade",
+     "profiles": [
+      {
+       "name": "duel",
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      },
+      {
+       "name": "phase sweep",
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "PhaseSweep",
+         "raw": "Phase Sweep*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "deathwatch.blademaster-veteran.adaptive-swordsmanship",
+     "name": "Adaptive Swordsmanship",
+     "text": "You can ignore any changes to the Hit stat of this operative’s xenophase blade. Whenever this operative is fighting or retaliating, you can resolve one of your successes before the normal order. If you do, that success must be used to block."
+    },
+    {
+     "id": "deathwatch.blademaster-veteran.phase-sweep",
+     "name": "Phase Sweep",
+     "text": "Whenever this operative performs the Fight action with this weapon profile, if it isn’t incapacitated, it can immediately perform a free Fight action afterwards, but you must select this weapon profile and it can only fight against each enemy operative within its control range once per activation or counteraction using this weapon profile. This takes precedence over action restrictions, and you can continue to perform free Fight actions until this operative is incapacitated or has fought against every enemy operative within its control range."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Champion duellists, Blademasters are swordsmen with few equals. Those of sanctified mien and pragmatic resolve are granted use of xenophase blades, which they wield with consummate skill."
+  },
+  {
+   "id": "deathwatch.bombard-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Bombard Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "GRAVIS",
+    "BOMBARD"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 40
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 18,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Frag cannon",
+     "profiles": [
+      {
+       "name": "shell",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "shrapnel",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Bombard Veterans are tactical artillerists, carrying enormous frag cannons to destroy the most heavily armoured opposition at long range. Their weapons are capable of firing dense shells that can blast through adamantium to cull xenos mobs."
+  },
+  {
+   "id": "deathwatch.breacher-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Breacher Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "GRAVIS",
+    "BREACHER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 40
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 18,
+   "weapons": [
+    {
+     "name": "Auxiliary grenade launcher",
+     "profiles": [
+      {
+       "name": "frag",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        }
+       ]
+      },
+      {
+       "name": "krak",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Hellstorm bolt rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Melta bomb",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 3,
+         "raw": "Range 3\""
+        },
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Breachers fulfil a combination of fire support and specialist ordnance roles. Skilled in penetrating xenos holds with melta bombs, they secure their breaches by following up with an explosive grenade into the smoking ruin, alongside rapid volleys of bolt fire."
+  },
+  {
+   "id": "deathwatch.demolisher-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Demolisher Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "DEMOLISHER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Heavy thunder hammer",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 6,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "deathwatch.demolisher-veteran.brutal-assault",
+     "name": "Brutal Assault",
+     "text": "Whenever this operative is fighting, its heavy thunder hammer has the Brutal weapon rule. Whenever this operative performs the Charge action, its heavy thunder hammer has the Ceaseless weapon rule until the end of the activation/counteraction."
+    },
+    {
+     "id": "deathwatch.demolisher-veteran.aggressive-force",
+     "name": "Aggressive Force",
+     "text": "Whenever this operative is fighting or retaliating, Normal and Critical Dmg of 3 or more inflicts 1 less damage on it. This isn’t cumulative with the Shield that Slays strategy ploy."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Against the largest alien monstrosities, Demolishers are an efficient and unsubtle concentration of shocking power. Their two-handed heavy thunder hammers unleash a blast of concussive and disruptive power when they hit, capable of holing voidship bulkheads."
+  },
+  {
+   "id": "deathwatch.disruptor-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Disruptor Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "DISRUPTOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 13,
+   "weapons": [
+    {
+     "name": "Marksman bolt carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "deathwatch.disruptor-veteran.advanced-omni-scrambler",
+     "name": "Advanced Omni-Scrambler",
+     "text": "STRATEGIC GAMBIT. Select one enemy operative visible to or within 6\" of this operative, then roll one D6. In the Firefight phase of this turning point, that enemy operative cannot be activated or perform actions until one of the following is true:\n\nYour opponent has activated a number of enemy operatives equal to the result of the D6.\n\nIt’s the last enemy operative to be activated."
+    },
+    {
+     "id": "deathwatch.disruptor-veteran.auspex-triangulation",
+     "name": "Auspex Triangulation",
+     "text": "The Advanced Auspex Scan firefight ploy costs you 0CP when both of the following are true:\n\nThis operative isn’t within control range of enemy operatives.\n\nThe target of that Shoot action (primary target, if relevant) is visible to this operative.\n\nNote that it doesn’t have to be this operative performing the Shoot action, and that any subsequent Shoot actions during that activation/counteraction must meet these same requirements (or that ploy has no effect on those subsequent Shoot actions)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Disruptor Veterans savage their foe’s comms traffic and data-streams. They triangulate even subtle signals before collapsing transmissions or rupturing them into incomprehensibility, before providing the rest of their kill team with pinpointed targeting data."
+  },
+  {
+   "id": "deathwatch.gunner-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Gunner Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Heavy plasma incinerator",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Fire support specialists whose heavy plasma incinerators fire searing bolts of blazing star matter, Gunners secure optimum positions from which to unleash the fury of their powerful weapons."
+  },
+  {
+   "id": "deathwatch.headtaker-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Headtaker Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "HEADTAKER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 3,
+   "wounds": 13,
+   "weapons": [
+    {
+     "name": "Special issue bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Combat knives",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "deathwatch.headtaker-veteran.grav-chute-and-grapnel-launcher",
+     "name": "Grav-chute and Grapnel Launcher",
+     "text": "Whenever this operative is climbing, treat the vertical distance as 2\" (regardless of how far the operative actually moves vertically). Whenever this operative is dropping, ignore the vertical distance."
+    },
+    {
+     "id": "deathwatch.headtaker-veteran.clandestine-headtaker",
+     "name": "Clandestine Headtaker",
+     "text": "This operative can perform the Charge action while it has a Conceal order. Whenever this operative is fighting against an operative it wasn’t visible to at the start of the activation/counteraction, the first time you strike during that sequence, you can immediately resolve another of your successes as a strike (before your opponent)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Armoured in the stealthier Phobos-pattern battle plate, Headtakers can approach their targets undetected to swiftly bring them in range of their razor-sharp combat knives. Equipped with a grav-chute and grapnel launcher, there is no safe place for the foe to hide."
+  },
+  {
+   "id": "deathwatch.horde-slayer-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Horde-Slayer Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "GRAVIS",
+    "HORDE-SLAYER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 40
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 18,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Infernus heavy bolter",
+     "profiles": [
+      {
+       "name": "flame",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      },
+      {
+       "name": "focused bolt",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        }
+       ]
+      },
+      {
+       "name": "sweeping bolt",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Wearing hulking suits of Gravis-pattern power armour, these veterans use devastating infernus heavy bolters to scythe through swarms of xenos that attempt to swamp the Deathwatch or lurk in hiding."
+  },
+  {
+   "id": "deathwatch.marksman-veteran",
+   "teamId": "deathwatch",
+   "name": "Deathwatch Marksman Veteran",
+   "keywords": [
+    "DEATHWATCH",
+    "IMPERIUM",
+    "ADEPTUS ASTARTES",
+    "MARKSMAN"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Stalker bolt rifle",
+     "profiles": [
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      },
+      {
+       "name": "heavy",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "deathwatch.marksman-veteran.vigilant-marksman",
+     "name": "Vigilant Marksman",
+     "text": "This operative can perform the Guard action during its activation regardless of the killzone (see close quarters rules, Kill Team: Tomb World).\n\nWhen using the close quarters rules, once per turning point, after this operative performs a free Shoot action on guard, it can immediately perform a free Guard action. However, if it does, it cannot counteract during that turning point (nor Guard twice if it’s counteracted)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Marksmen pinpoint their quarry before the prey is even aware of their peril. They wield long-range stalker bolt rifles that – in combination with master-crafted sights and data-prescient auspicators – aid these expert warriors in targeting the most elusive of threats."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "deathwatch.rule.veteran-astartes",
+   "name": "Veteran Astartes",
+   "text": "During each friendly DEATHWATCH operative’s activation, it can perform either two Shoot actions or two Fight actions. If it’s two Shoot actions and an auxiliary grenade launcher, frag cannon, heavy plasma incinerator, infernus heavy bolter, plasma pistol or stalker bolt rifle is selected for both, or if a melta bomb is selected for either, 1 additional AP must be spent for the second action.\n\nEach friendly DEATHWATCH operative can counteract regardless of its order. Whenever it does, it can perform an additional 1AP action for free during that counteraction, but both actions must be different and you cannot perform a Fight and Shoot action during the same counteraction.",
+   "fluff": "These genetically modified superhumans are made to wage unending war. Their skills have been honed over long years of battle and further refined with specialist knowledge through their Long Vigil."
+  },
+  {
+   "id": "deathwatch.rule.special-issue-ammunition",
+   "name": "Special Issue Ammunition",
+   "text": "Once per turning point, when a friendly DEATHWATCH operative is performing the Shoot action, in the Select Weapon step, you can use this rule. If you do, select one of the following weapon rules for that operative’s ranged weapons to have until the end of the action. This rule cannot be used with explosive grenades (see universal equipment) or melta bombs.\n\nBlast 1\" (you cannot select this if the weapon profile being used has the Torrent weapon rule)\n\nDevastating 1\n\nLethal 5+\n\nPiercing Crits 1\n\nSaturate\n\nSevere",
+   "fluff": "The Deathwatch utilise a range of specialised ammunition in many of their weapons. Each type is designed to eliminate specific xenos foes."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "deathwatch.sp.mission-tactics",
+   "name": "MISSION TACTICS",
+   "text": "Select Conceal or Engage. Whenever a friendly DEATHWATCH operative is shooting against or fighting against an enemy operative that has that order, that friendly operative’s weapons have the Balanced weapon rule.",
+   "cp": 1,
+   "fluff": "Through collated strategic data and hard-won combat experience, the Deathwatch possess the tactics to combat almost any foe."
+  },
+  {
+   "id": "deathwatch.sp.the-shield-that-slays",
+   "name": "THE SHIELD THAT SLAYS",
+   "text": "Whenever a friendly DEATHWATCH operative is wholly within your opponent’s territory, Normal Dmg of 4 or more inflicts 1 less damage on it.",
+   "cp": 1,
+   "fluff": "To enter the infested holds of the xenos is to be assailed by the most inhuman of abominations and technology, a foulness that the Deathwatch are trained to resist."
+  },
+  {
+   "id": "deathwatch.sp.the-long-vigil",
+   "name": "THE LONG VIGIL",
+   "text": "Whenever an operative is shooting a friendly DEATHWATCH operative that’s wholly within your territory, you can re-roll one of your defence dice.",
+   "cp": 1,
+   "fluff": "The Deathwatch guard some of the most dangerous stretches of the Imperium. Their vow to stand firm is at the heart of their vigil; they will see their foes dead before they abandon the Emperor’s realm."
+  },
+  {
+   "id": "deathwatch.sp.and-they-shall-know-no-fear",
+   "name": "AND THEY SHALL KNOW NO FEAR",
+   "text": "You can ignore any changes to the stats of friendly DEATHWATCH operatives from being injured (including their weapons’ stats).\n\nFirefight Ploys\nSUFFER NOT THE ALIEN\n\nEvery tool at their disposal, every scrap of knowledge, is sharpened upon the whetstone of the Deathwatch’s hatred of the alien.\nUse this firefight ploy after rolling your attack dice for a friendly DEATHWATCH operative, if it’s shooting against or fighting against an operative that doesn’t have the CHAOS or IMPERIUM keyword. You can re-roll any of your attack dice.\n\nADVANCED AUSPEX SCAN\n\nBetween unstinting sweeps of their bioscryer cuffs, their inbuilt auspexes warning of hostile threats and the augmented instincts of the Deathwatch themselves, no lurking threat can long evade their sights.\nUse this firefight ploy when a friendly DEATHWATCH operative performs the Shoot action. Until the end of the activation/counteraction, its ranged weapons have the Saturate weapon rule and enemy operatives cannot be obscured.\n\nAUSPICATOR TRACKING\n\nNeurally connected to a battle-brother’s senses, auspicator lenses can improve their data prescience to almost precognitive levels.\nUse this firefight ploy when a friendly DEATHWATCH operative is counteracting, before it performs any actions. You can change its order.\n\nTRANSHUMAN PHYSIOLOGY\n\nThe genetically modified physiology of a Space Marine is capable of resisting wounds that would kill a lesser being.\nUse this firefight ploy when an operative is shooting a friendly DEATHWATCH operative, in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead.\n\nFaction Equipment\nThe following equipment options are available to DEATHWATCH kill teams, alongside the universal equipment online. You cannot select each option more than once per battle.\n\nDIGITAL WEAPONS\n\nVarious high-powered lasers, toxic needlers, incineration projectors and more are concealed as bionic implants or in the knuckles of gauntlets. They lack the power to be used at range, but can be triggered up close to exploit a weakness while the enemy fends off the main attack.\nOnce per turning point, when a friendly DEATHWATCH operative performs the Fight action, at the start of the Roll Attack Dice step, you can use this rule. If you do, inflict 1 damage on the enemy operative in that sequence.\n\nSANCTUS-V BIOSCRYER CUFFS\n\nDeveloped by Techmarines and Apothecaries of the Castilos Nullifact watch fortress, these vambracemounted monitron relays offer unparalleled analysis and purgation of a range of bio-threats to the wearer’s augmented physiology.\nOnce during each friendly DEATHWATCH operative’s activation, before or after it performs an action, if it’s not within control range of enemy operatives, you can use this rule. If you do, select one of the following:\n\nThat friendly operative regains up to D3 lost wounds.\n\nRemove any changes to that friendly operative’s APL stat.\n\nRemove one of the following tokens that friendly operative has (before that token’s activation effects are resolved, if relevant): Neutron Fragment, Poison, Terrorchem.\n\nSCRUTAVORE SERVO-THRALL\n\nThis specialised servo-skull circles a kill team’s deployment on anti-grav motors, consuming data at a voracious rate before dissecting it and feeding the resultant analyses to the battle-brothers to provide maximum strategic awareness. Many are built upon the skulls of loyal serfs, though some are constructed around the sanctified craniums of defeated xenos.\nOnce per turning point, during a friendly DEATHWATCH operative’s activation, you can use this rule. If you do, during that activation, that operative can perform a mission action for 1 less AP.\n\nHaving an enemy operative within its control range doesn’t prevent that friendly operative from performing that mission action. However, in such an instance, after it does so, you and your opponent roll-off. If your opponent wins, you cannot use this equipment for the rest of the battle.\n\nAMMUNITION RESERVE\n\nAwarded to kill teams whose marksmanship is as efficient as it is lethal, additional caches of individually crafted shells, fuel canisters and ammunition cells serve to secure victory during the most dangerous missions.\nOnce per battle, you can use the Special Issue Ammunition faction rule for up to two Shoot actions during one turning point, but you must select different weapon rules for both uses. This takes precedence over the normal Special Issue Ammunition rules.",
+   "cp": 1,
+   "fluff": "Space Marines possess extraordinary courage and are utterly unflinching in the face of terrifying horrors and overwhelming odds."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "deathwatch.fp.suffer-not-the-alien",
+   "name": "SUFFER NOT THE ALIEN",
+   "text": "Use this firefight ploy after rolling your attack dice for a friendly DEATHWATCH operative, if it’s shooting against or fighting against an operative that doesn’t have the CHAOS or IMPERIUM keyword. You can re-roll any of your attack dice.",
+   "cp": 1,
+   "fluff": "Every tool at their disposal, every scrap of knowledge, is sharpened upon the whetstone of the Deathwatch’s hatred of the alien."
+  },
+  {
+   "id": "deathwatch.fp.advanced-auspex-scan",
+   "name": "ADVANCED AUSPEX SCAN",
+   "text": "Use this firefight ploy when a friendly DEATHWATCH operative performs the Shoot action. Until the end of the activation/counteraction, its ranged weapons have the Saturate weapon rule and enemy operatives cannot be obscured.",
+   "cp": 1,
+   "fluff": "Between unstinting sweeps of their bioscryer cuffs, their inbuilt auspexes warning of hostile threats and the augmented instincts of the Deathwatch themselves, no lurking threat can long evade their sights."
+  },
+  {
+   "id": "deathwatch.fp.auspicator-tracking",
+   "name": "AUSPICATOR TRACKING",
+   "text": "Use this firefight ploy when a friendly DEATHWATCH operative is counteracting, before it performs any actions. You can change its order.",
+   "cp": 1,
+   "fluff": "Neurally connected to a battle-brother’s senses, auspicator lenses can improve their data prescience to almost precognitive levels."
+  },
+  {
+   "id": "deathwatch.fp.transhuman-physiology",
+   "name": "TRANSHUMAN PHYSIOLOGY",
+   "text": "Use this firefight ploy when an operative is shooting a friendly DEATHWATCH operative, in the Roll Defence Dice step. You can retain one of your normal successes as a critical success instead.\n\nFaction Equipment\nThe following equipment options are available to DEATHWATCH kill teams, alongside the universal equipment online. You cannot select each option more than once per battle.\n\nDIGITAL WEAPONS\n\nVarious high-powered lasers, toxic needlers, incineration projectors and more are concealed as bionic implants or in the knuckles of gauntlets. They lack the power to be used at range, but can be triggered up close to exploit a weakness while the enemy fends off the main attack.\nOnce per turning point, when a friendly DEATHWATCH operative performs the Fight action, at the start of the Roll Attack Dice step, you can use this rule. If you do, inflict 1 damage on the enemy operative in that sequence.\n\nSANCTUS-V BIOSCRYER CUFFS\n\nDeveloped by Techmarines and Apothecaries of the Castilos Nullifact watch fortress, these vambracemounted monitron relays offer unparalleled analysis and purgation of a range of bio-threats to the wearer’s augmented physiology.\nOnce during each friendly DEATHWATCH operative’s activation, before or after it performs an action, if it’s not within control range of enemy operatives, you can use this rule. If you do, select one of the following:\n\nThat friendly operative regains up to D3 lost wounds.\n\nRemove any changes to that friendly operative’s APL stat.\n\nRemove one of the following tokens that friendly operative has (before that token’s activation effects are resolved, if relevant): Neutron Fragment, Poison, Terrorchem.\n\nSCRUTAVORE SERVO-THRALL\n\nThis specialised servo-skull circles a kill team’s deployment on anti-grav motors, consuming data at a voracious rate before dissecting it and feeding the resultant analyses to the battle-brothers to provide maximum strategic awareness. Many are built upon the skulls of loyal serfs, though some are constructed around the sanctified craniums of defeated xenos.\nOnce per turning point, during a friendly DEATHWATCH operative’s activation, you can use this rule. If you do, during that activation, that operative can perform a mission action for 1 less AP.\n\nHaving an enemy operative within its control range doesn’t prevent that friendly operative from performing that mission action. However, in such an instance, after it does so, you and your opponent roll-off. If your opponent wins, you cannot use this equipment for the rest of the battle.\n\nAMMUNITION RESERVE\n\nAwarded to kill teams whose marksmanship is as efficient as it is lethal, additional caches of individually crafted shells, fuel canisters and ammunition cells serve to secure victory during the most dangerous missions.\nOnce per battle, you can use the Special Issue Ammunition faction rule for up to two Shoot actions during one turning point, but you must select different weapon rules for both uses. This takes precedence over the normal Special Issue Ammunition rules.",
+   "cp": 1,
+   "fluff": "The genetically modified physiology of a Space Marine is capable of resisting wounds that would kill a lesser being."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "deathwatch.eq.digital-weapons",
+   "name": "DIGITAL WEAPONS",
+   "text": "Once per turning point, when a friendly DEATHWATCH operative performs the Fight action, at the start of the Roll Attack Dice step, you can use this rule. If you do, inflict 1 damage on the enemy operative in that sequence.",
+   "fluff": "Various high-powered lasers, toxic needlers, incineration projectors and more are concealed as bionic implants or in the knuckles of gauntlets. They lack the power to be used at range, but can be triggered up close to exploit a weakness while the enemy fends off the main attack."
+  },
+  {
+   "id": "deathwatch.eq.sanctus-v-bioscryer-cuffs",
+   "name": "SANCTUS-V BIOSCRYER CUFFS",
+   "text": "Once during each friendly DEATHWATCH operative’s activation, before or after it performs an action, if it’s not within control range of enemy operatives, you can use this rule. If you do, select one of the following:\n\nThat friendly operative regains up to D3 lost wounds.\n\nRemove any changes to that friendly operative’s APL stat.\n\nRemove one of the following tokens that friendly operative has (before that token’s activation effects are resolved, if relevant): Neutron Fragment, Poison, Terrorchem.",
+   "fluff": "Developed by Techmarines and Apothecaries of the Castilos Nullifact watch fortress, these vambracemounted monitron relays offer unparalleled analysis and purgation of a range of bio-threats to the wearer’s augmented physiology."
+  },
+  {
+   "id": "deathwatch.eq.scrutavore-servo-thrall",
+   "name": "SCRUTAVORE SERVO-THRALL",
+   "text": "Once per turning point, during a friendly DEATHWATCH operative’s activation, you can use this rule. If you do, during that activation, that operative can perform a mission action for 1 less AP.\n\nHaving an enemy operative within its control range doesn’t prevent that friendly operative from performing that mission action. However, in such an instance, after it does so, you and your opponent roll-off. If your opponent wins, you cannot use this equipment for the rest of the battle.",
+   "fluff": "This specialised servo-skull circles a kill team’s deployment on anti-grav motors, consuming data at a voracious rate before dissecting it and feeding the resultant analyses to the battle-brothers to provide maximum strategic awareness. Many are built upon the skulls of loyal serfs, though some are constructed around the sanctified craniums of defeated xenos."
+  },
+  {
+   "id": "deathwatch.eq.ammunition-reserve",
+   "name": "AMMUNITION RESERVE",
+   "text": "Once per battle, you can use the Special Issue Ammunition faction rule for up to two Shoot actions during one turning point, but you must select different weapon rules for both uses. This takes precedence over the normal Special Issue Ammunition rules.",
+   "fluff": "Awarded to kill teams whose marksmanship is as efficient as it is lethal, additional caches of individually crafted shells, fuel canisters and ammunition cells serve to secure victory during the most dangerous missions."
+  }
+ ],
+ "markerGuide": "Ammunition Reserve token\n\nDigital Weapons token\n\nScrutavore Servo-Thrall token\n\nVigilant Marksman token\n\nAdvanced Omni-Scrambler token\n\nMelta Bomb token\n\nStrategic Command Strategy Ploy token\n\nStrategic Command Firefight Ploy token",
+ "notes": [],
+ "rareWeaponRules": [
+  "PhaseSweep",
+  "Shield"
+ ]
+}

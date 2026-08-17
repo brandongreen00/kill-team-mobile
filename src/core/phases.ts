@@ -1,0 +1,195 @@
+/**
+ * Turning-point structure: Strategy phase (Initiative → Ready → Gambit) then Firefight
+ * phase (alternating activations, counteracts, On Guard interrupts), repeated until the
+ * mission pack ends the battle (Approved Ops: after four turning points).
+ */
+import type { GameContext } from './context.ts';
+import { aliveOperatives, log, recordRoll, removeIncapacitated } from './state.ts';
+import type { GameState, PlayerId } from './types.ts';
+import { otherPlayer } from './types.ts';
+
+export const MAX_TURNING_POINTS = 4;
+
+// ---------------------------------------------------------------------------
+// Strategy phase
+// ---------------------------------------------------------------------------
+
+/**
+ * 1. Initiative — "the players roll-off and the winner decides who has initiative. However,
+ * if the roll-off is a tie, the player who didn't have initiative in the previous turning
+ * point decides who has initiative."
+ *
+ * Approved Ops adds initiative cards: starting with the roll-off loser, players alternate
+ * playing a card or passing until both pass.
+ */
+export function rollInitiative(ctx: GameContext, state: GameState): { p1: number; p2: number; winner: PlayerId | null } {
+  const modP1 = ctx.hooks.emit('initiativeRollModifiers', state, { state, player: 'p1', mod: 0, rerollOffered: false }).mod;
+  const modP2 = ctx.hooks.emit('initiativeRollModifiers', state, { state, player: 'p2', mod: 0, rerollOffered: false }).mod;
+  const a = ctx.rng.d6();
+  const b = ctx.rng.d6();
+  recordRoll(state, 'initiative', [a, b], undefined, `TP${state.turningPoint}`);
+  const p1 = a + modP1;
+  const p2 = b + modP2;
+  log(state, { kind: 'dice', text: `Initiative roll-off: P1 ${a}${modP1 ? `${modP1 > 0 ? '+' : ''}${modP1}` : ''} vs P2 ${b}${modP2 ? `${modP2 > 0 ? '+' : ''}${modP2}` : ''}` });
+  if (p1 === p2) return { p1, p2, winner: null };
+  return { p1, p2, winner: p1 > p2 ? 'p1' : 'p2' };
+}
+
+/**
+ * 2. Ready — "Each player gains 1 Command point (CP). In each turning point after the first,
+ * the player who doesn't have initiative gains 2CP instead. Each player readies all friendly
+ * operatives."
+ */
+export function readyStep(ctx: GameContext, state: GameState): void {
+  for (const player of ['p1', 'p2'] as PlayerId[]) {
+    const base = state.turningPoint > 1 && state.initiative !== player ? 2 : 1;
+    const ev = ctx.hooks.emit('onReadyStep', state, { state, player, cp: base });
+    state.teams[player].cp += ev.cp;
+    state.teams[player].ploysUsedTP = [];
+    state.teams[player].gambitsUsedTP = [];
+    state.teams[player].passedGambit = false;
+  }
+  for (const op of aliveOperatives(state)) {
+    op.ready = true;
+    op.expended = false;
+    op.counteractedThisTP = false;
+    op.apSpent = 0;
+    op.actionsThisActivation = [];
+    // "It's the start of the next turning point" ends Guard.
+    op.onGuard = false;
+    op.guardSpentTP = null;
+  }
+  state.activationsThisTP = 0;
+  log(state, { kind: 'system', text: `Ready step — CP: P1 ${state.teams.p1.cp}, P2 ${state.teams.p2.cp}` });
+}
+
+/**
+ * 3. Gambit — "Starting with the player who has initiative, each player alternates either
+ * using a STRATEGIC GAMBIT or passing... until they have both passed in succession."
+ */
+export function gambitOptions(ctx: GameContext, state: GameState, player: PlayerId) {
+  const ev = ctx.hooks.emit('gambitOptions', state, { state, player, options: [] });
+  const used = state.teams[player].gambitsUsedTP;
+  return ev.options.filter((o) => !used.includes(o.id));
+}
+
+export function bothPassedGambit(state: GameState): boolean {
+  return state.teams.p1.passedGambit && state.teams.p2.passedGambit;
+}
+
+// ---------------------------------------------------------------------------
+// Firefight phase
+// ---------------------------------------------------------------------------
+
+export function readyOperatives(state: GameState, player: PlayerId) {
+  return aliveOperatives(state, player).filter((o) => o.ready);
+}
+
+/**
+ * Whose turn is it to activate? "The player who has initiative activates a ready friendly
+ * operative. Once that activation ends, their opponent activates one of their ready friendly
+ * operatives... alternating until all of one player's operatives are expended, in which case
+ * they can counteract between their opponent's remaining activations."
+ */
+export function whoActivates(state: GameState): { player: PlayerId; mode: 'activate' | 'counteract' } | null {
+  const init = state.initiative ?? 'p1';
+  const next = state.activePlayer ?? init;
+  const hasReady = (p: PlayerId) => readyOperatives(state, p).length > 0;
+  if (hasReady(next)) return { player: next, mode: 'activate' };
+  const other = otherPlayer(next);
+  if (hasReady(other)) {
+    // The player with no ready operatives may counteract between their opponent's activations.
+    const canCounteract = aliveOperatives(state, next).some(
+      (o) => o.expended && o.order === 'engage' && !o.counteractedThisTP,
+    );
+    if (canCounteract) return { player: next, mode: 'counteract' };
+    return { player: other, mode: 'activate' };
+  }
+  return null;
+}
+
+export function counteractCandidates(ctx: GameContext, state: GameState, player: PlayerId) {
+  return aliveOperatives(state, player)
+    .filter((o) => o.expended && o.order === 'engage' && !o.counteractedThisTP)
+    .filter((o) => ctx.hooks.emit('onCounteract', state, { state, operative: o, allowed: true }).allowed)
+    // "That friendly operative cannot counteract during the turning point" after On Guard.
+    .filter((o) => o.guardSpentTP !== state.turningPoint);
+}
+
+/**
+ * On Guard: "Once during each enemy operative's activation, after that enemy operative
+ * performs an action, you can interrupt that activation and select one friendly operative
+ * on guard to perform the Fight or Shoot action for free."
+ */
+export function guardInterruptCandidates(state: GameState, defender: PlayerId) {
+  return aliveOperatives(state, defender).filter((o) => o.onGuard);
+}
+
+// ---------------------------------------------------------------------------
+// End of turning point
+// ---------------------------------------------------------------------------
+
+export function endTurningPoint(ctx: GameContext, state: GameState): void {
+  removeIncapacitated(ctx, state);
+  ctx.hooks.emit('onEndOfTP', state, { state });
+  expireEffects(state);
+  log(state, { kind: 'system', text: `End of turning point ${state.turningPoint}` });
+}
+
+export function expireEffects(state: GameState): void {
+  state.effects = state.effects.filter((e) => {
+    switch (e.expiry.kind) {
+      case 'endOfTurningPoint':
+      case 'startOfNextTurningPoint':
+      case 'endOfAction':
+        return false;
+      case 'nActivations':
+        return e.expiry.remaining > 0;
+      default:
+        return true;
+    }
+  });
+}
+
+/** Called when an activation ends, to expire per-activation effects. */
+export function expireActivationEffects(state: GameState, operativeId: string): void {
+  state.effects = state.effects.filter((e) => {
+    if (e.expiry.kind === 'endOfActivation' && e.expiry.operativeId === operativeId) return false;
+    if (e.expiry.kind === 'endOfNextActivation' && e.expiry.operativeId === operativeId) {
+      if (e.expiry.armed) {
+        if (e.operativeId) {
+          // fall through: the effect is removed below
+        }
+        return false;
+      }
+      e.expiry.armed = true;
+      return true;
+    }
+    if (e.expiry.kind === 'nActivations') {
+      e.expiry.remaining -= 1;
+      return e.expiry.remaining > 0;
+    }
+    return true;
+  });
+}
+
+/** Smoke markers last "a number of activations equal to that D3... or the end of the TP". */
+export function tickSmoke(state: GameState): void {
+  for (const marker of Object.values(state.markers)) {
+    if (marker.kind !== 'smoke') continue;
+    const left = Number(marker.flags['activationsLeft'] ?? 0);
+    if (left <= 1) delete state.markers[marker.id];
+    else marker.flags['activationsLeft'] = left - 1;
+  }
+}
+
+export function battleShouldEnd(state: GameState): boolean {
+  return state.turningPoint > state.maxTurningPoints;
+}
+
+export function determineWinner(state: GameState): PlayerId | 'draw' {
+  const a = state.teams.p1.vp;
+  const b = state.teams.p2.vp;
+  if (a === b) return 'draw';
+  return a > b ? 'p1' : 'p2';
+}

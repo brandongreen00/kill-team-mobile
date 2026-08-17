@@ -1,0 +1,1038 @@
+{
+ "id": "void-dancer-troupe",
+ "name": "Void-dancer Troupe",
+ "faction": "Harlequins",
+ "grandFaction": "Aeldari",
+ "archetypes": [
+  "Infiltration",
+  "Recon"
+ ],
+ "booksVersion": "October ’25",
+ "books": [
+  {
+   "book": "Void-Dancer Troupe",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "October ’25",
+   "lastUpdate": "June 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_17-06_kill_team_team_rules_void-dancer_troupe_online_rules-ee8qymqvq4-w24lgiuhhz.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/void-dancer-troupe/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "LEAD PLAYER",
+   "datacardId": "void-dancer-troupe.lead-player",
+   "count": 1,
+   "loadouts": [],
+   "optionGroups": [
+    {
+     "id": "void-dancer-troupe.g1.g1",
+     "label": "Fusion pistol, neuro disruptor or shuriken pistol",
+     "choices": [
+      {
+       "id": "void-dancer-troupe.g1.g1o1",
+       "label": "Fusion pistol, neuro disruptor",
+       "weapons": [
+        "Fusion pistol",
+        "Neuro disruptor"
+       ]
+      },
+      {
+       "id": "void-dancer-troupe.g1.g1o2",
+       "label": "shuriken pistol",
+       "weapons": [
+        "Shuriken pistol"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "void-dancer-troupe.g1.g2",
+     "label": "Blade, caress, embrace, kiss or power weapon",
+     "choices": [
+      {
+       "id": "void-dancer-troupe.g1.g2o1",
+       "label": "Blade, caress, embrace, kiss",
+       "weapons": [
+        "Blade",
+        "Caress",
+        "Embrace",
+        "Kiss"
+       ]
+      },
+      {
+       "id": "void-dancer-troupe.g1.g2o2",
+       "label": "power weapon",
+       "weapons": [
+        "Power weapon"
+       ]
+      }
+     ]
+    }
+   ],
+   "loadoutMode": "combine",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "LEAD PLAYER"
+   ]
+  },
+  "slots": 7,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "LEAD PLAYER"
+    ],
+    "rawText": "1 VOID-DANCER TROUPE LEAD PLAYER operative with one option from each of the following:"
+   },
+   {
+    "index": 2,
+    "count": 7,
+    "kind": "list",
+    "roles": [
+     "DEATH JESTER",
+     "PLAYER",
+     "SHADOWSEER"
+    ],
+    "rawText": "7 VOID-DANCER TROUPE operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "DEATH JESTER",
+    "datacardAnchor": "Death-Jester",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "DEATH JESTER",
+    "group": 2,
+    "datacardId": "void-dancer-troupe.death-jester",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Shrieker cannon",
+     "Shrieker blade"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "PLAYER",
+    "datacardAnchor": "Player",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [
+     {
+      "id": "void-dancer-troupe.g2e2.g1",
+      "label": "Fusion pistol, neuro disruptor or shuriken pistol",
+      "choices": [
+       {
+        "id": "void-dancer-troupe.g2e2.g1o1",
+        "label": "Fusion pistol, neuro disruptor",
+        "weapons": [
+         "Fusion pistol",
+         "Neuro disruptor"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g2e2.g1o2",
+        "label": "shuriken pistol",
+        "weapons": [
+         "Shuriken pistol"
+        ]
+       }
+      ]
+     },
+     {
+      "id": "void-dancer-troupe.g2e2.g2",
+      "label": "Blade, caress, embrace or kiss",
+      "choices": [
+       {
+        "id": "void-dancer-troupe.g2e2.g2o1",
+        "label": "Blade, caress, embrace",
+        "weapons": [
+         "Blade",
+         "Caress",
+         "Embrace"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g2e2.g2o2",
+        "label": "kiss",
+        "weapons": [
+         "Kiss"
+        ]
+       }
+      ]
+     }
+    ],
+    "loadoutMode": "combine",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "PLAYER with one option from each of the following:",
+    "group": 2,
+    "datacardId": "void-dancer-troupe.player",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": false
+   },
+   {
+    "role": "SHADOWSEER",
+    "datacardAnchor": "Shadowseer",
+    "count": 1,
+    "fixedWeapons": [
+     "Hallucinogen grenade"
+    ],
+    "loadouts": [
+     {
+      "id": "void-dancer-troupe.g2e3.opt1",
+      "label": "Neuro disruptor; miststave",
+      "weapons": [
+       "Neuro disruptor",
+       "Miststave"
+      ]
+     },
+     {
+      "id": "void-dancer-troupe.g2e3.opt2",
+      "label": "Shuriken pistol; miststave",
+      "weapons": [
+       "Shuriken pistol",
+       "Miststave"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SHADOWSEER with hallucinogen grenade and one of the following options:",
+    "group": 2,
+    "datacardId": "void-dancer-troupe.shadowseer",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "LEAD PLAYER",
+    "datacardAnchor": "Lead-Player",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [
+     {
+      "id": "void-dancer-troupe.g1.g1",
+      "label": "Fusion pistol, neuro disruptor or shuriken pistol",
+      "choices": [
+       {
+        "id": "void-dancer-troupe.g1.g1o1",
+        "label": "Fusion pistol, neuro disruptor",
+        "weapons": [
+         "Fusion pistol",
+         "Neuro disruptor"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g1.g1o2",
+        "label": "shuriken pistol",
+        "weapons": [
+         "Shuriken pistol"
+        ]
+       }
+      ]
+     },
+     {
+      "id": "void-dancer-troupe.g1.g2",
+      "label": "Blade, caress, embrace, kiss or power weapon",
+      "choices": [
+       {
+        "id": "void-dancer-troupe.g1.g2o1",
+        "label": "Blade, caress, embrace, kiss",
+        "weapons": [
+         "Blade",
+         "Caress",
+         "Embrace",
+         "Kiss"
+        ]
+       },
+       {
+        "id": "void-dancer-troupe.g1.g2o2",
+        "label": "power weapon",
+        "weapons": [
+         "Power weapon"
+        ]
+       }
+      ]
+     }
+    ],
+    "loadoutMode": "combine",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 VOID-DANCER TROUPE LEAD PLAYER operative with one option from each of the following:",
+    "group": 1,
+    "datacardId": "void-dancer-troupe.lead-player",
+    "isLeader": true,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "PLAYER"
+    ]
+   },
+   {
+    "kind": "maxItem",
+    "item": "fusion pistol",
+    "max": 1
+   },
+   {
+    "kind": "maxItem",
+    "item": "neuro disruptor",
+    "max": 1
+   }
+  ],
+  "footnotes": {},
+  "designerNotes": [],
+  "rawText": "1 VOID-DANCER TROUPE LEAD PLAYER operative with one option from each of the following:\n\nFusion pistol, neuro disruptor or shuriken pistol\n\nBlade, caress, embrace, kiss or power weapon\n\n7 VOID-DANCER TROUPE operatives selected from the following list:\n\nDEATH JESTER\n\nPLAYER with one option from each of the following:\n\nFusion pistol, neuro disruptor or shuriken pistol\n\nBlade, caress, embrace or kiss\n\nSHADOWSEER with hallucinogen grenade and one of the following options:\n\nNeuro disruptor; miststave\n\nShuriken pistol; miststave\n\nOther than PLAYER operatives, your kill team can only include each operative on this list once. Your kill team can only include up to one fusion pistol and up to one neuro disruptor."
+ },
+ "datacards": [
+  {
+   "id": "void-dancer-troupe.lead-player",
+   "teamId": "void-dancer-troupe",
+   "name": "Lead Player",
+   "keywords": [
+    "VOID-DANCER TROUPE",
+    "AELDARI",
+    "HARLEQUIN",
+    "LEADER",
+    "LEAD PLAYER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Fusion pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 3,
+         "raw": "Range 3\""
+        },
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Neuro disruptor",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Caress",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Embrace",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Kiss",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 7,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "void-dancer-troupe.lead-player.lead-the-performance",
+     "name": "Lead the Performance",
+     "text": "Once per battle STRATEGIC GAMBIT. If this operative is in the killzone, change the ALLEGORY you selected for your kill team. Note that the ACCOLADE rule friendly operatives have will also change."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Choreographers of conflict, Lead Players are experienced Harlequins clad in extravagant garb. They direct their warriors’ reactions to the fates of battle and ensure their comrades’ performances in the theatre of war is as perfect as it can be."
+  },
+  {
+   "id": "void-dancer-troupe.death-jester",
+   "teamId": "void-dancer-troupe",
+   "name": "Death Jester",
+   "keywords": [
+    "VOID-DANCER TROUPE",
+    "AELDARI",
+    "HARLEQUIN",
+    "DEATH JESTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Shrieker cannon",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "HumblingCruelty",
+         "raw": "Humbling Cruelty*"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        },
+        {
+         "id": "HumblingCruelty",
+         "raw": "Humbling Cruelty*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shrieker blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "void-dancer-troupe.death-jester.humbling-cruelty",
+     "name": "Humbling Cruelty",
+     "text": "If the target of this weapon isn’t incapacitated but any of your attack dice inflict damage, the target gains one of your Humbling Cruelty tokens (if it doesn’t already have one). Whenever an enemy operative has one of your Humbling Cruelty tokens, subtract 2\" from its Move stat and worsen the Hit stat of its weapons by 1. This isn’t cumulative with being injured. At the end of that enemy operative’s next activation, remove its Humbling Cruelty token."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The arrival of a Death Jester in a killzone is announced by a hissing storm of shrieker cannon fire. Enemy infantry are torn apart as the weapon’s gene-toxins cause them to combust horrifically from within. Adding insult to injury, the Death Jester ensures every demise is cruelly ironic."
+  },
+  {
+   "id": "void-dancer-troupe.player",
+   "teamId": "void-dancer-troupe",
+   "name": "Player",
+   "keywords": [
+    "VOID-DANCER TROUPE",
+    "AELDARI",
+    "HARLEQUIN",
+    "PLAYER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Fusion pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 3,
+         "raw": "Range 3\""
+        },
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Neuro disruptor",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Caress",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Embrace",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Kiss",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 7,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "void-dancer-troupe.player.luck-of-the-laughing-god",
+     "name": "Luck of the Laughing God",
+     "text": "Once per turning point, you can use this rule. If you do, you can use a firefight ploy for 0CP if this is the specified VOID-DANCER TROUPE operative (including Command Re-roll if the attack or defence dice was rolled for this operative). You cannot select the same firefight ploy for this rule more than once per battle."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Harlequin Players perform with breathtaking skill, whether their stage is a wraithbone-and-glass amphitheatre bathed in crystalline light or the firelit hell of the battlefield. They tumble, sprint and leap, with every trigger squeeze and blade slash bringing orchestrated death to the enemy."
+  },
+  {
+   "id": "void-dancer-troupe.shadowseer",
+   "teamId": "void-dancer-troupe",
+   "name": "Shadowseer",
+   "keywords": [
+    "VOID-DANCER TROUPE",
+    "AELDARI",
+    "HARLEQUIN",
+    "PSYKER",
+    "SHADOWSEER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 3,
+   "move": 7,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Hallucinogen grenade",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 1,
+       "dmgC": 1,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "SeekLight",
+         "raw": "Seek Light"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Neuro disruptor",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Miststave",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "void-dancer-troupe.shadowseer.act.fog-of-dreams",
+     "name": "FOG OF DREAMS",
+     "ap": 1,
+     "text": "PSYCHIC. Select one ready enemy operative visible to this operative and roll one D6. Until the end of the turning point, that enemy operative cannot be activated or perform actions until it’s the last enemy operative to be activated, or until your opponent has activated a number of enemy operatives after this action equal to the result of the D6 (whichever comes first).\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "void-dancer-troupe.shadowseer.act.mirror-of-minds",
+     "name": "MIRROR OF MINDS",
+     "ap": 1,
+     "text": "PSYCHIC. Select one enemy operative that’s a valid target for and within 8\" of this operative. Both players roll five D6. Pair your dice with your opponent’s dice based on matching results. For each matching pair, inflict D3 damage on that enemy operative (to a maximum of 8). For example, if you rolled 6, 5, 5, 2, 1 and your opponent rolled 6, 5, 4, 3, 1, you would inflict 3D3 damage on that enemy operative.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Shadowseers can blind foes and drive them mad with their psychic powers. As they obscure their allies with illusions, they fire hallucinogenic grenades that cause disorientation or death. In close combat, Shadowseers’ miststaves scramble the perceptions of those they hit."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "void-dancer-troupe.rule.saedath",
+   "name": "Saedath",
+   "text": "As a STRATEGIC GAMBIT in the first turning point, you must select an ALLEGORY (Epic or Melodrama below) for your kill team for the battle, and one friendly VOID-DANCER TROUPE operative to have the PIVOTAL ROLE for the battle. Whenever a friendly operative has the PIVOTAL ROLE, it has the ACCOLADE rule of your ALLEGORY for the battle.\n\nAs a STRATEGIC GAMBIT in each subsequent turning point, you can select one friendly VOID-DANCER TROUPE operative to gain the ACCOLADE rule of your ALLEGORY for the battle.\n\nOnce per turning point, when a friendly operative that has the PIVOTAL ROLE completes the performance of your ALLEGORY, you can select one friendly VOID-DANCER TROUPE operative to gain the ACCOLADE rule of your ALLEGORY for the battle.\n\nEpic\n\nPerformance: The operative incapacitates an enemy operative while fighting.\n\nAccolade: Whenever this operative is fighting, its melee weapons have the Balanced weapon rule.\n\nMelodrama\n\nPerformance: The operative incapacitates an enemy operative while shooting.\n\nAccolade: The operative’s ranged weapons have the Balanced weapon rule.",
+   "fluff": "Void-dancer Troupes put on a performance as they attack from the Webway. A single player begins in the pivotal role, then the rest of the troupe progressively join in."
+  },
+  {
+   "id": "void-dancer-troupe.rule.harlequins-panoply",
+   "name": "Harlequin’s Panoply",
+   "text": "Whenever an operative is shooting a friendly VOID-DANCER TROUPE operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any). Note that Piercing 1 would therefore be ignored.\n\nWhenever a friendly VOID-DANCER TROUPE operative is climbing up, you can treat the vertical distance as 2\" (regardless of how far the operative actually moves vertically). \n\nFriendly VOID-DANCER TROUPE operatives can move within control range of enemy operatives (they must still start and end the move following all requirements for that move).",
+   "fluff": "The tools of the Harlequins’ trade afford them additional mobility and make them highly difficult to target, enabling them to dodge away from piercing shots of plasma and melta fire."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "void-dancer-troupe.sp.darting-salvo",
+   "name": "DARTING SALVO",
+   "text": "Whenever a friendly VOID-DANCER TROUPE operative performs the Reposition action during its activation, it can perform the Shoot action during that action (it must do so in a location it can be placed, and any remaining move distance it had from that Reposition action can be used after it does so).",
+   "cp": 1,
+   "fluff": "Advancing in a dazzling blurr of vibrant colour,\nHarlequins fire on the move, leaping away before their opponents can return fire."
+  },
+  {
+   "id": "void-dancer-troupe.sp.rising-crescendo",
+   "name": "RISING CRESCENDO",
+   "text": "Friendly VOID-DANCER TROUPE operatives can perform the Dash action during the same activation in which they performed the Charge action, but not vice versa (i.e. not DASH then CHARGE).",
+   "cp": 1,
+   "fluff": "With each darting advance and lethal flourish, the\ntempo of the troupe’s performance increases, building towards a violent crescendo."
+  },
+  {
+   "id": "void-dancer-troupe.sp.prismatic-blur",
+   "name": "PRISMATIC BLUR",
+   "text": "Whenever an operative is shooting a friendly VOID-DANCER TROUPE operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.",
+   "cp": 1,
+   "fluff": "So swift and dazzling are the Harlequins that even\nveteran marksmen struggle to draw a bead upon their lithe forms."
+  },
+  {
+   "id": "void-dancer-troupe.sp.cegorachs-jest",
+   "name": "CEGORACH’S JEST",
+   "text": "Whenever a friendly VOID-DANCER TROUPE operative is fighting or retaliating and your opponent strikes with a normal success, you can roll one D6: if the result is less than the Hit stat of your opponent’s selected weapon, that strike is allocated to block one of your dice instead (ignore the Brutal weapon rule, if relevant) and you cannot use this rule for the rest of the sequence.\n\nFirefight Ploys\nMURDEROUS ENTRANCE\n\nThe Harlequin assault materialises with terrifying speed, a flurry of deadly blows landing before the foe can raise a blade in response.\nUse this firefight ploy when a friendly VOID-DANCER TROUPE operative is fighting during an activation in which it performed the Charge action, after you strike. You can immediately resolve another of your normal successes as a strike (before your opponent), or one of your critical successes if there are none.\n\nTHE CURTAIN FALLS\n\nUpon landing a devastating blow, the Harlequin\ndisengages, leaving their wounded opponent flailing desperately in response.\nUse this firefight ploy when a friendly VOID-DANCER TROUPE operative is fighting, after you strike with a critical success, if the enemy operative isn’t incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Fall Back action up to 3\" with that operative (then the Fight action ends). That operative can do so even if it’s performed an action that prevents it from performing the Fall Back action.\n\nELUSIVE TARGET\n\nSwift, agile and graceful, Harlequins dart from cover to cover, evading their opponents with contemptuous ease.\nUse this firefight ploy during a friendly VOID-DANCER TROUPE operative’s activation. Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".\n\nDOMINO FIELD\n\nHarlequins bear a variety of esoteric equipment,\nincluding the ubiquitous Domino Field, which breaks up their outline and renders them difficult to target.\nUse this firefight ploy when an operative is shooting a friendly VOID-DANCER TROUPE operative, during the Resolve Defence Dice step. You can allocate one of your rolled successful dice to block all of your opponent’s attack dice with matching results (e.g. one of your successful defence dice results of 5 can be used to block all successful attack dice results of 5).\n\nFaction Equipment\nWRAITHBONE TALISMAN\n\nCharged with psychic power, this item provides fleeting insight to the bearer, enabling them to strike their opponents with unerring accuracy.\nOnce per turning point, when a friendly VOID-DANCER TROUPE operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nSHRIEKER TOXIN ROUNDS\n\nCoated with virulent genetic toxins, these rounds cause the flesh of the target to twist, distort and rupture to devastating effect.\nOnce per turning point, when a friendly VOID-DANCER TROUPE operative is performing the Shoot action and you select a shuriken pistol or shrieker cannon (focused), you can use this rule. If you do, until the end of that action, that weapon has the Devastating 1 weapon rule.\n\nDEATH MASK\n\nOn occasion, a Harlequin must perish in order to fulfil their role in the saedath. Such dedication emboldens those in their troupe that survive.\nKeep a Tragedy tally. Whenever a friendly VOID-DANCER TROUPE operative that has an ACCOLADE rule is incapacitated, add 1 to your Tragedy tally. When your Tragedy tally reaches 3, you gain 1CP and stop that tally.\n\nUNDERSTUDY’S MASK\n\nThis item allows Harlequins to change roles during the saedath. Should one who holds a pivotal role be slain, another will swiftly take their place.\nOnce per battle, when you activate a friendly VOID-DANCER TROUPE operative, if the friendly operative that has the PIVOTAL ROLE has been incapacitated, you can use this rule. If you do, that activated operative has the PIVOTAL ROLE for the battle.",
+   "cp": 1,
+   "fluff": "Attempts to engage the troupe in melee combat meet with little success. Luckless assailants find their wellaimed strikes meeting only thin air."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "void-dancer-troupe.fp.murderous-entrance",
+   "name": "MURDEROUS ENTRANCE",
+   "text": "Use this firefight ploy when a friendly VOID-DANCER TROUPE operative is fighting during an activation in which it performed the Charge action, after you strike. You can immediately resolve another of your normal successes as a strike (before your opponent), or one of your critical successes if there are none.",
+   "cp": 1,
+   "fluff": "The Harlequin assault materialises with terrifying speed, a flurry of deadly blows landing before the foe can raise a blade in response."
+  },
+  {
+   "id": "void-dancer-troupe.fp.the-curtain-falls",
+   "name": "THE CURTAIN FALLS",
+   "text": "Use this firefight ploy when a friendly VOID-DANCER TROUPE operative is fighting, after you strike with a critical success, if the enemy operative isn’t incapacitated. End that sequence (any remaining attack dice are discarded) and immediately perform a free Fall Back action up to 3\" with that operative (then the Fight action ends). That operative can do so even if it’s performed an action that prevents it from performing the Fall Back action.",
+   "cp": 1,
+   "fluff": "Upon landing a devastating blow, the Harlequin\ndisengages, leaving their wounded opponent flailing desperately in response."
+  },
+  {
+   "id": "void-dancer-troupe.fp.elusive-target",
+   "name": "ELUSIVE TARGET",
+   "text": "Use this firefight ploy during a friendly VOID-DANCER TROUPE operative’s activation. Until the start of its next activation, while that operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".",
+   "cp": 1,
+   "fluff": "Swift, agile and graceful, Harlequins dart from cover to cover, evading their opponents with contemptuous ease."
+  },
+  {
+   "id": "void-dancer-troupe.fp.domino-field",
+   "name": "DOMINO FIELD",
+   "text": "Use this firefight ploy when an operative is shooting a friendly VOID-DANCER TROUPE operative, during the Resolve Defence Dice step. You can allocate one of your rolled successful dice to block all of your opponent’s attack dice with matching results (e.g. one of your successful defence dice results of 5 can be used to block all successful attack dice results of 5).\n\nFaction Equipment\nWRAITHBONE TALISMAN\n\nCharged with psychic power, this item provides fleeting insight to the bearer, enabling them to strike their opponents with unerring accuracy.\nOnce per turning point, when a friendly VOID-DANCER TROUPE operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nSHRIEKER TOXIN ROUNDS\n\nCoated with virulent genetic toxins, these rounds cause the flesh of the target to twist, distort and rupture to devastating effect.\nOnce per turning point, when a friendly VOID-DANCER TROUPE operative is performing the Shoot action and you select a shuriken pistol or shrieker cannon (focused), you can use this rule. If you do, until the end of that action, that weapon has the Devastating 1 weapon rule.\n\nDEATH MASK\n\nOn occasion, a Harlequin must perish in order to fulfil their role in the saedath. Such dedication emboldens those in their troupe that survive.\nKeep a Tragedy tally. Whenever a friendly VOID-DANCER TROUPE operative that has an ACCOLADE rule is incapacitated, add 1 to your Tragedy tally. When your Tragedy tally reaches 3, you gain 1CP and stop that tally.\n\nUNDERSTUDY’S MASK\n\nThis item allows Harlequins to change roles during the saedath. Should one who holds a pivotal role be slain, another will swiftly take their place.\nOnce per battle, when you activate a friendly VOID-DANCER TROUPE operative, if the friendly operative that has the PIVOTAL ROLE has been incapacitated, you can use this rule. If you do, that activated operative has the PIVOTAL ROLE for the battle.",
+   "cp": 1,
+   "fluff": "Harlequins bear a variety of esoteric equipment,\nincluding the ubiquitous Domino Field, which breaks up their outline and renders them difficult to target."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "void-dancer-troupe.eq.wraithbone-talisman",
+   "name": "WRAITHBONE TALISMAN",
+   "text": "Once per turning point, when a friendly VOID-DANCER TROUPE operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.",
+   "fluff": "Charged with psychic power, this item provides fleeting insight to the bearer, enabling them to strike their opponents with unerring accuracy."
+  },
+  {
+   "id": "void-dancer-troupe.eq.shrieker-toxin-rounds",
+   "name": "SHRIEKER TOXIN ROUNDS",
+   "text": "Once per turning point, when a friendly VOID-DANCER TROUPE operative is performing the Shoot action and you select a shuriken pistol or shrieker cannon (focused), you can use this rule. If you do, until the end of that action, that weapon has the Devastating 1 weapon rule.",
+   "fluff": "Coated with virulent genetic toxins, these rounds cause the flesh of the target to twist, distort and rupture to devastating effect."
+  },
+  {
+   "id": "void-dancer-troupe.eq.death-mask",
+   "name": "DEATH MASK",
+   "text": "Keep a Tragedy tally. Whenever a friendly VOID-DANCER TROUPE operative that has an ACCOLADE rule is incapacitated, add 1 to your Tragedy tally. When your Tragedy tally reaches 3, you gain 1CP and stop that tally.",
+   "fluff": "On occasion, a Harlequin must perish in order to fulfil their role in the saedath. Such dedication emboldens those in their troupe that survive."
+  },
+  {
+   "id": "void-dancer-troupe.eq.understudys-mask",
+   "name": "UNDERSTUDY’S MASK",
+   "text": "Once per battle, when you activate a friendly VOID-DANCER TROUPE operative, if the friendly operative that has the PIVOTAL ROLE has been incapacitated, you can use this rule. If you do, that activated operative has the PIVOTAL ROLE for the battle.",
+   "fluff": "This item allows Harlequins to change roles during the saedath. Should one who holds a pivotal role be slain, another will swiftly take their place."
+  }
+ ],
+ "markerGuide": "",
+ "notes": [],
+ "rareWeaponRules": [
+  "HumblingCruelty"
+ ]
+}

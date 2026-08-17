@@ -1,0 +1,1695 @@
+{
+ "id": "corsair-voidscarred",
+ "name": "Corsair Voidscarred",
+ "faction": "Corsairs",
+ "grandFaction": "Aeldari",
+ "archetypes": [
+  "Infiltration",
+  "Recon"
+ ],
+ "booksVersion": "January ’26",
+ "books": [
+  {
+   "book": "Corsair Voidscarred",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "January ’26",
+   "lastUpdate": "January 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_28-01_kill_team_team_rules_corsair_voidscarred-3war9i1i61-vjohvdpcb9.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/corsair-voidscarred/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "FELARCH",
+   "datacardId": "corsair-voidscarred.voidscarred-felarch",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "corsair-voidscarred.g1.opt1",
+     "label": "Shuriken rifle; shuriken pistol; power weapon",
+     "weapons": [
+      "Shuriken rifle",
+      "Shuriken pistol",
+      "Power weapon"
+     ]
+    },
+    {
+     "id": "corsair-voidscarred.g1.opt2",
+     "label": "Neuro disruptor; power weapon",
+     "weapons": [
+      "Neuro disruptor",
+      "Power weapon"
+     ]
+    }
+   ],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "FELARCH"
+   ]
+  },
+  "slots": 8,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "FELARCH"
+    ],
+    "rawText": "1 CORSAIR VOIDSCARRED FELARCH operative with one of the following options:"
+   },
+   {
+    "index": 2,
+    "count": 8,
+    "kind": "list",
+    "roles": [
+     "FATE DEALER",
+     "GUNNER",
+     "HEAVY GUNNER",
+     "KURNATHI",
+     "KURNITE HUNTER",
+     "SHADE RUNNER",
+     "SOUL WEAVER",
+     "STARSTORM DUELLIST",
+     "WARRIOR",
+     "WAY SEEKER"
+    ],
+    "rawText": "8 CORSAIR VOIDSCARRED operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "FATE DEALER",
+    "datacardAnchor": "Voidscarred-Fate-Dealer",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "FATE DEALER",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-fate-dealer",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Ranger long rifle",
+     "Shuriken pistol",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Voidscarred-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "corsair-voidscarred.g2e2.opt1",
+      "label": "Blaster*; shuriken pistol; fists",
+      "weapons": [
+       "Blaster",
+       "Shuriken pistol",
+       "Fists"
+      ]
+     },
+     {
+      "id": "corsair-voidscarred.g2e2.opt2",
+      "label": "Shredder; shuriken pistol; fists",
+      "weapons": [
+       "Shredder",
+       "Shuriken pistol",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with one of the following options:",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Voidscarred-Heavy-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "corsair-voidscarred.g2e3.opt1",
+      "label": "Shuriken cannon; shuriken pistol; fists",
+      "weapons": [
+       "Shuriken cannon",
+       "Shuriken pistol",
+       "Fists"
+      ]
+     },
+     {
+      "id": "corsair-voidscarred.g2e3.opt2",
+      "label": "Shuriken pistol; wraithcannon*; fists",
+      "weapons": [
+       "Shuriken pistol",
+       "Wraithcannon",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER with one of the following options:",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-heavy-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "KURNATHI",
+    "datacardAnchor": "Voidscarred-Kurnathi",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "KURNATHI",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-kurnathi",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Shuriken pistol",
+     "Dual power weapons"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "KURNITE HUNTER",
+    "datacardAnchor": "Voidscarred-Kurnite-Hunter",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "KURNITE HUNTER",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-kurnite-hunter",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Faolchú",
+     "Shuriken pistol",
+     "Power weapon"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SHADE RUNNER",
+    "datacardAnchor": "Voidscarred-Shade-Runner",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SHADE RUNNER",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-shade-runner",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Shuriken pistol",
+     "Throwing blades",
+     "Hekatarii blades"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SOUL WEAVER",
+    "datacardAnchor": "Voidscarred-Soul-Weaver",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "SOUL WEAVER",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-soul-weaver",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Shuriken pistol",
+     "Power weapon"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "STARSTORM DUELLIST",
+    "datacardAnchor": "Voidscarred-Starstorm-Duellist",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "STARSTORM DUELLIST",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-starstorm-duellist",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Fusion pistol",
+     "Shuriken pistol",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "WARRIOR",
+    "datacardAnchor": "Voidscarred-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "corsair-voidscarred.g2e9.opt1",
+      "label": "Shuriken pistol; power weapon",
+      "weapons": [
+       "Shuriken pistol",
+       "Power weapon"
+      ]
+     },
+     {
+      "id": "corsair-voidscarred.g2e9.opt2",
+      "label": "Shuriken rifle; fists",
+      "weapons": [
+       "Shuriken rifle",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WARRIOR with one of the following options:",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-warrior",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": false
+   },
+   {
+    "role": "WAY SEEKER",
+    "datacardAnchor": "Voidscarred-Way-Seeker",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WAY SEEKER",
+    "group": 2,
+    "datacardId": "corsair-voidscarred.voidscarred-way-seeker",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Freezing grasp",
+     "Lightning strike",
+     "Shuriken pistol",
+     "Witch staff"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "FELARCH",
+    "datacardAnchor": "Voidscarred-Felarch",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "corsair-voidscarred.g1.opt1",
+      "label": "Shuriken rifle; shuriken pistol; power weapon",
+      "weapons": [
+       "Shuriken rifle",
+       "Shuriken pistol",
+       "Power weapon"
+      ]
+     },
+     {
+      "id": "corsair-voidscarred.g1.opt2",
+      "label": "Neuro disruptor; power weapon",
+      "weapons": [
+       "Neuro disruptor",
+       "Power weapon"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 CORSAIR VOIDSCARRED FELARCH operative with one of the following options:",
+    "group": 1,
+    "datacardId": "corsair-voidscarred.voidscarred-felarch",
+    "isLeader": true,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "WARRIOR"
+    ]
+   },
+   {
+    "kind": "custom",
+    "text": "Your kill team cannot include both a blaster and a wraithcannon.",
+    "hook": "corsair-voidscarred.your-kill-team-cannot-include-both"
+   }
+  ],
+  "footnotes": {
+   "*": "Your kill team cannot include both a blaster and a wraithcannon."
+  },
+  "designerNotes": [],
+  "rawText": "1 CORSAIR VOIDSCARRED FELARCH operative with one of the following options:\n\nShuriken rifle; shuriken pistol; power weapon\n\nNeuro disruptor; power weapon\n\n8 CORSAIR VOIDSCARRED operatives selected from the following list:\n\nFATE DEALER\n\nGUNNER with one of the following options:\n\nBlaster*; shuriken pistol; fists\n\nShredder; shuriken pistol; fists\n\nHEAVY GUNNER with one of the following options:\n\nShuriken cannon; shuriken pistol; fists\n\nShuriken pistol; wraithcannon*; fists\n\nKURNATHI\n\nKURNITE HUNTER\n\nSHADE RUNNER\n\nSOUL WEAVER\n\nSTARSTORM DUELLIST\n\nWARRIOR with one of the following options:\n\nShuriken pistol; power weapon\n\nShuriken rifle; fists\n\nWAY SEEKER\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once.\n\n* Your kill team cannot include both a blaster and a wraithcannon."
+ },
+ "datacards": [
+  {
+   "id": "corsair-voidscarred.voidscarred-felarch",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Felarch",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "LEADER",
+    "FELARCH"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Neuro disruptor",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "corsair-voidscarred.voidscarred-felarch.veteran-raider",
+     "name": "Veteran Raider",
+     "text": "This operative can perform a 1AP action for free during their activation as a result of the Aeldari Raiders rule (instead of the Dash action)."
+    },
+    {
+     "id": "corsair-voidscarred.voidscarred-felarch.one-step-ahead",
+     "name": "One Step Ahead",
+     "text": "Once per battle, after an enemy operative performs an action, if this operative is ready, you can use this rule. If you do, roll one D6: if the result is higher than that enemy operative’s APL stat, you can interrupt and immediately perform either a free Shoot or a free Fight action with this operative, but you cannot select any other enemy operative as a valid target or to fight against during that action (note that secondary targets from the Blast weapon rule can still be targeted). After you perform that action, subtract 1 from this operative’s APL stat until the end of its next activation."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Felarchs are veteran Corsairs, with centuries or even millennia of experience reaving the stars. They have fought countless different races and mastered numerous weapons, making them deadly enemies for any who face them."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-fate-dealer",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Fate Dealer",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "FATE DEALER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Ranger long rifle",
+     "profiles": [
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      },
+      {
+       "name": "stationary",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Heavy",
+         "raw": "Heavy"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "corsair-voidscarred.voidscarred-fate-dealer.camo-cloak",
+     "name": "Camo Cloak",
+     "text": "Whenever an operative is shooting this operative:\n\nIgnore the Saturate weapon rule.\n\nIf you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Once a Fate Dealer has an enemy in their sights, it is the mark of the unfortunate soul’s death. Expert infiltrators, they hide in positions with greatest oversight of the whole battlefield, and are rendered all but invisible by camo cloaks."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-gunner",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Gunner",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Blaster",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shredder",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Corsairs utilise weapons hailing from every Aeldari society. Shredders unleash an expanding mesh of monofilament, entangling foes in a net and slicing them apart, while blasters use mysterious darklight technology, lethal even to the most armoured foe."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-heavy-gunner",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Heavy Gunner",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "HEAVY GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Shuriken cannon",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Wraithcannon",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 6,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 4,
+         "raw": "Devastating 4"
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "With rapid volleys of shuriken fire, Corsairs can shred enemy infantry and provide cover for their coterie. Some Corsairs wield wraithcannons. These weapons tear rifts between warp and realspace, ripping apart targets caught in the vortex."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-kurnathi",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Kurnathi",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "KURNATHI"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Dual power weapons",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "corsair-voidscarred.voidscarred-kurnathi.blademaster",
+     "name": "Blademaster",
+     "text": "This operative can perform the Dash action during an activation in which it performed the Charge action, but can only use any remaining move distance it had from that Charge action (to a maximum of 3\")."
+    },
+    {
+     "id": "corsair-voidscarred.voidscarred-kurnathi.bladed-stance",
+     "name": "Bladed Stance",
+     "text": "Whenever this operative is fighting or retaliating, you can resolve one of your successes before the normal order. If you do, that success must be used to block."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The Kurnathi are true blademasters. Assassins all, they have learned their bloody trade in Asuryani Aspect Shrines, in the arenas of Commorragh or even alongside the Harlequins. Now they put their skills to work however they see fit."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-kurnite-hunter",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Kurnite Hunter",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "KURNITE HUNTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Faolchú",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 1,
+       "dmgC": 2,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "SeekLight",
+         "raw": "Seek Light"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "corsair-voidscarred.voidscarred-kurnite-hunter.faolch-s-bond",
+     "name": "Faolchú’s Bond",
+     "text": "The first time during each turning point that this operative is retaliating, if it’s ready, in the Resolve Attack Dice step of that sequence, you resolve the first attack dice (i.e. defender instead of attacker)."
+    },
+    {
+     "id": "corsair-voidscarred.voidscarred-kurnite-hunter.erudite-hunter",
+     "name": "Erudite Hunter",
+     "text": "STRATEGIC GAMBIT. Select one enemy operative within 9\" of this operative. Once during this turning point, after that enemy operative performs an action in which it moves, you can interrupt to use this rule. If you do, this operative can immediately perform either a free Reposition action (it cannot end that move further away from that enemy operative), or a free Charge action (you can change its order to do so, and it must end that move within control range of that enemy operative). In a killzone that uses the close quarters rules (e.g. Killzone: Tomb World), ignore Wall terrain when determining further away."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Those Corsairs known a Kurnite Hunters are followers of Kurnous, Aeldari god of the hunt. Their bond with creatures of the hunt, such as the Faolchú, is often stronger than that with their fellow Corsairs."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-shade-runner",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Shade Runner",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "SHADE RUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Throwing blades",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Hekatarii blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "corsair-voidscarred.voidscarred-shade-runner.blink-pack",
+     "name": "Blink Pack",
+     "text": "Whenever this operative performs the Charge, Fall Back or Reposition action, it can warp jump. If it does, don’t move it. Instead, remove it from the killzone and set it back up wholly within 7\" horizontally of its original location (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, this distance can be measured through Wall terrain). It must be set up in a location it can be placed, and unless it’s the Charge action, it cannot be set up within control range of an enemy operative."
+    },
+    {
+     "id": "corsair-voidscarred.voidscarred-shade-runner.slicing-attack",
+     "name": "Slicing Attack",
+     "text": "Whenever this operative performs the Reposition action with a warp jump (see other side of card), you can use this rule. If you do, after it moves, draw an imaginary line 1mm in diameter and up to 7\" long between it and its previous location. Note this doesn’t have to be a straight line. Inflict D3+2 damage on one enemy operative that line crosses. You cannot inflict damage on an enemy operative that was not visible to this operative at the start of that action. A 28mm round marker can be temporarily placed underneath this operative before it moves to help determine this."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Shade Runners are experts at the surprise attack. Utilising their blink packs – which function in a similar manner to the warp jump generators used by Warp Spiders of the Asuryani – they flank their enemies, striking with the swift, savage blows of their Hekatarii blades."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-soul-weaver",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Soul Weaver",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "PSYKER",
+    "MEDIC",
+    "SOUL WEAVER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "corsair-voidscarred.voidscarred-soul-weaver.act.soul-channel",
+     "name": "SOUL CHANNEL",
+     "ap": 1,
+     "text": "PSYCHIC. Select one other friendly CORSAIR VOIDSCARRED operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "corsair-voidscarred.voidscarred-soul-weaver.act.soul-heal",
+     "name": "SOUL HEAL",
+     "ap": 1,
+     "text": "PSYCHIC. Select one friendly CORSAIR VOIDSCARRED operative visible to and within 6\" of this operative. That operative regains up to 2D3 lost wounds.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Spiritual mystics, Soul Weavers utilise the power and knowledge of the Aeldari souls in the spirit stones they carry. With this energy they can enhance warriors’ abilities in combat or heal the wounded."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-starstorm-duellist",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Starstorm Duellist",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "STARSTORM DUELLIST"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Fusion pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 3,
+         "raw": "Range 3\""
+        },
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Piercing",
+         "x": 2,
+         "raw": "Piercing 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "corsair-voidscarred.voidscarred-starstorm-duellist.quick-on-the-trigger",
+     "name": "Quick on the Trigger",
+     "text": "This operative can perform the Shoot action while within control range of an enemy operative. If it does, when selecting a valid target, you can only select an enemy operative within this operative’s control range, and can do so even if other friendly operatives are within that enemy operative’s control range."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "corsair-voidscarred.voidscarred-starstorm-duellist.act.pistol-barrage",
+     "name": "PISTOL BARRAGE",
+     "ap": 1,
+     "text": "Perform two free Shoot actions with this operative (this takes precedence over action restrictions). You must select its fusion pistol for one action and its shuriken pistol for the other (in any order).\n\nThis operative cannot perform this action while it has a Conceal order, or during an activation in which it performed the Shoot action (or vice versa)."
+    }
+   ],
+   "fluff": "Brash and arrogant, Starstorm Duellists are expert pistol wielders who dive through the fray to deliver salvoes of pinpoint fire at close range."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-warrior",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Warrior",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken rifle",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power weapon",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "corsair-voidscarred.voidscarred-warrior.prowling-raiders",
+     "name": "Prowling Raiders",
+     "text": "You can use the Capricious Flight and Light Fingers firefight ploys for 0CP each if a friendly WARRIOR operative is the specified CORSAIR VOIDSCARRED operative."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Corsairs are lithe and nimble warriors, skilled marksmen and bladesmen both. Swift fighters, they make up for lack of physical strength with sheer agility."
+  },
+  {
+   "id": "corsair-voidscarred.voidscarred-way-seeker",
+   "teamId": "corsair-voidscarred",
+   "name": "Voidscarred Way Seeker",
+   "keywords": [
+    "CORSAIR VOIDSCARRED",
+    "AELDARI",
+    "ANHRATHE",
+    "PSYKER",
+    "WAY SEEKER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 28
+   },
+   "apl": 2,
+   "move": 7,
+   "save": 4,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Freezing grasp",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 1,
+       "dmgC": 2,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Lightning strike",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Devastating",
+         "x": 2,
+         "dist": 2.0,
+         "raw": "2\" Devastating 2"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shuriken pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Witch staff",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "corsair-voidscarred.voidscarred-way-seeker.act.warp-fold",
+     "name": "WARP FOLD",
+     "ap": 1,
+     "text": "PSYCHIC. Select two friendly CORSAIR VOIDSCARRED operatives visible to and within 5\" of this operative. Remove them both from the killzone and set them back up in each other’s previous locations (in other words, swap their positions). If one of them performed the Charge, Fall Back or Reposition action during this turning point and the other is ready, the other cannot perform any of those actions in its activation during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "corsair-voidscarred.voidscarred-way-seeker.act.warding-shield",
+     "name": "WARDING SHIELD",
+     "ap": 1,
+     "text": "PSYCHIC. Select one friendly CORSAIR VOIDSCARRED operative visible to and within 6\" of this operative. Until the start of this operative’s next activation, until it’s incapacitated or until it performs this action again (whichever comes first), the first time an attack dice inflicts Normal Dmg on that friendly operative, ignore that inflicted damage.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "It is the role of the Way Seekers to guide and steer smaller Corsair ships on their travels. They are also powerful battlefield psykers who work closely with Fate Dealers and Kurnathi, identifying targets for these assassins as they would identify obstacles to their craft."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "corsair-voidscarred.rule.rifles",
+   "name": "Rifles",
+   "text": "Whenever a friendly CORSAIR VOIDSCARRED operative is shooting with a shuriken rifle or ranger long rifle during an activation in which it hasn’t performed the Charge, Fall Back or Reposition action, that weapon has the Accurate 1 weapon rule. Note that operative isn’t restricted from performing those actions after shooting.",
+   "fluff": "Whilst not all Aeldari outcasts have walked the Path of the Warrior, all are skilled in the use of rifles."
+  },
+  {
+   "id": "corsair-voidscarred.rule.aeldari-raiders",
+   "name": "Aeldari Raiders",
+   "text": "Each friendly CORSAIR VOIDSCARRED operative can perform a free Dash action during their activation.",
+   "fluff": "Aeldari are lithe, graceful and swift – qualities the Corsair Voidscarred utilise to outmanoeuvre their enemies."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "corsair-voidscarred.sp.plunderers",
+   "name": "PLUNDERERS",
+   "text": "Up to D3 friendly CORSAIR VOIDSCARRED operatives can immediately perform a free Dash action in an order of your choice. This turning point, each that does so cannot perform the Dash action during their activation. You cannot use this ploy during the first turning point.",
+   "cp": 1,
+   "fluff": "Aeldari Corsairs prioritise profit over glory, moving swiftly towards their objective in the hope of seizing their prize before the foe can react."
+  },
+  {
+   "id": "corsair-voidscarred.sp.piratical-profiteers",
+   "name": "PIRATICAL PROFITEERS",
+   "text": "Whenever a friendly CORSAIR VOIDSCARRED operative is shooting, fighting or retaliating, if it or the enemy operative in that sequence contests an objective marker or one of your mission markers, that friendly operative’s weapons have the Balanced weapon rule.",
+   "cp": 1,
+   "fluff": "Any foolish enough to attempt to contest a prize claimed by the Corsair Voidscarred will soon find themselves caught in a blizzard of shuriken fire and sword thrusts."
+  },
+  {
+   "id": "corsair-voidscarred.sp.mobile-engagement",
+   "name": "MOBILE ENGAGEMENT",
+   "text": "Whenever an operative is shooting a friendly CORSAIR VOIDSCARRED operative that performed an action in which it moved during this turning point, you can re-roll one of your defence dice.",
+   "cp": 1,
+   "fluff": "Aeldari Corsairs rely upon blistering speed to avoid heavy fire."
+  },
+  {
+   "id": "corsair-voidscarred.sp.outcasts",
+   "name": "OUTCASTS",
+   "text": "Whenever a friendly CORSAIR VOIDSCARRED operative is more than 5\" from other friendly operatives, its weapons have the Punishing weapon rule.\n\nFirefight Ploys\nOPPORTUNISTIC FIGHTERS\n\nShould the foe show weakness, the Corsair Voidscarred will redouble their attack, seeking to slaughter the enemy before they can regroup.\nUse this firefight ploy when an enemy operative performs the Fall Back action. Before it moves, inflict 2D3 damage on that operative for each friendly CORSAIR VOIDSCARRED operative within its control range.\n\nLIGHT FINGERS\n\nThe pursuit of riches drives all Corsairs. These lithe raiders may pluck a prize from under the nose of a foe and disappear before a blow can be landed in return.\nUse this firefight ploy during a friendly CORSAIR VOIDSCARRED operative’s activation. Until the end of that activation, having an enemy operative within its control range doesn’t prevent that friendly operative from performing the Pick Up Marker or mission actions.\n\nCAPRICIOUS FLIGHT\n\nAlways outnumbered and often outgunned, the Corsair Voidscarred utilise feints and trickery to strike before melting away into shadow.\nUse this firefight ploy during a friendly CORSAIR VOIDSCARRED operative’s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP.\n\nCONTEMPTUOUS ADVENTURER\n\nThe Corsair Voidscarred possess a fearless arrogance that is often justified by their superior skill at arms.\nUse this firefight ploy when the first friendly CORSAIR VOIDSCARRED operative is activated during the turning point, if it’s more than 5\" from other friendly operatives. The first time that operative performs either the Shoot or Fight action during that activation, its weapons have the Relentless weapon rule. Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation).\n\nFaction Equipment\nDIUTURNAL MANTLES\n\nThe cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature.\nWhenever an operative is shooting a friendly CORSAIR VOIDSCARRED operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly CORSAIR VOIDSCARRED operatives aren’t affected by the x\" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence.\n\nMISTFIELD\n\nA mistfield projects a field of thick moisture around the bearer that not only obscures their form, but also slows bullets, reducing their lethality.\nOnce per turning point, when an operative is shooting a friendly CORSAIR VOIDSCARRED operative more than 3\" from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.\n\nRUNES OF GUIDANCE\n\nCorsair psykers wield warp powers with consummate precision, lending their foresight to distant allies.\nOnce per turning point, when a friendly CORSAIR VOIDSCARRED WAY SEEKER or CORSAIR VOIDSCARRED SOUL WEAVER operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3\" to its distance requirement. Note this has no effect on PSYCHIC weapons (e.g. the Devastating distance requirement of lightning strike).\n\nSTAR CHARTS\n\nThe Corsair Voidscarred utilise their peerless knowledge of the void to outmanoeuvre their foes.\nSTRATEGIC GAMBIT. Roll one D3: if the result is higher than the number of the current turning point, you gain 1CP and cannot use this STRATEGIC GAMBIT for the rest of the battle.",
+   "cp": 1,
+   "fluff": "Those who walk the Path of the Outcast are no strangers to solitude. Some even fight better alone."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "corsair-voidscarred.fp.opportunistic-fighters",
+   "name": "OPPORTUNISTIC FIGHTERS",
+   "text": "Use this firefight ploy when an enemy operative performs the Fall Back action. Before it moves, inflict 2D3 damage on that operative for each friendly CORSAIR VOIDSCARRED operative within its control range.",
+   "cp": 1,
+   "fluff": "Should the foe show weakness, the Corsair Voidscarred will redouble their attack, seeking to slaughter the enemy before they can regroup."
+  },
+  {
+   "id": "corsair-voidscarred.fp.light-fingers",
+   "name": "LIGHT FINGERS",
+   "text": "Use this firefight ploy during a friendly CORSAIR VOIDSCARRED operative’s activation. Until the end of that activation, having an enemy operative within its control range doesn’t prevent that friendly operative from performing the Pick Up Marker or mission actions.",
+   "cp": 1,
+   "fluff": "The pursuit of riches drives all Corsairs. These lithe raiders may pluck a prize from under the nose of a foe and disappear before a blow can be landed in return."
+  },
+  {
+   "id": "corsair-voidscarred.fp.capricious-flight",
+   "name": "CAPRICIOUS FLIGHT",
+   "text": "Use this firefight ploy during a friendly CORSAIR VOIDSCARRED operative’s activation, before or after it performs an action. During that activation, that operative can perform the Fall Back action for 1 less AP.",
+   "cp": 1,
+   "fluff": "Always outnumbered and often outgunned, the Corsair Voidscarred utilise feints and trickery to strike before melting away into shadow."
+  },
+  {
+   "id": "corsair-voidscarred.fp.contemptuous-adventurer",
+   "name": "CONTEMPTUOUS ADVENTURER",
+   "text": "Use this firefight ploy when the first friendly CORSAIR VOIDSCARRED operative is activated during the turning point, if it’s more than 5\" from other friendly operatives. The first time that operative performs either the Shoot or Fight action during that activation, its weapons have the Relentless weapon rule. Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation).\n\nFaction Equipment\nDIUTURNAL MANTLES\n\nThe cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature.\nWhenever an operative is shooting a friendly CORSAIR VOIDSCARRED operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly CORSAIR VOIDSCARRED operatives aren’t affected by the x\" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence.\n\nMISTFIELD\n\nA mistfield projects a field of thick moisture around the bearer that not only obscures their form, but also slows bullets, reducing their lethality.\nOnce per turning point, when an operative is shooting a friendly CORSAIR VOIDSCARRED operative more than 3\" from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.\n\nRUNES OF GUIDANCE\n\nCorsair psykers wield warp powers with consummate precision, lending their foresight to distant allies.\nOnce per turning point, when a friendly CORSAIR VOIDSCARRED WAY SEEKER or CORSAIR VOIDSCARRED SOUL WEAVER operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3\" to its distance requirement. Note this has no effect on PSYCHIC weapons (e.g. the Devastating distance requirement of lightning strike).\n\nSTAR CHARTS\n\nThe Corsair Voidscarred utilise their peerless knowledge of the void to outmanoeuvre their foes.\nSTRATEGIC GAMBIT. Roll one D3: if the result is higher than the number of the current turning point, you gain 1CP and cannot use this STRATEGIC GAMBIT for the rest of the battle.",
+   "cp": 1,
+   "fluff": "The Corsair Voidscarred possess a fearless arrogance that is often justified by their superior skill at arms."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "corsair-voidscarred.eq.diuturnal-mantles",
+   "name": "DIUTURNAL MANTLES",
+   "text": "Whenever an operative is shooting a friendly CORSAIR VOIDSCARRED operative, if the ranged weapon in that sequence has the Blast or Torrent weapon rule, you can re-roll one of your defence dice. In addition, friendly CORSAIR VOIDSCARRED operatives aren’t affected by the x\" Devastating x weapon rule (i.e. Devastating with a distance) unless they are the target during that sequence.",
+   "fluff": "The cloaks worn by Corsair Voidscarred operatives are woven from psychoactive material that hardens in response to explosions and fluctuations in temperature."
+  },
+  {
+   "id": "corsair-voidscarred.eq.mistfield",
+   "name": "MISTFIELD",
+   "text": "Once per turning point, when an operative is shooting a friendly CORSAIR VOIDSCARRED operative more than 3\" from it, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.",
+   "fluff": "A mistfield projects a field of thick moisture around the bearer that not only obscures their form, but also slows bullets, reducing their lethality."
+  },
+  {
+   "id": "corsair-voidscarred.eq.runes-of-guidance",
+   "name": "RUNES OF GUIDANCE",
+   "text": "Once per turning point, when a friendly CORSAIR VOIDSCARRED WAY SEEKER or CORSAIR VOIDSCARRED SOUL WEAVER operative is performing a PSYCHIC unique action (excluding Warp Fold), you can use this rule. If you do, until the end of that action, add 3\" to its distance requirement. Note this has no effect on PSYCHIC weapons (e.g. the Devastating distance requirement of lightning strike).",
+   "fluff": "Corsair psykers wield warp powers with consummate precision, lending their foresight to distant allies."
+  },
+  {
+   "id": "corsair-voidscarred.eq.star-charts",
+   "name": "STAR CHARTS",
+   "text": "STRATEGIC GAMBIT. Roll one D3: if the result is higher than the number of the current turning point, you gain 1CP and cannot use this STRATEGIC GAMBIT for the rest of the battle.",
+   "fluff": "The Corsair Voidscarred utilise their peerless knowledge of the void to outmanoeuvre their foes."
+  }
+ ],
+ "markerGuide": "Erudite Hunter token\n\nWarding Shield token\n\nMistfield token\n\nFaolchú’s Bond token\n\nOne Step Ahead token\n\nRunes of Guidance token",
+ "notes": [],
+ "rareWeaponRules": [
+  "PSYCHIC"
+ ]
+}

@@ -1,0 +1,1740 @@
+{
+ "id": "wyrmblade",
+ "name": "Wyrmblade",
+ "faction": "Genestealer Cults",
+ "grandFaction": "Xenos",
+ "archetypes": [
+  "Seek & Destroy",
+  "Infiltration"
+ ],
+ "booksVersion": "November ’25",
+ "books": [
+  {
+   "book": "Wyrmblade",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "November ’25",
+   "lastUpdate": "November 2025",
+   "pdf": "https://assets.warhammer-community.com/eng_19-11_kt_wyrmblade_online_rules-6x2wikhnde-vicerplha0.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/wyrmblade/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "NEOPHYTE LEADER",
+   "datacardId": "wyrmblade.neophyte-leader",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "wyrmblade.g1.opt1",
+     "label": "Autogun; gun butt",
+     "weapons": [
+      "Autogun",
+      "Gun butt"
+     ]
+    },
+    {
+     "id": "wyrmblade.g1.opt2",
+     "label": "Shotgun; gun butt",
+     "weapons": [
+      "Shotgun",
+      "Gun butt"
+     ]
+    }
+   ],
+   "optionGroups": [
+    {
+     "id": "wyrmblade.g1.g1",
+     "label": "Bolt pistol, master-crafted autopistol or web pistol",
+     "choices": [
+      {
+       "id": "wyrmblade.g1.g1o1",
+       "label": "Bolt pistol, master-crafted autopistol",
+       "weapons": [
+        "Bolt pistol",
+        "Master-crafted autopistol"
+       ]
+      },
+      {
+       "id": "wyrmblade.g1.g1o2",
+       "label": "web pistol",
+       "weapons": [
+        "Web pistol"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "wyrmblade.g1.g2",
+     "label": "Chainsword, power maul or power pick",
+     "choices": [
+      {
+       "id": "wyrmblade.g1.g2o1",
+       "label": "Chainsword, power maul",
+       "weapons": [
+        "Chainsword",
+        "Power maul"
+       ]
+      },
+      {
+       "id": "wyrmblade.g1.g2o2",
+       "label": "power pick",
+       "weapons": [
+        "Power pick"
+       ]
+      }
+     ]
+    }
+   ],
+   "loadoutMode": "either",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "NEOPHYTE LEADER"
+   ]
+  },
+  "slots": 13,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "NEOPHYTE LEADER"
+    ],
+    "rawText": "1 WYRMBLADE NEOPHYTE LEADER operative with one of the following options:"
+   },
+   {
+    "index": 2,
+    "count": 13,
+    "kind": "list",
+    "roles": [
+     "KELERMORPH",
+     "LOCUS",
+     "GUNNER",
+     "GUNNER",
+     "GUNNER",
+     "HEAVY GUNNER",
+     "HEAVY GUNNER",
+     "HEAVY GUNNER",
+     "ICON BEARER",
+     "SANCTUS SNIPER",
+     "SANCTUS TALON",
+     "WARRIOR"
+    ],
+    "rawText": "13 WYRMBLADE operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "KELERMORPH",
+    "datacardAnchor": "Kelermorph",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "KELERMORPH*",
+    "group": 2,
+    "datacardId": "wyrmblade.kelermorph",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Liberator autostubs",
+     "Kelermorph knife"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "LOCUS",
+    "datacardAnchor": "Locus",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "LOCUS*",
+    "group": 2,
+    "datacardId": "wyrmblade.locus",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Barbed tail",
+     "Locus blades"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Neophyte-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Flamer",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with flamer and gun butt",
+    "group": 2,
+    "datacardId": "wyrmblade.neophyte-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Neophyte-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Grenade launcher",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with grenade launcher and gun butt",
+    "group": 2,
+    "datacardId": "wyrmblade.neophyte-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Neophyte-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Webber",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with webber and gun butt",
+    "group": 2,
+    "datacardId": "wyrmblade.neophyte-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Neophyte-Heavy-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Heavy stubber",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER with heavy stubber and gun butt",
+    "group": 2,
+    "datacardId": "wyrmblade.neophyte-heavy-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Neophyte-Heavy-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Mining laser",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER with mining laser and gun butt",
+    "group": 2,
+    "datacardId": "wyrmblade.neophyte-heavy-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Neophyte-Heavy-Gunner",
+    "count": 1,
+    "fixedWeapons": [
+     "Seismic cannon",
+     "Gun butt"
+    ],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER with seismic cannon and gun butt",
+    "group": 2,
+    "datacardId": "wyrmblade.neophyte-heavy-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "ICON BEARER",
+    "datacardAnchor": "Neophyte-Icon-Bearer",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "wyrmblade.g2e9.opt1",
+      "label": "Autogun; gun butt",
+      "weapons": [
+       "Autogun",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "wyrmblade.g2e9.opt2",
+      "label": "Shotgun; gun butt",
+      "weapons": [
+       "Shotgun",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ICON BEARER with one of the following options:",
+    "group": 2,
+    "datacardId": "wyrmblade.neophyte-icon-bearer",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SANCTUS SNIPER",
+    "datacardAnchor": "Sanctus-Sniper",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "SANCTUS SNIPER*",
+    "group": 2,
+    "datacardId": "wyrmblade.sanctus-sniper",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Sanctus sniper rifle",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "SANCTUS TALON",
+    "datacardAnchor": "Sanctus-Talon",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": "*",
+    "requires": [],
+    "rawText": "SANCTUS TALON*",
+    "group": 2,
+    "datacardId": "wyrmblade.sanctus-talon",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Sanctus bio-dagger"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "WARRIOR",
+    "datacardAnchor": "Neophyte-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "wyrmblade.g2e12.opt1",
+      "label": "Autogun; gun butt",
+      "weapons": [
+       "Autogun",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "wyrmblade.g2e12.opt2",
+      "label": "Shotgun; gun butt",
+      "weapons": [
+       "Shotgun",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WARRIOR with one of the following options:",
+    "group": 2,
+    "datacardId": "wyrmblade.neophyte-warrior",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": false
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "NEOPHYTE LEADER",
+    "datacardAnchor": "Neophyte-Leader",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "wyrmblade.g1.opt1",
+      "label": "Autogun; gun butt",
+      "weapons": [
+       "Autogun",
+       "Gun butt"
+      ]
+     },
+     {
+      "id": "wyrmblade.g1.opt2",
+      "label": "Shotgun; gun butt",
+      "weapons": [
+       "Shotgun",
+       "Gun butt"
+      ]
+     }
+    ],
+    "optionGroups": [
+     {
+      "id": "wyrmblade.g1.g1",
+      "label": "Bolt pistol, master-crafted autopistol or web pistol",
+      "choices": [
+       {
+        "id": "wyrmblade.g1.g1o1",
+        "label": "Bolt pistol, master-crafted autopistol",
+        "weapons": [
+         "Bolt pistol",
+         "Master-crafted autopistol"
+        ]
+       },
+       {
+        "id": "wyrmblade.g1.g1o2",
+        "label": "web pistol",
+        "weapons": [
+         "Web pistol"
+        ]
+       }
+      ]
+     },
+     {
+      "id": "wyrmblade.g1.g2",
+      "label": "Chainsword, power maul or power pick",
+      "choices": [
+       {
+        "id": "wyrmblade.g1.g2o1",
+        "label": "Chainsword, power maul",
+        "weapons": [
+         "Chainsword",
+         "Power maul"
+        ]
+       },
+       {
+        "id": "wyrmblade.g1.g2o2",
+        "label": "power pick",
+        "weapons": [
+         "Power pick"
+        ]
+       }
+      ]
+     }
+    ],
+    "loadoutMode": "either",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 WYRMBLADE NEOPHYTE LEADER operative with one of the following options:",
+    "group": 1,
+    "datacardId": "wyrmblade.neophyte-leader",
+    "isLeader": true,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "WARRIOR"
+    ]
+   },
+   {
+    "kind": "maxCount",
+    "role": "GUNNER",
+    "max": 2
+   },
+   {
+    "kind": "maxCount",
+    "role": "HEAVY GUNNER operatives and up to two CULT AGENT",
+    "max": 2
+   },
+   {
+    "kind": "custom",
+    "text": "These operatives count as two selections each.",
+    "hook": "wyrmblade.these-operatives-count-as-two-selections"
+   }
+  ],
+  "footnotes": {
+   "*": "These operatives count as two selections each."
+  },
+  "designerNotes": [],
+  "rawText": "1 WYRMBLADE NEOPHYTE LEADER operative with one of the following options:\n\nAutogun; gun butt\n\nShotgun; gun butt\n\nOr one option from each of the following:\n\nBolt pistol, master-crafted autopistol or web pistol\n\nChainsword, power maul or power pick\n\n13 WYRMBLADE operatives selected from the following list:\n\nKELERMORPH*\n\nLOCUS*\n\nGUNNER with flamer and gun butt\n\nGUNNER with grenade launcher and gun butt\n\nGUNNER with webber and gun butt\n\nHEAVY GUNNER with heavy stubber and gun butt\n\nHEAVY GUNNER with mining laser and gun butt\n\nHEAVY GUNNER with seismic cannon and gun butt\n\nICON BEARER with one of the following options:\n\nAutogun; gun butt\n\nShotgun; gun butt\n\nSANCTUS SNIPER*\n\nSANCTUS TALON*\n\nWARRIOR with one of the following options:\n\nAutogun; gun butt\n\nShotgun; gun butt\n\nOther than WARRIOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to two GUNNER operatives, up to two HEAVY GUNNER operatives and up to two CULT AGENT operatives.\n\n*These operatives count as two selections each."
+ },
+ "datacards": [
+  {
+   "id": "wyrmblade.neophyte-leader",
+   "teamId": "wyrmblade",
+   "name": "Neophyte Leader",
+   "keywords": [
+    "WYRMBLADE",
+    "TYRANIDS",
+    "GENESTEALER CULTS",
+    "NEOPHYTE",
+    "LEADER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 8,
+   "weapons": [
+    {
+     "name": "Autogun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Master-crafted autopistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Shotgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Web pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Chainsword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Power maul",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Power pick",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wyrmblade.neophyte-leader.shadow-vector",
+     "name": "Shadow Vector",
+     "text": "Once per turning point, you can use the Slink Into Darkness or Coiled Serpent firefight ploy for 0CP if the specified friendly WYRMBLADE operative is a NEOPHYTE visible to this operative."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Often a clandestine veteran of an Imperial martial or security institution, the leaders of Wyrmblade broods are accomplished guerrilla commanders. Highly skilled in unorthodox strikes and coordinating multipronged assaults, the gene-sect’s agents defer to their experience."
+  },
+  {
+   "id": "wyrmblade.kelermorph",
+   "teamId": "wyrmblade",
+   "name": "Kelermorph",
+   "keywords": [
+    "WYRMBLADE",
+    "TYRANIDS",
+    "GENESTEALER CULTS",
+    "CULT AGENT",
+    "KELERMORPH"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Liberator autostubs",
+     "profiles": [
+      {
+       "name": "hypersense",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "SeekLight",
+         "raw": "Seek Light"
+        },
+        {
+         "id": "Hypersense",
+         "raw": "Hypersense*"
+        }
+       ]
+      },
+      {
+       "name": "long range",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      },
+      {
+       "name": "short range",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        },
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Kelermorph knife",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wyrmblade.kelermorph.hypersense",
+     "name": "Hypersense",
+     "text": "Whenever this operative is shooting with this weapon profile, enemy operatives cannot be obscured."
+    },
+    {
+     "id": "wyrmblade.kelermorph.expert-gunslinger",
+     "name": "Expert Gunslinger",
+     "text": "This operative can perform two Shoot actions during its activation."
+    },
+    {
+     "id": "wyrmblade.kelermorph.heroic-inspiration",
+     "name": "Heroic Inspiration",
+     "text": "Whenever a friendly WYRMBLADE NEOPHYTE operative visible to and within 3\" of this operative is shooting, fighting or retaliating, if this operative has incapacitated an enemy operative during this turning point, that friendly operative’s weapons have the Severe weapon rule."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The Kelermorph is a third generation cult hybrid, bred to exploit the hopes of the downtrodden and embody their kin’s desire for rebellion. They are seen as inspirational folk heroes, and it is often on Wyrmblade missions that their legend as agile, gunslinging revolutionaries is forged."
+  },
+  {
+   "id": "wyrmblade.locus",
+   "teamId": "wyrmblade",
+   "name": "Locus",
+   "keywords": [
+    "WYRMBLADE",
+    "TYRANIDS",
+    "GENESTEALER CULTS",
+    "CULT AGENT",
+    "LOCUS"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Barbed tail",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 3,
+         "raw": "Range 3\""
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Locus blades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wyrmblade.locus.expert-swordsman",
+     "name": "Expert Swordsman",
+     "text": "This operative can perform two Fight actions during its activation. Whenever this operative ends the Fight action, if it’s no longer within control range of enemy operatives, it can immediately perform a free Charge action (even if it’s already performed the Charge action during that activation), but it cannot move more than 3\" during that action. Doing so doesn’t prevent it from performing the Dash action afterwards during that activation."
+    },
+    {
+     "id": "wyrmblade.locus.bladed-stance",
+     "name": "Bladed Stance",
+     "text": "Whenever this operative is fighting or retaliating, you can resolve one of your successes before the normal order. If you do, that success must be used to block."
+    },
+    {
+     "id": "wyrmblade.locus.quicksilver-strike",
+     "name": "Quicksilver Strike",
+     "text": "Once per turning point, after an enemy operative performs an action in which it moves or is set up, you can interrupt to use this rule. If you do, this operative can immediately perform a free Charge action (you can change its order to do so), but it cannot move more than 3\", and it must end that move within control range of that enemy operative. If this isn’t possible, the interruption is cancelled and this rule hasn’t been used."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Concealing a powerful, xenos-mutated form beneath heavy robes and a sinisterly still exterior, a Locus can erupt into a flurry of attacks in the blink of an eye. Often appointed by the cult’s Magus to protect a kill team’s leader, these gene-bred bodyguards are also their master’s eyes and ears."
+  },
+  {
+   "id": "wyrmblade.neophyte-gunner",
+   "teamId": "wyrmblade",
+   "name": "Neophyte Gunner",
+   "keywords": [
+    "WYRMBLADE",
+    "TYRANIDS",
+    "GENESTEALER CULTS",
+    "NEOPHYTE",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Flamer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Grenade launcher",
+     "profiles": [
+      {
+       "name": "frag",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        }
+       ]
+      },
+      {
+       "name": "krak",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Webber",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 12,
+         "raw": "Range 12\""
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "Especially powerful weapons purloined from defence militias, acquired via criminal contacts or even built in weapons shops are issued to a Wyrmblade brood’s most capable Gunners. These warriors gladly lay down salvoes on the move to protect their comrades and slay the cult’s foes."
+  },
+  {
+   "id": "wyrmblade.neophyte-heavy-gunner",
+   "teamId": "wyrmblade",
+   "name": "Neophyte Heavy Gunner",
+   "keywords": [
+    "WYRMBLADE",
+    "TYRANIDS",
+    "GENESTEALER CULTS",
+    "NEOPHYTE",
+    "HEAVY GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Heavy stubber",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        }
+       ]
+      },
+      {
+       "name": "sweeping",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Mining laser",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Seismic cannon",
+     "profiles": [
+      {
+       "name": "long-wave",
+       "type": "ranged",
+       "atk": 5,
+       "hit": 4,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      },
+      {
+       "name": "short-wave",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "PiercingCrits",
+         "x": 1,
+         "raw": "Piercing Crits 1"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wyrmblade.neophyte-heavy-gunner.heavy-weapon-bipod",
+     "name": "Heavy Weapon Bipod",
+     "text": "Whenever this operative is shooting with a weapon from its datacard, if it hasn’t moved during the activation, or if it’s a counteraction, that weapon has the Ceaseless weapon rule; if the weapon already has that weapon rule (i.e. from the Cult Ambush faction rule), it has the Relentless weapon rule. Note this operative isn’t restricted from moving after shooting."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Powerfully built Neophytes are granted the honour of bearing deadly, repurposed mining tools or weapons too hefty for normal Humans to carry. Their heavy firepower supports Wyrmblade missions by laying low the biggest threats."
+  },
+  {
+   "id": "wyrmblade.neophyte-icon-bearer",
+   "teamId": "wyrmblade",
+   "name": "Neophyte Icon Bearer",
+   "keywords": [
+    "WYRMBLADE",
+    "TYRANIDS",
+    "GENESTEALER CULTS",
+    "NEOPHYTE",
+    "ICON BEARER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autogun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Shotgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wyrmblade.neophyte-icon-bearer.icon-bearer",
+     "name": "Icon Bearer",
+     "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
+    },
+    {
+     "id": "wyrmblade.neophyte-icon-bearer.overthrow-the-oppressors",
+     "name": "Overthrow the Oppressors",
+     "text": "Once per turning point, when a ready friendly WYRMBLADE NEOPHYTE operative is incapacitated while visible to and within 6\" of this operative, you can use this rule. If you do, before that operative is removed from the killzone, it can either perform one free Shoot action (you can change its order to do so), or you can use the A Plan Generations in the Making firefight ploy for 0CP if that incapacitated operative is the specified friendly WYRMBLADE NEOPHYTE operative. It’s then removed from the killzone as normal."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "As strong in faith as their genetic inheritance makes them in body, Icon Bearers carry their holy sigils low until the time comes to raise them and signal the attack. Honoured wardens of their brood’s holy icon, they inspire their brothers and sisters to feats of great sacrifice."
+  },
+  {
+   "id": "wyrmblade.sanctus-sniper",
+   "teamId": "wyrmblade",
+   "name": "Sanctus Sniper",
+   "keywords": [
+    "WYRMBLADE",
+    "TYRANIDS",
+    "GENESTEALER CULTS",
+    "CULT AGENT",
+    "SANCTUS",
+    "SNIPER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Sanctus sniper rifle",
+     "profiles": [
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      },
+      {
+       "name": "stationary",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        },
+        {
+         "id": "Silent",
+         "raw": "Silent"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "wyrmblade.sanctus-sniper.act.target-vulnerability",
+     "name": "TARGET VULNERABILITY",
+     "ap": 1,
+     "text": "Until the end of this operative’s activation, the stationary profile of its Sanctus sniper rifle has the Lethal 5+ weapon rule.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "wyrmblade.sanctus-sniper.act.familiars-soulsight",
+     "name": "FAMILIAR’S SOULSIGHT",
+     "ap": 1,
+     "text": "Select one enemy operative visible to this operative. Until the end of the battle, or until this action is performed again by a friendly operative (whichever comes first), that enemy operative gains one of your Soulsight tokens. Whenever this operative is shooting an enemy operative that has one of your Soulsight tokens, all profiles of this operative’s Sanctus sniper rifle have the Saturate weapon rule and that enemy operative cannot be obscured.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Fixed by the assassin’s tri-lens goggles and centred in the cross hairs of their calibrated rifle, the target of a Sanctus Sniper is doomed. The Sanctus’ aim is further refined by their Soulsight Familiar, through which the cult’s Patriarch directs the killer."
+  },
+  {
+   "id": "wyrmblade.sanctus-talon",
+   "teamId": "wyrmblade",
+   "name": "Sanctus Talon",
+   "keywords": [
+    "WYRMBLADE",
+    "TYRANIDS",
+    "GENESTEALER CULTS",
+    "CULT AGENT",
+    "SANCTUS",
+    "TALON"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 6,
+   "save": 4,
+   "wounds": 9,
+   "weapons": [
+    {
+     "name": "Sanctus bio-dagger",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 4,
+         "raw": "Lethal 4+"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wyrmblade.sanctus-talon.creeping-shadow",
+     "name": "Creeping Shadow",
+     "text": "This operative can perform the Charge action while it has a Conceal order. Whenever this operative performs the Fight action, it can immediately perform a free Dash or Fall Back action afterwards (for the latter, it cannot move more than 3\"), even if it’s performed an action that prevents it from performing those actions."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "wyrmblade.sanctus-talon.act.familiars-soulsight",
+     "name": "FAMILIAR’S SOULSIGHT",
+     "ap": 1,
+     "text": "Select one enemy operative visible to this operative. Until the end of the battle, or until this action is performed again by a friendly operative (whichever comes first), that enemy operative gains one of your Soulsight tokens. Whenever this operative is fighting or retaliating against an enemy operative that has one of your Soulsight tokens, its Sanctus bio-dagger has the Brutal and Balanced weapon rules.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "wyrmblade.sanctus-talon.act.assassinate",
+     "name": "ASSASSINATE",
+     "ap": 2,
+     "text": "Select one enemy operative this operative isn’t visible to. Perform a free Charge action with this operative, but don’t exceed its Move stat (i.e. don’t add 2\"), and it must end that move within control range of that enemy operative. Then immediately perform a free Fight action with this operative against that enemy operative. The first time you strike during that action, you can immediately resolve another of your successes as a strike (before your opponent).\n\nThis operative cannot perform this action while it has an Engage order, or while within control range of an enemy operative."
+    }
+   ],
+   "fluff": "Some Sanctuses wield atrophic blades, each grown within bubbling pools containing the liquefied psychic essences of slain cultists. Clutching these weapons, a Sanctus will track its target for days, squeezing its multijointed limbs through narrow spaces while following its victim’s psychic spoor."
+  },
+  {
+   "id": "wyrmblade.neophyte-warrior",
+   "teamId": "wyrmblade",
+   "name": "Neophyte Warrior",
+   "keywords": [
+    "WYRMBLADE",
+    "TYRANIDS",
+    "GENESTEALER CULTS",
+    "NEOPHYTE",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Autogun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Shotgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 6,
+         "raw": "Range 6\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Gun butt",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wyrmblade.neophyte-warrior.group-activation",
+     "name": "Group Activation",
+     "text": "Whenever this operative is expended, you must then activate one other ready friendly WYRMBLADE WARRIOR operative (if able) before your opponent activates. When that other operative is expended, your opponent then activates as normal (in other words, you cannot activate more than two operatives in succession with this rule)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Warriors are amongst the most experienced guerrilla fighters of a cult’s Neophyte Hybrids. They are veteran agitators and insurgents, deeply indoctrinated in the cult’s creed. They form the backbone of the elite Wyrmblade broods sent deep into the oppressors’ territory."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "wyrmblade.rule.familiar-territory",
+   "name": "Familiar Territory",
+   "text": "When setting up a WYRMBLADE kill team before the battle, one third of your kill team can be set up in HIDING: place them to one side instead of in the killzone. CULT AGENT operatives cannot be set up in HIDING.\n\nIn the Firefight phase, friendly WYRMBLADE operatives set up in HIDING are activated as normal. When you do, you can either expend that operative or have it emerge. If it emerges, set it up in the killzone in a location it can be placed as follows (it’s no longer set up in HIDING):\n\nWholly within 6\" of your drop zone.\n\nMore than 6\" from enemy operatives.\n\nWith an order of your choice.\n\nThe operative is treated as performing the Reposition action (spend the AP accordingly), then continue its activation as normal. If the operative is a WARRIOR, ignore its Group Activation rule. Friendly operatives still in HIDING at the end of the second turning point are incapacitated.",
+   "fluff": "Genestealer Cults infiltrate all stratas of Imperial society, accumulating knowledge of transit routes, passageways and hidden tunnels by which they may outmanoeuvre their foes."
+  },
+  {
+   "id": "wyrmblade.rule.cult-agent",
+   "name": "Cult Agent",
+   "text": "Whenever an operative is shooting a friendly WYRMBLADE CULT AGENT operative:\n\nIgnore the Piercing and Saturate weapon rules.\n\nIf you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain.",
+   "fluff": "The Patriarch’s chosen agents are seeded throughout the Cult’s forces, providing guidance and motivation to the faithful."
+  },
+  {
+   "id": "wyrmblade.rule.cult-ambush",
+   "name": "Cult Ambush",
+   "text": "Whenever a friendly WYRMBLADE operative is shooting or fighting during its activation, if its order was changed from Conceal to Engage at the start of that activation, or it wasn’t visible to enemy operatives at the start of that activation, that friendly operative’s weapons have the Ceaseless weapon rule.",
+   "fluff": "When the Day of Ascension arrives, the Cult strike as one, catching their foes unawares with lethal ambushes and surprise assaults."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "wyrmblade.sp.the-day-is-at-hand",
+   "name": "THE DAY IS AT HAND",
+   "text": "Whenever a friendly WYRMBLADE operative is activated, if its order is changed from Conceal to Engage, until the end of that activation:\n\nIts ranged weapons have the Rending weapon rule.\n\nAdd 1 to the Atk stat of its melee weapons (to a maximum of 5).",
+   "cp": 1,
+   "fluff": "When the moment is right, the Cult strikes. Swift and brutal ambushes allow for high lethality, even with improvised weapons."
+  },
+  {
+   "id": "wyrmblade.sp.crossfire",
+   "name": "CROSSFIRE",
+   "text": "Whenever a friendly WYRMBLADE operative is shooting an operative that another friendly WYRMBLADE operative has already shot during this turning point, that first friendly operative’s ranged weapons have the Accurate 1 weapon rule.",
+   "cp": 1,
+   "fluff": "The Cult’s operatives surround their foes before opening fire and catching their targets in a lethal crossfire."
+  },
+  {
+   "id": "wyrmblade.sp.one-with-the-shadows",
+   "name": "ONE WITH THE SHADOWS",
+   "text": "Whenever an operative is shooting a friendly WYRMBLADE operative that has a Conceal order, if Light terrain is intervening, that friendly operative is obscured (unless the intervening Light terrain is within 1\" of either operative).",
+   "cp": 1,
+   "fluff": "Wyrmblade operatives know the battlefield like the backs of their clawed hands, stalking the shadows and using terrain to their own advantage."
+  },
+  {
+   "id": "wyrmblade.sp.divert-and-disappear",
+   "name": "DIVERT AND DISAPPEAR",
+   "text": "Up to three friendly WYRMBLADE operatives can immediately perform a free Dash or Charge action in an order of your choice (choose separately for each, and for the latter, it cannot move more than 3\"). If a WYRMBLADE CULT AGENT operative is selected for this ploy, it counts as two operatives, and it can perform a free Fall Back action instead (it cannot move more than 3\"); if it does, subtract 1 from its APL stat until the end of its next activation.\n\nFirefight Ploys\nSLINK INTO DARKNESS\n\nAs swiftly as their ambush is launched, Wyrmblade operatives fade away once more, scrambling into access tunnels and shadowy hiding places in preparation for the next wave.\nUse this firefight ploy at the end of a friendly WYRMBLADE operative’s activation. If that operative has an Engage order, change it to Conceal. You cannot use this ploy for each friendly operative more than once per battle.\n\nCOILED SERPENT\n\nWhen the ambush occurs, it does so with lightning speed and precise coordination, obliterating its targets in a hail of firepower or slashing blades.\nUse this firefight ploy when a friendly WYRMBLADE operative is shooting or fighting, after rolling your attack dice. If that friendly operative’s order was changed from Conceal to Engage at the start of that activation and this is the first time it’s performed either the Shoot or Fight action during that activation, you can retain one of your normal successes as a critical success instead. Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation).\n\nUNQUESTIONING LOYALTY\n\nNeophytes frequently sacrifice themselves for the cause, leaping in front of bullets and blades intended for the Cult’s leaders and heroes.\nUse this firefight ploy when a friendly WYRMBLADE CULT AGENT or WYRMBLADE LEADER operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly WYRMBLADE NEOPHYTE operative (excluding LEADER) visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that other operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that other operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.\n\nA PLAN GENERATIONS IN THE MAKING\n\nThe Cult will allow no interference in the execution of their plan. The Day of Ascension must occur. Even the mortally wounded will expend the last of their energy to ensure success.\nUse this firefight ploy when a friendly WYRMBLADE NEOPHYTE operative is incapacitated. It can perform a free mission action before it’s removed from the killzone.\n\nFaction Equipment\nBLASTING CHARGES\n\nMining equipment becomes deadly weaponry in the hands of the Wyrmblade.\nOnce per turning point, a friendly WYRMBLADE NEOPHYTE operative can use the following ranged weapon:\n\nBlasting charge\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nBlasting charge\n4\n\n4+\n\n3/5\n\nWR\n\nRange 4\", Blast 1\", Saturate\n\nCULT KNIVES\n\nThe agents of the Cult bear many bladed implements. Some mere tools,\nothers ritual in significance, yet all equally lethal in their hands.\nFriendly WYRMBLADE NEOPHYTE operatives have the following melee weapon:\n\nCult knife\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCult knife\n3\n\n4+\n\n3/4\n\nEXPLOSIVE TRAPS\n\nWyrmblade operatives make frequent use of booby traps and mines in the execution of their ambushes.\nThis equipment allows you to select two mines (see universal equipment). You cannot also select that equipment as normal (i.e. to give you three), and friendly WYRMBLADE operatives are ignored for your mines’ effects (i.e. they cannot trigger or take damage from them). This takes precedence over the normal mines rules.\n\nSPOTLIGHTS\n\nWyrmblade Neophytes bear mining lumen and flashlights, using these devices to sweep the shadows and reveal concealed foes.\nWhenever a friendly WYRMBLADE operative is shooting, the target cannot be obscured if it’s visible to and within 6\" of a friendly WYRMBLADE NEOPHYTE operative that isn’t within control range of enemy operatives.",
+   "cp": 1,
+   "fluff": "The Cult’s agents direct their zealous underlings with great cunning by throwing them into the fray or drawing them back, using the resultant chaos to place themselves in advantageous positions.",
+   "weapons": [
+    {
+     "name": "Blasting charge",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Cult knife",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "wyrmblade.fp.slink-into-darkness",
+   "name": "SLINK INTO DARKNESS",
+   "text": "Use this firefight ploy at the end of a friendly WYRMBLADE operative’s activation. If that operative has an Engage order, change it to Conceal. You cannot use this ploy for each friendly operative more than once per battle.",
+   "cp": 1,
+   "fluff": "As swiftly as their ambush is launched, Wyrmblade operatives fade away once more, scrambling into access tunnels and shadowy hiding places in preparation for the next wave."
+  },
+  {
+   "id": "wyrmblade.fp.coiled-serpent",
+   "name": "COILED SERPENT",
+   "text": "Use this firefight ploy when a friendly WYRMBLADE operative is shooting or fighting, after rolling your attack dice. If that friendly operative’s order was changed from Conceal to Engage at the start of that activation and this is the first time it’s performed either the Shoot or Fight action during that activation, you can retain one of your normal successes as a critical success instead. Note this ploy cannot come into effect more than once per activation (you cannot use it during both the Shoot and Fight action in the same activation).",
+   "cp": 1,
+   "fluff": "When the ambush occurs, it does so with lightning speed and precise coordination, obliterating its targets in a hail of firepower or slashing blades."
+  },
+  {
+   "id": "wyrmblade.fp.unquestioning-loyalty",
+   "name": "UNQUESTIONING LOYALTY",
+   "text": "Use this firefight ploy when a friendly WYRMBLADE CULT AGENT or WYRMBLADE LEADER operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one other friendly WYRMBLADE NEOPHYTE operative (excluding LEADER) visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that other operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that other operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.",
+   "cp": 1,
+   "fluff": "Neophytes frequently sacrifice themselves for the cause, leaping in front of bullets and blades intended for the Cult’s leaders and heroes."
+  },
+  {
+   "id": "wyrmblade.fp.a-plan-generations-in-the-making",
+   "name": "A PLAN GENERATIONS IN THE MAKING",
+   "text": "Use this firefight ploy when a friendly WYRMBLADE NEOPHYTE operative is incapacitated. It can perform a free mission action before it’s removed from the killzone.\n\nFaction Equipment\nBLASTING CHARGES\n\nMining equipment becomes deadly weaponry in the hands of the Wyrmblade.\nOnce per turning point, a friendly WYRMBLADE NEOPHYTE operative can use the following ranged weapon:\n\nBlasting charge\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nBlasting charge\n4\n\n4+\n\n3/5\n\nWR\n\nRange 4\", Blast 1\", Saturate\n\nCULT KNIVES\n\nThe agents of the Cult bear many bladed implements. Some mere tools,\nothers ritual in significance, yet all equally lethal in their hands.\nFriendly WYRMBLADE NEOPHYTE operatives have the following melee weapon:\n\nCult knife\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCult knife\n3\n\n4+\n\n3/4\n\nEXPLOSIVE TRAPS\n\nWyrmblade operatives make frequent use of booby traps and mines in the execution of their ambushes.\nThis equipment allows you to select two mines (see universal equipment). You cannot also select that equipment as normal (i.e. to give you three), and friendly WYRMBLADE operatives are ignored for your mines’ effects (i.e. they cannot trigger or take damage from them). This takes precedence over the normal mines rules.\n\nSPOTLIGHTS\n\nWyrmblade Neophytes bear mining lumen and flashlights, using these devices to sweep the shadows and reveal concealed foes.\nWhenever a friendly WYRMBLADE operative is shooting, the target cannot be obscured if it’s visible to and within 6\" of a friendly WYRMBLADE NEOPHYTE operative that isn’t within control range of enemy operatives.",
+   "cp": 1,
+   "fluff": "The Cult will allow no interference in the execution of their plan. The Day of Ascension must occur. Even the mortally wounded will expend the last of their energy to ensure success.",
+   "weapons": [
+    {
+     "name": "Blasting charge",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Cult knife",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "equipment": [
+  {
+   "id": "wyrmblade.eq.blasting-charges",
+   "name": "BLASTING CHARGES",
+   "text": "Once per turning point, a friendly WYRMBLADE NEOPHYTE operative can use the following ranged weapon:\n\nBlasting charge\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nBlasting charge\n4\n\n4+\n\n3/5\n\nWR\n\nRange 4\", Blast 1\", Saturate",
+   "fluff": "Mining equipment becomes deadly weaponry in the hands of the Wyrmblade.",
+   "weapons": [
+    {
+     "name": "Blasting charge",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wyrmblade.eq.cult-knives",
+   "name": "CULT KNIVES",
+   "text": "Friendly WYRMBLADE NEOPHYTE operatives have the following melee weapon:\n\nCult knife\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nCult knife\n3\n\n4+\n\n3/4",
+   "fluff": "The agents of the Cult bear many bladed implements. Some mere tools,\nothers ritual in significance, yet all equally lethal in their hands.",
+   "weapons": [
+    {
+     "name": "Cult knife",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "wyrmblade.eq.explosive-traps",
+   "name": "EXPLOSIVE TRAPS",
+   "text": "This equipment allows you to select two mines (see universal equipment). You cannot also select that equipment as normal (i.e. to give you three), and friendly WYRMBLADE operatives are ignored for your mines’ effects (i.e. they cannot trigger or take damage from them). This takes precedence over the normal mines rules.",
+   "fluff": "Wyrmblade operatives make frequent use of booby traps and mines in the execution of their ambushes."
+  },
+  {
+   "id": "wyrmblade.eq.spotlights",
+   "name": "SPOTLIGHTS",
+   "text": "Whenever a friendly WYRMBLADE operative is shooting, the target cannot be obscured if it’s visible to and within 6\" of a friendly WYRMBLADE NEOPHYTE operative that isn’t within control range of enemy operatives.",
+   "fluff": "Wyrmblade Neophytes bear mining lumen and flashlights, using these devices to sweep the shadows and reveal concealed foes."
+  }
+ ],
+ "markerGuide": "",
+ "notes": [],
+ "rareWeaponRules": [
+  "Hypersense"
+ ]
+}

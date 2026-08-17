@@ -1,0 +1,699 @@
+{
+ "id": "exodite-dragon-masters",
+ "name": "Exodite Dragon Masters",
+ "faction": "Exodites",
+ "grandFaction": "Aeldari",
+ "archetypes": [
+  "Seek & Destroy",
+  "Recon"
+ ],
+ "booksVersion": "",
+ "books": [
+  {
+   "book": "Exodite Dragon Masters",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "",
+   "lastUpdate": "July 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_22-07_kill_team_team_rules_exodite_dragon_masters-bfqzdncjqz-ijdqo65ctu.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/exodite-dragon-masters/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": null,
+   "datacardId": null,
+   "count": 0,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "fixed",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": []
+  },
+  "slots": 5,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "CLANBLADE"
+    ],
+    "rawText": "1 EXODITE DRAGON MASTER CLANBLADE operative"
+   },
+   {
+    "index": 2,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "LEYSTALKER"
+    ],
+    "rawText": "1 EXODITE DRAGON MASTER LEYSTALKER operative"
+   },
+   {
+    "index": 3,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "STONESINGER"
+    ],
+    "rawText": "1 EXODITE DRAGON MASTER STONESINGER operative"
+   },
+   {
+    "index": 4,
+    "count": 2,
+    "kind": "fixed",
+    "roles": [
+     "DRAKOLITHE"
+    ],
+    "rawText": "2 EXODITE DRAGON MASTER DRAKOLITHE operatives"
+   }
+  ],
+  "list": [
+   {
+    "role": "CLANBLADE",
+    "datacardAnchor": "Dragon-Master-Clanblade",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 EXODITE DRAGON MASTER CLANBLADE operative",
+    "group": 1,
+    "datacardId": "exodite-dragon-masters.dragon-master-clanblade",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Solar carbine",
+     "Drakesteed fangs & talons",
+     "Moonblades"
+    ]
+   },
+   {
+    "role": "LEYSTALKER",
+    "datacardAnchor": "Dragon-Master-Leystalker",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 EXODITE DRAGON MASTER LEYSTALKER operative",
+    "group": 2,
+    "datacardId": "exodite-dragon-masters.dragon-master-leystalker",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Long rifle",
+     "Drakesteed fangs & talons",
+     "Hunting blade"
+    ]
+   },
+   {
+    "role": "STONESINGER",
+    "datacardAnchor": "Dragon-Master-Stonesinger",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 EXODITE DRAGON MASTER STONESINGER operative",
+    "group": 3,
+    "datacardId": "exodite-dragon-masters.dragon-master-stonesinger",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Solar carbine",
+     "Venomcrest spit",
+     "Drakesteed fangs & talons",
+     "Stone stave"
+    ]
+   },
+   {
+    "role": "DRAKOLITHE",
+    "datacardAnchor": "Drakolithe",
+    "count": 2,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "2 EXODITE DRAGON MASTER DRAKOLITHE operatives",
+    "group": 4,
+    "datacardId": "exodite-dragon-masters.drakolithe",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Fangs & talons"
+    ]
+   }
+  ],
+  "leaderList": [],
+  "constraints": [],
+  "footnotes": {},
+  "designerNotes": [],
+  "rawText": "1 EXODITE DRAGON MASTER CLANBLADE operative\n\n1 EXODITE DRAGON MASTER LEYSTALKER operative\n\n1 EXODITE DRAGON MASTER STONESINGER operative\n\n2 EXODITE DRAGON MASTER DRAKOLITHE operatives"
+ },
+ "datacards": [
+  {
+   "id": "exodite-dragon-masters.dragon-master-clanblade",
+   "teamId": "exodite-dragon-masters",
+   "name": "Dragon Master Clanblade",
+   "keywords": [
+    "EXODITE DRAGON MASTER",
+    "AELDARI",
+    "MOUNTED",
+    "CLANBLADE"
+   ],
+   "base": {
+    "shape": "oval",
+    "mm": [
+     75,
+     42
+    ]
+   },
+   "apl": 4,
+   "move": 12,
+   "save": 3,
+   "wounds": 24,
+   "weapons": [
+    {
+     "name": "Solar carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 1,
+         "raw": "Devastating 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Drakesteed fangs & talons",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 6,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Moonblades",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exodite-dragon-masters.dragon-master-clanblade.scaleshield",
+     "name": "Scaleshield",
+     "text": "Whenever an operative is shooting this operative, and no attack dice are retained as critical successes, worsen the x of the Piercing weapon rule by 1 (if any). Note that Piercing 1 would therefore be ignored."
+    },
+    {
+     "id": "exodite-dragon-masters.dragon-master-clanblade.clanblade-upgrades",
+     "name": "Clanblade Upgrades",
+     "text": "When this operative is selected for the battle, select up to two different Clanblade Upgrade rules to be added to its datacard for the battle."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "At one ritual vertex of a Dragon Master triad are Clanblades. Fighting from atop ferocious redmaw drakesteeds, they are close-quarters masters who wield powered swords and axes in a ceremonial pairing known as moonblades. Clanblades champion the final and most physically dangerous stage of the hunt, when a prey is cornered and its every deadly movement must be anticipated, countered and exploited. Expert at reading the skills and power of their prey, they direct the rest of the triad in advantageous attack angles before charging in to personally strike down the deadliest foe."
+  },
+  {
+   "id": "exodite-dragon-masters.dragon-master-leystalker",
+   "teamId": "exodite-dragon-masters",
+   "name": "Dragon Master Leystalker",
+   "keywords": [
+    "EXODITE DRAGON MASTER",
+    "AELDARI",
+    "MOUNTED",
+    "LEYSTALKER"
+   ],
+   "base": {
+    "shape": "oval",
+    "mm": [
+     75,
+     42
+    ]
+   },
+   "apl": 4,
+   "move": 12,
+   "save": 3,
+   "wounds": 24,
+   "weapons": [
+    {
+     "name": "Long rifle",
+     "profiles": [
+      {
+       "name": "mobile",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 1,
+         "raw": "Devastating 1"
+        }
+       ]
+      },
+      {
+       "name": "stationary",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 3,
+         "raw": "Devastating 3"
+        },
+        {
+         "id": "Aimed",
+         "raw": "Aimed*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Drakesteed fangs & talons",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 6,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Hunting blade",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exodite-dragon-masters.dragon-master-leystalker.aimed",
+     "name": "Aimed",
+     "text": "This operative cannot use this weapon during an activation in which it moved more than 3\", and it cannot move more than 3\" during an activation in which it used this weapon. This weapon rule has no effect on preventing the Guard action."
+    },
+    {
+     "id": "exodite-dragon-masters.dragon-master-leystalker.implacable-darkscale",
+     "name": "Implacable Darkscale",
+     "text": "You can ignore any changes to this operative’s drakesteed fangs & talons weapon’s Hit stat from being injured."
+    },
+    {
+     "id": "exodite-dragon-masters.dragon-master-leystalker.leystalker-upgrades",
+     "name": "Leystalker Upgrades",
+     "text": "When this operative is selected for the battle, select up to two different Leystalker Upgrade rules to be added to its datacard for the battle."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Leystalkers are keen-eyed and ever-watchful. They divine the complex routes that lead their fellow Dragon Masters to their prey via hidden paths and subtle strategies. Exemplars of their clan’s renowned preparedness, Leystalkers direct their intelligent darkscale drakesteeds onto new routes to outflank and outwit their foe should they attempt to escape. They are also masterful snipers; once an unknowing target is in the sights of their expertly crafted long rifle, a Leystalker’s kill shot is delivered with unnatural precision. They are also capable of firing with reflexive accuracy at speeds that would daunt other marksmen."
+  },
+  {
+   "id": "exodite-dragon-masters.dragon-master-stonesinger",
+   "teamId": "exodite-dragon-masters",
+   "name": "Dragon Master Stonesinger",
+   "keywords": [
+    "EXODITE DRAGON MASTER",
+    "AELDARI",
+    "MOUNTED",
+    "PSYKER",
+    "STONESINGER"
+   ],
+   "base": {
+    "shape": "oval",
+    "mm": [
+     75,
+     42
+    ]
+   },
+   "apl": 4,
+   "move": 12,
+   "save": 3,
+   "wounds": 24,
+   "weapons": [
+    {
+     "name": "Solar carbine",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Devastating",
+         "x": 1,
+         "raw": "Devastating 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Venomcrest spit",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Drakesteed fangs & talons",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 6,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Stone stave",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exodite-dragon-masters.dragon-master-stonesinger.stonesinger-upgrades",
+     "name": "Stonesinger Upgrades",
+     "text": "When this operative is selected for the battle, select up to two different Stonesinger Upgrade rules to be added to its datacard for the battle."
+    }
+   ],
+   "uniqueActions": [
+    {
+     "id": "exodite-dragon-masters.dragon-master-stonesinger.act.song-of-renewal",
+     "name": "SONG OF RENEWAL",
+     "ap": 1,
+     "text": "PSYCHIC. Select one friendly EXODITE DRAGON MASTER operative visible to this operative. That operative regains up to 2D3 lost wounds.\n\nPSYCHIC. Alternatively, each friendly EXODITE DRAGON MASTER operative can regain up to D3 lost wounds.\n\nThis operative cannot perform this action while within control range of an enemy operative, or more than once per turning point"
+    }
+   ],
+   "fluff": "Stonesingers are powerful Exodite psykers who ride venom-spitting drakesteeds. They are renowned for their ability to contact the souls within a world spirit through the network’s psychocrystalline menhirs, and possess an eldritch connection with the energy that suffuses their environment. Stonesingers unleash this in elemental manifestations, conjuring howling storms and geomantic fluxes, or rupturing armour, flesh and bone with thrumming songs of wrath and ruin. They can equally invoke geysers of restorative energy capable of healing fellow Dragon Masters, or call forth thrashing vines and thorny growths of grasping tendrils."
+  },
+  {
+   "id": "exodite-dragon-masters.drakolithe",
+   "teamId": "exodite-dragon-masters",
+   "name": "Drakolithe",
+   "keywords": [
+    "EXODITE DRAGON MASTER",
+    "AELDARI",
+    "DRAKOLITHE"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 8,
+   "save": 5,
+   "wounds": 7,
+   "weapons": [
+    {
+     "name": "Fangs & talons",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Rending",
+         "raw": "Rending"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "exodite-dragon-masters.drakolithe.preternatural-evasion",
+     "name": "Preternatural Evasion",
+     "text": "Whenever this operative performs the Charge, Fall Back or Reposition action, if it ends that action more than 2\" from its previous location, it has SPEED 4+; if it ends more than 5\" from its previous location, it has SPEED 7+ instead. Whenever this operative ends its activation, if it didn’t gain SPEED 4+ or SPEED 7+ during that activation, it has SPEED 3-. Note that it’s the distance from the previous location, not the distance moved (in other words it cannot just circle back to its previous location and gain high SPEED)."
+    },
+    {
+     "id": "exodite-dragon-masters.drakolithe.beast",
+     "name": "Beast",
+     "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back, Fight, Guard, Pick Up Marker, Place Marker, Reposition and mission actions. This operative cannot perform the Pick Up Marker, Place Marker or mission actions unless there’s a friendly LEYSTALKER operative that isn’t incapacitated. It cannot use any weapons that aren’t on its datacard."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "These scaled, coursing beasts are used by Dragon Masters to help hunt elusive targets. They also protect Exodites from foes attempting to swarm them, intercepting and counterattacking with savage ferocity. Drakolithes chase down escaping targets, ambush outflanking enemies and use exceptional senses of sight, smell and predatory focus to detect prey attempting to lie low."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "exodite-dragon-masters.rule.drakesteed-agility",
+   "name": "Drakesteed Agility",
+   "text": "EXODITE DRAGON MASTER MOUNTED operatives cannot perform the Charge, Dash, Fall Back or Reposition actions; instead they can perform the Sprint and Turn unique actions.\n\nSPRINT0AP\nMove the active operative to a location it can be placed. This must be directly forwards or backwards in one or more straight-line increments, and increments are always rounded up to the nearest inch. It cannot move more than 9\" forwards or 3\" backwards per activation, and it cannot move more than 12\" per turning point.\n\nBefore or after one of the increments, you can pivot the active operative up to 45°. This doesn’t use any of its movement allowance, and it can then continue its movement with any remaining move distance.\n\nThe active operative cannot climb or finish the move on Vantage terrain higher than 2\" from the killzone floor. It can move through operatives and it treats terrain parts less than 2\" tall as Accessible terrain. Whenever it moves through an equipment terrain feature, remove that terrain feature from the battle.\n\nAn operative cannot perform this action while counteracting. For the purposes of your opponent’s rules, mission rules and killzone rules, this action is treated as the Reposition action, or the Charge action if the active operative ends the action within control range of an enemy operative.\n\nTURN1AP\nPivot the active operative up to 45°. This doesn’t use any of its movement allowance.\n\nAn operative cannot perform this action while counteracting. For the purposes of your opponent’s rules, mission rules and killzone rules, this action is treated as the Dash action, or the Charge action if the active operative ends the action within control range of an enemy operative.",
+   "fluff": "Dragon Masters guide their drakesteeds in rushing charges or banking turns to home in on their prey."
+  },
+  {
+   "id": "exodite-dragon-masters.rule.draconic-cavalry-tactics",
+   "name": "Draconic Cavalry Tactics",
+   "text": "When setting up an EXODITE DRAGON MASTER kill team before the battle, the first third of your kill team must be friendly DRAKOLITHE operatives set up as normal. Each friendly EXODITE DRAGON MASTER MOUNTED operative thereafter must be set up in reserve: place it to one side instead of in the killzone.\n\nIn the first Firefight phase, each friendly EXODITE DRAGON MASTER MOUNTED operative set up in reserve is activated as normal. When it is, set it up in a location it can be placed on the killzone floor with its base touching your killzone edge (it’s no longer in reserve). The operative is treated as performing the Turn action (spend the AP accordingly), then continue its activation as normal.\n\nEach friendly EXODITE DRAGON MASTER MOUNTED operative is activated twice per turning point (it’s only expended after the second activation). You cannot spend more than 3AP for it per activation, or more than its APL stat per turning point.\n\nEach friendly EXODITE DRAGON MASTER MOUNTED operative cannot be in cover from or obscured by Light terrain, terrain parts less than 2\" tall or terrain that’s not wholly intervening. Whenever a friendly EXODITE DRAGON MASTER MOUNTED operative would perform the Fight action, the distance requirements of its control range can be changed to 1\" horizontally and 4\" vertically until the end of that action.",
+   "fluff": "Dragon Master triads send forth their Drakolithes to flush out the prey before surging from ambush. The riders’ drakesteeds possess acute hunting instincts, while from their elevated positions the Exodites can strike down prey who seek to stay out of reach."
+  },
+  {
+   "id": "exodite-dragon-masters.rule.mercurial-speed",
+   "name": "Mercurial Speed",
+   "text": "Each friendly EXODITE DRAGON MASTER operative has a SPEED that has three levels: SPEED 3-, SPEED 4+ and SPEED 7+. An operative can only have one SPEED level at a time, and it starts the battle with SPEED 3-.\n\nAn EXODITE DRAGON MASTER MOUNTED operative has SPEED 3- if either of the following are true:\n\nIt ends the Sprint action and it either moved backwards or less than 4\" forwards.\n\nIt ends its activation without performing the Sprint action.\n\nAn EXODITE DRAGON MASTER MOUNTED operative has SPEED 4+ if it ends the Sprint action and moved 4\" or more during that action, or SPEED 7+ instead if it moved 7\" or more during that action.\n\nWhenever an operative is shooting a friendly EXODITE DRAGON MASTER operative, if that friendly operative has SPEED 4+, you can retain one of your defence dice as a normal success without rolling it; if it has SPEED 7+, you can retain one as a critical success instead.\n\nEXODITE DRAGON MASTER DRAKOLITHE operatives’ SPEED changes as described on their datacard.\n\nClanblade Upgrade\nMOONSONG CULL\n\nThe mythic weapons after which moonblades are named were said to sing louder with every soul thread they severed. Some Clanblades emulate this haunting dirge, surging from prey to prey with the screams and ar terial sprays of their foes ever in their wake.\nOnce during each of this operative’s activations, after it’s performed the Sprint action forwards and incapacitated an enemy operative during the Fight action, if it’s no longer within control range of enemy operatives, you can use this rule. If you do, it can immediately perform a free Sprint action forwards using any remaining move distance it had from that first Sprint action, but it cannot pivot during that free action. That operative can perform two Sprint actions during its activation to do so, and its SPEED is measured by the distance moved during both Sprint actions combined. The operative cannot have performed any other actions between those actions.\n\nSPECTRAL NIMBUS\n\nThose Clanblades fated to endure the deadliest trials master their control of the scaleshield’s energies. They become skilled in imbuing their own psychic gifts through its haptic controls, projecting a warding nimbus of empyric energy that can cast aside what should be the most grievous of wounds.\nOnce per turning point, when this operative is fighting or retaliating, after your opponent rolls their attack dice, but before re-rolls, you can use this rule. If you do, your opponent cannot retain attack dice results of less than 6 as critical successes during that sequence (e.g. as a result of the Lethal, Rending or Severe weapon rules).\n\nFOCUSED REFLECTION\n\nWith preternatural reactions and expert tilts of their scaleshield, the Clanblade is capable of angling the refracted energy of an honourless foe’s shots right back at them.\nWhenever an enemy operative is shooting this operative while within 6\" of it, if you allocate one or more critical successes to block your opponent’s attack dice, you can use this rule. If you do, after the action, before incapacitated operatives are removed (including this one, if relevant), inflict 1 damage on that enemy operative for each critical success allocated this way.\n\nSPEARTIP OF THE CLAN\n\nIt is the Clanblade’s ritual role amongst their triad to lead the charge into their prey. The most storied exemplars hit their targets like a celestial lance, speed itself honed as much as any weapon in their arsenal.\nWhenever this operative is fighting:\n\nIf it has SPEED 4+, the first time you strike with a normal success during that sequence, inflict 1 additional damage.\n\nIf it has SPEED 7+, add 1 to the Normal Dmg stat of melee weapons on its datacard.\n\nBLADED STANCE\n\nClanblades sharpen their martial skills by hunting some of the most dangerous dragons. These are creatures of such speed and strength that only those with reactions swift enough to blunt and deflect their first strike ever survive the encounter.\nWhenever this operative is fighting or retaliating with its moonblades, you can resolve one of your successes before the normal order. If you do, that success must be used to block.\n\nLeystalker Upgrade\nNOMAD EXECUTIONER\n\nThose who think to outmanoeuvre hunting groups of Dragon Masters are rapidly tracked down by the triads’ exceptionally dexterous marksmen. Leystalkers unlimber, load, aim and fire their long rifles in single, graceful movements on the move, already seeking out their next target before the first victim falls.\nWhenever this operative is performing the Sprint action, it can perform the Shoot action during that action (it must do so in a location it can be placed, and any remaining move distance it had from that Sprint action can be used after it does so). Note that as the Shoot action occurs before the Sprint action ends, for that Shoot action, this operative’s SPEED is whatever it had before beginning the Sprint action.\n\nELUSIVE PHANTASM\n\nLeystalkers are constantly on the move. They scout the triad’s hunting ground, seek the foe’s position and test their strengths, all while slipping through the enemy’s clutches again and again. Their skills have led a number of the Exodites' foes to believe them some kind of insubstantial spirit. While the enemy's paranoia grows, a Leystalker is already drawing a bead on them from yet another unexpected angle.\nAt the end of each Firefight phase, if this operative isn’t within control range of enemy operatives, it can perform a free Sprint or Turn action, but it cannot move more than 3\" during that action and its SPEED remains the same. Note that it must still have the necessary amount of movement allowance remaining this turning point.\n\nFATED SHOT\n\nSome Leystalkers read hidden paths in a world’s ley lines for more than themselves. They trace the route of a precision shot so that it lances through gusting fumes and lashing vegetation, whispering safely past allies and into the most vulnerable spot of a foe’s defences.\nOnce per turning point, when this operative performs the Shoot action and you select a profile of its long rifle, you can use this rule. If you do, select one of the following rules for it to have until the end of that sequence:\n\nEnemy operatives cannot be obscured.\n\nHaving other friendly EXODITE DRAGON MASTER operatives within an enemy operative’s control range doesn’t prevent that enemy operative from being selected as a valid target.\n\nNEXUS SENTINEL\n\nWhere lines of power converge – whether the vivid leys of an Exodite world or the muted energies of natural flows – Leystalkers can access sensory perceptions of incredible breadth and acuity. Few enemies can approach such a site held by a Leystalker without detection.\nOnce per turning point, this operative can perform the Guard action during its activation regardless of the killzone if it has SPEED 3- (see close quarters rules, Kill Team Core Book).\n\nWhenever this operative performs a pointblank shot as a result of the Guard action, don’t worsen the Hit stat of its weapons as a result of performing a point-blank shot.\n\nGLOAMING MANTLE\n\nMasters of merging with their environment and invoking the cloaking energies of hidden ley lines, Leystalkers can fade from the scrutiny of those attempting to hunt them as if mantling themselves in a supernatural gloaming.\nWhenever an operative is shooting this operative from more than 8\" away, if you cannot retain any cover saves, you can retain one of your defence dice as a normal success without rolling it; if you can retain any cover saves, you can retain one cover save as a critical success instead.\n\nStonesinger Upgrade\nWAILS OF THE WORLD\n\nA keening lament emitted by a Stonesinger signals their abhorrence of the foe. It rises in a reverberating wail until the air around the enemy and the ground beneath them shudder. Those without the agility to retain their footing risk being claimed by sudden crevasses, struck by tumbling rocks or mired in viscous flows of formerly solid matter.\n\nWAILS OF THE WORLD1AP\nPSYCHIC. Select one enemy operative visible to this operative. Subtract 2\" from the Move stat of that operative and each other enemy operative within 2\" of it until the end of their next activations respectively (this isn’t cumulative with being injured). MOUNTED operatives are unaffected.\n\nRoll 2D3 separately for each of those operatives: inflict damage on that operative equal to the difference between the result and their new Move stat (this takes precedence over stats not changing during an action). MOUNTED operatives are unaffected.\n\nThis operative cannot perform this action while within control range of an enemy operative, or more than once per turning point.\n\nCLEANSING OF THE PALE MOON\n\nThe Stonesinger weaves a psychic skirl of purification. Toxins are purged and anguish is soothed as the longlost Maiden Moon is invoked.\n\nCLEANSING OF THE PALE MOON1AP\nPSYCHIC. Select one friendly EXODITE DRAGON MASTER operative visible to this operative. Remove one rules effect or stat change your opponent has applied to it (e.g. Poison token, -1APL, cannot be activated or perform actions, etc.) This cannot allow it to regain lost wounds, remove mission pack rules or ignore the effects of being injured.\n\nThis operative cannot perform this action while within control range of an enemy operative. Note that unlike this operative’s other unique action upgrades, it can perform this action more than once per turning point.\n\nSOW THE SEEDS\n\nQuickening the slow rhythms of plant life, unnaturally motile vines and roots burst forth, marking sites as under the Stonesinger’s dominance.\nOnce per turning point, during this operative’s activation, before or after it performs an action, you can use this rule. If you do, select one objective marker it controls. Until this operative is incapacitated, until you use this rule again or until an enemy operative controls that marker (whichever comes first), this operative is treated as contesting that marker with an APL of 1 and controlling it for the purposes of mission actions and victory conditions (even if it’s not within this operative’s control range). Note that this could allow this operative to perform a mission action that would require it to control that marker.\n\nWIND’S GRACE\n\nWith swirling zephyrs, the psyker blurs their allies’ forms to shield them.\n\nWIND’S GRACE1AP\nPSYCHIC. Select one friendly EXODITE DRAGON MASTER operative visible to this operative. Until the start of this operative’s first activation in the next turning point, until it’s incapacitated or until it performs this action again (whichever comes first), that selected operative’s SPEED is one higher (i.e. if it would have SPEED 3-, it has SPEED 4+; if it would have SPEED 4+, it has SPEED 7+).\n\nThis operative cannot perform this action while within control range of an enemy operative, or more than once per turning point.\n\nEARTHEN WRATH\n\nA Stonesinger’s eldritch gesture can command eruptions of rocky shards or liquefy once solid ground to engulf the foe.\nThis operative has the following ranged weapon:\n\nEarthen Wrath\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nEarthen Wrath\n4\n\n3+\n\n4/3\n\nWR\n\nDevastating 2, Saturate, Earthen Wrath*\n\n*Earthen Wrath: If the target is in cover, this weapon has the Lethal 5+ weapon rule.",
+   "fluff": "Controlled breeding and harsh environments have granted drakesteeds powerful muscles. At their master’s command, they can switch from poised stillness to breakneck lunges too fast for the eye to follow.",
+   "weapons": [
+    {
+     "name": "Earthen Wrath",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 3,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "exodite-dragon-masters.sp.wind-swift-precision",
+   "name": "WIND-SWIFT PRECISION",
+   "text": "Whenever a friendly EXODITE DRAGON MASTER operative is shooting, if it has SPEED 4+, its ranged weapons have the Balanced weapon rule.",
+   "cp": 1,
+   "fluff": "Dragon Masters are superior mounted marksmen. At high speed, they intuitively exploit slivers of calm amidst their drakesteeds’ gait to deliver pinpoint shots into stunned foes."
+  },
+  {
+   "id": "exodite-dragon-masters.sp.draconic-fury",
+   "name": "DRACONIC FURY",
+   "text": "Whenever a friendly EXODITE DRAGON MASTER operative is fighting:\n\nIf it has SPEED 4+, its melee weapons have the Balanced weapon rule.\n\nIf it has SPEED 7+, its melee weapons have the Ceaseless weapon rule.",
+   "cp": 1,
+   "fluff": "In rapid hit-and-run lunges or daring thrusts through enemy lines, the poise and balance of Exodites and their dragons at speed are legendary."
+  },
+  {
+   "id": "exodite-dragon-masters.sp.sinuous-flux",
+   "name": "SINUOUS FLUX",
+   "text": "Whenever an enemy operative is shooting a friendly EXODITE DRAGON MASTER operative more than 6\" from it, if that friendly operative has SPEED 4+ or SPEED 7+, your opponent cannot re-roll their attack dice.",
+   "cp": 1,
+   "fluff": "Dragon Masters on the hunt are frighteningly evasive predators. The expert riders, as well as their reptilian mounts and hunting beasts, weave and coil to elude the foe’s attacks."
+  },
+  {
+   "id": "exodite-dragon-masters.sp.ride-them-down",
+   "name": "RIDE THEM DOWN",
+   "text": "Once during each friendly EXODITE DRAGON MASTER MOUNTED operative’s activation, whenever it ends its move during the Sprint action:\n\nIf it moved 4\" or more during that action, you can inflict 1 damage on one enemy operative within its control range.\n\nIf it moved 7\" or more during that action, or it’s a CLANBLADE operative, you can inflict D3 damage on one enemy operative within its control range instead.\n\nFirefight Ploys\nSURVIVALIST SPIRIT\n\nDragon Masters have endured long lives of gruelling trials. Their deep reserves of spiritual resilience harden them against many hurts.\nUse this firefight ploy during a friendly EXODITE DRAGON MASTER MOUNTED operative’s activation or counteraction, before or after it performs an action. Until the start of its next activation, you can ignore any changes to that operative’s weapon stats from being injured.\n\nLEAP\n\nThe preternatural agility and corded muscles of drakesteeds enable them to rapidly reposition in a single, nimble motion.\nUse this firefight ploy when a friendly EXODITE DRAGON MASTER MOUNTED operative performs the Sprint action. Instead of moving that operative, remove it from the killzone and set it back up in a location it can be placed within 1\" horizontally of its original location. This distance cannot be measured through terrain features more than 2\" tall, and that operative cannot be set up on Vantage terrain higher than 2\" from the killzone floor. That operative is treated as having moved 3\" for the purposes of its movement allowance and has SPEED 3-.\n\nFERAL HUNGER\n\nWith the scent of blood and fear in the air, the Exodites will willingly unleash their carnivorous dragons’ most vicious and feral instincts.\nUse this firefight ploy after rolling your attack dice for a friendly EXODITE DRAGON MASTER operative, if it’s fighting against a wounded enemy operative with its Drakesteed fangs & talons or fangs & talons. You can re-roll any of your attack dice.\n\nRIDING MASTERY\n\nDragon Masters’ command of their drakesteeds is paired with the exceptional dexterity and athleticism of their own species. In defence of their clan’s future, Dragon Masters can perform incredible feats of manoeuvre while surging through hostile territory.\nUse this firefight ploy when a friendly EXODITE DRAGON MASTER MOUNTED operative performs the Sprint action during its activation. During that action, that operative can perform the Pick Up Marker, Place Marker or a mission action (you can determine control during that action to do so), and any remaining move distance it had from that Sprint action can be used after it does so.\n\nFaction Equipment\nDRAGONSCALE MESH\n\nThese unique suits of mesh armour incorporate the glittering, crystalline scales of elder dragons and can withstand even esoteric assaults.\nOnce per turning point, when an operative is shooting a friendly EXODITE DRAGON MASTER MOUNTED operative, in the Roll Defence Dice step, you can retain one of your normal successes as a critical success instead.\n\nCLAN TALISMANS\n\nPotent talismans may invoke celestial myths, bear the blessings of clan lords, or carry arcane technology and psychic sigils. Such tokens instil a resolve to fight for the clan with exquisite grace and finesse.\nOnce per turning point, when a friendly EXODITE DRAGON MASTER MOUNTED operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nLILEATHAN CRYSTAL MATRICES\n\nExceptionally rare crystals from the hardest to reach maiden worlds focus the shots of the Exodites’ laser weaponry into searing beams.\nOnce per turning point, when a friendly EXODITE DRAGON MASTER operative is performing the Shoot action and you select a solar carbine or a profile of its long rifle, you can use this rule. If you do, until the end of that activation, that weapon has the Piercing 1 weapon rule.\n\nSPIRIT STONES\n\nSpirit stones carrying the souls of a former triad are priceless artefacts whose occupants provide wisdom to their living peers. Should the bearer of such treasures fall in battle, their comrades fight all the harder to recover their stone and those of the long departed. Such a collection of the clan’s most powerful souls cannot be allowed to slip into the enemy’s profane clutches.\nWhenever a friendly EXODITE DRAGON MASTER MOUNTED operative is incapacitated, you gain 1CP.",
+   "cp": 1,
+   "fluff": "Drakesteeds are large and ferocious beasts, utterly deadly when their slashing talons and rending fangs are magnified by crushing impact."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "exodite-dragon-masters.fp.survivalist-spirit",
+   "name": "SURVIVALIST SPIRIT",
+   "text": "Use this firefight ploy during a friendly EXODITE DRAGON MASTER MOUNTED operative’s activation or counteraction, before or after it performs an action. Until the start of its next activation, you can ignore any changes to that operative’s weapon stats from being injured.",
+   "cp": 1,
+   "fluff": "Dragon Masters have endured long lives of gruelling trials. Their deep reserves of spiritual resilience harden them against many hurts."
+  },
+  {
+   "id": "exodite-dragon-masters.fp.leap",
+   "name": "LEAP",
+   "text": "Use this firefight ploy when a friendly EXODITE DRAGON MASTER MOUNTED operative performs the Sprint action. Instead of moving that operative, remove it from the killzone and set it back up in a location it can be placed within 1\" horizontally of its original location. This distance cannot be measured through terrain features more than 2\" tall, and that operative cannot be set up on Vantage terrain higher than 2\" from the killzone floor. That operative is treated as having moved 3\" for the purposes of its movement allowance and has SPEED 3-.",
+   "cp": 1,
+   "fluff": "The preternatural agility and corded muscles of drakesteeds enable them to rapidly reposition in a single, nimble motion."
+  },
+  {
+   "id": "exodite-dragon-masters.fp.feral-hunger",
+   "name": "FERAL HUNGER",
+   "text": "Use this firefight ploy after rolling your attack dice for a friendly EXODITE DRAGON MASTER operative, if it’s fighting against a wounded enemy operative with its Drakesteed fangs & talons or fangs & talons. You can re-roll any of your attack dice.",
+   "cp": 1,
+   "fluff": "With the scent of blood and fear in the air, the Exodites will willingly unleash their carnivorous dragons’ most vicious and feral instincts."
+  },
+  {
+   "id": "exodite-dragon-masters.fp.riding-mastery",
+   "name": "RIDING MASTERY",
+   "text": "Use this firefight ploy when a friendly EXODITE DRAGON MASTER MOUNTED operative performs the Sprint action during its activation. During that action, that operative can perform the Pick Up Marker, Place Marker or a mission action (you can determine control during that action to do so), and any remaining move distance it had from that Sprint action can be used after it does so.\n\nFaction Equipment\nDRAGONSCALE MESH\n\nThese unique suits of mesh armour incorporate the glittering, crystalline scales of elder dragons and can withstand even esoteric assaults.\nOnce per turning point, when an operative is shooting a friendly EXODITE DRAGON MASTER MOUNTED operative, in the Roll Defence Dice step, you can retain one of your normal successes as a critical success instead.\n\nCLAN TALISMANS\n\nPotent talismans may invoke celestial myths, bear the blessings of clan lords, or carry arcane technology and psychic sigils. Such tokens instil a resolve to fight for the clan with exquisite grace and finesse.\nOnce per turning point, when a friendly EXODITE DRAGON MASTER MOUNTED operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.\n\nLILEATHAN CRYSTAL MATRICES\n\nExceptionally rare crystals from the hardest to reach maiden worlds focus the shots of the Exodites’ laser weaponry into searing beams.\nOnce per turning point, when a friendly EXODITE DRAGON MASTER operative is performing the Shoot action and you select a solar carbine or a profile of its long rifle, you can use this rule. If you do, until the end of that activation, that weapon has the Piercing 1 weapon rule.\n\nSPIRIT STONES\n\nSpirit stones carrying the souls of a former triad are priceless artefacts whose occupants provide wisdom to their living peers. Should the bearer of such treasures fall in battle, their comrades fight all the harder to recover their stone and those of the long departed. Such a collection of the clan’s most powerful souls cannot be allowed to slip into the enemy’s profane clutches.\nWhenever a friendly EXODITE DRAGON MASTER MOUNTED operative is incapacitated, you gain 1CP.",
+   "cp": 1,
+   "fluff": "Dragon Masters’ command of their drakesteeds is paired with the exceptional dexterity and athleticism of their own species. In defence of their clan’s future, Dragon Masters can perform incredible feats of manoeuvre while surging through hostile territory."
+  }
+ ],
+ "equipment": [
+  {
+   "id": "exodite-dragon-masters.eq.dragonscale-mesh",
+   "name": "DRAGONSCALE MESH",
+   "text": "Once per turning point, when an operative is shooting a friendly EXODITE DRAGON MASTER MOUNTED operative, in the Roll Defence Dice step, you can retain one of your normal successes as a critical success instead.",
+   "fluff": "These unique suits of mesh armour incorporate the glittering, crystalline scales of elder dragons and can withstand even esoteric assaults."
+  },
+  {
+   "id": "exodite-dragon-masters.eq.clan-talismans",
+   "name": "CLAN TALISMANS",
+   "text": "Once per turning point, when a friendly EXODITE DRAGON MASTER MOUNTED operative is shooting, fighting or retaliating, if you roll two or more fails, you can discard one of them to retain another as a normal success instead.",
+   "fluff": "Potent talismans may invoke celestial myths, bear the blessings of clan lords, or carry arcane technology and psychic sigils. Such tokens instil a resolve to fight for the clan with exquisite grace and finesse."
+  },
+  {
+   "id": "exodite-dragon-masters.eq.lileathan-crystal-matrices",
+   "name": "LILEATHAN CRYSTAL MATRICES",
+   "text": "Once per turning point, when a friendly EXODITE DRAGON MASTER operative is performing the Shoot action and you select a solar carbine or a profile of its long rifle, you can use this rule. If you do, until the end of that activation, that weapon has the Piercing 1 weapon rule.",
+   "fluff": "Exceptionally rare crystals from the hardest to reach maiden worlds focus the shots of the Exodites’ laser weaponry into searing beams."
+  },
+  {
+   "id": "exodite-dragon-masters.eq.spirit-stones",
+   "name": "SPIRIT STONES",
+   "text": "Whenever a friendly EXODITE DRAGON MASTER MOUNTED operative is incapacitated, you gain 1CP.",
+   "fluff": "Spirit stones carrying the souls of a former triad are priceless artefacts whose occupants provide wisdom to their living peers. Should the bearer of such treasures fall in battle, their comrades fight all the harder to recover their stone and those of the long departed. Such a collection of the clan’s most powerful souls cannot be allowed to slip into the enemy’s profane clutches."
+  }
+ ],
+ "markerGuide": "Remaining Actions\n\nSow the Seeds\n\nSpeed (SPEED 3- indicated by no token)\n\nSpectral Nimbus\n\nWails of the World\n\nWind’s Grace\n\nSong of Renewal\n\nFated Shot\n\nNexus Sentinel\n\nDragonscale Mesh\n\nClan Talismans\n\nLileathan Crystal Matrices\n\nSprint template\n\nFront/Back Pivot Template\n\nCentre Pivot Template",
+ "notes": [
+  "no datacard in this team carries the LEADER keyword"
+ ],
+ "rareWeaponRules": [
+  "Aimed",
+  "PSYCHIC"
+ ]
+}

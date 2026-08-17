@@ -1,0 +1,1034 @@
+{
+ "id": "plague-marines",
+ "name": "Plague Marines",
+ "faction": "Death Guard",
+ "grandFaction": "Chaos",
+ "archetypes": [
+  "Seek & Destroy",
+  "Security"
+ ],
+ "booksVersion": "APRIL ’26",
+ "books": [
+  {
+   "book": "Plague Marines",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "APRIL ’26",
+   "lastUpdate": "April 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_29-04_kt_teamrules_plague_marines-liggy6zl51-fa8nryqey9.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/plague-marines/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "CHAMPION",
+   "datacardId": "plague-marines.marine-champion",
+   "count": 1,
+   "loadouts": [],
+   "optionGroups": [],
+   "loadoutMode": "fixed",
+   "fixedWeapons": [],
+   "alwaysWeapons": [
+    "Plasma pistol",
+    "Plague sword"
+   ],
+   "choices": [
+    "CHAMPION"
+   ]
+  },
+  "slots": 5,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "CHAMPION"
+    ],
+    "rawText": "1 PLAGUE MARINE CHAMPION operative"
+   },
+   {
+    "index": 2,
+    "count": 5,
+    "kind": "list",
+    "roles": [
+     "BOMBARDIER",
+     "FIGHTER",
+     "HEAVY GUNNER",
+     "ICON BEARER",
+     "MALIGNANT PLAGUECASTER",
+     "WARRIOR"
+    ],
+    "rawText": "5 PLAGUE MARINE operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "BOMBARDIER",
+    "datacardAnchor": "Plague-Marine-Bombardier",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BOMBARDIER",
+    "group": 2,
+    "datacardId": "plague-marines.marine-bombardier",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Boltgun",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "FIGHTER",
+    "datacardAnchor": "Plague-Marine-Fighter",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "FIGHTER",
+    "group": 2,
+    "datacardId": "plague-marines.marine-fighter",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Flail of Corruption"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "HEAVY GUNNER",
+    "datacardAnchor": "Plague-Marine-Heavy-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "HEAVY GUNNER",
+    "group": 2,
+    "datacardId": "plague-marines.marine-heavy-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Plague spewer",
+     "Fists"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "ICON BEARER",
+    "datacardAnchor": "Plague-Marine-Icon-Bearer",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ICON BEARER",
+    "group": 2,
+    "datacardId": "plague-marines.marine-icon-bearer",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Bolt pistol",
+     "Plague knife"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "MALIGNANT PLAGUECASTER",
+    "datacardAnchor": "Malignant-Plaguecaster",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "MALIGNANT PLAGUECASTER",
+    "group": 2,
+    "datacardId": "plague-marines.malignant-plaguecaster",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Entropy",
+     "Plague wind",
+     "Corrupted staff"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "WARRIOR",
+    "datacardAnchor": "Plague-Marine-Warrior",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "WARRIOR",
+    "group": 2,
+    "datacardId": "plague-marines.marine-warrior",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Boltgun",
+     "Plague knife"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "CHAMPION",
+    "datacardAnchor": "Plague-Marine-Champion",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "1 PLAGUE MARINE CHAMPION operative",
+    "group": 1,
+    "datacardId": "plague-marines.marine-champion",
+    "isLeader": true,
+    "alwaysWeapons": [
+     "Plasma pistol",
+     "Plague sword"
+    ],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": []
+   }
+  ],
+  "footnotes": {},
+  "designerNotes": [
+   "Nurgle’s number is 7 and his sigil shows 3. From these numbers does his corruption flow."
+  ],
+  "rawText": "1 PLAGUE MARINE CHAMPION operative\n\n5 PLAGUE MARINE operatives selected from the following list:\n\nBOMBARDIER\n\nFIGHTER\n\nHEAVY GUNNER\n\nICON BEARER\n\nMALIGNANT PLAGUECASTER\n\nWARRIOR\n\nYour kill team can only include each operative on this list once."
+ },
+ "datacards": [
+  {
+   "id": "plague-marines.marine-champion",
+   "teamId": "plague-marines",
+   "name": "Plague Marine Champion",
+   "keywords": [
+    "PLAGUE MARINE",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "LEADER",
+    "CHAMPION"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 15,
+   "weapons": [
+    {
+     "name": "Plasma pistol",
+     "profiles": [
+      {
+       "name": "standard",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      },
+      {
+       "name": "supercharge",
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Hot",
+         "raw": "Hot"
+        },
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Piercing",
+         "x": 1,
+         "raw": "Piercing 1"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plague sword",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Poison",
+         "raw": "Poison*"
+        },
+        {
+         "id": "Toxic",
+         "raw": "Toxic*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "plague-marines.marine-champion.grandfathers-blessing",
+     "name": "Grandfather’s Blessing",
+     "text": "Whenever an enemy operative that has one of your Poison tokens loses one or more wounds within 7\" of this operative, this operative regains up to an equal number of lost wounds (to a maximum of 3 lost wounds per turning point, and only if this operative isn’t incapacitated)."
+    },
+    {
+     "id": "plague-marines.marine-champion.toxic",
+     "name": "Toxic",
+     "text": "Whenever this operative is using this weapon against an enemy operative that has one of your Poison tokens, add 1 to both Dmg stats of this weapon."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Armed with centuries of experience and warp-tainted weaponry, Champions are the rotten core of Plague Marine warbands. They lead from the front, setting a gory example for their troops to follow."
+  },
+  {
+   "id": "plague-marines.marine-bombardier",
+   "teamId": "plague-marines",
+   "name": "Plague Marine Bombardier",
+   "keywords": [
+    "PLAGUE MARINE",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "BOMBARDIER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "plague-marines.marine-bombardier.grenadier",
+     "name": "Grenadier",
+     "text": "This operative can use blight and krak grenades (see faction and universal equipment). Doing so doesn’t count towards any limited uses you have (i.e. if you also select those grenades from equipment for other operatives). Whenever it’s doing so, improve the Hit stat of that weapon by 1 and blight grenades have the Toxic weapon rule (see below)."
+    },
+    {
+     "id": "plague-marines.marine-bombardier.toxic",
+     "name": "Toxic",
+     "text": "Whenever this operative is using this weapon against an enemy operative that has one of your Poison tokens, add 1 to both Dmg stats of this weapon."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The Death Guard have long been terrifying trench fighters. Bombardiers specialise in breaking dug-in positions with hails of explosives, from armour-sundering krak grenades to hypertoxic blight grenades."
+  },
+  {
+   "id": "plague-marines.marine-fighter",
+   "teamId": "plague-marines",
+   "name": "Plague Marine Fighter",
+   "keywords": [
+    "PLAGUE MARINE",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "FIGHTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Flail of Corruption",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "Poison",
+         "raw": "Poison*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "plague-marines.marine-fighter.act.flail",
+     "name": "FLAIL",
+     "ap": 1,
+     "text": "Inflict D3+2 damage on each other operative that’s both visible to and within 2\" of this operative. Roll separately for each: if it’s an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn’t already have one).\n\nFor the purposes of action restrictions and the Astartes faction rule, this action is treated as a Fight action. This operative cannot perform this action while it has a Conceal order."
+    }
+   ],
+   "fluff": "Many Plague Marines prefer to fight their foes up close. They wade through the enemy ranks, with every swing of their plague-blessed weapons spreading new infections."
+  },
+  {
+   "id": "plague-marines.marine-heavy-gunner",
+   "teamId": "plague-marines",
+   "name": "Plague Marine Heavy Gunner",
+   "keywords": [
+    "PLAGUE MARINE",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "HEAVY GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plague spewer",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 5,
+       "hit": 2,
+       "dmgN": 3,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 7,
+         "raw": "Range 7\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Torrent",
+         "x": 2,
+         "raw": "Torrent 2\""
+        },
+        {
+         "id": "Poison",
+         "raw": "Poison*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [],
+   "fluff": "The arsenals of the Death Guard are filled with deadly weaponry, from lethal arcana to forbidden chem-agents from bygone ages. Heavy Gunners wield these tools of war to horrific effect."
+  },
+  {
+   "id": "plague-marines.marine-icon-bearer",
+   "teamId": "plague-marines",
+   "name": "Plague Marine Icon Bearer",
+   "keywords": [
+    "PLAGUE MARINE",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "ICON BEARER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Bolt pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plague knife",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 5,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Poison",
+         "raw": "Poison*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "plague-marines.marine-icon-bearer.icon-bearer",
+     "name": "Icon Bearer",
+     "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
+    },
+    {
+     "id": "plague-marines.marine-icon-bearer.icon-of-contagion",
+     "name": "Icon of Contagion",
+     "text": "Whenever this operative is within your opponent’s territory, the Contagion strategy ploy costs you 0CP."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Icon Bearers are honoured to bear the cursed standards of the Death Guard. Each is a locus for decay that saps the will of nearby foes and enhances the vigour of their fellow Plague Marines."
+  },
+  {
+   "id": "plague-marines.malignant-plaguecaster",
+   "teamId": "plague-marines",
+   "name": "Malignant Plaguecaster",
+   "keywords": [
+    "PLAGUE MARINE",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "PSYKER",
+    "MALIGNANT PLAGUECASTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Entropy",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 7,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Range",
+         "x": 7,
+         "raw": "Range 7\""
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Poison",
+         "raw": "Poison*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plague wind",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 6,
+       "hit": 3,
+       "dmgN": 2,
+       "dmgC": 3,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Saturate",
+         "raw": "Saturate"
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Torrent",
+         "x": 1,
+         "raw": "Torrent 1\""
+        },
+        {
+         "id": "Poison",
+         "raw": "Poison*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Corrupted staff",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "PSYCHIC",
+         "raw": "PSYCHIC"
+        },
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "Stun",
+         "raw": "Stun"
+        },
+        {
+         "id": "Poison",
+         "raw": "Poison*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "plague-marines.malignant-plaguecaster.act.poisonous-miasma",
+     "name": "POISONOUS MIASMA",
+     "ap": 1,
+     "text": "PSYCHIC. Select one enemy operative visible to and within 7\" of this operative, or one enemy operative that’s a valid target for this operative. That enemy operative gains one of your Poison tokens (if it doesn’t already have one). If it already has one, inflict 3 damage on that enemy operative instead.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+    },
+    {
+     "id": "plague-marines.malignant-plaguecaster.act.putrescent-vitality",
+     "name": "PUTRESCENT VITALITY",
+     "ap": 1,
+     "text": "PSYCHIC. Select one friendly operative visible to and within 3\" of this operative, then roll 2D6: if the result is 7, the selected operative regains 7 lost wounds; otherwise, the selected operative regains lost wounds equal to the highest D6.\n\nThis operative cannot perform this action while within control range of an enemy operative, or more than once per turning point."
+    }
+   ],
+   "fluff": "Malignant Plaguecasters channel the foetid energies of Nurgle’s realm. The foul cycle of decay and rebirth is theirs to master, whether unleashing clouds of killing wind or revitalising their brethren."
+  },
+  {
+   "id": "plague-marines.marine-warrior",
+   "teamId": "plague-marines",
+   "name": "Plague Marine Warrior",
+   "keywords": [
+    "PLAGUE MARINE",
+    "CHAOS",
+    "HERETIC ASTARTES",
+    "WARRIOR"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 3,
+   "move": 5,
+   "save": 3,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Boltgun",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Toxic",
+         "raw": "Toxic*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Plague knife",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": [
+        {
+         "id": "Severe",
+         "raw": "Severe"
+        },
+        {
+         "id": "Poison",
+         "raw": "Poison*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "plague-marines.marine-warrior.repulsive-fortitude",
+     "name": "Repulsive Fortitude",
+     "text": "Whenever an operative is shooting this operative, defence dice results of 5+ are critical successes."
+    },
+    {
+     "id": "plague-marines.marine-warrior.toxic",
+     "name": "Toxic",
+     "text": "Whenever this operative is using this weapon against an enemy operative that has one of your Poison tokens, add 1 to both Dmg stats of this weapon."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Almost nothing can stop a Plague Marine on the march. Shielded by power armour and Nurgle’s vile blessings, these warriors march through storms of enemy fire in pursuit of their objective."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "plague-marines.rule.astartes",
+   "name": "Astartes",
+   "text": "During each friendly PLAGUE MARINE operative’s activation, it can perform either two Shoot actions or two Fight actions. If it’s two Shoot actions, a bolt pistol, boltgun or PSYCHIC weapon must be selected for at least one of them. You cannot select the same PSYCHIC ranged weapon more than once per activation.\n\nEach friendly PLAGUE MARINE operative can counteract regardless of its order.",
+   "fluff": "Space Marines are genetically augmented transhumans forged for only one purpose: war."
+  },
+  {
+   "id": "plague-marines.rule.poison",
+   "name": "Poison",
+   "text": "Some weapons in this team’s rules have the Poison weapon rule.\n\n*Poison: In the Resolve Attack Dice step, if you inflict damage with any successes, the operative this weapon is being used against (excluding friendly PLAGUE MARINE operatives) gains one of your Poison tokens (if it doesn’t already have one). Whenever an operative that has one of your Poison tokens is activated, inflict 1 damage on it.",
+   "fluff": "Nurgle deals in warp-tainted poisons, toxins, viral plagues and sicknesses of the soul that defy both natural resilience and medical intervention."
+  },
+  {
+   "id": "plague-marines.rule.disgustingly-resilient",
+   "name": "Disgustingly Resilient",
+   "text": "Whenever an attack dice inflicts damage of 3 or more on a friendly PLAGUE MARINE operative, roll one D6: on a 4+, subtract 1 from that inflicted damage.",
+   "fluff": "The followers of Nurgle possess extreme resilience to bullet and blade, for their hideous forms are swollen by death, decay and disease."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "plague-marines.sp.contagion",
+   "name": "CONTAGION",
+   "text": "Subtract 2\" from the Move stat of an enemy operative and worsen the Hit stat of its weapons by 1 (this isn’t cumulative with being injured) whenever any of the following are true:\n\nIt has one of your Poison tokens and is visible to (or vice versa) and within 3\" of friendly PLAGUE MARINE operatives.\n\nIt’s visible to (or vice versa) and within 3\" of a friendly PLAGUE MARINE ICON BEARER operative.",
+   "cp": 1,
+   "fluff": "Plague Marines are oozing with contagion, their hideous forms emanating a miasma of decay that saps the vigour of their foes."
+  },
+  {
+   "id": "plague-marines.sp.lumbering-death",
+   "name": "LUMBERING DEATH",
+   "text": "Whenever a friendly PLAGUE MARINE operative is shooting or fighting during an activation in which it hasn’t moved more than 3\", or whenever it’s retaliating, its weapons have the Ceaseless weapon rule.",
+   "cp": 1,
+   "fluff": "Plague Marines are methodical and uncompromising in their approach to warfare, advancing and firing with steadfast determination."
+  },
+  {
+   "id": "plague-marines.sp.cloud-of-flies",
+   "name": "CLOUD OF FLIES",
+   "text": "Place one of your Cloud of Flies markers in the killzone. Whenever an operative is shooting a friendly PLAGUE MARINE operative that’s more than 3\" from it, if that friendly operative is wholly within 1\" of that marker, that friendly operative is obscured. In the Ready step of the next Strategy phase, remove that marker.",
+   "cp": 1,
+   "fluff": "Disgusting, fat-bodied flies swarm the killzone, blurring the forms of advancing Plague Marines and absorbing the enemy’s projectiles."
+  },
+  {
+   "id": "plague-marines.sp.nurglings",
+   "name": "NURGLINGS",
+   "text": "Select one enemy operative within 3\" of a friendly PLAGUE MARINE operative, or one enemy operative that has one of your Poison tokens and is within 7\" of a friendly PLAGUE MARINE operative. Until the end of the selected operative’s next activation, subtract 1 from its APL stat.\n\nFirefight Ploys\nVIRULENT POISON\n\nThe most potent of Grandfather Nurgle’s foul plagues spread swiftly through the air, breaching even enviro-seals and filtration masks.\nUse this firefight ploy during a friendly PLAGUE MARINE operative’s activation or counteraction, before or after it performs an action. One enemy operative within 3\" of, or visible to and within 7\" of, that operative gains one of your Poison tokens (if it doesn’t already have one).\n\nSICKENING RESILIENCE\n\nBy voluntarily offering their bodies as hosts for the Grandfather’s contagious gifts, some Plague Marines are granted even greater endurance.\nUse this firefight ploy when an attack dice inflicts damage on a friendly PLAGUE MARINE operative. Until the end of the activation or counteraction, for the purposes of the Disgustingly Resilient rule for that operative, always subtract 1 from the damage inflicted (to a minimum of 2) – you don’t need to roll.\n\nPOISONOUS DEMISE\n\nThe body of a Plague Marine plays host to countless poisons and plagues. Upon death, their bloated forms may detonate, spreading foul contagion all around.\nUse this firefight ploy when a friendly PLAGUE MARINE operative is incapacitated, before it’s removed from the killzone. Each enemy operative visible to and within 3\" of that operative gains one of your Poison tokens (if they don’t already have one); for each of those enemy operatives that already has one of your Poison tokens (including if they gained one during this action), inflict 1 damage on them instead.\n\nCURSE OF ROT\n\nTo engage a Plague Marine in single combat is to expose oneself to wilting contagion and soul-eroding decay.\nUse this firefight ploy when a friendly PLAGUE MARINE operative is shooting against or fighting against an enemy operative within 3\" of it (or within 7\" of it if that enemy operative has one of your Poison tokens), after your opponent rolls their attack or defence dice. For each result of 3 they roll, inflict 1 damage on that enemy operative, that result cannot be retained as a success and they cannot re-roll it.\n\nFaction Equipment\nPLAGUE BELLS\n\nWhen the plague bells toll, the Death Guard are infused with corrupted energy, heightening their unholy resilience to extraordinary levels.\nYou can ignore any changes to the stats of friendly PLAGUE MARINE operatives from being injured (including their weapons’ stats).\n\nPLAGUE ROUNDS\n\nVirulent toxins ooze from these projectiles, so that those struck by them are infected with deadly diseases.\nFriendly PLAGUE MARINE operatives’ boltguns and bolt pistols have the Poison and Severe weapon rules.\n\nBLIGHT GRENADES\n\nThese devices are packed with explosives, shards of jagged metal and deadly pathogens that poison any unfortunate enough to survive the initial blast.\nFriendly PLAGUE MARINE operatives have the following ranged weapon (you cannot select it for use more than twice during the battle):\n\nBlight grenade\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nBlight grenade\n4\n\n4+\n\n2/4\n\nWR\n\nRange 6\", Blast 2\", Saturate, Severe, Poison*\n\nPOISON VENTS\n\nActivating vents in their power armour, Plague Marines may unleash clouds of sickening fumes that clog the lungs of nearby foes.\nWhenever an enemy operative is activated within 3\" of a friendly PLAGUE MARINE operative:\n\nIf that enemy operative doesn’t have one of your Poison tokens, roll one D3: on a 3, it gains one.\n\nIf that enemy operative has one of your Poison tokens, inflict D3 damage on it (instead of 1).",
+   "cp": 1,
+   "fluff": "The smallest of Nurgle’s daemons, Nurglings are both malicious and playful, cackling wildly as they claw and harass the Plague Marines’ foes with pestilent claws and teeth.",
+   "weapons": [
+    {
+     "name": "Blight grenade",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "plague-marines.fp.virulent-poison",
+   "name": "VIRULENT POISON",
+   "text": "Use this firefight ploy during a friendly PLAGUE MARINE operative’s activation or counteraction, before or after it performs an action. One enemy operative within 3\" of, or visible to and within 7\" of, that operative gains one of your Poison tokens (if it doesn’t already have one).",
+   "cp": 1,
+   "fluff": "The most potent of Grandfather Nurgle’s foul plagues spread swiftly through the air, breaching even enviro-seals and filtration masks."
+  },
+  {
+   "id": "plague-marines.fp.sickening-resilience",
+   "name": "SICKENING RESILIENCE",
+   "text": "Use this firefight ploy when an attack dice inflicts damage on a friendly PLAGUE MARINE operative. Until the end of the activation or counteraction, for the purposes of the Disgustingly Resilient rule for that operative, always subtract 1 from the damage inflicted (to a minimum of 2) – you don’t need to roll.",
+   "cp": 1,
+   "fluff": "By voluntarily offering their bodies as hosts for the Grandfather’s contagious gifts, some Plague Marines are granted even greater endurance."
+  },
+  {
+   "id": "plague-marines.fp.poisonous-demise",
+   "name": "POISONOUS DEMISE",
+   "text": "Use this firefight ploy when a friendly PLAGUE MARINE operative is incapacitated, before it’s removed from the killzone. Each enemy operative visible to and within 3\" of that operative gains one of your Poison tokens (if they don’t already have one); for each of those enemy operatives that already has one of your Poison tokens (including if they gained one during this action), inflict 1 damage on them instead.",
+   "cp": 1,
+   "fluff": "The body of a Plague Marine plays host to countless poisons and plagues. Upon death, their bloated forms may detonate, spreading foul contagion all around."
+  },
+  {
+   "id": "plague-marines.fp.curse-of-rot",
+   "name": "CURSE OF ROT",
+   "text": "Use this firefight ploy when a friendly PLAGUE MARINE operative is shooting against or fighting against an enemy operative within 3\" of it (or within 7\" of it if that enemy operative has one of your Poison tokens), after your opponent rolls their attack or defence dice. For each result of 3 they roll, inflict 1 damage on that enemy operative, that result cannot be retained as a success and they cannot re-roll it.\n\nFaction Equipment\nPLAGUE BELLS\n\nWhen the plague bells toll, the Death Guard are infused with corrupted energy, heightening their unholy resilience to extraordinary levels.\nYou can ignore any changes to the stats of friendly PLAGUE MARINE operatives from being injured (including their weapons’ stats).\n\nPLAGUE ROUNDS\n\nVirulent toxins ooze from these projectiles, so that those struck by them are infected with deadly diseases.\nFriendly PLAGUE MARINE operatives’ boltguns and bolt pistols have the Poison and Severe weapon rules.\n\nBLIGHT GRENADES\n\nThese devices are packed with explosives, shards of jagged metal and deadly pathogens that poison any unfortunate enough to survive the initial blast.\nFriendly PLAGUE MARINE operatives have the following ranged weapon (you cannot select it for use more than twice during the battle):\n\nBlight grenade\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nBlight grenade\n4\n\n4+\n\n2/4\n\nWR\n\nRange 6\", Blast 2\", Saturate, Severe, Poison*\n\nPOISON VENTS\n\nActivating vents in their power armour, Plague Marines may unleash clouds of sickening fumes that clog the lungs of nearby foes.\nWhenever an enemy operative is activated within 3\" of a friendly PLAGUE MARINE operative:\n\nIf that enemy operative doesn’t have one of your Poison tokens, roll one D3: on a 3, it gains one.\n\nIf that enemy operative has one of your Poison tokens, inflict D3 damage on it (instead of 1).",
+   "cp": 1,
+   "fluff": "To engage a Plague Marine in single combat is to expose oneself to wilting contagion and soul-eroding decay.",
+   "weapons": [
+    {
+     "name": "Blight grenade",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "equipment": [
+  {
+   "id": "plague-marines.eq.plague-bells",
+   "name": "PLAGUE BELLS",
+   "text": "You can ignore any changes to the stats of friendly PLAGUE MARINE operatives from being injured (including their weapons’ stats).",
+   "fluff": "When the plague bells toll, the Death Guard are infused with corrupted energy, heightening their unholy resilience to extraordinary levels."
+  },
+  {
+   "id": "plague-marines.eq.plague-rounds",
+   "name": "PLAGUE ROUNDS",
+   "text": "Friendly PLAGUE MARINE operatives’ boltguns and bolt pistols have the Poison and Severe weapon rules.",
+   "fluff": "Virulent toxins ooze from these projectiles, so that those struck by them are infected with deadly diseases."
+  },
+  {
+   "id": "plague-marines.eq.blight-grenades",
+   "name": "BLIGHT GRENADES",
+   "text": "Friendly PLAGUE MARINE operatives have the following ranged weapon (you cannot select it for use more than twice during the battle):\n\nBlight grenade\n\nNAME\n\nATK\n\nHIT\n\nDMG\n\nBlight grenade\n4\n\n4+\n\n2/4\n\nWR\n\nRange 6\", Blast 2\", Saturate, Severe, Poison*",
+   "fluff": "These devices are packed with explosives, shards of jagged metal and deadly pathogens that poison any unfortunate enough to survive the initial blast.",
+   "weapons": [
+    {
+     "name": "Blight grenade",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 4,
+       "hit": 4,
+       "dmgN": 2,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "plague-marines.eq.poison-vents",
+   "name": "POISON VENTS",
+   "text": "Whenever an enemy operative is activated within 3\" of a friendly PLAGUE MARINE operative:\n\nIf that enemy operative doesn’t have one of your Poison tokens, roll one D3: on a 3, it gains one.\n\nIf that enemy operative has one of your Poison tokens, inflict D3 damage on it (instead of 1).",
+   "fluff": "Activating vents in their power armour, Plague Marines may unleash clouds of sickening fumes that clog the lungs of nearby foes."
+  }
+ ],
+ "markerGuide": "",
+ "notes": [],
+ "rareWeaponRules": [
+  "PSYCHIC",
+  "Poison",
+  "Toxic"
+ ]
+}

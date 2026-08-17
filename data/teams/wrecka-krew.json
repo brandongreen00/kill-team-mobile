@@ -1,0 +1,1034 @@
+{
+ "id": "wrecka-krew",
+ "name": "Wrecka Krew",
+ "faction": "Orks",
+ "grandFaction": "Xenos",
+ "archetypes": [
+  "Seek & Destroy",
+  "Security"
+ ],
+ "booksVersion": "",
+ "books": [
+  {
+   "book": "Wrecka Krew",
+   "kind": "Faction",
+   "edition": "3",
+   "version": "",
+   "lastUpdate": "June 2026",
+   "pdf": "https://assets.warhammer-community.com/eng_17-06_kill_team_team_rules_wrecka_krew_online_rules-1o31d0dshf-1p2z1ugswl.pdf"
+  }
+ ],
+ "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/wrecka-krew/",
+ "scrapedAt": "2026-08-17T03:47:03+00:00",
+ "source": "cache",
+ "selection": {
+  "leader": {
+   "role": "BOSS NOB",
+   "datacardId": "wrecka-krew.boss-nob",
+   "count": 1,
+   "loadouts": [
+    {
+     "id": "wrecka-krew.g1.opt1",
+     "label": "Rokkit pistol; smash hammer",
+     "weapons": [
+      "Rokkit pistol",
+      "Smash hammer"
+     ]
+    },
+    {
+     "id": "wrecka-krew.g1.opt2",
+     "label": "Two rokkit pistols; choppa",
+     "weapons": [
+      "Two rokkit pistols",
+      "Choppa"
+     ]
+    }
+   ],
+   "optionGroups": [],
+   "loadoutMode": "choice",
+   "fixedWeapons": [],
+   "alwaysWeapons": [],
+   "choices": [
+    "BOSS NOB"
+   ]
+  },
+  "slots": 7,
+  "groups": [
+   {
+    "index": 1,
+    "count": 1,
+    "kind": "fixed",
+    "roles": [
+     "BOSS NOB"
+    ],
+    "rawText": "BOSS NOB operative with one\nof the following options:"
+   },
+   {
+    "index": 2,
+    "count": 2,
+    "kind": "fixed",
+    "roles": [
+     "BOMB SQUIG"
+    ],
+    "rawText": "2 WRECKA KREW BOMB SQUIG operatives"
+   },
+   {
+    "index": 3,
+    "count": 5,
+    "kind": "list",
+    "roles": [
+     "BREAKA BOY DEMOLISHA",
+     "FIGHTER",
+     "KRUSHA",
+     "GUNNER",
+     "ROKKITEER"
+    ],
+    "rawText": "5 WRECKA KREW operatives selected from the following list:"
+   }
+  ],
+  "list": [
+   {
+    "role": "BOMB SQUIG",
+    "datacardAnchor": "Wrecka-Bomb-Squig",
+    "count": 2,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "2 WRECKA KREW BOMB SQUIG operatives",
+    "group": 2,
+    "datacardId": "wrecka-krew.bomb-squig",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Explosives",
+     "Bite"
+    ],
+    "uniqueUnlessRole": false
+   },
+   {
+    "role": "BREAKA BOY DEMOLISHA",
+    "datacardAnchor": "Breaka-Boy-Demolisha",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BREAKA BOY DEMOLISHA",
+    "group": 3,
+    "datacardId": "wrecka-krew.breaka-boy-demolisha",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Tankhammer"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "FIGHTER",
+    "datacardAnchor": "Breaka-Boy-Fighter",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "FIGHTER",
+    "group": 3,
+    "datacardId": "wrecka-krew.breaka-boy-fighter",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Smash hammer"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "KRUSHA",
+    "datacardAnchor": "Breaka-Boy-Krusha-1",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [],
+    "optionGroups": [],
+    "loadoutMode": "fixed",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "KRUSHA",
+    "group": 3,
+    "datacardId": "wrecka-krew.breaka-boy-krusha",
+    "isLeader": false,
+    "alwaysWeapons": [
+     "Knucklebustas"
+    ],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "GUNNER",
+    "datacardAnchor": "Tankbusta-Gunner",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "wrecka-krew.g3e4.opt1",
+      "label": "’Eavy rokkit launcha; fists",
+      "weapons": [
+       "’Eavy rokkit launcha",
+       "Fists"
+      ]
+     },
+     {
+      "id": "wrecka-krew.g3e4.opt2",
+      "label": "Rokkit launcha; fists",
+      "weapons": [
+       "Rokkit launcha",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "GUNNER with one of the following options:",
+    "group": 3,
+    "datacardId": "wrecka-krew.tankbusta-gunner",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   },
+   {
+    "role": "ROKKITEER",
+    "datacardAnchor": "Tankbusta-Rokkiteer",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "wrecka-krew.g3e5.opt1",
+      "label": "Rokkit launcha; pulsa rokkit; fists",
+      "weapons": [
+       "Rokkit launcha",
+       "Pulsa rokkit",
+       "Fists"
+      ]
+     },
+     {
+      "id": "wrecka-krew.g3e5.opt2",
+      "label": "Rokkit launcha; rokkit rack; fists",
+      "weapons": [
+       "Rokkit launcha",
+       "Rokkit rack",
+       "Fists"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "ROKKITEER with one of the following options:",
+    "group": 3,
+    "datacardId": "wrecka-krew.tankbusta-rokkiteer",
+    "isLeader": false,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "leaderList": [
+   {
+    "role": "BOSS NOB",
+    "datacardAnchor": "Wrecka-Boss-Nob",
+    "count": 1,
+    "fixedWeapons": [],
+    "loadouts": [
+     {
+      "id": "wrecka-krew.g1.opt1",
+      "label": "Rokkit pistol; smash hammer",
+      "weapons": [
+       "Rokkit pistol",
+       "Smash hammer"
+      ]
+     },
+     {
+      "id": "wrecka-krew.g1.opt2",
+      "label": "Two rokkit pistols; choppa",
+      "weapons": [
+       "Two rokkit pistols",
+       "Choppa"
+      ]
+     }
+    ],
+    "optionGroups": [],
+    "loadoutMode": "choice",
+    "selectionCost": 1,
+    "footnoteGroup": null,
+    "requires": [],
+    "rawText": "BOSS NOB operative with one\nof the following options:",
+    "group": 1,
+    "datacardId": "wrecka-krew.boss-nob",
+    "isLeader": true,
+    "alwaysWeapons": [],
+    "uniqueUnlessRole": true
+   }
+  ],
+  "constraints": [
+   {
+    "kind": "uniqueExcept",
+    "roles": [
+     "BOMB SQUIG",
+     "BREAKA BOY FIGHTER",
+     "TANKBUSTA GUNNER"
+    ]
+   }
+  ],
+  "footnotes": {},
+  "designerNotes": [],
+  "rawText": "BOSS NOB operative with one\nof the following options:\n\nRokkit pistol; smash hammer\n\nTwo rokkit pistols; choppa\n\n2 WRECKA KREW BOMB SQUIG operatives\n\n5 WRECKA KREW operatives selected from the following list:\n\nBREAKA BOY DEMOLISHA\n\nFIGHTER\n\nKRUSHA\n\nGUNNER with one of the following options:\n\n’Eavy rokkit launcha; fists\n\nRokkit launcha; fists\n\nROKKITEER with one of the following options:\n\nRokkit launcha; pulsa rokkit; fists\n\nRokkit launcha; rokkit rack; fists\n\nOther than BOMB SQUIG, BREAKA BOY FIGHTER and TANKBUSTA GUNNER operatives, your kill team can only include each operative on this list once."
+ },
+ "datacards": [
+  {
+   "id": "wrecka-krew.boss-nob",
+   "teamId": "wrecka-krew",
+   "name": "Wrecka Boss Nob",
+   "keywords": [
+    "WRECKA KREW",
+    "ORK",
+    "LEADER",
+    "BOSS NOB"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 40
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 14,
+   "weapons": [
+    {
+     "name": "Rokkit pistol",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 6,
+       "hit": 5,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Two rokkit pistols",
+     "profiles": [
+      {
+       "name": "focused",
+       "type": "ranged",
+       "atk": 6,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        },
+        {
+         "id": "Ceaseless",
+         "raw": "Ceaseless"
+        }
+       ]
+      },
+      {
+       "name": "salvo",
+       "type": "ranged",
+       "atk": 6,
+       "hit": 5,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Range",
+         "x": 8,
+         "raw": "Range 8\""
+        },
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        },
+        {
+         "id": "Salvo",
+         "raw": "Salvo*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Choppa",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    },
+    {
+     "name": "Smash hammer",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wrecka-krew.boss-nob.wrecka-boss",
+     "name": "Wrecka Boss",
+     "text": "Whenever this operative performs the Shoot or Fight action (excluding Guard), you gain 1 Wrecka point."
+    },
+    {
+     "id": "wrecka-krew.boss-nob.salvo",
+     "name": "Salvo",
+     "text": "Select up to two different valid targets that aren’t within control range of friendly operatives. Shoot with this weapon against both primary targets in an order of your choice, then against all remaining secondary targets in the same manner (roll each sequence separately). Each target (primary and secondary) cannot be shot more than once during the action."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "The biggest, strongest and nastiest Tankbusta or Breaka Boy will typically rise to lead a Wrecka Krew as its Boss Nob. It takes a Boss Nob of singular determination and force of will to keep his ladz in line and prevent them from simply tearing off after the biggest target of opportunity."
+  },
+  {
+   "id": "wrecka-krew.bomb-squig",
+   "teamId": "wrecka-krew",
+   "name": "Wrecka Bomb Squig",
+   "keywords": [
+    "WRECKA KREW",
+    "ORK",
+    "BOMB SQUIG"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 25
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 5,
+   "wounds": 5,
+   "weapons": [
+    {
+     "name": "Explosives",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 6,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Explosive",
+         "raw": "Explosive*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Bite",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wrecka-krew.bomb-squig.explosive",
+     "name": "Explosive",
+     "text": "This operative can perform the Shoot action with this weapon while within control range of an enemy operative. Don’t select a valid target. Instead, this operative is always the primary target and cannot be in cover or obscured."
+    },
+    {
+     "id": "wrecka-krew.bomb-squig.stoopid",
+     "name": "Stoopid",
+     "text": "In the Firefight phase, whenever you determine this operative’s order, you cannot select Conceal. This operative cannot perform any actions other than Charge, Dash, Fight, Reposition and Shoot. It cannot use any weapons that aren’t on its datacard."
+    },
+    {
+     "id": "wrecka-krew.bomb-squig.boom",
+     "name": "Boom!",
+     "text": "If this operative is incapacitated during a battle in which it hasn’t used its explosives, roll one D6, or two D6 if you wish. If any result is a 4+, this operative performs a free Shoot action with its explosives before it’s removed from the killzone."
+    },
+    {
+     "id": "wrecka-krew.bomb-squig.expendable",
+     "name": "Expendable",
+     "text": "This operative is ignored for your opponent’s kill/elimination op (when it’s incapacitated, and when determining your starting number of operatives). It’s also ignored for victory conditions and scoring VPs if either require operatives to ‘escape’, ‘survive’ or be incapacitated by enemy operatives (if it escapes/survives/is incapacitated, determining how many operatives must escape/survive/be incapacitated, etc.)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Orks breed all manner of squigs. The most iconic of these are spherical, bipedal creatures with a large number of teeth and an incredibly bad attitude. Wrecka Krews bring many of these creatures to battle, strapping explosives to them and herding them directly towards the enemy."
+  },
+  {
+   "id": "wrecka-krew.breaka-boy-demolisha",
+   "teamId": "wrecka-krew",
+   "name": "Breaka Boy Demolisha",
+   "keywords": [
+    "WRECKA KREW",
+    "ORK",
+    "BREAKA BOY",
+    "DEMOLISHA"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Tankhammer",
+     "profiles": [
+      {
+       "name": "bash",
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": []
+      },
+      {
+       "name": "detonate",
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 0,
+       "dmgC": 0,
+       "rules": [
+        {
+         "id": "Lethal",
+         "x": 5,
+         "raw": "Lethal 5+"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Detonate",
+         "raw": "Detonate*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wrecka-krew.breaka-boy-demolisha.reckless-temperament",
+     "name": "Reckless Temperament",
+     "text": "Normal Dmg of 4 or more inflicts 1 less damage on this operative; if this operative has an Engage order, Critical Dmg of 4 or more also inflicts 1 less damage on this operative."
+    },
+    {
+     "id": "wrecka-krew.breaka-boy-demolisha.detonate",
+     "name": "Detonate",
+     "text": "The first time you would inflict damage on an enemy operative with this weapon profile during the battle, inflict D6+6 damage on that enemy operative and each other operative within its control range if it’s a normal success, or 2D6+6 damage if it’s a critical success (roll separately for each). Then the action ends and you gain 1 Wrecka point, plus 1 for each operative that was incapacitated during that action. Damage from this weapon rule cannot be ignored or reduced."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Demolishas aren’t satisfied with simply swinging a hammer at their chosen target. Instead, they strap explosive rockets to the heads of their weapons before swinging them in anger. Whilst the resultant explosions are potentially lethal to the Demolisha, they are almost certain to obliterate the target."
+  },
+  {
+   "id": "wrecka-krew.breaka-boy-fighter",
+   "teamId": "wrecka-krew",
+   "name": "Breaka Boy Fighter",
+   "keywords": [
+    "WRECKA KREW",
+    "ORK",
+    "BREAKA BOY",
+    "FIGHTER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Smash hammer",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [],
+   "uniqueActions": [
+    {
+     "id": "wrecka-krew.breaka-boy-fighter.act.break-stuff",
+     "name": "Break Stuff",
+     "ap": 1,
+     "text": "Select a terrain feature within this operative’s control range. If it’s an equipment terrain feature, remove it. Otherwise, place one of your Breach markers within this operative’s control range as close as possible to that terrain feature. Whenever an operative is within 1\" of that marker, it treats parts of that terrain feature that are no more than 1\" thick as Accessible terrain.\n\nThis operative cannot perform this action while within control range of an enemy operative, or if a terrain feature isn’t within its control range."
+    }
+   ],
+   "fluff": "Wreckas drawn from Breaka Boy mobs prefer to get up close and personal. Whilst they always try to take on the biggest and meanest foes, they are more than happy to pulp anything the boss points at. Their weapons – referred to simply as smash hammers – are simplistic in nature, but no less effective for it."
+  },
+  {
+   "id": "wrecka-krew.breaka-boy-krusha",
+   "teamId": "wrecka-krew",
+   "name": "Breaka Boy Krusha",
+   "keywords": [
+    "WRECKA KREW",
+    "ORK",
+    "BREAKA BOY",
+    "KRUSHA"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Knucklebustas",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 4,
+       "hit": 3,
+       "dmgN": 5,
+       "dmgC": 6,
+       "rules": [
+        {
+         "id": "Brutal",
+         "raw": "Brutal"
+        },
+        {
+         "id": "Shock",
+         "raw": "Shock"
+        },
+        {
+         "id": "Smash",
+         "raw": "Smash*"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wrecka-krew.breaka-boy-krusha.smash",
+     "name": "Smash",
+     "text": "Whenever you strike, you can move the enemy operative in a straight line increment of up to 1\". If you do, it must end the move further away from this operative and in a location it can be placed. Then move this operative in a straight line increment of up to 1\", but it must end that move within that enemy operative’s control range (if either isn’t possible, you cannot move them)."
+    },
+    {
+     "id": "wrecka-krew.breaka-boy-krusha.armoured-up",
+     "name": "Armoured Up",
+     "text": "Whenever an enemy operative is shooting this operative, or this operative is fighting or retaliating, your opponent cannot retain attack dice results of less than 6 as critical successes (e.g. as a result of the Lethal, Rending or Severe weapon rules)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Clad in bulky scrap metal armour, Breaka Boy Krushas often lead the Wrecka Krew’s advance. Their pneumatic knucklebustas make them expert siege-breakers, providing them with a right hook powerful enough to cave in a bunker door, or punch a hole bigger than a Boss Nob’s head in the armoured shell of a battle tank."
+  },
+  {
+   "id": "wrecka-krew.tankbusta-gunner",
+   "teamId": "wrecka-krew",
+   "name": "Tankbusta Gunner",
+   "keywords": [
+    "WRECKA KREW",
+    "ORK",
+    "TANKBUSTA",
+    "GUNNER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "’Eavy rokkit launcha",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 6,
+       "hit": 4,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Dash",
+         "raw": "Heavy (Dash only)"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Rokkit launcha",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 6,
+       "hit": 5,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wrecka-krew.tankbusta-gunner.kompetitive-streak",
+     "name": "Kompetitive Streak",
+     "text": "Once per Shoot action, if this operative shoots an enemy operative that another friendly operative has already shot during this turning point, you gain 1 Wrecka point. Determine this when you select a valid target, but you can include any secondary targets when doing so (e.g. from the Blast weapon rule)."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Armed with various forms of rokkit launcha, Tankbusta Gunners possess incredibly itchy trigger fingers. Their natural desire to chase and destroy armoured vehicles can only be reined in for so long. Thus, their Boss Nob must continually present them with opportunities to blow things up, lest they be distracted by bigger game."
+  },
+  {
+   "id": "wrecka-krew.tankbusta-rokkiteer",
+   "teamId": "wrecka-krew",
+   "name": "Tankbusta Rokkiteer",
+   "keywords": [
+    "WRECKA KREW",
+    "ORK",
+    "TANKBUSTA",
+    "ROKKITEER"
+   ],
+   "base": {
+    "shape": "round",
+    "mm": 32
+   },
+   "apl": 2,
+   "move": 6,
+   "save": 4,
+   "wounds": 12,
+   "weapons": [
+    {
+     "name": "Pulsa rokkit",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 6,
+       "hit": 5,
+       "dmgN": 0,
+       "dmgC": 0,
+       "rules": [
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Pulsa",
+         "raw": "Pulsa*"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Rokkit launcha",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 6,
+       "hit": 5,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 1,
+         "raw": "Blast 1\""
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Rokkit rack",
+     "profiles": [
+      {
+       "type": "ranged",
+       "atk": 6,
+       "hit": 5,
+       "dmgN": 4,
+       "dmgC": 5,
+       "rules": [
+        {
+         "id": "Blast",
+         "x": 2,
+         "raw": "Blast 2\""
+        },
+        {
+         "id": "Heavy",
+         "only": "Reposition",
+         "raw": "Heavy (Reposition only)"
+        },
+        {
+         "id": "Limited",
+         "x": 1,
+         "raw": "Limited 1"
+        },
+        {
+         "id": "Relentless",
+         "raw": "Relentless"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "name": "Fists",
+     "profiles": [
+      {
+       "type": "melee",
+       "atk": 3,
+       "hit": 3,
+       "dmgN": 3,
+       "dmgC": 4,
+       "rules": []
+      }
+     ]
+    }
+   ],
+   "abilities": [
+    {
+     "id": "wrecka-krew.tankbusta-rokkiteer.pulsa",
+     "name": "Pulsa",
+     "text": "Don’t select a valid target. Instead, place your Pulsa marker visible to this operative, or on Vantage terrain of a terrain feature that’s visible to this operative. That marker gains 1 Pulsa point, then roll attack dice: it gains 1 additional Pulsa point for each success (to a maximum of 3 additional points). Separately inflict D3 damage on each operative wholly within x\" of that marker, where x is that marker’s Pulsa points. Then the action ends."
+    },
+    {
+     "id": "wrecka-krew.tankbusta-rokkiteer.shokkwave",
+     "name": "Shokkwave",
+     "text": "Whenever an operative is within x\" of your Pulsa marker (see left), subtract 2\" from its Move stat and worsen the Hit stat of its weapons by 1. This is cumulative with being injured. X is that marker’s Pulsa points. In the Ready step of each Strategy phase, subtract 1 from your Pulsa marker’s points. If a Pulsa marker ever has 0 points, remove it."
+    }
+   ],
+   "uniqueActions": [],
+   "fluff": "Unsatisfied with the amount of firepower of a simple rokkit launcha, Tankbusta Rokkiteers have spent all their teef on additional explody gubbinz in the form of rokkit racks and pulsa rokkits. The latter is a particularly nasty weapon that knocks those caught in its blast radius from their feet, allowing the Orks to close in and club any survivors to death."
+  }
+ ],
+ "factionRules": [
+  {
+   "id": "wrecka-krew.rule.wrecka-rampage",
+   "name": "Wrecka Rampage",
+   "text": "Whenever a friendly WRECKA KREW operative is shooting, fighting or retaliating, in the Roll Attack Dice step:\n\nFor each attack dice result of 6 you retain, you gain one Wrecka point.\n\nYou can spend up to 2 of your Wrecka points (unless it’s a BOMB SQUIG, then you cannot spend any). For each point you spend this way, retain one of your fails as a normal success instead of discarding it.\n\nYou cannot have more than 6 Wrecka points at once. You can gain and spend Wrecka points during the same action and can do so in an order of your choice, unless you started the action with 6, in which case you can only spend them.",
+   "fluff": "The sound of explosions, the acrid stench of smoke and the screams of battle drive Wrecka Krews forwards to ever more destructive acts."
+  },
+  {
+   "id": "wrecka-krew.rule.tanked-up",
+   "name": "Tanked Up",
+   "text": "The first time a friendly WRECKA KREW operative (excluding BOMB SQUIG) that has an Engage order performs either the Charge, Shoot or Fight action (excluding Guard) during each of its activations/counteractions, add 1 to its APL stat until the start of its next activation.",
+   "fluff": "Wrecka Krews are empowered by the thrill of explosive combat, lending them fresh impetus as they undertake their murderous rampages."
+  }
+ ],
+ "strategyPloys": [
+  {
+   "id": "wrecka-krew.sp.waaagh",
+   "name": "WAAAGH!",
+   "text": "Friendly WRECKA KREW operatives’ melee weapons have the Balanced weapon rule.",
+   "cp": 1,
+   "fluff": "When the Wrecka Krew’s violent rampage reaches its crescendo, a rage overcomes them. They bellow the infamous Ork battle cry as they set upon their enemies with hammer and fist."
+  },
+  {
+   "id": "wrecka-krew.sp.destruction",
+   "name": "DESTRUCTION",
+   "text": "Friendly WRECKA KREW operatives’ ranged weapons have the Saturate weapon rule.",
+   "cp": 1,
+   "fluff": "If an enemy takes cover, this just provides Wrecka Krews with the opportunity to blow more stuff up."
+  },
+  {
+   "id": "wrecka-krew.sp.tuff-gitz",
+   "name": "TUFF GITZ",
+   "text": "Whenever an operative is shooting a friendly WRECKA KREW operative that has an Engage order, you can re-roll one of your defence dice.",
+   "cp": 1,
+   "fluff": "Wrecka Krews don’t have time for mukkin’ about. They’ll gladly take a hit if it means they get to land a few of their own."
+  },
+  {
+   "id": "wrecka-krew.sp.amped-up",
+   "name": "AMPED UP",
+   "text": "Each friendly WRECKA KREW operative that has an Engage order can immediately regain up to D3+1 lost wounds (roll separately for each).\n\nFirefight Ploys\nJUST A SCRATCH\n\nOrks have a remarkable ability to shrug off grievous damage that would incapacitate most other creatures.\nUse this firefight ploy when an attack dice inflicts Normal Dmg on a friendly WRECKA KREW operative (excluding BOMB SQUIG). Ignore that inflicted damage.\n\nPROPPA SCRAP\n\nOrks like nothing better than a good scrap. With fist or hammer, they seek to demonstrate that might is right.\nUse this firefight ploy during a friendly BREAKA BOY or BOSS NOB operative’s activation. During that activation, that operative can perform two FIGHT actions.\n\nDEMOLITION JOB\n\nShould a prime target present itself, the Wrecka Krew will unleash their combined destructive might, demolishing anything in the vicinity.\nUse this firefight ploy after a friendly WRECKA KREW operative performs the Shoot or Fight action, just before incapacitated operatives are removed (if any). Place one of your Demolition markers within the target’s control range (if it’s using a Blast weapon, the primary target). Whenever a friendly WRECKA KREW operative (excluding BOMB SQUIG) is shooting against, fighting against or retaliating against an operative that’s within 3\" of that marker, you can spend a Wrecka point for free (even if you have none). In the Ready step of the next Strategy phase, remove that marker.\n\nKABOOM!\n\nThe more intense the dakka and the louder the boom of explosions, the more satisfying the carnage!\nUse this firefight ploy when a friendly WRECKA KREW operative performs the Shoot action and a weapon with the Blast weapon rule is selected. Until the end of that action, add 1\" to that weapon’s Blast and it has the Severe weapon rule when shooting the primary target. You cannot use this ploy and the Drill Rokkits rule during the same action. Note that Severe doesn’t generate a Wrecka point (as it’s not a 6).\n\nFaction Equipment\nDRILL ROKKITS\n\nMek ingenuity knows few bounds. Drill rokkits are designed to strike a target and bore through thick armour before exploding.\nOnce per turning point, when a friendly WRECKA KREW operative is performing the Shoot action and you select a rokkit launcha or ’eavy rokkit launcha, you can use this rule. If you do, until the end of that action, that weapon loses the Blast weapon rule but has the Piercing 1 weapon rule.\n\nENGINE OIL\n\nWrecka Krews are known to ingest the oils of vehicles they have destroyed. The intoxicating fluid bolsters their natural resilience.\nOnce per turning point, when a friendly WRECKA KREW operative (excluding BOMB SQUIG) is activated, you can use this rule. If you do, until the end of that activation, you can ignore any changes to that operative’s stats from being injured (including its weapons’ stats).\n\nEXTRA ARMOUR\n\nScrap metal Ork armour may appear haphazard, but it is no less effective for its simple construction.\nSubtract 1\" from the Move stat of friendly WRECKA KREW operatives and improve their Save stat by 1. This excludes BOMB SQUIG operatives and isn’t cumulative with the Protective rule of a Portable Barricade from universal equipment.\n\nGLYPHS\n\nBack-banners, crude markings and glyph-scrawled armour proudly display the Wrecka Krew’s favoured method of destruction.\nWhen this item of equipment is selected, also select the Waaagh! or Destruction strategy ploy. The first time you would use that ploy during the battle, it costs you 0CP; whenever you would use it thereafter, it costs you 0CP if you have any Wrecka points.",
+   "cp": 1,
+   "fluff": "Orks thrive in the chaos and cacophony of battle. The greater the explosions and destruction around them, the more their adrenaline kicks in. When whipped up into such a fury, they can fight on through injuries that would ordinarily lay them low."
+  }
+ ],
+ "firefightPloys": [
+  {
+   "id": "wrecka-krew.fp.just-a-scratch",
+   "name": "JUST A SCRATCH",
+   "text": "Use this firefight ploy when an attack dice inflicts Normal Dmg on a friendly WRECKA KREW operative (excluding BOMB SQUIG). Ignore that inflicted damage.",
+   "cp": 1,
+   "fluff": "Orks have a remarkable ability to shrug off grievous damage that would incapacitate most other creatures."
+  },
+  {
+   "id": "wrecka-krew.fp.proppa-scrap",
+   "name": "PROPPA SCRAP",
+   "text": "Use this firefight ploy during a friendly BREAKA BOY or BOSS NOB operative’s activation. During that activation, that operative can perform two FIGHT actions.",
+   "cp": 1,
+   "fluff": "Orks like nothing better than a good scrap. With fist or hammer, they seek to demonstrate that might is right."
+  },
+  {
+   "id": "wrecka-krew.fp.demolition-job",
+   "name": "DEMOLITION JOB",
+   "text": "Use this firefight ploy after a friendly WRECKA KREW operative performs the Shoot or Fight action, just before incapacitated operatives are removed (if any). Place one of your Demolition markers within the target’s control range (if it’s using a Blast weapon, the primary target). Whenever a friendly WRECKA KREW operative (excluding BOMB SQUIG) is shooting against, fighting against or retaliating against an operative that’s within 3\" of that marker, you can spend a Wrecka point for free (even if you have none). In the Ready step of the next Strategy phase, remove that marker.",
+   "cp": 1,
+   "fluff": "Should a prime target present itself, the Wrecka Krew will unleash their combined destructive might, demolishing anything in the vicinity."
+  },
+  {
+   "id": "wrecka-krew.fp.kaboom",
+   "name": "KABOOM!",
+   "text": "Use this firefight ploy when a friendly WRECKA KREW operative performs the Shoot action and a weapon with the Blast weapon rule is selected. Until the end of that action, add 1\" to that weapon’s Blast and it has the Severe weapon rule when shooting the primary target. You cannot use this ploy and the Drill Rokkits rule during the same action. Note that Severe doesn’t generate a Wrecka point (as it’s not a 6).\n\nFaction Equipment\nDRILL ROKKITS\n\nMek ingenuity knows few bounds. Drill rokkits are designed to strike a target and bore through thick armour before exploding.\nOnce per turning point, when a friendly WRECKA KREW operative is performing the Shoot action and you select a rokkit launcha or ’eavy rokkit launcha, you can use this rule. If you do, until the end of that action, that weapon loses the Blast weapon rule but has the Piercing 1 weapon rule.\n\nENGINE OIL\n\nWrecka Krews are known to ingest the oils of vehicles they have destroyed. The intoxicating fluid bolsters their natural resilience.\nOnce per turning point, when a friendly WRECKA KREW operative (excluding BOMB SQUIG) is activated, you can use this rule. If you do, until the end of that activation, you can ignore any changes to that operative’s stats from being injured (including its weapons’ stats).\n\nEXTRA ARMOUR\n\nScrap metal Ork armour may appear haphazard, but it is no less effective for its simple construction.\nSubtract 1\" from the Move stat of friendly WRECKA KREW operatives and improve their Save stat by 1. This excludes BOMB SQUIG operatives and isn’t cumulative with the Protective rule of a Portable Barricade from universal equipment.\n\nGLYPHS\n\nBack-banners, crude markings and glyph-scrawled armour proudly display the Wrecka Krew’s favoured method of destruction.\nWhen this item of equipment is selected, also select the Waaagh! or Destruction strategy ploy. The first time you would use that ploy during the battle, it costs you 0CP; whenever you would use it thereafter, it costs you 0CP if you have any Wrecka points.",
+   "cp": 1,
+   "fluff": "The more intense the dakka and the louder the boom of explosions, the more satisfying the carnage!"
+  }
+ ],
+ "equipment": [
+  {
+   "id": "wrecka-krew.eq.drill-rokkits",
+   "name": "DRILL ROKKITS",
+   "text": "Once per turning point, when a friendly WRECKA KREW operative is performing the Shoot action and you select a rokkit launcha or ’eavy rokkit launcha, you can use this rule. If you do, until the end of that action, that weapon loses the Blast weapon rule but has the Piercing 1 weapon rule.",
+   "fluff": "Mek ingenuity knows few bounds. Drill rokkits are designed to strike a target and bore through thick armour before exploding."
+  },
+  {
+   "id": "wrecka-krew.eq.engine-oil",
+   "name": "ENGINE OIL",
+   "text": "Once per turning point, when a friendly WRECKA KREW operative (excluding BOMB SQUIG) is activated, you can use this rule. If you do, until the end of that activation, you can ignore any changes to that operative’s stats from being injured (including its weapons’ stats).",
+   "fluff": "Wrecka Krews are known to ingest the oils of vehicles they have destroyed. The intoxicating fluid bolsters their natural resilience."
+  },
+  {
+   "id": "wrecka-krew.eq.extra-armour",
+   "name": "EXTRA ARMOUR",
+   "text": "Subtract 1\" from the Move stat of friendly WRECKA KREW operatives and improve their Save stat by 1. This excludes BOMB SQUIG operatives and isn’t cumulative with the Protective rule of a Portable Barricade from universal equipment.",
+   "fluff": "Scrap metal Ork armour may appear haphazard, but it is no less effective for its simple construction."
+  },
+  {
+   "id": "wrecka-krew.eq.glyphs",
+   "name": "GLYPHS",
+   "text": "When this item of equipment is selected, also select the Waaagh! or Destruction strategy ploy. The first time you would use that ploy during the battle, it costs you 0CP; whenever you would use it thereafter, it costs you 0CP if you have any Wrecka points.",
+   "fluff": "Back-banners, crude markings and glyph-scrawled armour proudly display the Wrecka Krew’s favoured method of destruction."
+  }
+ ],
+ "markerGuide": "Wrecka Points (Values 1 & 2)\n\nTankhammer token\n\nRokkit Rack token\n\nPulsa Rokkit token\n\nPulsa Point token\n\nPulsa marker\n\nExplosives token\n\nEngine oil\n\nDrill Rokkits token\n\nDemolition marker\n\nBreach marker",
+ "notes": [
+  "Breaka Boy Demolisha: weapon 'Tankhammer (detonate)' prints DMG '*' (resolved by a rule, not a number) — dmgN/dmgC recorded as 0",
+  "Tankbusta Rokkiteer: weapon 'Pulsa rokkit' prints DMG '-' (resolved by a rule, not a number) — dmgN/dmgC recorded as 0"
+ ],
+ "rareWeaponRules": [
+  "Detonate",
+  "Explosive",
+  "Pulsa",
+  "Salvo",
+  "Smash"
+ ]
+}
