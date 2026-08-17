@@ -31,6 +31,8 @@ export interface EnumerateOptions {
   weights: EvalWeights;
   /** Validated destinations kept per movement action. */
   moveLimit?: number;
+  /** Reachability-field resolution (0.5" is the engine default). */
+  moveStep?: number;
 }
 
 /** Actions the AI never chooses on its own initiative (they have no scoring model yet). */
@@ -139,7 +141,7 @@ export function actionCandidates(
       case 'Dash':
       case 'Fall Back':
       case 'Charge':
-        out.push(...moveCandidates(ctx, state, op, def, def.id as MoveAction, pc, moveLimit, hardCap));
+        out.push(...moveCandidates(ctx, state, op, def, def.id as MoveAction, pc, moveLimit, hardCap, opts.moveStep));
         break;
       case 'Shoot':
         out.push(...shootCandidates(ctx, state, op, def));
@@ -226,6 +228,7 @@ function moveCandidates(
   pc: PositionContext,
   limit: number,
   hardCap?: number,
+  step?: number,
 ): Candidate[] {
   const extraTargets = pc.objectives.map((m) => m.pos);
   if (action === 'Charge') {
@@ -234,6 +237,7 @@ function moveCandidates(
   const moves = generateMoves(ctx, state, op, action, {
     limit,
     ...(hardCap !== undefined ? { hardCap } : {}),
+    ...(step !== undefined ? { step } : {}),
     extraTargets,
     rank: (pos) => cheapPositionScore(ctx, state, op, pos, pc),
   });

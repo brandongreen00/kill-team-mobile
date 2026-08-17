@@ -35,7 +35,23 @@ export interface TeamSnapshot {
   alive: number;
 }
 
-export function snapshot(ctx: GameContext, state: GameState, player: PlayerId): TeamSnapshot {
+/** Marker control is the most expensive read in the evaluation, so it is computed once. */
+export function objectiveControl(ctx: GameContext, state: GameState): Record<PlayerId, number> {
+  const out: Record<PlayerId, number> = { p1: 0, p2: 0 };
+  for (const marker of Object.values(state.markers)) {
+    if (marker.kind !== 'objective') continue;
+    const owner = markerController(ctx, state, marker);
+    if (owner) out[owner] += 1;
+  }
+  return out;
+}
+
+export function snapshot(
+  ctx: GameContext,
+  state: GameState,
+  player: PlayerId,
+  control?: Record<PlayerId, number>,
+): TeamSnapshot {
   const team = state.teams[player];
   let value = 0;
   let health = 0;
@@ -47,11 +63,7 @@ export function snapshot(ctx: GameContext, state: GameState, player: PlayerId): 
     health += v * healthFraction(ctx, op);
     if (op.carryingMarkerId) carrying++;
   }
-  let objectives = 0;
-  for (const marker of Object.values(state.markers)) {
-    if (marker.kind !== 'objective') continue;
-    if (markerController(ctx, state, marker) === player) objectives++;
-  }
+  const objectives = (control ?? objectiveControl(ctx, state))[player];
   return { vp: team.vp, cp: team.cp, objectives, value, health, carrying, alive: ops.length };
 }
 
@@ -80,8 +92,9 @@ export function evaluate(
   opts: EvalOptions = {},
 ): number {
   const them = otherPlayer(me);
-  const a = snapshot(ctx, state, me);
-  const b = snapshot(ctx, state, them);
+  const control = objectiveControl(ctx, state);
+  const a = snapshot(ctx, state, me, control);
+  const b = snapshot(ctx, state, them, control);
 
   let score = 0;
   score += w.vp * (a.vp - b.vp);

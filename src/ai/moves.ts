@@ -50,9 +50,15 @@ interface Cell {
  * Bounded to keep memory flat over a soak run.
  */
 const FIELD_CACHE = new Map<string, Map<string, Cell>>();
-const FIELD_CACHE_MAX = 256;
+const FIELD_CACHE_MAX = 2048;
 
-function fieldFor(ctx: GameContext, state: GameState, op: OperativeState, budget: number): Map<string, Cell> {
+function fieldFor(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  budget: number,
+  step: number,
+): Map<string, Cell> {
   const key = [
     state.map.id,
     Object.keys(state.terrainState).length,
@@ -63,13 +69,28 @@ function fieldFor(ctx: GameContext, state: GameState, op: OperativeState, budget
     op.z.toFixed(2),
     op.rot.toFixed(1),
     budget.toFixed(2),
+    step,
   ].join('|');
   const hit = FIELD_CACHE.get(key);
   if (hit) return hit;
-  const field = reachableCells(ctx, state, op, budget);
+  const field = reachableCells(ctx, state, op, budget, step);
   if (FIELD_CACHE.size >= FIELD_CACHE_MAX) FIELD_CACHE.clear();
   FIELD_CACHE.set(key, field);
   return field;
+}
+
+/**
+ * ONE field per (operative, position) covers every movement action: a Charge has the largest
+ * budget (Move + 2"), so a Reposition / Dash / Fall Back / counteract move is the same field
+ * filtered by cost. `reachableCells` is the most expensive call the AI makes, so this keeps
+ * planning to a single flood fill per position.
+ */
+function cellsWithin(ctx: GameContext, state: GameState, op: OperativeState, budget: number, step: number): Cell[] {
+  const fieldBudget = Math.max(budget, moveBudget(ctx, state, op, moveOptionsFor('Charge')));
+  const field = fieldFor(ctx, state, op, fieldBudget, step);
+  const out: Cell[] = [];
+  for (const cell of field.values()) if (cell.cost <= budget + 1e-6) out.push(cell);
+  return out;
 }
 
 /** Test hook: drop the cached reachability fields (e.g. between games). */
@@ -78,9 +99,9 @@ export function clearMoveCache(): void {
 }
 
 /** One reachable cell per `bucket`-inch square, cheapest first. */
-function sampleField(field: Map<string, Cell>, bucket: number): Cell[] {
+function sampleField(field: Iterable<Cell>, bucket: number): Cell[] {
   const best = new Map<string, Cell>();
-  for (const cell of field.values()) {
+  for (const cell of field) {
     const k = `${Math.round(cell.pos.x / bucket)},${Math.round(cell.pos.y / bucket)},${cell.z.toFixed(1)}`;
     const prev = best.get(k);
     if (!prev || prev.cost > cell.cost) best.set(k, cell);
@@ -97,6 +118,12 @@ export interface GenerateOptions {
   hardCap?: number;
   /** Cheap ranking function; the best `limit * 2` are validated. */
   rank?: (pos: Vec2, z: number) => number;
+  /**
+   * Reachability-field resolution. The engine's default is 0.5"; the baseline agents use a
+   * coarser 1" field because `reachableCells` is the AI's single most expensive call
+   * (see docs/AI.md › Known weaknesses).
+   */
+  step?: number;
 }
 
 /**
@@ -114,16 +141,17 @@ export function generateMoves(
   const options = moveOptionsFor(action, opts.hardCap);
   const budget = Math.min(moveBudget(ctx, state, op, options), opts.hardCap ?? Infinity);
   if (budget <= 0) return [];
-  const field = fieldFor(ctx, state, op, budget);
+  const reachable = cellsWithin(ctx, state, op, budget, opts.step ?? 0.5);
+  if (reachable.length === 0) return [];
 
   const bucket = budget <= 3 ? 1 : 1.5;
-  const cells = sampleField(field, bucket);
+  const cells = sampleField(reachable, bucket);
 
   // Snap the requested extra targets (objectives, charge rings) onto the nearest field cell.
   for (const target of opts.extraTargets ?? []) {
     let best: Cell | undefined;
     let bestD = Infinity;
-    for (const cell of field.values()) {
+    for (const cell of reachable) {
       const d = dist(cell.pos, target);
       if (d < bestD) {
         bestD = d;

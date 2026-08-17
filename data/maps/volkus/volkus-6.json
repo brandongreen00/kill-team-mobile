@@ -443,38 +443,14 @@
       },
       {
        "x": 6.562,
-       "y": 9.0
+       "y": 8.833
+      },
+      {
+       "x": 7.479,
+       "y": 8.792
       },
       {
        "x": 7.5,
-       "y": 8.979
-      },
-      {
-       "x": 7.542,
-       "y": 8.771
-      },
-      {
-       "x": 7.771,
-       "y": 8.75
-      },
-      {
-       "x": 7.771,
-       "y": 7.708
-      },
-      {
-       "x": 7.562,
-       "y": 7.667
-      },
-      {
-       "x": 7.562,
-       "y": 7.458
-      },
-      {
-       "x": 7.771,
-       "y": 7.417
-      },
-      {
-       "x": 7.792,
        "y": 7.229
       },
       {
@@ -504,10 +480,13 @@
     }
    ],
    "placement": {
-    "x": 7.428,
-    "y": 9.532,
+    "x": 7.385,
+    "y": 9.759,
     "rotDeg": 0,
-    "flip": false
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.5642
    }
   },
   {
@@ -797,8 +776,11 @@
    "placement": {
     "x": 22.518,
     "y": 6.49,
-    "rotDeg": 0,
+    "rotDeg": 270,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9964
    }
   },
   {
@@ -974,7 +956,10 @@
     "x": 15.105,
     "y": 11.611,
     "rotDeg": 0,
-    "flip": false
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.8176
    }
   },
   {
@@ -1161,8 +1146,11 @@
    "placement": {
     "x": 24.33,
     "y": 17.591,
-    "rotDeg": 0,
+    "rotDeg": 270,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9907
    }
   },
   {
@@ -1236,8 +1224,11 @@
    "placement": {
     "x": 6.438,
     "y": 18.177,
-    "rotDeg": 0,
+    "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -1311,8 +1302,11 @@
    "placement": {
     "x": 10.552,
     "y": 3.479,
-    "rotDeg": 0,
+    "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -1357,6 +1351,9 @@
     "y": 14.521,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -1399,8 +1396,11 @@
    "placement": {
     "x": 15.333,
     "y": 18.521,
-    "rotDeg": 0,
-    "flip": false
+    "rotDeg": 90,
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9486
    }
   },
   {
@@ -1445,6 +1445,9 @@
     "y": 9.245,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9393
    }
   },
   {
@@ -1461,11 +1464,11 @@
        "y": 3.021
       },
       {
-       "x": 2.771,
+       "x": 4.396,
        "y": 3.042
       },
       {
-       "x": 2.75,
+       "x": 4.375,
        "y": 3.771
       },
       {
@@ -1482,44 +1485,16 @@
      "blocksVisibility": false,
      "standable": false,
      "solid": true
-    },
-    {
-     "id": "volkus-6.J.p1",
-     "featureId": "volkus-6.J",
-     "poly": [
-      {
-       "x": 3.583,
-       "y": 3.021
-      },
-      {
-       "x": 4.396,
-       "y": 3.042
-      },
-      {
-       "x": 4.375,
-       "y": 3.771
-      },
-      {
-       "x": 3.562,
-       "y": 3.75
-      }
-     ],
-     "z0": 0.0,
-     "z1": 1.0,
-     "types": [
-      "Light"
-     ],
-     "role": "rubble",
-     "blocksVisibility": false,
-     "standable": false,
-     "solid": true
     }
    ],
    "placement": {
-    "x": 3.177,
+    "x": 3.187,
     "y": 3.396,
-    "rotDeg": 0,
-    "flip": false
+    "rotDeg": 90,
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9776
    }
   },
   {
@@ -1568,40 +1543,16 @@
        "y": 7.229
       },
       {
-       "x": 7.771,
+       "x": 7.479,
        "y": 7.25
       },
       {
-       "x": 7.75,
-       "y": 7.438
-      },
-      {
-       "x": 6.458,
-       "y": 7.438
-      },
-      {
-       "x": 6.438,
-       "y": 7.667
-      },
-      {
-       "x": 6.229,
-       "y": 7.708
-      },
-      {
-       "x": 6.229,
-       "y": 8.5
-      },
-      {
-       "x": 6.312,
+       "x": 7.479,
        "y": 8.792
       },
       {
-       "x": 6.521,
-       "y": 8.833
-      },
-      {
        "x": 6.562,
-       "y": 9.042
+       "y": 8.833
       },
       {
        "x": 6.542,
@@ -1640,10 +1591,13 @@
     }
    ],
    "placement": {
-    "x": 5.642,
-    "y": 8.663,
+    "x": 5.37,
+    "y": 8.896,
     "rotDeg": 0,
-    "flip": false
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.228
    }
   },
   {
@@ -1686,8 +1640,11 @@
    "placement": {
     "x": 25.979,
     "y": 9.792,
-    "rotDeg": 0,
-    "flip": false
+    "rotDeg": 90,
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9891
    }
   },
   {
@@ -1732,6 +1689,9 @@
     "y": 8.557,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -1774,8 +1734,11 @@
    "placement": {
     "x": 26.479,
     "y": 3.896,
-    "rotDeg": 0,
-    "flip": false
+    "rotDeg": 90,
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9881
    }
   }
  ],
@@ -1791,7 +1754,9 @@
    "dropDepthP2": 3.0,
    "deployment": "long-edge",
    "p1Side": "top",
-   "centreSeamErrIn": 0.0208
+   "centreSeamErrIn": 0.0208,
+   "templateIoUMin": 0.228,
+   "templateIoUMedian": 0.9886
   }
  }
 }

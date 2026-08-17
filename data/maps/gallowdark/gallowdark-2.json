@@ -202,19 +202,19 @@
      "poly": [
       {
        "x": 0.469,
-       "y": 19.056
+       "y": 19.38
       },
       {
        "x": 4.281,
-       "y": 19.056
+       "y": 19.38
       },
       {
        "x": 4.281,
-       "y": 20.069
+       "y": 19.745
       },
       {
        "x": 0.469,
-       "y": 20.069
+       "y": 19.745
       }
      ],
      "z0": 0.0,
@@ -227,45 +227,6 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
-    },
-    {
-     "id": "gallowdark-2.B3-1.access",
-     "featureId": "gallowdark-2.B3-1",
-     "poly": [
-      {
-       "x": 1.902,
-       "y": 19.84
-      },
-      {
-       "x": 2.97,
-       "y": 19.84
-      },
-      {
-       "x": 2.97,
-       "y": 20.907
-      },
-      {
-       "x": 1.902,
-       "y": 20.907
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.362,
-     "types": [
-      "Heavy",
-      "Wall"
-     ],
-     "role": "accessPoint",
-     "state": "closed",
-     "blocksVisibility": true,
-     "solid": true,
-     "standable": false,
-     "openTypes": [
-      "Accessible",
-      "Insignificant",
-      "Exposed"
-     ],
-     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -273,6 +234,9 @@
     "y": 19.562,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -286,19 +250,19 @@
      "poly": [
       {
        "x": 4.281,
-       "y": 19.056
+       "y": 19.38
       },
       {
        "x": 11.906,
-       "y": 19.056
+       "y": 19.38
       },
       {
        "x": 11.906,
-       "y": 20.069
+       "y": 19.745
       },
       {
        "x": 4.281,
-       "y": 20.069
+       "y": 19.745
       }
      ],
      "z0": 0.0,
@@ -318,6 +282,9 @@
     "y": 19.562,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -331,19 +298,19 @@
      "poly": [
       {
        "x": 15.719,
-       "y": 19.056
+       "y": 19.38
       },
       {
        "x": 23.344,
-       "y": 19.056
+       "y": 19.38
       },
       {
        "x": 23.344,
-       "y": 20.069
+       "y": 19.745
       },
       {
        "x": 15.719,
-       "y": 20.069
+       "y": 19.745
       }
      ],
      "z0": 0.0,
@@ -363,6 +330,9 @@
     "y": 19.562,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -376,19 +346,19 @@
      "poly": [
       {
        "x": 23.344,
-       "y": 19.056
+       "y": 19.38
       },
       {
        "x": 27.156,
-       "y": 19.056
+       "y": 19.38
       },
       {
        "x": 27.156,
-       "y": 20.069
+       "y": 19.745
       },
       {
        "x": 23.344,
-       "y": 20.069
+       "y": 19.745
       }
      ],
      "z0": 0.0,
@@ -401,45 +371,6 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
-    },
-    {
-     "id": "gallowdark-2.B3-2.access",
-     "featureId": "gallowdark-2.B3-2",
-     "poly": [
-      {
-       "x": 24.737,
-       "y": 18.177
-      },
-      {
-       "x": 25.804,
-       "y": 18.177
-      },
-      {
-       "x": 25.804,
-       "y": 19.245
-      },
-      {
-       "x": 24.737,
-       "y": 19.245
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.362,
-     "types": [
-      "Heavy",
-      "Wall"
-     ],
-     "role": "accessPoint",
-     "state": "closed",
-     "blocksVisibility": true,
-     "solid": true,
-     "standable": false,
-     "openTypes": [
-      "Accessible",
-      "Insignificant",
-      "Exposed"
-     ],
-     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -447,6 +378,9 @@
     "y": 19.562,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -460,19 +394,19 @@
      "poly": [
       {
        "x": 11.906,
-       "y": 11.431
+       "y": 11.755
       },
       {
        "x": 19.531,
-       "y": 11.431
+       "y": 11.755
       },
       {
        "x": 19.531,
-       "y": 12.444
+       "y": 12.12
       },
       {
        "x": 11.906,
-       "y": 12.444
+       "y": 12.12
       }
      ],
      "z0": 0.0,
@@ -492,6 +426,9 @@
     "y": 11.938,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -505,19 +442,19 @@
      "poly": [
       {
        "x": 19.531,
-       "y": 11.431
+       "y": 11.755
       },
       {
        "x": 27.156,
-       "y": 11.431
+       "y": 11.755
       },
       {
        "x": 27.156,
-       "y": 12.444
+       "y": 12.12
       },
       {
        "x": 19.531,
-       "y": 12.444
+       "y": 12.12
       }
      ],
      "z0": 0.0,
@@ -530,45 +467,6 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
-    },
-    {
-     "id": "gallowdark-2.A4-1.access",
-     "featureId": "gallowdark-2.A4-1",
-     "poly": [
-      {
-       "x": 21.005,
-       "y": 12.215
-      },
-      {
-       "x": 22.073,
-       "y": 12.215
-      },
-      {
-       "x": 22.073,
-       "y": 13.282
-      },
-      {
-       "x": 21.005,
-       "y": 13.282
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.362,
-     "types": [
-      "Heavy",
-      "Wall"
-     ],
-     "role": "accessPoint",
-     "state": "closed",
-     "blocksVisibility": true,
-     "solid": true,
-     "standable": false,
-     "openTypes": [
-      "Accessible",
-      "Insignificant",
-      "Exposed"
-     ],
-     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -576,6 +474,9 @@
     "y": 11.938,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -589,19 +490,19 @@
      "poly": [
       {
        "x": 0.469,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 4.281,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 4.281,
-       "y": 4.819
+       "y": 4.495
       },
       {
        "x": 0.469,
-       "y": 4.819
+       "y": 4.495
       }
      ],
      "z0": 0.0,
@@ -614,45 +515,6 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
-    },
-    {
-     "id": "gallowdark-2.B2-1.access",
-     "featureId": "gallowdark-2.B2-1",
-     "poly": [
-      {
-       "x": 1.902,
-       "y": 2.886
-      },
-      {
-       "x": 2.97,
-       "y": 2.886
-      },
-      {
-       "x": 2.97,
-       "y": 3.954
-      },
-      {
-       "x": 1.902,
-       "y": 3.954
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.362,
-     "types": [
-      "Heavy",
-      "Wall"
-     ],
-     "role": "accessPoint",
-     "state": "closed",
-     "blocksVisibility": true,
-     "solid": true,
-     "standable": false,
-     "openTypes": [
-      "Accessible",
-      "Insignificant",
-      "Exposed"
-     ],
-     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -660,6 +522,9 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -673,19 +538,19 @@
      "poly": [
       {
        "x": 4.281,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 11.906,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 11.906,
-       "y": 4.819
+       "y": 4.495
       },
       {
        "x": 4.281,
-       "y": 4.819
+       "y": 4.495
       }
      ],
      "z0": 0.0,
@@ -705,6 +570,9 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -718,19 +586,19 @@
      "poly": [
       {
        "x": 11.906,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 15.719,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 15.719,
-       "y": 4.819
+       "y": 4.495
       },
       {
        "x": 11.906,
-       "y": 4.819
+       "y": 4.495
       }
      ],
      "z0": 0.0,
@@ -743,45 +611,6 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
-    },
-    {
-     "id": "gallowdark-2.B3-3.access",
-     "featureId": "gallowdark-2.B3-3",
-     "poly": [
-      {
-       "x": 13.299,
-       "y": 2.886
-      },
-      {
-       "x": 14.367,
-       "y": 2.886
-      },
-      {
-       "x": 14.367,
-       "y": 3.954
-      },
-      {
-       "x": 13.299,
-       "y": 3.954
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.362,
-     "types": [
-      "Heavy",
-      "Wall"
-     ],
-     "role": "accessPoint",
-     "state": "closed",
-     "blocksVisibility": true,
-     "solid": true,
-     "standable": false,
-     "openTypes": [
-      "Accessible",
-      "Insignificant",
-      "Exposed"
-     ],
-     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -789,6 +618,9 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -802,19 +634,19 @@
      "poly": [
       {
        "x": 15.719,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 19.531,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 19.531,
-       "y": 4.819
+       "y": 4.495
       },
       {
        "x": 15.719,
-       "y": 4.819
+       "y": 4.495
       }
      ],
      "z0": 0.0,
@@ -832,8 +664,11 @@
    "placement": {
     "x": 17.625,
     "y": 4.312,
-    "rotDeg": 0,
+    "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -847,19 +682,19 @@
      "poly": [
       {
        "x": 19.531,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 27.156,
-       "y": 3.806
+       "y": 4.13
       },
       {
        "x": 27.156,
-       "y": 4.819
+       "y": 4.495
       },
       {
        "x": 19.531,
-       "y": 4.819
+       "y": 4.495
       }
      ],
      "z0": 0.0,
@@ -872,45 +707,6 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
-    },
-    {
-     "id": "gallowdark-2.A4-2.access",
-     "featureId": "gallowdark-2.A4-2",
-     "poly": [
-      {
-       "x": 20.965,
-       "y": 4.59
-      },
-      {
-       "x": 22.032,
-       "y": 4.59
-      },
-      {
-       "x": 22.032,
-       "y": 5.657
-      },
-      {
-       "x": 20.965,
-       "y": 5.657
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.362,
-     "types": [
-      "Heavy",
-      "Wall"
-     ],
-     "role": "accessPoint",
-     "state": "closed",
-     "blocksVisibility": true,
-     "solid": true,
-     "standable": false,
-     "openTypes": [
-      "Accessible",
-      "Insignificant",
-      "Exposed"
-     ],
-     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -918,6 +714,9 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -930,19 +729,19 @@
      "featureId": "gallowdark-2.B1-2",
      "poly": [
       {
-       "x": 11.399,
+       "x": 11.724,
        "y": 15.75
       },
       {
-       "x": 12.413,
+       "x": 12.089,
        "y": 15.75
       },
       {
-       "x": 12.413,
+       "x": 12.089,
        "y": 19.562
       },
       {
-       "x": 11.399,
+       "x": 11.724,
        "y": 19.562
       }
      ],
@@ -961,8 +760,11 @@
    "placement": {
     "x": 11.906,
     "y": 17.656,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -975,19 +777,19 @@
      "featureId": "gallowdark-2.B3-4",
      "poly": [
       {
-       "x": 11.399,
+       "x": 11.724,
        "y": 11.938
       },
       {
-       "x": 12.413,
+       "x": 12.089,
        "y": 11.938
       },
       {
-       "x": 12.413,
+       "x": 12.089,
        "y": 15.75
       },
       {
-       "x": 11.399,
+       "x": 11.724,
        "y": 15.75
       }
      ],
@@ -1001,45 +803,6 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
-    },
-    {
-     "id": "gallowdark-2.B3-4.access",
-     "featureId": "gallowdark-2.B3-4",
-     "poly": [
-      {
-       "x": 12.224,
-       "y": 13.249
-      },
-      {
-       "x": 13.292,
-       "y": 13.249
-      },
-      {
-       "x": 13.292,
-       "y": 14.317
-      },
-      {
-       "x": 12.224,
-       "y": 14.317
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.362,
-     "types": [
-      "Heavy",
-      "Wall"
-     ],
-     "role": "accessPoint",
-     "state": "closed",
-     "blocksVisibility": true,
-     "solid": true,
-     "standable": false,
-     "openTypes": [
-      "Accessible",
-      "Insignificant",
-      "Exposed"
-     ],
-     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -1047,6 +810,9 @@
     "y": 13.844,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -1059,19 +825,19 @@
      "featureId": "gallowdark-2.A3-1",
      "poly": [
       {
-       "x": 11.399,
+       "x": 11.724,
        "y": 4.312
       },
       {
-       "x": 12.413,
+       "x": 12.089,
        "y": 4.312
       },
       {
-       "x": 12.413,
+       "x": 12.089,
        "y": 11.938
       },
       {
-       "x": 11.399,
+       "x": 11.724,
        "y": 11.938
       }
      ],
@@ -1131,6 +897,9 @@
     "y": 8.125,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -1143,19 +912,19 @@
      "featureId": "gallowdark-2.A3-2",
      "poly": [
       {
-       "x": 15.212,
+       "x": 15.536,
        "y": 11.938
       },
       {
-       "x": 16.226,
+       "x": 15.901,
        "y": 11.938
       },
       {
-       "x": 16.226,
+       "x": 15.901,
        "y": 19.562
       },
       {
-       "x": 15.212,
+       "x": 15.536,
        "y": 19.562
       }
      ],
@@ -1169,45 +938,6 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
-    },
-    {
-     "id": "gallowdark-2.A3-2.access",
-     "featureId": "gallowdark-2.A3-2",
-     "poly": [
-      {
-       "x": 16.037,
-       "y": 13.249
-      },
-      {
-       "x": 17.104,
-       "y": 13.249
-      },
-      {
-       "x": 17.104,
-       "y": 14.317
-      },
-      {
-       "x": 16.037,
-       "y": 14.317
-      }
-     ],
-     "z0": 0.0,
-     "z1": 2.362,
-     "types": [
-      "Heavy",
-      "Wall"
-     ],
-     "role": "accessPoint",
-     "state": "closed",
-     "blocksVisibility": true,
-     "solid": true,
-     "standable": false,
-     "openTypes": [
-      "Accessible",
-      "Insignificant",
-      "Exposed"
-     ],
-     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -1215,6 +945,9 @@
     "y": 15.75,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   }
  ],
@@ -1232,7 +965,9 @@
    "p1Side": "top",
    "centreSeamErrIn": 0.0,
    "latticeStepPx": 94.0,
-   "wallThicknessPx": 25.0
+   "wallThicknessPx": 9.0,
+   "templateIoUMin": 1.0,
+   "templateIoUMedian": 1.0
   }
  }
 }

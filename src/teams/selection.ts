@@ -250,3 +250,59 @@ export function loadoutOf(state: GameState, operativeId: string): string[] | und
   const store = state.opState['loadout'] as Record<string, string[]> | undefined;
   return store?.[operativeId];
 }
+
+/**
+ * A legal roster built deterministically from the printed selection list: the leader first,
+ * then list entries in printed order, skipping any pick that would break a constraint.
+ * Used by the tests, the soak driver and as the app's "quick start" roster.
+ */
+export function defaultRoster(data: TeamData): RosterPickIn[] {
+  const entries = selectionEntries(data);
+  const picks: RosterPickIn[] = [];
+  const pickOf = (entry: SelectionEntry, index: number): RosterPickIn => ({
+    datacardId: entry.datacardId,
+    entryId: entryId(data, index),
+    loadoutIds: [
+      ...(entry.loadouts[0] ? [entry.loadouts[0].id] : []),
+      ...entry.optionGroups.map((g) => g.choices[0]?.id).filter((x): x is string => Boolean(x)),
+      ...entry.fixedChoiceGroups.map((g) => g.choices[0]?.id).filter((x): x is string => Boolean(x)),
+    ],
+  });
+
+  // Leader group(s) first — every group whose entries are marked isLeader.
+  entries.forEach((entry, index) => {
+    if (!entry.isLeader) return;
+    if (picks.some((p) => resolveEntry(data, p)?.entry.isLeader)) return;
+    picks.push(pickOf(entry, index));
+  });
+
+  // Then fill each remaining group to its printed count, in list order.
+  for (const group of data.selection.groups ?? []) {
+    if (entries.some((e) => e.group === group.index && e.isLeader)) continue;
+    let filled = picks
+      .map((p) => resolveEntry(data, p))
+      .filter((r) => r && r.entry.group === group.index)
+      .reduce((n, r) => n + (r ? r.entry.selectionCost : 0), 0);
+    let guard = 0;
+    while (filled < group.count && guard++ < 200) {
+      let added = false;
+      for (let index = 0; index < entries.length; index++) {
+        const entry = entries[index]!;
+        if (entry.group !== group.index || entry.isLeader) continue;
+        if (filled + entry.selectionCost > group.count) continue;
+        const trial = [...picks, pickOf(entry, index)];
+        const check = validateRosterFor(data, trial);
+        const blocking = check.errors.filter(
+          (e) => !e.startsWith('select exactly') && !e.includes('—') && !e.includes('operative (found'),
+        );
+        if (blocking.length > 0) continue;
+        picks.push(pickOf(entry, index));
+        filled += entry.selectionCost;
+        added = true;
+        break;
+      }
+      if (!added) break;
+    }
+  }
+  return picks;
+}

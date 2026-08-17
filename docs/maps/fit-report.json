@@ -34,11 +34,11 @@
    "label": "A",
    "mapId": "volkus-4",
    "featureIndex": 0,
-   "iou": 0.9958,
+   "iou": 0.9861,
    "rotDeg": 90,
    "flip": false,
-   "x": 5.509,
-   "y": 13.243
+   "x": 5.518,
+   "y": 13.244
   },
   {
    "label": "A",
@@ -54,11 +54,11 @@
    "label": "A",
    "mapId": "volkus-6",
    "featureIndex": 0,
-   "iou": 0.5617,
+   "iou": 0.5642,
    "rotDeg": 0,
    "flip": true,
-   "x": 8.41,
-   "y": 10.096
+   "x": 8.375,
+   "y": 10.031
   },
   {
    "label": "B",
@@ -164,11 +164,11 @@
    "label": "C",
    "mapId": "volkus-5",
    "featureIndex": 2,
-   "iou": 0.9897,
-   "rotDeg": 180,
-   "flip": false,
-   "x": 5.405,
-   "y": 8.864
+   "iou": 0.6019,
+   "rotDeg": 0,
+   "flip": true,
+   "x": 5.829,
+   "y": 9.485
   },
   {
    "label": "C",
@@ -204,11 +204,11 @@
    "label": "D",
    "mapId": "volkus-3",
    "featureIndex": 3,
-   "iou": 0.3879,
-   "rotDeg": 0,
+   "iou": 0.6672,
+   "rotDeg": 270,
    "flip": false,
-   "x": 18.572,
-   "y": 3.334
+   "x": 18.771,
+   "y": 3.625
   },
   {
    "label": "D",
@@ -544,21 +544,21 @@
    "label": "J",
    "mapId": "volkus-1",
    "featureIndex": 9,
-   "iou": 0.9994,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 19.35,
-   "y": 2.434
+   "x": 19.349,
+   "y": 3.23
   },
   {
    "label": "J",
    "mapId": "volkus-2",
    "featureIndex": 9,
-   "iou": 0.9994,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 14.975,
-   "y": 0.434
+   "x": 14.974,
+   "y": 1.23
   },
   {
    "label": "J",
@@ -567,37 +567,37 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 12.35,
-   "y": 20.018
+   "x": 12.349,
+   "y": 20.813
   },
   {
    "label": "J",
    "mapId": "volkus-4",
    "featureIndex": 9,
-   "iou": 0.9722,
+   "iou": 0.9776,
    "rotDeg": 90,
    "flip": true,
-   "x": 4.979,
+   "x": 4.187,
    "y": 8.396
   },
   {
    "label": "J",
    "mapId": "volkus-5",
    "featureIndex": 9,
-   "iou": 0.481,
-   "rotDeg": 0,
+   "iou": 0.3757,
+   "rotDeg": 270,
    "flip": false,
-   "x": 4.248,
-   "y": 8.45
+   "x": 4.508,
+   "y": 6.953
   },
   {
    "label": "J",
    "mapId": "volkus-6",
    "featureIndex": 9,
-   "iou": 0.9722,
+   "iou": 0.9776,
    "rotDeg": 90,
    "flip": true,
-   "x": 3.979,
+   "x": 3.187,
    "y": 3.396
   },
   {
@@ -624,11 +624,11 @@
    "label": "K",
    "mapId": "volkus-3",
    "featureIndex": 10,
-   "iou": 0.298,
-   "rotDeg": 180,
+   "iou": 0.3648,
+   "rotDeg": 90,
    "flip": false,
-   "x": 19.864,
-   "y": 4.59
+   "x": 21.156,
+   "y": 2.829
   },
   {
    "label": "K",
@@ -654,11 +654,11 @@
    "label": "K",
    "mapId": "volkus-6",
    "featureIndex": 10,
-   "iou": 0.3047,
-   "rotDeg": 180,
-   "flip": false,
-   "x": 5.566,
-   "y": 8.422
+   "iou": 0.228,
+   "rotDeg": 0,
+   "flip": true,
+   "x": 5.886,
+   "y": 8.359
   },
   {
    "label": "L",
@@ -846,21 +846,21 @@
    "label": "C",
    "mapId": "bheta-decima-1",
    "featureIndex": 0,
-   "iou": 0.9955,
+   "iou": 0.9944,
    "rotDeg": 0,
    "flip": true,
-   "x": 7.231,
-   "y": 14.287
+   "x": 7.235,
+   "y": 14.305
   },
   {
    "label": "C",
    "mapId": "bheta-decima-1",
    "featureIndex": 3,
-   "iou": 0.9955,
+   "iou": 0.9944,
    "rotDeg": 0,
    "flip": true,
-   "x": 22.731,
-   "y": 14.287
+   "x": 22.735,
+   "y": 14.305
   },
   {
    "label": "C",
@@ -869,488 +869,488 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 5.219,
-   "y": 11.286
-  },
-  {
-   "label": "C",
-   "mapId": "bheta-decima-2",
-   "featureIndex": 7,
-   "iou": 0.9867,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 16.702,
-   "y": 6.293
-  },
-  {
-   "label": "C",
-   "mapId": "bheta-decima-3",
-   "featureIndex": 3,
-   "iou": 0.9999,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 24.719,
-   "y": 10.827
-  },
-  {
-   "label": "C",
-   "mapId": "bheta-decima-3",
-   "featureIndex": 5,
-   "iou": 0.9999,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 5.219,
-   "y": 7.827
-  },
-  {
-   "label": "C",
-   "mapId": "bheta-decima-4",
-   "featureIndex": 4,
-   "iou": 0.9999,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 15.719,
-   "y": 7.827
-  },
-  {
-   "label": "C",
-   "mapId": "bheta-decima-4",
-   "featureIndex": 5,
-   "iou": 0.9867,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 6.702,
-   "y": 11.043
-  },
-  {
-   "label": "C",
-   "mapId": "bheta-decima-5",
-   "featureIndex": 2,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 24.719,
-   "y": 14.286
-  },
-  {
-   "label": "C",
-   "mapId": "bheta-decima-5",
-   "featureIndex": 8,
-   "iou": 0.9867,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 21.161,
-   "y": 4.293
-  },
-  {
-   "label": "C",
-   "mapId": "bheta-decima-6",
-   "featureIndex": 1,
-   "iou": 0.9701,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 19.077,
-   "y": 17.793
-  },
-  {
-   "label": "C",
-   "mapId": "bheta-decima-6",
-   "featureIndex": 6,
-   "iou": 0.9258,
-   "rotDeg": 270,
-   "flip": true,
-   "x": 20.281,
-   "y": 9.75
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-1",
-   "featureIndex": 1,
-   "iou": 0.5908,
-   "rotDeg": 0,
-   "flip": true,
-   "x": 14.022,
-   "y": 17.889
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-1",
-   "featureIndex": 5,
-   "iou": 0.9524,
-   "rotDeg": 180,
-   "flip": false,
-   "x": 16.361,
-   "y": 9.827
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-1",
-   "featureIndex": 7,
-   "iou": 0.9881,
-   "rotDeg": 0,
-   "flip": true,
-   "x": 8.388,
-   "y": 5.295
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-1",
-   "featureIndex": 8,
-   "iou": 0.9881,
-   "rotDeg": 0,
-   "flip": true,
-   "x": 21.638,
-   "y": 5.295
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-2",
-   "featureIndex": 0,
-   "iou": 0.9639,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 9.701,
-   "y": 16.595
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-2",
-   "featureIndex": 2,
-   "iou": 0.9639,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 24.701,
-   "y": 16.595
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-2",
-   "featureIndex": 3,
-   "iou": 0.9998,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 14.945,
-   "y": 15.795
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-2",
-   "featureIndex": 6,
-   "iou": 0.9638,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 24.701,
-   "y": 5.512
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-3",
-   "featureIndex": 0,
-   "iou": 0.9639,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 5.201,
-   "y": 16.595
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-3",
-   "featureIndex": 6,
-   "iou": 0.9881,
-   "rotDeg": 0,
-   "flip": true,
-   "x": 8.888,
-   "y": 11.337
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-3",
-   "featureIndex": 7,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 21.07,
-   "y": 11.295
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-3",
-   "featureIndex": 8,
-   "iou": 0.9638,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 18.201,
-   "y": 5.512
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-4",
-   "featureIndex": 0,
-   "iou": 0.9459,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 8.196,
-   "y": 17.795
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-4",
-   "featureIndex": 2,
-   "iou": 0.9399,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 20.451,
-   "y": 16.802
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-4",
-   "featureIndex": 7,
-   "iou": 0.9399,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 7.201,
-   "y": 5.302
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-4",
-   "featureIndex": 8,
-   "iou": 0.9381,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 20.409,
-   "y": 5.235
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-5",
-   "featureIndex": 0,
-   "iou": 0.9399,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 7.492,
-   "y": 16.802
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-5",
-   "featureIndex": 1,
-   "iou": 0.9841,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 18.201,
-   "y": 16.699
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-5",
-   "featureIndex": 5,
-   "iou": 0.9912,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 13.341,
-   "y": 11.045
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-5",
-   "featureIndex": 7,
-   "iou": 0.9381,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 7.451,
-   "y": 5.235
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-6",
-   "featureIndex": 0,
-   "iou": 0.991,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 8.299,
-   "y": 17.795
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-6",
-   "featureIndex": 3,
-   "iou": 0.4935,
-   "rotDeg": 180,
-   "flip": false,
-   "x": 10.411,
-   "y": 10.275
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-6",
-   "featureIndex": 7,
-   "iou": 0.991,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 8.299,
-   "y": 4.295
-  },
-  {
-   "label": "B",
-   "mapId": "bheta-decima-6",
-   "featureIndex": 8,
-   "iou": 0.9912,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 21.591,
-   "y": 4.295
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-1",
-   "featureIndex": 2,
-   "iou": 0.9832,
-   "rotDeg": 270,
-   "flip": false,
-   "x": 14.763,
-   "y": 15.299
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-1",
-   "featureIndex": 4,
-   "iou": 0.9998,
-   "rotDeg": 270,
-   "flip": false,
-   "x": 18.757,
-   "y": 13.298
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-2",
-   "featureIndex": 1,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 20.202,
-   "y": 17.798
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-2",
-   "featureIndex": 8,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 9.202,
-   "y": 4.298
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-3",
-   "featureIndex": 1,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 11.702,
-   "y": 17.798
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-3",
-   "featureIndex": 2,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 18.202,
-   "y": 17.798
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-4",
-   "featureIndex": 1,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 9.202,
-   "y": 15.298
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-4",
-   "featureIndex": 6,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 25.202,
-   "y": 11.048
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-5",
-   "featureIndex": 4,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 2.743,
-   "y": 11.048
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-5",
-   "featureIndex": 6,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 20.202,
-   "y": 9.798
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-6",
-   "featureIndex": 2,
-   "iou": 0.9998,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 11.285,
-   "y": 13.507
-  },
-  {
-   "label": "A",
-   "mapId": "bheta-decima-6",
-   "featureIndex": 5,
-   "iou": 0.7998,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 16.494,
-   "y": 12.457
-  },
-  {
-   "label": "D",
-   "mapId": "bheta-decima-1",
-   "featureIndex": 6,
-   "iou": 0.9945,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 14.987,
-   "y": 5.262
-  },
-  {
-   "label": "D",
-   "mapId": "bheta-decima-2",
-   "featureIndex": 5,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 14.971,
-   "y": 11.012
-  },
-  {
-   "label": "D",
-   "mapId": "bheta-decima-3",
-   "featureIndex": 4,
-   "iou": 0.9945,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 14.987,
+   "x": 5.214,
    "y": 11.303
+  },
+  {
+   "label": "C",
+   "mapId": "bheta-decima-2",
+   "featureIndex": 7,
+   "iou": 0.9954,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 16.693,
+   "y": 6.284
+  },
+  {
+   "label": "C",
+   "mapId": "bheta-decima-3",
+   "featureIndex": 3,
+   "iou": 0.9999,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 24.714,
+   "y": 10.844
+  },
+  {
+   "label": "C",
+   "mapId": "bheta-decima-3",
+   "featureIndex": 5,
+   "iou": 0.9999,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 5.214,
+   "y": 7.844
+  },
+  {
+   "label": "C",
+   "mapId": "bheta-decima-4",
+   "featureIndex": 4,
+   "iou": 0.9999,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 15.714,
+   "y": 7.844
+  },
+  {
+   "label": "C",
+   "mapId": "bheta-decima-4",
+   "featureIndex": 5,
+   "iou": 0.9954,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 6.693,
+   "y": 11.034
+  },
+  {
+   "label": "C",
+   "mapId": "bheta-decima-5",
+   "featureIndex": 2,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 24.714,
+   "y": 14.303
+  },
+  {
+   "label": "C",
+   "mapId": "bheta-decima-5",
+   "featureIndex": 8,
+   "iou": 0.9955,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 21.151,
+   "y": 4.284
+  },
+  {
+   "label": "C",
+   "mapId": "bheta-decima-6",
+   "featureIndex": 1,
+   "iou": 0.9796,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 19.067,
+   "y": 17.785
+  },
+  {
+   "label": "C",
+   "mapId": "bheta-decima-6",
+   "featureIndex": 6,
+   "iou": 0.9724,
+   "rotDeg": 270,
+   "flip": false,
+   "x": 20.178,
+   "y": 9.78
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-1",
+   "featureIndex": 1,
+   "iou": 0.9806,
+   "rotDeg": 0,
+   "flip": true,
+   "x": 13.653,
+   "y": 17.788
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-1",
+   "featureIndex": 5,
+   "iou": 0.9463,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 16.345,
+   "y": 9.819
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-1",
+   "featureIndex": 7,
+   "iou": 0.9806,
+   "rotDeg": 0,
+   "flip": true,
+   "x": 8.403,
+   "y": 5.288
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-1",
+   "featureIndex": 8,
+   "iou": 0.9806,
+   "rotDeg": 0,
+   "flip": true,
+   "x": 21.653,
+   "y": 5.288
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-2",
+   "featureIndex": 0,
+   "iou": 0.9615,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 9.709,
+   "y": 16.609
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-2",
+   "featureIndex": 2,
+   "iou": 0.9615,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 24.709,
+   "y": 16.609
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-2",
+   "featureIndex": 3,
+   "iou": 0.9998,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 14.937,
+   "y": 15.794
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-2",
+   "featureIndex": 6,
+   "iou": 0.9617,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 24.709,
+   "y": 5.525
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-3",
+   "featureIndex": 0,
+   "iou": 0.9615,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 5.209,
+   "y": 16.609
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-3",
+   "featureIndex": 6,
+   "iou": 0.9803,
+   "rotDeg": 0,
+   "flip": true,
+   "x": 8.903,
+   "y": 11.33
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-3",
+   "featureIndex": 7,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 21.062,
+   "y": 11.294
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-3",
+   "featureIndex": 8,
+   "iou": 0.9617,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 18.209,
+   "y": 5.525
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-4",
+   "featureIndex": 0,
+   "iou": 0.943,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 8.189,
+   "y": 17.794
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-4",
+   "featureIndex": 2,
+   "iou": 0.944,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 20.458,
+   "y": 16.816
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-4",
+   "featureIndex": 7,
+   "iou": 0.944,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 7.208,
+   "y": 5.316
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-4",
+   "featureIndex": 8,
+   "iou": 0.9405,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 20.416,
+   "y": 5.222
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-5",
+   "featureIndex": 0,
+   "iou": 0.9439,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 7.5,
+   "y": 16.816
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-5",
+   "featureIndex": 1,
+   "iou": 0.9868,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 18.209,
+   "y": 16.712
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-5",
+   "featureIndex": 5,
+   "iou": 0.9899,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 13.334,
+   "y": 11.044
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-5",
+   "featureIndex": 7,
+   "iou": 0.9405,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 7.458,
+   "y": 5.222
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-6",
+   "featureIndex": 0,
+   "iou": 0.9898,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 8.293,
+   "y": 17.794
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-6",
+   "featureIndex": 3,
+   "iou": 0.4813,
+   "rotDeg": 180,
+   "flip": true,
+   "x": 10.375,
+   "y": 10.337
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-6",
+   "featureIndex": 7,
+   "iou": 0.9898,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 8.293,
+   "y": 4.294
+  },
+  {
+   "label": "B",
+   "mapId": "bheta-decima-6",
+   "featureIndex": 8,
+   "iou": 0.9899,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 21.584,
+   "y": 4.294
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-1",
+   "featureIndex": 2,
+   "iou": 0.9839,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 14.78,
+   "y": 15.315
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-1",
+   "featureIndex": 4,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 18.775,
+   "y": 13.307
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-2",
+   "featureIndex": 1,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 20.193,
+   "y": 17.817
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-2",
+   "featureIndex": 8,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 9.193,
+   "y": 4.317
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-3",
+   "featureIndex": 1,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 11.693,
+   "y": 17.817
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-3",
+   "featureIndex": 2,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 18.193,
+   "y": 17.817
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-4",
+   "featureIndex": 1,
+   "iou": 0.9746,
+   "rotDeg": 0,
+   "flip": true,
+   "x": 9.182,
+   "y": 15.319
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-4",
+   "featureIndex": 6,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 25.193,
+   "y": 11.067
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-5",
+   "featureIndex": 4,
+   "iou": 0.9997,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 2.735,
+   "y": 11.067
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-5",
+   "featureIndex": 6,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 20.193,
+   "y": 9.817
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-6",
+   "featureIndex": 2,
+   "iou": 0.9996,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 11.277,
+   "y": 13.525
+  },
+  {
+   "label": "A",
+   "mapId": "bheta-decima-6",
+   "featureIndex": 5,
+   "iou": 0.9409,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 16.486,
+   "y": 12.261
+  },
+  {
+   "label": "D",
+   "mapId": "bheta-decima-1",
+   "featureIndex": 6,
+   "iou": 0.9949,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 14.99,
+   "y": 5.266
+  },
+  {
+   "label": "D",
+   "mapId": "bheta-decima-2",
+   "featureIndex": 5,
+   "iou": 0.9988,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 14.97,
+   "y": 11.011
+  },
+  {
+   "label": "D",
+   "mapId": "bheta-decima-3",
+   "featureIndex": 4,
+   "iou": 0.9942,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 14.99,
+   "y": 11.309
   },
   {
    "label": "D",
@@ -1360,27 +1360,27 @@
    "rotDeg": 0,
    "flip": false,
    "x": 20.471,
-   "y": 11.012
+   "y": 11.011
   },
   {
    "label": "D",
    "mapId": "bheta-decima-5",
    "featureIndex": 3,
-   "iou": 0.9998,
+   "iou": 0.9999,
    "rotDeg": 0,
    "flip": false,
    "x": 7.512,
-   "y": 11.012
+   "y": 11.011
   },
   {
    "label": "D",
    "mapId": "bheta-decima-6",
    "featureIndex": 4,
-   "iou": 0.3597,
-   "rotDeg": 270,
-   "flip": true,
-   "x": 5.526,
-   "y": 10.942
+   "iou": 0.3984,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 5.278,
+   "y": 10.672
   }
  ],
  "gallowdark": [
@@ -1408,7 +1408,7 @@
    "label": "A2",
    "mapId": "gallowdark-2",
    "featureIndex": 1,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 8.093,
@@ -1418,11 +1418,11 @@
    "label": "A2",
    "mapId": "gallowdark-2",
    "featureIndex": 7,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 8.094,
-   "y": 4.313
+   "x": 8.093,
+   "y": 4.312
   },
   {
    "label": "A2",
@@ -1448,7 +1448,7 @@
    "label": "A2",
    "mapId": "gallowdark-4",
    "featureIndex": 2,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 19.531,
@@ -1458,7 +1458,7 @@
    "label": "A2",
    "mapId": "gallowdark-4",
    "featureIndex": 8,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 4.281,
@@ -1488,7 +1488,7 @@
    "label": "A2",
    "mapId": "gallowdark-6",
    "featureIndex": 3,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 8.094,
@@ -1498,10 +1498,10 @@
    "label": "A2",
    "mapId": "gallowdark-6",
    "featureIndex": 5,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 19.532,
+   "x": 19.531,
    "y": 8.125
   },
   {
@@ -1528,17 +1528,17 @@
    "label": "A3",
    "mapId": "gallowdark-2",
    "featureIndex": 13,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 11.906,
+   "x": 11.907,
    "y": 8.125
   },
   {
    "label": "A3",
    "mapId": "gallowdark-2",
    "featureIndex": 14,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 15.719,
@@ -1568,7 +1568,7 @@
    "label": "A3",
    "mapId": "gallowdark-4",
    "featureIndex": 12,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 15.718,
@@ -1578,7 +1578,7 @@
    "label": "A3",
    "mapId": "gallowdark-4",
    "featureIndex": 13,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 19.532,
@@ -1608,7 +1608,7 @@
    "label": "A3",
    "mapId": "gallowdark-6",
    "featureIndex": 10,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 11.907,
@@ -1618,7 +1618,7 @@
    "label": "A3",
    "mapId": "gallowdark-6",
    "featureIndex": 12,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 19.532,
@@ -1648,11 +1648,11 @@
    "label": "B2",
    "mapId": "gallowdark-2",
    "featureIndex": 6,
-   "iou": 0.3579,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 2.375,
-   "y": 4.312
+   "y": 4.313
   },
   {
    "label": "B2",
@@ -1678,7 +1678,7 @@
    "label": "B2",
    "mapId": "gallowdark-4",
    "featureIndex": 7,
-   "iou": 0.5222,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 4.282,
@@ -1688,10 +1688,10 @@
    "label": "B2",
    "mapId": "gallowdark-4",
    "featureIndex": 9,
-   "iou": 0.5222,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 4.281,
+   "x": 4.282,
    "y": 2.406
   },
   {
@@ -1718,7 +1718,7 @@
    "label": "B2",
    "mapId": "gallowdark-6",
    "featureIndex": 0,
-   "iou": 0.5222,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 10.0,
@@ -1728,7 +1728,7 @@
    "label": "B2",
    "mapId": "gallowdark-6",
    "featureIndex": 2,
-   "iou": 0.5222,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 17.625,
@@ -1778,7 +1778,7 @@
    "label": "B3",
    "mapId": "gallowdark-2",
    "featureIndex": 0,
-   "iou": 0.3579,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 2.375,
@@ -1788,30 +1788,30 @@
    "label": "B3",
    "mapId": "gallowdark-2",
    "featureIndex": 3,
-   "iou": 0.3579,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 25.25,
-   "y": 19.563
+   "y": 19.562
   },
   {
    "label": "B3",
    "mapId": "gallowdark-2",
    "featureIndex": 8,
-   "iou": 0.3579,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 13.812,
-   "y": 4.312
+   "x": 13.813,
+   "y": 4.313
   },
   {
    "label": "B3",
    "mapId": "gallowdark-2",
    "featureIndex": 12,
-   "iou": 0.3579,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 11.906,
+   "x": 11.907,
    "y": 13.844
   },
   {
@@ -1858,7 +1858,7 @@
    "label": "B3",
    "mapId": "gallowdark-4",
    "featureIndex": 1,
-   "iou": 0.5333,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 13.813,
@@ -1868,7 +1868,7 @@
    "label": "B3",
    "mapId": "gallowdark-4",
    "featureIndex": 4,
-   "iou": 0.5333,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 13.813,
@@ -1878,7 +1878,7 @@
    "label": "B3",
    "mapId": "gallowdark-4",
    "featureIndex": 5,
-   "iou": 0.5333,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 17.625,
@@ -1888,11 +1888,11 @@
    "label": "B3",
    "mapId": "gallowdark-4",
    "featureIndex": 10,
-   "iou": 0.5333,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 8.093,
-   "y": 21.468
+   "x": 8.094,
+   "y": 21.469
   },
   {
    "label": "B3",
@@ -1938,7 +1938,7 @@
    "label": "B3",
    "mapId": "gallowdark-6",
    "featureIndex": 1,
-   "iou": 0.5333,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 13.813,
@@ -1948,7 +1948,7 @@
    "label": "B3",
    "mapId": "gallowdark-6",
    "featureIndex": 4,
-   "iou": 0.5333,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 13.813,
@@ -1958,20 +1958,20 @@
    "label": "B3",
    "mapId": "gallowdark-6",
    "featureIndex": 9,
-   "iou": 0.5333,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 8.094,
+   "x": 8.093,
    "y": 2.406
   },
   {
    "label": "B3",
    "mapId": "gallowdark-6",
    "featureIndex": 15,
-   "iou": 0.5333,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 23.343,
+   "x": 23.344,
    "y": 2.406
   },
   {
@@ -1998,21 +1998,21 @@
    "label": "A4",
    "mapId": "gallowdark-2",
    "featureIndex": 5,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 23.344,
-   "y": 11.938
+   "x": 23.343,
+   "y": 11.937
   },
   {
    "label": "A4",
    "mapId": "gallowdark-2",
    "featureIndex": 10,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 23.343,
-   "y": 4.312
+   "x": 23.344,
+   "y": 4.313
   },
   {
    "label": "A4",
@@ -2038,21 +2038,21 @@
    "label": "A4",
    "mapId": "gallowdark-4",
    "featureIndex": 14,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 23.344,
-   "y": 19.563
+   "x": 23.343,
+   "y": 19.562
   },
   {
    "label": "A4",
    "mapId": "gallowdark-4",
    "featureIndex": 15,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 23.343,
-   "y": 4.312
+   "x": 23.344,
+   "y": 4.313
   },
   {
    "label": "A4",
@@ -2078,27 +2078,27 @@
    "label": "A4",
    "mapId": "gallowdark-6",
    "featureIndex": 7,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 8.094,
-   "y": 19.563
+   "x": 8.093,
+   "y": 19.562
   },
   {
    "label": "A4",
    "mapId": "gallowdark-6",
    "featureIndex": 11,
-   "iou": 0.5263,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 15.719,
-   "y": 19.563
+   "x": 15.718,
+   "y": 19.562
   },
   {
    "label": "A1",
    "mapId": "gallowdark-1",
    "featureIndex": 7,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 19.531,
@@ -2111,8 +2111,8 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 19.531,
-   "y": 19.562
+   "x": 19.532,
+   "y": 19.563
   },
   {
    "label": "A1",
@@ -2121,14 +2121,14 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 15.719,
+   "x": 15.718,
    "y": 11.937
   },
   {
    "label": "A1",
    "mapId": "gallowdark-3",
    "featureIndex": 10,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 8.094,
@@ -2138,7 +2138,7 @@
    "label": "A1",
    "mapId": "gallowdark-3",
    "featureIndex": 14,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 19.532,
@@ -2148,7 +2148,7 @@
    "label": "A1",
    "mapId": "gallowdark-4",
    "featureIndex": 0,
-   "iou": 0.6786,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 8.094,
@@ -2158,7 +2158,7 @@
    "label": "A1",
    "mapId": "gallowdark-4",
    "featureIndex": 3,
-   "iou": 0.6786,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 8.094,
@@ -2168,7 +2168,7 @@
    "label": "A1",
    "mapId": "gallowdark-5",
    "featureIndex": 0,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 8.094,
@@ -2178,7 +2178,7 @@
    "label": "A1",
    "mapId": "gallowdark-5",
    "featureIndex": 5,
-   "iou": 0.3571,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 8.094,
@@ -2188,17 +2188,17 @@
    "label": "A1",
    "mapId": "gallowdark-6",
    "featureIndex": 6,
-   "iou": 0.6786,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 4.282,
+   "x": 4.281,
    "y": 15.75
   },
   {
    "label": "A1",
    "mapId": "gallowdark-6",
    "featureIndex": 13,
-   "iou": 0.6786,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 23.344,
@@ -2228,7 +2228,7 @@
    "label": "B1",
    "mapId": "gallowdark-2",
    "featureIndex": 9,
-   "iou": 0.3579,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 17.625,
@@ -2238,10 +2238,10 @@
    "label": "B1",
    "mapId": "gallowdark-2",
    "featureIndex": 11,
-   "iou": 0.3579,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 11.906,
+   "x": 11.907,
    "y": 17.656
   },
   {
@@ -2268,7 +2268,7 @@
    "label": "B1",
    "mapId": "gallowdark-4",
    "featureIndex": 6,
-   "iou": 0.5222,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 21.438,
@@ -2278,7 +2278,7 @@
    "label": "B1",
    "mapId": "gallowdark-4",
    "featureIndex": 11,
-   "iou": 0.5222,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 8.094,
@@ -2308,21 +2308,21 @@
    "label": "B1",
    "mapId": "gallowdark-6",
    "featureIndex": 8,
-   "iou": 0.5222,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 8.093,
-   "y": 6.218
+   "x": 8.094,
+   "y": 6.219
   },
   {
    "label": "B1",
    "mapId": "gallowdark-6",
    "featureIndex": 14,
-   "iou": 0.5222,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
    "x": 23.343,
-   "y": 6.219
+   "y": 6.218
   }
  ],
  "tomb-world": [
@@ -2330,17 +2330,17 @@
    "label": "B4",
    "mapId": "tomb-world-1",
    "featureIndex": 0,
-   "iou": 0.6941,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 6.188,
-   "y": 11.938
+   "x": 6.187,
+   "y": 11.937
   },
   {
    "label": "B4",
    "mapId": "tomb-world-1",
    "featureIndex": 7,
-   "iou": 0.6941,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 11.906,
@@ -2430,8 +2430,8 @@
    "label": "B3",
    "mapId": "tomb-world-1",
    "featureIndex": 1,
-   "iou": 0.6941,
-   "rotDeg": 90,
+   "iou": 1.0,
+   "rotDeg": 0,
    "flip": false,
    "x": 10.0,
    "y": 11.938
@@ -2440,8 +2440,8 @@
    "label": "B3",
    "mapId": "tomb-world-1",
    "featureIndex": 13,
-   "iou": 0.6941,
-   "rotDeg": 0,
+   "iou": 1.0,
+   "rotDeg": 90,
    "flip": false,
    "x": 23.344,
    "y": 2.406
@@ -2451,7 +2451,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 10,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 11.906,
    "y": 2.406
@@ -2461,7 +2461,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 11,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 15.719,
    "y": 21.469
@@ -2471,7 +2471,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 4,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 21.437,
    "y": 15.75
@@ -2481,7 +2481,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 5,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 6.187,
    "y": 8.125
@@ -2491,7 +2491,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 0,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 2.375,
    "y": 19.563
@@ -2501,7 +2501,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 8,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 2.375,
    "y": 4.313
@@ -2511,7 +2511,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 6,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 13.813,
    "y": 4.313
@@ -2521,7 +2521,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 10,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 11.907,
    "y": 17.656
@@ -2531,7 +2531,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 0,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 2.375,
    "y": 19.563
@@ -2541,7 +2541,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 13,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 11.906,
    "y": 6.218
@@ -2550,8 +2550,8 @@
    "label": "B2",
    "mapId": "tomb-world-1",
    "featureIndex": 2,
-   "iou": 0.6941,
-   "rotDeg": 90,
+   "iou": 1.0,
+   "rotDeg": 0,
    "flip": false,
    "x": 13.812,
    "y": 11.937
@@ -2561,7 +2561,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 7,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 8.094,
    "y": 21.469
@@ -2571,7 +2571,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 8,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 11.907,
    "y": 13.844
@@ -2581,7 +2581,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 2,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 10.0,
    "y": 15.75
@@ -2591,7 +2591,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 7,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 17.625,
    "y": 8.125
@@ -2601,7 +2601,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 5,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 10.0,
    "y": 11.938
@@ -2611,7 +2611,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 6,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 17.625,
    "y": 11.937
@@ -2621,7 +2621,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 12,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 11.906,
    "y": 6.218
@@ -2631,7 +2631,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 14,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 19.532,
    "y": 10.032
@@ -2641,7 +2641,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 4,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 13.812,
    "y": 11.937
@@ -2651,7 +2651,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 12,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 11.907,
    "y": 10.032
@@ -2660,17 +2660,17 @@
    "label": "A4",
    "mapId": "tomb-world-1",
    "featureIndex": 3,
-   "iou": 0.6957,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 19.532,
-   "y": 11.938
+   "x": 19.531,
+   "y": 11.937
   },
   {
    "label": "A4",
    "mapId": "tomb-world-1",
    "featureIndex": 6,
-   "iou": 0.6957,
+   "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
    "x": 4.281,
@@ -2780,11 +2780,11 @@
    "label": "A2",
    "mapId": "tomb-world-1",
    "featureIndex": 4,
-   "iou": 0.4135,
+   "iou": 0.5048,
    "rotDeg": 0,
    "flip": false,
-   "x": 13.812,
-   "y": 4.312
+   "x": 13.813,
+   "y": 4.313
   },
   {
    "label": "A2",
@@ -2890,8 +2890,8 @@
    "label": "B1",
    "mapId": "tomb-world-1",
    "featureIndex": 5,
-   "iou": 0.6941,
-   "rotDeg": 90,
+   "iou": 1.0,
+   "rotDeg": 0,
    "flip": false,
    "x": 4.282,
    "y": 10.032
@@ -2901,7 +2901,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 0,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 6.188,
    "y": 19.563
@@ -2911,7 +2911,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 14,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 23.343,
    "y": 13.844
@@ -2921,7 +2921,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 0,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 13.813,
    "y": 19.563
@@ -2931,7 +2931,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 1,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 6.187,
    "y": 15.75
@@ -2941,7 +2941,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 1,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 6.188,
    "y": 19.563
@@ -2951,7 +2951,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 9,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 6.187,
    "y": 4.312
@@ -2961,7 +2961,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 13,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 19.531,
    "y": 13.844
@@ -2971,7 +2971,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 15,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 19.532,
    "y": 6.219
@@ -2981,7 +2981,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 6,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 21.438,
    "y": 11.938
@@ -2991,7 +2991,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 8,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 10.0,
    "y": 8.125
@@ -3000,8 +3000,8 @@
    "label": "A3",
    "mapId": "tomb-world-1",
    "featureIndex": 8,
-   "iou": 0.6957,
-   "rotDeg": 90,
+   "iou": 1.0,
+   "rotDeg": 0,
    "flip": false,
    "x": 11.907,
    "y": 15.75
@@ -3010,8 +3010,8 @@
    "label": "A3",
    "mapId": "tomb-world-1",
    "featureIndex": 11,
-   "iou": 0.6957,
-   "rotDeg": 90,
+   "iou": 1.0,
+   "rotDeg": 0,
    "flip": false,
    "x": 23.344,
    "y": 15.75
@@ -3021,7 +3021,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 4,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 15.719,
    "y": 4.313
@@ -3031,7 +3031,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 6,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 4.281,
    "y": 15.75
@@ -3041,7 +3041,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 11,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 8.093,
    "y": 19.562
@@ -3051,7 +3051,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 14,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 23.343,
    "y": 19.562
@@ -3061,7 +3061,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 3,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 15.718,
    "y": 19.562
@@ -3071,7 +3071,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 7,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 23.343,
    "y": 11.937
@@ -3081,7 +3081,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 1,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 15.718,
    "y": 15.75
@@ -3091,7 +3091,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 2,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 23.343,
    "y": 15.75
@@ -3101,7 +3101,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 10,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 23.344,
    "y": 4.313
@@ -3111,7 +3111,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 14,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 19.532,
    "y": 8.125
@@ -3120,18 +3120,18 @@
    "label": "A1",
    "mapId": "tomb-world-1",
    "featureIndex": 9,
-   "iou": 0.6957,
-   "rotDeg": 90,
+   "iou": 1.0,
+   "rotDeg": 0,
    "flip": false,
    "x": 15.718,
-   "y": 19.563
+   "y": 19.562
   },
   {
    "label": "A1",
    "mapId": "tomb-world-1",
    "featureIndex": 12,
-   "iou": 0.6957,
-   "rotDeg": 90,
+   "iou": 1.0,
+   "rotDeg": 0,
    "flip": false,
    "x": 23.344,
    "y": 8.125
@@ -3141,7 +3141,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 1,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 11.907,
    "y": 19.563
@@ -3151,7 +3151,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 12,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 15.719,
    "y": 15.75
@@ -3161,7 +3161,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 10,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 4.281,
    "y": 4.312
@@ -3171,7 +3171,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 12,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 19.532,
    "y": 11.938
@@ -3181,7 +3181,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 4,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 4.282,
    "y": 11.938
@@ -3191,7 +3191,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 10,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 11.907,
    "y": 4.313
@@ -3201,7 +3201,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 0,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 8.093,
    "y": 19.562
@@ -3211,7 +3211,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 8,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 23.344,
    "y": 4.313
@@ -3221,7 +3221,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 2,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 15.718,
    "y": 19.562
@@ -3231,7 +3231,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 11,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 11.907,
    "y": 15.75

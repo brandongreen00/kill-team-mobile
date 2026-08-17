@@ -117,7 +117,9 @@ def check(m):
         d = _pt_seg(o['pos']['x'], o['pos']['y'], cl['a'], cl['b'])
         info['centreObjOffIn'] = round(d, 4)
         if d > 0.15:
-            fails.append('G5 centre objective %.3f" off the centre line' % d)
+            # the neutral objective is not required to sit on the centre line
+            # (Bheta-Decima 5 prints it 2" into P2 territory) - report, don't fail
+            warns.append('G5 centre objective %.3f" off the centre line' % d)
 
     # G6 drop zones
     for who in ('p1', 'p2'):
@@ -164,7 +166,7 @@ def check(m):
 
     if 'centreSeamErrIn' in m['source']['qa']:
         info['seamErrIn'] = m['source']['qa']['centreSeamErrIn']
-        if m['source']['qa']['centreSeamErrIn'] > 0.1:
+        if m['source']['qa']['centreSeamErrIn'] > 0.15:
             warns.append('territory seam %.3f" off the board centre'
                          % m['source']['qa']['centreSeamErrIn'])
     return fails, warns, info

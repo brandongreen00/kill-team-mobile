@@ -177,14 +177,27 @@ def _snap_cq(frame, v, axis):
 
 
 def _seam(a, b, axis):
-    """Pixel index where mask `a` ends and mask `b` begins along `axis`."""
-    pa = a.sum(0 if axis == 0 else 1)
-    pb = b.sum(0 if axis == 0 else 1)
-    ia = np.where(pa > pa.max() * 0.3)[0]
-    ib = np.where(pb > pb.max() * 0.3)[0]
-    if not len(ia) or not len(ib):
-        return None
-    return (ia.max() + ib.min()) / 2 if ia.max() < ib.min() else (ib.max() + ia.min()) / 2
+    """Where mask `a` gives way to mask `b`, as the median over scanlines.
+
+    Taking the median rather than the global extent keeps the measurement honest
+    on Bheta-Decima, where the printed ocean covers the tints over most of the
+    board's middle.
+    """
+    vals = []
+    n = a.shape[1] if axis == 0 else a.shape[0]
+    lines = a.shape[0] if axis == 0 else a.shape[1]
+    for k in range(0, lines, 3):
+        la = a[k] if axis == 0 else a[:, k]
+        lb = b[k] if axis == 0 else b[:, k]
+        ia = np.where(la)[0]
+        ib = np.where(lb)[0]
+        if not len(ia) or not len(ib):
+            continue
+        if ia.max() < ib.min():
+            vals.append((ia.max() + ib.min()) / 2)
+        elif ib.max() < ia.min():
+            vals.append((ib.max() + ia.min()) / 2)
+    return float(np.median(vals)) if vals else None
 
 
 def extract_edges(img, frame):
@@ -318,25 +331,45 @@ def extract_annotations(img, frame):
 VOLKUS_STRUCTURE_LETTERS = set('ABCDEF')
 
 
-def heal_chips(mask, boxes, pad=3, frac=0.30):
-    """Paint label chips back into a mask they were printed on top of.
+def heal_chips(mask, boxes, pad=3, frac=0.30, side_frac=0.25):
+    """Paint opaque overlays back into the mask they were printed on top of.
 
-    A chip is opaque, so it punches a notch out of the terrain footprint under
-    it. If most of the ring just outside the chip is the mask, the chip was
-    drawn on that piece and the notch is filled in.
+    Label chips and objective markers are opaque, so they punch a notch out of
+    the terrain footprint under them. The overlay belongs to a piece if the ring
+    just outside it is mostly that piece, or if the piece continues on two
+    opposite sides of it (a chip printed on a piece narrower than the chip, e.g.
+    Volkus light rubble).
     """
     out = mask.copy()
     H, W = mask.shape
     for (x0, y0, x1, y1) in boxes:
+        x0, y0 = max(0, int(x0)), max(0, int(y0))
+        x1, y1 = min(W, int(x1)), min(H, int(y1))
+        if x1 <= x0 or y1 <= y0:
+            continue
         ya, yb = max(0, y0 - pad), min(H, y1 + pad)
         xa, xb = max(0, x0 - pad), min(W, x1 + pad)
         box = mask[ya:yb, xa:xb]
         inner = np.zeros(box.shape, bool)
         inner[y0 - ya:y1 - ya, x0 - xa:x1 - xa] = True
         ring = box[~inner]
-        if ring.size and ring.mean() >= frac:
+        left = mask[y0:y1, xa:x0]
+        right = mask[y0:y1, x1:xb]
+        top = mask[ya:y0, x0:x1]
+        bot = mask[y1:yb, x0:x1]
+        opposite = ((left.size and left.mean() >= side_frac) and
+                    (right.size and right.mean() >= side_frac)) or \
+                   ((top.size and top.mean() >= side_frac) and
+                    (bot.size and bot.mean() >= side_frac))
+        if (ring.size and ring.mean() >= frac) or opposite:
             out[max(0, y0 - 1):y1 + 1, max(0, x0 - 1):x1 + 1] = True
     return out
+
+
+def marker_boxes(objectives, r=21):
+    """Bounding boxes of the printed objective markers, for healing."""
+    return [(int(cx - r), int(cy - r), int(cx + r), int(cy + r))
+            for cx, cy in (o['px'] for o in objectives)]
 
 
 def dashed_rects(img, ink, chip_boxes):
@@ -395,8 +428,9 @@ def volkus_features(img, frame, objectives):
 
     green = C.mask_any(img, C.GREEN_MID, tol=4) & interior
     dgreen = C.mask_any(img, C.GREEN_DARK, tol=4) & interior
-    green = heal_chips(green, chip_boxes)
-    dgreen = heal_chips(dgreen, chip_boxes)
+    overlays = chip_boxes + marker_boxes(objectives)
+    green = heal_chips(green, overlays)
+    dgreen = heal_chips(dgreen, overlays)
 
     # Structural ink: thick black strokes only. The centre-line dashes, the
     # drop-zone arrows and the marker rings are all thinner than a wall, so an
@@ -516,11 +550,22 @@ def bheta_features(img, frame, objectives):
     chip_list = L.chips(img, 'open')
     green = C.mask_any(img, C.GREEN_MID, tol=5) & interior
     # the label chips sit on the decks and punch notches out of them
-    green = heal_chips(green, [b for _, _, _, b in chip_list])
+    green = heal_chips(green, [b for _, _, _, b in chip_list] + marker_boxes(objectives))
+    # every gantry deck and the condenser are printed with their own outline in
+    # the chip colour; cutting along it separates decks drawn edge to edge
+    outline = C.mask_exact(img, C.PALETTE['label_open'], 6) & interior
+    for (bx0, by0, bx1, by1) in [b for _, _, _, b in chip_list]:
+        outline[max(0, by0 - 2):by1 + 2, max(0, bx0 - 2):bx1 + 2] = False
+    touching = green.copy()
+    green &= ~ndimage.binary_dilation(outline, np.ones((3, 3), bool))
 
     chips = {}
     for idx, (t, cx, cy, _) in enumerate(chip_list):
         chips['%s#%d' % (t, idx)] = (cx, cy)
+
+    # adjacency groups: pieces that were one blob before the outline cut are
+    # gantries drawn deck-to-deck, i.e. "treated as the same terrain"
+    tlab, _ = ndimage.label(touching)
 
     pieces, orphans = [], []
     for blob in G.component_masks(green, 120):
@@ -529,13 +574,12 @@ def bheta_features(img, frame, objectives):
         if not inside:
             orphans.append(blob)
             continue
+        grp = int(np.bincount(tlab[blob]).argmax())
         if len(inside) > 1:
-            # gantries drawn deck-to-deck: split them, then group them
-            group = 'g%d' % len(pieces)
             for k, sub in G.split_blob_by_chips(blob, inside).items():
-                pieces.append(dict(key=k, mask=sub, group=group))
+                pieces.append(dict(key=k, mask=sub, group=grp))
         else:
-            pieces.append(dict(key=next(iter(inside)), mask=blob, group=None))
+            pieces.append(dict(key=next(iter(inside)), mask=blob, group=grp))
 
     out = []
     for pc in pieces:
@@ -558,8 +602,11 @@ def bheta_features(img, frame, objectives):
                     ip = G.blob_polys(inner, frame)
                     if ip:
                         parts.append((pspec, ip[0][0]))
-        out.append(dict(label=label, kind=kind, parts=parts,
-                        groupKey=pc['group'], shared=pc['group'] is not None))
+        out.append(dict(label=label, kind=kind, parts=parts, groupKey=pc['group']))
+    shared = {g for g in [p['groupKey'] for p in out]
+              if [p['groupKey'] for p in out].count(g) > 1}
+    for p in out:
+        p['shared'] = p['groupKey'] in shared
     return out
 
 
@@ -621,7 +668,7 @@ def cq_features(img, frame, killzone):
     runs = _cq_runs(occupied_h, occupied_v)
     feats = _assign_labels(runs, chips, lx, ly)
     walls = []
-    thick = _wall_thickness(wall, lx, ly)
+    thick = _wall_thickness(wall, lx, ly, occupied_h, occupied_v)
     for f in feats:
         walls.append(_cq_wall_feature(f, frame, lx, ly, thick, access, killzone))
 
@@ -737,20 +784,39 @@ def _assign_labels(runs, chips, lx, ly):
     return out
 
 
-def _wall_thickness(wall, lx, ly):
-    """Median printed wall thickness in px, measured across occupied lattice lines."""
-    widths = []
-    for y in ly:
-        yy = int(round(y))
-        row = wall[yy]
-        run = 0
-        for v in wall[max(0, yy - 12):yy + 13, :].sum(1):
-            pass
-        col = wall[max(0, yy - 12):min(wall.shape[0], yy + 13), :]
-        prof = col.sum(1)
-        if prof.max() > wall.shape[1] * 0.2:
-            widths.append(int((prof > wall.shape[1] * 0.2).sum()))
-    return float(np.median(widths)) if widths else 9.0
+def _wall_thickness(wall, lx, ly, oh, ov):
+    """Median printed wall stroke, measured perpendicular to occupied edges.
+
+    Sampling has to avoid the lattice nodes, where the printed pillar blocks are
+    two to three times wider than the wall itself.
+    """
+    runs = []
+    for (i, j), on in oh.items():
+        if not on:
+            continue
+        x = int(round((lx[i] + lx[i + 1]) / 2))
+        y = int(round(ly[j]))
+        runs.append(_run_len(wall[:, x], y))
+    for (i, j), on in ov.items():
+        if not on:
+            continue
+        y = int(round((ly[j] + ly[j + 1]) / 2))
+        x = int(round(lx[i]))
+        runs.append(_run_len(wall[y, :], x))
+    runs = [r for r in runs if r]
+    return float(np.median(runs)) if runs else 9.0
+
+
+def _run_len(line, k):
+    if not line[k]:
+        return 0
+    a = k
+    while a > 0 and line[a - 1]:
+        a -= 1
+    b = k
+    while b + 1 < len(line) and line[b + 1]:
+        b += 1
+    return b - a + 1
 
 
 def _cq_wall_feature(seg, frame, lx, ly, thick, access, killzone):
@@ -916,7 +982,7 @@ def _finish_open(raw, mapId, group=False):
         feat = dict(id=fid, kind=f['kind'], label=f['label'], parts=parts,
                     placement=dict(x=round(cx, 3), y=round(cy, 3), rotDeg=0, flip=False))
         if group and f.get('shared'):
-            feat['groupId'] = '%s.%s' % (mapId, f['groupKey'])
+            feat['groupId'] = '%s.g%s' % (mapId, f['groupKey'])
         feats.append(feat)
     # deduplicate ids when a letter appears twice on one card (Bheta gantries)
     seen = defaultdict(int)

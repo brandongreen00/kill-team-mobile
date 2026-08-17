@@ -456,13 +456,15 @@ export function resolveFightDie(
       },
       brutal: hasRule(rules, 'Brutal'),
       blocks: 1,
+      normalsCanBlockCrits: false,
     });
     die.state = 'discarded';
     let blocked = 0;
     for (let i = 0; i < Math.max(1, ev.blocks); i++) {
       // "A normal success can block a normal success... a critical success can block either."
       const targets = successes(opponentPool);
-      const blockable = dieWasCrit ? targets : targets.filter((d) => d.state === 'normal');
+      const blockable =
+        dieWasCrit || ev.normalsCanBlockCrits ? targets : targets.filter((d) => d.state === 'normal');
       const victim =
         (i === 0 && blockTargetId !== undefined ? blockable.find((d) => d.id === blockTargetId) : undefined) ??
         blockable.find((d) => d.state === 'crit') ??

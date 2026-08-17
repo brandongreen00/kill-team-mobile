@@ -62,6 +62,7 @@ export const HOOK_NAMES = [
   'onScore',
   'onStatMod',
   'onFreeActions',
+  'onSupportDistance',
 ] as const;
 
 export type HookName = (typeof HOOK_NAMES)[number];
@@ -223,7 +224,14 @@ export interface HookEvents {
    * one; the rare `Shield` weapon rule makes it two ("each of your blocks can be allocated to
    * block two unresolved successes instead of one").
    */
-  onBlockAllocation: { state: GameState; ctx: AttackContext; brutal: boolean; blocks: number };
+  onBlockAllocation: {
+    state: GameState;
+    ctx: AttackContext;
+    brutal: boolean;
+    blocks: number;
+    /** Dueller-style rules: "each of your normal successes can block one critical success". */
+    normalsCanBlockCrits: boolean;
+  };
   onDamage: {
     state: GameState;
     ctx: AttackContext | null;
@@ -240,6 +248,11 @@ export interface HookEvents {
   onScore: { state: GameState; player: PlayerId; opId: string; vp: number };
   onStatMod: { state: GameState; operative: OperativeState; mods: StatMods };
   onFreeActions: { state: GameState; operative: OperativeState; actions: { id: string; label: string }[] };
+  /**
+   * The distance requirement of a SUPPORT rule that refers to friendly operatives, so
+   * equipment (Comms Device: +3") can widen it.
+   */
+  onSupportDistance: { state: GameState; operative: OperativeState; inches: number };
 }
 
 // ---------------------------------------------------------------------------

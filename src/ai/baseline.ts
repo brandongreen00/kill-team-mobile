@@ -52,7 +52,7 @@ export class RandomLegalAgent implements Agent {
       const pick = options[Math.floor(rng.next() * options.length)] ?? options[options.length - 1];
       return pick ? pick.intent : { t: 'DeclineInterrupt', player };
     }
-    const candidates = enumerateCandidates(ctx, state, player, { weights: this.weights, moveLimit: 4 });
+    const candidates = enumerateCandidates(ctx, state, player, { weights: this.weights, moveLimit: 4, moveStep: 1 });
     if (candidates.length === 0) return null;
     // Bias very slightly away from ending an activation with AP left, or the random agent
     // barely ever does anything at all.
@@ -88,7 +88,7 @@ export class GreedyAgent implements Agent {
       return best && best.hint > 8 ? best.intent : { t: 'DeclineInterrupt', player };
     }
 
-    const candidates = enumerateCandidates(ctx, state, player, { weights: this.weights, moveLimit: 6 });
+    const candidates = enumerateCandidates(ctx, state, player, { weights: this.weights, moveLimit: 5, moveStep: 1 });
     if (candidates.length === 0) return null;
 
     const activations = candidates.filter((c) => c.kind === 'activate');
