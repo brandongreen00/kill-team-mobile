@@ -85,7 +85,7 @@ export function enumerateCandidates(
     return out;
   }
 
-  const turn = whoActivates(state);
+  const turn = whoActivates(state, ctx);
   if (!turn || turn.player !== player) return out;
 
   if (turn.mode === 'activate') {

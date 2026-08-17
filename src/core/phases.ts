@@ -91,7 +91,10 @@ export function readyOperatives(state: GameState, player: PlayerId) {
  * operatives... alternating until all of one player's operatives are expended, in which case
  * they can counteract between their opponent's remaining activations."
  */
-export function whoActivates(state: GameState): { player: PlayerId; mode: 'activate' | 'counteract' } | null {
+export function whoActivates(
+  state: GameState,
+  ctx?: GameContext,
+): { player: PlayerId; mode: 'activate' | 'counteract' } | null {
   const init = state.initiative ?? 'p1';
   const next = state.activePlayer ?? init;
   const hasReady = (p: PlayerId) => readyOperatives(state, p).length > 0;
@@ -99,19 +102,34 @@ export function whoActivates(state: GameState): { player: PlayerId; mode: 'activ
   const other = otherPlayer(next);
   if (hasReady(other)) {
     // The player with no ready operatives may counteract between their opponent's activations.
-    const canCounteract = aliveOperatives(state, next).some(
-      (o) => o.expended && o.order === 'engage' && !o.counteractedThisTP,
-    );
+    // With a context, ask `counteractCandidates` so rules that widen eligibility ("can
+    // counteract regardless of its order") are honoured here too; without one, fall back to
+    // the printed default so the pure/UI callers keep working.
+    const canCounteract = ctx
+      ? counteractCandidates(ctx, state, next).length > 0
+      : aliveOperatives(state, next).some((o) => o.expended && o.order === 'engage' && !o.counteractedThisTP);
     if (canCounteract) return { player: next, mode: 'counteract' };
     return { player: other, mode: 'activate' };
   }
   return null;
 }
 
+/**
+ * Counteract: "each of their operatives that is expended and has an Engage order can
+ * counteract once during the turning point."
+ *
+ * The Engage-order requirement is the hook's DEFAULT, not a pre-filter, so a team rule can
+ * widen it — "This operative can counteract regardless of its order" is printed on the
+ * Astartes faction rule of seven kill teams. Filtering before the emit made every one of
+ * those clauses unreachable, because `onCounteract` could then only ever narrow the list the
+ * core had already computed (docs/TEAM-STATUS.md § Engine seams added for team rules).
+ */
 export function counteractCandidates(ctx: GameContext, state: GameState, player: PlayerId) {
   return aliveOperatives(state, player)
-    .filter((o) => o.expended && o.order === 'engage' && !o.counteractedThisTP)
-    .filter((o) => ctx.hooks.emit('onCounteract', state, { state, operative: o, allowed: true }).allowed)
+    .filter((o) => o.expended && !o.counteractedThisTP)
+    .filter(
+      (o) => ctx.hooks.emit('onCounteract', state, { state, operative: o, allowed: o.order === 'engage' }).allowed,
+    )
     // "That friendly operative cannot counteract during the turning point" after On Guard.
     .filter((o) => o.guardSpentTP !== state.turningPoint);
 }
