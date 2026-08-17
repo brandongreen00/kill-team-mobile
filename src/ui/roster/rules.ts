@@ -208,7 +208,11 @@ export function supportProblems(data: TeamData): string[] {
   const groupSum = groups.reduce((n, g) => n + g.count, 0);
   const leaderCount = sel.leader?.count ?? 1;
 
-  if (groups.length > 0 && leaderCount + sel.slots > groupSum) {
+  // A leader drawn from the same list as everyone else consumes one of the printed
+  // selections rather than sitting on top of them, and the validator now counts it that way
+  // (`selection.ts`, leaderInList). Only flag the arithmetic when the leader is genuinely
+  // additional — otherwise every such team was reported as unsupported despite validating.
+  if (groups.length > 0 && sel.leader?.inList !== true && leaderCount + sel.slots > groupSum) {
     out.push(
       `the leader is chosen from the same list as everyone else, and the shared validator counts it on top of the ${sel.slots} printed selections — no roster can satisfy both`,
     );

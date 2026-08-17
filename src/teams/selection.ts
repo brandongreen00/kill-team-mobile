@@ -164,9 +164,21 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
     );
   }
   const slots = sel.slots;
-  const used = nonLeader.reduce((n, r) => n + r.entry.selectionCost, 0);
+  // Some kill teams print their leader as one entry of the same list the other operatives
+  // come from — "5 DEATHWATCH operatives selected from the following list: WATCH SERGEANT,
+  // AEGIS, ..." — so the leader consumes one of the N rather than sitting on top of it.
+  // Counting it as extra made those teams impossible to field: leader + N breaks the total,
+  // and leader + (N-1) breaks the slot count.
+  const leaderInList = sel.leader?.inList === true;
+  const counted = leaderInList ? resolved : nonLeader;
+  const used = counted.reduce((n, r) => n + r.entry.selectionCost, 0);
   if (used !== slots) {
-    fail('slotCount', `select exactly ${slots} further operatives (${used} selected)`);
+    fail(
+      'slotCount',
+      leaderInList
+        ? `select exactly ${slots} operatives in total, including the ${sel.leader?.role ?? 'leader'} (${used} selected)`
+        : `select exactly ${slots} further operatives (${used} selected)`,
+    );
   }
   if (sel.totalOperatives && total > sel.totalOperatives) {
     fail('totalCount', `a ${data.name} kill team is ${sel.totalOperatives} operatives at most`);
@@ -290,7 +302,11 @@ export function defaultRoster(data: TeamData): RosterPickIn[] {
 
   // Then fill each remaining group to its printed count, in list order.
   for (const group of data.selection.groups ?? []) {
-    if (entries.some((e) => e.group === group.index && e.isLeader)) continue;
+    // Do NOT skip a group just because the leader belongs to it. When the leader is drawn
+    // from the same list ("5 DEATHWATCH operatives selected from the following list: WATCH
+    // SERGEANT, ..."), skipping left the roster with nothing but the leader. The leader's
+    // pick is already counted in `filled` below, so a group of exactly one leader fills
+    // itself and needs no special case.
     let filled = picks
       .map((p) => resolveEntry(data, p))
       .filter((r) => r && r.entry.group === group.index)

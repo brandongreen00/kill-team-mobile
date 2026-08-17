@@ -61,7 +61,17 @@ export type SelectionConstraint =
   | { kind: string; [k: string]: unknown };
 
 export interface SelectionBlock {
-  leader: { role: string; datacardId: string; count: number };
+  leader: {
+    role: string;
+    datacardId: string;
+    count: number;
+    /**
+     * True when the leader is printed as one entry of the same list the other operatives are
+     * drawn from ("5 DEATHWATCH operatives selected from the following list: WATCH SERGEANT,
+     * ..."), so it consumes one of the N rather than sitting on top of it.
+     */
+    inList?: boolean;
+  };
   slots: number;
   totalOperatives: number;
   groups: { index: number; count: number; kind: string; roles: string[]; rawText: string }[];
