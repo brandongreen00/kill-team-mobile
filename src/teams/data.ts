@@ -14,6 +14,15 @@ import celestianInsidiantsJson from '../../data/teams/celestian-insidiants.json'
 import kommandosJson from '../../data/teams/kommandos.json';
 import pathfindersJson from '../../data/teams/pathfinders.json';
 import hierotekCircleJson from '../../data/teams/hierotek-circle.json';
+// Batch 2 — Astartes & Heretic Astartes.
+import scoutSquadJson from '../../data/teams/scout-squad.json';
+import murderwingJson from '../../data/teams/murderwing.json';
+import phobosStrikeTeamJson from '../../data/teams/phobos-strike-team.json';
+import deathwatchJson from '../../data/teams/deathwatch.json';
+import wolfScoutsJson from '../../data/teams/wolf-scouts.json';
+import legionaryJson from '../../data/teams/legionary.json';
+import nemesisClawJson from '../../data/teams/nemesis-claw.json';
+import warpcovenJson from '../../data/teams/warpcoven.json';
 import type { Datacard } from '../core/types.ts';
 
 export interface LoadoutOption {
@@ -152,6 +161,14 @@ export const TEAM_DATA: Record<string, TeamData> = {
   kommandos: normalise(kommandosJson),
   pathfinders: normalise(pathfindersJson),
   'hierotek-circle': normalise(hierotekCircleJson),
+  'scout-squad': normalise(scoutSquadJson),
+  murderwing: normalise(murderwingJson),
+  'phobos-strike-team': normalise(phobosStrikeTeamJson),
+  deathwatch: normalise(deathwatchJson),
+  'wolf-scouts': normalise(wolfScoutsJson),
+  legionary: normalise(legionaryJson),
+  'nemesis-claw': normalise(nemesisClawJson),
+  warpcoven: normalise(warpcovenJson),
 };
 
 export function teamData(id: string): TeamData {
