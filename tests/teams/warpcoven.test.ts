@@ -211,7 +211,11 @@ describe('WARPCOVEN data (pinned against data/teams/warpcoven.json)', () => {
     expect(DATA.selection.constraints[0]).toMatchObject({
       text: 'You must select at least one friendly SORCERER operative.',
     });
-    expect(DATA.selection.constraints.filter((c) => c.kind === 'maxItem').map((c) => c['item'])).toEqual([
+    expect(
+      DATA.selection.constraints
+        .filter((c) => c.kind === 'maxItem')
+        .map((c) => (c as unknown as { item: string }).item),
+    ).toEqual([
       'warpflame pistol',
       'soulreaper cannon',
     ]);
@@ -553,7 +557,7 @@ describe('WARPCOVEN datacard abilities', () => {
     const icon = op(state, 'p1', TZ_ICON);
     icon.pos = { x: 15, y: 11 };
     for (const id of [...state.teams.p1.operativeIds, ...state.teams.p2.operativeIds])
-      if (id !== icon.id) state.operatives[id]!.pos = { x: 2 + Math.random() * 0, y: 21 };
+      if (id !== icon.id) state.operatives[id]!.pos = { x: 2, y: 21 };
     state.markers['obj'] = { id: 'obj', kind: 'objective', diameterMm: 40, pos: { x: 15, y: 11 }, z: 0, flags: {} };
     const ev = ctx.hooks.emit('onMarkerControl', state, { state, markerId: 'obj', aplByPlayer: { p1: 2, p2: 0 } });
     expect(ev.aplByPlayer.p1).toBe(3);
@@ -800,6 +804,13 @@ describe('WARPCOVEN ploys', () => {
     const eff = s.effects.find((e) => e.rule === 'warpcoven.mutantHerd');
     expect(eff?.operativeId).toBe(first.id);
     expect(eff?.data?.['partnerId']).toBe(partner.id);
+    // Each firefight ploy names the operative whose window it is.
+    const usable = (id: string, st: GameState) => warpcoven.ploys.find((p) => p.id === id)!.usable!(st, 'p1');
+    expect(usable('warpcoven.fp.mutant-herd', s).ok).toBe(true);
+    const noHerd = setup().state; // the sorcerer roster has no TZAANGOR and no RUBRIC MARINE pair
+    expect(usable('warpcoven.fp.mutant-herd', noHerd).ok).toBe(false);
+    expect(usable('warpcoven.fp.psychic-cabal', noHerd).ok).toBe(true);
+    expect(usable('warpcoven.fp.psychic-cabal', s).ok).toBe(false); // only one SORCERER in the herd
   });
 });
 

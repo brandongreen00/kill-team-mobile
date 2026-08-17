@@ -391,8 +391,11 @@ function damageDice(ctx: GameContext | undefined, state: GameState, target: Oper
   const w = melee.find((x) => x.name === name) ?? melee[0];
   const profile = w ? (findProfile(w, profileName) ?? w.profiles[0]) : undefined;
   if (!profile) return undefined;
-  const crit = amount === profile.dmgC && profile.dmgC !== profile.dmgN;
-  const normal = amount === profile.dmgN;
+  // A fight strikes one dice at a time, so the dice is identified from the amount. It is
+  // compared with `>=` rather than `===` because an earlier handler (Warp Swell) may already
+  // have added to it.
+  const crit = profile.dmgC !== profile.dmgN && amount >= profile.dmgC;
+  const normal = !crit && amount >= profile.dmgN;
   return { profile, attacker: striker, type: 'melee', normals: normal ? 1 : 0, crits: crit ? 1 : 0 };
 }
 
@@ -1714,6 +1717,17 @@ for (const base of ['Reposition', 'Charge'] as const) {
 
 // ---------------------------------------------------------------------------
 
+/** "Use this firefight ploy when a friendly WARPCOVEN <X> operative is …" */
+function needs(keyword: string, count: number, label: string) {
+  return (state: GameState, player: PlayerId): { ok: boolean; reason?: string } => {
+    const n = aliveOperatives(state, player).filter((o) => {
+      const kws = DATA.datacards.find((c) => c.id === o.datacardId)?.keywords ?? [];
+      return kws.includes(KW) && kws.includes(keyword);
+    }).length;
+    return n >= count ? { ok: true } : { ok: false, reason: `this ploy needs ${label} in the killzone` };
+  };
+}
+
 export const warpcoven = defineTeam({
   id: 'warpcoven',
   rules: (reg, T) => {
@@ -1729,6 +1743,14 @@ export const warpcoven = defineTeam({
   ploys,
   equipment,
   actions,
+  ployUsable: {
+    // Each firefight ploy names the operative whose window it is; without one in the killzone
+    // the ploy has nothing to attach to, so it is refused rather than burning the CP.
+    'warpcoven.fp.all-is-dust': needs('RUBRIC MARINE', 1, 'a friendly WARPCOVEN RUBRIC MARINE operative'),
+    'warpcoven.fp.capricious-plan': needs('SORCERER', 1, 'a friendly WARPCOVEN SORCERER operative'),
+    'warpcoven.fp.psychic-cabal': needs('SORCERER', 2, 'two friendly WARPCOVEN SORCERER operatives'),
+    'warpcoven.fp.mutant-herd': needs('TZAANGOR', 2, 'two friendly WARPCOVEN TZAANGOR operatives'),
+  },
   aiHints: {
     roles: {
       [CARD.destiny]: 'leader',
