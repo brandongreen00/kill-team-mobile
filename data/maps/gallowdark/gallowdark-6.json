@@ -273,6 +273,9 @@
     "y": 15.75,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5222
    }
   },
   {
@@ -357,6 +360,9 @@
     "y": 15.75,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5333
    }
   },
   {
@@ -441,6 +447,9 @@
     "y": 15.75,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5222
    }
   },
   {
@@ -486,6 +495,9 @@
     "y": 8.125,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5263
    }
   },
   {
@@ -570,6 +582,9 @@
     "y": 8.125,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5333
    }
   },
   {
@@ -615,6 +630,9 @@
     "y": 8.125,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5263
    }
   },
   {
@@ -660,6 +678,9 @@
     "y": 15.75,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.6786
    }
   },
   {
@@ -744,24 +765,27 @@
     "y": 19.562,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5263
    }
   },
   {
-   "id": "gallowdark-6.A2-3",
-   "kind": "gallowdark.wallA2",
-   "label": "A2",
+   "id": "gallowdark-6.B1-1",
+   "kind": "gallowdark.wallB1",
+   "label": "B1",
    "parts": [
     {
-     "id": "gallowdark-6.A2-3.wall",
-     "featureId": "gallowdark-6.A2-3",
+     "id": "gallowdark-6.B1-1.wall",
+     "featureId": "gallowdark-6.B1-1",
      "poly": [
       {
        "x": 7.749,
-       "y": 0.5
+       "y": 4.312
       },
       {
        "x": 8.438,
-       "y": 0.5
+       "y": 4.312
       },
       {
        "x": 8.438,
@@ -786,9 +810,99 @@
    ],
    "placement": {
     "x": 8.094,
-    "y": 4.312,
+    "y": 6.219,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5222
+   }
+  },
+  {
+   "id": "gallowdark-6.B3-3",
+   "kind": "gallowdark.wallB3",
+   "label": "B3",
+   "parts": [
+    {
+     "id": "gallowdark-6.B3-3.wall",
+     "featureId": "gallowdark-6.B3-3",
+     "poly": [
+      {
+       "x": 7.749,
+       "y": 0.5
+      },
+      {
+       "x": 8.438,
+       "y": 0.5
+      },
+      {
+       "x": 8.438,
+       "y": 4.312
+      },
+      {
+       "x": 7.749,
+       "y": 4.312
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "gallowdark-6.B3-3.access",
+     "featureId": "gallowdark-6.B3-3",
+     "poly": [
+      {
+       "x": 6.749,
+       "y": 1.852
+      },
+      {
+       "x": 7.816,
+       "y": 1.852
+      },
+      {
+       "x": 7.816,
+       "y": 2.92
+      },
+      {
+       "x": 6.749,
+       "y": 2.92
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
+    }
+   ],
+   "placement": {
+    "x": 8.094,
+    "y": 2.406,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5333
    }
   },
   {
@@ -873,6 +987,9 @@
     "y": 11.938,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5263
    }
   },
   {
@@ -957,6 +1074,9 @@
     "y": 19.562,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5263
    }
   },
   {
@@ -1041,6 +1161,9 @@
     "y": 11.938,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5263
    }
   },
   {
@@ -1086,16 +1209,19 @@
     "y": 15.75,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.6786
    }
   },
   {
-   "id": "gallowdark-6.B1-1",
+   "id": "gallowdark-6.B1-2",
    "kind": "gallowdark.wallB1",
    "label": "B1",
    "parts": [
     {
-     "id": "gallowdark-6.B1-1.wall",
-     "featureId": "gallowdark-6.B1-1",
+     "id": "gallowdark-6.B1-2.wall",
+     "featureId": "gallowdark-6.B1-2",
      "poly": [
       {
        "x": 22.999,
@@ -1129,18 +1255,21 @@
    "placement": {
     "x": 23.344,
     "y": 6.219,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5222
    }
   },
   {
-   "id": "gallowdark-6.B3-3",
+   "id": "gallowdark-6.B3-4",
    "kind": "gallowdark.wallB3",
    "label": "B3",
    "parts": [
     {
-     "id": "gallowdark-6.B3-3.wall",
-     "featureId": "gallowdark-6.B3-3",
+     "id": "gallowdark-6.B3-4.wall",
+     "featureId": "gallowdark-6.B3-4",
      "poly": [
       {
        "x": 22.999,
@@ -1171,8 +1300,8 @@
      "standable": false
     },
     {
-     "id": "gallowdark-6.B3-3.access",
-     "featureId": "gallowdark-6.B3-3",
+     "id": "gallowdark-6.B3-4.access",
+     "featureId": "gallowdark-6.B3-4",
      "poly": [
       {
        "x": 23.662,
@@ -1215,6 +1344,9 @@
     "y": 2.406,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.5333
    }
   }
  ],
@@ -1232,7 +1364,9 @@
    "p1Side": "right",
    "centreSeamErrIn": 0.0406,
    "latticeStepPx": 94.0,
-   "wallThicknessPx": 17.0
+   "wallThicknessPx": 17.0,
+   "templateIoUMin": 0.5222,
+   "templateIoUMedian": 0.5263
   }
  }
 }

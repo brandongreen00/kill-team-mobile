@@ -1,0 +1,179 @@
+{
+  "source": "Universal Equipment supplement (ed. 3, version January '26, last update June 2026), wahapedia.ru/kill-team3/the-rules/universal-equipment — extracted 2026-08-17. Text verbatim; footprints are owner-supplied physical measurements.",
+  "note": "The following equipment options are available to all kill teams, alongside their faction equipment. You cannot select each option more than once per battle.",
+  "footprintProvenance": {
+    "heavyBarricade": "owner-measured 40mm wide x 45mm tall; DEPTH ASSUMED 15mm (flagged)",
+    "lightBarricade": "owner-measured 50mm wide x 25mm tall x 10mm deep",
+    "portableBarricade": "owner-measured 20mm wide x 40mm tall; DEPTH ASSUMED 10mm (flagged)",
+    "razorWire": "owner-measured 72mm wide x 36mm tall x 10mm deep",
+    "ladder": "owner-measured 95mm tall x 20mm wide x 5mm deep, upright against terrain at least 2\" tall",
+    "markers": "all non-objective markers are 20mm in diameter (core rules > Markers)"
+  },
+  "equipment": [
+    {
+      "id": "eq.ammoCache",
+      "name": "Ammo Cache",
+      "count": 1,
+      "setup": { "kind": "marker", "count": 1, "markerKind": "ammoCache", "diameterMm": 20 },
+      "constraints": ["whollyWithinTerritory"],
+      "text": "Before the battle, you can set up one of your Ammo Cache markers wholly within your territory. Friendly operatives can perform the following mission action during the battle.\n\nAMMO RESUPPLY 0AP: One of your Ammo Cache markers the active operative controls is used during this turning point.\n\nUntil the start of the next turning point, whenever this operative is shooting with a weapon from its datacard, you can re-roll one of your attack dice.\n\nAn operative cannot perform this action while within control range of an enemy operative, if that marker isn't yours, or if that marker has been used this turning point."
+    },
+    {
+      "id": "eq.razorWire",
+      "name": "Razor Wire",
+      "count": 1,
+      "setup": {
+        "kind": "terrain",
+        "count": 1,
+        "footprintMm": { "w": 72, "d": 10, "h": 36 },
+        "types": ["Exposed", "Obstructing"]
+      },
+      "constraints": [
+        "whollyWithinTerritory",
+        "onKillzoneFloor",
+        "moreThan2FromEquipmentTerrain",
+        "moreThan2FromAccessPoints",
+        "moreThan2FromAccessible"
+      ],
+      "text": "Razor wire is Exposed and Obstructing terrain. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain.\n\nObstructing: Whenever an operative would cross over this terrain feature within 1\" of it, treat the distance as an additional 1\"."
+    },
+    {
+      "id": "eq.commsDevice",
+      "name": "Comms Device",
+      "count": 1,
+      "setup": { "kind": "marker", "count": 1, "markerKind": "commsDevice", "diameterMm": 20 },
+      "constraints": ["whollyWithinTerritory"],
+      "text": "Before the battle, you can set up one of your Comms Device markers wholly within your territory. While a friendly operative controls this marker, add 3\" to the distance requirements of its SUPPORT rules that refer to friendly operatives (e.g. 'select one friendly operative within 6\"' would be 9\" instead). Note that you cannot benefit from your opponent's Comms Device markers."
+    },
+    {
+      "id": "eq.mines",
+      "name": "Mines",
+      "count": 1,
+      "setup": { "kind": "marker", "count": 1, "markerKind": "mine", "diameterMm": 20 },
+      "constraints": [
+        "whollyWithinTerritory",
+        "moreThan2FromMarkers",
+        "moreThan2FromAccessPoints",
+        "moreThan2FromAccessible"
+      ],
+      "text": "Before the battle, you can set up one of your Mines markers wholly within your territory and more than 2\" from other markers, access points and Accessible terrain. The first time that marker is within an operative's control range, remove that marker and inflict D3+3 damage on that operative."
+    },
+    {
+      "id": "eq.lightBarricades",
+      "name": "Light Barricades",
+      "count": 2,
+      "setup": {
+        "kind": "terrain",
+        "count": 2,
+        "footprintMm": { "w": 50, "d": 10, "h": 25 },
+        "types": ["Light"],
+        "feet": true
+      },
+      "constraints": [
+        "whollyWithinTerritory",
+        "onKillzoneFloor",
+        "moreThan2FromEquipmentTerrain",
+        "moreThan2FromAccessPoints",
+        "moreThan2FromAccessible"
+      ],
+      "text": "Light barricades are Light terrain, except the feet, which are Insignificant and Exposed. Before the battle, you can set up any of them wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain."
+    },
+    {
+      "id": "eq.heavyBarricade",
+      "name": "Heavy Barricade",
+      "count": 1,
+      "setup": {
+        "kind": "terrain",
+        "count": 1,
+        "footprintMm": { "w": 40, "d": 15, "h": 45 },
+        "types": ["Heavy"]
+      },
+      "constraints": [
+        "whollyWithin4OfDropZone",
+        "onKillzoneFloor",
+        "moreThan2FromEquipmentTerrain",
+        "moreThan2FromAccessPoints",
+        "moreThan2FromAccessible"
+      ],
+      "text": "A heavy barricade is Heavy terrain. Before the battle, you can set it up wholly within 4\" of your drop zone, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain."
+    },
+    {
+      "id": "eq.ladders",
+      "name": "Ladders",
+      "count": 2,
+      "setup": {
+        "kind": "terrain",
+        "count": 2,
+        "footprintMm": { "w": 20, "d": 5, "h": 95 },
+        "types": ["Insignificant", "Exposed"]
+      },
+      "constraints": [
+        "whollyWithinTerritory",
+        "uprightAgainstTerrain2Tall",
+        "moreThan2FromEquipmentTerrain",
+        "moreThan1FromDoorsAndAccessPoints"
+      ],
+      "text": "Ladders are Insignificant and Exposed terrain. Before the battle, you can set up any of them as follows: Wholly within your territory. Upright against terrain that's at least 2\" tall. More than 2\" from other equipment terrain features. More than 1\" from doors and access points.\n\nOnce per action, whenever an operative is climbing the terrain feature a ladder is placed against, treat the vertical distance as 1\" if the ladder is within that operative's control range during that entire climb."
+    },
+    {
+      "id": "eq.portableBarricade",
+      "name": "Portable Barricade",
+      "count": 1,
+      "setup": {
+        "kind": "terrain",
+        "count": 1,
+        "footprintMm": { "w": 20, "d": 10, "h": 40 },
+        "types": ["Light", "Protective", "Portable"],
+        "feet": true
+      },
+      "constraints": [
+        "whollyWithinTerritory",
+        "onKillzoneFloor",
+        "moreThan2FromEquipmentTerrain",
+        "moreThan2FromAccessPoints",
+        "moreThan2FromAccessible"
+      ],
+      "text": "A portable barricade is Light, Protective and Portable terrain, except the feet which are Insignificant and Exposed. Before the battle, you can set it up wholly within your territory, on the killzone floor and more than 2\" from other equipment terrain features, access points and Accessible terrain.\n\nProtective: While an operative is in cover from this terrain feature, improve its Save stat by 1 (to a maximum of 2+).\n\nPortable: This terrain feature only provides cover while an operative is connected to it and if the shield is intervening (ignore its feet). Operatives connected to the inside of it can perform the following unique action during the battle.\n\nMOVE WITH BARRICADE 1AP: The same as the Reposition action, except the active operative can move no more than its Move stat minus 2\" and cannot climb, drop, jump or use any kill team's rules that remove it and set it back up again. Before this operative moves, remove the portable barricade it's connected to. After it moves, set up the portable barricade so it's connected again, but the portable barricade cannot be set up within 2\" of other equipment terrain features, access points or Accessible terrain. If this is not possible, the portable barricade is not set up again. This action is treated as a Reposition action. An operative cannot perform this action while within control range of an enemy operative, or during the same activation in which it performed the Fall Back or Charge action."
+    },
+    {
+      "id": "eq.utilityGrenades",
+      "name": "Utility Grenades",
+      "count": 1,
+      "select": { "kind": "utilityGrenades", "total": 2, "options": ["smoke", "stun"] },
+      "text": "When you select this equipment, select two utility grenades (2 smoke, 2 stun, or 1 smoke and 1 stun). Each selection is a unique action your operatives can perform, but your kill team can only perform that action a total number of times during the battle equal to your selection.\n\nSMOKE GRENADE 1AP: Place one of your Smoke Grenade markers within 6\" of this operative. It must be visible to this operative, or on Vantage terrain of a terrain feature that's visible to this operative. The marker creates an area of smoke 1\" horizontally and unlimited height vertically from (but not below) it.\n\nWhile an operative is wholly within an area of smoke, it's obscured to operatives more than 2\" from it, and vice versa. In addition, whenever an operative is shooting an enemy operative wholly within an area of smoke, weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead, unless they're within 2\" of each other.\n\nIn the Ready step of the next Strategy phase, roll one D3. Remove that Smoke Grenade marker after a number of activations equal to that D3 have been completed or at the end of the turning point (whichever comes first).\n\nSTUN GRENADE 1AP: Select one enemy operative visible to and within 6\" of this operative. That operative and each other operative within 1\" of it takes a stun test. For an operative to take a stun test, roll one D6: on a 3+, subtract 1 from its APL stat until the end of its next activation.\n\nAn operative cannot perform these actions while within control range of an enemy operative, or if you have reached the total number of times your kill team can perform it."
+    },
+    {
+      "id": "eq.explosiveGrenades",
+      "name": "Explosive Grenades",
+      "count": 1,
+      "select": { "kind": "explosiveGrenades", "total": 2, "options": ["frag", "krak"] },
+      "weapons": [
+        {
+          "id": "frag",
+          "name": "Frag grenade",
+          "atk": 4,
+          "hit": 4,
+          "dmgN": 2,
+          "dmgC": 4,
+          "rules": "Range 6\", Blast 2\", Saturate"
+        },
+        {
+          "id": "krak",
+          "name": "Krak grenade",
+          "atk": 4,
+          "hit": 4,
+          "dmgN": 4,
+          "dmgC": 5,
+          "rules": "Range 6\", Piercing 1, Saturate"
+        }
+      ],
+      "text": "When you select this equipment, select two explosive grenades (2 frag, 2 krak, or 1 frag and 1 krak). Each selection is a ranged weapon your operatives can use, but your kill team can only use that weapon a total number of times during the battle equal to your selection."
+    },
+    {
+      "id": "eq.breachingCharge",
+      "name": "Breaching Charge",
+      "count": 1,
+      "text": "Once per battle, when a friendly operative performs the Breach action, you can use this rule. If you do, that operative can perform that action for 1 less AP (to a minimum of 1AP) as though it had the word 'breach marker' on its datacard."
+    }
+  ]
+}

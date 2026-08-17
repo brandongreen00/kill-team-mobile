@@ -19,12 +19,12 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/raveners/",
- "scrapedAt": "2026-08-17T03:59:23+00:00",
+ "scrapedAt": "2026-08-17T04:08:59+00:00",
  "source": "cache",
  "selection": {
   "leader": {
    "role": "PRIME",
-   "datacardId": "raveners.ravener-prime",
+   "datacardId": "raveners.prime",
    "count": 1,
    "loadouts": [],
    "optionGroups": [],
@@ -80,7 +80,7 @@
     "requires": [],
     "rawText": "FELLTALON",
     "group": 2,
-    "datacardId": "raveners.ravener-felltalon",
+    "datacardId": "raveners.felltalon",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -103,7 +103,7 @@
     "requires": [],
     "rawText": "TREMORSCYTHE",
     "group": 2,
-    "datacardId": "raveners.ravener-tremorscythe",
+    "datacardId": "raveners.tremorscythe",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -125,7 +125,7 @@
     "requires": [],
     "rawText": "VENOMSPITTER",
     "group": 2,
-    "datacardId": "raveners.ravener-venomspitter",
+    "datacardId": "raveners.venomspitter",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -148,7 +148,7 @@
     "requires": [],
     "rawText": "WARRIOR",
     "group": 2,
-    "datacardId": "raveners.ravener-warrior",
+    "datacardId": "raveners.warrior",
     "isLeader": false,
     "uniqueUnlessRole": false,
     "alwaysWeapons": [
@@ -170,7 +170,7 @@
     "requires": [],
     "rawText": "WRECKER",
     "group": 2,
-    "datacardId": "raveners.ravener-wrecker",
+    "datacardId": "raveners.wrecker",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -194,7 +194,7 @@
     "requires": [],
     "rawText": "1 RAVENER PRIME operative",
     "group": 1,
-    "datacardId": "raveners.ravener-prime",
+    "datacardId": "raveners.prime",
     "isLeader": true,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -218,7 +218,7 @@
  },
  "datacards": [
   {
-   "id": "raveners.ravener-prime",
+   "id": "raveners.prime",
    "teamId": "raveners",
    "name": "Ravener Prime",
    "keywords": [
@@ -285,12 +285,12 @@
    ],
    "abilities": [
     {
-     "id": "raveners.ravener-prime.neuropredatory-crest",
+     "id": "raveners.prime.neuropredatory-crest",
      "name": "Neuropredatory Crest",
      "text": "Whenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of this operative. Note this isn’t a change to the APL stat, so any changes are cumulative with this. Whenever an enemy operative is within 3\" of this operative:\n\nYour opponent must spend 1 additional AP for that enemy operative to perform the Pick Up Marker and mission actions.\n\nYour opponent cannot re-roll their attack or defence dice for that operative."
     },
     {
-     "id": "raveners.ravener-prime.synaptic-link",
+     "id": "raveners.prime.synaptic-link",
      "name": "Synaptic Link",
      "text": "STRATEGIC GAMBIT if this operative isn’t incapacitated. Roll one D6 and compare the result to the number of the current turning point; if the result is:\n\nTwice as high or higher, you gain 1CP.\n\nLess, inflict damage on this operative equal to the result.\n\nAny other result, nothing happens."
     }
@@ -299,7 +299,7 @@
    "fluff": "Ravener Primes act as a nodal hub for their brood. Via their neuropredatory crests, the Hive Mind’s influence spreads to nearby Raveners, overriding their instincts and coordinating their behaviours to its alien design."
   },
   {
-   "id": "raveners.ravener-felltalon",
+   "id": "raveners.felltalon",
    "teamId": "raveners",
    "name": "Ravener Felltalon",
    "keywords": [
@@ -397,14 +397,14 @@
    ],
    "abilities": [
     {
-     "id": "raveners.ravener-felltalon.poison",
+     "id": "raveners.felltalon.poison",
      "name": "Poison",
      "text": "In the Resolve Attack Dice step, if you inflict damage with any critical successes, the operative this weapon is being used against gains one of your Poison tokens (if it doesn’t already have one). Whenever an operative that has one of your Poison tokens is activated, inflict D3 damage on it."
     }
    ],
    "uniqueActions": [
     {
-     "id": "raveners.ravener-felltalon.act.toxic-lunge",
+     "id": "raveners.felltalon.act.toxic-lunge",
      "name": "TOXIC LUNGE",
      "ap": 1,
      "text": "Select one enemy operative within 2\" of this operative. Alternatively, if this operative is underground, select one enemy operative on your TUNNEL. Inflict D3+2 damage on that enemy operative and it gains one of your Poison tokens (if it doesn’t already have one).\n\nThis operative can perform this action while underground (this takes precedence over the normal Burrow rules)."
@@ -413,7 +413,7 @@
    "fluff": "The virulent toxins that seep from a Felltalon’s claws turn their victims’ bodies into sites of xenos infection. Those who somehow survive and escape unwittingly leave a trail of pathogens the Felltalon can track."
   },
   {
-   "id": "raveners.ravener-tremorscythe",
+   "id": "raveners.tremorscythe",
    "teamId": "raveners",
    "name": "Ravener Tremorscythe",
    "keywords": [
@@ -475,12 +475,12 @@
    ],
    "abilities": [
     {
-     "id": "raveners.ravener-tremorscythe.subterranean-ambush",
+     "id": "raveners.tremorscythe.subterranean-ambush",
      "name": "Subterranean Ambush",
      "text": "Once per turning point in the Firefight phase, after an enemy operative performs an action in which it moves more than 2\" and ends within 2\" of your TUNNEL, if this operative is underground and is either ready or hasn’t counteracted during this turning point, you can interrupt to use this rule.\n\nIf you do, activate or counteract with this operative (as appropriate), but during its activation/counteraction it must shoot against or fight against that enemy operative, and cannot do so against any other enemy operatives until it does (if this isn’t possible, this operative’s activation/counteraction is cancelled and this rule hasn’t been used). After completing this operative’s activation/counteraction, continue that enemy operative’s activation/counteraction (if possible and relevant)."
     },
     {
-     "id": "raveners.ravener-tremorscythe.hypersensory-hunter",
+     "id": "raveners.tremorscythe.hypersensory-hunter",
      "name": "Hypersensory Hunter",
      "text": "This operative can perform the Charge action while it has a Conceal order if it performed the Burrow action during the same activation/counteraction."
     }
@@ -489,7 +489,7 @@
    "fluff": "The nerve clusters that fill their hypersensory array enable Tremorscythes to detect not only prey movements but also energy blooms, comms bursts and the minute chemical signatures that betray their victim’s fear."
   },
   {
-   "id": "raveners.ravener-venomspitter",
+   "id": "raveners.venomspitter",
    "teamId": "raveners",
    "name": "Ravener Venomspitter",
    "keywords": [
@@ -599,14 +599,14 @@
    ],
    "abilities": [
     {
-     "id": "raveners.ravener-venomspitter.poison",
+     "id": "raveners.venomspitter.poison",
      "name": "Poison",
      "text": "In the Resolve Attack Dice step, if you inflict damage with any critical successes, the operative this weapon is being used against gains one of your Poison tokens (if it doesn’t already have one). Whenever an operative that has one of your Poison tokens is activated, inflict D3 damage on it."
     }
    ],
    "uniqueActions": [
     {
-     "id": "raveners.ravener-venomspitter.act.distend-dorsal-sac",
+     "id": "raveners.venomspitter.act.distend-dorsal-sac",
      "name": "DISTEND DORSAL SAC",
      "ap": 1,
      "text": "Until this operative has shot with its venom bolt, until it performs this action again or until it performs the Burrow action (whichever comes first), all profiles of its venom bolt have the Lethal 5+ weapon rule, have 1 added to their Atk stat and the Range 8\" weapon rule removed."
@@ -615,7 +615,7 @@
    "fluff": "A Venomspitter has been adapted by the Hive Mind to carry sac-like nodules that produce a ferocious toxin. From modified jaws, it can project gobbets of it at considerable distance to douse enemy positions in the venomous ooze."
   },
   {
-   "id": "raveners.ravener-warrior",
+   "id": "raveners.warrior",
    "teamId": "raveners",
    "name": "Ravener Warrior",
    "keywords": [
@@ -672,7 +672,7 @@
    ],
    "abilities": [
     {
-     "id": "raveners.ravener-warrior.instinctive-behaviour",
+     "id": "raveners.warrior.instinctive-behaviour",
      "name": "Instinctive Behaviour",
      "text": "Whenever this operative is shooting against, fighting against or retaliating against a wounded enemy operative, or an enemy operative that performed the Fall Back action during this turning point, this operative’s weapons have the Lethal 5+ weapon rule."
     }
@@ -681,7 +681,7 @@
    "fluff": "With predatory instincts, hyperadapted strength and razor-sharp talons, these burrowing horrors are amongst the galaxy’s greatest shock troops, propelled by the fathomless alien intellect of the Hive Mind."
   },
   {
-   "id": "raveners.ravener-wrecker",
+   "id": "raveners.wrecker",
    "teamId": "raveners",
    "name": "Ravener Wrecker",
    "keywords": [
@@ -748,12 +748,12 @@
    ],
    "abilities": [
     {
-     "id": "raveners.ravener-wrecker.reinforced-carapace",
+     "id": "raveners.wrecker.reinforced-carapace",
      "name": "Reinforced Carapace",
      "text": "Normal and Critical Dmg of 4 or more inflicts 1 less damage on this operative."
     },
     {
-     "id": "raveners.ravener-wrecker.crush",
+     "id": "raveners.wrecker.crush",
      "name": "Crush",
      "text": "Whenever you strike, you and your opponent roll-off, adding 1 to your result if the operative this weapon is being used against has a Wounds stat of 9 or less. If you win, inflict additional damage on that operative equal to the difference between the dice results (to a maximum of 3 additional damage)."
     }

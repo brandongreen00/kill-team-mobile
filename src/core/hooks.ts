@@ -34,6 +34,7 @@ export const HOOK_NAMES = [
   'initiativeRollModifiers',
   'onReadyStep',
   'gambitOptions',
+  'onPloyUsed',
   'onActivationStart',
   'onActivationEnd',
   'onCounteract',
@@ -42,6 +43,7 @@ export const HOOK_NAMES = [
   'onMoveDistance',
   'onMoveRules',
   'availableWeapons',
+  'onWeaponRules',
   'onSelectWeapon',
   'onCollectAttackDice',
   'onValidTarget',
@@ -131,6 +133,18 @@ export interface HookEvents {
   initiativeRollModifiers: { state: GameState; player: PlayerId; mod: number; rerollOffered: boolean };
   onReadyStep: { state: GameState; player: PlayerId; cp: number };
   gambitOptions: { state: GameState; player: PlayerId; options: { id: string; label: string; sourceText?: string }[] };
+  /**
+   * A ploy (or STRATEGIC GAMBIT) has just been paid for. This is where its immediate effect
+   * happens — placing a marker, pushing an ActiveEffect, granting an operative a free action.
+   * Ploys whose effect is a lasting modifier can instead read `ploysUsedTP`/`gambitsUsedTP`.
+   */
+  onPloyUsed: {
+    state: GameState;
+    player: PlayerId;
+    ployId: string;
+    kind: 'strategy' | 'firefight';
+    data?: Record<string, unknown>;
+  };
   onActivationStart: { state: GameState; operative: OperativeState };
   onActivationEnd: { state: GameState; operative: OperativeState };
   onCounteract: { state: GameState; operative: OperativeState; allowed: boolean; reason?: string };
@@ -149,6 +163,25 @@ export interface HookEvents {
     teleport: boolean;
   };
   availableWeapons: { state: GameState; operative: OperativeState; weapons: string[] };
+  /**
+   * The weapon rules in effect for one use of a weapon, after the killzone's own changes
+   * (Condensed Environment). This is where "friendly X operatives' ranged weapons have the
+   * Severe weapon rule" style team rules, ploys and equipment take effect: they push (or
+   * remove) entries in `rules`. Emitted by `effectiveRules` on every read, so it is re-derived
+   * at each step of the shoot/fight sequence and never goes stale.
+   */
+  onWeaponRules: {
+    state: GameState;
+    operative: OperativeState;
+    /** The intended target, when the sequence knows one. */
+    target?: OperativeState;
+    weaponName: string;
+    profile: WeaponProfile;
+    type: 'ranged' | 'melee';
+    /** True while the operative is the defender in a fight (retaliating). */
+    retaliating: boolean;
+    rules: WeaponRule[];
+  };
   onSelectWeapon: { state: GameState; ctx: AttackContext; allowed: boolean; reason?: string };
   onCollectAttackDice: { state: GameState; ctx: AttackContext; count: number; mods: StatMods };
   onValidTarget: {
@@ -182,7 +215,12 @@ export interface HookEvents {
     mods: StatMods;
     rerolls: RerollGrant[];
   };
-  onBlockAllocation: { state: GameState; ctx: AttackContext; brutal: boolean };
+  /**
+   * How many of the opponent's unresolved successes one block discards. The core answer is
+   * one; the rare `Shield` weapon rule makes it two ("each of your blocks can be allocated to
+   * block two unresolved successes instead of one").
+   */
+  onBlockAllocation: { state: GameState; ctx: AttackContext; brutal: boolean; blocks: number };
   onDamage: {
     state: GameState;
     ctx: AttackContext | null;

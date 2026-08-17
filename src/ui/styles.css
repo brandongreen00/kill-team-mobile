@@ -59,15 +59,11 @@ select, input { min-height: var(--tap); font-size: 15px; background: var(--panel
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
 /* --- responsive shell ---------------------------------------------------- */
-.desktop-only { display: none; }
-.phone-only { display: contents; }
 .dock { flex: 0 0 auto; max-height: var(--dock-h); overflow-y: auto; border-top: 1px solid var(--line); }
 .decision { border-color: var(--accent); }
 .decision h2 { color: var(--accent); }
 
 @media (min-width: 900px) {
-  .desktop-only { display: grid; }
-  .phone-only { display: none; }
   .layout > .page { overflow-y: auto; }
 }
 

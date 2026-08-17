@@ -19,12 +19,12 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/plague-marines/",
- "scrapedAt": "2026-08-17T03:59:23+00:00",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
  "source": "cache",
  "selection": {
   "leader": {
    "role": "CHAMPION",
-   "datacardId": "plague-marines.marine-champion",
+   "datacardId": "plague-marines.champion",
    "count": 1,
    "loadouts": [],
    "optionGroups": [],
@@ -81,7 +81,7 @@
     "requires": [],
     "rawText": "BOMBARDIER",
     "group": 2,
-    "datacardId": "plague-marines.marine-bombardier",
+    "datacardId": "plague-marines.bombardier",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -103,7 +103,7 @@
     "requires": [],
     "rawText": "FIGHTER",
     "group": 2,
-    "datacardId": "plague-marines.marine-fighter",
+    "datacardId": "plague-marines.fighter",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -125,7 +125,7 @@
     "requires": [],
     "rawText": "HEAVY GUNNER",
     "group": 2,
-    "datacardId": "plague-marines.marine-heavy-gunner",
+    "datacardId": "plague-marines.heavy-gunner",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -148,7 +148,7 @@
     "requires": [],
     "rawText": "ICON BEARER",
     "group": 2,
-    "datacardId": "plague-marines.marine-icon-bearer",
+    "datacardId": "plague-marines.icon-bearer",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -193,7 +193,7 @@
     "requires": [],
     "rawText": "WARRIOR",
     "group": 2,
-    "datacardId": "plague-marines.marine-warrior",
+    "datacardId": "plague-marines.warrior",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -217,7 +217,7 @@
     "requires": [],
     "rawText": "1 PLAGUE MARINE CHAMPION operative",
     "group": 1,
-    "datacardId": "plague-marines.marine-champion",
+    "datacardId": "plague-marines.champion",
     "isLeader": true,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -241,7 +241,7 @@
  },
  "datacards": [
   {
-   "id": "plague-marines.marine-champion",
+   "id": "plague-marines.champion",
    "teamId": "plague-marines",
    "name": "Plague Marine Champion",
    "keywords": [
@@ -343,12 +343,12 @@
    ],
    "abilities": [
     {
-     "id": "plague-marines.marine-champion.grandfathers-blessing",
+     "id": "plague-marines.champion.grandfathers-blessing",
      "name": "Grandfather’s Blessing",
      "text": "Whenever an enemy operative that has one of your Poison tokens loses one or more wounds within 7\" of this operative, this operative regains up to an equal number of lost wounds (to a maximum of 3 lost wounds per turning point, and only if this operative isn’t incapacitated)."
     },
     {
-     "id": "plague-marines.marine-champion.toxic",
+     "id": "plague-marines.champion.toxic",
      "name": "Toxic",
      "text": "Whenever this operative is using this weapon against an enemy operative that has one of your Poison tokens, add 1 to both Dmg stats of this weapon."
     }
@@ -357,7 +357,7 @@
    "fluff": "Armed with centuries of experience and warp-tainted weaponry, Champions are the rotten core of Plague Marine warbands. They lead from the front, setting a gory example for their troops to follow."
   },
   {
-   "id": "plague-marines.marine-bombardier",
+   "id": "plague-marines.bombardier",
    "teamId": "plague-marines",
    "name": "Plague Marine Bombardier",
    "keywords": [
@@ -404,12 +404,12 @@
    ],
    "abilities": [
     {
-     "id": "plague-marines.marine-bombardier.grenadier",
+     "id": "plague-marines.bombardier.grenadier",
      "name": "Grenadier",
      "text": "This operative can use blight and krak grenades (see faction and universal equipment). Doing so doesn’t count towards any limited uses you have (i.e. if you also select those grenades from equipment for other operatives). Whenever it’s doing so, improve the Hit stat of that weapon by 1 and blight grenades have the Toxic weapon rule (see below)."
     },
     {
-     "id": "plague-marines.marine-bombardier.toxic",
+     "id": "plague-marines.bombardier.toxic",
      "name": "Toxic",
      "text": "Whenever this operative is using this weapon against an enemy operative that has one of your Poison tokens, add 1 to both Dmg stats of this weapon."
     }
@@ -418,7 +418,7 @@
    "fluff": "The Death Guard have long been terrifying trench fighters. Bombardiers specialise in breaking dug-in positions with hails of explosives, from armour-sundering krak grenades to hypertoxic blight grenades."
   },
   {
-   "id": "plague-marines.marine-fighter",
+   "id": "plague-marines.fighter",
    "teamId": "plague-marines",
    "name": "Plague Marine Fighter",
    "keywords": [
@@ -489,7 +489,7 @@
    "abilities": [],
    "uniqueActions": [
     {
-     "id": "plague-marines.marine-fighter.act.flail",
+     "id": "plague-marines.fighter.act.flail",
      "name": "FLAIL",
      "ap": 1,
      "text": "Inflict D3+2 damage on each other operative that’s both visible to and within 2\" of this operative. Roll separately for each: if it’s an enemy operative, if the D3 result is a 3, that enemy operative also gains one of your Poison tokens (if it doesn’t already have one).\n\nFor the purposes of action restrictions and the Astartes faction rule, this action is treated as a Fight action. This operative cannot perform this action while it has a Conceal order."
@@ -498,7 +498,7 @@
    "fluff": "Many Plague Marines prefer to fight their foes up close. They wade through the enemy ranks, with every swing of their plague-blessed weapons spreading new infections."
   },
   {
-   "id": "plague-marines.marine-heavy-gunner",
+   "id": "plague-marines.heavy-gunner",
    "teamId": "plague-marines",
    "name": "Plague Marine Heavy Gunner",
    "keywords": [
@@ -590,7 +590,7 @@
    "fluff": "The arsenals of the Death Guard are filled with deadly weaponry, from lethal arcana to forbidden chem-agents from bygone ages. Heavy Gunners wield these tools of war to horrific effect."
   },
   {
-   "id": "plague-marines.marine-icon-bearer",
+   "id": "plague-marines.icon-bearer",
    "teamId": "plague-marines",
    "name": "Plague Marine Icon Bearer",
    "keywords": [
@@ -652,12 +652,12 @@
    ],
    "abilities": [
     {
-     "id": "plague-marines.marine-icon-bearer.icon-bearer",
+     "id": "plague-marines.icon-bearer.icon-bearer",
      "name": "Icon Bearer",
      "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
     },
     {
-     "id": "plague-marines.marine-icon-bearer.icon-of-contagion",
+     "id": "plague-marines.icon-bearer.icon-of-contagion",
      "name": "Icon of Contagion",
      "text": "Whenever this operative is within your opponent’s territory, the Contagion strategy ploy costs you 0CP."
     }
@@ -808,7 +808,7 @@
    "fluff": "Malignant Plaguecasters channel the foetid energies of Nurgle’s realm. The foul cycle of decay and rebirth is theirs to master, whether unleashing clouds of killing wind or revitalising their brethren."
   },
   {
-   "id": "plague-marines.marine-warrior",
+   "id": "plague-marines.warrior",
    "teamId": "plague-marines",
    "name": "Plague Marine Warrior",
    "keywords": [
@@ -869,12 +869,12 @@
    ],
    "abilities": [
     {
-     "id": "plague-marines.marine-warrior.repulsive-fortitude",
+     "id": "plague-marines.warrior.repulsive-fortitude",
      "name": "Repulsive Fortitude",
      "text": "Whenever an operative is shooting this operative, defence dice results of 5+ are critical successes."
     },
     {
-     "id": "plague-marines.marine-warrior.toxic",
+     "id": "plague-marines.warrior.toxic",
      "name": "Toxic",
      "text": "Whenever this operative is using this weapon against an enemy operative that has one of your Poison tokens, add 1 to both Dmg stats of this weapon."
     }

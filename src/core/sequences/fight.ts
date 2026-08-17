@@ -262,7 +262,17 @@ export function sideWeapon(
   const profileName = side === 'attacker' ? seq.attackerProfile : seq.defenderProfile;
   const w = weaponsOf(ctx, state, op, 'melee').find((x) => x.name === name) ?? weaponsOf(ctx, state, op, 'melee')[0];
   const profile = w ? (findProfile(w, profileName) ?? w.profiles[0]!) : fallbackProfile();
-  return { profile, rules: effectiveRules(ctx, state, profile), name: w?.name ?? name };
+  const foe = side === 'attacker' ? state.operatives[seq.defenderId] : state.operatives[seq.attackerId];
+  return {
+    profile,
+    rules: effectiveRules(ctx, state, profile, {
+      operative: op,
+      ...(foe ? { target: foe } : {}),
+      weaponName: w?.name ?? name,
+      retaliating: side === 'defender',
+    }),
+    name: w?.name ?? name,
+  };
 }
 
 function fallbackProfile(): WeaponProfile {
@@ -378,6 +388,7 @@ export function resolveFightDie(
   const me = side === 'attacker' ? state.operatives[seq.attackerId]! : state.operatives[seq.defenderId]!;
   const them = side === 'attacker' ? state.operatives[seq.defenderId]! : state.operatives[seq.attackerId]!;
   const { profile, rules } = sideWeapon(ctx, state, seq, side);
+  const dieWasCrit = die.state === 'crit';
 
   if (mode === 'strike') {
     const crit = die.state === 'crit';
@@ -425,20 +436,44 @@ export function resolveFightDie(
       struck: them,
     });
   } else {
-    const targets = successes(opponentPool);
-    const blockable = die.state === 'crit' ? targets : targets.filter((d) => d.state === 'normal');
-    const victim =
-      (blockTargetId !== undefined ? blockable.find((d) => d.id === blockTargetId) : undefined) ??
-      blockable.find((d) => d.state === 'crit') ??
-      blockable[0];
+    // "Each of your blocks can be allocated to block ONE unresolved success" — the rare
+    // Shield weapon rule raises that to two, via the onBlockAllocation hook.
+    const ev = ctx.hooks.emit('onBlockAllocation', state, {
+      state,
+      ctx: {
+        attacker: me,
+        defender: them,
+        weaponName: seq.attackerWeapon,
+        profile,
+        rules,
+        type: 'melee',
+        secondary: false,
+        pointBlank: false,
+        inCover: false,
+        obscured: false,
+        vantageAccurate: 0,
+        distance: 0,
+      },
+      brutal: hasRule(rules, 'Brutal'),
+      blocks: 1,
+    });
     die.state = 'discarded';
-    if (victim) {
+    let blocked = 0;
+    for (let i = 0; i < Math.max(1, ev.blocks); i++) {
+      // "A normal success can block a normal success... a critical success can block either."
+      const targets = successes(opponentPool);
+      const blockable = dieWasCrit ? targets : targets.filter((d) => d.state === 'normal');
+      const victim =
+        (i === 0 && blockTargetId !== undefined ? blockable.find((d) => d.id === blockTargetId) : undefined) ??
+        blockable.find((d) => d.state === 'crit') ??
+        blockable[0];
+      if (!victim) break;
       const wasCrit = victim.state === 'crit';
       victim.state = 'blocked';
+      blocked++;
       log(state, { kind: 'dice', player: me.player, text: `${me.letter} blocks a ${wasCrit ? 'critical' : 'normal'} success` });
-    } else {
-      log(state, { kind: 'dice', player: me.player, text: `${me.letter} blocks (nothing to block)` });
     }
+    if (blocked === 0) log(state, { kind: 'dice', player: me.player, text: `${me.letter} blocks (nothing to block)` });
   }
 
   // "or one operative in that fight is incapacitated" — stop mid-sequence.

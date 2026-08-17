@@ -315,13 +315,85 @@ def extract_annotations(img, frame):
 VOLKUS_STRUCTURE_LETTERS = set('ABCDEF')
 
 
+def heal_chips(mask, boxes, pad=3, frac=0.30):
+    """Paint label chips back into a mask they were printed on top of.
+
+    A chip is opaque, so it punches a notch out of the terrain footprint under
+    it. If most of the ring just outside the chip is the mask, the chip was
+    drawn on that piece and the notch is filled in.
+    """
+    out = mask.copy()
+    H, W = mask.shape
+    for (x0, y0, x1, y1) in boxes:
+        ya, yb = max(0, y0 - pad), min(H, y1 + pad)
+        xa, xb = max(0, x0 - pad), min(W, x1 + pad)
+        box = mask[ya:yb, xa:xb]
+        inner = np.zeros(box.shape, bool)
+        inner[y0 - ya:y1 - ya, x0 - xa:x1 - xa] = True
+        ring = box[~inner]
+        if ring.size and ring.mean() >= frac:
+            out[max(0, y0 - 1):y1 + 1, max(0, x0 - 1):x1 + 1] = True
+    return out
+
+
+def dashed_rects(img, ink, chip_boxes):
+    """Rectangles drawn in thick white dashes.
+
+    keys/VS2.png: white dashed lines mark a door when they cross a wall, and a
+    rectangle of them marks a rubble piece standing on an upper level. Dashes on
+    a wall are excluded here (they are handled as doors), so what is left is the
+    upper-level outlines. Returns their pixel bounding boxes.
+    """
+    white = (img >= 235).all(2)
+    white &= ~ndimage.binary_dilation(ink, np.ones((7, 7), bool))
+    for (x0, y0, x1, y1) in chip_boxes:
+        white[max(0, y0 - 2):y1 + 2, max(0, x0 - 2):x1 + 2] = False
+    dash = np.zeros_like(white)
+    n = 0
+    for blob in G.component_masks(white, 4):
+        ys, xs = np.where(blob)
+        if blob.sum() <= 120 and max(ys.max() - ys.min(), xs.max() - xs.min()) <= 18:
+            dash |= blob
+            n += 1
+    lab, k = ndimage.label(ndimage.binary_dilation(dash, np.ones((11, 11), bool)))
+    out = []
+    for i in range(1, k + 1):
+        cl = (lab == i) & dash
+        parts = ndimage.label(cl)[1]
+        ys, xs = np.where(cl)
+        if parts < 5:
+            continue
+        w, hh = xs.max() - xs.min(), ys.max() - ys.min()
+        if w < 12 or hh < 12:
+            continue
+        out.append((int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1))
+    return out
+
+
+def cut_rect_outline(mask, box, t=2):
+    """Erase a 2px rectangle outline so a piece drawn on an upper level is no
+    longer connected to that level's footprint."""
+    x0, y0, x1, y1 = box
+    out = mask.copy()
+    out[y0:y1, x0:x0 + t] = False
+    out[y0:y1, x1 - t:x1] = False
+    out[y0:y0 + t, x0:x1] = False
+    out[y1 - t:y1, x0:x1] = False
+    return out
+
+
 def volkus_features(img, frame, objectives):
     x0, y0, x1, y1 = frame.qa['board_px']
     interior = np.zeros(img.shape[:2], bool)
     interior[y0:y1, x0:x1] = True
 
+    chip_list = L.chips(img, 'open')
+    chip_boxes = [b for _, _, _, b in chip_list]
+
     green = C.mask_any(img, C.GREEN_MID, tol=4) & interior
     dgreen = C.mask_any(img, C.GREEN_DARK, tol=4) & interior
+    green = heal_chips(green, chip_boxes)
+    dgreen = heal_chips(dgreen, chip_boxes)
 
     # Structural ink: thick black strokes only. The centre-line dashes, the
     # drop-zone arrows and the marker rings are all thinner than a wall, so an
@@ -334,9 +406,12 @@ def volkus_features(img, frame, objectives):
     core = ndimage.binary_opening(ink, np.ones((5, 5), bool))
     ink = ndimage.binary_propagation(core, mask=ink)
 
+    for box in dashed_rects(img, ink, chip_boxes):
+        green = cut_rect_outline(green, box)
+
     doors = _volkus_doors(img, ink, interior)
 
-    chips = {t: (cx, cy) for t, cx, cy, _ in L.chips(img, 'open')}
+    chips = {t: (cx, cy) for t, cx, cy, _ in chip_list}
 
     green_blobs = list(G.component_masks(green, 40))
     dgreen_blobs = list(G.component_masks(dgreen, 40))
@@ -428,11 +503,12 @@ def bheta_features(img, frame, objectives):
     x0, y0, x1, y1 = frame.qa['board_px']
     interior = np.zeros(img.shape[:2], bool)
     interior[y0:y1, x0:x1] = True
+    chip_list = L.chips(img, 'open')
     green = C.mask_any(img, C.GREEN_MID, tol=5) & interior
-    # the label chips sit on the decks and punch holes in them
-    green = L._fill_small_holes(green, 900)
+    # the label chips sit on the decks and punch notches out of them
+    green = heal_chips(green, [b for _, _, _, b in chip_list])
     chips = {}
-    for idx, (t, cx, cy, _) in enumerate(L.chips(img, 'open')):
+    for idx, (t, cx, cy, _) in enumerate(chip_list):
         chips['%s#%d' % (t, idx)] = (cx, cy)
 
     out = []
@@ -512,12 +588,7 @@ def cq_features(img, frame, killzone):
     blackchips = [(t, cx, cy, b) for t, cx, cy, b in L.chips(img, 'black', **L.BLACK_CHIP)]
 
     runs = _cq_runs(occupied_h, occupied_v)
-    feats = []
-    used = set()
-    for orient, i, j, length in runs:
-        segs = _split_run(orient, i, j, length, chips, frame, lx, ly, used)
-        feats.extend(segs)
-
+    feats = _assign_labels(runs, chips, lx, ly)
     walls = []
     thick = _wall_thickness(wall, lx, ly)
     for f in feats:
@@ -574,37 +645,49 @@ def _cq_runs(oh, ov):
     return runs
 
 
-def _split_run(orient, i, j, length, chips, frame, lx, ly, used):
-    """Cut a run of lattice edges into the printed wall pieces using the labels."""
-    # Labels sitting alongside this run, ordered along it.
-    tol = (lx[1] - lx[0]) * 0.42
-    mine = []
-    for t, cx, cy in chips:
-        if orient == 'h':
-            if abs(cy - ly[j]) > tol:
-                continue
-            pos = (cx - lx[i]) / (lx[1] - lx[0])
-            if -0.35 <= pos <= length + 0.35:
-                mine.append((pos, t))
-        else:
-            if abs(cx - lx[i]) > tol:
-                continue
-            pos = (cy - ly[j]) / (ly[1] - ly[0])
-            if -0.35 <= pos <= length + 0.35:
-                mine.append((pos, t))
-    mine.sort()
-    mine = [(p, t) for p, t in mine if (orient, i, j, round(p, 2), t) not in used]
+def _assign_labels(runs, chips, lx, ly):
+    """Attach each printed wall label to the run it sits beside, then tile each
+    run with the labelled pieces (A* spans two lattice squares, B* one).
 
-    out, cursor = [], 0
-    for pos, t in mine:
-        if cursor >= length:
-            break
-        span = min(2 if t.startswith('A') else 1, length - cursor)
-        out.append((orient, i, j, cursor, span, t))
-        cursor += span
-    while cursor < length:                      # unlabelled remainder
-        out.append((orient, i, j, cursor, 1, None))
-        cursor += 1
+    A chip near a T-junction is close to two runs; it is given to the run whose
+    centreline it is nearer to, and only if it lies strictly *along* that run —
+    which is what separates e.g. an "A3" printed above a horizontal wall from
+    the vertical wall that starts underneath it.
+    """
+    stepx, stepy = lx[1] - lx[0], ly[1] - ly[0]
+    max_perp = 0.55 * stepx
+    best = {}
+    for ci, (t, cx, cy) in enumerate(chips):
+        pick = None
+        for ri, (orient, i, j, length) in enumerate(runs):
+            if orient == 'h':
+                pos = (cx - lx[i]) / stepx
+                perp = abs(cy - ly[j])
+            else:
+                pos = (cy - ly[j]) / stepy
+                perp = abs(cx - lx[i])
+            if not (0.05 <= pos <= length - 0.05):
+                continue
+            if perp > max_perp:
+                continue
+            if pick is None or perp < pick[0]:
+                pick = (perp, ri, pos)
+        if pick is not None:
+            best.setdefault(pick[1], []).append((pick[2], t))
+
+    out = []
+    for ri, (orient, i, j, length) in enumerate(runs):
+        mine = sorted(best.get(ri, []))
+        cursor = 0
+        for pos, t in mine:
+            if cursor >= length:
+                break
+            span = min(2 if t.startswith('A') else 1, length - cursor)
+            out.append((orient, i, j, cursor, span, t))
+            cursor += span
+        while cursor < length:                 # unlabelled remainder
+            out.append((orient, i, j, cursor, 1, None))
+            cursor += 1
     return out
 
 
@@ -666,7 +749,7 @@ def fit_templates(instances):
     """
     templates, fits = {}, []
     for label, items in instances.items():
-        cands = [_centre(p) for _, p in items]
+        cands = [_centre(p) for _, _, p in items]
         best_idx, best_score = 0, -1
         for a in range(len(cands)):
             scores = [_best_align(cands[a], cands[b])[0] for b in range(len(cands))]
@@ -675,10 +758,10 @@ def fit_templates(instances):
                 best_idx, best_score = a, s
         tmpl = cands[best_idx]
         templates[label] = tmpl
-        for (mapId, poly), c in zip(items, cands):
+        for (mapId, fi, poly), c in zip(items, cands):
             score, rot, flip = _best_align(tmpl, c)
             cx, cy = C.centroid(poly)
-            fits.append(dict(label=label, mapId=mapId, iou=round(score, 4),
+            fits.append(dict(label=label, mapId=mapId, featureIndex=fi, iou=round(score, 4),
                              rotDeg=rot, flip=flip, x=round(cx, 3), y=round(cy, 3)))
     return templates, fits
 
@@ -915,22 +998,19 @@ def main(argv):
     # Template fit QA across each killzone.
     by_kz = defaultdict(lambda: defaultdict(list))
     for mid, m in maps.items():
-        for f in m['features']:
+        for fi, f in enumerate(m['features']):
             poly = _footprint(f)
             if poly is not None and f.get('label'):
-                by_kz[m['killzone']][f['label']].append((mid, poly))
+                by_kz[m['killzone']][f['label']].append((mid, fi, poly))
     qa_fits = {}
     for kz, inst in by_kz.items():
         templates, fits = fit_templates(inst)
         qa_fits[kz] = fits
         for f in fits:
-            m = maps[f['mapId']]
-            for feat in m['features']:
-                if feat.get('label') == f['label'] and abs(feat['placement']['x'] - f['x']) < 1e-6 \
-                        and abs(feat['placement']['y'] - f['y']) < 1e-6:
-                    feat['placement']['rotDeg'] = f['rotDeg']
-                    feat['placement']['flip'] = bool(f['flip'])
-                    feat.setdefault('qa', {})['templateIoU'] = f['iou']
+            feat = maps[f['mapId']]['features'][f['featureIndex']]
+            feat['placement']['rotDeg'] = f['rotDeg']
+            feat['placement']['flip'] = bool(f['flip'])
+            feat.setdefault('qa', {})['templateIoU'] = f['iou']
         write_terrain(kz, templates)
     for mid, m in maps.items():
         ious = [f['qa']['templateIoU'] for f in m['features'] if 'qa' in f]

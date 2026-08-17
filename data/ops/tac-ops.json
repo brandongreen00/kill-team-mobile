@@ -1,0 +1,159 @@
+{
+  "source": "Approved Ops 2025 card pack (JS array ContentAllTacOps), wahapedia.ru/kill-team3 — extracted 2026-08-17. Text is verbatim; ids/flags are ours.",
+  "archetypes": ["Infiltration", "Recon", "Security", "Seek & Destroy"],
+  "ops": [
+    {
+      "id": "tac.plantDevices",
+      "archetype": "Infiltration",
+      "name": "Plant Devices",
+      "reveal": "The first time a friendly operative performs the Plant Device action.",
+      "actions": [
+        {
+          "id": "Plant Device",
+          "name": "Plant Device",
+          "ap": 1,
+          "text": "One objective marker the active operative controls gains one of your Device tokens.\n\nAn operative cannot perform this action during the first turning point, while within control range of an enemy operative, or if that objective marker already has one of your Device tokens."
+        }
+      ],
+      "vp": "At the end of each turning point after the first:\nIf your opponent's objective marker has one of your Device tokens, you score 1VP.\nFor each other objective marker enemy operatives contest that has one of your Device tokens, you score 1VP.\nYou cannot score more than 2VP from this op per turning point.",
+      "perTPCap": 2,
+      "tokens": ["Device"]
+    },
+    {
+      "id": "tac.stealIntelligence",
+      "archetype": "Infiltration",
+      "name": "Steal Intelligence",
+      "reveal": "The first time an enemy operative is incapacitated.",
+      "additional": "Whenever an enemy operative is incapacitated, before it's removed from the killzone, place one of your Intelligence mission markers within its control range.\n\nFriendly operatives can perform the Pick Up Marker action on your Intelligence mission markers, and for the purposes of that action's conditions, ignore the first Intelligence mission marker the active operative is carrying. In other words, each friendly operative can carry up to two Intelligence mission markers, or one and one other marker.",
+      "actions": [],
+      "vp": "At the end of each turning point after the first, if any friendly operatives are carrying any of your Intelligence mission markers, you score 1VP.\n\nAt the end of the battle, for each of your Intelligence mission markers friendly operatives are carrying, you score 1VP.",
+      "tokens": ["Intelligence"]
+    },
+    {
+      "id": "tac.trackEnemy",
+      "archetype": "Infiltration",
+      "name": "Track Enemy",
+      "reveal": "The first time you score VP from this op.",
+      "additional": "An enemy operative is being tracked if it's a valid target for a friendly operative within 6\" of it. That friendly operative must have a Conceal order, cannot be a valid target for the enemy operative it's attempting to track, and cannot be within control range of enemy operatives.",
+      "actions": [],
+      "vp": "At the end of each turning point after the first:\nIf one enemy operative is being tracked, you score 1VP, or 2VP instead if it's the fourth turning point.\nIf two or more enemy operatives are being tracked, you score 2VP.\nYou cannot score more than 2VP from this op per turning point.",
+      "perTPCap": 2
+    },
+    {
+      "id": "tac.flank",
+      "archetype": "Recon",
+      "name": "Flank",
+      "reveal": "As a STRATEGIC GAMBIT.",
+      "additional": "Divide the killzone into two flanks (left and right) by drawing an imaginary line that's just like the centreline, except it runs from the centre of each player's killzone edge. An operative contests a flank while both wholly within it and wholly within their opponent's territory. Friendly operatives control a flank if the total APL stat of those contesting it is greater than that of enemy operatives.",
+      "actions": [],
+      "vp": "After you reveal this op, at the end of each turning point after the first, for each flank friendly operatives control, you score 1VP. In the fourth turning point, if friendly operatives also controlled that flank at the end of the third turning point, you score 2VP instead.\n\nYou cannot score more than 2VP from this op per turning point.",
+      "perTPCap": 2
+    },
+    {
+      "id": "tac.retrieval",
+      "archetype": "Recon",
+      "name": "Retrieval",
+      "reveal": "The first time you score VP from this op.",
+      "actions": [
+        {
+          "id": "Retrieve",
+          "name": "Retrieve",
+          "ap": 1,
+          "text": "If the active operative controls an objective marker that hasn't been searched by friendly operatives, that operative is now carrying one of your Retrieval mission markers and that objective marker has been searched by friendly operatives. Friendly operatives can perform the Pick Up Marker action on your Retrieval mission markers.\n\nAn operative cannot perform this action during the first turning point, or while within control range of an enemy operative, or if it's already carrying a marker."
+        }
+      ],
+      "vp": "The first time each objective marker is searched by friendly operatives, you score 1VP.\n\nAt the end of the battle, for each of your Retrieval mission markers friendly operatives are carrying, you score 1VP.",
+      "tokens": ["Retrieval"]
+    },
+    {
+      "id": "tac.scoutEnemyMovement",
+      "archetype": "Recon",
+      "name": "Scout Enemy Movement",
+      "reveal": "The first time a friendly operative performs the Scout action.",
+      "actions": [
+        {
+          "id": "Scout",
+          "name": "Scout",
+          "ap": 1,
+          "text": "Select one ready enemy operative visible to and more than 6\" from the active operative. That enemy operative is now monitored until the Ready step of the next Strategy phase.\n\nAn operative cannot perform this action while it has an Engage order, during the first turning point, or while within control range of an enemy operative."
+        }
+      ],
+      "vp": "At the end of each turning point after the first, for each monitored enemy operative that's visible to friendly operatives, you score 1VP. Note that it doesn't have to be a friendly operative that performed the Scout action.\n\nYou cannot score more than 2VP from this op per turning point.",
+      "perTPCap": 2
+    },
+    {
+      "id": "tac.plantBanner",
+      "archetype": "Security",
+      "name": "Plant Banner",
+      "reveal": "When you perform the Plant Banner action.",
+      "actions": [
+        {
+          "id": "Plant Banner",
+          "name": "Plant Banner",
+          "ap": 1,
+          "text": "Place your Banner mission marker within the active operative's control range, wholly within your opponent's territory and more than 5\" from a neutral killzone edge. Operatives can perform the Pick Up Marker action on your Banner mission marker.\n\nAn operative cannot perform this action during the first turning point, while within control range of an enemy operative, or if a friendly operative has already performed this action during the battle."
+        }
+      ],
+      "vp": "At the end of each turning point after the first, if your Banner mission marker is wholly within your opponent's territory and friendly operatives control it, you score 1VP; if that's true and no enemy operatives contest it, you score 2VP instead. Note your Banner mission marker must be in the killzone (not being carried) to score.",
+      "tokens": ["Banner"]
+    },
+    {
+      "id": "tac.martyrs",
+      "archetype": "Security",
+      "name": "Martyrs",
+      "reveal": "The first time a friendly operative is incapacitated while contesting an objective marker.",
+      "additional": "Whenever a friendly operative is incapacitated while contesting an objective marker, that marker gains one of your Martyr tokens. Note that this is only the first time each operative is incapacitated, so if an operative is incapacitated, set back up (e.g. HIEROTEK CIRCLE Reanimation Protocols) and then subsequently incapacitated again, a second Martyr token cannot be gained as a result.",
+      "actions": [],
+      "vp": "At the end of each turning point after the first, if friendly operatives contest an objective marker that has one or more of your Martyr tokens, you can remove any of those tokens. For each token you remove, you score 1VP; if friendly operatives also control that marker, you score 2VP instead.\n\nYou cannot score more than 2VP from this op per turning point.",
+      "perTPCap": 2,
+      "tokens": ["Martyr"]
+    },
+    {
+      "id": "tac.envoy",
+      "archetype": "Security",
+      "name": "Envoy",
+      "reveal": "The first time you select an envoy.",
+      "additional": "As a STRATEGIC GAMBIT in each turning point after the first, select one friendly operative to be your envoy until the Ready step of the next Strategy phase. You cannot select an operative you selected during a previous turning point or an operative that's ignored for the kill op.",
+      "actions": [],
+      "vp": "At the end of each turning point after the first, if your envoy is wholly within enemy territory and not within control range of enemy operatives, you score 1VP; if this is true and your envoy has not lost any wounds during that turning point, you score 2VP instead."
+    },
+    {
+      "id": "tac.rout",
+      "archetype": "Seek & Destroy",
+      "name": "Rout",
+      "reveal": "The first time you score VP from this op.",
+      "actions": [],
+      "vp": "Whenever a friendly operative incapacitates an enemy operative, if that friendly operative is within 6\" of your opponent's drop zone, you score 1VP; if this is true and that enemy operative had a Wounds stat of 12 or more, you score 2VP instead.\n\nYou cannot score more than 2VP from this op per turning point.",
+      "perTPCap": 2
+    },
+    {
+      "id": "tac.sweepAndClear",
+      "archetype": "Seek & Destroy",
+      "name": "Sweep & Clear",
+      "reveal": "The first time an enemy operative is incapacitated while contesting an objective marker, or the first time a friendly operative performs the Clear action (whichever comes first).",
+      "additional": "When an enemy operative that contests an objective marker is incapacitated, that objective marker gains one of your Swept tokens (if it doesn't already have one) until the Ready step of the next Strategy phase.",
+      "actions": [
+        {
+          "id": "Clear",
+          "name": "Clear",
+          "ap": 1,
+          "text": "An objective marker the active operative controls is cleared for the turning point.\n\nAn operative cannot perform this action during the first turning point, or while within control range of an enemy operative."
+        }
+      ],
+      "vp": "At the end of each turning point after the first, if at least one objective marker (excluding your objective marker) is cleared and enemy operatives do not contest that marker, you score 1VP. If that marker also has one of your Swept tokens, you score 2VP instead.\n\nIf friendly operatives control an objective marker that has one of your Swept tokens, you score 1VP.\n\nYou cannot score more than 2VP from this op per turning point.",
+      "perTPCap": 2,
+      "tokens": ["Swept"]
+    },
+    {
+      "id": "tac.dominate",
+      "archetype": "Seek & Destroy",
+      "name": "Dominate",
+      "reveal": "The first time an enemy operative is incapacitated by a friendly operative.",
+      "additional": "Each time a friendly operative incapacitates an enemy operative, that friendly operative gains one of your Dominate tokens or two of your Dominate tokens if that enemy operative had a Wounds stat of 12 or more.",
+      "actions": [],
+      "vp": "At the end of the third and fourth turning point, you can remove Dominate tokens from friendly operatives that aren't incapacitated. For each you remove, you score 1VP.\n\nYou cannot score more than 3VP from this op per turning point.",
+      "perTPCap": 3,
+      "tokens": ["Dominate"]
+    }
+  ]
+}

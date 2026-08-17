@@ -88,7 +88,10 @@ def new_ops(team: dict) -> dict[str, dict]:
         for w in c["weapons"]:
             for p in w["profiles"]:
                 nm = w["name"] + (f" ({p['name']})" if p.get("name") else "")
-                weps[norm_weapon(nm) + ("|" + (p.get("name") or ""))] = {
+                key = norm_weapon(nm) + "|" + (p.get("name") or "")
+                while key in weps:
+                    key += "'"
+                weps[key] = {
                     "name": nm, "atk": p["atk"], "hit": p["hit"],
                     "dmgN": p["dmgN"], "dmgC": p["dmgC"],
                     "rules": [r["raw"] for r in p["rules"]],
@@ -108,7 +111,10 @@ def legacy_ops(f: dict) -> dict[str, dict]:
         for w in o.get("weapons", []):
             m = re.match(r"^(.*?)\s*\(([^()]*)\)\s*$", w["name"])
             prof = m.group(2) if m else ""
-            weps[norm_weapon(w["name"]) + "|" + prof] = {
+            key = norm_weapon(w["name"]) + "|" + prof
+            while key in weps:
+                key += "'"
+            weps[key] = {
                 "name": w["name"], "atk": w.get("atk"), "hit": w.get("hit"),
                 "dmgN": w.get("normal_dmg"), "dmgC": w.get("crit_dmg"),
                 "rules": w.get("rules", []),
@@ -183,9 +189,13 @@ def build_report() -> tuple[list[str], dict]:
                 if b.get(stat) is not None and a[stat] != b[stat]:
                     rows.append(f"`{a['name']}` {stat.upper()} {b[stat]} (old) -> {a[stat]}")
                     stats["stat_diffs"] += 1
-            if b.get("base") and a["base"] != b["base"]:
+            # `note` (e.g. "flying base") is new information, not a discrepancy
+            base_new = {k: v for k, v in a["base"].items() if k != "note"}
+            if b.get("base") and base_new != b["base"]:
                 rows.append(f"`{a['name']}` base {b['base']} (old) -> {a['base']}")
                 stats["base_diffs"] += 1
+            elif a["base"].get("note"):
+                stats["base_notes_added"] += 1
             missing = [a["weapons"][k]["name"] for k in a["weapons"] if k not in b["weapons"]]
             extra = [b["weapons"][k]["name"] for k in b["weapons"] if k not in a["weapons"]]
             if missing:
@@ -237,10 +247,85 @@ def build_report() -> tuple[list[str], dict]:
     return lines, per_team
 
 
+def coverage_table() -> str:
+    idx = json.load(open(os.path.join(DATA, "_index.json"), encoding="utf-8"))["teams"]
+    out = ["| # | Team | Faction | Archetypes | Cards | Total ops | Leader | SP/FP/EQ | "
+           "Rare rules | Source version |",
+           "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for i, t in enumerate(sorted(idx, key=lambda x: x["id"]), 1):
+        with open(os.path.join(DATA, t["id"] + ".json"), encoding="utf-8") as f:
+            d = json.load(f)
+        sel, ldr = d["selection"], d["selection"]["leader"]
+        lead = ldr["role"] or (f"{len(ldr['choices'])} choices" if ldr["choices"] else "—")
+        if ldr["inList"] and ldr["choices"]:
+            lead += " (in list)"
+        out.append(f"| {i} | `{t['id']}` | {t['faction']} | "
+                   f"{' / '.join(t['archetypes']) or '—'} | {t['datacards']} | "
+                   f"{sel['totalOperatives']} | {lead} | {t['strategyPloys']}/"
+                   f"{t['firefightPloys']}/{t['equipment']} | "
+                   f"{len(d['rareWeaponRules']) or '—'} | {t['booksVersion']} |")
+    return "\n".join(out)
+
+
+def hooks_table() -> tuple[str, int]:
+    rows, n = ["| Team | Hook | Verbatim rule |", "| --- | --- | --- |"], 0
+    for fn in sorted(os.listdir(DATA)):
+        if not fn.endswith(".json") or fn.startswith("_"):
+            continue
+        with open(os.path.join(DATA, fn), encoding="utf-8") as f:
+            d = json.load(f)
+        for c in d["selection"]["constraints"]:
+            if c["kind"] == "custom":
+                rows.append(f"| `{d['id']}` | `{c['hook']}` | {c['text']} |")
+                n += 1
+    return "\n".join(rows), n
+
+
+def unresolved_table() -> str:
+    rows = ["| Team | Field the source did not give | What the data records |",
+            "| --- | --- | --- |"]
+    for fn in sorted(os.listdir(DATA)):
+        if not fn.endswith(".json") or fn.startswith("_"):
+            continue
+        with open(os.path.join(DATA, fn), encoding="utf-8") as f:
+            d = json.load(f)
+        for x in d["notes"]:
+            rows.append(f"| `{d['id']}` | {x} | see `notes[]` |")
+        for e in d["selection"]["leaderList"] + d["selection"]["list"]:
+            for x in e.get("notes", []):
+                rows.append(f"| `{d['id']}` | {e['role']}: {x} | `items[]` on the option |")
+    return "\n".join(rows)
+
+
+def rare_table() -> str:
+    with open(os.path.join(DATA, "_rare-weapon-rules.json"), encoding="utf-8") as f:
+        doc = json.load(f)
+    rows = ["| Rule id | Printed as | Teams | Definition source |", "| --- | --- | --- | --- |"]
+    for r in doc["rules"]:
+        src = r["definedIn"] or ("**no printed definition** — referenced by other rules"
+                                 if r.get("unresolved") else "")
+        rows.append(f"| `{r['id']}` | {', '.join('`' + x + '`' for x in r['forms'])} | "
+                    f"{len(r['teams'])} | {src} |")
+    return "\n".join(rows)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--md", default="", help="write a markdown fragment to this path")
+    ap.add_argument("--tables", default="",
+                    help="write the docs/TEAM-DATA.md generated tables into this directory "
+                         "(coverage.md, hooks.md, unresolved.md, rare.md, diff.md)")
     args = ap.parse_args()
+    if args.tables:
+        os.makedirs(args.tables, exist_ok=True)
+        ht, hn = hooks_table()
+        for name, body in (("coverage.md", coverage_table()),
+                           ("hooks.md", ht + f"\n\ntotal {hn}"),
+                           ("unresolved.md", unresolved_table()),
+                           ("rare.md", rare_table())):
+            with open(os.path.join(args.tables, name), "w", encoding="utf-8") as f:
+                f.write(body + "\n")
+        args.md = args.md or os.path.join(args.tables, "diff.md")
     summary, per_team = build_report()
     print("\n".join(summary))
     body: list[str] = []

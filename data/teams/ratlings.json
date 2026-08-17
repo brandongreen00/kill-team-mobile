@@ -19,12 +19,12 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/ratlings/",
- "scrapedAt": "2026-08-17T03:59:22+00:00",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
  "source": "cache",
  "selection": {
   "leader": {
    "role": "FIXER",
-   "datacardId": "ratlings.ratling-fixer",
+   "datacardId": "ratlings.fixer",
    "count": 1,
    "loadouts": [
     {
@@ -101,7 +101,7 @@
     "requires": [],
     "rawText": "BATTLEMUTT",
     "group": 2,
-    "datacardId": "ratlings.ratling-battlemutt",
+    "datacardId": "ratlings.battlemutt",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -204,7 +204,7 @@
     "requires": [],
     "rawText": "BIG SHOT",
     "group": 2,
-    "datacardId": "ratlings.ratling-big-shot",
+    "datacardId": "ratlings.big-shot",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -226,7 +226,7 @@
     "requires": [],
     "rawText": "BOMBER",
     "group": 2,
-    "datacardId": "ratlings.ratling-bomber",
+    "datacardId": "ratlings.bomber",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -249,7 +249,7 @@
     "requires": [],
     "rawText": "HARDBIT",
     "group": 2,
-    "datacardId": "ratlings.ratling-hardbit",
+    "datacardId": "ratlings.hardbit",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -271,7 +271,7 @@
     "requires": [],
     "rawText": "RAIDER",
     "group": 2,
-    "datacardId": "ratlings.ratling-raider",
+    "datacardId": "ratlings.raider",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -293,7 +293,7 @@
     "requires": [],
     "rawText": "SNEAK",
     "group": 2,
-    "datacardId": "ratlings.ratling-sneak",
+    "datacardId": "ratlings.sneak",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -315,7 +315,7 @@
     "requires": [],
     "rawText": "SNIPER",
     "group": 2,
-    "datacardId": "ratlings.ratling-sniper",
+    "datacardId": "ratlings.sniper",
     "isLeader": false,
     "uniqueUnlessRole": false,
     "alwaysWeapons": [
@@ -337,7 +337,7 @@
     "requires": [],
     "rawText": "SPOTTER",
     "group": 2,
-    "datacardId": "ratlings.ratling-spotter",
+    "datacardId": "ratlings.spotter",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -359,7 +359,7 @@
     "requires": [],
     "rawText": "STASHMASTER",
     "group": 2,
-    "datacardId": "ratlings.ratling-stashmaster",
+    "datacardId": "ratlings.stashmaster",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -381,7 +381,7 @@
     "requires": [],
     "rawText": "VOX-THIEF",
     "group": 2,
-    "datacardId": "ratlings.ratling-vox-thief",
+    "datacardId": "ratlings.vox-thief",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -422,7 +422,7 @@
     "requires": [],
     "rawText": "1 RATLING FIXER operative with one of the following options:",
     "group": 1,
-    "datacardId": "ratlings.ratling-fixer",
+    "datacardId": "ratlings.fixer",
     "isLeader": true,
     "uniqueUnlessRole": true,
     "alwaysWeapons": []
@@ -466,7 +466,7 @@
  },
  "datacards": [
   {
-   "id": "ratlings.ratling-fixer",
+   "id": "ratlings.fixer",
    "teamId": "ratlings",
    "name": "Ratling Fixer",
    "keywords": [
@@ -547,12 +547,12 @@
    ],
    "abilities": [
     {
-     "id": "ratlings.ratling-fixer.munitorum-contacts",
+     "id": "ratlings.fixer.munitorum-contacts",
      "name": "Munitorum Contacts",
      "text": "You can select one additional equipment option."
     },
     {
-     "id": "ratlings.ratling-fixer.target-designation",
+     "id": "ratlings.fixer.target-designation",
      "name": "Target Designation",
      "text": "STRATEGIC GAMBIT. Select one enemy operative. Until the end of the turning point, whenever a friendly RATLING operative is shooting that enemy operative with a rifle, that weapon has the Lethal 5+ weapon rule."
     }
@@ -561,7 +561,7 @@
    "fluff": "Appointed by their squadmates, Fixers are the leaders of Ratling kill teams. Whilst they are as skilled with a rifle as any fellow Ratling, they possess the raw cunning to deploy and command their diminutive troops to best effect."
   },
   {
-   "id": "ratlings.ratling-battlemutt",
+   "id": "ratlings.battlemutt",
    "teamId": "ratlings",
    "name": "Ratling Battlemutt",
    "keywords": [
@@ -595,12 +595,12 @@
    ],
    "abilities": [
     {
-     "id": "ratlings.ratling-battlemutt.early-warning",
+     "id": "ratlings.battlemutt.early-warning",
      "name": "Early Warning",
      "text": "Once per turning point, after an enemy operative performs an action in which it moves or is set up, you can interrupt to use this rule. If you do, each friendly RATLING operative (excluding OGRYN and BULLGRYN) within 6\" of this operative and within 2\" of that enemy operative can immediately perform a free Dash or Fall Back action in an order of your choice (choose separately for each), but it cannot move more than 3\" during that action. In either case, each one cannot end that move within 2\" of an enemy operative unless it’s not visible to every enemy operative when it ends that move (if this isn’t possible for an operative, it cannot move)."
     },
     {
-     "id": "ratlings.ratling-battlemutt.beast",
+     "id": "ratlings.battlemutt.beast",
      "name": "Beast",
      "text": "This operative cannot perform any actions other than Charge, Dash, Fall Back, Fight and Reposition. It cannot use any weapons that aren’t on its datacard."
     }
@@ -788,7 +788,7 @@
    "fluff": "Burly abhumans originating from high-gravity planets, Ogryns are occasionally fielded alongside Ratlings. These hulking soldiers view Ratlings as their ‘little mates’, and are extremely protective of them."
   },
   {
-   "id": "ratlings.ratling-big-shot",
+   "id": "ratlings.big-shot",
    "teamId": "ratlings",
    "name": "Ratling Big Shot",
    "keywords": [
@@ -883,7 +883,7 @@
    "fluff": "Some Ratlings prefer to hunt bigger prey. Big Shots utilise weapons known as tankstopper rifles. These guns are jury-rigged with an array of purloined or repurposed power packs and weapon components that enable them to pierce heavy armour."
   },
   {
-   "id": "ratlings.ratling-bomber",
+   "id": "ratlings.bomber",
    "teamId": "ratlings",
    "name": "Ratling Bomber",
    "keywords": [
@@ -993,12 +993,12 @@
    ],
    "abilities": [
     {
-     "id": "ratlings.ratling-bomber.tripwire",
+     "id": "ratlings.bomber.tripwire",
      "name": "Tripwire",
      "text": "When setting up equipment before the battle, you can set up to two of your Tripwire markers up wholly within your territory and more than 2\" from other markers, access points and Accessible terrain. The first time that marker is within an enemy operative’s control range, remove that marker, subtract 1 from that operative’s APL stat until the end of its next activation and end its action (if any), even if that action’s effects aren’t fulfilled. If it cannot be placed, move it the minimum amount to do so."
     },
     {
-     "id": "ratlings.ratling-bomber.mine",
+     "id": "ratlings.bomber.mine",
      "name": "Mine",
      "text": "Mines you select from universal equipment inflict 2D3+3 damage instead, and friendly RATLING operatives (excluding OGRYN and BULLGRYN) are ignored for your mines’ effects (i.e. they cannot trigger or take damage from them). This takes precedence over the normal mines rules."
     }
@@ -1007,7 +1007,7 @@
    "fluff": "Some Ratlings have been known to develop a knack for tinkering with explosives. These self-taught sappers use tripwires, mines and remote explosives to confound any enemies attempting to outflank or infiltrate the Ratlings’ positions."
   },
   {
-   "id": "ratlings.ratling-hardbit",
+   "id": "ratlings.hardbit",
    "teamId": "ratlings",
    "name": "Ratling Hardbit",
    "keywords": [
@@ -1059,12 +1059,12 @@
    ],
    "abilities": [
     {
-     "id": "ratlings.ratling-hardbit.hunter",
+     "id": "ratlings.hardbit.hunter",
      "name": "Hunter",
      "text": "This operative can perform the Charge action while it has a Conceal order. If it does so during its activation, until the end of that activation, add 1 to the Atk stat of its combat knife and that melee weapon has the Brutal weapon rule."
     },
     {
-     "id": "ratlings.ratling-hardbit.lie-in-wait",
+     "id": "ratlings.hardbit.lie-in-wait",
      "name": "Lie in Wait",
      "text": "Whenever this operative is retaliating while Light or Heavy terrain is within its control range, you resolve the first attack dice (i.e. defender instead of attacker)."
     }
@@ -1073,7 +1073,7 @@
    "fluff": "The most grizzled and experienced Ratlings are known by their kin as Hardbits. These warriors have often survived multiple deployments and learned to handle themselves in close combat as well as at extreme range."
   },
   {
-   "id": "ratlings.ratling-raider",
+   "id": "ratlings.raider",
    "teamId": "ratlings",
    "name": "Ratling Raider",
    "keywords": [
@@ -1149,14 +1149,14 @@
    ],
    "abilities": [
     {
-     "id": "ratlings.ratling-raider.grappling-hook",
+     "id": "ratlings.raider.grappling-hook",
      "name": "Grappling Hook",
      "text": "Whenever this operative is climbing up, you can treat the vertical distance as 2\" (regardless of how far the operative actually moves vertically)."
     }
    ],
    "uniqueActions": [
     {
-     "id": "ratlings.ratling-raider.act.slingshot",
+     "id": "ratlings.raider.act.slingshot",
      "name": "SLINGSHOT",
      "ap": 1,
      "text": "Select a point on a terrain feature; that point must be visible to and within 6\" of this operative. Remove this operative from the killzone and set it back up in a location it can be placed wholly within 6\" horizontally of that point, not within control range of enemy operatives, and with that point visible to it.\n\nThis action is treated as a Reposition action. This operative cannot perform this action while within control range of an enemy operative, or during an activation in which it performed the Charge, Fall Back or Shoot action (or vice versa)."
@@ -1165,7 +1165,7 @@
    "fluff": "Raiders are equipped with grappling hook launchers and climbing gear, allowing them to swiftly ascend to locations to establish overwatch."
   },
   {
-   "id": "ratlings.ratling-sneak",
+   "id": "ratlings.sneak",
    "teamId": "ratlings",
    "name": "Ratling Sneak",
    "keywords": [
@@ -1241,14 +1241,14 @@
    ],
    "abilities": [
     {
-     "id": "ratlings.ratling-sneak.evade",
+     "id": "ratlings.sneak.evade",
      "name": "Evade",
      "text": "Once per turning point, after an enemy operative performs an action, you can interrupt and perform a free Dash action with this operative. Note this operative cannot use the Scarper faction rule (it has this rule instead)."
     }
    ],
    "uniqueActions": [
     {
-     "id": "ratlings.ratling-sneak.act.optics",
+     "id": "ratlings.sneak.act.optics",
      "name": "OPTICS",
      "ap": 1,
      "text": "Until the start of this operative’s next activation, whenever it’s shooting, enemy operatives cannot be obscured and the stationary profile of this operative’s suppressed sniper rifle has the Lethal 5+ weapon rule\n\nThis operative cannot perform this action while within control range of an enemy operative."
@@ -1257,7 +1257,7 @@
    "fluff": "Sneaks reach concealed positions before using their night vision goggles and suppressed rifles to detect and quietly eliminate key targets."
   },
   {
-   "id": "ratlings.ratling-sniper",
+   "id": "ratlings.sniper",
    "teamId": "ratlings",
    "name": "Ratling Sniper",
    "keywords": [
@@ -1327,7 +1327,7 @@
    "fluff": "Whilst Ratlings are often underestimated by ally and foe alike, these marksmen are supremely deadly at long range."
   },
   {
-   "id": "ratlings.ratling-spotter",
+   "id": "ratlings.spotter",
    "teamId": "ratlings",
    "name": "Ratling Spotter",
    "keywords": [
@@ -1395,7 +1395,7 @@
    "abilities": [],
    "uniqueActions": [
     {
-     "id": "ratlings.ratling-spotter.act.spot",
+     "id": "ratlings.spotter.act.spot",
      "name": "SPOT",
      "ap": 1,
      "text": "SUPPORT. Select one enemy operative visible to this operative. Until the end of the turning point, whenever a friendly RATLING operative within 3\" of this operative is shooting that enemy operative, you can use this effect. If you do:\n\nThis operative cannot perform this action while within control range of an enemy operative."
@@ -1404,7 +1404,7 @@
    "fluff": "Ratling Spotters use magnoculars to detect targets and assist their squadmates in adjusting their aim when engaging distant foes."
   },
   {
-   "id": "ratlings.ratling-stashmaster",
+   "id": "ratlings.stashmaster",
    "teamId": "ratlings",
    "name": "Ratling Stashmaster",
    "keywords": [
@@ -1471,12 +1471,12 @@
    ],
    "abilities": [
     {
-     "id": "ratlings.ratling-stashmaster.light-fingered",
+     "id": "ratlings.stashmaster.light-fingered",
      "name": "Light-fingered",
      "text": "Once during each of this operative’s activations, it can perform the Pick Up Marker, Place Marker or a mission action for 1 less AP."
     },
     {
-     "id": "ratlings.ratling-stashmaster.well-stocked",
+     "id": "ratlings.stashmaster.well-stocked",
      "name": "Well Stocked",
      "text": "If you select an Ammo Cache from universal equipment, you can set up an additional Ammo Cache marker."
     }
@@ -1485,7 +1485,7 @@
    "fluff": "A Ratling Stashmaster is responsible for stockpiling, carrying and distributing ammunition, supplies or even contraband."
   },
   {
-   "id": "ratlings.ratling-vox-thief",
+   "id": "ratlings.vox-thief",
    "teamId": "ratlings",
    "name": "Ratling Vox-Thief",
    "keywords": [
@@ -1553,7 +1553,7 @@
    "abilities": [],
    "uniqueActions": [
     {
-     "id": "ratlings.ratling-vox-thief.act.intercept-communications",
+     "id": "ratlings.vox-thief.act.intercept-communications",
      "name": "INTERCEPT COMMUNICATIONS",
      "ap": 1,
      "text": "SUPPORT. Select one other friendly RATLING operative visible to and within 6\" of this operative. Until the end of its next activation, add 1 to that operative’s APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."

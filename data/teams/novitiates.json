@@ -19,12 +19,12 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/novitiates/",
- "scrapedAt": "2026-08-17T03:59:22+00:00",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
  "source": "cache",
  "selection": {
   "leader": {
    "role": "SUPERIOR",
-   "datacardId": "novitiates.novitiate-superior",
+   "datacardId": "novitiates.superior",
    "count": 1,
    "loadouts": [
     {
@@ -108,7 +108,7 @@
     "requires": [],
     "rawText": "CONDEMNOR",
     "group": 2,
-    "datacardId": "novitiates.novitiate-condemnor",
+    "datacardId": "novitiates.condemnor",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -130,7 +130,7 @@
     "requires": [],
     "rawText": "DIALOGUS",
     "group": 2,
-    "datacardId": "novitiates.novitiate-dialogus",
+    "datacardId": "novitiates.dialogus",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -152,7 +152,7 @@
     "requires": [],
     "rawText": "DUELLIST",
     "group": 2,
-    "datacardId": "novitiates.novitiate-duellist",
+    "datacardId": "novitiates.duellist",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -174,7 +174,7 @@
     "requires": [],
     "rawText": "EXACTOR",
     "group": 2,
-    "datacardId": "novitiates.novitiate-exactor",
+    "datacardId": "novitiates.exactor",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -195,7 +195,7 @@
     "requires": [],
     "rawText": "HOSPITALLER",
     "group": 2,
-    "datacardId": "novitiates.novitiate-hospitaller",
+    "datacardId": "novitiates.hospitaller",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -234,7 +234,7 @@
     "requires": [],
     "rawText": "MILITANT with one of the following options:",
     "group": 2,
-    "datacardId": "novitiates.novitiate-militant",
+    "datacardId": "novitiates.militant",
     "isLeader": false,
     "uniqueUnlessRole": false,
     "alwaysWeapons": []
@@ -253,7 +253,7 @@
     "requires": [],
     "rawText": "PENITENT",
     "group": 2,
-    "datacardId": "novitiates.novitiate-penitent",
+    "datacardId": "novitiates.penitent",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -275,7 +275,7 @@
     "requires": [],
     "rawText": "PRECEPTOR",
     "group": 2,
-    "datacardId": "novitiates.novitiate-preceptor",
+    "datacardId": "novitiates.preceptor",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -296,7 +296,7 @@
     "requires": [],
     "rawText": "PRONATUS",
     "group": 2,
-    "datacardId": "novitiates.novitiate-pronatus",
+    "datacardId": "novitiates.pronatus",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -318,7 +318,7 @@
     "requires": [],
     "rawText": "PURGATUS",
     "group": 2,
-    "datacardId": "novitiates.novitiate-purgatus",
+    "datacardId": "novitiates.purgatus",
     "isLeader": false,
     "uniqueUnlessRole": false,
     "alwaysWeapons": [
@@ -340,7 +340,7 @@
     "requires": [],
     "rawText": "RELIQUARIUS",
     "group": 2,
-    "datacardId": "novitiates.novitiate-reliquarius",
+    "datacardId": "novitiates.reliquarius",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -389,7 +389,7 @@
     "requires": [],
     "rawText": "1 NOVITIATE SUPERIOR operative with one of the following options:",
     "group": 1,
-    "datacardId": "novitiates.novitiate-superior",
+    "datacardId": "novitiates.superior",
     "isLeader": true,
     "uniqueUnlessRole": true,
     "alwaysWeapons": []
@@ -416,7 +416,7 @@
  },
  "datacards": [
   {
-   "id": "novitiates.novitiate-superior",
+   "id": "novitiates.superior",
    "teamId": "novitiates",
    "name": "Novitiate Superior",
    "keywords": [
@@ -567,7 +567,7 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-superior.inspirational-example",
+     "id": "novitiates.superior.inspirational-example",
      "name": "Inspirational Example",
      "text": "Whenever this operative incapacitates an enemy operative, you gain 1 Faith point, or 2 Faith points if that enemy operative had a Wounds stat of 12 or more. This rule has no effect when using the Glorious Martyrdom firefight ploy."
     }
@@ -576,7 +576,7 @@
    "fluff": "A fully fledged Battle Sister of an Order Militant, a Superior has the task of leading Novitiates in battle. They make command decisions, steer the faith of their charges and serve as inspirational examples of how a warrior of the Adepta Sororitas acts at all times."
   },
   {
-   "id": "novitiates.novitiate-condemnor",
+   "id": "novitiates.condemnor",
    "teamId": "novitiates",
    "name": "Novitiate Condemnor",
    "keywords": [
@@ -651,12 +651,12 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-condemnor.null-rod",
+     "id": "novitiates.condemnor.null-rod",
      "name": "Null Rod",
      "text": "PSYCHIC ranged weapons cannot inflict damage on this operative. For the effects of PSYCHIC actions, this operative cannot be selected and is never treated as being within those actions’ required distances. Whenever an operative is within 6\" of this operative:\n\nThat operative cannot perform PSYCHIC actions or use PSYCHIC additional rules.\n\nThat operative cannot use PSYCHIC ranged weapons.\n\nPSYCHIC melee weapons have no weapon rules and cannot have Dmg stats higher than 3/4."
     },
     {
-     "id": "novitiates.novitiate-condemnor.anti-psyker",
+     "id": "novitiates.condemnor.anti-psyker",
      "name": "Anti-PSYKER",
      "text": "Whenever this weapon is being used against an operative that has the PSYKER keyword, add 1 to both Dmg stats of this weapon and it has the Lethal 5+ weapon rule."
     }
@@ -665,7 +665,7 @@
    "fluff": "Sorcerers and witches are among the Adepta Sororitas’ most hated foes. Such psychic abominations are terrible threats to the Emperor’s realm, and cutting them down is a key priority. Novitiates Condemnor are especially equipped to deal with this kind of enemy."
   },
   {
-   "id": "novitiates.novitiate-dialogus",
+   "id": "novitiates.dialogus",
    "teamId": "novitiates",
    "name": "Novitiate Dialogus",
    "keywords": [
@@ -724,13 +724,13 @@
    "abilities": [],
    "uniqueActions": [
     {
-     "id": "novitiates.novitiate-dialogus.act.stirring-rhetoric",
+     "id": "novitiates.dialogus.act.stirring-rhetoric",
      "name": "STIRRING RHETORIC",
      "ap": 1,
      "text": "SUPPORT. Select one other friendly NOVITIATE operative visible to and within 6\" of this operative, or within 6\" of your Auto-broadcaster marker. Until the end of that operative’s next activation, add 1 to its APL stat (to a maximum of 3 after all APL stat changes have been totalled).\n\nThis operative cannot perform this action while within control range of an enemy operative."
     },
     {
-     "id": "novitiates.novitiate-dialogus.act.auto-broadcaster",
+     "id": "novitiates.dialogus.act.auto-broadcaster",
      "name": "AUTO-BROADCASTER",
      "ap": 0,
      "text": "If your Auto-broadcaster marker isn’t in the killzone, place it within 8\" horizontally of this operative; otherwise, move your Auto-broadcaster marker up to 8\" horizontally. If this operative is removed from the killzone, remove your Auto-broadcaster marker from the killzone.\n\nWhenever an enemy operative within 3\" of your Auto-broadcaster marker is shooting, fighting or retaliating, your opponent cannot re-roll their attack dice.\n\nThis operative cannot perform this action while within control range of an enemy operative."
@@ -739,7 +739,7 @@
    "fluff": "These Novitiates are in training to join the Orders Dialogus, while learning warfare under the guidance of experienced Battle Sisters. Their training in cryptography makes them of great value to kill teams – they can unlock obscure ciphers and find hidden patterns in communiques."
   },
   {
-   "id": "novitiates.novitiate-duellist",
+   "id": "novitiates.duellist",
    "teamId": "novitiates",
    "name": "Novitiate Duellist",
    "keywords": [
@@ -801,7 +801,7 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-duellist.riposte",
+     "id": "novitiates.duellist.riposte",
      "name": "Riposte",
      "text": "Whenever you block with a critical success, you can also inflict damage equal to the weapon’s Critical Dmg stat on the enemy operative in that sequence."
     }
@@ -810,7 +810,7 @@
    "fluff": "Some Novitiates have a natural affinity for bladework, their reaction times and dexterity greater than that of their fellow warriors. They take to the field eager to prove their skill, wishing to claim the heads of the most capable enemies and emulate the warrior-saints of legend."
   },
   {
-   "id": "novitiates.novitiate-exactor",
+   "id": "novitiates.exactor",
    "teamId": "novitiates",
    "name": "Novitiate Exactor",
    "keywords": [
@@ -880,7 +880,7 @@
    "abilities": [],
    "uniqueActions": [
     {
-     "id": "novitiates.novitiate-exactor.act.whip-into-frenzy",
+     "id": "novitiates.exactor.act.whip-into-frenzy",
      "name": "WHIP INTO FRENZY",
      "ap": 1,
      "text": "Select one other friendly NOVITIATE operative (excluding SUPERIOR) visible to and within 3\" of this operative that isn’t currently benefitting from the effects of this action. Until the end of that operative’s next activation, add 1\" to its Move stat, it can perform two Fight actions during its next activation, and one of them can be free.\n\nThis operative cannot perform this action while within control range of an enemy operative."
@@ -889,7 +889,7 @@
    "fluff": "Some zealous Novitiates are given neural whips with which to inflict physical and mental anguish on the foe. On occasion, the bearer will turn these weapons on fellow Novitiates they feel are lacking in commitment and need to be dissuaded from lapses in bravery and faith."
   },
   {
-   "id": "novitiates.novitiate-hospitaller",
+   "id": "novitiates.hospitaller",
    "teamId": "novitiates",
    "name": "Novitiate Hospitaller",
    "keywords": [
@@ -953,14 +953,14 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-hospitaller.medic",
+     "id": "novitiates.hospitaller.medic",
      "name": "Medic!",
      "text": "The first time during each turning point that another friendly NOVITIATE operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. Subtract 1 from this and that operative’s APL stats until the end of their next activations respectively, and if this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
     }
    ],
    "uniqueActions": [
     {
-     "id": "novitiates.novitiate-hospitaller.act.chirurgeons-tools",
+     "id": "novitiates.hospitaller.act.chirurgeons-tools",
      "name": "CHIRURGEON’S TOOLS",
      "ap": 1,
      "text": "Select one friendly NOVITIATE operative within this operative’s control range to regain up to 2D3 lost wounds. It cannot be an operative that the Medic! rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
@@ -969,7 +969,7 @@
    "fluff": "Curing the physical and spiritual ills of the Imperium’s battlefield wounded is an onerous task, one that requires countless hours of practice. Novitiates seeking admission into the Orders Hospitaller hone their skills in the field, aiding their fellow Novitiates in whichever way they can."
   },
   {
-   "id": "novitiates.novitiate-militant",
+   "id": "novitiates.militant",
    "teamId": "novitiates",
    "name": "Novitiate Militant",
    "keywords": [
@@ -1048,7 +1048,7 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-militant.militant-faith",
+     "id": "novitiates.militant.militant-faith",
      "name": "Militant Faith",
      "text": "Whenever this operative is shooting, fighting or retaliating, if you use an ACT OF FAITH during that sequence and an enemy operative is incapacitated, the Faith points spent on that ACT OF FAITH are refunded. If you use the Icon of Faith equipment, Faith points are only refunded for one of those ACTS OF FAITH (your choice)."
     }
@@ -1057,7 +1057,7 @@
    "fluff": "Novitiates Militant are Battle Sisters in training. They have yet to earn the power armour and boltguns of fully fledged Battle Sisters, but are zealous warriors of the Emperor nonetheless, eager to join the ranks of their Order Militant."
   },
   {
-   "id": "novitiates.novitiate-penitent",
+   "id": "novitiates.penitent",
    "teamId": "novitiates",
    "name": "Novitiate Penitent",
    "keywords": [
@@ -1119,12 +1119,12 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-penitent.zealous-rage",
+     "id": "novitiates.penitent.zealous-rage",
      "name": "Zealous Rage",
      "text": "Whenever this operative is fighting with this weapon, it has the Ceaseless weapon rule."
     },
     {
-     "id": "novitiates.novitiate-penitent.absolution-through-destruction",
+     "id": "novitiates.penitent.absolution-through-destruction",
      "name": "Absolution Through Destruction",
      "text": "Whenever this operative performs the Fight action, if it isn’t incapacitated, it can immediately perform a free Fight action afterwards. This takes precedence over action restrictions, and you cannot perform more than two Fight actions in succession as a result of this rule. If this operative is benefitting from the effects of the Whip Into Frenzy action (see EXACTOR), this applies to each of the Fight actions from those effects."
     }
@@ -1133,7 +1133,7 @@
    "fluff": "Some Novitiates are ordered to wield brutal eviscerators as a mark of shame for minor transgressions. Urged to earn their redemption face-to -face with the enemy, such Sisters will fight with unrestrained fury to earn back their honour."
   },
   {
-   "id": "novitiates.novitiate-preceptor",
+   "id": "novitiates.preceptor",
    "teamId": "novitiates",
    "name": "Novitiate Preceptor",
    "keywords": [
@@ -1176,12 +1176,12 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-preceptor.unflinching-example",
+     "id": "novitiates.preceptor.unflinching-example",
      "name": "Unflinching Example",
      "text": "Whenever this operative incapacitates a ready enemy operative within its control range, you gain 1 Faith point, or 2 Faith points if that enemy operative had a Wounds stat of 12 or more."
     },
     {
-     "id": "novitiates.novitiate-preceptor.glorious-hymnal",
+     "id": "novitiates.preceptor.glorious-hymnal",
      "name": "Glorious Hymnal",
      "text": "SUPPORT. Whenever a friendly NOVITIATE operative is within 3\" of this operative, that friendly operative’s weapons have the Severe weapon rule."
     }
@@ -1190,7 +1190,7 @@
    "fluff": "These Novitiates are expected to rigidly enforce their Order’s precepts, ensuring their fellows faithfully adhere to the prescribed standards. They are often chosen as their Superior’s second in command, and serve as exemplars by eagerly striding into the fray to smite the Emperor’s foes."
   },
   {
-   "id": "novitiates.novitiate-pronatus",
+   "id": "novitiates.pronatus",
    "teamId": "novitiates",
    "name": "Novitiate Pronatus",
    "keywords": [
@@ -1243,12 +1243,12 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-pronatus.relic-seeker",
+     "id": "novitiates.pronatus.relic-seeker",
      "name": "Relic Seeker",
      "text": "Once during each of this operative’s activations, it can perform the Pick Up Marker, Place Marker or a mission action for 1 less AP."
     },
     {
-     "id": "novitiates.novitiate-pronatus.divine-acquisition",
+     "id": "novitiates.pronatus.divine-acquisition",
      "name": "Divine Acquisition",
      "text": "Once per turning point, when this operative performs a mission action that requires it to control an objective or mission marker, you gain a number of Faith points equal to the turning point number."
     }
@@ -1257,7 +1257,7 @@
    "fluff": "To serve in the Orders Pronatus a candidate must learn everything there is to know of countless kinds of relics, as well being highly skilled warriors. They are expected to retrieve and guard highly precious – and sometimes extremely dangerous – artefacts."
   },
   {
-   "id": "novitiates.novitiate-purgatus",
+   "id": "novitiates.purgatus",
    "teamId": "novitiates",
    "name": "Novitiate Purgatus",
    "keywords": [
@@ -1319,7 +1319,7 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-purgatus.purge-with-flame",
+     "id": "novitiates.purgatus.purge-with-flame",
      "name": "Purge with Flame",
      "text": "Once per turning point, you can use the inferno firefight ploy for 0CP if this is the specified friendly NOVITIATE operative."
     }
@@ -1328,7 +1328,7 @@
    "fluff": "Novitiates Purgatus have the holy duty of bringing cleansing flame to the enemies of Mankind. When they unleash their Ministorum flamers at the enemy, they leave little more than ash behind."
   },
   {
-   "id": "novitiates.novitiate-reliquarius",
+   "id": "novitiates.reliquarius",
    "teamId": "novitiates",
    "name": "Novitiate Reliquarius",
    "keywords": [
@@ -1381,14 +1381,14 @@
    ],
    "abilities": [
     {
-     "id": "novitiates.novitiate-reliquarius.icon-bearer",
+     "id": "novitiates.reliquarius.icon-bearer",
      "name": "Icon Bearer",
      "text": "Whenever determining control of a marker, treat this operative’s APL stat as 1 higher. Note this isn’t a change to its APL stat, so any changes are cumulative with this."
     }
    ],
    "uniqueActions": [
     {
-     "id": "novitiates.novitiate-reliquarius.act.raise-icon",
+     "id": "novitiates.reliquarius.act.raise-icon",
      "name": "RAISE ICON",
      "ap": 1,
      "text": "You gain 1 Faith point. If this operative controls an objective marker, you also gain a number of Faith points equal to the turning point number.\n\nThis operative cannot perform this action more than once per turning point, and cannot perform it while within control range of an enemy operative."

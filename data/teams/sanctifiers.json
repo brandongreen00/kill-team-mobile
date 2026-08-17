@@ -19,12 +19,12 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/sanctifiers/",
- "scrapedAt": "2026-08-17T03:59:22+00:00",
+ "scrapedAt": "2026-08-17T04:08:58+00:00",
  "source": "cache",
  "selection": {
   "leader": {
    "role": "CONFESSOR",
-   "datacardId": "sanctifiers.sanctifier-confessor",
+   "datacardId": "sanctifiers.confessor",
    "count": 1,
    "loadouts": [],
    "optionGroups": [],
@@ -93,7 +93,7 @@
     "requires": [],
     "rawText": "1 SANCTIFIER CHERUB operative",
     "group": 2,
-    "datacardId": "sanctifiers.sanctifier-cherub",
+    "datacardId": "sanctifiers.cherub",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -114,7 +114,7 @@
     "requires": [],
     "rawText": "CONFLAGRATOR",
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-conflagrator",
+    "datacardId": "sanctifiers.conflagrator",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -136,7 +136,7 @@
     "requires": [],
     "rawText": "DEATH CULT ASSASSIN",
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-death-cult-assassin",
+    "datacardId": "sanctifiers.death-cult-assassin",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -158,7 +158,7 @@
     "requires": [],
     "rawText": "DRILL ABBOT",
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-drill-abbot",
+    "datacardId": "sanctifiers.drill-abbot",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -179,7 +179,7 @@
     "requires": [],
     "rawText": "MIRACULIST",
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-miraculist",
+    "datacardId": "sanctifiers.miraculist",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -227,7 +227,7 @@
      "option 'Ministorum flamer; gun butt; holy relic': ['holy relic'] is not a weapon on the datacard (kept verbatim in `items`)"
     ],
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-missionary",
+    "datacardId": "sanctifiers.missionary",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": []
@@ -271,7 +271,7 @@
      "option 'Meltagun; chainsword; holy relic': ['holy relic'] is not a weapon on the datacard (kept verbatim in `items`)"
     ],
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-missionary",
+    "datacardId": "sanctifiers.missionary",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": []
@@ -290,7 +290,7 @@
     "requires": [],
     "rawText": "PERSECUTOR",
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-persecutor",
+    "datacardId": "sanctifiers.persecutor",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -312,7 +312,7 @@
     "requires": [],
     "rawText": "PREACHER",
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-preacher",
+    "datacardId": "sanctifiers.preacher",
     "isLeader": false,
     "uniqueUnlessRole": false,
     "alwaysWeapons": [
@@ -334,7 +334,7 @@
     "requires": [],
     "rawText": "RELIQUANT",
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-reliquant",
+    "datacardId": "sanctifiers.reliquant",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -356,7 +356,7 @@
     "requires": [],
     "rawText": "SALVATIONIST",
     "group": 3,
-    "datacardId": "sanctifiers.sanctifier-salvationist",
+    "datacardId": "sanctifiers.salvationist",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -379,7 +379,7 @@
     "requires": [],
     "rawText": "1 SANCTIFIER CONFESSOR operative",
     "group": 1,
-    "datacardId": "sanctifiers.sanctifier-confessor",
+    "datacardId": "sanctifiers.confessor",
     "isLeader": true,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -422,7 +422,7 @@
  },
  "datacards": [
   {
-   "id": "sanctifiers.sanctifier-confessor",
+   "id": "sanctifiers.confessor",
    "teamId": "sanctifiers",
    "name": "Sanctifier Confessor",
    "keywords": [
@@ -466,12 +466,12 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-confessor.lead-the-procession",
+     "id": "sanctifiers.confessor.lead-the-procession",
      "name": "Lead the Procession",
      "text": "In each turning point after the first, whenever this operative is an ORATOR and performs the Charge, Fall Back or Reposition action during its activation, you can use this rule before it moves. If you do, determine each other friendly SANCTIFIER operative that’s benefitting from the SERMON and is visible to this operative (or vice versa). After this operative ends that action, each of those friendly SANCTIFIER operatives can immediately perform a free Charge, Fall Back or Reposition action in an order of your choice (choose separately for each), but each cannot move more than or be removed and set up more than 3\" and must end that move in a location where they are still benefitting from the SERMON. If this operative is incapacitated before this rule is fully resolved, e.g. from the Guard action’s interruption (see close quarters rules, Kill Team Core Book), don’t remove it from the killzone until this rule has been resolved."
     },
     {
-     "id": "sanctifiers.sanctifier-confessor.commanding-declamation",
+     "id": "sanctifiers.confessor.commanding-declamation",
      "name": "Commanding Declamation",
      "text": "Whenever an enemy operative would perform an action during an activation or counteraction while visible to and within 6\" of this operative, you can use this rule. If you do, roll one D6: if the result is higher than that enemy operative’s APL stat:\n\nIt cannot perform that action during that activation/counteraction (the AP spent on it isn’t refunded). If it’s a counteraction, that counteraction ends.\n\nYou cannot use this rule again during the battle."
     }
@@ -480,7 +480,7 @@
    "fluff": "Amongst the most zealous of the Imperium’s clergy, Confessors are wandering priests with decades of experience in rooting out traitors and heretics. They are skilled orators possessed of towering charisma."
   },
   {
-   "id": "sanctifiers.sanctifier-cherub",
+   "id": "sanctifiers.cherub",
    "teamId": "sanctifiers",
    "name": "Sanctifier Cherub",
    "keywords": [
@@ -519,19 +519,19 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-cherub.cherub",
+     "id": "sanctifiers.cherub.cherub",
      "name": "Cherub",
      "text": "Whenever determining control of an objective marker, treat this operative’s APL stat as 1 lower. Note this isn’t a change to its APL stat, so any changes are cumulative with this.\n\nWhenever this operative has a Conceal order and is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\".\n\nThis operative cannot use any weapons that aren’t on its datacard, or perform unique actions other than Incentivise."
     },
     {
-     "id": "sanctifiers.sanctifier-cherub.fly",
+     "id": "sanctifiers.cherub.fly",
      "name": "Fly",
      "text": "Whenever this operative is performing the Charge, Fall Back or Reposition action, it can FLY. If it does, don’t move it. Instead, remove it from the killzone and set it back up wholly within a distance equal to its Move stat horizontally of its original location (in a killzone that uses the close quarters rules, e.g. Killzone: Tomb World, this distance cannot be measured over or through Wall terrain). Note that it gains no additional distance when performing the Charge action. It must be set up in a location it can be placed, and unless it’s the Charge action, it cannot be set up within control range of an enemy operative."
     }
    ],
    "uniqueActions": [
     {
-     "id": "sanctifiers.sanctifier-cherub.act.incentivise",
+     "id": "sanctifiers.cherub.act.incentivise",
      "name": "INCENTIVISE",
      "ap": 1,
      "text": "SUPPORT. Select one other friendly SANCTIFIER operative (excluding CONFESSOR, DEATH CULT ASSASSIN, MIRACULIST and ORATOR) visible to and within 2\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
@@ -540,7 +540,7 @@
    "fluff": "Grown in flesh-vats, Cherubim are diminutive servitors that undertake a wide variety of ritual tasks and duties. Those that accompany Sanctifiers are often armed with incentivisers to disable fleeing foes."
   },
   {
-   "id": "sanctifiers.sanctifier-conflagrator",
+   "id": "sanctifiers.conflagrator",
    "teamId": "sanctifiers",
    "name": "Sanctifier Conflagrator",
    "keywords": [
@@ -639,12 +639,12 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-conflagrator.twin-torrent",
+     "id": "sanctifiers.conflagrator.twin-torrent",
      "name": "Twin Torrent",
      "text": "Select up to two different valid targets that aren’t within control range of friendly operatives. Shoot with this weapon against both of them in an order of your choice (roll each sequence separately). Torrent 0\" means you cannot select secondary targets, but this weapon still has the Torrent weapon rule for all other rules purposes, e.g. the Condensed Stronghold rule (see Killzone: Volkus, Kill Team Core Book)."
     },
     {
-     "id": "sanctifiers.sanctifier-conflagrator.sanctification-rack",
+     "id": "sanctifiers.conflagrator.sanctification-rack",
      "name": "Sanctification Rack",
      "text": "This operative can perform the Sanctification Orb action (see faction equipment). Doing so in this manner doesn’t count towards the once per turning point limit (i.e. if you also select that equipment for other operatives)."
     }
@@ -653,7 +653,7 @@
    "fluff": "It is said by many a Ministorum Priest that the taint of heresy can only be cleansed in fire. Conflagrators believe wholeheartedly in this credo, wielding hand flamers into battle and incinerating the corrupt without mercy."
   },
   {
-   "id": "sanctifiers.sanctifier-death-cult-assassin",
+   "id": "sanctifiers.death-cult-assassin",
    "teamId": "sanctifiers",
    "name": "Sanctifier Death Cult Assassin",
    "keywords": [
@@ -710,14 +710,14 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-death-cult-assassin.bladed-stance",
+     "id": "sanctifiers.death-cult-assassin.bladed-stance",
      "name": "Bladed Stance",
      "text": "Whenever this operative is fighting or retaliating, you can resolve one of your successes before the normal order. If you do, that success must be used to block."
     }
    ],
    "uniqueActions": [
     {
-     "id": "sanctifiers.sanctifier-death-cult-assassin.act.trained-assassin",
+     "id": "sanctifiers.death-cult-assassin.act.trained-assassin",
      "name": "TRAINED ASSASSIN",
      "ap": 1,
      "text": "Change this operative’s order.\n\nThis operative cannot perform this action while within control range of an enemy operative."
@@ -726,7 +726,7 @@
    "fluff": "Members of extreme sects within the Imperial Cult, Death Cult Assassins are cold-blooded slayers who view killing as an act of worship. In battle, they wield a variety of ritual weapons with skill and grace, leaving a trail of mutilated corpses in their wake."
   },
   {
-   "id": "sanctifiers.sanctifier-drill-abbot",
+   "id": "sanctifiers.drill-abbot",
    "teamId": "sanctifiers",
    "name": "Sanctifier Drill Abbot",
    "keywords": [
@@ -769,12 +769,12 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-drill-abbot.schola-progenium-disciplinarian",
+     "id": "sanctifiers.drill-abbot.schola-progenium-disciplinarian",
      "name": "Schola Progenium Disciplinarian",
      "text": "Whenever a friendly SANCTIFIER operative is within 6\" of this operative, you can ignore any changes to that operative’s stats from being injured (including its weapons’ stats)."
     },
     {
-     "id": "sanctifiers.sanctifier-drill-abbot.null-skull",
+     "id": "sanctifiers.drill-abbot.null-skull",
      "name": "Null Skull",
      "text": "Whenever an enemy operative is within 4\" of this operative, that enemy operative’s APL stat cannot be added to (remove all positive APL stat changes it has). If an enemy operative that’s more than 4\" from this operative has a positive APL stat change and your opponent spends its final AP to move that operative within 4\" of this operative, this can cause your opponent to have spent more AP than its APL stat – this is permitted in this situation."
     }
@@ -783,7 +783,7 @@
    "fluff": "Drill Abbots are tasked by the Schola Progenium with turning recruits into fanatical warriors. Veterans of frontline combat, they are commonly recruited to serve within Sanctifier bands as enforcers of military discipline amongst often ad hoc units."
   },
   {
-   "id": "sanctifiers.sanctifier-persecutor",
+   "id": "sanctifiers.persecutor",
    "teamId": "sanctifiers",
    "name": "Sanctifier Persecutor",
    "keywords": [
@@ -854,12 +854,12 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-persecutor.merciless-castigation",
+     "id": "sanctifiers.persecutor.merciless-castigation",
      "name": "Merciless Castigation",
      "text": "The first time this operative performs the Fight action during each of its activations, if neither it nor the enemy operative in that sequence is incapacitated, this operative can immediately perform a free Fight action afterwards, but you cannot select any other enemy operative to fight against during that action (and only if it’s still valid to fight against). This takes precedence over action restrictions."
     },
     {
-     "id": "sanctifiers.sanctifier-persecutor.fanatical-retribution",
+     "id": "sanctifiers.persecutor.fanatical-retribution",
      "name": "Fanatical Retribution",
      "text": "If this operative is incapacitated during the Fight action, you can strike the enemy operative in that sequence with one of your unresolved successes before this operative is removed from the killzone."
     }
@@ -868,7 +868,7 @@
    "fluff": "Possessed of frightening zeal, Persecutors relentlessly pursue their heretic prey. Once caught, they butcher and incinerate their victim with a two-handed eviscerator, affixed with a hand flamer."
   },
   {
-   "id": "sanctifiers.sanctifier-miraculist",
+   "id": "sanctifiers.miraculist",
    "teamId": "sanctifiers",
    "name": "Sanctifier Miraculist",
    "keywords": [
@@ -1003,12 +1003,12 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-miraculist.wreathed",
+     "id": "sanctifiers.miraculist.wreathed",
      "name": "Wreathed",
      "text": "This operative can perform the Shoot action with this weapon while within control range of an enemy operative. Don’t select a valid target. Instead, this operative is always the primary target, but only shoot against secondary targets and they cannot be in cover or obscured (in other words, determine Blast from this operative, but this operative isn’t affected)."
     },
     {
-     "id": "sanctifiers.sanctifier-miraculist.miracle",
+     "id": "sanctifiers.miraculist.miracle",
      "name": "Miracle",
      "text": "The first time this operative would be incapacitated during the battle, it’s not incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. All remaining attack dice are discarded (including yours if this operative is fighting or retaliating), then this operative can immediately perform a free Dash or Fall Back action (for the latter, it cannot move more than 3\"), even if it’s performed an action that prevents it from performing those actions."
     }
@@ -1017,7 +1017,7 @@
    "fluff": "On occasion, a Confessor will encounter an individual in whom they believe the Emperor’s divine power is made manifest. These strange beings display unnatural powers and insight that often prove invaluable."
   },
   {
-   "id": "sanctifiers.sanctifier-missionary",
+   "id": "sanctifiers.missionary",
    "teamId": "sanctifiers",
    "name": "Sanctifier Missionary",
    "keywords": [
@@ -1218,12 +1218,12 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-missionary.holy-relic",
+     "id": "sanctifiers.missionary.holy-relic",
      "name": "Holy Relic",
      "text": "If this operative has a holy relic, it’s always benefitting from the SERMON."
     },
     {
-     "id": "sanctifiers.sanctifier-missionary.spread-the-word-of-the-god-emperor",
+     "id": "sanctifiers.missionary.spread-the-word-of-the-god-emperor",
      "name": "Spread the Word of the God-Emperor",
      "text": "Whenever this operative is more than 6\" from other friendly operatives, its weapons have the Severe weapon rule."
     }
@@ -1232,7 +1232,7 @@
    "fluff": "Missionaries are tasked with spreading the Imperial faith beyond the boundaries of the Imperium. Most are veterans of countless border conflicts, and as such bear a variety of military equipment acquired along the way."
   },
   {
-   "id": "sanctifiers.sanctifier-preacher",
+   "id": "sanctifiers.preacher",
    "teamId": "sanctifiers",
    "name": "Sanctifier Preacher",
    "keywords": [
@@ -1298,7 +1298,7 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-preacher.defend-the-faith",
+     "id": "sanctifiers.preacher.defend-the-faith",
      "name": "Defend the Faith",
      "text": "Whenever this operative controls an objective marker, it’s benefitting from the SERMON."
     }
@@ -1307,7 +1307,7 @@
    "fluff": "Preachers are responsible for tending to the spiritual needs of the Imperium’s countless worlds, and are commonly attached to military units to bolster their resolve. They are also tasked with rooting out psykers, mutants and heretics, and overseeing their execution."
   },
   {
-   "id": "sanctifiers.sanctifier-reliquant",
+   "id": "sanctifiers.reliquant",
    "teamId": "sanctifiers",
    "name": "Sanctifier Reliquant",
    "keywords": [
@@ -1373,12 +1373,12 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-reliquant.cult-icon",
+     "id": "sanctifiers.reliquant.cult-icon",
      "name": "Cult Icon",
      "text": "Whenever determining control of a marker within 4\" of this operative, treat the total APL stat of friendly SANCTIFIER operatives that contest it as 1 higher if at least one friendly SANCTIFIER operative contests that marker. Note this isn’t a change to the APL stat, so any changes are cumulative with this."
     },
     {
-     "id": "sanctifiers.sanctifier-reliquant.imperial-cult-devotion",
+     "id": "sanctifiers.reliquant.imperial-cult-devotion",
      "name": "Imperial Cult Devotion",
      "text": "Once per turning point, when a ready friendly SANCTIFIER operative is incapacitated while visible to and within 6\" of this operative, you can use this rule. If you do, before that operative is removed from the killzone, it can perform one free action (excluding Fight), and you can change its order to do so. It’s then removed from the killzone as normal."
     }
@@ -1387,7 +1387,7 @@
    "fluff": "Sanctifier Reliquants bear to battle relics harvested from the bodies of Imperial martyrs. When borne aloft, these invaluable symbols inspire the faithful, inflaming their zeal and banishing fear and doubt from their minds."
   },
   {
-   "id": "sanctifiers.sanctifier-salvationist",
+   "id": "sanctifiers.salvationist",
    "teamId": "sanctifiers",
    "name": "Sanctifier Salvationist",
    "keywords": [
@@ -1422,14 +1422,14 @@
    ],
    "abilities": [
     {
-     "id": "sanctifiers.sanctifier-salvationist.conversion-field",
+     "id": "sanctifiers.salvationist.conversion-field",
      "name": "Conversion Field",
      "text": "Whenever an operative more than 6\" from this operative is shooting a friendly SANCTIFIER operative within 6\" of this operative, improve that friendly operative’s Save stat by 1."
     }
    ],
    "uniqueActions": [
     {
-     "id": "sanctifiers.sanctifier-salvationist.act.medikit",
+     "id": "sanctifiers.salvationist.act.medikit",
      "name": "MEDIKIT",
      "ap": 1,
      "text": "Select one friendly SANCTIFIER operative within this operative’s control range to regain up to 2D3 lost wounds.\n\nThis operative cannot perform this action while within control range of an enemy operative."

@@ -6,6 +6,7 @@
  * decision panel docks under the board so a reactive window never hides the dice.
  */
 import { useEffect, useState } from 'preact/hooks';
+import { useIsDesktop } from './useMedia.ts';
 import { Board } from './Board.tsx';
 import { SequenceOverlay } from './SequenceOverlay.tsx';
 import { DecisionPanel } from './DecisionPanel.tsx';
@@ -27,6 +28,7 @@ export function App() {
   const [store, setLocalStore] = useState<Store | null>(null);
   const [, force] = useState(0);
   const [tab, setTab] = useState<Tab>('board');
+  const isDesktop = useIsDesktop();
   const [placement, setPlacement] = useState<{ operativeId: string; player: PlayerId } | null>(null);
   /** Targeting-line inspector: tap a shooter, then a target. */
   const [inspect, setInspect] = useState<{ from?: string; to?: string }>({});
@@ -169,24 +171,28 @@ export function App() {
         {decision && <span class="tag" style={{ color: 'var(--accent)' }}>decision: {decision.who}</span>}
       </header>
 
-      {/* Desktop: board centre, rails either side. Phone: one page at a time. */}
-      <div class="layout desktop-only">
-        <aside class="page">{playPane}</aside>
-        {boardPane}
-        <aside class="page">{logPane}</aside>
-      </div>
+      {/* Only one layout mounts at a time: the board is expensive, and two live copies
+          would also make every DOM query ambiguous. */}
+      {isDesktop ? (
+        <div class="layout">
+          <aside class="page">{playPane}</aside>
+          {boardPane}
+          <aside class="page">{logPane}</aside>
+        </div>
+      ) : (
+        <>
+          {tab === 'board' && boardPane}
+          {tab === 'board' && decision && (
+            <div class="page dock">
+              <DecisionPanel store={store} decision={decision} />
+            </div>
+          )}
+          {tab === 'play' && <main class="page">{playPane}</main>}
+          {tab === 'log' && <main class="page">{logPane}</main>}
+        </>
+      )}
 
-      <div class="phone-only" style={{ display: 'contents' }}>
-        <div style={{ display: tab === 'board' ? 'contents' : 'none' }}>{boardPane}</div>
-        {tab === 'board' && decision && (
-          <div class="page dock">
-            <DecisionPanel store={store} decision={decision} />
-          </div>
-        )}
-        {tab === 'play' && <main class="page">{playPane}</main>}
-        {tab === 'log' && <main class="page">{logPane}</main>}
-      </div>
-
+      {!isDesktop && (
       <nav class="m-tabs" role="tablist">
         {(['board', 'play', 'log'] as Tab[]).map((t) => (
           <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>
@@ -195,6 +201,7 @@ export function App() {
           </button>
         ))}
       </nav>
+      )}
     </>
   );
 }

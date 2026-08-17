@@ -246,6 +246,13 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       team.passedGambit = false;
       next.teams[otherPlayer(intent.player)].passedGambit = false;
       log(next, { kind: 'ploy', player: intent.player, text: `STRATEGIC GAMBIT: ${ply?.name ?? intent.gambitId}` });
+      ctx.hooks.emit('onPloyUsed', next, {
+        state: next,
+        player: intent.player,
+        ployId: intent.gambitId,
+        kind: 'strategy',
+        ...(intent.data ? { data: intent.data } : {}),
+      });
       return ok(next);
     }
 
@@ -459,6 +466,13 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       team.cp -= ply.cp;
       team.ploysUsedTP.push(ply.id);
       log(next, { kind: 'ploy', player: intent.player, text: `${ply.name} (${ply.cp}CP)` });
+      ctx.hooks.emit('onPloyUsed', next, {
+        state: next,
+        player: intent.player,
+        ployId: ply.id,
+        kind: ply.kind === 'strategy' ? 'strategy' : 'firefight',
+        ...(intent.data ? { data: intent.data } : {}),
+      });
       return ok(next);
     }
 

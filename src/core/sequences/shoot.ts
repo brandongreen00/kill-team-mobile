@@ -195,16 +195,44 @@ export function validTargets(
   if (!w) return [];
   const profile = findProfile(w, profileName);
   if (!profile) return [];
-  const rules = effectiveRules(ctx, state, profile);
   return aliveOperatives(state, otherPlayer(attacker.player))
-    .map((target) => ({ target, check: checkTarget(ctx, state, attacker, target, profile, rules) }))
+    .map((target) => ({
+      target,
+      check: checkTarget(ctx, state, attacker, target, profile, effectiveRules(ctx, state, profile, { operative: attacker, target, weaponName })),
+    }))
     .filter((r) => r.check.valid);
 }
 
+/** Who is using the weapon, so team rules can scope their grants. */
+export interface WeaponUse {
+  operative?: OperativeState;
+  target?: OperativeState;
+  weaponName?: string;
+  /** The defender's weapon in a fight. */
+  retaliating?: boolean;
+}
+
 /** Weapon rules after killzone/hook modifications (Condensed Environment, granted rules). */
-export function effectiveRules(ctx: GameContext, state: GameState, profile: WeaponProfile): WeaponRule[] {
+export function effectiveRules(
+  ctx: GameContext,
+  state: GameState,
+  profile: WeaponProfile,
+  use: WeaponUse = {},
+): WeaponRule[] {
   let rules = [...profile.rules];
   if (state.map.closeQuarters) rules = condensedEnvironmentRules(rules);
+  if (use.operative) {
+    rules = ctx.hooks.emit('onWeaponRules', state, {
+      state,
+      operative: use.operative,
+      ...(use.target ? { target: use.target } : {}),
+      weaponName: use.weaponName ?? '',
+      profile,
+      type: profile.type,
+      retaliating: use.retaliating ?? false,
+      rules,
+    }).rules;
+  }
   return rules;
 }
 
@@ -225,9 +253,9 @@ export function startShoot(
   if (!w) return { ok: false, reason: `operative has no ranged weapon '${weaponName}'` };
   const profile = findProfile(w, profileName);
   if (!profile) return { ok: false, reason: `weapon '${weaponName}' has no profile '${profileName}'` };
-  const rules = effectiveRules(ctx, state, profile);
   const target = state.operatives[targetId];
   if (!target || target.removed) return { ok: false, reason: 'no such target' };
+  const rules = effectiveRules(ctx, state, profile, { operative: attacker, target, weaponName });
 
   const check = checkTarget(ctx, state, attacker, target, profile, rules, { pointBlank: opts.pointBlank ?? false });
   if (!check.valid) return { ok: false, reason: check.reason ?? 'not a valid target' };
@@ -321,7 +349,7 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
     }
     const w = weaponsOf(ctx, state, attacker, 'ranged').find((x) => x.name === seq.weaponName)!;
     const profile = findProfile(w, seq.profileName)!;
-    const rules = effectiveRules(ctx, state, profile);
+    const rules = effectiveRules(ctx, state, profile, { operative: attacker, target, weaponName: seq.weaponName });
     const actx = attackContext(ctx, state, seq, attacker, target, profile, rules);
 
     switch (seq.step) {
@@ -738,7 +766,7 @@ function nextTarget(ctx: GameContext, state: GameState, seq: ShootSequence): voi
   const attacker = state.operatives[seq.attackerId]!;
   const w = weaponsOf(ctx, state, attacker, 'ranged').find((x) => x.name === seq.weaponName);
   const profile = w ? findProfile(w, seq.profileName) : undefined;
-  const rules = profile ? effectiveRules(ctx, state, profile) : [];
+  const rules = profile ? effectiveRules(ctx, state, profile, { operative: attacker, weaponName: seq.weaponName }) : [];
 
   seq.resolvedTargets.push(seq.targetId);
   const nextId = seq.queue.shift();

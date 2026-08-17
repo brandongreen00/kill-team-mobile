@@ -19,12 +19,12 @@
   }
  ],
  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/kommandos/",
- "scrapedAt": "2026-08-17T03:59:23+00:00",
+ "scrapedAt": "2026-08-17T04:08:59+00:00",
  "source": "cache",
  "selection": {
   "leader": {
    "role": "BOSS NOB",
-   "datacardId": "kommandos.kommando-boss-nob",
+   "datacardId": "kommandos.boss-nob",
    "count": 1,
    "loadouts": [
     {
@@ -99,7 +99,7 @@
     "requires": [],
     "rawText": "BOMB SQUIG*",
     "group": 2,
-    "datacardId": "kommandos.kommando-bomb-squig",
+    "datacardId": "kommandos.bomb-squig",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -121,7 +121,7 @@
     "requires": [],
     "rawText": "BOY",
     "group": 2,
-    "datacardId": "kommandos.kommando-boy",
+    "datacardId": "kommandos.boy",
     "isLeader": false,
     "uniqueUnlessRole": false,
     "alwaysWeapons": [
@@ -143,7 +143,7 @@
     "requires": [],
     "rawText": "BREACHA BOY",
     "group": 2,
-    "datacardId": "kommandos.kommando-breacha-boy",
+    "datacardId": "kommandos.breacha-boy",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -165,7 +165,7 @@
     "requires": [],
     "rawText": "BURNA BOY",
     "group": 2,
-    "datacardId": "kommandos.kommando-burna-boy",
+    "datacardId": "kommandos.burna-boy",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -187,7 +187,7 @@
     "requires": [],
     "rawText": "COMMS BOY",
     "group": 2,
-    "datacardId": "kommandos.kommando-comms-boy",
+    "datacardId": "kommandos.comms-boy",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -209,7 +209,7 @@
     "requires": [],
     "rawText": "DAKKA BOY",
     "group": 2,
-    "datacardId": "kommandos.kommando-dakka-boy",
+    "datacardId": "kommandos.dakka-boy",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -231,7 +231,7 @@
     "requires": [],
     "rawText": "GROT*",
     "group": 2,
-    "datacardId": "kommandos.kommando-grot",
+    "datacardId": "kommandos.grot",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -252,7 +252,7 @@
     "requires": [],
     "rawText": "ROKKIT BOY",
     "group": 2,
-    "datacardId": "kommandos.kommando-rokkit-boy",
+    "datacardId": "kommandos.rokkit-boy",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -274,7 +274,7 @@
     "requires": [],
     "rawText": "SLASHA BOY",
     "group": 2,
-    "datacardId": "kommandos.kommando-slasha-boy",
+    "datacardId": "kommandos.slasha-boy",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -296,7 +296,7 @@
     "requires": [],
     "rawText": "SNIPA BOY",
     "group": 2,
-    "datacardId": "kommandos.kommando-snipa-boy",
+    "datacardId": "kommandos.snipa-boy",
     "isLeader": false,
     "uniqueUnlessRole": true,
     "alwaysWeapons": [
@@ -337,7 +337,7 @@
     "requires": [],
     "rawText": "1 KOMMANDO BOSS NOB operative with one of the following options:",
     "group": 1,
-    "datacardId": "kommandos.kommando-boss-nob",
+    "datacardId": "kommandos.boss-nob",
     "isLeader": true,
     "uniqueUnlessRole": true,
     "alwaysWeapons": []
@@ -372,7 +372,7 @@
  },
  "datacards": [
   {
-   "id": "kommandos.kommando-boss-nob",
+   "id": "kommandos.boss-nob",
    "teamId": "kommandos",
    "name": "Kommando Boss Nob",
    "keywords": [
@@ -447,14 +447,14 @@
    ],
    "abilities": [
     {
-     "id": "kommandos.kommando-boss-nob.krumpin-time",
+     "id": "kommandos.boss-nob.krumpin-time",
      "name": "Krumpin’ Time",
      "text": "This operative can perform two Fight actions during its activation"
     }
    ],
    "uniqueActions": [
     {
-     "id": "kommandos.kommando-boss-nob.act.get-it-dun",
+     "id": "kommandos.boss-nob.act.get-it-dun",
      "name": "GET IT DUN!",
      "ap": 1,
      "text": "SUPPORT. Select one other friendly KOMMANDO operative (excluding BOMB SQUIG) visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative, or while counteracting."
@@ -463,7 +463,7 @@
    "fluff": "The sneakiest of sneaky gits, Kommando Nobs are both brutal and cunning enough to boss about the most conniving of their species."
   },
   {
-   "id": "kommandos.kommando-bomb-squig",
+   "id": "kommandos.bomb-squig",
    "teamId": "kommandos",
    "name": "Kommando Bomb Squig",
    "keywords": [
@@ -524,22 +524,22 @@
    ],
    "abilities": [
     {
-     "id": "kommandos.kommando-bomb-squig.explosive",
+     "id": "kommandos.bomb-squig.explosive",
      "name": "Explosive",
      "text": "This operative can perform the Shoot action with this weapon while within control range of an enemy operative. Don’t select a valid target. Instead, this operative is always the primary target and cannot be in cover or obscured."
     },
     {
-     "id": "kommandos.kommando-bomb-squig.boom",
+     "id": "kommandos.bomb-squig.boom",
      "name": "Boom!",
      "text": "If this operative is incapacitated during a battle in which it hasn’t used its explosives, roll one D6, or two D6 if you wish. If any result is a 4+, this operative performs a free Shoot action with its explosives before it’s removed from the killzone."
     },
     {
-     "id": "kommandos.kommando-bomb-squig.stoopid",
+     "id": "kommandos.bomb-squig.stoopid",
      "name": "Stoopid",
      "text": "In the Firefight phase, whenever you determine this operative’s order, you cannot select Conceal. This operative cannot perform any actions other than Charge, Dash, Fight, Reposition and Shoot. It cannot use any weapons that aren’t on its datacard."
     },
     {
-     "id": "kommandos.kommando-bomb-squig.expendable",
+     "id": "kommandos.bomb-squig.expendable",
      "name": "Expendable",
      "text": "This operative is ignored for your opponent’s kill/ elimination op (when it’s incapacitated, and when determining your starting number of operatives). It’s also ignored for victory conditions and scoring VPs if either require operatives to ‘escape’, ‘survive’ or be incapacitated by enemy operatives (if it escapes/survives/is incapacitated, determining how many operatives must escape/survive/be incapacitated, etc.)."
     }
@@ -548,7 +548,7 @@
    "fluff": "Bomb squigs are among the most dangerous of their kind. In addition to being voracious predators, as the name suggests they carry all manner of explosives. In battle they race for the foe, blowing up enemy troops and destroying their defences."
   },
   {
-   "id": "kommandos.kommando-boy",
+   "id": "kommandos.boy",
    "teamId": "kommandos",
    "name": "Kommando Boy",
    "keywords": [
@@ -600,7 +600,7 @@
    ],
    "abilities": [
     {
-     "id": "kommandos.kommando-boy.taktical-wot-notz",
+     "id": "kommandos.boy.taktical-wot-notz",
      "name": "Taktical Wot-notz",
      "text": "You can do each of the following once per turning point:\n\nOne friendly KOMMANDO BOY operative can perform the Smoke Grenade action.\n\nOne friendly KOMMANDO BOY operative can perform the Stun Grenade action.\n\nThe rules for these actions are found in universal equipment. Performing these actions using this rule doesn’t count towards their action limits (i.e. if you also select those grenades from equipment)."
     }
@@ -609,7 +609,7 @@
    "fluff": "Kommandos epitomise the Orky virtue of low cunning. Few things make them happier than sneaking up on an unsuspecting enemy and hacking, slashing and shooting before the foe can strike back."
   },
   {
-   "id": "kommandos.kommando-breacha-boy",
+   "id": "kommandos.breacha-boy",
    "teamId": "kommandos",
    "name": "Kommando Breacha Boy",
    "keywords": [
@@ -675,7 +675,7 @@
    "abilities": [],
    "uniqueActions": [
     {
-     "id": "kommandos.kommando-breacha-boy.act.breach",
+     "id": "kommandos.breacha-boy.act.breach",
      "name": "BREACH",
      "ap": 1,
      "text": "Place one of your Breach markers within this operative’s control range as close as possible to a terrain feature within control range of it. Whenever an operative is within 1\" of that marker, it treats parts of that terrain feature that are no more than 1\" thick as Accessible terrain.\n\nThis operative can perform this action during the Charge or Reposition action, and it can do so for 1 less AP during those actions. Any remaining move distance can be used after it does so.\n\nThis operative cannot perform this action while within control range of an enemy operative, or if a terrain feature isn’t within its control range."
@@ -684,7 +684,7 @@
    "fluff": "Kommando Breacha Boys have the task of barging into places and enemies alike and smashing them apart with their Breacha Rams. It is one they relish, and those that see them in action and survive soon learn to especially fear these brutal greenskins."
   },
   {
-   "id": "kommandos.kommando-burna-boy",
+   "id": "kommandos.burna-boy",
    "teamId": "kommandos",
    "name": "Kommando Burna Boy",
    "keywords": [
@@ -783,7 +783,7 @@
    ]
   },
   {
-   "id": "kommandos.kommando-comms-boy",
+   "id": "kommandos.comms-boy",
    "teamId": "kommandos",
    "name": "Kommando Comms Boy",
    "keywords": [
@@ -848,14 +848,14 @@
    ],
    "abilities": [
     {
-     "id": "kommandos.kommando-comms-boy.i-got-a-plan-ladz",
+     "id": "kommandos.comms-boy.i-got-a-plan-ladz",
      "name": "I Got a Plan, Ladz",
      "text": "Once during each of this operative’s activations, it can perform the Pick Up Marker, Place Marker or a mission action for 1 less AP."
     }
    ],
    "uniqueActions": [
     {
-     "id": "kommandos.kommando-comms-boy.act.listen-in",
+     "id": "kommandos.comms-boy.act.listen-in",
      "name": "LISTEN IN",
      "ap": 1,
      "text": "SUPPORT. Select one other friendly KOMMANDO operative (excluding BOMB SQUIG) visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
@@ -864,7 +864,7 @@
    "fluff": "There’s no excuse for not following the boss’ plan, no matter how questionably sane it seems. Kommando Comms Boys perform the function of ensuring no Ork ‘forgets’ their orders on the field by relaying the boss’ instructions."
   },
   {
-   "id": "kommandos.kommando-dakka-boy",
+   "id": "kommandos.dakka-boy",
    "teamId": "kommandos",
    "name": "Kommando Dakka Boy",
    "keywords": [
@@ -931,7 +931,7 @@
    "abilities": [],
    "uniqueActions": [
     {
-     "id": "kommandos.kommando-dakka-boy.act.dakka-dash",
+     "id": "kommandos.dakka-boy.act.dakka-dash",
      "name": "DAKKA DASH",
      "ap": 1,
      "text": "Perform a free Dash action and a free Shoot action with this operative in any order. You can only select a dakka shoota for that Shoot action.\n\nThis operative cannot perform this action while it has a Conceal order, or while within control range of an enemy operative."
@@ -940,7 +940,7 @@
    "fluff": "The sound of roaring dakka is music to the ears of many Orks, not least to Kommando Dakka Boys. They take great delight in pouring vast quantities of bullets into the enemy, destroying light cover, sending foes running and causing pandemonium."
   },
   {
-   "id": "kommandos.kommando-grot",
+   "id": "kommandos.grot",
    "teamId": "kommandos",
    "name": "Kommando Grot",
    "keywords": [
@@ -973,14 +973,14 @@
    ],
    "abilities": [
     {
-     "id": "kommandos.kommando-grot.sneaky-zogger",
+     "id": "kommandos.grot.sneaky-zogger",
      "name": "Sneaky Zogger",
      "text": "This operative cannot have an Engage order. Whenever this operative is in cover, it cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"."
     }
    ],
    "uniqueActions": [
     {
-     "id": "kommandos.kommando-grot.act.grappling-hook",
+     "id": "kommandos.grot.act.grappling-hook",
      "name": "GRAPPLING HOOK",
      "ap": 1,
      "text": "Select a visible point on a terrain feature for this operative. Remove this operative from the killzone and set it back up within 1\" horizontally of that point in a location it can be placed, not within control range of enemy operatives, and with that point visible to it. This operative cannot perform the Operate Hatch action during this action.\n\nThis action is treated as a Reposition action. This operative cannot perform this action while within control range of an enemy operative, or during an activation in which it performed the Charge or Fall Back action (or vice versa)."
@@ -989,7 +989,7 @@
    "fluff": "For Grots to last long in the brutal reality of Ork society, they have to learn to lie, cheat, steal, sneak, suck up and plan – traits all valuable to Kommando kill teams."
   },
   {
-   "id": "kommandos.kommando-rokkit-boy",
+   "id": "kommandos.rokkit-boy",
    "teamId": "kommandos",
    "name": "Kommando Rokkit Boy",
    "keywords": [
@@ -1069,7 +1069,7 @@
    "fluff": "Rising from hidden locations, Kommando Rokkit Boyz fire rockets at bunkers, fuel silos, ammo dumps or even into the midst of an unsuspecting enemy – all with a broad grin at the havoc they’ve caused."
   },
   {
-   "id": "kommandos.kommando-slasha-boy",
+   "id": "kommandos.slasha-boy",
    "teamId": "kommandos",
    "name": "Kommando Slasha Boy",
    "keywords": [
@@ -1135,7 +1135,7 @@
    ],
    "abilities": [
     {
-     "id": "kommandos.kommando-slasha-boy.dat-all-you-got",
+     "id": "kommandos.slasha-boy.dat-all-you-got",
      "name": "Dat All You Got?",
      "text": "After this operative fights or retaliates, if it wasn’t incapacitated, you can inflict D3 damage on the enemy operative in that sequence."
     }
@@ -1144,7 +1144,7 @@
    "fluff": "Slasha Boyz love getting into the thick of action, even by Ork standards. Festooned with all manner of blades, they hack and slash their way through enemy after enemy."
   },
   {
-   "id": "kommandos.kommando-snipa-boy",
+   "id": "kommandos.snipa-boy",
    "teamId": "kommandos",
    "name": "Kommando Snipa Boy",
    "keywords": [
@@ -1248,7 +1248,7 @@
    ],
    "abilities": [
     {
-     "id": "kommandos.kommando-snipa-boy.concealed-position",
+     "id": "kommandos.snipa-boy.concealed-position",
      "name": "Concealed Position",
      "text": "This operative can only use this weapon the first time it’s performing the Shoot action during the battle."
     }

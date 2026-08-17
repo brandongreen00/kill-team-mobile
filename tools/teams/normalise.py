@@ -59,11 +59,15 @@ AP_RE = re.compile(r"(\d+)\s*AP", re.I)
 
 
 def card_local_id(team_name: str, card_name: str) -> str:
-    """'Kasrkin Sergeant' in team 'Kasrkin' -> 'sergeant'."""
-    tw = [w for w in re.split(r"\W+", team_name.lower()) if w]
+    """'Kasrkin Sergeant' in team 'Kasrkin' -> 'sergeant'.
+
+    The team-name prefix is matched singular/plural-insensitively, so
+    'Plague Marine Champion' in team 'Plague Marines' -> 'champion'."""
+    stem = lambda w: w[:-1] if len(w) > 3 and w.endswith("s") else w
+    tw = [stem(w) for w in re.split(r"\W+", team_name.lower()) if w]
     cw = [w for w in re.split(r"\W+", card_name) if w]
     i = 0
-    while i < len(cw) and i < len(tw) and cw[i].lower() == tw[i]:
+    while i < len(cw) and i < len(tw) and stem(cw[i].lower()) == tw[i]:
         i += 1
     rest = cw[i:] or cw
     return slugify(" ".join(rest))

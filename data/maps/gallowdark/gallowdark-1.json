@@ -234,6 +234,9 @@
     "y": 19.562,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -279,6 +282,9 @@
     "y": 19.562,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -363,6 +369,9 @@
     "y": 19.562,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -408,6 +417,9 @@
     "y": 11.938,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -453,6 +465,9 @@
     "y": 11.938,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -498,6 +513,9 @@
     "y": 11.938,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -543,6 +561,9 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -588,6 +609,9 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.3571
    }
   },
   {
@@ -633,24 +657,27 @@
     "y": 4.312,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
-   "id": "gallowdark-1.A3-2",
-   "kind": "gallowdark.wallA3",
-   "label": "A3",
+   "id": "gallowdark-1.B1-1",
+   "kind": "gallowdark.wallB1",
+   "label": "B1",
    "parts": [
     {
-     "id": "gallowdark-1.A3-2.wall",
-     "featureId": "gallowdark-1.A3-2",
+     "id": "gallowdark-1.B1-1.wall",
+     "featureId": "gallowdark-1.B1-1",
      "poly": [
       {
        "x": 11.724,
-       "y": 11.938
+       "y": 15.75
       },
       {
        "x": 12.089,
-       "y": 11.938
+       "y": 15.75
       },
       {
        "x": 12.089,
@@ -675,19 +702,70 @@
    ],
    "placement": {
     "x": 11.906,
-    "y": 15.75,
-    "rotDeg": 90,
+    "y": 17.656,
+    "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
-   "id": "gallowdark-1.B1-1",
-   "kind": "gallowdark.wallB1",
-   "label": "B1",
+   "id": "gallowdark-1.B3-4",
+   "kind": "gallowdark.wallB3",
+   "label": "B3",
    "parts": [
     {
-     "id": "gallowdark-1.B1-1.wall",
-     "featureId": "gallowdark-1.B1-1",
+     "id": "gallowdark-1.B3-4.wall",
+     "featureId": "gallowdark-1.B3-4",
+     "poly": [
+      {
+       "x": 11.724,
+       "y": 11.938
+      },
+      {
+       "x": 12.089,
+       "y": 11.938
+      },
+      {
+       "x": 12.089,
+       "y": 15.75
+      },
+      {
+       "x": 11.724,
+       "y": 15.75
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    }
+   ],
+   "placement": {
+    "x": 11.906,
+    "y": 13.844,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
+   }
+  },
+  {
+   "id": "gallowdark-1.B2-2",
+   "kind": "gallowdark.wallB2",
+   "label": "B2",
+   "parts": [
+    {
+     "id": "gallowdark-1.B2-2.wall",
+     "featureId": "gallowdark-1.B2-2",
      "poly": [
       {
        "x": 11.724,
@@ -723,16 +801,19 @@
     "y": 10.031,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
-   "id": "gallowdark-1.B3-4",
-   "kind": "gallowdark.wallB3",
-   "label": "B3",
+   "id": "gallowdark-1.B1-2",
+   "kind": "gallowdark.wallB1",
+   "label": "B1",
    "parts": [
     {
-     "id": "gallowdark-1.B3-4.wall",
-     "featureId": "gallowdark-1.B3-4",
+     "id": "gallowdark-1.B1-2.wall",
+     "featureId": "gallowdark-1.B1-2",
      "poly": [
       {
        "x": 11.724,
@@ -766,8 +847,11 @@
    "placement": {
     "x": 11.906,
     "y": 6.219,
-    "rotDeg": 90,
+    "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -852,16 +936,19 @@
     "y": 15.75,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
-   "id": "gallowdark-1.A3-3",
+   "id": "gallowdark-1.A3-2",
    "kind": "gallowdark.wallA3",
    "label": "A3",
    "parts": [
     {
-     "id": "gallowdark-1.A3-3.wall",
-     "featureId": "gallowdark-1.A3-3",
+     "id": "gallowdark-1.A3-2.wall",
+     "featureId": "gallowdark-1.A3-2",
      "poly": [
       {
        "x": 19.349,
@@ -892,8 +979,8 @@
      "standable": false
     },
     {
-     "id": "gallowdark-1.A3-3.access",
-     "featureId": "gallowdark-1.A3-3",
+     "id": "gallowdark-1.A3-2.access",
+     "featureId": "gallowdark-1.A3-2",
      "poly": [
       {
        "x": 18.227,
@@ -936,6 +1023,9 @@
     "y": 8.125,
     "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   }
  ],
@@ -953,7 +1043,9 @@
    "p1Side": "top",
    "centreSeamErrIn": 0.0,
    "latticeStepPx": 94.0,
-   "wallThicknessPx": 9.0
+   "wallThicknessPx": 9.0,
+   "templateIoUMin": 0.3571,
+   "templateIoUMedian": 1.0
   }
  }
 }

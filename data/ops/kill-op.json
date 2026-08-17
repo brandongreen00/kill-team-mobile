@@ -1,0 +1,20 @@
+{
+  "source": "Approved Ops 2025 — KILL OP section + KillGrade.png, wahapedia.ru/kill-team3 — extracted 2026-08-17.",
+  "id": "kill.killOp",
+  "name": "Kill Op",
+  "text": "You start without a kill grade. As enemy operatives are incapacitated, your kill grade goes up until it reaches 5.\nWhenever you move to a new kill grade, you score 1VP.\nAt the end of the battle, if your kill grade is higher than your opponent's, you score 1VP.\nThe table below shows how many enemy operatives must be incapacitated to reach each kill grade. The row you use is determined by the starting number of enemy operatives.",
+  "maxGrade": 5,
+  "table": {
+    "5": [1, 2, 3, 4, 5],
+    "6": [1, 2, 4, 5, 6],
+    "7": [1, 3, 4, 6, 7],
+    "8": [2, 3, 5, 6, 8],
+    "9": [2, 4, 5, 7, 9],
+    "10": [2, 4, 6, 8, 10],
+    "11": [2, 4, 7, 9, 11],
+    "12": [2, 5, 7, 10, 12],
+    "13": [3, 5, 8, 10, 13],
+    "14": [3, 6, 8, 11, 14]
+  },
+  "extrapolation": "The printed table is exactly round(start x grade / 5) for every one of its ten rows (verified by test), so starting sizes above 14 use that formula. Starting sizes below 5 use min(grade, start): one kill per grade, and tabling the enemy always reaches kill grade 5."
+}
