@@ -262,9 +262,12 @@ export function positionScore(
   // Opportunity: the best shot available from here.
   const plans = shotPlans(ctx, state, op, { pos, z, order });
   const best = plans[0];
-  if (best) score += pc.weights.threat * 3 * shotValue(best);
+  if (best) score += pc.weights.threat * 4 * shotValue(best);
 
-  // Exposure: what the enemy can do to me from where they stand.
+  // Exposure: what the enemy can do to me from where they stand. Only ONE enemy usually gets
+  // to act before we move again, so the worst threat counts in full and the rest are
+  // discounted — summing every enemy at full weight makes the AI hide instead of playing.
+  let worstExposure = 0;
   let exposure = 0;
   for (const e of pc.enemies) {
     if (dist(e.pos, pos) > 30) continue;
@@ -276,6 +279,7 @@ export function positionScore(
       // Cover and obscured both cost the attacker roughly a success.
       if (cover.inCover || cover.obscured) threat *= 0.6;
       if (order === 'conceal' && cover.inCover) threat = 0; // not a valid target at all
+      worstExposure = Math.max(worstExposure, threat);
       exposure += threat;
       continue;
     }

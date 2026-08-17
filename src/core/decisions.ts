@@ -87,10 +87,15 @@ export function resolveDecision(
       }
       break;
     }
-    default:
-      // Ops, ploys and team rules attach their own resolution through ctx.hooks; the
-      // decision's ctx carries what they need.
+    default: {
+      // Ops own several decision kinds (the secret TP1 primary op, Stake Claim, Reboot
+      // numbers, Envoy, Flank). Without this the primary-op prompt would block the reducer.
+      const handled = ctx.resolveOpDecision?.(ctx, state, decisionId, optionId, payload) ?? false;
+      if (!handled) {
+        log(state, { kind: 'system', text: `decision '${decision.kind}' had no handler — recorded only` });
+      }
       break;
+    }
   }
 
   // Continue whatever sequence is in flight.

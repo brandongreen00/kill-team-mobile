@@ -15,7 +15,7 @@ import { Setup, placeAt } from './flow/Setup.tsx';
 import { TargetingInspector } from './TargetingInspector.tsx';
 import { MapBrowser } from './MapBrowser.tsx';
 import { Store, setStore } from './store.ts';
-import { makeContext } from '../core/context.ts';
+import { createGameContext } from '../core/game.ts';
 import { SeededRng } from '../core/rng.ts';
 import { createBattle } from '../core/init.ts';
 import { loadMaps, loadTeams, type TeamData } from './data.ts';
@@ -39,9 +39,12 @@ export function App() {
       const [m, t] = await Promise.all([loadMaps(), loadTeams()]);
       setMaps(m);
       setTeams(t);
-      const ctx = makeContext({ rng: new SeededRng(1) });
-      for (const map of m) ctx.maps.set(map.id, map);
-      for (const team of t) for (const dc of team.datacards ?? []) ctx.datacards.set(dc.id, dc);
+      // A fully wired context: ops, equipment and the initiative-card flow included.
+      const ctx = createGameContext({
+        rng: new SeededRng(1),
+        maps: m,
+        datacards: t.flatMap((team) => team.datacards ?? []),
+      });
       const map = m[0] ?? fallbackMap();
       const s = new Store(createBattle(ctx, { map, seed: 1, mode: 'match' }), ctx);
       setStore(s);

@@ -76,6 +76,9 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
         if (next.phase !== 'setup') next.initiative = r.winner;
         log(next, { kind: 'system', text: `${r.winner} wins the roll-off` });
       }
+      // Approved Ops: starting with the roll-off LOSER, players alternate playing an
+      // initiative card or passing until both pass.
+      if (next.phase !== 'setup') ctx.beginInitiative?.(ctx, next);
       if (next.phase === 'setup') next.setup.step = 'chooseDropZone';
       return ok(next);
     }
@@ -90,6 +93,8 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       next.setup.dropZone[intent.player] = intent.zone;
       next.setup.dropZone[otherPlayer(intent.player)] = intent.zone === 'p1' ? 'p2' : 'p1';
       next.setup.step = 'selectOperatives';
+      // "the initiative player picks a drop zone, opponent gets the Re-roll initiative card"
+      ctx.grantSetupRerollCard?.(next, otherPlayer(intent.player));
       log(next, { kind: 'system', text: `${intent.player} takes the ${intent.zone} drop zone` });
       return ok(next);
     }
@@ -152,6 +157,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
         return fail(`${op.name} is a ${op.archetype} tac op — your kill team does not have that archetype`);
       next.teams[intent.player].tacOpId = intent.tacOpId;
       rebuildHooks(ctx, next);
+      if (next.teams.p1.tacOpId && next.teams.p2.tacOpId) ctx.initOps?.(ctx, next);
       return ok(next);
     }
 

@@ -48,10 +48,20 @@ export const DEFAULT_WEIGHTS: EvalWeights = {
 
 export interface AgentConfig {
   difficulty: Difficulty;
-  /** Hard cap on simulated `reduce` calls per decision. */
+  /**
+   * Hard cap on the work one decision may do, in abstract units: 1 per simulated `reduce`,
+   * 8 per candidate enumeration, 3 per positional score. This is the PRIMARY limiter and it
+   * is deterministic, so the same seed always produces the same game.
+   */
   nodeBudget: number;
-  /** Wall-clock cap per decision, milliseconds. */
+  /**
+   * Wall-clock safety cap per decision, milliseconds. Only enforced when
+   * `enforceTimeBudget` is set, because a clock-dependent cutoff would make replays
+   * non-reproducible. The node budget is tuned so decisions stay well under it.
+   */
   timeBudgetMs: number;
+  /** Enforce `timeBudgetMs`. Off by default: determinism beats latency in tests and replays. */
+  enforceTimeBudget: boolean;
   /** Monte-Carlo rollouts per candidate action. 0 = heuristic only. */
   rollouts: number;
   /** Candidate actions kept for simulation after the cheap pre-score. */
@@ -63,9 +73,9 @@ export interface AgentConfig {
 
 export const DIFFICULTY_PRESETS: Record<Difficulty, Omit<AgentConfig, 'weights' | 'difficulty'>> = {
   // Recruit plays honestly but shallowly, and misjudges by a wide margin.
-  recruit: { nodeBudget: 40, timeBudgetMs: 25, rollouts: 0, beam: 2, noise: 26 },
-  veteran: { nodeBudget: 160, timeBudgetMs: 60, rollouts: 1, beam: 4, noise: 8 },
-  elite: { nodeBudget: 700, timeBudgetMs: 280, rollouts: 2, beam: 6, noise: 0 },
+  recruit: { nodeBudget: 60, timeBudgetMs: 300, enforceTimeBudget: false, rollouts: 0, beam: 2, noise: 26 },
+  veteran: { nodeBudget: 260, timeBudgetMs: 300, enforceTimeBudget: false, rollouts: 1, beam: 4, noise: 8 },
+  elite: { nodeBudget: 900, timeBudgetMs: 300, enforceTimeBudget: false, rollouts: 2, beam: 6, noise: 0 },
 };
 
 export function agentConfig(difficulty: Difficulty = 'elite', over: Partial<AgentConfig> = {}): AgentConfig {

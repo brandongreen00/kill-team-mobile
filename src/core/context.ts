@@ -52,6 +52,20 @@ export interface GameContext {
   playInitiativeCard?: (ctx: GameContext, state: GameState, player: PlayerId, cardId: string) => { ok: boolean; reason?: string };
   scoreEndOfTurningPoint?: (ctx: GameContext, state: GameState) => void;
   scoreEndOfBattle?: (ctx: GameContext, state: GameState) => void;
+  /** Ops own several decision kinds (primary op, Stake Claim, Reboot, Envoy, Flank…). */
+  resolveOpDecision?: (
+    ctx: GameContext,
+    state: GameState,
+    decisionId: string,
+    optionId: string,
+    data?: Record<string, unknown>,
+  ) => boolean;
+  /** Approved Ops initiative cards: opens the per-turning-point card exchange. */
+  beginInitiative?: (ctx: GameContext, state: GameState) => void;
+  /** The opponent of the initiative player gets the Re-roll card during setup. */
+  grantSetupRerollCard?: (state: GameState, player: PlayerId) => void;
+  /** Called once both players' crit/tac ops are known. */
+  initOps?: (ctx: GameContext, state: GameState) => void;
   /** Cached terrain index, invalidated when the map object or terrain state changes. */
   terrainCache?: { map: KillzoneMap; key: string; index: TerrainIndex };
 }

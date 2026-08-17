@@ -166,7 +166,24 @@ export function act(
 
 export function activate(ctx: GameContext, state: GameState, operativeId: string, order: 'engage' | 'conceal' = 'engage'): GameState {
   const op = state.operatives[operativeId]!;
+  state.activePlayer = op.player; // it is this player's activation
   return reduce(state, { t: 'ActivateOperative', player: op.player, operativeId, order }, ctx).state;
+}
+
+/**
+ * A roster that definitely contains the named datacards, for rule tests that need a specific
+ * operative. Starts from the printed default roster and swaps trailing picks out.
+ */
+export function rosterIncluding(module: KtTeamModule, datacardIds: string[]): RosterPickIn[] {
+  const picks = defaultRoster(module.data);
+  const missing = datacardIds.filter((id) => !picks.some((p) => p.datacardId === id));
+  const out = [...picks];
+  for (const id of missing) {
+    const idx = out.map((p, i) => ({ p, i })).reverse().find((x) => !datacardIds.includes(x.p.datacardId))?.i;
+    if (idx === undefined) out.push({ datacardId: id });
+    else out[idx] = { datacardId: id };
+  }
+  return out;
 }
 
 /** Operative id of the first operative with this datacard on a side. */

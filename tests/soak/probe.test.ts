@@ -3,31 +3,46 @@ import { GreedyAgent, RandomLegalAgent } from '../../src/ai/baseline.ts';
 import { TacticalAgent } from '../../src/ai/agent.ts';
 import { playGame } from '../../src/ai/runner.ts';
 import { AI_ROSTER, aiContext, arenaMap, SCORING_OP_ID } from './fixtures.ts';
+import type { Intent } from '../../src/core/intents.ts';
 
 const mk = {
   random: () => new RandomLegalAgent(),
   greedy: () => new GreedyAgent(),
   tactical: () => new TacticalAgent({ difficulty: 'veteran' }),
+  elite: () => new TacticalAgent({ difficulty: 'elite' }),
 } as const;
 
-const which = (process.env['PROBE'] ?? 'random') as keyof typeof mk;
+const a = (process.env['P1'] ?? 'tactical') as keyof typeof mk;
+const b = (process.env['P2'] ?? 'greedy') as keyof typeof mk;
 
 it('probe', () => {
-  const ctx = aiContext(1);
-  const t0 = Date.now();
-  const r = playGame({
-    ctx,
-    map: arenaMap(),
-    seed: 7,
-    critOpId: SCORING_OP_ID,
-    rosters: { p1: AI_ROSTER, p2: AI_ROSTER },
-    agents: { p1: mk[which](), p2: mk[which]() },
-  });
-  const shots = r.state.log.filter((l) => l.text.includes('shoots')).length;
-  const fights = r.state.log.filter((l) => l.text.includes('fights')).length;
-  console.log(
-    `${which}: phase=${r.state.phase} tp=${r.turningPoints} vp=${r.vp.p1}:${r.vp.p2} alive=${r.survivors.p1}/${r.survivors.p2} ` +
-      `shots=${shots} fights=${fights} intents=${r.intents} rejected=${r.rejected.length} err=${r.error ?? '-'} ${Date.now() - t0}ms`,
-  );
-  for (const rj of r.rejected.slice(0, 5)) console.log('  reject:', rj.reason, JSON.stringify(rj.intent).slice(0, 160));
+  let wins = { p1: 0, p2: 0, draw: 0 };
+  const counts: Record<string, number> = {};
+  let ms = 0;
+  const games = Number(process.env['GAMES'] ?? 3);
+  for (let g = 0; g < games; g++) {
+    const ctx = aiContext(1);
+    const t0 = Date.now();
+    const r = playGame({
+      ctx,
+      map: arenaMap(),
+      seed: 100 + g,
+      critOpId: SCORING_OP_ID,
+      rosters: { p1: AI_ROSTER, p2: AI_ROSTER },
+      agents: { p1: mk[a](), p2: mk[b]() },
+      onIntent: (i: Intent) => {
+        if (i.t === 'PerformAction') counts[i.action] = (counts[i.action] ?? 0) + 1;
+      },
+    });
+    ms += Date.now() - t0;
+    if (r.winner === 'draw' || !r.winner) wins.draw++;
+    else wins[r.winner]++;
+    if (g === 0)
+      console.log(
+        `game0 ${a} vs ${b}: vp=${r.vp.p1}:${r.vp.p2} alive=${r.survivors.p1}/${r.survivors.p2} ` +
+          `intents=${r.intents} rejected=${r.rejected.length} err=${r.error ?? '-'}`,
+      );
+  }
+  console.log(`${a} vs ${b}: p1=${wins.p1} p2=${wins.p2} draw=${wins.draw} avg=${Math.round(ms / games)}ms/game`);
+  console.log('actions:', JSON.stringify(counts));
 }, 280000);

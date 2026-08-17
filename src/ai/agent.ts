@@ -47,9 +47,11 @@ export class TacticalAgent implements Agent {
   private readonly tag: string;
   private plan: PlanStep[] = [];
   private planFor: string | null = null;
-  /** Simulated reduce() calls in the current decision. */
+  /** Work units spent in the current decision (see AgentConfig.nodeBudget). */
   private nodes = 0;
   private deadline = 0;
+  /** Wall-clock of the longest decision so far, for the latency test. */
+  lastDecisionMs = 0;
 
   constructor(opts: TacticalAgentOptions = {}) {
     this.cfg = agentConfig(opts.difficulty ?? 'elite', opts.config ?? {});
@@ -64,8 +66,17 @@ export class TacticalAgent implements Agent {
   }
 
   act(ctx: GameContext, state: GameState, player: PlayerId): Intent | null {
+    const started = Date.now();
     this.nodes = 0;
-    this.deadline = Date.now() + this.cfg.timeBudgetMs;
+    this.deadline = started + this.cfg.timeBudgetMs;
+    try {
+      return this.decideAct(ctx, state, player);
+    } finally {
+      this.lastDecisionMs = Date.now() - started;
+    }
+  }
+
+  private decideAct(ctx: GameContext, state: GameState, player: PlayerId): Intent | null {
 
     const pending = state.pending.find((d) => d.who === player);
     if (pending) {
@@ -81,10 +92,7 @@ export class TacticalAgent implements Agent {
     const offer = state.opState['guardOffer'] as { player?: PlayerId } | undefined;
     if (offer?.player === player) return this.chooseInterrupt(ctx, state, player);
 
-    const candidates = enumerateCandidates(ctx, state, player, {
-      weights: this.cfg.weights,
-      moveLimit: this.cfg.beam + 1,
-    });
+    const candidates = this.enumerate(ctx, state, player);
     if (candidates.length === 0) {
       this.plan = [];
       this.planFor = null;
@@ -190,23 +198,20 @@ export class TacticalAgent implements Agent {
     if (!start) return { steps: [], score: -Infinity };
     let current = start;
     const steps: PlanStep[] = [];
-    let score = this.score(ctx, current, player);
+    let score = this.score(ctx, current, player) + this.positionTerm(ctx, current, opId);
     const op = current.operatives[opId];
     const maxSteps = op ? Math.min(4, Math.max(1, aplOf(ctx, current, op))) : 2;
 
     for (let depth = 0; depth < maxSteps; depth++) {
       if (this.exhausted()) break;
-      const options = enumerateCandidates(ctx, current, player, {
-        weights: this.cfg.weights,
-        moveLimit: this.cfg.beam + 1,
-      }).filter((c) => c.kind === 'action' || c.kind === 'ploy');
+      const options = this.enumerate(ctx, current, player).filter((c) => c.kind === 'action' || c.kind === 'ploy');
       if (options.length === 0) break;
       const beam = this.beamOf(options);
       let bestScore = score;
       let bestIntent: Intent | null = null;
       let bestState: GameState | null = null;
       for (const cand of beam) {
-        const outcome = this.evaluateCandidate(ctx, current, player, cand, `step${depth}:${opId}`);
+        const outcome = this.evaluateCandidate(ctx, current, player, cand, `step${depth}:${opId}`, opId);
         if (!outcome) continue;
         if (outcome.score > bestScore) {
           bestScore = outcome.score;
@@ -248,10 +253,10 @@ export class TacticalAgent implements Agent {
     const options = candidates.filter((c) => c.kind === 'action' || c.kind === 'ploy');
     if (options.length === 0) return endIntent;
     const rng = this.noiseStream(ctx, state, player, 'act');
-    const baseline = this.score(ctx, state, player);
+    const baseline = this.score(ctx, state, player) + this.positionTerm(ctx, state, active.id);
     let best: { intent: Intent; score: number } | null = null;
     for (const cand of this.beamOf(options)) {
-      const outcome = this.evaluateCandidate(ctx, state, player, cand, `single:${active.id}`);
+      const outcome = this.evaluateCandidate(ctx, state, player, cand, `single:${active.id}`, active.id);
       if (!outcome) continue;
       const score = outcome.score + this.noise(rng);
       if (!best || score > best.score) best = { intent: cand.intent, score };
@@ -294,12 +299,11 @@ export class TacticalAgent implements Agent {
     for (const cand of options.slice(0, this.cfg.beam)) {
       const sim = this.simulate(ctx, state, [cand.intent], player, 'counteract');
       if (!sim) continue;
-      const inner = enumerateCandidates(ctx, sim, player, { weights: this.cfg.weights, moveLimit: 3 }).filter(
-        (c) => c.kind === 'action',
-      );
-      let bestInner = this.score(ctx, sim, player);
+      const opId = cand.intent.t === 'Counteract' ? cand.intent.operativeId : undefined;
+      const inner = this.enumerate(ctx, sim, player, 3).filter((c) => c.kind === 'action');
+      let bestInner = this.score(ctx, sim, player) + this.positionTerm(ctx, sim, opId);
       for (const step of this.beamOf(inner)) {
-        const outcome = this.evaluateCandidate(ctx, sim, player, step, 'counteract-step');
+        const outcome = this.evaluateCandidate(ctx, sim, player, step, 'counteract-step', opId);
         if (outcome && outcome.score > bestInner) bestInner = outcome.score;
         if (this.exhausted()) break;
       }
@@ -346,6 +350,15 @@ export class TacticalAgent implements Agent {
   // Search primitives
   // -------------------------------------------------------------------------
 
+  /** Enumerate candidates and charge the work against the node budget. */
+  private enumerate(ctx: GameContext, state: GameState, player: PlayerId, moveLimit?: number): Candidate[] {
+    this.spend(8);
+    return enumerateCandidates(ctx, state, player, {
+      weights: this.cfg.weights,
+      moveLimit: moveLimit ?? this.cfg.beam + 1,
+    });
+  }
+
   private beamOf(options: Candidate[]): Candidate[] {
     const sorted = [...options].sort((a, b) => b.hint - a.hint);
     return sorted.slice(0, this.cfg.beam);
@@ -358,6 +371,7 @@ export class TacticalAgent implements Agent {
     player: PlayerId,
     cand: Candidate,
     tag: string,
+    focusOpId?: string,
   ): { score: number; state: GameState } | null {
     const samples = Math.max(1, this.cfg.rollouts);
     let total = 0;
@@ -374,19 +388,20 @@ export class TacticalAgent implements Agent {
     if (!last || taken === 0) return null;
     // Positional value is a property of where the operative ended up, not of the dice, so it
     // is priced once per candidate rather than once per rollout.
-    return { score: total / taken + this.candidateBonus(ctx, last, player, cand), state: last };
+    return { score: total / taken + this.positionTerm(ctx, last, focusOpId), state: last };
   }
 
   /**
-   * Positional value the state evaluation cannot see: what the operative can shoot from its
-   * new position, and what can shoot back. Computed once per candidate, not per rollout.
+   * Positional value the state evaluation cannot see: what this operative can shoot from where
+   * it now stands, and what can shoot it. Applied to the baseline AND to every candidate, so
+   * "stay put" is priced on the same terms as "move" — otherwise the exposure term would make
+   * standing still look free and the AI would never advance.
    */
-  private candidateBonus(ctx: GameContext, state: GameState, player: PlayerId, cand: Candidate): number {
-    if (cand.intent.t !== 'PerformAction') return 0;
-    const action = cand.intent.action;
-    if (action !== 'Reposition' && action !== 'Dash' && action !== 'Fall Back' && action !== 'Charge') return 0;
-    const op = state.operatives[cand.intent.operativeId];
+  private positionTerm(ctx: GameContext, state: GameState, opId?: string): number {
+    if (!opId) return 0;
+    const op = state.operatives[opId];
     if (!op || op.removed) return 0;
+    this.spend(3);
     const pc = positionContext(ctx, state, op, this.cfg.weights);
     return 0.5 * positionScore(ctx, state, op, op.pos, op.z, pc, op.order);
   }
@@ -436,8 +451,18 @@ export class TacticalAgent implements Agent {
     return current;
   }
 
+  /**
+   * Deterministic by default: only the node budget decides when to stop, so a replay of the
+   * same seed makes the same choices. The wall clock is a safety valve for interactive use.
+   */
   private exhausted(): boolean {
-    return this.nodes > this.cfg.nodeBudget || Date.now() > this.deadline;
+    if (this.nodes > this.cfg.nodeBudget) return true;
+    return this.cfg.enforceTimeBudget && Date.now() > this.deadline;
+  }
+
+  /** Charge work units for the parts of a decision that are not simulated reduces. */
+  private spend(units: number): void {
+    this.nodes += units;
   }
 
   /** Difficulty noise, drawn from a fork of the match RNG so replays stay byte-identical. */
