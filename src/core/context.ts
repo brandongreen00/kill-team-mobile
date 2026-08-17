@@ -16,6 +16,14 @@ export interface PlaceEquipmentIntent {
   z?: number;
 }
 
+export type DecisionHandler = (
+  ctx: GameContext,
+  state: GameState,
+  decision: import('./types.ts').PendingDecision,
+  optionId: string,
+  data?: Record<string, unknown>,
+) => boolean;
+
 export interface OpDef {
   id: string;
   kind: 'crit' | 'tac' | 'kill' | 'primary';
@@ -60,6 +68,13 @@ export interface GameContext {
     optionId: string,
     data?: Record<string, unknown>,
   ) => boolean;
+  /**
+   * Any rule layer may claim a PendingDecision kind it raised itself: team ploys and
+   * abilities that ask the player something, equipment choices, killzone prompts. Handlers
+   * are tried in registration order and the first to return true owns the decision, so a
+   * team rule can raise its own decision without the kernel knowing the kind exists.
+   */
+  decisionHandlers?: DecisionHandler[];
   /** Approved Ops initiative cards: opens the per-turning-point card exchange. */
   beginInitiative?: (ctx: GameContext, state: GameState) => void;
   /** The opponent of the initiative player gets the Re-roll card during setup. */
@@ -78,6 +93,7 @@ export function makeContext(init: Partial<GameContext> & { rng: Rng }): GameCont
     ops: init.ops ?? new Map(),
     equipment: init.equipment ?? new Map(),
     hooks: init.hooks ?? new HookRegistry(),
+    decisionHandlers: init.decisionHandlers ?? [],
     rng: init.rng,
   };
 }

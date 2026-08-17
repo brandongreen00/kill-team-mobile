@@ -278,6 +278,9 @@ export function positionScore(
       let threat = rangedThreat(ctx, e);
       // Cover and obscured both cost the attacker roughly a success.
       if (cover.inCover || cover.obscured) threat *= 0.6;
+      // An expended operative cannot shoot again this turning point (only counteract), so
+      // advancing past spent guns is much safer than advancing past fresh ones.
+      if (e.expended) threat *= 0.3;
       if (order === 'conceal' && cover.inCover) threat = 0; // not a valid target at all
       worstExposure = Math.max(worstExposure, threat);
       exposure += threat;

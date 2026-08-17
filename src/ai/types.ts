@@ -66,6 +66,10 @@ export interface AgentConfig {
   rollouts: number;
   /** Candidate actions kept for simulation after the cheap pre-score. */
   beam: number;
+  /** How many ready operatives get a full activation plan before one is chosen. */
+  shortlist: number;
+  /** Reachability-field resolution in inches (the engine's field is 0.5"). */
+  moveStep: number;
   /** Score perturbation, in evaluation points. Drawn from `ctx.rng.fork()`. */
   noise: number;
   weights: EvalWeights;
@@ -73,9 +77,9 @@ export interface AgentConfig {
 
 export const DIFFICULTY_PRESETS: Record<Difficulty, Omit<AgentConfig, 'weights' | 'difficulty'>> = {
   // Recruit plays honestly but shallowly, and misjudges by a wide margin.
-  recruit: { nodeBudget: 60, timeBudgetMs: 300, enforceTimeBudget: false, rollouts: 0, beam: 2, noise: 26 },
-  veteran: { nodeBudget: 260, timeBudgetMs: 300, enforceTimeBudget: false, rollouts: 1, beam: 4, noise: 8 },
-  elite: { nodeBudget: 900, timeBudgetMs: 300, enforceTimeBudget: false, rollouts: 2, beam: 6, noise: 0 },
+  recruit: { nodeBudget: 60, timeBudgetMs: 300, enforceTimeBudget: false, rollouts: 0, beam: 2, shortlist: 1, moveStep: 1, noise: 26 },
+  veteran: { nodeBudget: 420, timeBudgetMs: 300, enforceTimeBudget: false, rollouts: 1, beam: 5, shortlist: 3, moveStep: 0.5, noise: 8 },
+  elite: { nodeBudget: 900, timeBudgetMs: 300, enforceTimeBudget: false, rollouts: 2, beam: 6, shortlist: 3, moveStep: 0.5, noise: 0 },
 };
 
 export function agentConfig(difficulty: Difficulty = 'elite', over: Partial<AgentConfig> = {}): AgentConfig {

@@ -214,7 +214,7 @@ export function secureAndSlayOp(getCtx: () => GameContext): OpDef {
     id: SCORING_OP_ID,
     kind: 'crit',
     name: 'Secure and Slay',
-    text: 'End of each turning point: 1VP per objective marker you control (max 2VP), and 1VP per enemy operative incapacitated during that turning point.',
+    text: 'End of each turning point: 1VP per objective marker you control (max 2VP), and 2VP per enemy operative incapacitated during that turning point.',
     register(reg, player: PlayerId) {
       reg.on(
         'onEndOfTP',
@@ -232,7 +232,7 @@ export function secureAndSlayOp(getCtx: () => GameContext): OpDef {
           const dead = state.teams[enemy].startingSize - aliveOperatives(state, enemy).length;
           const scratch = (state.opState[SCORING_OP_ID] ??= {}) as Record<string, number>;
           const seen = scratch[`kills:${player}`] ?? 0;
-          const killVp = Math.max(0, dead - seen);
+          const killVp = 2 * Math.max(0, dead - seen);
           scratch[`kills:${player}`] = dead;
           const vp = secure + killVp;
           if (vp <= 0) return;

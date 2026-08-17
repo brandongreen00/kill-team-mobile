@@ -24,7 +24,7 @@ import type { GameState, OperativeState, PlayerId } from '../core/types.ts';
 import { otherPlayer } from '../core/types.ts';
 import { fightPlans, fightValue, shotPlans, shotValue } from './combat.ts';
 import { cheapPositionScore, positionContext, roleOf, type PositionContext } from './eval.ts';
-import { chargeRing, chargeTargets, generateMoves, type MoveAction } from './moves.ts';
+import { chargeRing, chargeTargets, generateMoves, primeMoveField, type MoveAction } from './moves.ts';
 import type { Candidate, EvalWeights } from './types.ts';
 
 export interface EnumerateOptions {
@@ -129,10 +129,18 @@ export function actionCandidates(
 ): Candidate[] {
   const out: Candidate[] = [];
   const counteracting = opts.counteracting ?? false;
+  // ENGINE GAP (src/core/reducer.ts › PerformAction): while counteracting, neither the AP
+  // limit nor action restrictions are applied, so the reducer would accept an unbounded
+  // stream of 1AP actions. The rule is "one free 1AP action", so the AI offers exactly one.
+  if (counteracting && op.actionsThisActivation.length > 0) return out;
   const defs = counteracting ? counteractActionDefs(ctx, state, op) : availableActions(ctx, state, op).filter((a) => a.ok).map((a) => a.def);
   const pc = positionContext(ctx, state, op, opts.weights);
   const moveLimit = opts.moveLimit ?? 6;
   const hardCap = counteracting ? 2 : undefined;
+  const moveActions = defs
+    .map((d) => d.id)
+    .filter((id): id is MoveAction => id === 'Reposition' || id === 'Dash' || id === 'Fall Back' || id === 'Charge');
+  if (moveActions.length > 0) primeMoveField(ctx, state, op, moveActions, opts.moveStep ?? 0.5, hardCap);
 
   for (const def of defs) {
     if (SKIP_ACTIONS.has(def.id)) continue;

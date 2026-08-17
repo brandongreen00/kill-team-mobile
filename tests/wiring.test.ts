@@ -53,6 +53,36 @@ function drainDecisions(state: GameState, ctx: ReturnType<typeof ctxWithCards>, 
 }
 
 describe('assembled game context', () => {
+  it('lets any rule layer claim a decision kind the kernel has never heard of', () => {
+    // Team ploys and abilities raise their own PendingDecisions; without a handler chain
+    // they would fall through the reducer's default branch and be silently dropped.
+    const ctx = ctxWithCards();
+    const seen: string[] = [];
+    ctx.decisionHandlers = [
+      (_c, _s, decision, optionId) => {
+        if (decision.kind !== 'test.customChoice') return false;
+        seen.push(optionId);
+        return true;
+      },
+    ];
+    let s = createBattle(ctx, { map: testMap(), seed: 4 });
+    s.pending.push({
+      id: 'custom-1',
+      who: 'p1',
+      kind: 'test.customChoice',
+      prompt: 'Pick one',
+      options: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }],
+    });
+    const out = reduce(s, { t: 'ResolveDecision', decisionId: 'custom-1', optionId: 'b' }, ctx);
+    expect(out.ok).toBe(true);
+    expect(seen).toEqual(['b']);
+    expect(out.state.pending).toHaveLength(0);
+    // An unclaimed decision is recorded rather than silently swallowed.
+    const unclaimed = { ...s, pending: [{ id: 'x', who: 'p1' as PlayerId, kind: 'nobody.owns.this', prompt: '?', options: [{ id: 'a', label: 'A' }] }] };
+    const out2 = reduce(unclaimed, { t: 'ResolveDecision', decisionId: 'x', optionId: 'a' }, ctx);
+    expect(out2.state.log.some((l) => l.text.includes('had no handler'))).toBe(true);
+  });
+
   it('registers every op and equipment option', () => {
     const ctx = ctxWithCards();
     // 9 crit ops + 12 tac ops + the kill op

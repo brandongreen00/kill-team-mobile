@@ -24,7 +24,7 @@ export interface DecisionPolicy {
   cpFloor: number;
 }
 
-export const DEFAULT_POLICY: DecisionPolicy = { cpRerollThreshold: 1.1, cpFloor: 0 };
+export const DEFAULT_POLICY: DecisionPolicy = { cpRerollThreshold: 0.6, cpFloor: 0 };
 
 export interface DecisionChoice {
   optionId: string;

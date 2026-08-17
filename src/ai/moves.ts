@@ -49,17 +49,17 @@ interface Cell {
  * do not depend on the other operatives — so they cache well across planning candidates.
  * Bounded to keep memory flat over a soak run.
  */
-const FIELD_CACHE = new Map<string, Map<string, Cell>>();
-const FIELD_CACHE_MAX = 2048;
+/**
+ * Two-level cache: (operative, position, step) -> budget -> field. A field computed for a
+ * LARGER budget already contains every cell of a smaller one, so a single flood fill can serve
+ * Reposition, Dash, Fall Back, Charge and a counteract move. `reachableCells` is by far the
+ * most expensive call the AI makes, so this matters.
+ */
+const FIELD_CACHE = new Map<string, Map<number, Map<string, Cell>>>();
+const FIELD_CACHE_MAX = 512;
 
-function fieldFor(
-  ctx: GameContext,
-  state: GameState,
-  op: OperativeState,
-  budget: number,
-  step: number,
-): Map<string, Cell> {
-  const key = [
+function opKey(state: GameState, op: OperativeState, step: number): string {
+  return [
     state.map.id,
     Object.keys(state.terrainState).length,
     state.placedFeatures.length,
@@ -68,26 +68,61 @@ function fieldFor(
     op.pos.y.toFixed(2),
     op.z.toFixed(2),
     op.rot.toFixed(1),
-    budget.toFixed(2),
     step,
   ].join('|');
-  const hit = FIELD_CACHE.get(key);
-  if (hit) return hit;
+}
+
+function fieldFor(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  budget: number,
+  step: number,
+): Map<string, Cell> {
+  const key = opKey(state, op, step);
+  let byBudget = FIELD_CACHE.get(key);
+  if (byBudget) {
+    let bestBudget = Infinity;
+    let best: Map<string, Cell> | undefined;
+    for (const [b, field] of byBudget) {
+      if (b + 1e-6 >= budget && b < bestBudget) {
+        bestBudget = b;
+        best = field;
+      }
+    }
+    if (best) return best;
+  } else {
+    if (FIELD_CACHE.size >= FIELD_CACHE_MAX) FIELD_CACHE.clear();
+    byBudget = new Map();
+    FIELD_CACHE.set(key, byBudget);
+  }
   const field = reachableCells(ctx, state, op, budget, step);
-  if (FIELD_CACHE.size >= FIELD_CACHE_MAX) FIELD_CACHE.clear();
-  FIELD_CACHE.set(key, field);
+  byBudget.set(budget, field);
   return field;
 }
 
 /**
- * ONE field per (operative, position) covers every movement action: a Charge has the largest
- * budget (Move + 2"), so a Reposition / Dash / Fall Back / counteract move is the same field
- * filtered by cost. `reachableCells` is the most expensive call the AI makes, so this keeps
- * planning to a single flood fill per position.
+ * Pre-compute the field at the largest budget any of this operative's movement actions could
+ * use, so the per-action calls all hit the cache.
  */
+export function primeMoveField(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  actions: MoveAction[],
+  step = 0.5,
+  hardCap?: number,
+): void {
+  let max = 0;
+  for (const action of actions) {
+    const budget = Math.min(moveBudget(ctx, state, op, moveOptionsFor(action)), hardCap ?? Infinity);
+    max = Math.max(max, budget);
+  }
+  if (max > 0) fieldFor(ctx, state, op, max, step);
+}
+
 function cellsWithin(ctx: GameContext, state: GameState, op: OperativeState, budget: number, step: number): Cell[] {
-  const fieldBudget = Math.max(budget, moveBudget(ctx, state, op, moveOptionsFor('Charge')));
-  const field = fieldFor(ctx, state, op, fieldBudget, step);
+  const field = fieldFor(ctx, state, op, budget, step);
   const out: Cell[] = [];
   for (const cell of field.values()) if (cell.cost <= budget + 1e-6) out.push(cell);
   return out;

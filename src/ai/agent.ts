@@ -26,6 +26,13 @@ import { evaluate, objectivesHeldFrom, positionContext, positionScore, roleOf } 
 import { enumerateCandidates, interruptCandidates } from './legal.ts';
 import { agentConfig, type Agent, type AgentConfig, type Candidate, type Difficulty } from './types.ts';
 
+/** Does this candidate change where the operative stands? */
+function movesOperative(cand: Candidate): boolean {
+  if (cand.intent.t !== 'PerformAction') return false;
+  const a = cand.intent.action;
+  return a === 'Reposition' || a === 'Dash' || a === 'Fall Back' || a === 'Charge';
+}
+
 interface PlanStep {
   intent: Intent;
   /** For re-validation right before dispatch. */
@@ -155,7 +162,7 @@ export class TacticalAgent implements Agent {
 
   /** Cheap ranking so only the promising operatives get a full plan. */
   private shortlistOperatives(ctx: GameContext, state: GameState, ready: OperativeState[]): OperativeState[] {
-    const depth = this.cfg.difficulty === 'recruit' ? 1 : this.cfg.difficulty === 'veteran' ? 2 : 3;
+    const depth = Math.max(1, this.cfg.shortlist);
     const scored = ready.map((op) => {
       const shot = shotPlans(ctx, state, op)[0];
       const role = roleOf(ctx, state, op);
@@ -198,7 +205,7 @@ export class TacticalAgent implements Agent {
     if (!start) return { steps: [], score: -Infinity };
     let current = start;
     const steps: PlanStep[] = [];
-    let score = this.score(ctx, current, player) + this.positionTerm(ctx, current, opId);
+    let score = this.score(ctx, current, player);
     const op = current.operatives[opId];
     const maxSteps = op ? Math.min(4, Math.max(1, aplOf(ctx, current, op))) : 2;
 
@@ -207,11 +214,12 @@ export class TacticalAgent implements Agent {
       const options = this.enumerate(ctx, current, player).filter((c) => c.kind === 'action' || c.kind === 'ploy');
       if (options.length === 0) break;
       const beam = this.beamOf(options);
+      const basePos = beam.some(movesOperative) ? this.positionTerm(ctx, current, opId) : 0;
       let bestScore = score;
       let bestIntent: Intent | null = null;
       let bestState: GameState | null = null;
       for (const cand of beam) {
-        const outcome = this.evaluateCandidate(ctx, current, player, cand, `step${depth}:${opId}`, opId);
+        const outcome = this.evaluateCandidate(ctx, current, player, cand, `step${depth}:${opId}`, opId, basePos);
         if (!outcome) continue;
         if (outcome.score > bestScore) {
           bestScore = outcome.score;
@@ -253,10 +261,12 @@ export class TacticalAgent implements Agent {
     const options = candidates.filter((c) => c.kind === 'action' || c.kind === 'ploy');
     if (options.length === 0) return endIntent;
     const rng = this.noiseStream(ctx, state, player, 'act');
-    const baseline = this.score(ctx, state, player) + this.positionTerm(ctx, state, active.id);
+    const baseline = this.score(ctx, state, player);
+    const beam = this.beamOf(options);
+    const basePos = beam.some(movesOperative) ? this.positionTerm(ctx, state, active.id) : 0;
     let best: { intent: Intent; score: number } | null = null;
-    for (const cand of this.beamOf(options)) {
-      const outcome = this.evaluateCandidate(ctx, state, player, cand, `single:${active.id}`, active.id);
+    for (const cand of beam) {
+      const outcome = this.evaluateCandidate(ctx, state, player, cand, `single:${active.id}`, active.id, basePos);
       if (!outcome) continue;
       const score = outcome.score + this.noise(rng);
       if (!best || score > best.score) best = { intent: cand.intent, score };
@@ -301,9 +311,11 @@ export class TacticalAgent implements Agent {
       if (!sim) continue;
       const opId = cand.intent.t === 'Counteract' ? cand.intent.operativeId : undefined;
       const inner = this.enumerate(ctx, sim, player, 3).filter((c) => c.kind === 'action');
-      let bestInner = this.score(ctx, sim, player) + this.positionTerm(ctx, sim, opId);
-      for (const step of this.beamOf(inner)) {
-        const outcome = this.evaluateCandidate(ctx, sim, player, step, 'counteract-step', opId);
+      const innerBeam = this.beamOf(inner);
+      const basePos = innerBeam.some(movesOperative) ? this.positionTerm(ctx, sim, opId) : 0;
+      let bestInner = this.score(ctx, sim, player);
+      for (const step of innerBeam) {
+        const outcome = this.evaluateCandidate(ctx, sim, player, step, 'counteract-step', opId, basePos);
         if (outcome && outcome.score > bestInner) bestInner = outcome.score;
         if (this.exhausted()) break;
       }
@@ -356,6 +368,7 @@ export class TacticalAgent implements Agent {
     return enumerateCandidates(ctx, state, player, {
       weights: this.cfg.weights,
       moveLimit: moveLimit ?? this.cfg.beam + 1,
+      moveStep: this.cfg.moveStep,
     });
   }
 
@@ -372,6 +385,7 @@ export class TacticalAgent implements Agent {
     cand: Candidate,
     tag: string,
     focusOpId?: string,
+    basePositionTerm = 0,
   ): { score: number; state: GameState } | null {
     const samples = Math.max(1, this.cfg.rollouts);
     let total = 0;
@@ -387,8 +401,10 @@ export class TacticalAgent implements Agent {
     }
     if (!last || taken === 0) return null;
     // Positional value is a property of where the operative ended up, not of the dice, so it
-    // is priced once per candidate rather than once per rollout.
-    return { score: total / taken + this.positionTerm(ctx, last, focusOpId), state: last };
+    // is priced once per candidate rather than once per rollout — and only for candidates that
+    // actually MOVE, since for everything else the delta against the baseline is zero.
+    const delta = movesOperative(cand) ? this.positionTerm(ctx, last, focusOpId) - basePositionTerm : 0;
+    return { score: total / taken + delta, state: last };
   }
 
   /**

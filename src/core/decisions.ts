@@ -90,7 +90,14 @@ export function resolveDecision(
     default: {
       // Ops own several decision kinds (the secret TP1 primary op, Stake Claim, Reboot
       // numbers, Envoy, Flank). Without this the primary-op prompt would block the reducer.
-      const handled = ctx.resolveOpDecision?.(ctx, state, decisionId, optionId, payload) ?? false;
+      let handled = false;
+      for (const handler of ctx.decisionHandlers ?? []) {
+        if (handler(ctx, state, decision, optionId, payload)) {
+          handled = true;
+          break;
+        }
+      }
+      if (!handled) handled = ctx.resolveOpDecision?.(ctx, state, decisionId, optionId, payload) ?? false;
       if (!handled) {
         log(state, { kind: 'system', text: `decision '${decision.kind}' had no handler — recorded only` });
       }
