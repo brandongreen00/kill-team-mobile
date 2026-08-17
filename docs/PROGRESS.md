@@ -2,6 +2,29 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-17 — Phases 0, 2 and 4 landed; 1, 3, 5 and 7 in flight
+
+**Landed this session (branch `claude/kill-team-mobile-overhaul-ohtkmd`)**
+- Phase 0 scaffold + the pure rules core (see the entry below for the file-by-file list).
+- Phase 1 maps: `tools/maps/extract_cards.py` produces all 24 Approved Ops layouts into
+  `data/maps/**` with terrain templates and heights in `data/terrain/**`, plus side-by-side
+  overlays in `docs/maps/overlays/`.
+- Phase 4 game flow + visible dice: world-anchored dice pools above the shooter and the
+  defender, per-die identity through rerolls, one decision surface for every reactive window,
+  the activation action sheet, the setup wizard, and the targeting-line inspector with a
+  side-elevation view.
+- Team data for all 48 kill teams (`tools/teams/*`, `data/teams/*.json`, `docs/TEAM-DATA.md`)
+  including a diff against the old `factions.js` that found 3 missing teams, ~20 dropped rare
+  weapon rules and 8 real stat errors.
+- `tests/integration.test.ts` plays a deployment and a shot on all 24 real maps with zero
+  rejected intents; `e2e/smoke.spec.ts` is green on iPhone SE, Pixel 7 and desktop.
+
+**Still in flight at the end of the session** — ops (`src/core/ops/**`), universal equipment
+(`src/core/equipment/**`), the AI (`src/ai/**`) and the batch-1 team modules
+(`src/teams/**`). See `docs/OVERHAUL-REPORT.md` for exactly where each stands.
+
+---
+
 ## 2026-08-17 — Phase 0 (scaffold) complete; Phase 2 (rules core) substantially implemented
 
 **Done**

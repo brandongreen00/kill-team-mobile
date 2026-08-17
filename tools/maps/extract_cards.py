@@ -848,7 +848,7 @@ def build_map(card, mapId, killzone, name):
         qa['latticeStepPx'] = round(wqa['step_px'], 3)
         qa['wallThicknessPx'] = round(wqa['wall_px'], 2)
 
-    objectives = _finish_objectives(objs, features, annotations, frame, img)
+    objectives = _finish_objectives(objs, features, annotations, killzone)
 
     out = dict(
         id=mapId, killzone=killzone, name=name,
@@ -963,7 +963,18 @@ def _finish_cq(walls, extras, mapId, killzone, frame):
     return feats
 
 
-def _finish_objectives(objs, features, annotations, frame, img):
+def _finish_objectives(objs, features, annotations, killzone):
+    """Objective markers, bound to the feature they stand on.
+
+    Appendix > GAME SEQUENCE: "Other than in Killzone: Bheta-Decima, all objective
+    markers must be set up on the killzone floor." So outside Bheta-Decima a
+    marker printed inside a stronghold or large ruin is on that structure's
+    GROUND floor, underneath its Ceiling/Vantage upper level — `onFeatureId` is
+    still recorded, but z stays 0. Only Bheta-Decima lifts a marker onto the
+    thermometric condenser's roof, and even there map 6's marker is annotated
+    "BENEATH THERMOMETRIC CONDENSER" and stays on the floor.
+    """
+    lift = killzone == 'bheta-decima'
     out = []
     for ob in objs:
         x, y = ob['pos']
@@ -980,10 +991,11 @@ def _finish_objectives(objs, features, annotations, frame, img):
             cx, cy = ob['px']
             if abs((ax0 + ax1) / 2 - cx) < 200 and abs((ay0 + ay1) / 2 - cy) < 200:
                 note = 'BENEATH THERMOMETRIC CONDENSER'
-                z, on = 0.0, on
+        if note is not None or not lift:
+            z = 0.0
         d = dict(id='obj.%s' % ob['kind'], kind=ob['kind'],
                  pos={'x': x, 'y': y}, z=round(z, 3))
-        if on and note is None:
+        if on:
             d['onFeatureId'] = on
         if note:
             d['note'] = note

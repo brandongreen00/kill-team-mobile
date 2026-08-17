@@ -243,7 +243,10 @@
     "x": 7.656,
     "y": 15.559,
     "rotDeg": 0,
-    "flip": false
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9955
    }
   },
   {
@@ -321,9 +324,12 @@
     "x": 12.863,
     "y": 17.88,
     "rotDeg": 0,
-    "flip": false
+    "flip": true
    },
-   "groupId": "bheta-decima-1.g1"
+   "groupId": "bheta-decima-1.g1",
+   "qa": {
+    "templateIoU": 0.5908
+   }
   },
   {
    "id": "bheta-decima-1.A",
@@ -375,10 +381,13 @@
    "placement": {
     "x": 14.868,
     "y": 15.708,
-    "rotDeg": 0,
+    "rotDeg": 270,
     "flip": false
    },
-   "groupId": "bheta-decima-1.g1"
+   "groupId": "bheta-decima-1.g1",
+   "qa": {
+    "templateIoU": 0.9832
+   }
   },
   {
    "id": "bheta-decima-1.C2",
@@ -431,7 +440,10 @@
     "x": 23.156,
     "y": 15.559,
     "rotDeg": 0,
-    "flip": false
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9955
    }
   },
   {
@@ -476,8 +488,11 @@
    "placement": {
     "x": 18.75,
     "y": 13.292,
-    "rotDeg": 0,
+    "rotDeg": 270,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9998
    }
   },
   {
@@ -534,8 +549,11 @@
    "placement": {
     "x": 15.935,
     "y": 9.336,
-    "rotDeg": 0,
+    "rotDeg": 180,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9524
    }
   },
   {
@@ -819,8 +837,11 @@
    "placement": {
     "x": 14.977,
     "y": 5.252,
-    "rotDeg": 0,
+    "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9945
    }
   },
   {
@@ -866,7 +887,10 @@
     "x": 8.375,
     "y": 5.292,
     "rotDeg": 0,
-    "flip": false
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9881
    }
   },
   {
@@ -912,7 +936,10 @@
     "x": 21.625,
     "y": 5.292,
     "rotDeg": 0,
-    "flip": false
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9881
    }
   }
  ],
@@ -928,7 +955,9 @@
    "dropDepthP2": 6.0,
    "deployment": "short-edge",
    "p1Side": "right",
-   "centreSeamErrIn": 0.0208
+   "centreSeamErrIn": 0.0208,
+   "templateIoUMin": 0.5908,
+   "templateIoUMedian": 0.9881
   }
  },
  "hazardous": [

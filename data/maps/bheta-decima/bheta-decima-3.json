@@ -233,8 +233,11 @@
    "placement": {
     "x": 5.203,
     "y": 16.578,
-    "rotDeg": 0,
-    "flip": false
+    "rotDeg": 90,
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9639
    }
   },
   {
@@ -281,6 +284,9 @@
     "y": 17.792,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -327,6 +333,9 @@
     "y": 17.792,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -381,6 +390,9 @@
     "y": 12.101,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9999
    }
   },
   {
@@ -664,8 +676,11 @@
    "placement": {
     "x": 14.977,
     "y": 11.294,
-    "rotDeg": 0,
+    "rotDeg": 90,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9945
    }
   },
   {
@@ -720,6 +735,9 @@
     "y": 9.101,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9999
    }
   },
   {
@@ -765,7 +783,10 @@
     "x": 8.875,
     "y": 11.333,
     "rotDeg": 0,
-    "flip": false
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9881
    }
   },
   {
@@ -812,6 +833,9 @@
     "y": 11.292,
     "rotDeg": 0,
     "flip": false
+   },
+   "qa": {
+    "templateIoU": 1.0
    }
   },
   {
@@ -856,8 +880,11 @@
    "placement": {
     "x": 18.203,
     "y": 5.495,
-    "rotDeg": 0,
-    "flip": false
+    "rotDeg": 90,
+    "flip": true
+   },
+   "qa": {
+    "templateIoU": 0.9638
    }
   }
  ],
@@ -873,7 +900,9 @@
    "dropDepthP2": 4.0,
    "deployment": "short-edge",
    "p1Side": "right",
-   "centreSeamErrIn": 0.0208
+   "centreSeamErrIn": 0.0208,
+   "templateIoUMin": 0.9638,
+   "templateIoUMedian": 0.9999
   }
  },
  "hazardous": [

@@ -27,7 +27,7 @@ import {
 } from '../common.ts';
 import { opText } from '../text.ts';
 import type { GameContext } from '../../context.ts';
-import type { GameState, OperativeState, PlayerId } from '../../types.ts';
+import type { GameState, OperativeState, PlayerId, Vec2 } from '../../types.ts';
 
 const ID = 'tac.flank';
 const PER_TP_CAP = 2;
@@ -46,23 +46,21 @@ const scratch = (state: GameState): FlankScratch =>
 const REVEAL_GAMBIT = `${ID}:reveal`;
 
 /** Which side of the flank line is a point on? >0 = 'left', <0 = 'right'. */
-function sideOf(state: GameState, p: { x: number; y: number }): number {
+export function flankSide(state: GameState, p: Vec2): number {
   const { a, b } = state.map.flankLine;
   return cross(sub(b, a), sub(p, a));
 }
 
-export function whollyWithinFlank(ctx: GameContext, op: OperativeState, flank: Flank): boolean {
-  const pts = [op.pos, ...basePerimeter(op.pos, card(ctx, op).base, op.rot, 24)];
+export function whollyWithinFlank(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  flank: Flank,
+): boolean {
+  const pts: Vec2[] = [op.pos, ...basePerimeter(op.pos, card(ctx, op).base, op.rot, 24)];
   const want = flank === 'left' ? 1 : -1;
-  return pts.every((p) => Math.sign(sideOfCached(op, p)) === want);
-  function sideOfCached(o: OperativeState, q: { x: number; y: number }): number {
-    void o;
-    return sideOf(stateRef!, q);
-  }
+  return pts.every((p) => Math.sign(flankSide(state, p)) === want);
 }
-
-/** `whollyWithinFlank` needs the map; kept out of the signature for call-site brevity. */
-let stateRef: GameState | undefined;
 
 export function contestingFlank(
   ctx: GameContext,
@@ -70,13 +68,10 @@ export function contestingFlank(
   player: PlayerId,
   flank: Flank,
 ): OperativeState[] {
-  stateRef = state;
   const enemyTerritory = territoryOf(state, otherPlayer(player));
-  const out = aliveOperatives(state, player).filter(
-    (o) => whollyWithinFlank(ctx, o, flank) && whollyWithin(ctx, o, enemyTerritory),
+  return aliveOperatives(state, player).filter(
+    (o) => whollyWithinFlank(ctx, state, o, flank) && whollyWithin(ctx, o, enemyTerritory),
   );
-  stateRef = undefined;
-  return out;
 }
 
 export function controlsFlank(ctx: GameContext, state: GameState, player: PlayerId, flank: Flank): boolean {

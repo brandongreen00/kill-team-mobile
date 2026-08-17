@@ -353,8 +353,12 @@ export interface TeamEquipmentDef {
 
 export interface TeamModule {
   id: string;
-  /** Registers all faction rules, ploys, equipment and unique actions as hooks. */
-  register(reg: HookRegistry, player: PlayerId): void;
+  /**
+   * Registers all faction rules, ploys, equipment and unique actions as hooks.
+   * Hook handlers are not given a GameContext, so `rebuildHooks` passes it here for the
+   * module to capture: team rules need datacards (keywords, bases) and geometry.
+   */
+  register(reg: HookRegistry, player: PlayerId, ctx?: import('./context.ts').GameContext): void;
   ploys: PloyDef[];
   equipment: TeamEquipmentDef[];
   /** Light hints so the generic AI can use the team without team-specific AI code. */

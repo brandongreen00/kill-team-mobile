@@ -85,7 +85,7 @@ export function rebuildHooks(ctx: GameContext, state: GameState): void {
   const reg = new HookRegistry();
   for (const player of ['p1', 'p2'] as PlayerId[]) {
     const team = ctx.teams.get(state.teams[player].teamId);
-    team?.register(reg, player);
+    team?.register(reg, player, ctx);
     for (const eqId of state.teams[player].equipment) {
       ctx.equipment.get(eqId)?.register?.(reg, player);
     }
