@@ -443,12 +443,28 @@ def volkus_features(img, frame, objectives):
     core = ndimage.binary_opening(ink, np.ones((5, 5), bool))
     ink = ndimage.binary_propagation(core, mask=ink)
 
-    for box in dashed_rects(img, ink, chip_boxes):
-        green = cut_rect_outline(green, box)
-
     doors = _volkus_doors(img, ink, interior)
 
     chips = {t: (cx, cy) for t, cx, cy, _ in chip_list}
+
+    # --- DECISION D-014 (owner, 2026-08-17) -------------------------------
+    # A white DASHED rectangle around a piece means that piece tucks slightly
+    # UNDER the adjacent raised terrain; a solid outline means it sits on top.
+    # So a dashed piece is on the killzone floor (z0 = 0) and the card only
+    # draws the part of it that is not hidden by the level above. The dashed
+    # rectangle is therefore the piece's real footprint, and the raised level
+    # it tucks under stays continuous across it (its green is NOT cut).
+    under = {}
+    for box in dashed_rects(img, ink, chip_boxes):
+        owner = None
+        for t, (cx, cy) in chips.items():
+            if box[0] <= cx < box[2] and box[1] <= cy < box[3]:
+                owner = t
+                break
+        if owner is not None:
+            under[owner] = box
+    for t in under:
+        chips.pop(t, None)          # its footprint comes from the rectangle
 
     green_blobs = []
     for blob in G.component_masks(green, 40):
@@ -507,6 +523,16 @@ def volkus_features(img, frame, objectives):
         if not parts:
             continue
         out.append(dict(label=label, kind=kind, parts=parts))
+
+    for label, box in sorted(under.items()):
+        kind = T.LABEL_TO_KIND.get(('volkus', label))
+        if kind is None:
+            continue
+        pspec = dict(T.PIECES[kind]['parts'][0])
+        pspec['z0'] = 0.0           # D-014: dashed => on the killzone floor
+        pspec['underRaisedLevel'] = True
+        poly = G.px_rect_to_board(frame, *box)
+        out.append(dict(label=label, kind=kind, parts=[(pspec, poly)]))
     return out
 
 
@@ -973,7 +999,7 @@ def _finish_open(raw, mapId, group=False):
             p = dict(id='%s.p%d' % (fid, k), featureId=fid, poly=G.round_poly(poly),
                      z0=pspec['z0'], z1=pspec['z1'], types=list(pspec['types']))
             for opt in ('role', 'blocksVisibility', 'standable', 'solid', 'state',
-                        'treatAsZ', 'maxOperatives'):
+                        'treatAsZ', 'maxOperatives', 'underRaisedLevel'):
                 if opt in pspec:
                     p[opt] = pspec[opt]
             parts.append(p)
@@ -1058,6 +1084,8 @@ def _finish_objectives(objs, features, annotations, killzone):
     thermometric condenser's roof, and even there map 6's marker is annotated
     "BENEATH THERMOMETRIC CONDENSER" and stays on the floor.
     """
+    # DECISION D-013 (owner, 2026-08-17): floor-only everywhere but Bheta-Decima,
+    # with no per-map exceptions.
     lift = killzone == 'bheta-decima'
     out = []
     for ob in objs:

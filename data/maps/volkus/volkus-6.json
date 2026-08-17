@@ -776,11 +776,11 @@
    "placement": {
     "x": 22.518,
     "y": 6.49,
-    "rotDeg": 270,
+    "rotDeg": 180,
     "flip": false
    },
    "qa": {
-    "templateIoU": 0.9964
+    "templateIoU": 0.9951
    }
   },
   {
@@ -899,15 +899,31 @@
       },
       {
        "x": 13.229,
-       "y": 11.083
-      },
-      {
-       "x": 14.021,
        "y": 11.042
       },
       {
-       "x": 14.021,
-       "y": 8.0
+       "x": 12.125,
+       "y": 11.021
+      },
+      {
+       "x": 11.979,
+       "y": 10.875
+      },
+      {
+       "x": 12.021,
+       "y": 7.542
+      },
+      {
+       "x": 13.833,
+       "y": 7.479
+      },
+      {
+       "x": 13.979,
+       "y": 7.625
+      },
+      {
+       "x": 13.958,
+       "y": 7.979
       },
       {
        "x": 14.25,
@@ -915,10 +931,6 @@
       },
       {
        "x": 14.708,
-       "y": 8.354
-      },
-      {
-       "x": 14.875,
        "y": 8.354
       },
       {
@@ -953,13 +965,13 @@
     }
    ],
    "placement": {
-    "x": 15.105,
-    "y": 11.611,
-    "rotDeg": 0,
-    "flip": true
+    "x": 14.736,
+    "y": 11.263,
+    "rotDeg": 180,
+    "flip": false
    },
    "qa": {
-    "templateIoU": 0.8176
+    "templateIoU": 0.6931
    }
   },
   {
@@ -1404,53 +1416,6 @@
    }
   },
   {
-   "id": "volkus-6.I",
-   "kind": "volkus.lightRubble",
-   "label": "I",
-   "parts": [
-    {
-     "id": "volkus-6.I.p0",
-     "featureId": "volkus-6.I",
-     "poly": [
-      {
-       "x": 12.021,
-       "y": 7.542
-      },
-      {
-       "x": 13.917,
-       "y": 7.521
-      },
-      {
-       "x": 13.938,
-       "y": 10.958
-      },
-      {
-       "x": 12.021,
-       "y": 10.958
-      }
-     ],
-     "z0": 0.0,
-     "z1": 1.0,
-     "types": [
-      "Light"
-     ],
-     "role": "rubble",
-     "blocksVisibility": false,
-     "standable": false,
-     "solid": true
-    }
-   ],
-   "placement": {
-    "x": 12.974,
-    "y": 9.245,
-    "rotDeg": 0,
-    "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9393
-   }
-  },
-  {
    "id": "volkus-6.J",
    "kind": "volkus.lightRubble",
    "label": "J",
@@ -1739,6 +1704,54 @@
    },
    "qa": {
     "templateIoU": 0.9881
+   }
+  },
+  {
+   "id": "volkus-6.I",
+   "kind": "volkus.lightRubble",
+   "label": "I",
+   "parts": [
+    {
+     "id": "volkus-6.I.p0",
+     "featureId": "volkus-6.I",
+     "poly": [
+      {
+       "x": 11.958,
+       "y": 7.417
+      },
+      {
+       "x": 14.042,
+       "y": 7.417
+      },
+      {
+       "x": 14.042,
+       "y": 11.042
+      },
+      {
+       "x": 11.958,
+       "y": 11.042
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.0,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true,
+     "underRaisedLevel": true
+    }
+   ],
+   "placement": {
+    "x": 13.0,
+    "y": 9.229,
+    "rotDeg": 0,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9333
    }
   }
  ],

@@ -63,9 +63,9 @@ export interface AgentConfig {
 
 export const DIFFICULTY_PRESETS: Record<Difficulty, Omit<AgentConfig, 'weights' | 'difficulty'>> = {
   // Recruit plays honestly but shallowly, and misjudges by a wide margin.
-  recruit: { nodeBudget: 60, timeBudgetMs: 120, rollouts: 0, beam: 2, noise: 26 },
-  veteran: { nodeBudget: 220, timeBudgetMs: 220, rollouts: 1, beam: 4, noise: 8 },
-  elite: { nodeBudget: 600, timeBudgetMs: 290, rollouts: 3, beam: 6, noise: 0 },
+  recruit: { nodeBudget: 40, timeBudgetMs: 25, rollouts: 0, beam: 2, noise: 26 },
+  veteran: { nodeBudget: 160, timeBudgetMs: 60, rollouts: 1, beam: 4, noise: 8 },
+  elite: { nodeBudget: 700, timeBudgetMs: 280, rollouts: 2, beam: 6, noise: 0 },
 };
 
 export function agentConfig(difficulty: Difficulty = 'elite', over: Partial<AgentConfig> = {}): AgentConfig {

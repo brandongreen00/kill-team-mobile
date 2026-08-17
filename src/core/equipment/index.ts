@@ -271,6 +271,9 @@ export function placeEquipment(
     );
   }
   state.setup.equipmentPlaced[player] = (state.setup.equipmentPlaced[player] ?? 0) + 1;
+  // The terrain index is keyed by `placedFeatures.length`, which cannot see a feature that was
+  // removed and re-added (Move With Barricade), so drop the cache explicitly.
+  ctx.terrainCache = undefined as unknown as GameContext['terrainCache'];
   log(state, { kind: 'system', player, text: `${equipment.name} set up (item ${itemIndex + 1})` });
   return { ok: true };
 }

@@ -406,8 +406,12 @@ export function fightPlans(ctx: GameContext, state: GameState, op: OperativeStat
 export const fightValue = (p: FightPlan): number =>
   p.estimate.dealt + p.estimate.killProb * 5 - p.estimate.taken * 0.9 - p.estimate.deathProb * 5;
 
+const VALUE_CACHE = new Map<string, number>();
+
 /** Rough worth of an operative, used to weight kills and losses. Datacards carry no points. */
 export function operativeValue(ctx: GameContext, op: OperativeState): number {
+  const cached = VALUE_CACHE.get(op.datacardId);
+  if (cached !== undefined) return cached;
   const c = card(ctx, op);
   let value = c.wounds * 0.6 + c.apl * 2 + c.move * 0.15 + (7 - c.save) * 1.2;
   for (const w of c.weapons) {
@@ -415,6 +419,8 @@ export function operativeValue(ctx: GameContext, op: OperativeState): number {
       value += (p.atk * (p.dmgN + p.dmgC)) / 12;
     }
   }
+  if (VALUE_CACHE.size > 512) VALUE_CACHE.clear();
+  VALUE_CACHE.set(op.datacardId, value);
   return value;
 }
 

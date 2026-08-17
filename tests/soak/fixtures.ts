@@ -76,28 +76,37 @@ export const AI_ROSTER: RosterSpec = {
   operatives: [
     { datacardId: 'ai.gunner' },
     { datacardId: 'ai.trooper' },
-    { datacardId: 'ai.trooper' },
     { datacardId: 'ai.blade' },
     { datacardId: 'ai.sniper' },
   ],
+};
+
+/** A five-strong roster for the heavier soak runs. */
+export const AI_ROSTER_BIG: RosterSpec = {
+  teamId: 'ai.test',
+  operatives: [...AI_ROSTER.operatives, { datacardId: 'ai.trooper' }],
 };
 
 // ---------------------------------------------------------------------------
 // Maps
 // ---------------------------------------------------------------------------
 
-/** An open arena with real cover: LoS blocks, obscuring slabs and two Vantage platforms. */
+/**
+ * An open arena with real cover but clear firing lanes: LoS blocks that grant cover and
+ * obscure, plus two Vantage platforms. Lanes matter — with no terrain at all, Kill Team
+ * weapons have unlimited range and positioning would be meaningless.
+ */
 export function arenaMap(): KillzoneMap {
   const features: TerrainFeature[] = [
-    heavyBlock('a1', 7, 3, 2.5, 5, 3),
-    heavyBlock('a2', 7, 14, 2.5, 5, 3),
-    heavyBlock('b1', 13.5, 8, 3, 6, 4),
-    heavyBlock('b2', 13.5, 1, 3, 4, 2),
-    heavyBlock('b3', 13.5, 17, 3, 4, 2),
-    heavyBlock('c1', 20.5, 3, 2.5, 5, 3),
-    heavyBlock('c2', 20.5, 14, 2.5, 5, 3),
-    vantagePlatform('v1', 4, 9, 3, 4, 3),
-    vantagePlatform('v2', 23, 9, 3, 4, 3),
+    heavyBlock('a1', 8, 4, 2, 3, 3),
+    heavyBlock('a2', 8, 15, 2, 3, 3),
+    heavyBlock('b1', 14, 9.5, 2.5, 3, 4),
+    heavyBlock('b2', 13.5, 1.5, 2, 2, 2),
+    heavyBlock('b3', 13.5, 18.5, 2, 2, 2),
+    heavyBlock('c1', 20, 4, 2, 3, 3),
+    heavyBlock('c2', 20, 15, 2, 3, 3),
+    vantagePlatform('v1', 4, 9.5, 2.5, 3, 3),
+    vantagePlatform('v2', 23.5, 9.5, 2.5, 3, 3),
   ];
   return testMap({ id: 'ai-arena', name: 'AI arena', features });
 }
@@ -105,10 +114,10 @@ export function arenaMap(): KillzoneMap {
 /** A tighter board that exercises cover-vs-obscured and charges. */
 export function corridorMap(): KillzoneMap {
   const features: TerrainFeature[] = [
-    heavyBlock('w1', 9, 0, 1.5, 8, 4),
-    heavyBlock('w2', 9, 13, 1.5, 9, 4),
-    heavyBlock('w3', 19.5, 0, 1.5, 9, 4),
-    heavyBlock('w4', 19.5, 14, 1.5, 8, 4),
+    heavyBlock('w1', 9, 0, 1.5, 7, 4),
+    heavyBlock('w2', 9, 14, 1.5, 8, 4),
+    heavyBlock('w3', 19.5, 0, 1.5, 8, 4),
+    heavyBlock('w4', 19.5, 15, 1.5, 7, 4),
     heavyBlock('m1', 14, 9.5, 2, 3, 2),
   ];
   return testMap({ id: 'ai-corridor', name: 'AI corridor', features });

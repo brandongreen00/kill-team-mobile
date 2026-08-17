@@ -64,38 +64,38 @@
    "label": "B",
    "mapId": "volkus-1",
    "featureIndex": 1,
-   "iou": 0.9945,
-   "rotDeg": 0,
+   "iou": 0.7087,
+   "rotDeg": 270,
    "flip": false,
-   "x": 6.368,
-   "y": 5.007
+   "x": 6.381,
+   "y": 5.337
   },
   {
    "label": "B",
    "mapId": "volkus-2",
    "featureIndex": 1,
-   "iou": 0.9265,
-   "rotDeg": 0,
+   "iou": 0.7907,
+   "rotDeg": 270,
    "flip": false,
-   "x": 9.32,
-   "y": 13.996
+   "x": 9.47,
+   "y": 14.181
   },
   {
    "label": "B",
    "mapId": "volkus-3",
    "featureIndex": 1,
-   "iou": 0.9481,
-   "rotDeg": 180,
+   "iou": 0.5701,
+   "rotDeg": 90,
    "flip": false,
-   "x": 10.603,
-   "y": 8.054
+   "x": 10.446,
+   "y": 7.477
   },
   {
    "label": "B",
    "mapId": "volkus-4",
    "featureIndex": 1,
-   "iou": 0.9942,
-   "rotDeg": 90,
+   "iou": 1.0,
+   "rotDeg": 0,
    "flip": false,
    "x": 18.987,
    "y": 9.412
@@ -104,8 +104,8 @@
    "label": "B",
    "mapId": "volkus-5",
    "featureIndex": 1,
-   "iou": 1.0,
-   "rotDeg": 0,
+   "iou": 0.9942,
+   "rotDeg": 270,
    "flip": false,
    "x": 10.368,
    "y": 16.009
@@ -114,8 +114,8 @@
    "label": "B",
    "mapId": "volkus-6",
    "featureIndex": 1,
-   "iou": 0.9964,
-   "rotDeg": 270,
+   "iou": 0.9951,
+   "rotDeg": 180,
    "flip": false,
    "x": 21.967,
    "y": 7.628
@@ -164,21 +164,21 @@
    "label": "C",
    "mapId": "volkus-5",
    "featureIndex": 2,
-   "iou": 0.6019,
+   "iou": 0.7898,
    "rotDeg": 0,
    "flip": true,
-   "x": 5.829,
-   "y": 9.485
+   "x": 5.682,
+   "y": 9.116
   },
   {
    "label": "C",
    "mapId": "volkus-6",
    "featureIndex": 2,
-   "iou": 0.8176,
-   "rotDeg": 0,
-   "flip": true,
-   "x": 15.256,
-   "y": 11.065
+   "iou": 0.6931,
+   "rotDeg": 180,
+   "flip": false,
+   "x": 14.599,
+   "y": 10.541
   },
   {
    "label": "D",
@@ -361,69 +361,9 @@
    "y": 3.104
   },
   {
-   "label": "G",
-   "mapId": "volkus-1",
-   "featureIndex": 6,
-   "iou": 0.8984,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 6.475,
-   "y": 7.521
-  },
-  {
-   "label": "G",
-   "mapId": "volkus-2",
-   "featureIndex": 6,
-   "iou": 0.8606,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 10.462,
-   "y": 15.471
-  },
-  {
-   "label": "G",
-   "mapId": "volkus-3",
-   "featureIndex": 6,
-   "iou": 0.9857,
-   "rotDeg": 90,
-   "flip": true,
-   "x": 9.474,
-   "y": 14.521
-  },
-  {
-   "label": "G",
-   "mapId": "volkus-4",
-   "featureIndex": 6,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 16.479,
-   "y": 3.521
-  },
-  {
-   "label": "G",
-   "mapId": "volkus-5",
-   "featureIndex": 6,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 7.479,
-   "y": 3.521
-  },
-  {
-   "label": "G",
-   "mapId": "volkus-6",
-   "featureIndex": 6,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 21.479,
-   "y": 14.521
-  },
-  {
    "label": "H",
    "mapId": "volkus-1",
-   "featureIndex": 7,
+   "featureIndex": 6,
    "iou": 0.9999,
    "rotDeg": 0,
    "flip": false,
@@ -433,7 +373,7 @@
   {
    "label": "H",
    "mapId": "volkus-2",
-   "featureIndex": 7,
+   "featureIndex": 6,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -483,38 +423,38 @@
   {
    "label": "I",
    "mapId": "volkus-1",
-   "featureIndex": 8,
-   "iou": 0.9868,
+   "featureIndex": 7,
+   "iou": 0.9891,
    "rotDeg": 90,
-   "flip": true,
+   "flip": false,
    "x": 14.729,
    "y": 11.021
   },
   {
    "label": "I",
    "mapId": "volkus-2",
-   "featureIndex": 8,
-   "iou": 0.9868,
+   "featureIndex": 7,
+   "iou": 0.9891,
    "rotDeg": 90,
-   "flip": true,
+   "flip": false,
    "x": 15.979,
    "y": 17.021
   },
   {
    "label": "I",
    "mapId": "volkus-3",
-   "featureIndex": 8,
-   "iou": 0.8657,
+   "featureIndex": 13,
+   "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 9.975,
-   "y": 5.769
+   "x": 10.0,
+   "y": 5.75
   },
   {
    "label": "I",
    "mapId": "volkus-4",
    "featureIndex": 8,
-   "iou": 0.9739,
+   "iou": 0.9698,
    "rotDeg": 0,
    "flip": false,
    "x": 23.979,
@@ -524,7 +464,7 @@
    "label": "I",
    "mapId": "volkus-5",
    "featureIndex": 8,
-   "iou": 1.0,
+   "iou": 0.9933,
    "rotDeg": 0,
    "flip": false,
    "x": 17.975,
@@ -533,17 +473,17 @@
   {
    "label": "I",
    "mapId": "volkus-6",
-   "featureIndex": 8,
-   "iou": 0.9393,
+   "featureIndex": 13,
+   "iou": 0.9333,
    "rotDeg": 0,
    "flip": false,
-   "x": 12.975,
-   "y": 9.248
+   "x": 13.0,
+   "y": 9.23
   },
   {
    "label": "J",
    "mapId": "volkus-1",
-   "featureIndex": 9,
+   "featureIndex": 8,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -553,7 +493,7 @@
   {
    "label": "J",
    "mapId": "volkus-2",
-   "featureIndex": 9,
+   "featureIndex": 8,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -563,7 +503,7 @@
   {
    "label": "J",
    "mapId": "volkus-3",
-   "featureIndex": 9,
+   "featureIndex": 8,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -584,16 +524,16 @@
    "label": "J",
    "mapId": "volkus-5",
    "featureIndex": 9,
-   "iou": 0.3757,
-   "rotDeg": 270,
-   "flip": false,
-   "x": 4.508,
-   "y": 6.953
+   "iou": 0.3177,
+   "rotDeg": 0,
+   "flip": true,
+   "x": 3.688,
+   "y": 7.96
   },
   {
    "label": "J",
    "mapId": "volkus-6",
-   "featureIndex": 9,
+   "featureIndex": 8,
    "iou": 0.9776,
    "rotDeg": 90,
    "flip": true,
@@ -603,7 +543,7 @@
   {
    "label": "K",
    "mapId": "volkus-1",
-   "featureIndex": 10,
+   "featureIndex": 9,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -613,7 +553,7 @@
   {
    "label": "K",
    "mapId": "volkus-2",
-   "featureIndex": 10,
+   "featureIndex": 9,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -623,7 +563,7 @@
   {
    "label": "K",
    "mapId": "volkus-3",
-   "featureIndex": 10,
+   "featureIndex": 9,
    "iou": 0.3648,
    "rotDeg": 90,
    "flip": false,
@@ -653,7 +593,7 @@
   {
    "label": "K",
    "mapId": "volkus-6",
-   "featureIndex": 10,
+   "featureIndex": 9,
    "iou": 0.228,
    "rotDeg": 0,
    "flip": true,
@@ -663,7 +603,7 @@
   {
    "label": "L",
    "mapId": "volkus-1",
-   "featureIndex": 11,
+   "featureIndex": 10,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -673,7 +613,7 @@
   {
    "label": "L",
    "mapId": "volkus-2",
-   "featureIndex": 11,
+   "featureIndex": 10,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -683,7 +623,7 @@
   {
    "label": "L",
    "mapId": "volkus-3",
-   "featureIndex": 11,
+   "featureIndex": 10,
    "iou": 0.9998,
    "rotDeg": 0,
    "flip": false,
@@ -713,7 +653,7 @@
   {
    "label": "L",
    "mapId": "volkus-6",
-   "featureIndex": 11,
+   "featureIndex": 10,
    "iou": 0.9891,
    "rotDeg": 90,
    "flip": true,
@@ -723,7 +663,7 @@
   {
    "label": "M",
    "mapId": "volkus-1",
-   "featureIndex": 12,
+   "featureIndex": 11,
    "iou": 0.9995,
    "rotDeg": 0,
    "flip": false,
@@ -733,7 +673,7 @@
   {
    "label": "M",
    "mapId": "volkus-2",
-   "featureIndex": 12,
+   "featureIndex": 11,
    "iou": 0.9995,
    "rotDeg": 0,
    "flip": false,
@@ -743,7 +683,7 @@
   {
    "label": "M",
    "mapId": "volkus-3",
-   "featureIndex": 12,
+   "featureIndex": 11,
    "iou": 0.9887,
    "rotDeg": 90,
    "flip": true,
@@ -773,7 +713,7 @@
   {
    "label": "M",
    "mapId": "volkus-6",
-   "featureIndex": 12,
+   "featureIndex": 11,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -783,7 +723,7 @@
   {
    "label": "N",
    "mapId": "volkus-1",
-   "featureIndex": 13,
+   "featureIndex": 12,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -793,7 +733,7 @@
   {
    "label": "N",
    "mapId": "volkus-2",
-   "featureIndex": 13,
+   "featureIndex": 12,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -803,7 +743,7 @@
   {
    "label": "N",
    "mapId": "volkus-3",
-   "featureIndex": 13,
+   "featureIndex": 12,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -833,12 +773,72 @@
   {
    "label": "N",
    "mapId": "volkus-6",
-   "featureIndex": 13,
+   "featureIndex": 12,
    "iou": 0.9881,
    "rotDeg": 90,
    "flip": true,
    "x": 26.479,
    "y": 3.895
+  },
+  {
+   "label": "G",
+   "mapId": "volkus-1",
+   "featureIndex": 13,
+   "iou": 0.8771,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 6.5,
+   "y": 7.5
+  },
+  {
+   "label": "G",
+   "mapId": "volkus-2",
+   "featureIndex": 13,
+   "iou": 0.8771,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 10.5,
+   "y": 15.5
+  },
+  {
+   "label": "G",
+   "mapId": "volkus-3",
+   "featureIndex": 6,
+   "iou": 0.9857,
+   "rotDeg": 90,
+   "flip": true,
+   "x": 9.474,
+   "y": 14.521
+  },
+  {
+   "label": "G",
+   "mapId": "volkus-4",
+   "featureIndex": 6,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 16.479,
+   "y": 3.521
+  },
+  {
+   "label": "G",
+   "mapId": "volkus-5",
+   "featureIndex": 6,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 7.479,
+   "y": 3.521
+  },
+  {
+   "label": "G",
+   "mapId": "volkus-6",
+   "featureIndex": 6,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 21.479,
+   "y": 14.521
   }
  ],
  "bheta-decima": [

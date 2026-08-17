@@ -639,24 +639,40 @@
        "y": 15.854
       },
       {
-       "x": 11.833,
-       "y": 15.771
-      },
-      {
-       "x": 11.021,
-       "y": 15.0
+       "x": 11.167,
+       "y": 15.104
       },
       {
        "x": 11.0,
-       "y": 13.979
+       "y": 15.104
+      },
+      {
+       "x": 10.979,
+       "y": 16.5
+      },
+      {
+       "x": 10.562,
+       "y": 16.792
+      },
+      {
+       "x": 10.458,
+       "y": 17.021
+      },
+      {
+       "x": 10.083,
+       "y": 17.021
+      },
+      {
+       "x": 9.979,
+       "y": 16.917
       },
       {
        "x": 9.958,
-       "y": 13.979
+       "y": 14.812
       },
       {
-       "x": 9.917,
-       "y": 14.771
+       "x": 9.792,
+       "y": 14.812
       },
       {
        "x": 7.75,
@@ -715,13 +731,13 @@
     }
    ],
    "placement": {
-    "x": 10.547,
-    "y": 14.521,
-    "rotDeg": 0,
+    "x": 10.504,
+    "y": 14.799,
+    "rotDeg": 270,
     "flip": false
    },
    "qa": {
-    "templateIoU": 0.9265
+    "templateIoU": 0.7907
    }
   },
   {
@@ -1271,57 +1287,6 @@
    }
   },
   {
-   "id": "volkus-2.G",
-   "kind": "volkus.heavyRubble",
-   "label": "G",
-   "parts": [
-    {
-     "id": "volkus-2.G.p0",
-     "featureId": "volkus-2.G",
-     "poly": [
-      {
-       "x": 10.021,
-       "y": 14.083
-      },
-      {
-       "x": 10.917,
-       "y": 14.062
-      },
-      {
-       "x": 10.938,
-       "y": 16.5
-      },
-      {
-       "x": 10.458,
-       "y": 16.979
-      },
-      {
-       "x": 10.021,
-       "y": 16.958
-      }
-     ],
-     "z0": 0.0,
-     "z1": 1.5,
-     "types": [
-      "Heavy"
-     ],
-     "role": "rubble",
-     "blocksVisibility": true,
-     "standable": false,
-     "solid": true
-    }
-   ],
-   "placement": {
-    "x": 10.471,
-    "y": 15.717,
-    "rotDeg": 90,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.8606
-   }
-  },
-  {
    "id": "volkus-2.H",
    "kind": "volkus.heavyRubble",
    "label": "H",
@@ -1409,10 +1374,10 @@
     "x": 15.979,
     "y": 17.021,
     "rotDeg": 90,
-    "flip": true
+    "flip": false
    },
    "qa": {
-    "templateIoU": 0.9868
+    "templateIoU": 0.9891
    }
   },
   {
@@ -1649,6 +1614,54 @@
    "qa": {
     "templateIoU": 1.0
    }
+  },
+  {
+   "id": "volkus-2.G",
+   "kind": "volkus.heavyRubble",
+   "label": "G",
+   "parts": [
+    {
+     "id": "volkus-2.G.p0",
+     "featureId": "volkus-2.G",
+     "poly": [
+      {
+       "x": 9.958,
+       "y": 13.958
+      },
+      {
+       "x": 11.042,
+       "y": 13.958
+      },
+      {
+       "x": 11.042,
+       "y": 17.042
+      },
+      {
+       "x": 9.958,
+       "y": 17.042
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.5,
+     "types": [
+      "Heavy"
+     ],
+     "role": "rubble",
+     "blocksVisibility": true,
+     "standable": false,
+     "solid": true,
+     "underRaisedLevel": true
+    }
+   ],
+   "placement": {
+    "x": 10.5,
+    "y": 15.5,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.8771
+   }
   }
  ],
  "source": {
@@ -1664,7 +1677,7 @@
    "deployment": "short-edge",
    "p1Side": "right",
    "centreSeamErrIn": 0.0208,
-   "templateIoUMin": 0.8606,
+   "templateIoUMin": 0.7907,
    "templateIoUMedian": 1.0
   }
  }

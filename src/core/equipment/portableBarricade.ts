@@ -112,6 +112,7 @@ registerAction({
     const id = feature.id;
     // "Before this operative moves, remove the portable barricade it's connected to."
     state.placedFeatures = state.placedFeatures.filter((f) => f.id !== id);
+    ctx.terrainCache = undefined as unknown as GameContext['terrainCache'];
     const reposition = getAction('Reposition');
     if (!reposition) return { ok: false, reason: 'the Reposition action is not registered' };
     const moved = reposition.perform(ctx, state, op, params);
@@ -120,6 +121,7 @@ registerAction({
     const rebuilt = buildEquipmentFeature({ id, kind: PORTABLE_KIND, owner, pos, rotDeg, item });
     if (barricadeSpotIsLegal(ctx, state, shieldPoly(rebuilt), id)) {
       state.placedFeatures.push(rebuilt);
+      ctx.terrainCache = undefined as unknown as GameContext['terrainCache'];
       log(state, { kind: 'action', player: op.player, text: `${op.letter} moves with the portable barricade` });
     } else {
       log(state, {

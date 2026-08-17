@@ -1,0 +1,227 @@
+# Killzone maps — extraction, geometry and QA
+
+All 24 Approved Ops 2025 killzone map layouts, extracted programmatically from the
+official map-card PNGs into `data/maps/<killzone>/<killzone>-N.json`, plus the
+terrain piece catalogue in `data/terrain/<killzone>.json`.
+
+Regenerate with `pnpm maps:extract && pnpm maps:overlay && pnpm maps:validate`.
+Method, tolerances and module layout: **`tools/maps/README.md`**.
+Overlays for visual review: **`docs/maps/overlays/*.png`** (extraction drawn over
+the card on the left, on its own on the right).
+
+## 1. Method in brief
+
+1. **Calibrate** the board frame from the card itself and assert it.
+   *Open killzones* (Volkus, Bheta-Decima): board interior 720 × 528 px over
+   30" × 22" ⇒ **exactly 24.0000 px/inch**, confirmed independently against the
+   printed 1" grid (step measures 24.000 px on all 12 cards).
+   *Close-quarters killzones* (Gallowdark, Tomb World): the 3.8125" lattice fits
+   at **exactly 94.000 px per square** (8 × 7 nodes) on all 12 cards. Card pixels
+   are mapped through the lattice, then the lattice is placed in the physical
+   board frame — 703 mm × 606 mm = **27.625" × 23.875"**, a 7 × 6 lattice of
+   3.8125" squares centred on it, giving border strips of exactly **0.46875"**
+   (short-side ends) and **0.5"** (long-side ends).
+2. **Palette** from the legend swatch PNGs in `keys/`, never guessed.
+3. **Board furniture**: drop-zone bands (snapped to 1/8" / to the lattice),
+   territories, centre line, flank line, killzone-edge ownership, objective
+   markers (owner read from the disc inside the white annulus), hazardous areas.
+4. **Labels** by exact-bitmap OCR of the printed chips — 14/14 letters on every
+   Volkus card, 9/9 on every Bheta-Decima card, 15–16 wall labels per Gallowdark
+   card, 19–23 per Tomb World card.
+5. **Terrain** by colour mask → 0.07" morphological close → drop < 0.20 sq in →
+   `find_contours` → Douglas-Peucker at 0.07" → CCW in board space. Volkus ink is
+   decomposed into axis-aligned wall bars; close-quarters walls are tested per
+   lattice edge and tiled with the labelled pieces.
+6. **Templates**: for each card letter the medoid instance becomes the template
+   and every instance is fitted to it (90°-multiple rotation + optional mirror);
+   the fit IoU is the QA number below and the template footprint is written to
+   `data/terrain/<killzone>.json`.
+
+Features carry compiled **world-space** polygons in `parts[].poly`, so consumers
+need no transform, alongside `placement { x, y, rotDeg, flip }` and the card
+`label`.
+
+## 2. Card conventions (owner-confirmed, 2026-08-17)
+
+Two conventions contradict what the source brief inferred. Both are now encoded
+explicitly in `tools/maps/extract_cards.py`, so a re-run reproduces them.
+
+**D-013 — Objective markers are floor-only outside Bheta-Decima.**
+Appendix › GAME SEQUENCE: *"Other than in Killzone: Bheta-Decima, all objective
+markers must be set up on the killzone floor."* `_finish_objectives` therefore
+forces `z = 0` for every objective in Volkus, Gallowdark and Tomb World,
+**with no per-map exceptions**, even where the printed marker falls inside a
+stronghold or large ruin (`volkus-4` P1 in Stronghold A, `volkus-5` P2 and
+`volkus-6` centre in large ruin C). `onFeatureId` is still recorded, because the
+marker is on that structure's ground floor *under* its Ceiling/Vantage upper
+level — which is exactly what Ceiling terrain means. Only Bheta-Decima lifts a
+marker (the thermometric condenser roof in maps 1–3), and even there map 6's
+printed "BENEATH THERMOMETRIC CONDENSER" callout is detected and forces `z` back
+to 0. Pinned by `tests/integration.test.ts`.
+
+**D-014 — A dashed outline means the piece tucks UNDER the adjacent raised
+terrain; a solid outline means it sits on top.** The brief read a white dashed
+rectangle inside a stronghold or large ruin as "rubble on that structure's upper
+level"; the owner confirmed the opposite. `dashed_rects()` finds those
+rectangles and `volkus_features()` gives the piece `z0 = 0` with
+`underRaisedLevel: true`, taking its footprint from the dashed rectangle (the
+card only draws the part of the piece that the level above does not hide) and
+leaving the raised level's own footprint continuous across it.
+
+Two further conventions read off the printed keys rather than inferred:
+white dashed lines **across a wall** are doors (`keys/VS2.png`); the dark pill
+beside a close-quarters wall is an **access point** — a hatchway or a breach
+point depending on the wall type (`keys/TW3.jpg`). The green ticks along some
+Tomb World walls mark the *Necron-Warrior modelled side of the wall*
+(`keys/TW1.jpg`), **not** a breach point, and are deliberately ignored.
+
+## 3. Per-map table
+
+`P1 killzone edge` is in engine coordinates (origin bottom-left, +y up, x along
+the long edge). Objectives are `(x, y)` in inches. `IoU` is min / median of the
+fitted-template match over that map's features. `Sym` is the fraction of the
+terrain footprint that maps onto itself under a 180° rotation — Approved Ops
+layouts are deliberately asymmetric (Killzones › SETTING UP KILLZONES:
+*"Try to avoid symmetrical killzones"*), so a low number is expected, not a fault.
+
+| Map | P1 killzone edge (engine coords) | Deployment | Drop depth | Objective P1 | Objective P2 | Objective centre | Features | IoU min / med | Sym | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `bheta-decima-1` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 6" / P2 6" | (17.5, 9.75) z=3 on&nbsp;B2 | (12.5, 17.75) z=3 on&nbsp;B | (15.042, 5.25) z=3 on&nbsp;D | 9: A B C D | 0.95 / 0.98 | 0.32 |  |
+| `bheta-decima-2` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 4" / P2 4" | (16.25, 18.25) | (13.75, 3.75) | (15, 11) z=3 on&nbsp;D | 9: A B C D | 0.96 / 1.00 | 0.47 |  |
+| `bheta-decima-3` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 4" / P2 4" | (16.25, 3.75) | (13.75, 18.25) | (15.042, 11.292) z=3 on&nbsp;D | 9: A B C D | 0.96 / 1.00 | 0.52 |  |
+| `bheta-decima-4` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (27.042, 12.75) | (2.75, 9) | (20.5, 11) z=3 on&nbsp;D | 9: A B C D | 0.94 / 0.97 | 0.27 |  |
+| `bheta-decima-5` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (27.75, 12.75) | (7.542, 11) z=3 on&nbsp;D | (15, 9) | 9: A B C D | 0.94 / 1.00 | 0.20 |  |
+| `bheta-decima-6` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (25.75, 12.75) | (4, 9) z=3 on&nbsp;D | (16.5, 11.042) z=3 on&nbsp;A2 | 9: A B C D | 0.40 / 0.98 | 0.33 |  |
+| `gallowdark-1` | (0.063, 23.875)–(27.643, 23.875) | long-edge (P1 top) | P1 4.3125" / P2 4.3125" | (6.248, 15.73) | (23.364, 8.105) | (15.739, 11.917) | 15: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.34 |  |
+| `gallowdark-2` | (0.063, 23.875)–(27.643, 23.875) | long-edge (P1 top) | P1 4.3125" / P2 4.3125" | (21.498, 15.73) | (15.739, 8.064) | (6.289, 11.917) | 15: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.46 |  |
+| `gallowdark-3` | (0.063, 23.875)–(27.643, 23.875) | long-edge (P1 top) | P1 4.3125" / P2 4.3125" | (13.711, 15.73) | (4.302, 8.105) | (23.364, 12.039) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.42 |  |
+| `gallowdark-4` | (27.625, 23.781)–(27.625, 0.013) | short-edge (P1 right) | P1 4.2812" / P2 4.2812" | (15.739, 19.542) | (11.927, 4.292) | (13.873, 11.917) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.51 |  |
+| `gallowdark-5` | (27.625, 23.781)–(27.625, 0.013) | short-edge (P1 right) | P1 4.2812" / P2 4.2812" | (15.739, 4.292) | (11.927, 19.542) | (13.873, 11.917) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.58 |  |
+| `gallowdark-6` | (27.625, 23.781)–(27.625, 0.013) | short-edge (P1 right) | P1 4.2812" / P2 4.2812" | (15.739, 11.917) | (11.927, 19.542) | (13.873, 4.292) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.28 |  |
+| `tomb-world-1` | (0, 23.781)–(0, 0.013) | short-edge (P1 left) | P1 4.2812" / P2 4.2812" | (10.223, 21.327) | (17.564, 17.514) | (13.792, 8.105) | 20: A1 A2 A3 A4 B1 B2 B3 B4 B? C1 C2 C3 C4 C5 T | 0.50 / 1.00 | 0.18 |  |
+| `tomb-world-2` | (0, 23.781)–(0, 0.013) | short-edge (P1 left) | P1 4.2812" / P2 4.2812" | (11.927, 21.448) | (15.739, 2.67) | (13.792, 11.917) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 1.00 / 1.00 | 0.41 |  |
+| `tomb-world-3` | (0, 23.781)–(0, 0.013) | short-edge (P1 left) | P1 4.2812" / P2 4.2812" | (10.629, 4.292) | (17.037, 19.542) | (13.792, 11.917) | 21: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 1.00 / 1.00 | 0.40 |  |
+| `tomb-world-4` | (0.063, 0)–(27.643, 0) | long-edge (P1 bottom) | P1 4.3125" / P2 4.3125" | (21.417, 8.105) | (5.883, 15.73) | (13.833, 11.958) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 0.99 / 1.00 | 0.57 |  |
+| `tomb-world-5` | (0.063, 0)–(27.643, 0) | long-edge (P1 bottom) | P1 4.3125" / P2 4.3125" | (23.364, 8.105) | (5.802, 15.73) | (15.05, 11.917) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 0.91 / 1.00 | 0.15 |  |
+| `tomb-world-6` | (0.063, 0)–(27.643, 0) | long-edge (P1 bottom) | P1 4.3125" / P2 4.3125" | (15.496, 8.064) | (19.552, 15.73) | (3.206, 11.917) | 22: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 0.96 / 1.00 | 0.14 |  |
+| `volkus-1` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 6" / P2 6" | (18.188, 3.771) | (11.771, 10.188) | (14.979, 16.021) | 14: A B C D E F G H I J K L M N | 0.71 / 1.00 | 0.23 |  |
+| `volkus-2` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 6" / P2 6" | (18.771, 12.771) | (11.229, 17.229) | (14.979, 3.771) | 14: A B C D E F G H I J K L M N | 0.79 / 1.00 | 0.32 |  |
+| `volkus-3` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 6" / P2 6" | (19.021, 3.812) on&nbsp;D | (11.229, 19.271) | (14.979, 11.021) | 14: A B C D E F G H I J K L M N | 0.36 / 1.00 | 0.30 |  |
+| `volkus-4` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (7.062, 12.896) on&nbsp;A | (14.979, 9.229) | (24.229, 11.021) | 14: A B C D E F G H I J K L M N | 0.91 / 0.99 | 0.09 |  |
+| `volkus-5` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (25.229, 13.729) | (5.188, 8.021) on&nbsp;C | (14.979, 11.021) | 14: A B C D E F G H I J K L M N | 0.32 / 0.99 | 0.31 |  |
+| `volkus-6` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (23.771, 13.771) | (7.021, 8.188) | (14.979, 11.021) on&nbsp;C | 14: A B C D E F G H I J K L M N | 0.23 / 0.99 | 0.21 |  |
+
+## 4. Heights, provenance and confidence
+
+Heights are **researched, not extracted** — the cards are top-down and carry no
+elevation. Confidence is one of `measured` (a published GW dimension),
+`photogrammetry` (measured off a key image against a known reference),
+`community` (a published third-party measurement of the real sprues) or
+`assumed`. **No measured height is rounded to a rules threshold**; values that
+land within 0.25" of 1"/2"/3"/4" are flagged in the table.
+
+| Height id | Inches | Confidence | Provenance |
+| --- | --- | --- | --- |
+| `volkus.strongholdA.top` | **5.906"** | `community` | Tale of Painters, "Review: Kill Team: Hivestorm Pt.1" (2024-09): Stronghold A (promethium-tank build) "footprint of approx. 18 x 13 cm, with a max. height of 15 cm" -> 150mm / 25.4 |
+| `volkus.strongholdA.level1` | **3.000"** | `community` | Tale of Painters, Hivestorm review: Stronghold A has "a floor at 3″ height" |
+| `volkus.strongholdB.top` | **7.480"** | `community` | Tale of Painters, Hivestorm review: Stronghold B "footprint of approx. 19 x 19cm, a maximum height of 19 cm" -> 190mm / 25.4 |
+| `volkus.strongholdB.level1` | **3.000"** | `community` | Tale of Painters, Hivestorm review: Stronghold B "floors placed at 3″ and 6″ height" |
+| `volkus.strongholdB.level2` | **6.000"** | `community` | Tale of Painters, Hivestorm review: Stronghold B "floors placed at 3″ and 6″ height" |
+| `volkus.largeRuin.level1` | **3.500"** | `community` | Tale of Painters, Hivestorm review: Manufactorum Ruins have "a top floor (placed at 3.5″ from the bottom)". Killzones rules: for intervening and targeting lines this level is TREATED as the height of a stronghold’s first upper level (3.0") — see `treatAsZ`. |
+| `volkus.largeRuin.top` | **4.500"** | `assumed` | No published figure. Upper rampart modelled as 1" of Light parapet above the 3.5" floor. CONFIRM WITH OWNER. |
+| `volkus.smallRuin.top` | **2.000"** | `assumed` | No published figure; the small ruin is a low corner wall roughly two thirds the height of a stronghold’s first floor. CONFIRM WITH OWNER. |
+| `volkus.heavyRubble.top` | **1.500"** | `assumed` | No published figure. Heavy rubble is modelled taller than a 32mm base is wide but below the 2" jump/drop threshold. CONFIRM WITH OWNER. |
+| `volkus.lightRubble.top` | **1.000"** | `assumed` | No published figure. CONFIRM WITH OWNER. |
+| `volkus.wreckage.top` | **1.250"** | `assumed` | Piece L (long wreckage) is not in the core-book Volkus inventory and has no published rules entry. CONFIRM WITH OWNER. ⚠ within 0.25" of the 1" rules threshold — **not** snapped |
+| `volkus.crates.top` | **1.500"** | `assumed` | Piece N (cargo-crate stack) is not in the core-book Volkus inventory and has no published rules entry. CONFIRM WITH OWNER. |
+| `cq.wall.top` | **2.362"** | `community` | Tale of Painters, "Review: Kill Team: Into the Dark – Part 1" (2022-09): "the Gallowdark elements have a height of 6 cm" -> 60mm / 25.4. Wall terrain blocks movement and visibility by rule regardless of height. |
+| `cq.wall.double` | **4.724"** | `community` | Tale of Painters, Into the Dark review: "Two Gallowdark elements have a height of 12 cm". |
+| `cq.teleportPad.top` | **0.200"** | `photogrammetry` | Measured off keys/TW3.jpg (teleport pad product photo) against its own 3.8125" square footprint: the pad is a shallow disc, ~5% of its width. It is Insignificant terrain, so the exact value never affects climb/drop. |
+| `cq.light.top` | **1.200"** | `assumed` | Sarcophagus / debris are Light terrain; no published height. CONFIRM WITH OWNER. ⚠ within 0.25" of the 1" rules threshold — **not** snapped |
+| `bheta.gantry.deck` | **3.000"** | `assumed` | NO published measurement found for the Bheta-Decima gantries (checked GW product pages, Tale of Painters and Goonhammer reviews, and the Kerlin killzone PDF). 3.0" is chosen because it matches the Volkus stronghold first floor, keeps the deck inside the 3" climb reach from the killzone floor, and above the 2" free-drop threshold. HIGHEST-PRIORITY VALUE TO CONFIRM WITH OWNER. |
+| `bheta.condenser.roof` | **3.000"** | `assumed` | No published measurement. Set equal to the gantry deck so the roof and adjoining gantries read as one level. CONFIRM WITH OWNER. |
+| `bheta.condenser.ledge` | **2.750"** | `assumed` | The inner ledge is Exposed + Insignificant, i.e. the rules explicitly say to ignore the slight height difference, so this value is cosmetic. CONFIRM WITH OWNER. ⚠ within 0.25" of the 3" rules threshold — **not** snapped |
+| `bheta.condenser.battlement` | **3.750"** | `assumed` | Battlements modelled as 0.75" of Light parapet above the roof. CONFIRM WITH OWNER. ⚠ within 0.25" of the 4" rules threshold — **not** snapped |
+
+### Heights to confirm with the owner (highest value first)
+
+1. **`bheta.gantry.deck` (3.0", assumed)** — no published measurement for the
+   Bheta-Decima gantries could be found (GW product pages, Tale of Painters and
+   Goonhammer reviews, and the Kerlin killzone PDF were all checked). This is
+   the single most load-bearing assumed value: it decides every climb, drop and
+   Vantage interaction on six maps. `bheta.condenser.roof`, `.ledge` and
+   `.battlement` follow from it.
+2. **`volkus.smallRuin.top` (2.0"), `volkus.heavyRubble.top` (1.5"),
+   `volkus.lightRubble.top` (1.0")** — no published figures. These sit right on
+   the 2" free-drop threshold, so they change how operatives cross the board.
+3. **`volkus.largeRuin.top` (4.5", assumed)** — the upper *rampart* height. The
+   floor beneath it (3.5") is published.
+4. **`cq.light.top` (1.2")** — Tomb World sarcophagus and debris.
+5. **`volkus.wreckage.top` / `volkus.crates.top`** — pieces L, M and N are on
+   the Volkus map cards and in `keys/VS1.png` but are **not** in the core-book
+   Volkus inventory (2× stronghold, 2× large ruin, 2× small ruin, 2× heavy
+   rubble, 3× light rubble) and have **no rules entry**, so both their heights
+   *and their terrain types* are assumed (L and M as Light, N as Heavy).
+6. **`cq.wall.top` (2.362", community)** — worth a sanity check. Wall terrain
+   blocks movement and visibility by rule regardless of height, so this only
+   matters for climbing onto a wall, which the rules do not permit anyway.
+
+Two rules-level height notes are carried in the data rather than baked in:
+the Volkus large ruin's floor is physically 3.5" but the Killzones page says to
+*treat it as a stronghold's first upper level* (3.0") for intervening and
+targeting lines — carried as `treatAsZ`; and Stronghold B's highest level takes
+at most one friendly operative — carried as `maxOperatives: 1`.
+
+## 5. QA gates
+
+`pnpm maps:validate` — **24 maps, 0 gate failures.**
+
+| Gate | Check | Result |
+| --- | --- | --- |
+| G1 | px/inch asserted per card | 24.0000 on all 12 open cards; 94.000 px/lattice square on all 12 CQ cards |
+| G2 | no polygon off-board, none degenerate | pass on all 24 |
+| G3 | piece counts within the printed killzone inventory | pass on all 24 |
+| G4 | every feature labelled | 1 exception: `tomb-world-1.B?-1` |
+| G5 | exactly 3 objectives (p1/p2/centre) | pass on all 24 |
+| G6 | drop-zone depth is a printed value | pass — Volkus 6"/3", Bheta-Decima 6"/4"/3", CQ 4.3125" (long-edge) / 4.28125" (short-edge) |
+| G7 | fitted-template IoU ≥ 0.92 | median 0.97–1.00 on every map; 20 individual features below the gate (see §6) |
+| G8 | CQ wall centrelines within 0.1" of the lattice | worst 0.0003" |
+| G9 | 180° rotational symmetry | reported, not gated (0.09–0.58; the layouts are asymmetric by design) |
+
+Objective-marker accuracy: the neutral marker sits within **0.02"–0.10"** of the
+centre line on 23 maps. `bheta-decima-5` is the exception — its neutral marker is
+genuinely printed 2.0" into P2 territory, so the check is a report, not a gate.
+
+Territory-seam check (`centreSeamErrIn`, the printed tint boundary against the
+derived centre line): **≤ 0.041" on all 24 maps**.
+
+## 6. Known nits
+
+* **20 features below the 0.92 IoU gate** (out of 353). All are on Volkus,
+  Bheta-Decima 6 and two close-quarters maps, and all have the same cause: the
+  card draws only the *visible* part of a piece that is overlapped by another
+  piece, so the traced footprint is smaller than the physical piece.
+  - Volkus `K`/`J`/`I`/`G` (0.23–0.88): rubble pieces that tuck under a raised
+    level (D-014). Where the dashed outline is unbroken the extractor recovers
+    the full rectangle; where an objective marker or a wall breaks the outline it
+    falls back to the visible green, which is what these IoUs measure.
+  - Volkus `A`, `C`, `D` (0.56–0.90) and Bheta-Decima 6 `B`, `D` (0.40–0.48):
+    upper levels / gantry decks partly hidden behind another piece.
+  - `tomb-world-1` `A2` (0.51) and its one unlabelled wall: two label chips on
+    that card are unreadable, so one long wall is tiled as two 1-square segments.
+  - `tomb-world-5` `C5` (0.91) is a hair under the gate.
+* **Parts the cards do not draw** are described in `data/terrain/*.json` `notes`
+  but are absent from the geometry: the Volkus stronghold's broken vent
+  (Blocking), the three barrel containers on Stronghold A (Blocking + Heavy),
+  the fire steps and small ramparts (Vantage/Insignificant/Exposed), the gap on
+  Stronghold B's lower Vantage level (Accessible), the large ruin's door
+  viewpoint (Blocking) and unbroken windows (Barred + Heavy), the Bheta-Decima
+  gantry pillars (Heavy), and the Gallowdark/Tomb World board-edge pillars and
+  pillar caps.
+* **Board-frame nuance**: the close-quarters lattice square is taken as exactly
+  3.8125"; GW's published tile is 9.7 cm = 3.8189", a difference of 0.045" over
+  the full 7 squares. The board dimensions used (27.625" × 23.875") are the
+  1/8"-rationalised form of 703 mm × 606 mm.
+* **Bheta-Decima 5** prints a pale non-hazardous floor disc beside the condenser;
+  it is correctly excluded from `hazardous` (it is floor, not ocean) but is not
+  modelled as a distinct feature.

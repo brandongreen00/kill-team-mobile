@@ -213,9 +213,36 @@ export function cheapPositionScore(
   return score;
 }
 
+/** Static ranged threat of an operative's best weapon, cached per datacard. */
+const THREAT_CACHE = new Map<string, number>();
+
+function rangedThreat(ctx: GameContext, op: OperativeState): number {
+  const cached = THREAT_CACHE.get(op.datacardId);
+  if (cached !== undefined) return cached;
+  let best = 0;
+  for (const w of card(ctx, op).weapons) {
+    for (const p of w.profiles) {
+      if (p.type !== 'ranged') continue;
+      best = Math.max(best, (p.atk * (p.dmgN + p.dmgC)) / 6);
+    }
+  }
+  if (THREAT_CACHE.size > 512) THREAT_CACHE.clear();
+  THREAT_CACHE.set(op.datacardId, best);
+  return best;
+}
+
+export interface PositionScoreOptions {
+  /**
+   * Price incoming fire with the full dice maths (slow) instead of the visibility + static
+   * threat proxy. The search uses the proxy; the UI/tests can ask for the precise number.
+   */
+  precise?: boolean;
+}
+
 /**
- * Full positional score for a destination: what can I shoot / charge from here, and what can
- * shoot me back. Expensive (visibility + dice maths), so only run on the pruned candidates.
+ * Positional score for a destination: what can I shoot from here, and what can shoot me back.
+ * The exposure half is the AI's hottest inner loop, so by default it uses a visibility +
+ * static-threat proxy; `precise` runs the real per-weapon estimate.
  */
 export function positionScore(
   ctx: GameContext,
@@ -225,6 +252,7 @@ export function positionScore(
   z: number,
   pc: PositionContext,
   order: OperativeState['order'] = op.order,
+  opts: PositionScoreOptions = {},
 ): number {
   let score = cheapPositionScore(ctx, state, op, pos, pc);
   const hypothetical: OperativeState = { ...op, pos, z, order };
@@ -242,6 +270,15 @@ export function positionScore(
     if (dist(e.pos, pos) > 30) continue;
     const them = bodyAt(ctx, e, e.pos, e.z);
     if (!isVisible(index, them, me).visible) continue;
+    if (!opts.precise) {
+      const cover = coverAndObscured(index, them, me);
+      let threat = rangedThreat(ctx, e);
+      // Cover and obscured both cost the attacker roughly a success.
+      if (cover.inCover || cover.obscured) threat *= 0.6;
+      if (order === 'conceal' && cover.inCover) threat = 0; // not a valid target at all
+      exposure += threat;
+      continue;
+    }
     const cover = coverAndObscured(index, them, me);
     let worst = 0;
     for (const w of weaponsOf(ctx, state, e, 'ranged')) {

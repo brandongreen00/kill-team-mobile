@@ -32,6 +32,8 @@ export interface RosterPickIn {
 export interface RosterValidation {
   ok: boolean;
   errors: string[];
+  /** Machine-readable code per error, in the same order (see `ERROR_CODES`). */
+  codes: string[];
   /** Resolved weapon names per pick, in pick order (selection + always-available weapons). */
   weapons: string[][];
 }
@@ -125,8 +127,16 @@ export function resolveEntry(data: TeamData, pick: RosterPickIn): { entry: Selec
  * Validate a roster against the printed selection requirements.
  * Pure: no state, no RNG, no I/O. Errors are player-facing sentences.
  */
+/** Error codes that only mean "the roster is not finished yet". */
+export const COUNT_CODES = ['leaderCount', 'slotCount', 'groupCount', 'totalCount'];
+
 export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): RosterValidation {
   const errors: string[] = [];
+  const codes: string[] = [];
+  const fail = (code: string, message: string): void => {
+    codes.push(code);
+    errors.push(message);
+  };
   const sel = data.selection;
   const resolved: { entry: SelectionEntry; index: number; pick: RosterPickIn }[] = [];
   const weapons: string[][] = [];
@@ -134,7 +144,7 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
   for (const pick of picks) {
     const r = resolveEntry(data, pick);
     if (!r) {
-      errors.push(`'${pick.datacardId}' is not on the ${data.name} selection list`);
+      fail('unknownEntry', `'${pick.datacardId}' is not on the ${data.name} selection list`);
       weapons.push([]);
       continue;
     }
@@ -148,17 +158,18 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
   const nonLeader = resolved.filter((r) => !r.entry.isLeader);
   const leaderCount = sel.leader?.count ?? 1;
   if (leaderPicks.length !== leaderCount) {
-    errors.push(
+    fail(
+      'leaderCount',
       `a ${data.name} kill team must include exactly ${leaderCount} ${sel.leader?.role ?? 'LEADER'} operative (found ${leaderPicks.length})`,
     );
   }
   const slots = sel.slots;
   const used = nonLeader.reduce((n, r) => n + r.entry.selectionCost, 0);
   if (used !== slots) {
-    errors.push(`select exactly ${slots} further operatives (${used} selected)`);
+    fail('slotCount', `select exactly ${slots} further operatives (${used} selected)`);
   }
   if (sel.totalOperatives && total > sel.totalOperatives) {
-    errors.push(`a ${data.name} kill team is ${sel.totalOperatives} operatives at most`);
+    fail('totalCount', `a ${data.name} kill team is ${sel.totalOperatives} operatives at most`);
   }
 
   // ---- per-group counts ("1 PLASMACYTE REANIMATOR operative") ---------------
@@ -166,7 +177,7 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
     const inGroup = resolved.filter((r) => r.entry.group === group.index);
     const cost = inGroup.reduce((n, r) => n + r.entry.selectionCost, 0);
     if (cost !== group.count) {
-      errors.push(`${group.rawText.trim()} — ${cost} selected`);
+      fail('groupCount', `${group.rawText.trim()} — ${cost} selected`);
     }
   }
 
@@ -182,7 +193,7 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
     if (n <= 1) continue;
     const exempt = uniqueExcept.has(norm(entry.role)) || !entry.uniqueUnlessRole;
     if (!exempt) {
-      errors.push(`your kill team can only include each operative on this list once — ${entry.role} selected ${n} times`);
+      fail('unique', `your kill team can only include each operative on this list once — ${entry.role} selected ${n} times`);
     }
   }
 
@@ -192,20 +203,21 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
     if (c.kind === 'maxCount') {
       const cc = c as { role: string; max: number };
       if (countRole(cc.role) > cc.max)
-        errors.push(`you cannot select more than ${cc.max} ${cc.role} operatives (${countRole(cc.role)} selected)`);
+        fail('maxCount', `you cannot select more than ${cc.max} ${cc.role} operatives (${countRole(cc.role)} selected)`);
     } else if (c.kind === 'requires') {
       const cc = c as { role: string; requiresRole: string };
       if (countRole(cc.role) > 0 && countRole(cc.requiresRole) === 0)
-        errors.push(`you can only select a ${cc.role} operative if your kill team includes a ${cc.requiresRole} operative`);
+        fail('requires', `you can only select a ${cc.role} operative if your kill team includes a ${cc.requiresRole} operative`);
     } else if (c.kind === 'groupCap') {
       const cc = c as { group: string; max: number };
       const n = resolved.filter((r) => r.entry.footnoteGroup === cc.group).length;
-      if (n > cc.max) errors.push(`${sel.footnotes[cc.group] ?? `at most ${cc.max} of these operatives combined`} (${n} selected)`);
+      if (n > cc.max)
+        fail('groupCap', `${sel.footnotes[cc.group] ?? `at most ${cc.max} of these operatives combined`} (${n} selected)`);
     } else if (c.kind === 'halfSelection') {
       const cc = c as { group: string; max: number };
       const cost = resolved.filter((r) => r.entry.footnoteGroup === cc.group).reduce((n, r) => n + r.entry.selectionCost, 0);
       if (cost > cc.max)
-        errors.push(`${sel.footnotes[cc.group] ?? 'these operatives count as half a selection each'} (${cost} selections used)`);
+        fail('halfSelection', `${sel.footnotes[cc.group] ?? 'these operatives count as half a selection each'} (${cost} selections used)`);
     }
   }
 
@@ -218,16 +230,16 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
       const has =
         entry.loadouts.some((l) => chosen.has(l.id)) ||
         entry.loadouts.some((l) => l.weapons.every((w) => named.has(norm(w))));
-      if (!has) errors.push(`${entry.role}: choose one of ${entry.loadouts.map((l) => l.label).join(' / ')}`);
+      if (!has) fail('loadout', `${entry.role}: choose one of ${entry.loadouts.map((l) => l.label).join(' / ')}`);
     }
     for (const g of groups) {
       const has =
         g.choices.some((c) => chosen.has(c.id)) || g.choices.some((c) => c.weapons.every((w) => named.has(norm(w))));
-      if (!has) errors.push(`${entry.role}: choose ${g.label}`);
+      if (!has) fail('loadout', `${entry.role}: choose ${g.label}`);
     }
   }
 
-  return { ok: errors.length === 0, errors, weapons };
+  return { ok: errors.length === 0, errors, codes, weapons };
 }
 
 /**
@@ -292,10 +304,7 @@ export function defaultRoster(data: TeamData): RosterPickIn[] {
         if (filled + entry.selectionCost > group.count) continue;
         const trial = [...picks, pickOf(entry, index)];
         const check = validateRosterFor(data, trial);
-        const blocking = check.errors.filter(
-          (e) => !e.startsWith('select exactly') && !e.includes('—') && !e.includes('operative (found'),
-        );
-        if (blocking.length > 0) continue;
+        if (check.codes.some((c) => !COUNT_CODES.includes(c))) continue;
         picks.push(pickOf(entry, index));
         filled += entry.selectionCost;
         added = true;

@@ -11,3 +11,7 @@ out/
 docs/context-pack/
 docs/rules-source/
 .cache/wahapedia/
+__pycache__/
+*.pyc
+test-results/
+playwright-report/

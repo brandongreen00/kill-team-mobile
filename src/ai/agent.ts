@@ -83,7 +83,7 @@ export class TacticalAgent implements Agent {
 
     const candidates = enumerateCandidates(ctx, state, player, {
       weights: this.cfg.weights,
-      moveLimit: this.cfg.beam + 2,
+      moveLimit: this.cfg.beam + 1,
     });
     if (candidates.length === 0) {
       this.plan = [];
@@ -147,7 +147,7 @@ export class TacticalAgent implements Agent {
 
   /** Cheap ranking so only the promising operatives get a full plan. */
   private shortlistOperatives(ctx: GameContext, state: GameState, ready: OperativeState[]): OperativeState[] {
-    const depth = this.cfg.difficulty === 'recruit' ? 1 : this.cfg.difficulty === 'veteran' ? 3 : 4;
+    const depth = this.cfg.difficulty === 'recruit' ? 1 : this.cfg.difficulty === 'veteran' ? 2 : 3;
     const scored = ready.map((op) => {
       const shot = shotPlans(ctx, state, op)[0];
       const role = roleOf(ctx, state, op);
@@ -198,7 +198,7 @@ export class TacticalAgent implements Agent {
       if (this.exhausted()) break;
       const options = enumerateCandidates(ctx, current, player, {
         weights: this.cfg.weights,
-        moveLimit: this.cfg.beam + 2,
+        moveLimit: this.cfg.beam + 1,
       }).filter((c) => c.kind === 'action' || c.kind === 'ploy');
       if (options.length === 0) break;
       const beam = this.beamOf(options);
@@ -366,13 +366,15 @@ export class TacticalAgent implements Agent {
     for (let i = 0; i < samples; i++) {
       const sim = this.simulate(ctx, state, [cand.intent], player, `${tag}#${i}`);
       if (!sim) break;
-      total += this.score(ctx, sim, player) + this.candidateBonus(ctx, sim, player, cand);
+      total += this.score(ctx, sim, player);
       last = sim;
       taken++;
       if (this.exhausted()) break;
     }
     if (!last || taken === 0) return null;
-    return { score: total / taken, state: last };
+    // Positional value is a property of where the operative ended up, not of the dice, so it
+    // is priced once per candidate rather than once per rollout.
+    return { score: total / taken + this.candidateBonus(ctx, last, player, cand), state: last };
   }
 
   /**
