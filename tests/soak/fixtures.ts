@@ -157,23 +157,37 @@ export function syntheticMaps(): KillzoneMap[] {
  * empty list otherwise so the soak skips them gracefully.
  */
 export function realMaps(limit = 3): KillzoneMap[] {
-  const dir = join(process.cwd(), 'data', 'maps');
-  let files: string[];
-  try {
-    files = readdirSync(dir).filter((f) => f.endsWith('.json') && !f.startsWith('_'));
-  } catch {
-    return [];
-  }
-  const out: KillzoneMap[] = [];
-  for (const file of files.sort().slice(0, limit)) {
+  const root = join(process.cwd(), 'data', 'maps');
+  const files: string[] = [];
+  const walk = (dir: string, depth: number): void => {
+    let entries: import('node:fs').Dirent[];
     try {
-      const parsed = JSON.parse(readFileSync(join(dir, file), 'utf8')) as KillzoneMap;
-      if (parsed && parsed.board && parsed.dropZones && Array.isArray(parsed.features)) out.push(parsed);
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries.sort((a, b) => (a.name < b.name ? -1 : 1))) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory() && depth < 2) walk(full, depth + 1);
+      else if (entry.isFile() && entry.name.endsWith('.json') && !entry.name.startsWith('_')) files.push(full);
+    }
+  };
+  walk(root, 0);
+
+  // One map per killzone first, so a sample covers Volkus / Bheta-Decima / Gallowdark / Tomb.
+  const byKillzone = new Map<string, KillzoneMap>();
+  const rest: KillzoneMap[] = [];
+  for (const file of files) {
+    try {
+      const parsed = JSON.parse(readFileSync(file, 'utf8')) as KillzoneMap;
+      if (!parsed?.board || !parsed.dropZones?.p1 || !Array.isArray(parsed.features)) continue;
+      if (!byKillzone.has(parsed.killzone)) byKillzone.set(parsed.killzone, parsed);
+      else rest.push(parsed);
     } catch {
       // A half-written or differently-shaped file is skipped, not fatal.
     }
   }
-  return out;
+  return [...byKillzone.values(), ...rest].slice(0, limit);
 }
 
 // ---------------------------------------------------------------------------

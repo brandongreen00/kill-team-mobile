@@ -413,9 +413,6 @@
     "y": 8.292,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9925
    }
   },
   {
@@ -719,9 +716,6 @@
     "y": 14.521,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9265
    }
   },
   {
@@ -914,9 +908,6 @@
     "y": 4.715,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1107,11 +1098,8 @@
    "placement": {
     "x": 22.509,
     "y": 15.653,
-    "rotDeg": 180,
+    "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9949
    }
   },
   {
@@ -1187,9 +1175,6 @@
     "y": 7.104,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1265,9 +1250,6 @@
     "y": 17.448,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1314,11 +1296,8 @@
    "placement": {
     "x": 10.471,
     "y": 15.717,
-    "rotDeg": 90,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.8606
+    "rotDeg": 0,
+    "flip": false
    }
   },
   {
@@ -1363,9 +1342,6 @@
     "y": 1.432,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1408,11 +1384,8 @@
    "placement": {
     "x": 15.979,
     "y": 17.021,
-    "rotDeg": 90,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.9868
+    "rotDeg": 0,
+    "flip": false
    }
   },
   {
@@ -1488,9 +1461,6 @@
     "y": 1.234,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9994
    }
   },
   {
@@ -1535,9 +1505,6 @@
     "y": 21.016,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1582,9 +1549,6 @@
     "y": 18.016,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   },
   {
@@ -1629,9 +1593,6 @@
     "y": 9.474,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 0.9995
    }
   },
   {
@@ -1676,9 +1637,6 @@
     "y": 18.516,
     "rotDeg": 0,
     "flip": false
-   },
-   "qa": {
-    "templateIoU": 1.0
    }
   }
  ],
@@ -1694,9 +1652,7 @@
    "dropDepthP2": 6.0,
    "deployment": "short-edge",
    "p1Side": "right",
-   "centreSeamErrIn": 0.0208,
-   "templateIoUMin": 0.8606,
-   "templateIoUMedian": 0.9998
+   "centreSeamErrIn": 0.0208
   }
  }
 }

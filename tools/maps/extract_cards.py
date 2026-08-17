@@ -66,10 +66,13 @@ def extract_zones(img, frame, cq):
     def tint(keys):
         return C.mask_any(img, [C.PALETTE[k] for k in keys], tol=3) & interior
 
-    p1d = tint(['p1_drop', 'p1_drop_grid'])
-    p2d = tint(['p2_drop', 'p2_drop_grid'])
-    p1t = tint(['p1_terr', 'p1_terr_grid'])
-    p2t = tint(['p2_terr', 'p2_terr_grid'])
+    # Solid fills only: on the close-quarters cards the multiply-darkened
+    # 3.8125" lattice line over P2 territory lands within 2 of the P2 drop-zone
+    # grid colour, which would smear the drop-zone band across the whole half.
+    p1d = tint(['p1_drop'])
+    p2d = tint(['p2_drop'])
+    p1t = tint(['p1_terr'])
+    p2t = tint(['p2_terr'])
 
     # Which axis do the drop zones band along?
     hx = _band(p1d, 0)
@@ -706,16 +709,31 @@ def _assign_labels(runs, chips, lx, ly):
     out = []
     for ri, (orient, i, j, length) in enumerate(runs):
         mine = sorted(best.get(ri, []))
-        cursor = 0
+        placed = []
+        taken = [False] * length
         for pos, t in mine:
-            if cursor >= length:
-                break
-            span = min(2 if t.startswith('A') else 1, length - cursor)
-            out.append((orient, i, j, cursor, span, t))
-            cursor += span
-        while cursor < length:                 # unlabelled remainder
-            out.append((orient, i, j, cursor, 1, None))
-            cursor += 1
+            span = 2 if t.startswith('A') else 1     # A* walls are two squares long
+            if span > length:
+                span = length
+            # the chip is printed centred on its piece
+            off = int(round(pos - span / 2.0))
+            off = max(0, min(length - span, off))
+            while off + span <= length and any(taken[off:off + span]):
+                off += 1
+            if off + span > length:
+                off = 0
+                while off + span <= length and any(taken[off:off + span]):
+                    off += 1
+            if off + span > length:
+                continue                             # no room: label dropped
+            for k in range(off, off + span):
+                taken[k] = True
+            placed.append((off, span, t))
+        for k in range(length):                      # unlabelled remainder
+            if not taken[k]:
+                placed.append((k, 1, None))
+        for off, span, t in sorted(placed):
+            out.append((orient, i, j, off, span, t))
     return out
 
 
@@ -1060,14 +1078,25 @@ def main(argv):
     print('wrote %d maps' % len(maps))
 
 
+FOOTPRINT_ROLES = ('floor', 'rubble', 'crate', 'teleportPad', 'ledge')
+
+
 def _footprint(feat):
-    """The polygon used for template matching: the largest standable/solid part."""
+    """The polygon used for template matching.
+
+    Structural ink is decomposed into individual wall bars, so the largest part
+    of a stronghold is one wall, not the building. Prefer the piece's own
+    footprint (its upper level / rubble outline) and fall back to the largest
+    wall bar for pieces that are nothing but wall (small ruins, CQ walls).
+    """
     best = None
     for p in feat['parts']:
         poly = [[q['x'], q['y']] for q in p['poly']]
         a = C.poly_area(poly)
-        if best is None or a > best[0]:
-            best = (a, poly)
+        pref = 1 if p.get('role') in FOOTPRINT_ROLES else 0
+        key = (pref, a)
+        if best is None or key > best[0]:
+            best = (key, poly)
     return best[1] if best else None
 
 

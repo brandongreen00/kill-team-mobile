@@ -13,6 +13,7 @@ import { DecisionPanel } from './DecisionPanel.tsx';
 import { ActivationPanel } from './ActivationPanel.tsx';
 import { Setup, placeAt } from './flow/Setup.tsx';
 import { TargetingInspector } from './TargetingInspector.tsx';
+import { MapBrowser } from './MapBrowser.tsx';
 import { Store, setStore } from './store.ts';
 import { makeContext } from '../core/context.ts';
 import { SeededRng } from '../core/rng.ts';
@@ -130,21 +131,7 @@ export function App() {
           <button onClick={() => store.dispatch({ t: 'AdvancePhase' })}>Advance phase</button>
         </div>
       </section>
-      <section class="card">
-        <h2>Killzone</h2>
-        <select value={state.map.id} onChange={(e) => pickMap((e.target as HTMLSelectElement).value)}>
-          {maps.length === 0 && <option value={state.map.id}>{state.map.name}</option>}
-          {maps.map((m) => (
-            <option key={m.id} value={m.id}>
-              {m.name}
-            </option>
-          ))}
-        </select>
-        <p class="muted">
-          {state.map.board.w}" × {state.map.board.h}" · {state.map.features.length} terrain features ·{' '}
-          {state.map.closeQuarters ? 'Close Quarters' : 'open killzone'} · {teams.length} kill teams loaded
-        </p>
-      </section>
+      <MapBrowser ctx={store.ctx} maps={maps} selectedId={state.map.id} onPick={(m) => pickMap(m.id)} />
     </>
   );
 
