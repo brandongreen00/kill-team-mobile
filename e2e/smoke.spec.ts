@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 /** Wait for the app to finish loading its bundled map/team data. */
 async function ready(page: import('@playwright/test').Page): Promise<void> {
-  await expect(page.locator('svg.board')).toBeVisible();
+  await expect(page.locator('svg.board-main')).toBeVisible();
 }
 
 /** The tab bar only exists below the desktop breakpoint; on desktop every pane is on screen. */
@@ -20,8 +20,8 @@ test('app loads, renders the board, and never scrolls horizontally', async ({ pa
 
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Kill Team', level: 1 })).toBeVisible();
-  await expect(page.locator('svg.board')).toHaveCount(1);
-  await expect(page.locator('svg.board')).toBeVisible();
+  await expect(page.locator('svg.board-main')).toHaveCount(1);
+  await expect(page.locator('svg.board-main')).toBeVisible();
 
   // Nothing may hang off the left/right edge — the phone failure mode of the previous app.
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

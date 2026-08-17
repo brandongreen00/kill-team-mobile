@@ -283,7 +283,6 @@ function rollSide(ctx: GameContext, state: GameState, seq: FightSequence, side: 
   const op = side === 'attacker' ? state.operatives[seq.attackerId]! : state.operatives[seq.defenderId]!;
   const { profile, rules, name } = sideWeapon(ctx, state, seq, side);
   const assists = side === 'attacker' ? seq.attackerAssists : seq.defenderAssists;
-  const hit = hitOf(ctx, state, op, profile, assists);
   const accurate = accurateValue(rules);
   const pool = side === 'attacker' ? seq.attackerPool : seq.defenderPool;
   const ctxObj: AttackContext = {
@@ -307,6 +306,8 @@ function rollSide(ctx: GameContext, state: GameState, seq: FightSequence, side: 
     mods: zeroStatMods(),
   });
   const toRoll = Math.max(0, ev.count + ev.mods.atk - accurate);
+  // Assists improve the Hit stat by 1 each; hook modifiers stack on top of that.
+  const hit = hitOf(ctx, state, op, profile, assists + ev.mods.hit);
   const results = ctx.rng.roll(toRoll);
   recordRoll(state, 'fight', results, op.player, `${op.letter} ${name}`);
   const lethal = lethalThreshold(rules);

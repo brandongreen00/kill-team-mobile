@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle } from '../src/core/init.ts';
 import { reduce } from '../src/core/reducer.ts';
+import { defaultDecisionOption } from '../src/core/decisions.ts';
 import { validateMove } from '../src/core/movement.ts';
 import { buildTerrainIndex, wallRouteDistance } from '../src/core/terrain.ts';
 import { counteractCandidates, readyStep, whoActivates } from '../src/core/phases.ts';
@@ -321,5 +322,43 @@ describe('hatchways (Killzones › Gallowdark / Tomb World)', () => {
     const state = { terrainState: { 'tomb-world-1.h.access': { state: 'open' }, 'tomb-world-1.h.hatch': { state: 'open' } }, placedFeatures: [] } as never;
     const index = buildTerrainIndex(map, state);
     expect(index.byId.has('tomb-world-1.h.hatch')).toBe(false);
+  });
+});
+
+describe('hook stat modifiers actually reach the dice', () => {
+  it('applies onCollectAttackDice.mods.hit when rolling attack dice', () => {
+    // Collected and then thrown away, this made every rule that improves or worsens a Hit
+    // stat through this hook inert (it silenced the Breachers' GRENADIER).
+    const ctx = testContext({ script: [4, 4, 4, 4, 1, 1, 1] });
+    let s = battle(ctx, testMap(), 1);
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    s.operatives[a]!.pos = { x: 10, y: 11 };
+    s.operatives[b]!.pos = { x: 16, y: 11 };
+    // A lasgun hits on 4+, so an unmodified 4 is a success. Worsen it by 1 and the same
+    // roll must fail.
+    ctx.hooks.on('onCollectAttackDice', { id: 'test.worsenHit', sourceText: 'test' }, (ev) => {
+      ev.mods.hit -= 1;
+    });
+    s = reduce(s, { t: 'ActivateOperative', player: 'p1', operativeId: a, order: 'engage' }, ctx).state;
+    s = reduce(s, { t: 'PerformAction', operativeId: a, action: 'Shoot', params: { weaponName: 'lasgun', targetId: b } }, ctx).state;
+    let guard = 0;
+    while (s.pending.length > 0 && guard++ < 20) {
+      const d = s.pending[0]!;
+      s = reduce(s, { t: 'ResolveDecision', decisionId: d.id, optionId: defaultDecisionOption(d).optionId }, ctx).state;
+    }
+    expect(s.operatives[b]!.wounds).toBe(10); // every 4 failed
+  });
+
+  it('applies onStatMod.apl, still clamped to -1/+1', () => {
+    const ctx = testContext();
+    const s = battle(ctx, testMap(), 1);
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    expect(aplOf(ctx, s, op)).toBe(2);
+    ctx.hooks.on('onStatMod', { id: 'test.apl', sourceText: 'test' }, (ev) => {
+      ev.mods.apl += 3;
+    });
+    // "the total can never be more than -1 or +1 from its normal APL"
+    expect(aplOf(ctx, s, op)).toBe(3);
   });
 });

@@ -431,7 +431,9 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
         // Vantage grants Accurate; the weapon's own Accurate x adds to it.
         const accurate = accurateValue(rules) + (target.order === 'engage' ? seq.vantageAccurate : 0);
         const toRoll = Math.max(0, mods.count + mods.mods.atk - accurate);
-        const hit = hitStat(ctx, state, attacker, profile, seq);
+        // mods.hit was collected and then ignored, which made every rule that improves or
+        // worsens a Hit stat through this hook inert (e.g. the Breachers' GRENADIER).
+        const hit = hitStat(ctx, state, attacker, profile, seq, mods.mods.hit);
         const results = ctx.rng.roll(toRoll);
         recordRoll(state, 'attack', results, seq.attacker, `${seq.weaponName} vs ${target.letter}`);
         addRolled(seq.attack, results, hit, lethalOpts(rules));
@@ -636,9 +638,10 @@ function hitStat(
   attacker: OperativeState,
   profile: WeaponProfile,
   seq: ShootSequence,
+  extra = 0,
 ): number {
   // Point-blank shot: "Worsen the Hit stat of your operative's weapons by 1."
-  return hitOf(ctx, state, attacker, profile, seq.pointBlank ? -1 : 0);
+  return hitOf(ctx, state, attacker, profile, (seq.pointBlank ? -1 : 0) + extra);
 }
 
 function lethalOpts(rules: WeaponRule[]) {

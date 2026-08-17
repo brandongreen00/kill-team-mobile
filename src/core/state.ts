@@ -77,7 +77,10 @@ export function requireOperative(state: GameState, id: string): OperativeState {
  */
 export function aplOf(ctx: GameContext, state: GameState, op: OperativeState): number {
   const base = card(ctx, op).apl;
-  const raw = op.aplMods.reduce((a, b) => a + b, 0);
+  // Both sources count toward the same clamp: tokens/effects recorded on the operative, and
+  // rules that adjust APL through the onStatMod hook (which was previously ignored here,
+  // leaving StatMods.apl dead).
+  const raw = op.aplMods.reduce((a, b) => a + b, 0) + statMods(ctx, state, op).apl;
   const clamped = Math.max(-1, Math.min(1, raw));
   return Math.max(0, base + clamped);
 }

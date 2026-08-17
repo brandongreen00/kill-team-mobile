@@ -64,6 +64,7 @@ export function MapBrowser({ ctx, maps, selectedId, onPick }: MapBrowserProps) {
                   state={createBattle(ctx, { map: m, seed: 1, mode: 'sandbox' })}
                   showGrid={false}
                   showZones={true}
+                  variant="thumb"
                 />
                 <span class="thumb-label">{m.name}</span>
               </button>

@@ -53,6 +53,12 @@ export interface BoardProps {
   selectedId?: string;
   showGrid?: boolean;
   showZones?: boolean;
+  /**
+   * 'main' is the one interactive board; 'thumb' is a contact-sheet preview. They carry
+   * different classes so a selector can address exactly one of them — the killzone browser
+   * renders 24 thumbnails, which otherwise makes any `svg.board` query ambiguous.
+   */
+  variant?: 'main' | 'thumb';
 }
 
 export function Board({
@@ -64,6 +70,7 @@ export function Board({
   selectedId,
   showGrid = true,
   showZones = true,
+  variant = 'main',
 }: BoardProps) {
   const map = state.map;
   const vp = viewport ?? fullViewport(map);
@@ -83,7 +90,7 @@ export function Board({
 
   return (
     <svg
-      class="board"
+      class={`board board-${variant}`}
       viewBox={`${vp.x} ${vp.y} ${vp.w} ${vp.h}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
