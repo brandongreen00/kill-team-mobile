@@ -10,8 +10,9 @@
  * Anything the validator cannot express (see docs/TEAM-DATA.md §5) is shown as a warning
  * rather than silently dropped.
  */
-import { useState } from 'preact/hooks';
-import { validateRosterFor, type RosterPickIn } from '../../teams/selection.ts';
+import { useEffect, useState } from 'preact/hooks';
+import { validateRosterFor, withRequisitioned, type RosterPickIn } from '../../teams/selection.ts';
+import { requisitionGroups } from '../../teams/data.ts';
 import { OperativeCard, costLabel } from './OperativeCard.tsx';
 import {
   addability,
@@ -25,6 +26,7 @@ import {
   warningsFor,
   type TeamData,
 } from './rules.ts';
+import type { Datacard } from '../../core/types.ts';
 import {
   deleteRoster,
   exportRosters,
@@ -49,10 +51,18 @@ export interface ConfirmedRoster {
   /** Resolved weapon names per pick, in pick order (selection option + always-carried). */
   weapons: string[][];
   name: string;
+  /** Every datacard the roster can name, REQUISITIONED borrowings included. */
+  datacards: Datacard[];
 }
 
 export interface RosterBuilderProps {
+  /**
+   * Every kill team, as little or as much of each as the caller has: an id/name/faction
+   * summary is enough to draw the picker, and `loadTeam` fetches the chosen team's real JSON.
+   */
   teams: TeamLike[];
+  /** Fetches one kill team's full JSON on demand (`src/ui/data.ts`). */
+  loadTeam?: (id: string) => Promise<TeamLike | null>;
   title?: string;
   confirmLabel?: string;
   /** Present when the builder is feeding a battle; absent when it is just a workbench. */
@@ -60,22 +70,70 @@ export interface RosterBuilderProps {
   onCancel?: () => void;
 }
 
-export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel, onConfirm, onCancel }: RosterBuilderProps) {
+export function RosterBuilder({
+  teams,
+  loadTeam,
+  title = 'Select operatives',
+  confirmLabel,
+  onConfirm,
+  onCancel,
+}: RosterBuilderProps) {
   const [teamId, setTeamId] = useState<string | null>(null);
   const [picks, setPicks] = useState<RosterPickIn[]>([]);
   const [name, setName] = useState('');
   const [library, setLibrary] = useState<SavedRoster[]>(() => loadRosters());
   const [search, setSearch] = useState('');
   const [io, setIo] = useState<{ text: string; note?: string; error?: string }>({ text: '' });
+  /** Full JSON fetched on demand: the chosen team, plus any kill team it borrows datacards from. */
+  const [fetched, setFetched] = useState<Record<string, TeamLike>>({});
 
-  const team = teams.find((t) => t.id === teamId);
-  const data = team ? asTeamData(team) : null;
+  const summary = teams.find((t) => t.id === teamId);
+  const team = summary ?? (teamId ? fetched[teamId] : undefined);
+  // The caller may hand over whole teams (tests, and any caller that already has them) or
+  // just the picker summary; either way the full JSON is what the builder validates against.
+  const base = asTeamData(summary) ?? asTeamData(teamId ? fetched[teamId] : undefined);
+  // "…or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction
+  // rule" — those datacards are printed with the donor kill team, so its JSON is fetched too
+  // and merged in (with the printed faction-keyword swap) before anything is validated.
+  const donorIds = base
+    ? [...new Set(requisitionGroups(base).map((g) => g.sourceTeam).filter((x): x is string => Boolean(x)))]
+    : [];
+  const donors = donorIds
+    .map((id) => asTeamData(teams.find((t) => t.id === id)) ?? asTeamData(fetched[id]))
+    .filter((d): d is TeamData => Boolean(d));
+  const data = base ? withRequisitioned(base, donors) : null;
+  const missingDonors = donorIds.filter((id) => !donors.some((d) => d.id === id));
+  const wanted = [...(teamId && !base ? [teamId] : []), ...missingDonors].filter((id) => !fetched[id]);
+
+  useEffect(() => {
+    if (!loadTeam || wanted.length === 0) return;
+    let live = true;
+    void Promise.all(wanted.map(async (id) => [id, await loadTeam(id)] as const)).then((rows) => {
+      if (!live) return;
+      const add: Record<string, TeamLike> = {};
+      for (const [id, t] of rows) if (t) add[id] = t;
+      if (Object.keys(add).length > 0) setFetched((cur) => ({ ...cur, ...add }));
+    });
+    return () => {
+      live = false;
+    };
+  }, [wanted.join(',')]);
 
   const load = (r: SavedRoster) => {
     setTeamId(r.teamId);
     setPicks(r.picks);
     setName(r.name);
   };
+
+  // ---- the chosen team's JSON is still in flight ------------------------
+  if (teamId && !data && wanted.length > 0) {
+    return (
+      <section class="card roster">
+        <h2>{title}</h2>
+        <p class="muted">Loading {team?.name ?? teamId}…</p>
+      </section>
+    );
+  }
 
   // ---- team picker ------------------------------------------------------
   if (!team || !data) {
@@ -103,8 +161,10 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
             />
             <ul class="team-list">
               {list.map((t) => {
+                // Only teams whose JSON is already here can be checked; the rest are
+                // checked the moment they are picked (nothing is claimed either way).
                 const d = asTeamData(t);
-                const unsupported = d ? supportProblems(d).length > 0 : true;
+                const unsupported = d !== null && supportProblems(d).length > 0;
                 return (
                   <li key={t.id}>
                     <button
@@ -159,14 +219,24 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
   const u = usage(data, picks);
   const blocking = blockingErrors(validation);
   const blockingNow = new Set(blocking);
-  const warnings = warningsFor(data);
+  const warnings = warningsFor(data, missingDonors);
   const problems = supportProblems(data);
   const expected = data.selection.totalOperatives || data.selection.slots + (data.selection.leader?.count ?? 1);
-  /** The 6 teams whose printed list the shared validator provably cannot satisfy (see rules.ts). */
+  /**
+   * The escape hatch for a team whose printed list the shared validator provably cannot
+   * satisfy (see `supportProblems`). No kill team needs it today — it stays so a future data
+   * gap surfaces as an explained override rather than an unbuildable screen.
+   */
   const override = problems.length > 0 && blocking.length === 0 && picks.length === expected;
   const canConfirm = validation.ok || override;
 
   const setPick = (i: number, pick: RosterPickIn) => setPicks(picks.map((p, j) => (j === i ? pick : p)));
+  const listProps = {
+    data,
+    picks,
+    blockingNow,
+    onAdd: (index: number) => setPicks([...picks, pickFor(data, index)]),
+  };
 
   return (
     <section class="card roster">
@@ -252,38 +322,40 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
       })}
 
       <h2 style={{ marginTop: 12 }}>Selection list</h2>
-      <ul class="entry-list">
-        {rows.map((row) => {
-          const can = addability(data, picks, row.index, blockingNow);
-          const cost = costLabel(row.entry.selectionCost);
-          return (
-            <li key={row.id}>
-              <div class="row">
-                <button
-                  class="add"
-                  disabled={!can.ok}
-                  title={can.reason ?? `Add ${row.entry.role}`}
-                  aria-label={`Add ${row.entry.role}`}
-                  onClick={() => setPicks([...picks, pickFor(data, row.index)])}
-                >
-                  ＋
-                </button>
-                <div class="entry-text">
-                  <div class="row">
-                    <strong>{row.entry.role}</strong>
-                    {row.entry.isLeader && <span class="tag">LEADER</span>}
-                    {cost && <span class="tag">{cost}</span>}
-                    {row.entry.footnoteGroup && <span class="tag">{row.entry.footnoteGroup}</span>}
-                    {row.entry.requires.length > 0 && <span class="tag">needs {row.entry.requires.join(', ')}</span>}
-                  </div>
-                  <div class="muted">{row.entry.rawText}</div>
-                  {!can.ok && <div class="muted why">{can.reason}</div>}
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+      <EntryList rows={rows.filter((r) => !r.entry.requisitionGroup)} {...listProps} />
+
+      {requisitionGroups(data).map((g) => {
+        const groupRows = rows.filter((r) => r.entry.requisitionGroup === g.id);
+        return (
+          <details key={g.id} class="rules-block req-group">
+            <summary>
+              {data.selection.requisition!.keyword} — {g.name}
+              {g.sourceTeam && !donors.some((d) => d.id === g.sourceTeam) ? ' (data not loaded)' : ''}
+            </summary>
+            <p class="muted">{g.rawText}</p>
+            {(() => {
+              // The requisition card prints its own size (DEATH KORPS says six) while the
+              // kill team's list says how many selections this group is worth. They differ;
+              // both are printed, so both are shown and the kill team's is the one counted.
+              const slot = (data.selection.groups ?? []).find((x) => x.requisition);
+              if (!slot || g.count === 0 || g.count === slot.count) return null;
+              return (
+                <p class="muted">
+                  This card prints {g.count} operatives; this kill team's list allows {slot.count} selections here, and
+                  that is the number counted.
+                </p>
+              );
+            })()}
+            {g.unresolved.length > 0 && <p class="muted">Not offered — no printed datacard: {g.unresolved.join(', ')}</p>}
+            <EntryList rows={groupRows} {...listProps} />
+            {Object.entries(g.footnotes).map(([marker, text]) => (
+              <p key={marker} class="muted">
+                <strong>{marker}</strong> {text}
+              </p>
+            ))}
+          </details>
+        );
+      })}
 
       <div class="row" style={{ marginTop: 10 }}>
         <input
@@ -312,6 +384,9 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
                 picks,
                 weapons: validation.weapons,
                 name: name.trim() || `${team.name} kill team`,
+                // REQUISITIONED borrowings included, so the caller can register every
+                // datacard the roster names without loading the donor teams itself.
+                datacards: data.datacards,
               })
             }
           >
@@ -343,6 +418,52 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
         onImport={(text) => setLibrary(importRosters(text))}
       />
     </section>
+  );
+}
+
+interface EntryListProps {
+  rows: ReturnType<typeof entryRows>;
+  data: TeamData;
+  picks: RosterPickIn[];
+  blockingNow: Set<string>;
+  onAdd: (index: number) => void;
+}
+
+/** The printed selection rows, each with the reason it cannot be taken when it cannot. */
+function EntryList({ rows, data, picks, blockingNow, onAdd }: EntryListProps) {
+  return (
+    <ul class="entry-list">
+      {rows.map((row) => {
+        const can = addability(data, picks, row.index, blockingNow);
+        const cost = costLabel(row.entry.selectionCost);
+        return (
+          <li key={row.id}>
+            <div class="row">
+              <button
+                class="add"
+                disabled={!can.ok}
+                title={can.reason ?? `Add ${row.entry.role}`}
+                aria-label={`Add ${row.entry.role}`}
+                onClick={() => onAdd(row.index)}
+              >
+                ＋
+              </button>
+              <div class="entry-text">
+                <div class="row">
+                  <strong>{row.entry.role}</strong>
+                  {row.entry.isLeader && <span class="tag">LEADER</span>}
+                  {cost && <span class="tag">{cost}</span>}
+                  {row.entry.footnoteGroup && <span class="tag">{row.entry.footnoteGroup}</span>}
+                  {row.entry.requires.length > 0 && <span class="tag">needs {row.entry.requires.join(', ')}</span>}
+                </div>
+                <div class="muted">{row.entry.rawText}</div>
+                {!can.ok && <div class="muted why">{can.reason}</div>}
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

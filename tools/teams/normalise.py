@@ -31,6 +31,7 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from constraints import parse_constraints  # noqa: E402
+from requisition import attach_requisition  # noqa: E402
 from selection import (  # noqa: E402
     RE_EVERY,
     parse_footnote_blocks,
@@ -242,9 +243,19 @@ def build_selection(raw: dict, cards: list[dict], anchor_to_card: dict[str, str]
         nested = head.pop("_nested", None)
         if nested is None:
             if not head["role"] and RE_SAME_AS_ABOVE.search(head["rawText"]):
-                # "5 X operatives selected from the list above, or ..."
-                groups.append({"index": gi, "count": head["count"], "kind": "sameAsAbove",
-                               "roles": [], "rawText": head["rawText"]})
+                # "5 X operatives selected from the list above, or ..." — the entries are
+                # the ones printed for the most recent list group, so record which group
+                # it draws from instead of leaving an empty, unfillable group behind.
+                draws_from = next((g["index"] for g in reversed(groups)
+                                   if g["kind"] in ("list", "every")), None)
+                grp = {"index": gi, "count": head["count"], "kind": "sameAsAbove",
+                       "roles": [], "rawText": head["rawText"]}
+                if draws_from is not None:
+                    grp["drawsFrom"] = draws_from
+                else:
+                    notes.append(f"group {gi} is printed as 'selected from the list above' "
+                                 f"but no list group precedes it")
+                groups.append(grp)
                 continue
             head["group"] = gi
             entries.append(head)
@@ -594,6 +605,12 @@ def main() -> int:
         if not team["archetypes"]:
             notes.append(f"no archetype list on the page (div.archetype = {raw.get('archetypeRaw','')!r})")
         teams[slug] = team
+
+    # Groups filled from a faction rule ("… or REQUISITIONED operatives from one group in
+    # the Inquisitorial Requisition faction rule") need every team built first, because the
+    # donor datacards live in the donor kill team's own file.
+    for slug, team in teams.items():
+        attach_requisition(team, teams, team["notes"])
 
     rare = resolve_rare(rare_sink, teams, raws)
 

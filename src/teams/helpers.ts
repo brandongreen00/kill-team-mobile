@@ -35,7 +35,8 @@ import type {
   WeaponRuleId,
 } from '../core/types.ts';
 import { otherPlayer } from '../core/types.ts';
-import { TEAM_DATA, teamData, type TeamData, type TeamRuleText } from './data.ts';
+import { TEAM_DATA, teamData } from './bundled.ts';
+import type { TeamData, TeamRuleText } from './data.ts';
 import { validateRosterFor, type RosterPickIn, type RosterValidation } from './selection.ts';
 
 // ---------------------------------------------------------------------------

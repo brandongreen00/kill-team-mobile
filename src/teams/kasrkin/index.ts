@@ -12,7 +12,7 @@ import { HookRegistry } from '../../core/hooks.ts';
 import { log, recordRoll } from '../../core/state.ts';
 import type { FightSequence, ShootSequence } from '../../core/sequences/types.ts';
 import type { Datacard, GameState, OperativeState, PlayerId, Weapon } from '../../core/types.ts';
-import { teamData } from '../data.ts';
+import { teamData } from '../bundled.ts';
 import {
   centroidOf,
   chosenOperative,

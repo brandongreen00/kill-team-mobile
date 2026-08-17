@@ -17,7 +17,7 @@ import type { GameContext } from '../../core/context.ts';
 import type { ActionParams } from '../../core/intents.ts';
 import type { FightSequence } from '../../core/sequences/types.ts';
 import type { GameState, OperativeState, PlayerId, Weapon } from '../../core/types.ts';
-import { teamData } from '../data.ts';
+import { teamData } from '../bundled.ts';
 import {
   chosenOperative,
   currentApl,

@@ -8,7 +8,7 @@ import { body, gapBetween, inflictDamage, log, recordRoll } from '../../core/sta
 import { terrain, type GameContext } from '../../core/context.ts';
 import { isVisible } from '../../core/visibility.ts';
 import type { GameState, OperativeState, PlayerId } from '../../core/types.ts';
-import { teamData } from '../data.ts';
+import { teamData } from '../bundled.ts';
 import {
   centroidOf,
   defineTeam,

@@ -17,7 +17,7 @@ import { isVisible } from '../../core/visibility.ts';
 import type { GameContext } from '../../core/context.ts';
 import type { ShootSequence } from '../../core/sequences/types.ts';
 import type { GameState, OperativeState, PlayerId, Weapon, WeaponProfile } from '../../core/types.ts';
-import { teamData } from '../data.ts';
+import { teamData } from '../bundled.ts';
 import {
   chosenOperative,
   currentApl,

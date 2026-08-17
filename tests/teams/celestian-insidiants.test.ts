@@ -23,7 +23,7 @@ import {
 } from '../../src/teams/celestian-insidiants/index.ts';
 import { kasrkin } from '../../src/teams/kasrkin/index.ts';
 import { plagueMarines } from '../../src/teams/plague-marines/index.ts';
-import { teamData } from '../../src/teams/data.ts';
+import { teamData } from '../../src/teams/bundled.ts';
 import { defaultRoster } from '../../src/teams/selection.ts';
 import { activate, battle, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
 import type { GameState, WeaponProfile } from '../../src/core/types.ts';

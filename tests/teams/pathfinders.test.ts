@@ -19,7 +19,7 @@ import {
   markerlightTokens,
   pathfinders,
 } from '../../src/teams/pathfinders/index.ts';
-import { teamData } from '../../src/teams/data.ts';
+import { teamData } from '../../src/teams/bundled.ts';
 import { defaultRoster } from '../../src/teams/selection.ts';
 import { testMap } from '../fixtures.ts';
 import { activate, battle, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';

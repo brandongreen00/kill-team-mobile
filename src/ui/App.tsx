@@ -19,7 +19,7 @@ import { Store, setStore } from './store.ts';
 import { createGameContext } from '../core/game.ts';
 import { SeededRng } from '../core/rng.ts';
 import { createBattle } from '../core/init.ts';
-import { loadMaps, loadTeams, type TeamData } from './data.ts';
+import { loadMaps, loadTeam, loadTeamIndex, type TeamSummary } from './data.ts';
 import type { GameState, KillzoneMap, PlayerId } from '../core/types.ts';
 
 type Tab = 'board' | 'play' | 'log' | 'roster';
@@ -29,7 +29,8 @@ const TAB_LABEL: Record<Tab, string> = { board: 'Board', play: 'Play', log: 'Log
 
 export function App() {
   const [maps, setMaps] = useState<KillzoneMap[]>([]);
-  const [teams, setTeams] = useState<TeamData[]>([]);
+  /** Name/faction only: a team's datacards arrive when the roster builder asks for them. */
+  const [teams, setTeams] = useState<TeamSummary[]>([]);
   const [store, setLocalStore] = useState<Store | null>(null);
   const [, force] = useState(0);
   const [tab, setTab] = useState<Tab>('board');
@@ -40,23 +41,26 @@ export function App() {
 
   useEffect(() => {
     void (async () => {
-      const [m, t] = await Promise.all([loadMaps(), loadTeams()]);
+      const [m, t] = await Promise.all([loadMaps(), loadTeamIndex()]);
       setMaps(m);
       setTeams(t);
-      // A fully wired context: ops, equipment, the initiative-card flow and — so a roster's
-      // kill team actually plays by its own rules — every implemented team module.
-      const { BATCH_1 } = await import('../teams/index.ts');
-      const ctx = createGameContext({
-        rng: new SeededRng(1),
-        maps: m,
-        datacards: t.flatMap((team) => team.datacards ?? []),
-        teams: BATCH_1,
-      });
+      // Ops, equipment and the initiative-card flow — everything the killzone needs. NO team
+      // data: the board renders without a single kill team's JSON, and a team's datacards are
+      // registered when its roster is confirmed (`Setup`).
+      const ctx = createGameContext({ rng: new SeededRng(1), maps: m });
       const map = m[0] ?? fallbackMap();
       const s = new Store(createBattle(ctx, { map, seed: 1, mode: 'match' }), ctx);
       setStore(s);
       setLocalStore(s);
       s.subscribe(() => force((n) => n + 1));
+
+      // Then, off the critical path, the implemented kill teams' rule modules — so a
+      // selected roster actually plays by its own faction rules, ploys and equipment.
+      // `ctx.teams` / `ctx.datacards` are read at dispatch time, long after this resolves.
+      const { BATCH_1, TEAM_DATA } = await import('../teams/index.ts');
+      for (const team of BATCH_1) ctx.teams.set(team.id, team);
+      for (const data of Object.values(TEAM_DATA)) for (const c of data.datacards) ctx.datacards.set(c.id, c);
+      force((n) => n + 1);
     })();
   }, []);
 
@@ -121,7 +125,13 @@ export function App() {
           onClose={() => setInspect({})}
         />
       )}
-      <Setup store={store} teams={teams} pendingPlacement={placement} setPendingPlacement={setPlacement} />
+      <Setup
+        store={store}
+        teams={teams}
+        loadTeam={loadTeam}
+        pendingPlacement={placement}
+        setPendingPlacement={setPlacement}
+      />
       <ActivationPanel store={store} />
       <section class="card">
         <h2>Battle</h2>
@@ -149,6 +159,7 @@ export function App() {
   const rosterPane = (
     <RosterBuilder
       teams={teams}
+      loadTeam={loadTeam}
       title="Roster builder"
       onCancel={() => setTab(isDesktop ? 'play' : 'board')}
     />

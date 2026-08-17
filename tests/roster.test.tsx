@@ -19,15 +19,20 @@ import {
   asTeamData,
   blockingErrors,
   entryRows,
+  isEitherEntry,
+  loadoutModes,
+  modeOfPick,
   pickFor,
   supportProblems,
   usage,
   warningsFor,
+  withMode,
   type RosterPickIn,
   type TeamData,
 } from '../src/ui/roster/rules.ts';
 import { exportRosters, importRosters, loadRosters, saveRoster, STORAGE_KEY } from '../src/ui/roster/storage.ts';
-import { defaultRoster, entryId, validateRosterFor } from '../src/teams/selection.ts';
+import { defaultRoster, entryId, validateRosterFor, withRequisitioned } from '../src/teams/selection.ts';
+import { requisitionGroups, selectionEntries } from '../src/teams/data.ts';
 import { makeContext } from '../src/core/context.ts';
 import { createBattle } from '../src/core/init.ts';
 import { reduce } from '../src/core/reducer.ts';
@@ -154,16 +159,184 @@ describe('roster builder — the shared validator decides, the screen quotes it'
       .filter((d) => supportProblems(d).length > 0)
       .map((d) => d.id)
       .sort();
-    // This list must only ever shrink. Deathwatch, Elucidian Starstrider, Gellerpox Infected
-    // and Wolf Scouts were on it until the validator learned that a leader drawn from the
-    // same list consumes one of the printed selections rather than sitting on top of them.
-    // What is left is two genuine data problems, not validator arithmetic:
-    //   battleclade         — the printed rule caps COMBAT SERVITOR per WEAPON ("up to one
-    //                         with meltagun... up to three with incendine igniter"); the
-    //                         scrape flattened it to two role-level maxCount rows, 1 and 3.
-    //   inquisitorial-agent — its second group of 5 may be REQUISITIONED operatives defined
-    //                         in a faction rule, which are not on the selection list.
-    expect(flagged).toEqual(['battleclade', 'inquisitorial-agent']);
+    // This list must only ever shrink, and it is now empty. Deathwatch, Elucidian
+    // Starstrider, Gellerpox Infected and Wolf Scouts came off it when the validator learned
+    // that a leader drawn from the same list consumes one of the printed selections rather
+    // than sitting on top of them; battleclade came off when the pipeline learned to read a
+    // weapon-qualified maximum ("up to one COMBAT SERVITOR operative with meltagun") as a cap
+    // on the option rather than on the role; inquisitorial-agent came off when its second
+    // group of 5 learned to draw from the list above and from the Inquisitorial Requisition
+    // faction rule's groups.
+    expect(flagged).toEqual([]);
+  });
+
+  it('caps a weapon-qualified maximum per WEAPON, not per role', () => {
+    // BATTLECLADE: "Your kill team can only include up to one COMBAT SERVITOR operative with
+    // meltagun, and it can only include up to three COMBAT SERVITOR operatives with incendine
+    // igniter." Read as a role cap, the 8-operative group could never be filled.
+    const bc = asTeamData(JSON.parse(readFile('data/teams/battleclade.json')) as never)!;
+    const rows = entryRows(bc).filter((r) => r.entry.role === 'COMBAT SERVITOR');
+    expect(rows).toHaveLength(1);
+    const row = rows[0]!;
+    const options = row.entry.loadouts;
+    const withOption = (label: RegExp) => ({
+      ...pickFor(bc, row.index),
+      loadoutIds: [options.find((l) => label.test(l.label))!.id],
+    });
+
+    // Six COMBAT SERVITORs is legal — the role itself has no printed maximum.
+    const legal = defaultRoster(bc);
+    expect(validateRosterFor(bc, legal).ok).toBe(true);
+    expect(legal.filter((p) => p.datacardId === row.entry.datacardId).length).toBeGreaterThan(3);
+
+    // A second meltagun breaks the printed sentence, and the error quotes it.
+    const twoMelta = [...defaultRoster(bc).slice(0, 4), withOption(/meltagun/i), withOption(/meltagun/i)];
+    const v = validateRosterFor(bc, twoMelta);
+    expect(blockingErrors(v).join(' ')).toContain('up to one COMBAT SERVITOR operative with meltagun');
+    // …as does a fourth incendine igniter.
+    const fourIgniter = [
+      ...defaultRoster(bc).slice(0, 4),
+      ...Array.from({ length: 4 }, () => withOption(/incendine igniter/i)),
+    ];
+    expect(blockingErrors(validateRosterFor(bc, fourIgniter)).join(' ')).toContain(
+      'up to three COMBAT SERVITOR operatives with incendine igniter',
+    );
+  });
+
+  it('an "…Or one option from each of the following" entry takes one whole mode, never both', () => {
+    // The printed form is an either/or: "…with one of the following options: A; B. **Or** one
+    // option from each of the following: (C or D) + (E or F)".
+    const found: string[] = [];
+    for (const f of teamFiles()) {
+      const d = asTeamData(JSON.parse(readFile(`data/teams/${f}`)) as never)!;
+      for (const row of entryRows(d)) {
+        if (!isEitherEntry(row.entry)) continue;
+        found.push(`${d.id}:${row.entry.role}`);
+        const seed = pickFor(d, row.index);
+        const options = withMode(row.entry, seed, 'options');
+        const each = withMode(row.entry, seed, 'each');
+        // The screen asks which mode first, and each mode is complete on its own.
+        expect(loadoutModes(row.entry)).toHaveLength(2);
+        expect(modeOfPick(row.entry, options)).toBe('options');
+        expect(modeOfPick(row.entry, each)).toBe('each');
+        expect(validateRosterFor(d, [options]).errors.join(' ')).not.toMatch(/not both|choose one of/);
+        expect(validateRosterFor(d, [each]).errors.join(' ')).not.toMatch(/not both|choose one of/);
+        // Taking a choice from both halves is exactly what the printed "Or" forbids.
+        const both = { ...seed, loadoutIds: [...(options.loadoutIds ?? []), ...(each.loadoutIds ?? [])] };
+        expect(validateRosterFor(d, [both]).errors.join(' ')).toContain('choose one of the two, not both');
+      }
+    }
+    expect(found.sort()).toEqual([
+      'angel-of-death:ASSAULT INTERCESSOR SERGEANT',
+      'blades-of-khaine:DIRE AVENGER EXARCH',
+      'death-korps:WATCHMASTER',
+      'hunter-clade:SKITARII RANGER ALPHA',
+      'hunter-clade:SKITARII VANGUARD ALPHA',
+      'imperial-navy-breacher:SERGEANT-AT-ARMS',
+      'murderwing:CHAOS LORD',
+      'wyrmblade:NEOPHYTE LEADER',
+    ]);
+  });
+});
+
+describe('REQUISITIONED operatives — Inquisitorial Requisition', () => {
+  const agents = () => asTeamData(JSON.parse(readFile('data/teams/inquisitorial-agent.json')) as never)!;
+  const donor = (id: string) => asTeamData(JSON.parse(readFile(`data/teams/${id}.json`)) as never)!;
+  const DONORS = ['death-korps', 'exaction-squad', 'imperial-navy-breacher', 'kasrkin'];
+  const full = () => withRequisitioned(agents(), DONORS.map(donor));
+
+  /** n picks from one REQUISITIONED group, in printed order. */
+  function fromGroup(data: TeamData, groupId: string, n: number): RosterPickIn[] {
+    const entries = selectionEntries(data);
+    const out: RosterPickIn[] = [];
+    for (let i = 0; i < entries.length && out.length < n; i++) {
+      if (entries[i]!.requisitionGroup === groupId) out.push(pickFor(data, i));
+    }
+    return out;
+  }
+
+  it('offers exactly the six groups the faction rule names', () => {
+    // "REQUISITIONED operatives can be taken from one of the following groups… DEATH KORPS,
+    // EXACTION SQUAD, IMPERIAL NAVY BREACHER, KASRKIN, SISTER OF SILENCE, TEMPESTUS SCION"
+    expect(requisitionGroups(agents()).map((g) => g.keyword)).toEqual([
+      'DEATH KORPS',
+      'EXACTION SQUAD',
+      'IMPERIAL NAVY BREACHER',
+      'KASRKIN',
+      'SISTER OF SILENCE',
+      'TEMPESTUS SCION',
+    ]);
+    // Every printed role resolved to a real datacard — nothing was invented to fill a gap.
+    expect(requisitionGroups(agents()).flatMap((g) => g.unresolved)).toEqual([]);
+  });
+
+  it('fills the second group of five from one REQUISITIONED group', () => {
+    // "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED
+    // operatives from one group in the Inquisitorial Requisition faction rule"
+    const data = full();
+    const base = defaultRoster(agents()).slice(0, 7); // leader + TOME-SKULL + the first five
+    const picks = [...base, ...fromGroup(data, 'death-korps', 5)];
+    const v = validateRosterFor(data, picks);
+    expect(v.ok, v.errors.join(' | ')).toBe(true);
+    // The borrowed datacards really are the donor's, with the printed keyword swap applied.
+    const trooper = data.datacards.find((c) => c.id === 'death-korps.trooper')!;
+    expect(trooper.keywords).toContain('INQUISITORIAL AGENT');
+    expect(trooper.keywords).not.toContain('DEATH KORPS');
+    expect(v.weapons[7]!.length).toBeGreaterThan(0);
+  });
+
+  it('refuses REQUISITIONED operatives from two different groups', () => {
+    // "(you cannot select REQUISITIONED operatives from different groups)"
+    const data = full();
+    const base = defaultRoster(agents()).slice(0, 7);
+    const picks = [...base, ...fromGroup(data, 'kasrkin', 3), ...fromGroup(data, 'tempestus-scion', 2)];
+    const blocked = blockingErrors(validateRosterFor(data, picks)).join(' ');
+    expect(blocked).toContain('cannot select REQUISITIONED operatives from different groups');
+    expect(blocked).toContain('Kasrkin and Tempestus Scion');
+  });
+
+  it("enforces each group's own printed list rules", () => {
+    // KASRKIN group: "* You cannot select more than two of these operatives combined."
+    const data = full();
+    const base = defaultRoster(agents()).slice(0, 7);
+    const starred = selectionEntries(data)
+      .map((e, i) => ({ e, i }))
+      .filter((x) => x.e.requisitionGroup === 'kasrkin' && x.e.footnoteGroup === '*');
+    expect(starred.length).toBeGreaterThan(2);
+    const picks = [...base, ...starred.slice(0, 3).map((x) => pickFor(data, x.i))];
+    expect(blockingErrors(validateRosterFor(data, picks)).join(' ')).toContain(
+      'more than two of these operatives combined',
+    );
+  });
+
+  it('says so instead of inventing an operative when the donor kill team is not loaded', () => {
+    const data = agents(); // no donors merged in
+    const picks = [...defaultRoster(data).slice(0, 7), ...fromGroup(data, 'kasrkin', 5)];
+    const blocked = blockingErrors(validateRosterFor(data, picks)).join(' ');
+    expect(blocked).toContain('printed with the Kasrkin kill team and is not loaded here');
+  });
+
+  it('relaxes uniqueness only when no REQUISITIONED operative is taken', () => {
+    // "Your kill team can only include each operative on this list once, unless you're not
+    // including any REQUISITIONED operatives, in which case you can include up to two GUN
+    // SERVITOR operatives, but each one must have different options."
+    const data = full();
+    const gun = entryRows(data).find((r) => r.entry.role === 'GUN SERVITOR' && !r.entry.requisitionGroup)!;
+    const opt = (n: number) => ({ ...pickFor(data, gun.index), loadoutIds: [gun.entry.loadouts[n]!.id] });
+
+    // The default roster takes the relaxation: two GUN SERVITORs, different options, no
+    // REQUISITIONED operative anywhere.
+    const legal = defaultRoster(data);
+    expect(validateRosterFor(data, legal).ok).toBe(true);
+    expect(legal.filter((p) => p.datacardId === gun.entry.datacardId)).toHaveLength(2);
+    expect(legal.some((p) => selectionEntries(data)[0]!.requisitionGroup)).toBe(false);
+
+    // Two with the SAME option is refused…
+    const same = [...legal.filter((p) => p.datacardId !== gun.entry.datacardId), opt(0), opt(0)];
+    expect(blockingErrors(validateRosterFor(data, same)).join(' ')).toContain('must have different options');
+    // …and so is a third, however they are equipped.
+    const three = [...legal.filter((p) => p.datacardId !== gun.entry.datacardId).slice(0, 7), opt(0), opt(1), opt(2)];
+    expect(blockingErrors(validateRosterFor(data, three)).join(' ')).toContain('GUN SERVITOR selected 3 times');
   });
 });
 
@@ -262,36 +435,96 @@ describe('roster builder (rendered)', () => {
     expect(card?.querySelector('.op-weapons .tag')?.textContent).toContain('always carried');
   });
 
-  it('will not let a rules gap pass silently: unsupported teams say so, and say so on the button', () => {
-    // BATTLECLADE's printed rule caps COMBAT SERVITOR operatives per WEAPON ("up to one with
-    // meltagun... up to three with incendine igniter"), but the scrape flattened that into two
-    // role-level maxCount rows, 1 and 3. The stricter row makes the 8-operative group
-    // unfillable, so the screen says so out loud and the confirm button admits that legality
-    // is not being enforced for this team.
-    //
-    // DEATHWATCH used to be in this test. It is not a gap any more: its WATCH SERGEANT is
-    // drawn from the same list as everyone else, and the validator now counts a list-drawn
-    // leader toward the slots instead of on top of them.
+  it('builds BATTLECLADE, whose COMBAT SERVITOR maximums are per weapon', () => {
+    // This test used to assert the opposite: that BATTLECLADE was a dead end because the
+    // scrape had flattened "up to one COMBAT SERVITOR operative with meltagun… up to three
+    // with incendine igniter" into two role-level maximums (1 and 3), the stricter of which
+    // made the printed 8-operative group unfillable. The pipeline now records the weapon
+    // qualifier, so the team builds — deliberately changed, not weakened.
     let confirmed: ConfirmedRoster | null = null;
     const team = JSON.parse(readFile('data/teams/battleclade.json')) as { name: string };
     act(() => {
       render(<RosterBuilder teams={[team as never]} onConfirm={(r) => (confirmed = r)} confirmLabel="Lock in" />, root);
     });
     click(byText('.team-list button', team.name));
-    // The gap is stated on screen, quoting the group it cannot fill.
-    expect(root.querySelector('.warn-block')?.textContent ?? '').toMatch(/cannot be filled/);
+    expect(root.querySelector('.warn-block')?.textContent ?? '').not.toMatch(/cannot be filled/);
 
-    // And it is a dead end, not an escape hatch: adding every offered operative still cannot
-    // reach a legal roster, so confirm stays disabled rather than shipping an illegal team.
     const confirm = () => byText('button', 'Lock in') as HTMLButtonElement;
     expect(confirm().disabled).toBe(true);
-    for (let i = 0; i < 24; i++) {
+    for (let i = 0; i < 24 && confirm().disabled; i++) {
       const add = root.querySelector('button.add:not([disabled])');
       if (!add) break;
       click(add);
     }
+    expect(root.querySelector('.ok-line')?.textContent).toContain('meets its printed selection requirements');
+    expect(confirm().disabled).toBe(false);
+    click(confirm());
+    expect(confirmed).not.toBeNull();
+    // Never more than the printed number of any one option.
+    const out = confirmed as unknown as ConfirmedRoster;
+    const carrying = (w: string) => out.weapons.filter((ws) => ws.some((x) => x.toLowerCase() === w)).length;
+    expect(carrying('meltagun')).toBeLessThanOrEqual(1);
+    expect(carrying('incendine igniter')).toBeLessThanOrEqual(3);
+  });
+
+  it('builds INQUISITORIAL AGENT, whose second group of five draws from the list above', () => {
+    // "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED
+    // operatives from one group in the Inquisitorial Requisition faction rule." Taking the
+    // list above means the group-3 rows have to stay addable past group 3's own five, which
+    // is what `groupUsage`'s spill does — pinned here through the real screen.
+    let confirmed: ConfirmedRoster | null = null;
+    const all = ['inquisitorial-agent', 'death-korps', 'exaction-squad', 'imperial-navy-breacher', 'kasrkin'].map(
+      (id) => JSON.parse(readFile(`data/teams/${id}.json`)) as never,
+    );
+    act(() => {
+      render(<RosterBuilder teams={all} onConfirm={(r) => (confirmed = r)} confirmLabel="Lock in" />, root);
+    });
+    click(byText('.team-list button', 'Inquisitorial Agent'));
+    const confirm = () => byText('button', 'Lock in') as HTMLButtonElement;
     expect(confirm().disabled).toBe(true);
-    expect(confirmed).toBeNull();
+    for (let i = 0; i < 40 && confirm().disabled; i++) {
+      const add = root.querySelector('button.add:not([disabled])');
+      if (!add) break;
+      click(add);
+    }
+    expect(root.querySelector('.ok-line')?.textContent).toContain('meets its printed selection requirements');
+    expect(confirm().disabled).toBe(false);
+    click(confirm());
+    const out = confirmed as unknown as ConfirmedRoster;
+    expect(out.picks).toHaveLength(12);
+    // Both printed groups of five are full, not one group of ten.
+    expect(root.textContent).toContain('group 3: 5/5');
+    expect(root.textContent).toContain('group 4: 5/5');
+  });
+
+  it('fetches a kill team on demand, and the donors its faction rule borrows from', async () => {
+    // The picker only has name/faction rows (`loadTeamIndex`); the JSON arrives when a team
+    // is chosen, and INQUISITORIAL AGENT also needs the four kill teams whose datacards its
+    // Inquisitorial Requisition groups point at.
+    const asked: string[] = [];
+    const loadTeam = async (id: string) => {
+      asked.push(id);
+      return JSON.parse(readFile(`data/teams/${id}.json`)) as never;
+    };
+    const summaries = [
+      { id: 'inquisitorial-agent', name: 'Inquisitorial Agent', faction: 'Imperium' },
+      { id: 'kasrkin', name: 'Kasrkin', faction: 'Astra Militarum' },
+    ];
+    await act(async () => {
+      render(<RosterBuilder teams={summaries as never} loadTeam={loadTeam} />, root);
+    });
+    // Nothing is fetched to draw the picker.
+    expect(asked).toEqual([]);
+    await act(async () => {
+      click(byText('.team-list button', 'Inquisitorial Agent'));
+    });
+    // One flush for the team's own JSON, another for the donors its faction rule names.
+    for (let i = 0; i < 4; i++) await act(async () => void (await Promise.resolve()));
+    expect(asked).toContain('inquisitorial-agent');
+    expect(asked).toEqual(expect.arrayContaining(['death-korps', 'exaction-squad', 'imperial-navy-breacher', 'kasrkin']));
+    expect(root.textContent).toContain('Printed selection requirements');
+    expect(root.textContent).toContain('REQUISITIONED — Kasrkin');
+    expect(root.querySelector('.warn-block')?.textContent ?? '').not.toMatch(/not loaded/);
   });
 });
 
@@ -314,13 +547,10 @@ describe('every kill team can be fielded', () => {
 
   // A team whose printed rules the shared validator cannot express is surfaced in the UI as
   // a rules gap. That list must only shrink, and every entry needs a reason — so it is
-  // asserted here rather than left as a comment.
-  const KNOWN_GAPS: Record<string, string> = {
-    battleclade:
-      'COMBAT SERVITOR parses two role-level maxCount rows (1 and 3); the printed rule caps them per WEAPON ("up to one with meltagun... up to three with incendine igniter"), so the stricter row makes the 8-operative group unfillable',
-    'inquisitorial-agent':
-      'the second group of 5 may come from REQUISITIONED operatives defined in the Inquisitorial Requisition faction rule rather than from the selection list',
-  };
+  // asserted here rather than left as a comment. **It is now empty**: battleclade's
+  // weapon-qualified COMBAT SERVITOR maximums and inquisitorial-agent's REQUISITIONED group
+  // are both read from the printed text now. A gap added here must fail this test once fixed.
+  const KNOWN_GAPS: Record<string, string> = {};
 
   for (const slug of slugs) {
     it(`${slug}: defaultRoster produces a legal kill team`, () => {

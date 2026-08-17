@@ -81,7 +81,9 @@
     "count": 5,
     "kind": "sameAsAbove",
     "roles": [],
-    "rawText": "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups)."
+    "rawText": "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups).",
+    "drawsFrom": 3,
+    "requisition": true
    }
   ],
   "list": [
@@ -356,20 +358,1497 @@
     "roles": []
    },
    {
-    "kind": "maxCount",
+    "kind": "uniqueUnlessAlternative",
+    "alternative": "REQUISITIONED",
     "role": "GUN SERVITOR",
-    "max": 2
+    "max": 2,
+    "distinctOptions": true,
+    "text": "Your kill team can only include each operative on this list once, unless you’re not including any REQUISITIONED operatives, in which case you can include up to two GUN SERVITOR operatives, but each one must have different options."
    },
    {
     "kind": "custom",
     "text": "Your kill team (including any REQUISITIONED operatives) cannot include more than one weapon with the Piercing 2 weapon rule, and cannot include more than three weapons with the Piercing X (excluding Piercing Crits X) weapon rule combined.",
     "hook": "inquisitorial-agent.your-kill-team-including-any-requisitioned"
+   },
+   {
+    "kind": "oneRequisitionGroup",
+    "keyword": "REQUISITIONED",
+    "text": "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups)."
    }
   ],
   "footnotes": {},
   "footnoteOptions": {},
   "designerNotes": [],
-  "rawText": "1 INQUISITORIAL AGENT INTERROGATOR operative\n\n1 INQUISITORIAL AGENT TOME-SKULL operative\n\n5 INQUISITORIAL AGENT operatives selected from the following list:\n\nAUTOSAVANT\n\nQUESTKEEPER\n\nDEATH WORLD VETERAN\n\nENLIGHTENER\n\nHEXORCIST\n\nMYSTIC\n\nPENAL LEGIONNAIRE\n\nPISTOLIER\n\nGUN SERVITOR with one of the following options:\n\nHeavy bolter; servo-claw\n\nMulti-melta; servo-claw\n\nPlasma cannon; servo-claw\n\n5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups).\n\nYour kill team can only include each operative on this list once, unless you’re not including any REQUISITIONED operatives, in which case you can include up to two GUN SERVITOR operatives, but each one must have different options. Your kill team (including any REQUISITIONED operatives) cannot include more than one weapon with the Piercing 2 weapon rule, and cannot include more than three weapons with the Piercing X (excluding Piercing Crits X) weapon rule combined."
+  "rawText": "1 INQUISITORIAL AGENT INTERROGATOR operative\n\n1 INQUISITORIAL AGENT TOME-SKULL operative\n\n5 INQUISITORIAL AGENT operatives selected from the following list:\n\nAUTOSAVANT\n\nQUESTKEEPER\n\nDEATH WORLD VETERAN\n\nENLIGHTENER\n\nHEXORCIST\n\nMYSTIC\n\nPENAL LEGIONNAIRE\n\nPISTOLIER\n\nGUN SERVITOR with one of the following options:\n\nHeavy bolter; servo-claw\n\nMulti-melta; servo-claw\n\nPlasma cannon; servo-claw\n\n5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups).\n\nYour kill team can only include each operative on this list once, unless you’re not including any REQUISITIONED operatives, in which case you can include up to two GUN SERVITOR operatives, but each one must have different options. Your kill team (including any REQUISITIONED operatives) cannot include more than one weapon with the Piercing 2 weapon rule, and cannot include more than three weapons with the Piercing X (excluding Piercing Crits X) weapon rule combined.",
+  "requisition": {
+   "ruleId": "inquisitorial-agent.rule.inquisitorial-requisition",
+   "ruleName": "Inquisitorial Requisition",
+   "keyword": "REQUISITIONED",
+   "oneGroupOnly": true,
+   "rawText": "5 INQUISITORIAL AGENT operatives selected from the list above, or REQUISITIONED operatives from one group in the Inquisitorial Requisition faction rule (you cannot select REQUISITIONED operatives from different groups).",
+   "factionKeyword": "INQUISITORIAL AGENT",
+   "keywordRuleText": "These operatives have their faction keyword replaced in all instances on their datacards with INQUISITORIAL AGENT (unless they already have it).",
+   "groups": [
+    {
+     "id": "death-korps",
+     "name": "Death Korps",
+     "keyword": "DEATH KORPS",
+     "sourceTeam": "death-korps",
+     "count": 6,
+     "rawText": "6 DEATH KORPS operatives selected from the following list:",
+     "entries": [
+      {
+       "role": "BRUISER",
+       "datacardId": "death-korps.bruiser",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Lasgun",
+        "Trench club"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "BRUISER",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "CONFIDANT",
+       "datacardId": "death-korps.confidant",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "choice",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Bolt pistol",
+        "Boltgun",
+        "Lasgun",
+        "Relic laspistol"
+       ],
+       "loadouts": [
+        {
+         "id": "inquisitorial-agent.req.death-korps.e2.opt1",
+         "label": "Boltgun or lasgun; bayonet",
+         "weapons": [
+          "Bayonet"
+         ]
+        },
+        {
+         "id": "inquisitorial-agent.req.death-korps.e2.opt2",
+         "label": "Bolt pistol or relic laspistol; chainsword",
+         "weapons": [
+          "Chainsword"
+         ]
+        }
+       ],
+       "optionGroups": [],
+       "rawText": "CONFIDANT with one of the following options:",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "death-korps.gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Flamer",
+        "Bayonet"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with flamer and bayonet*",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "death-korps.gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Grenade launcher",
+        "Bayonet"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with grenade launcher and bayonet*",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "death-korps.gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Meltagun",
+        "Bayonet"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with meltagun and bayonet*",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "death-korps.gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Plasma gun",
+        "Bayonet"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with plasma gun and bayonet*",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "MEDIC",
+       "datacardId": "death-korps.medic",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Lasgun",
+        "Bayonet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "MEDIC",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "SAPPER",
+       "datacardId": "death-korps.sapper",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Lasgun",
+        "Remote detonator",
+        "Bayonet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "SAPPER",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "SNIPER",
+       "datacardId": "death-korps.sniper",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Long-las",
+        "Bayonet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "SNIPER*",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "TROOPER",
+       "datacardId": "death-korps.trooper",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": false,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Lasgun",
+        "Bayonet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "TROOPER",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "VETERAN",
+       "datacardId": "death-korps.veteran",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Lasgun",
+        "Bionic arm"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "VETERAN",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "VOX-OPERATOR",
+       "datacardId": "death-korps.vox-operator",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Lasgun",
+        "Bayonet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "VOX-OPERATOR",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      },
+      {
+       "role": "ZEALOT",
+       "datacardId": "death-korps.zealot",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Lasgun",
+        "Bayonet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "ZEALOT",
+       "group": 4,
+       "requisitionGroup": "death-korps"
+      }
+     ],
+     "constraints": [
+      {
+       "kind": "uniqueExcept",
+       "roles": [
+        "TROOPER"
+       ]
+      },
+      {
+       "kind": "groupCap",
+       "group": "*",
+       "max": 3
+      }
+     ],
+     "footnotes": {
+      "*": "You cannot select more than three of these operatives combined."
+     },
+     "unresolved": []
+    },
+    {
+     "id": "exaction-squad",
+     "name": "Exaction Squad",
+     "keyword": "EXACTION SQUAD",
+     "sourceTeam": "exaction-squad",
+     "count": 5,
+     "rawText": "5 EXACTION SQUAD operatives selected from the following list:",
+     "entries": [
+      {
+       "role": "CASTIGATOR",
+       "datacardId": "exaction-squad.arbites-castigator",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Combat shotgun",
+        "Excruciator maul"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "CASTIGATOR",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "CHIRURGANT",
+       "datacardId": "exaction-squad.arbites-chirurgant",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Combat shotgun",
+        "Repression baton"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "CHIRURGANT",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "exaction-squad.arbites-gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "choice",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [
+        {
+         "id": "inquisitorial-agent.req.exaction-squad.e3.opt1",
+         "label": "Grenade launcher; repression baton",
+         "weapons": [
+          "Grenade launcher",
+          "Repression baton"
+         ]
+        },
+        {
+         "id": "inquisitorial-agent.req.exaction-squad.e3.opt2",
+         "label": "Heavy stubber; repression baton",
+         "weapons": [
+          "Heavy stubber",
+          "Repression baton"
+         ]
+        },
+        {
+         "id": "inquisitorial-agent.req.exaction-squad.e3.opt3",
+         "label": "Webber; repression baton",
+         "weapons": [
+          "Webber",
+          "Repression baton"
+         ]
+        }
+       ],
+       "optionGroups": [],
+       "rawText": "GUNNER with one of the following options:",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "LEASHMASTER",
+       "datacardId": "exaction-squad.arbites-leashmaster",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Combat shotgun",
+        "Shotpistol",
+        "Repression baton"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "LEASHMASTER",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "MALOCATOR",
+       "datacardId": "exaction-squad.arbites-malocator",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Combat shotgun",
+        "Repression baton"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "MALOCATOR",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "MARKSMAN",
+       "datacardId": "exaction-squad.arbites-marksman",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Executioner shotgun",
+        "Repression baton"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "MARKSMAN",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "REVELATUM",
+       "datacardId": "exaction-squad.arbites-revelatum",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Scoped shotpistol",
+        "Repression baton"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "REVELATUM",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "R-VR CYBER-MASTIFF",
+       "datacardId": "exaction-squad.r-vr-cyber-mastiff",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Mechanical bite"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "R-VR CYBER-MASTIFF",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "SUBDUCTOR",
+       "datacardId": "exaction-squad.arbites-subductor",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": false,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Shotpistol",
+        "Shock maul & assault shield"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "SUBDUCTOR",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "VIGILANT",
+       "datacardId": "exaction-squad.arbites-vigilant",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": false,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Combat shotgun",
+        "Repression baton"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "VIGILANT",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      },
+      {
+       "role": "VOX-SIGNIFIER",
+       "datacardId": "exaction-squad.arbites-vox-signifier",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Combat shotgun",
+        "Repression baton"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "VOX-SIGNIFIER",
+       "group": 4,
+       "requisitionGroup": "exaction-squad"
+      }
+     ],
+     "constraints": [
+      {
+       "kind": "uniqueExcept",
+       "roles": [
+        "SUBDUCTOR",
+        "VIGILANT"
+       ]
+      },
+      {
+       "kind": "maxCount",
+       "role": "SUBDUCTOR",
+       "max": 2
+      },
+      {
+       "kind": "custom",
+       "text": "Permitted EXACTION SQUAD faction rules: Ruthless Efficiency, Repress.",
+       "hook": "inquisitorial-agent.req.exaction-squad.permitted-exaction-squad-faction-rules-ruthless"
+      }
+     ],
+     "footnotes": {},
+     "unresolved": []
+    },
+    {
+     "id": "imperial-navy-breacher",
+     "name": "Imperial Navy Breacher",
+     "keyword": "IMPERIAL NAVY BREACHER",
+     "sourceTeam": "imperial-navy-breacher",
+     "count": 5,
+     "rawText": "5 IMPERIAL NAVY BREACHER operatives selected from the following list:",
+     "entries": [
+      {
+       "role": "ARMSMAN",
+       "datacardId": "imperial-navy-breacher.navis-armsman",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": false,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Navis shotgun",
+        "Navis hatchet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "ARMSMAN",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      },
+      {
+       "role": "AXEJACK",
+       "datacardId": "imperial-navy-breacher.navis-axejack",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Autopistol",
+        "Power weapon"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "AXEJACK",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      },
+      {
+       "role": "C.A.T. UNIT",
+       "datacardId": "imperial-navy-breacher.navis-c-a-t-unit",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 0.5,
+       "footnoteGroup": "*",
+       "requires": [
+        "SURVEYOR"
+       ],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "C.A.T. UNIT*",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      },
+      {
+       "role": "ENDURANT",
+       "datacardId": "imperial-navy-breacher.navis-endurant",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Navis heavy shotgun",
+        "Shield bash"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "ENDURANT",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      },
+      {
+       "role": "GHEISTSKULL",
+       "datacardId": "imperial-navy-breacher.navis-gheistskull",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 0.5,
+       "footnoteGroup": "*",
+       "requires": [
+        "VOID-JAMMER"
+       ],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GHEISTSKULL*",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      },
+      {
+       "role": "GRENADIER",
+       "datacardId": "imperial-navy-breacher.navis-grenadier",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Demolition charge",
+        "Navis shotgun",
+        "Navis hatchet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GRENADIER",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      },
+      {
+       "role": "HATCHCUTTER",
+       "datacardId": "imperial-navy-breacher.navis-hatchcutter",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Autopistol",
+        "Chainfist"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "HATCHCUTTER",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      },
+      {
+       "role": "SURVEYOR",
+       "datacardId": "imperial-navy-breacher.navis-surveyor",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Navis shotgun",
+        "Navis hatchet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "SURVEYOR",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      },
+      {
+       "role": "VOID-JAMMER",
+       "datacardId": "imperial-navy-breacher.navis-void-jammer",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Gheistskull detonator",
+        "Navis shotgun",
+        "Navis hatchet"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "VOID-JAMMER",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "imperial-navy-breacher.navis-gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "choice",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [
+        {
+         "id": "inquisitorial-agent.req.imperial-navy-breacher.e10.opt1",
+         "label": "Navis las-volley; gun butt",
+         "weapons": [
+          "Navis las-volley",
+          "Gun butt"
+         ]
+        },
+        {
+         "id": "inquisitorial-agent.req.imperial-navy-breacher.e10.opt2",
+         "label": "Meltagun; gun butt",
+         "weapons": [
+          "Meltagun",
+          "Gun butt"
+         ]
+        },
+        {
+         "id": "inquisitorial-agent.req.imperial-navy-breacher.e10.opt3",
+         "label": "Plasma gun; gun butt",
+         "weapons": [
+          "Plasma gun",
+          "Gun butt"
+         ]
+        }
+       ],
+       "optionGroups": [],
+       "rawText": "GUNNER with one of the following options:",
+       "group": 4,
+       "requisitionGroup": "imperial-navy-breacher"
+      }
+     ],
+     "constraints": [
+      {
+       "kind": "uniqueExcept",
+       "roles": [
+        "ARMSMAN"
+       ]
+      },
+      {
+       "kind": "requires",
+       "role": "GHEISTSKULL",
+       "requiresRole": "VOID-JAMMER"
+      },
+      {
+       "kind": "requires",
+       "role": "C.A.T. UNIT",
+       "requiresRole": "SURVEYOR"
+      },
+      {
+       "kind": "halfSelection",
+       "group": "*",
+       "max": 1
+      },
+      {
+       "kind": "custom",
+       "text": "Permitted IMPERIAL NAVY BREACHER faction rule: Void Armour.",
+       "hook": "inquisitorial-agent.req.imperial-navy-breacher.permitted-imperial-navy-breacher-faction-rule"
+      }
+     ],
+     "footnotes": {
+      "*": "These operatives count as half a selection each, meaning you can select both of them and it’s treated as one selection in total."
+     },
+     "unresolved": []
+    },
+    {
+     "id": "kasrkin",
+     "name": "Kasrkin",
+     "keyword": "KASRKIN",
+     "sourceTeam": "kasrkin",
+     "count": 5,
+     "rawText": "5 KASRKIN operatives selected from the following list:",
+     "entries": [
+      {
+       "role": "MEDIC",
+       "datacardId": "kasrkin.combat-medic",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Hot-shot lasgun",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "MEDIC KASRKIN",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "DEMO-TROOPER",
+       "datacardId": "kasrkin.demo-trooper",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Hot-shot laspistol",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "DEMO-TROOPER",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "kasrkin.gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Flamer",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER KASRKIN with flamer and gun butt*",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "kasrkin.gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Grenade launcher",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with grenade launcher and gun butt*",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "kasrkin.gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Hot-shot volley gun",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with hot-shot volley gun and gun butt*",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "kasrkin.gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Meltagun",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with meltagun and gun butt*",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "kasrkin.gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Plasma gun",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with plasma gun and gun butt*",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "RECON-TROOPER",
+       "datacardId": "kasrkin.recon-trooper",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Hot-shot lasgun",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "RECON-TROOPER KASRKIN",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "SHARPSHOOTER",
+       "datacardId": "kasrkin.sharpshooter",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": "*",
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Hot-shot marksman rifle",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "SHARPSHOOTER KASRKIN*",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "TROOPER",
+       "datacardId": "kasrkin.trooper",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": false,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Hot-shot lasgun",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "TROOPER KASRKIN",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      },
+      {
+       "role": "VOX-TROOPER",
+       "datacardId": "kasrkin.vox-trooper",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Hot-shot lasgun",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "VOX-TROOPER KASRKIN",
+       "group": 4,
+       "requisitionGroup": "kasrkin"
+      }
+     ],
+     "constraints": [
+      {
+       "kind": "uniqueExcept",
+       "roles": [
+        "TROOPER"
+       ]
+      },
+      {
+       "kind": "groupCap",
+       "group": "*",
+       "max": 2
+      }
+     ],
+     "footnotes": {
+      "*": "You cannot select more than two of these operatives combined."
+     },
+     "unresolved": []
+    },
+    {
+     "id": "sister-of-silence",
+     "name": "Sister of Silence",
+     "keyword": "SISTER OF SILENCE",
+     "sourceTeam": null,
+     "count": 5,
+     "rawText": "5 SISTER OF SILENCE operatives selected from the following list:",
+     "entries": [
+      {
+       "role": "PROSECUTOR",
+       "datacardId": "inquisitorial-agent.sister-of-silence-prosecutor",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": false,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Boltgun",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "PROSECUTOR",
+       "group": 4,
+       "requisitionGroup": "sister-of-silence"
+      },
+      {
+       "role": "VIGILATOR",
+       "datacardId": "inquisitorial-agent.sister-of-silence-vigilator",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": false,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Executioner greatblade"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "VIGILATOR",
+       "group": 4,
+       "requisitionGroup": "sister-of-silence"
+      },
+      {
+       "role": "WITCHSEEKER",
+       "datacardId": "inquisitorial-agent.sister-of-silence-witchseeker",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": false,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Flamer",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "WITCHSEEKER",
+       "group": 4,
+       "requisitionGroup": "sister-of-silence"
+      }
+     ],
+     "constraints": [],
+     "footnotes": {},
+     "unresolved": []
+    },
+    {
+     "id": "tempestus-scion",
+     "name": "Tempestus Scion",
+     "keyword": "TEMPESTUS SCION",
+     "sourceTeam": null,
+     "count": 5,
+     "rawText": "5 TEMPESTUS SCION operatives selected from the following list:",
+     "entries": [
+      {
+       "role": "GUNNER",
+       "datacardId": "inquisitorial-agent.tempestus-scion-gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Flamer",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with flamer and gun butt",
+       "group": 4,
+       "requisitionGroup": "tempestus-scion"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "inquisitorial-agent.tempestus-scion-gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Grenade launcher",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with grenade launcher and gun butt",
+       "group": 4,
+       "requisitionGroup": "tempestus-scion"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "inquisitorial-agent.tempestus-scion-gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Hot-shot volley gun",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with hot-shot volley gun and gun butt",
+       "group": 4,
+       "requisitionGroup": "tempestus-scion"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "inquisitorial-agent.tempestus-scion-gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Meltagun",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with meltagun and gun butt",
+       "group": 4,
+       "requisitionGroup": "tempestus-scion"
+      },
+      {
+       "role": "GUNNER",
+       "datacardId": "inquisitorial-agent.tempestus-scion-gunner",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [
+        "Plasma gun",
+        "Gun butt"
+       ],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "GUNNER with plasma gun and gun butt",
+       "group": 4,
+       "requisitionGroup": "tempestus-scion"
+      },
+      {
+       "role": "MEDIC",
+       "datacardId": "inquisitorial-agent.tempestus-scion-medic",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Hot-shot lasgun",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "MEDIC",
+       "group": 4,
+       "requisitionGroup": "tempestus-scion"
+      },
+      {
+       "role": "TROOPER",
+       "datacardId": "inquisitorial-agent.tempestus-scion-trooper",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": false,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Hot-shot lasgun",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "TROOPER",
+       "group": 4,
+       "requisitionGroup": "tempestus-scion"
+      },
+      {
+       "role": "VOX-OPERATOR",
+       "datacardId": "inquisitorial-agent.tempestus-scion-vox-operator",
+       "count": 1,
+       "isLeader": false,
+       "uniqueUnlessRole": true,
+       "selectionCost": 1,
+       "footnoteGroup": null,
+       "requires": [],
+       "loadoutMode": "fixed",
+       "fixedWeapons": [],
+       "fixedChoiceGroups": [],
+       "alwaysWeapons": [
+        "Hot-shot lasgun",
+        "Gun butt"
+       ],
+       "loadouts": [],
+       "optionGroups": [],
+       "rawText": "VOX-OPERATOR",
+       "group": 4,
+       "requisitionGroup": "tempestus-scion"
+      }
+     ],
+     "constraints": [
+      {
+       "kind": "uniqueExcept",
+       "roles": [
+        "TROOPER"
+       ]
+      },
+      {
+       "kind": "maxCount",
+       "role": "GUNNER",
+       "max": 2
+      }
+     ],
+     "footnotes": {},
+     "unresolved": []
+    }
+   ]
+  }
  },
  "datacards": [
   {

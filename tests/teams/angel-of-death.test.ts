@@ -14,7 +14,7 @@ import {
   setChapterTactics,
   setVeteranTactic,
 } from '../../src/teams/angel-of-death/index.ts';
-import { teamData } from '../../src/teams/data.ts';
+import { teamData } from '../../src/teams/bundled.ts';
 import { activate, battle, opWith, rosterIncluding, teamContext } from './harness.ts';
 import type { GameState, WeaponProfile } from '../../src/core/types.ts';
 

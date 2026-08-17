@@ -9,7 +9,7 @@ import { moveBudget } from '../../src/core/movement.ts';
 import { availableActions } from '../../src/core/actions.ts';
 import { aplOf, inflictDamage, markerController } from '../../src/core/state.ts';
 import { kasrkin, SKILLS, skillGambitId } from '../../src/teams/kasrkin/index.ts';
-import { teamData } from '../../src/teams/data.ts';
+import { teamData } from '../../src/teams/bundled.ts';
 import { activate, battle, opWith, rosterIncluding, teamContext } from './harness.ts';
 import type { GameState } from '../../src/core/types.ts';
 

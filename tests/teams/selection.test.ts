@@ -3,7 +3,7 @@
  * Each case quotes the printed selection requirement it pins.
  */
 import { describe, expect, it } from 'vitest';
-import { teamData } from '../../src/teams/data.ts';
+import { teamData } from '../../src/teams/bundled.ts';
 import {
   alwaysAvailableWeapons,
   defaultRoster,

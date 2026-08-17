@@ -8,7 +8,18 @@
  * Those are shown as "always carried", never as a choice.
  */
 import { alwaysAvailableWeapons } from '../../teams/selection.ts';
-import { choiceGroups, weaponsOfPick, withChoice, type EntryRow, type RosterPickIn, type TeamData } from './rules.ts';
+import {
+  choiceGroups,
+  isEitherEntry,
+  loadoutModes,
+  modeOfPick,
+  weaponsOfPick,
+  withChoice,
+  withMode,
+  type EntryRow,
+  type RosterPickIn,
+  type TeamData,
+} from './rules.ts';
 import type { Weapon, WeaponProfile } from '../../core/types.ts';
 
 export interface OperativeCardProps {
@@ -38,7 +49,11 @@ export function costLabel(cost: number): string | null {
 
 export function OperativeCard({ data, row, pick, onChange, onRemove }: OperativeCardProps) {
   const { entry, card } = row;
-  const groups = choiceGroups(entry);
+  // "…with one of the following options: A; B. Or one option from each of the following:
+  // (C or D) + (E or F)" is an either/or: pick the mode first, then that mode's options.
+  const either = isEitherEntry(entry);
+  const mode = modeOfPick(entry, pick) ?? 'options';
+  const groups = choiceGroups(entry, mode);
   const chosen = new Set(pick.loadoutIds ?? []);
   const names = weaponsOfPick(data, pick);
   const always = new Set(
@@ -72,6 +87,26 @@ export function OperativeCard({ data, row, pick, onChange, onRemove }: Operative
           <span class="tag">WOUNDS {card.wounds}</span>
           <span class="tag">{baseLabel(card)}</span>
         </div>
+      )}
+
+      {either && (
+        <label class="op-choice op-mode">
+          <span class="muted">This operative is equipped with…</span>
+          <select
+            value={mode}
+            aria-label={`${entry.role} loadout mode`}
+            disabled={!onChange}
+            onChange={(e) =>
+              onChange?.(withMode(entry, pick, (e.target as HTMLSelectElement).value as 'options' | 'each'))
+            }
+          >
+            {loadoutModes(entry).map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.label}
+              </option>
+            ))}
+          </select>
+        </label>
       )}
 
       {groups.map((g) => (

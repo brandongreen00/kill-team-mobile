@@ -9,7 +9,7 @@
  */
 import { useState } from 'preact/hooks';
 import type { Store } from '../store.ts';
-import type { TeamData } from '../data.ts';
+import type { TeamData, TeamSummary } from '../data.ts';
 import type { PlayerId, Vec2 } from '../../core/types.ts';
 import { otherPlayer } from '../../core/types.ts';
 import { RosterBuilder } from '../roster/RosterBuilder.tsx';
@@ -17,7 +17,9 @@ import { applyLoadouts } from '../../teams/selection.ts';
 
 export interface SetupProps {
   store: Store;
-  teams: TeamData[];
+  /** The picker's rows; a team's full JSON is fetched by the builder through `loadTeam`. */
+  teams: (TeamSummary | TeamData)[];
+  loadTeam?: (id: string) => Promise<TeamData | null>;
   /** Board click plumbing so operatives are placed by tapping the map. */
   pendingPlacement: { operativeId: string; player: PlayerId } | null;
   setPendingPlacement: (p: { operativeId: string; player: PlayerId } | null) => void;
@@ -26,7 +28,7 @@ export interface SetupProps {
 const PLAYERS: PlayerId[] = ['p1', 'p2'];
 const LABEL: Record<PlayerId, string> = { p1: 'Player 1', p2: 'Player 2' };
 
-export function Setup({ store, teams, pendingPlacement, setPendingPlacement }: SetupProps) {
+export function Setup({ store, teams, loadTeam, pendingPlacement, setPendingPlacement }: SetupProps) {
   const { state, ctx } = store;
   const [handedOver, setHandedOver] = useState<PlayerId | null>(null);
   /** `state.setup.step` is nudged directly for the reveal (the reducer has no intent for it). */
@@ -126,9 +128,14 @@ export function Setup({ store, teams, pendingPlacement, setPendingPlacement }: S
         // A fresh builder per player: pass-and-play must never show one player the other's picks.
         key={next}
         teams={teams}
+        loadTeam={loadTeam}
         title={`Select operatives — ${LABEL[next]}`}
         confirmLabel={`Lock in ${LABEL[next]}'s kill team`}
-        onConfirm={({ teamId, picks, weapons }) => {
+        onConfirm={({ teamId, picks, weapons, datacards }) => {
+          // The context only carries the implemented teams' datacards up front, so the
+          // chosen team's (REQUISITIONED borrowings included) are registered here — before
+          // `SelectRoster` asks the reducer to resolve them.
+          for (const card of datacards) ctx.datacards.set(card.id, card);
           const ok = store.dispatch({
             t: 'SelectRoster',
             player: next,

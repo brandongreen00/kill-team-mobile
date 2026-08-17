@@ -6,7 +6,7 @@ import { getAction, registerAction } from '../../core/actions.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import { log } from '../../core/state.ts';
 import type { GameState, OperativeState, PlayerId } from '../../core/types.ts';
-import { teamData } from '../data.ts';
+import { teamData } from '../bundled.ts';
 import {
   chosenOperative,
   currentApl,

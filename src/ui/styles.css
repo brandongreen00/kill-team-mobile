@@ -108,6 +108,11 @@ p.err { color: var(--danger); font-size: 13px; }
 .rules-block summary, .roster-library summary { color: var(--muted); font-size: 13px;
   min-height: var(--tap); display: flex; align-items: center; }
 .rules-block pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; color: var(--muted); }
+/* A REQUISITIONED group: a selection list printed inside a faction rule, kept folded away
+   so the team's own list stays the obvious one. */
+.req-group { border-top: 1px solid var(--line); margin-top: 8px; }
+.req-group > summary { color: var(--accent); }
+.req-group p { font-size: 12px; margin: 4px 0; }
 
 .op-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px; margin-bottom: 8px; }
 .op-card .op-head { gap: 6px; }

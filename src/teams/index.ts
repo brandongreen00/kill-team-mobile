@@ -45,4 +45,5 @@ export {
 };
 export type { KtTeamModule } from './helpers.ts';
 export { defaultRoster, validateRosterFor, type RosterPickIn, type RosterValidation } from './selection.ts';
-export { TEAM_DATA, teamData, type TeamData } from './data.ts';
+export { TEAM_DATA, teamData, teamDatacards } from './bundled.ts';
+export type { TeamData } from './data.ts';

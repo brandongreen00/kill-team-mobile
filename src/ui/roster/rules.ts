@@ -9,19 +9,34 @@
  */
 import {
   COUNT_CODES,
+  eachGroups,
   entryId,
+  groupUsage,
+  isEitherEntry,
+  modeOfPick,
   validateRosterFor,
   weaponsForPick,
+  type LoadoutMode,
   type RosterPickIn,
   type RosterValidation,
 } from '../../teams/selection.ts';
-import { selectionEntries, type SelectionEntry, type TeamData } from '../../teams/data.ts';
+import { requisitionGroups, selectionEntries, type SelectionEntry, type TeamData } from '../../teams/data.ts';
 import type { Datacard } from '../../core/types.ts';
 
-export type { RosterPickIn, RosterValidation, SelectionEntry, TeamData };
+export type { LoadoutMode, RosterPickIn, RosterValidation, SelectionEntry, TeamData };
+export { isEitherEntry, modeOfPick };
 
 /** Constraint kinds the shared validator understands (`validateRosterFor`). */
-const ENFORCED_KINDS = new Set(['uniqueExcept', 'maxCount', 'requires', 'groupCap', 'halfSelection']);
+const ENFORCED_KINDS = new Set([
+  'uniqueExcept',
+  'uniqueUnlessAlternative',
+  'maxCount',
+  'maxCountWithWeapon',
+  'requires',
+  'groupCap',
+  'halfSelection',
+  'oneRequisitionGroup',
+]);
 /** Baked into each entry's `selectionCost` by the normaliser, so it needs no separate check. */
 const APPLIED_TO_ENTRIES = new Set(['selectionCost']);
 
@@ -30,8 +45,10 @@ const APPLIED_TO_ENTRIES = new Set(['selectionCost']);
  * loosely (`selection?: unknown`) because most of the app does not care. Teams whose data has
  * no selection block cannot be built and are reported as such.
  */
-export function asTeamData(team: { id: string; selection?: unknown; datacards?: unknown }): TeamData | null {
-  if (!team.selection || !Array.isArray(team.datacards)) return null;
+export function asTeamData(
+  team: { id: string; selection?: unknown; datacards?: unknown } | null | undefined,
+): TeamData | null {
+  if (!team || !team.selection || !Array.isArray(team.datacards)) return null;
   return team as unknown as TeamData;
 }
 
@@ -55,16 +72,66 @@ export function rowFor(data: TeamData, pick: RosterPickIn): EntryRow | undefined
   return entryRows(data).find((r) => r.id === pick.entryId);
 }
 
-/** Every choice an entry offers: `loadouts` (pick one) and each option group (pick one from each). */
-export function choiceGroups(entry: SelectionEntry): { id: string; label: string; choices: { id: string; label: string; weapons: string[] }[] }[] {
-  const out: { id: string; label: string; choices: { id: string; label: string; weapons: string[] }[] }[] = [];
-  if (entry.loadouts.length > 0)
-    out.push({ id: `${entry.datacardId}.loadouts`, label: 'One of the following options', choices: entry.loadouts });
-  for (const g of [...entry.optionGroups, ...entry.fixedChoiceGroups]) out.push(g);
+export interface ChoiceGroup {
+  id: string;
+  label: string;
+  choices: { id: string; label: string; weapons: string[] }[];
+}
+
+/**
+ * Every choice an entry offers: `loadouts` (pick one) and each option group (pick one from
+ * each). For an **either** entry the two halves are alternatives, so the pickers are those
+ * of the mode the pick has committed to — the screen asks which mode first.
+ */
+export function choiceGroups(entry: SelectionEntry, mode?: LoadoutMode | null): ChoiceGroup[] {
+  const out: ChoiceGroup[] = [];
+  const optionsGroup: ChoiceGroup = {
+    id: `${entry.datacardId}.loadouts`,
+    label: 'One of the following options',
+    choices: entry.loadouts,
+  };
+  if (isEitherEntry(entry)) {
+    if (mode === 'each') return eachGroups(entry);
+    return [optionsGroup];
+  }
+  if (entry.loadouts.length > 0) out.push(optionsGroup);
+  for (const g of eachGroups(entry)) out.push(g);
   return out;
 }
 
+/** The two printed halves of an `either` entry, in printed order. */
+export function loadoutModes(entry: SelectionEntry): { id: LoadoutMode; label: string }[] {
+  return [
+    { id: 'options', label: `One of: ${entry.loadouts.map((l) => l.label).join(' / ')}` },
+    { id: 'each', label: `One option from each of: ${eachGroups(entry).map((g) => g.label).join(' + ')}` },
+  ];
+}
+
+/**
+ * Switch an `either` entry to the other printed mode: the abandoned half's choices are
+ * dropped (taking one from each half is exactly what the printed "Or" forbids) and the new
+ * half is seeded with its first option, so the operative is never left half-equipped.
+ */
+export function withMode(entry: SelectionEntry, pick: RosterPickIn, mode: LoadoutMode): RosterPickIn {
+  const keep = mode === 'options' ? entry.loadouts : eachGroups(entry).flatMap((g) => g.choices);
+  const keepIds = new Set(keep.map((c) => c.id));
+  const kept = (pick.loadoutIds ?? []).filter((id) => keepIds.has(id));
+  const seed =
+    mode === 'options'
+      ? kept.length > 0
+        ? []
+        : entry.loadouts.slice(0, 1).map((l) => l.id)
+      : eachGroups(entry)
+          .filter((g) => !g.choices.some((c) => kept.includes(c.id)))
+          .map((g) => g.choices[0]?.id)
+          .filter((x): x is string => Boolean(x));
+  const has = new Set(kept);
+  return { ...pick, loadoutIds: [...kept, ...seed.filter((id) => !has.has(id))] };
+}
+
 export function defaultLoadoutIds(entry: SelectionEntry): string[] {
+  // `either` entries default to the printed options list; the player can switch modes.
+  if (isEitherEntry(entry)) return entry.loadouts[0] ? [entry.loadouts[0].id] : [];
   return choiceGroups(entry)
     .map((g) => g.choices[0]?.id)
     .filter((x): x is string => Boolean(x));
@@ -103,6 +170,9 @@ export interface Usage {
 export function usage(data: TeamData, picks: RosterPickIn[]): Usage {
   const rows = picks.map((p) => rowFor(data, p)).filter((r): r is EntryRow => Boolean(r));
   const cost = (list: EntryRow[]) => list.reduce((n, r) => n + r.entry.selectionCost, 0);
+  // A group printed as "selected from the list above" is filled by the SOURCE group's rows,
+  // so the counting has to let those picks spill over — see `groupUsage`.
+  const used = groupUsage(data, rows.map((r) => r.entry));
   return {
     leader: { used: rows.filter((r) => r.entry.isLeader).length, need: data.selection.leader?.count ?? 1 },
     slots: { used: cost(rows.filter((r) => !r.entry.isLeader)), total: data.selection.slots },
@@ -110,7 +180,7 @@ export function usage(data: TeamData, picks: RosterPickIn[]): Usage {
     groups: (data.selection.groups ?? []).map((g) => ({
       index: g.index,
       count: g.count,
-      used: cost(rows.filter((r) => r.entry.group === g.index)),
+      used: used.get(g.index) ?? 0,
       rawText: g.rawText.trim(),
     })),
     operatives: picks.length,
@@ -146,14 +216,16 @@ export function addability(
     return { ok: false, reason: `your kill team already includes its ${data.selection.leader?.role ?? 'LEADER'}` };
   if (!entry.isLeader && u.slots.used + cost > u.slots.total)
     return { ok: false, reason: `no selections left — ${u.slots.total} operatives besides the leader` };
-  const group = u.groups.find((g) => g.index === entry.group);
-  if (group && group.used + cost > group.count) return { ok: false, reason: `${group.rawText} — that group is full` };
+  // Ask the same counting the legality panel uses, so a row that a later "…selected from the
+  // list above" group can still absorb stays offered instead of reading as a full group.
+  const trial = [...picks, pickFor(data, index)];
+  const overfull = usage(data, trial).groups.find((g) => g.used > g.count);
+  if (overfull) return { ok: false, reason: `${overfull.rawText} — that group is full` };
   if (u.total.max && u.total.used + cost > u.total.max)
     return { ok: false, reason: `a ${data.name} kill team is ${u.total.max} operatives at most` };
 
   const before = current ?? new Set(blockingErrors(validateRosterFor(data, picks)));
-  const after = blockingErrors(validateRosterFor(data, [...picks, pickFor(data, index)]));
-  const introduced = after.find((e) => !before.has(e));
+  const introduced = blockingErrors(validateRosterFor(data, trial)).find((e) => !before.has(e));
   return introduced ? { ok: false, reason: introduced } : { ok: true };
 }
 
@@ -170,7 +242,13 @@ export interface RosterWarning {
 /** Printed constraints with no machine check behind them (docs/TEAM-DATA.md §5). */
 export function unenforcedConstraints(data: TeamData): RosterWarning[] {
   const out: RosterWarning[] = [];
-  for (const c of data.selection.constraints) {
+  const printed = [
+    ...data.selection.constraints,
+    // Each REQUISITIONED group prints its own rules; the ones with no machine check
+    // ("Permitted EXACTION SQUAD faction rules: …") are surfaced here like any other.
+    ...requisitionGroups(data).flatMap((g) => g.constraints),
+  ];
+  for (const c of printed) {
     if (ENFORCED_KINDS.has(c.kind) || APPLIED_TO_ENTRIES.has(c.kind)) continue;
     const r = c as { text?: string; item?: string; max?: number; role?: string; items?: string[] };
     let text: string;
@@ -185,14 +263,13 @@ export function unenforcedConstraints(data: TeamData): RosterWarning[] {
 }
 
 /**
- * Entries printed as "…; **Or** one option from each of the following". The validator asks
- * for a choice from the options list AND from each group, so the operative ends up with both
- * sets of weapons — the player has to keep the printed either/or in their head.
+ * Entries printed as "…; **Or** one option from each of the following". The screen asks which
+ * printed half is being taken before showing that half's pickers (`loadoutModes`/`withMode`),
+ * and `validateRosterFor` rejects a pick that takes choices from both — so these are
+ * enforced, not warned about.
  */
 export function eitherEntries(data: TeamData): SelectionEntry[] {
-  return selectionEntries(data).filter(
-    (e) => e.loadoutMode === 'either' && e.loadouts.length > 0 && (e.optionGroups.length > 0 || e.fixedChoiceGroups.length > 0),
-  );
+  return selectionEntries(data).filter(isEitherEntry);
 }
 
 /**
@@ -219,27 +296,48 @@ export function supportProblems(data: TeamData): string[] {
   }
   for (const g of groups) {
     const inGroup = entries.filter((e) => e.group === g.index);
-    if (g.count > 0 && inGroup.length === 0) {
+    // "N operatives selected from the list above, or REQUISITIONED operatives from one
+    // group": the reachable total is the source list's spare capacity, or the best single
+    // REQUISITIONED group — never their sum, because only one group may be used.
+    const sources: number[] = [maxAchievable(data, inGroup)];
+    if (g.drawsFrom !== undefined) {
+      const src = groups.find((x) => x.index === g.drawsFrom);
+      if (src) sources.push(maxAchievable(data, entries.filter((e) => e.group === src.index)) - src.count);
+    }
+    for (const req of requisitionGroups(data))
+      sources.push(maxAchievable(data, req.entries, req.constraints));
+    if (inGroup.length === 0 && g.drawsFrom === undefined && g.count > 0) {
       out.push(`"${g.rawText.trim()}" has no entries on the selection list (its operatives come from a faction rule)`);
       continue;
     }
-    if (maxAchievable(data, inGroup) < g.count)
+    if (Math.max(...sources) < g.count)
       out.push(`"${g.rawText.trim()}" cannot be filled: the list plus its printed maximums allow fewer selections than that`);
   }
   return out;
 }
 
-/** The largest total selection cost a set of entries can reach under uniqueness + role caps. */
-function maxAchievable(data: TeamData, entries: SelectionEntry[]): number {
+/**
+ * The largest total selection cost a set of entries can reach under uniqueness + role caps.
+ * A REQUISITIONED group carries its own printed constraints, so they can be passed in.
+ */
+function maxAchievable(
+  data: TeamData,
+  entries: SelectionEntry[],
+  scoped?: readonly { kind: string; [k: string]: unknown }[],
+): number {
   const norm = (s: string) => s.trim().toLowerCase();
   const exempt = new Set<string>();
   const roleMax = new Map<string, number>();
-  for (const c of data.selection.constraints) {
+  for (const c of scoped ?? data.selection.constraints) {
     if (c.kind === 'uniqueExcept') for (const r of (c as { roles: string[] }).roles) exempt.add(norm(r));
     if (c.kind === 'maxCount') {
       const cc = c as { role: string; max: number };
       roleMax.set(norm(cc.role), Math.min(roleMax.get(norm(cc.role)) ?? Infinity, cc.max));
     }
+    // `maxCountWithWeapon` is deliberately NOT a role cap: "up to one COMBAT SERVITOR
+    // operative with meltagun" limits that option, not how many COMBAT SERVITORs the kill
+    // team may field. Treating it as one is what made BATTLECLADE's 8-operative group
+    // look unfillable.
   }
   const byRole = new Map<string, SelectionEntry[]>();
   for (const e of entries) {
@@ -255,15 +353,32 @@ function maxAchievable(data: TeamData, entries: SelectionEntry[]): number {
   return total;
 }
 
-export function warningsFor(data: TeamData): RosterWarning[] {
+/**
+ * What a REQUISITIONED group cannot offer, said out loud: a role the pipeline could not tie
+ * to a real datacard, and a donor kill team whose JSON is not loaded here. Transcribe, never
+ * invent — an operative the data cannot produce is reported, not made up.
+ */
+export function requisitionNotes(data: TeamData, missingDonors: string[] = []): RosterWarning[] {
+  const out: RosterWarning[] = [];
+  for (const g of requisitionGroups(data)) {
+    if (g.unresolved.length > 0)
+      out.push({
+        kind: 'support',
+        text: `${g.name}: ${g.unresolved.join(', ')} could not be matched to a printed datacard, so ${g.unresolved.length === 1 ? 'it is' : 'they are'} not offered.`,
+      });
+    if (g.sourceTeam && missingDonors.includes(g.sourceTeam))
+      out.push({
+        kind: 'support',
+        text: `${g.name}: these datacards are printed with the ${g.name} kill team, whose data is not loaded — its operatives cannot be selected here.`,
+      });
+  }
+  return out;
+}
+
+export function warningsFor(data: TeamData, missingDonors: string[] = []): RosterWarning[] {
   return [
     ...supportProblems(data).map((text): RosterWarning => ({ kind: 'support', text })),
+    ...requisitionNotes(data, missingDonors),
     ...unenforcedConstraints(data),
-    ...eitherEntries(data).map(
-      (e): RosterWarning => ({
-        kind: 'entry',
-        text: `${e.role}: printed as "…or one option from each of the following", which the shared validator cannot express — it asks for a choice in every picker, so this operative is shown with both sets of weapons.`,
-      }),
-    ),
   ];
 }

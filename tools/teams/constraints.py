@@ -23,8 +23,15 @@ RE_UNIQUE = re.compile(r"(?i)your kill team " + _ONCE)
 RE_COUNTS_AS = re.compile(r"(?i)these operatives count as (\w+) selections? each")
 RE_NOT_BOTH = re.compile(
     r"(?i)your kill team cannot include both an? (.+?) and an? ([^.]+)")
+# "up to two GUNNER operatives", and the weapon-qualified form BATTLECLADE prints:
+# "up to one COMBAT SERVITOR operative WITH MELTAGUN, and it can only include up to
+# three COMBAT SERVITOR operatives WITH INCENDINE IGNITER". The qualifier caps the
+# operatives carrying that weapon, NOT the role — flattening it to a role maximum
+# takes the strictest number and makes the printed list unfillable.
 RE_MAX_ROLE = re.compile(
-    r"(?i)(?:include |and )?up to (\w+) (%s) operatives?(?:\s*\(([^)]*)\))?" % ROLE)
+    r"(?i)(?:include |and )?up to (\w+) (%s) operatives?"
+    r"(?:\s+with\s+([^,.;()]+?)(?=\s*(?:[,.;)]|\s+and\s+up to|$)))?"
+    r"(?:\s*\(([^)]*)\))?" % ROLE)
 RE_MAX_ITEM = re.compile(r"(?i)up to (\w+) ([a-z][^,.;]*?)(?=[,.;]|\s+and\s+up to|$)")
 RE_GROUP_CAP = re.compile(
     r"(?i)you cannot select more than (\w+) (?:of these operatives|operatives with these weapons)? ?combined")
@@ -35,6 +42,13 @@ RE_HALF = re.compile(r"(?i)these operatives count as half a selection each")
 RE_ONCE_PER_BATTLE = re.compile(
     r"(?i)you cannot select an option that includes an? (.+?) more than once per battle")
 RE_DISTINCT = re.compile(r"(?i)each must have a different option")
+# INQUISITORIAL AGENT: "Your kill team can only include each operative on this list once,
+# unless you're not including any REQUISITIONED operatives, in which case you can include
+# up to two GUN SERVITOR operatives, but each one must have different options."
+RE_UNIQUE_UNLESS_ALT = re.compile(
+    r"(?i)" + _ONCE + r",\s*unless you[’']?re not including any ([A-Z][A-Z0-9'’\- ]*[A-Z]) "
+    r"operatives?, in which case you can include up to (\w+) (%s) operatives?"
+    r"(, but each one must have different options)?" % ROLE)
 
 # never split after a single-letter abbreviation ("C.A.T. UNIT" is one role)
 _SENT = re.compile(r"(?<![A-Z][.])(?<=[.!?])\s+(?=[A-Z“\"‘'])")
@@ -74,6 +88,18 @@ def parse_constraints(free_text: str, slug: str) -> tuple[list[dict], dict[str, 
         for sent in split_sentences(body) or [body]:
             matched = False
 
+            mm = RE_UNIQUE_UNLESS_ALT.search(sent)
+            if mm and num(mm.group(2)) is not None:
+                # Uniqueness still applies; it is RELAXED for one role when the kill team
+                # takes none of the alternative (REQUISITIONED) operatives. Emitted as the
+                # ordinary uniqueExcept plus the relaxation, and no other pattern is run on
+                # this sentence — its "up to two X operatives" is the relaxation, not a cap.
+                add({"kind": "uniqueExcept", "roles": []})
+                add({"kind": "uniqueUnlessAlternative", "alternative": mm.group(1).strip(),
+                     "role": mm.group(3).strip(), "max": num(mm.group(2)),
+                     "distinctOptions": bool(mm.group(4)), "text": sent})
+                continue
+
             mm = RE_UNIQUE_EXCEPT.search(sent)
             if mm:
                 add({"kind": "uniqueExcept", "roles": split_roles(mm.group(1))})
@@ -86,9 +112,17 @@ def parse_constraints(free_text: str, slug: str) -> tuple[list[dict], dict[str, 
                 n = num(mm.group(1))
                 if n is None:
                     continue
-                add({"kind": "maxCount", "role": mm.group(2).strip(), "max": n})
-                if mm.group(3) and RE_DISTINCT.search(mm.group(3)):
-                    add({"kind": "distinctOptions", "role": mm.group(2).strip()})
+                role = mm.group(2).strip()
+                weapon = (mm.group(3) or "").strip(" .")
+                if weapon:
+                    # The cap is on operatives of that role CARRYING that weapon; the
+                    # verbatim sentence rides along so the app can quote it back.
+                    add({"kind": "maxCountWithWeapon", "role": role,
+                         "weapon": weapon, "max": n, "text": sent})
+                else:
+                    add({"kind": "maxCount", "role": role, "max": n})
+                if mm.group(4) and RE_DISTINCT.search(mm.group(4)):
+                    add({"kind": "distinctOptions", "role": role})
                 matched = True
 
             if not RE_MAX_ROLE.search(sent):

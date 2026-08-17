@@ -7,7 +7,7 @@ import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { inflictDamage } from '../../src/core/state.ts';
 import { hasPoison, plagueMarines, POISON } from '../../src/teams/plague-marines/index.ts';
-import { teamData } from '../../src/teams/data.ts';
+import { teamData } from '../../src/teams/bundled.ts';
 import { activate, battle, opWith, rosterIncluding, teamContext } from './harness.ts';
 import type { GameState, WeaponProfile } from '../../src/core/types.ts';
 

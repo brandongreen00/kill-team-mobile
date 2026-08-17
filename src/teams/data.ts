@@ -5,15 +5,12 @@
  * faction rules, ploys, equipment, abilities, unique actions and the selection block.
  * A team module NEVER hard-codes rule text — it reads it from here, so the in-app rule
  * tooltip and the tests are pinned to the same bytes.
+ *
+ * **This module holds no JSON.** The implemented teams' bundled data lives in `bundled.ts`,
+ * which the team modules import; everything here is types and pure helpers, so the roster
+ * builder can read a team's shape without dragging every bundled kill team into the entry
+ * chunk (that alone was ~380 kB of the first paint).
  */
-import kasrkinJson from '../../data/teams/kasrkin.json';
-import angelOfDeathJson from '../../data/teams/angel-of-death.json';
-import plagueMarinesJson from '../../data/teams/plague-marines.json';
-import imperialNavyBreacherJson from '../../data/teams/imperial-navy-breacher.json';
-import celestianInsidiantsJson from '../../data/teams/celestian-insidiants.json';
-import kommandosJson from '../../data/teams/kommandos.json';
-import pathfindersJson from '../../data/teams/pathfinders.json';
-import hierotekCircleJson from '../../data/teams/hierotek-circle.json';
 import type { Datacard } from '../core/types.ts';
 
 export interface LoadoutOption {
@@ -50,14 +47,60 @@ export interface SelectionEntry {
   optionGroups: OptionGroup[];
   fixedChoiceGroups: OptionGroup[];
   rawText: string;
+  /** Set on entries that come from a faction rule's requisition group, never the printed list. */
+  requisitionGroup?: string;
+}
+
+/**
+ * One group of REQUISITIONED operatives — a selection list printed inside a *faction rule*
+ * rather than in the Operatives section ("REQUISITIONED operatives can be taken from one of
+ * the following groups… DEATH KORPS, EXACTION SQUAD, …"). Its datacards are printed either on
+ * this team's own page (`sourceTeam: null`) or on the donor kill team's page.
+ */
+export interface RequisitionGroup {
+  id: string;
+  name: string;
+  keyword: string;
+  /** The kill team whose committed JSON holds these datacards, or null when this team has them. */
+  sourceTeam: string | null;
+  count: number;
+  rawText: string;
+  entries: SelectionEntry[];
+  constraints: SelectionConstraint[];
+  footnotes: Record<string, string>;
+  /** Roles the pipeline could not resolve to a real datacard — surfaced, never invented. */
+  unresolved: string[];
+}
+
+export interface RequisitionBlock {
+  ruleId: string;
+  ruleName: string;
+  /** "REQUISITIONED". */
+  keyword: string;
+  oneGroupOnly: boolean;
+  rawText: string;
+  /** "…have their faction keyword replaced in all instances on their datacards with X." */
+  factionKeyword?: string;
+  keywordRuleText?: string;
+  groups: RequisitionGroup[];
 }
 
 export type SelectionConstraint =
   | { kind: 'uniqueExcept'; roles: string[] }
   | { kind: 'maxCount'; role: string; max: number }
+  /** "…up to one COMBAT SERVITOR operative **with meltagun**" — a cap on the option, not the role. */
+  | { kind: 'maxCountWithWeapon'; role: string; weapon: string; max: number; text?: string }
   | { kind: 'requires'; role: string; requiresRole: string }
   | { kind: 'groupCap'; group: string; max: number }
   | { kind: 'halfSelection'; group: string; max: number }
+  /** "you cannot select REQUISITIONED operatives from different groups" */
+  | { kind: 'oneRequisitionGroup'; keyword: string; text: string }
+  /**
+   * "…can only include each operative on this list once, **unless** you're not including any
+   * REQUISITIONED operatives, in which case you can include up to two GUN SERVITOR
+   * operatives, but each one must have different options."
+   */
+  | { kind: 'uniqueUnlessAlternative'; alternative: string; role: string; max: number; distinctOptions: boolean; text: string }
   | { kind: string; [k: string]: unknown };
 
 export interface SelectionBlock {
@@ -74,10 +117,21 @@ export interface SelectionBlock {
   };
   slots: number;
   totalOperatives: number;
-  groups: { index: number; count: number; kind: string; roles: string[]; rawText: string }[];
+  groups: {
+    index: number;
+    count: number;
+    kind: string;
+    roles: string[];
+    rawText: string;
+    /** "N operatives selected from **the list above**" — the group whose entries it offers. */
+    drawsFrom?: number;
+    /** This group may also be filled from `selection.requisition`. */
+    requisition?: boolean;
+  }[];
   list: SelectionEntry[];
   leaderList: SelectionEntry[];
   constraints: SelectionConstraint[];
+  requisition?: RequisitionBlock;
   footnotes: Record<string, string>;
   designerNotes?: string[];
   rawText: string;
@@ -131,7 +185,7 @@ export function trimTrailingSection(text: string): string {
   return out.trim();
 }
 
-function normalise(raw: unknown): TeamData {
+export function normaliseTeam(raw: unknown): TeamData {
   const data = raw as TeamData;
   const fix = <T extends TeamRuleText>(r: T): T => ({ ...r, text: trimTrailingSection(r.text) });
   return {
@@ -143,30 +197,33 @@ function normalise(raw: unknown): TeamData {
   };
 }
 
-export const TEAM_DATA: Record<string, TeamData> = {
-  kasrkin: normalise(kasrkinJson),
-  'angel-of-death': normalise(angelOfDeathJson),
-  'plague-marines': normalise(plagueMarinesJson),
-  'imperial-navy-breacher': normalise(imperialNavyBreacherJson),
-  'celestian-insidiants': normalise(celestianInsidiantsJson),
-  kommandos: normalise(kommandosJson),
-  pathfinders: normalise(pathfindersJson),
-  'hierotek-circle': normalise(hierotekCircleJson),
-};
+/**
+ * All selection entries (leader group first), which is what the roster validator walks.
+ *
+ * REQUISITIONED entries are appended in printed group order and are ALWAYS included, whether
+ * or not their donor kill team's datacards have been merged in: entry ids are positional, so
+ * a saved roster must not shift when a donor is or is not loaded. An entry whose datacard is
+ * absent is refused by `validateRosterFor`, not hidden.
+ */
+const ENTRY_CACHE = new WeakMap<TeamData, SelectionEntry[]>();
 
-export function teamData(id: string): TeamData {
-  const d = TEAM_DATA[id];
-  if (!d) throw new Error(`Unknown kill team '${id}' — add data/teams/${id}.json to src/teams/data.ts`);
-  return d;
-}
-
-export function teamDatacards(id: string): Datacard[] {
-  return teamData(id).datacards;
-}
-
-/** All selection entries (leader group first), which is what the roster validator walks. */
 export function selectionEntries(data: TeamData): SelectionEntry[] {
-  return [...data.selection.leaderList, ...data.selection.list];
+  // Memoised per team object: this is on the hot path of every legality check, and a team
+  // with REQUISITIONED groups has ~70 entries. Pure — the same input gives the same array.
+  const hit = ENTRY_CACHE.get(data);
+  if (hit) return hit;
+  const out = [
+    ...data.selection.leaderList,
+    ...data.selection.list,
+    ...(data.selection.requisition?.groups ?? []).flatMap((g) => g.entries),
+  ];
+  ENTRY_CACHE.set(data, out);
+  return out;
+}
+
+/** The REQUISITIONED groups a faction rule offers, or [] when the team has none. */
+export function requisitionGroups(data: TeamData): RequisitionGroup[] {
+  return data.selection.requisition?.groups ?? [];
 }
 
 /** The printed text of one faction rule / ploy / equipment option, by id. */

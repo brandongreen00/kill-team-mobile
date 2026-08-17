@@ -368,9 +368,10 @@ so no team module has to read English at runtime.
 | `leader.inList` | `true` when the leader is picked out of a mixed list and therefore **consumes an ordinary slot** (Deathwatch, Wolf Scouts, Elucidian Starstrider, Gellerpox Infected) |
 | `slots` | operatives to select **besides** a dedicated leader slot |
 | `totalOperatives` | every group's count summed — the kill team's size |
-| `groups[]` | the printed groups: `{index, count, kind, roles[], rawText}`. `kind` ∈ `fixed` (one named role) · `list` (choose from a list) · `every` (a fixed roster — "Every X operative in the following list") · `sameAsAbove` (Inquisitorial Agent's second block) |
+| `groups[]` | the printed groups: `{index, count, kind, roles[], rawText, drawsFrom?, requisition?}`. `kind` ∈ `fixed` (one named role) · `list` (choose from a list) · `every` (a fixed roster — "Every X operative in the following list") · `sameAsAbove` (Inquisitorial Agent's second block, which carries `drawsFrom` = the group whose entries it offers and `requisition: true` when a faction rule supplies the alternative) |
 | `list[]` | one entry per selectable role (below) |
 | `leaderList[]` | the entries whose datacard carries `LEADER`, for teams where that overlaps `list` |
+| `requisition` | present when a group is filled from a *faction rule*: `{ruleId, ruleName, keyword, oneGroupOnly, factionKeyword, keywordRuleText, rawText, groups[]}`. Each `groups[]` entry is `{id, name, keyword, sourceTeam, count, rawText, entries[], constraints[], footnotes, unresolved[]}` — the printed sub-list transcribed into ordinary selection entries. `sourceTeam` names the kill team whose committed JSON holds those datacards (`null` when they are printed on this team's own page); `unresolved[]` lists any printed role that could **not** be matched to a real datacard, so it is reported rather than invented |
 | `constraints[]` | machine-readable restrictions (below) |
 | `footnotes[]` | marker → verbatim footnote text |
 | `footnoteOptions` | marker → `{text, fixedWeapons, loadouts}` where a footnote *defines a loadout* ("`*`With one of the following options:" — Hearthkyn Salvager, Warpcoven) |
@@ -407,6 +408,9 @@ the Navis Grenadier — named in no option at all — keeps everything.
 | --- | --- | --- |
 | `uniqueExcept` | `{roles[]}` | "Other than TROOPER operatives, your kill team can only include each operative on this list once" (`roles: []` for the unconditional form) |
 | `maxCount` | `{role, max}` | "can only include up to two GUNNER operatives" |
+| `maxCountWithWeapon` | `{role, weapon, max, text}` | "up to one COMBAT SERVITOR operative **with meltagun**… up to three **with incendine igniter**" — a cap on the OPTION, not the role |
+| `uniqueUnlessAlternative` | `{alternative, role, max, distinctOptions, text}` | "…once, unless you're not including any REQUISITIONED operatives, in which case you can include up to two GUN SERVITOR operatives, but each one must have different options" |
+| `oneRequisitionGroup` | `{keyword, text}` | "(you cannot select REQUISITIONED operatives from different groups)" |
 | `maxItem` | `{item, max, group?}` | "up to one fusion pistol", "up to two darklight weapons" |
 | `distinctOptions` | `{role}` | "(each must have a different option)" |
 | `groupCap` | `{group, max}` | "`*` You cannot select more than four of these operatives combined" |

@@ -19,7 +19,7 @@ import { successes } from '../../core/dice.ts';
 import type { FightSequence, ShootSequence } from '../../core/sequences/types.ts';
 import type { GameContext } from '../../core/context.ts';
 import type { GameState, OperativeState, PendingDecision, PlayerId, WeaponProfile } from '../../core/types.ts';
-import { teamData } from '../data.ts';
+import { teamData } from '../bundled.ts';
 import {
   defineTeam,
   dropEffects,

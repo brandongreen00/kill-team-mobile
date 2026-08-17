@@ -17,7 +17,7 @@ import {
   magnifyProxy,
   reanimationMarkers,
 } from '../../src/teams/hierotek-circle/index.ts';
-import { teamData } from '../../src/teams/data.ts';
+import { teamData } from '../../src/teams/bundled.ts';
 import { defaultRoster } from '../../src/teams/selection.ts';
 import { makeTeamHooks } from '../../src/teams/helpers.ts';
 import { activate, battle, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';

@@ -12,7 +12,7 @@ import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
 import { celestianInsidiants } from '../../src/teams/celestian-insidiants/index.ts';
 import { EXPLOSIVE_SHOOT, KRUMPIN_TIME_FIGHT, THROAT_SLITTAS_CHARGE, kommandos } from '../../src/teams/kommandos/index.ts';
-import { teamData } from '../../src/teams/data.ts';
+import { teamData } from '../../src/teams/bundled.ts';
 import { defaultRoster } from '../../src/teams/selection.ts';
 import { activate, battle, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
 import type { GameState, WeaponProfile } from '../../src/core/types.ts';

@@ -283,14 +283,18 @@
     ]
    },
    {
-    "kind": "maxCount",
+    "kind": "maxCountWithWeapon",
     "role": "COMBAT SERVITOR",
-    "max": 1
+    "weapon": "meltagun",
+    "max": 1,
+    "text": "Your kill team can only include up to one COMBAT SERVITOR operative with meltagun, and it can only include up to three COMBAT SERVITOR operatives with incendine igniter."
    },
    {
-    "kind": "maxCount",
+    "kind": "maxCountWithWeapon",
     "role": "COMBAT SERVITOR",
-    "max": 3
+    "weapon": "incendine igniter",
+    "max": 3,
+    "text": "Your kill team can only include up to one COMBAT SERVITOR operative with meltagun, and it can only include up to three COMBAT SERVITOR operatives with incendine igniter."
    }
   ],
   "footnotes": {},
