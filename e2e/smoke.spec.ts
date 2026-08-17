@@ -39,6 +39,41 @@ test('the roll-off starts a battle and the log records the dice', async ({ page 
   await expect(page.getByText(/Initiative roll-off/)).toBeVisible();
 });
 
+test('the board zooms on the wheel and still fits its container', async ({ page }) => {
+  await page.goto('/');
+  await ready(page);
+  const board = page.locator('svg.board-main');
+  await expect(board).toHaveAttribute('viewBox', '0 0 30 22');
+
+  const box = await board.boundingBox();
+  if (!box) throw new Error('the board has no layout box');
+  await page.mouse.move(box.x + box.width * 0.35, box.y + box.height * 0.45);
+  await page.mouse.wheel(0, -500);
+
+  // The window shrank, so the killzone is magnified…
+  await expect(board).not.toHaveAttribute('viewBox', '0 0 30 22');
+  const [, , w] = ((await board.getAttribute('viewBox')) ?? '').split(' ').map(Number);
+  expect(w).toBeLessThan(30);
+
+  // …and the element itself is still inside the pane, i.e. zooming never grows the layout.
+  const fits = await page.evaluate(() => {
+    const svg = document.querySelector('svg.board-main')!.getBoundingClientRect();
+    const wrap = document.querySelector('.board-wrap')!.getBoundingClientRect();
+    return { ok: svg.width <= wrap.width + 1 && svg.height <= wrap.height + 1 && svg.height > 50, svg, wrap };
+  });
+  expect(fits.ok).toBe(true);
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
+
+  // Fit puts the whole killzone back, and is a 44px target on every viewport.
+  const fit = page.getByRole('button', { name: 'Fit the killzone to the screen' });
+  const fitBox = await fit.boundingBox();
+  expect(fitBox?.width ?? 0).toBeGreaterThanOrEqual(44);
+  expect(fitBox?.height ?? 0).toBeGreaterThanOrEqual(44);
+  await fit.click();
+  await expect(board).toHaveAttribute('viewBox', '0 0 30 22');
+});
+
 test('tapping two operatives opens the targeting-line inspector', async ({ page }) => {
   await page.goto('/');
   await ready(page);

@@ -2,19 +2,43 @@
  * The board: SVG, so it stays crisp at any zoom and hit-testing is free.
  * World coordinates are inches with the origin bottom-left; the single `worldTransform`
  * below is the ONLY place the y-flip happens.
+ *
+ * Pan and zoom are a gesture layer over the `viewBox`, nothing more: all the maths lives in
+ * the pure `boardView.ts`, this file only turns pointer events into calls on it. Because the
+ * window is the viewBox, everything drawn inside the world transform — terrain, operatives,
+ * markers and the `overlays` (dice pools, firing line) — follows pan and zoom for free.
  */
+import { useEffect, useRef, useState } from 'preact/hooks';
 import type { GameState, KillzoneMap, OperativeState, TerrainPart, Vec2 } from '../core/types.ts';
 import { buildTerrainIndex } from '../core/terrain.ts';
+import {
+  fitViewport,
+  isFitViewport,
+  maxZoom,
+  minViewportWidth,
+  panBy,
+  pinch,
+  pixelsPerInch,
+  screenToView,
+  screenToWorld,
+  zoomAt,
+  zoomAtView,
+  zoomOf,
+  type Pt,
+  type ScreenRect,
+  type Viewport,
+} from './boardView.ts';
 
-export interface Viewport {
-  /** Visible world rectangle, inches. */
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
+export type { Viewport } from './boardView.ts';
 
-export const fullViewport = (map: KillzoneMap): Viewport => ({ x: 0, y: 0, w: map.board.w, h: map.board.h });
+export const fullViewport = (map: KillzoneMap): Viewport => fitViewport(map.board);
+
+/** A press that never wanders this far (CSS px) is a tap, not a drag. */
+const TAP_SLOP_PX = 8;
+/** One wheel notch (deltaY ≈ 100) zooms about 17%; trackpads deliver much smaller deltas. */
+const WHEEL_ZOOM_PER_PX = 0.0016;
+/** The +/− buttons step by a fixed factor about the centre of the current window. */
+const BUTTON_ZOOM_STEP = 1.5;
 
 /** World (y-up) → SVG (y-down) for a given board height. */
 export const worldTransform = (boardH: number): string => `translate(0 ${boardH}) scale(1 -1)`;
@@ -45,6 +69,10 @@ const pts = (poly: Vec2[]): string => poly.map((p) => `${p.x.toFixed(3)},${p.y.t
 
 export interface BoardProps {
   state: GameState;
+  /**
+   * Starting window. Omitted, the board fits the killzone and then owns its own window
+   * through the gestures below; supplied, it re-seeds the window whenever it changes.
+   */
   viewport?: Viewport;
   /** Highlights: control range, targeting lines, reachability. */
   overlays?: preact.ComponentChildren;
@@ -73,29 +101,203 @@ export function Board({
   variant = 'main',
 }: BoardProps) {
   const map = state.map;
-  const vp = viewport ?? fullViewport(map);
+  const board = map.board;
+  /** Thumbnails are previews: no gestures, no controls, always the whole killzone. */
+  const interactive = variant === 'main';
+
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [ownVp, setOwnVp] = useState<Viewport>(() => viewport ?? fitViewport(board));
+  const vp = interactive ? ownVp : (viewport ?? fitViewport(board));
+  // The gesture handlers are plain DOM listeners, so they read the live window off a ref
+  // rather than closing over a stale render.
+  const vpRef = useRef(vp);
+  vpRef.current = vp;
+
+  // Re-seed only when the caller actually changes something: a new killzone or a new
+  // `viewport` prop. Anything else would fight the user's own pan mid-gesture.
+  const seedKey = `${map.id}|${viewport ? `${viewport.x},${viewport.y},${viewport.w},${viewport.h}` : '-'}`;
+  const seedRef = useRef(seedKey);
+  useEffect(() => {
+    if (seedRef.current === seedKey) return;
+    seedRef.current = seedKey;
+    setOwnVp(viewport ?? fitViewport(board));
+  }, [seedKey]);
+
+  /** Live pointers, so a second finger is detectable the moment it lands. */
+  const pointers = useRef(new Map<number, Pt>());
+  /** Single-finger pan, anchored to where the press started (no frame-to-frame drift). */
+  const drag = useRef<{ id: number; from: Pt; vp: Viewport; rect: ScreenRect; moved: boolean } | null>(null);
+  /** Two-finger pinch, anchored to the window as it was when the second finger landed. */
+  const twoFinger = useRef<{ ids: [number, number]; start: [Pt, Pt]; vp: Viewport; rect: ScreenRect } | null>(null);
+  /** Set by any gesture that moved: the trailing `click` is then swallowed, not acted on. */
+  const suppressClick = useRef(false);
+
+  /** True once, then rearmed — a pinch or a pan must never place an operative. */
+  const gestureConsumedClick = (): boolean => {
+    if (!suppressClick.current) return false;
+    suppressClick.current = false;
+    return true;
+  };
+
+  const rectOf = (): ScreenRect | null => {
+    const svg = svgRef.current;
+    if (!svg) return null;
+    const r = svg.getBoundingClientRect();
+    return r.width > 0 && r.height > 0 ? r : null;
+  };
+
+  const beginPinch = (rect: ScreenRect) => {
+    const live = [...pointers.current.entries()].slice(0, 2);
+    if (live.length < 2) return;
+    const [a, b] = live as [[number, Pt], [number, Pt]];
+    const start = vpRef.current;
+    twoFinger.current = {
+      ids: [a[0], b[0]],
+      start: [screenToView(a[1], rect, start), screenToView(b[1], rect, start)],
+      vp: start,
+      rect,
+    };
+  };
+
+  const onPointerDown = (e: PointerEvent) => {
+    if (!interactive) return;
+    const rect = rectOf();
+    if (!rect) return;
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.current.size === 1) {
+      suppressClick.current = false;
+      drag.current = { id: e.pointerId, from: { x: e.clientX, y: e.clientY }, vp: vpRef.current, rect, moved: false };
+      twoFinger.current = null;
+    } else if (pointers.current.size === 2) {
+      // A second finger cancels whatever the first was doing, so a pinch can never fall
+      // through to onBoardClick / onOperativeClick.
+      drag.current = null;
+      suppressClick.current = true;
+      beginPinch(rect);
+    } else {
+      drag.current = null;
+    }
+  };
+
+  // Move/up live on the window: without pointer capture (which would retarget `click` away
+  // from the operative that was tapped) a gesture must still survive leaving the element.
+  useEffect(() => {
+    if (!interactive) return;
+
+    const onMove = (e: PointerEvent) => {
+      if (!pointers.current.has(e.pointerId)) return;
+      pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      const two = twoFinger.current;
+      if (two && pointers.current.size >= 2) {
+        const a = pointers.current.get(two.ids[0]);
+        const b = pointers.current.get(two.ids[1]);
+        if (!a || !b) return;
+        const now: [Pt, Pt] = [screenToView(a, two.rect, two.vp), screenToView(b, two.rect, two.vp)];
+        setOwnVp(pinch(two.vp, board, two.start, now));
+        return;
+      }
+
+      const d = drag.current;
+      if (!d || d.id !== e.pointerId) return;
+      const dx = e.clientX - d.from.x;
+      const dy = e.clientY - d.from.y;
+      if (!d.moved) {
+        if (Math.hypot(dx, dy) <= TAP_SLOP_PX) return;
+        d.moved = true;
+      }
+      // One finger pans only when zoomed in. At fit there is nothing to pan, so the press
+      // stays a tap however far the finger slid — swallowing it would just look broken to
+      // someone placing an operative with an imprecise thumb.
+      if (isFitViewport(d.vp, board)) return;
+      const scale = pixelsPerInch(d.rect, d.vp);
+      if (scale <= 0) return;
+      suppressClick.current = true;
+      setOwnVp(panBy(d.vp, board, -dx / scale, -dy / scale));
+    };
+
+    const onEnd = (e: PointerEvent) => {
+      if (!pointers.current.delete(e.pointerId)) return;
+      if (pointers.current.size < 2) twoFinger.current = null;
+      if (pointers.current.size === 1) {
+        // A finger lifted mid-pinch: hand the survivor a fresh pan anchor so the board does
+        // not jump, and keep the click suppressed — this was still a gesture.
+        const rest = [...pointers.current.entries()][0];
+        const rect = rectOf();
+        if (rest && rect) {
+          drag.current = { id: rest[0], from: rest[1], vp: vpRef.current, rect, moved: true };
+          suppressClick.current = true;
+        }
+      }
+      if (pointers.current.size === 0) drag.current = null;
+    };
+
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onEnd);
+    window.addEventListener('pointercancel', onEnd);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onEnd);
+      window.removeEventListener('pointercancel', onEnd);
+    };
+  }, [interactive, board.w, board.h]);
+
+  // Wheel zoom, anchored at the cursor. Registered by hand because it must be non-passive:
+  // the page itself never scrolls, so the browser's default scroll has to be cancelled.
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg || !interactive) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const rect = rectOf();
+      if (!rect) return;
+      const cur = vpRef.current;
+      const px = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * rect.height : e.deltaY;
+      const factor = Math.exp(-px * WHEEL_ZOOM_PER_PX);
+      setOwnVp(zoomAt(cur, board, factor, screenToWorld({ x: e.clientX, y: e.clientY }, rect, cur, board.h)));
+    };
+    svg.addEventListener('wheel', onWheel, { passive: false });
+    return () => svg.removeEventListener('wheel', onWheel);
+  }, [interactive, board.w, board.h]);
+
+  const zoomStep = (factor: number) => {
+    const cur = vpRef.current;
+    setOwnVp(zoomAtView(cur, board, factor, { x: cur.x + cur.w / 2, y: cur.y + cur.h / 2 }));
+  };
+
   const index = buildTerrainIndex(map, state);
   // Parts are drawn lowest-first so upper levels sit on top.
   const parts = [...index.parts].sort((a, b) => a.z1 - b.z1);
 
   const handleClick = (e: MouseEvent) => {
+    if (gestureConsumedClick()) return;
     if (!onBoardClick) return;
-    const svg = e.currentTarget as SVGSVGElement;
-    const rect = svg.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) return;
-    const x = vp.x + ((e.clientX - rect.left) / rect.width) * vp.w;
-    const yTop = vp.y + ((e.clientY - rect.top) / rect.height) * vp.h;
-    onBoardClick({ x, y: map.board.h - yTop });
+    const rect = svgRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0 || rect.height === 0) return;
+    // preserveAspectRatio letterboxes the window, so the rect is not the viewBox: the
+    // conversion has to skip the bars or every tap is offset on a non-board-shaped screen.
+    onBoardClick(screenToWorld({ x: e.clientX, y: e.clientY }, rect, vp, board.h));
   };
 
-  return (
+  const zoom = zoomOf(vp, board);
+  const atFit = isFitViewport(vp, board);
+  const atMax = vp.w <= minViewportWidth(board) + 1e-6 || maxZoom(board) <= 1;
+
+  const svgEl = (
     <svg
+      ref={svgRef}
       class={`board board-${variant}`}
       viewBox={`${vp.x} ${vp.y} ${vp.w} ${vp.h}`}
       preserveAspectRatio="xMidYMid meet"
       role="img"
       aria-label={`Killzone ${map.name}`}
       onClick={handleClick}
+      onPointerDown={onPointerDown}
+      style={
+        interactive
+          ? { flex: '1 1 0%', minHeight: 0, height: 'auto', userSelect: 'none', WebkitUserSelect: 'none' }
+          : undefined
+      }
     >
       <g transform={worldTransform(map.board.h)}>
         <rect x={0} y={0} width={map.board.w} height={map.board.h} fill="#15181d" />
@@ -176,6 +378,9 @@ export function Board({
                   key={op.id}
                   onClick={(e: MouseEvent) => {
                     e.stopPropagation();
+                    // stopPropagation means the svg handler never runs, so the gesture
+                    // guard has to be consumed here too.
+                    if (gestureConsumedClick()) return;
                     onOperativeClick?.(op);
                   }}
                   style={{ cursor: onOperativeClick ? 'pointer' : 'default' }}
@@ -203,5 +408,67 @@ export function Board({
         {overlays}
       </g>
     </svg>
+  );
+
+  if (!interactive) return svgEl;
+
+  // The controls sit UNDER the board, never over it: the drop zones run along the left and
+  // right edges of every killzone, which is exactly where an overlaid cluster would steal
+  // the taps that place operatives.
+  return (
+    <div
+      class="board-view"
+      style={{ width: '100%', height: '100%', minWidth: 0, minHeight: 0, display: 'flex', flexDirection: 'column' }}
+    >
+      {svgEl}
+      <div
+        class="board-controls"
+        style={{
+          flex: '0 0 auto',
+          display: 'flex',
+          gap: '6px',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          padding: '4px 6px',
+          background: 'var(--panel)',
+          borderTop: '1px solid var(--line)',
+        }}
+      >
+        <button
+          type="button"
+          aria-label="Zoom out"
+          title="Zoom out"
+          disabled={atFit}
+          style={{ minWidth: '44px', padding: '0 10px' }}
+          onClick={() => zoomStep(1 / BUTTON_ZOOM_STEP)}
+        >
+          −
+        </button>
+        <button
+          type="button"
+          aria-label="Zoom in"
+          title="Zoom in"
+          disabled={atMax}
+          style={{ minWidth: '44px', padding: '0 10px' }}
+          onClick={() => zoomStep(BUTTON_ZOOM_STEP)}
+        >
+          +
+        </button>
+        <button
+          type="button"
+          aria-label="Fit the killzone to the screen"
+          title="Fit the killzone to the screen"
+          disabled={atFit}
+          style={{ minWidth: '44px', padding: '0 10px' }}
+          onClick={() => setOwnVp(fitViewport(board))}
+        >
+          ⤢
+        </button>
+        <span class="tag" aria-live="off" aria-label={`Zoom ${Math.round(zoom * 100)} percent`}>
+          {Math.round(zoom * 100)}%
+        </span>
+      </div>
+    </div>
   );
 }
