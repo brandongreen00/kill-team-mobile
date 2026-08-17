@@ -138,19 +138,21 @@ land within 0.25" of 1"/2"/3"/4" are flagged in the table.
 | `cq.wall.double` | **4.724"** | `community` | Tale of Painters, Into the Dark review: "Two Gallowdark elements have a height of 12 cm". |
 | `cq.teleportPad.top` | **0.200"** | `photogrammetry` | Measured off keys/TW3.jpg (teleport pad product photo) against its own 3.8125" square footprint: the pad is a shallow disc, ~5% of its width. It is Insignificant terrain, so the exact value never affects climb/drop. |
 | `cq.light.top` | **1.200"** | `assumed` | Sarcophagus / debris are Light terrain; no published height. CONFIRM WITH OWNER. ⚠ within 0.25" of the 1" rules threshold — **not** snapped |
-| `bheta.gantry.deck` | **3.000"** | `assumed` | NO published measurement found for the Bheta-Decima gantries (checked GW product pages, Tale of Painters and Goonhammer reviews, and the Kerlin killzone PDF). 3.0" is chosen because it matches the Volkus stronghold first floor, keeps the deck inside the 3" climb reach from the killzone floor, and above the 2" free-drop threshold. HIGHEST-PRIORITY VALUE TO CONFIRM WITH OWNER. |
-| `bheta.condenser.roof` | **3.000"** | `assumed` | No published measurement. Set equal to the gantry deck so the roof and adjoining gantries read as one level. CONFIRM WITH OWNER. |
+| `bheta.gantry.deck` | **3.000"** | `owner-confirmed` | NO published measurement found for the Bheta-Decima gantries (checked GW product pages, Tale of Painters and Goonhammer reviews, and the Kerlin killzone PDF). 3.0" is chosen because it matches the Volkus stronghold first floor, keeps the deck inside the 3" climb reach from the killzone floor, and above the 2" free-drop threshold. **Confirmed by the owner 2026-08-17** ("3 inches is a fine assumption"). |
+| `bheta.condenser.roof` | **3.000"** | `derived` | No published measurement. Set equal to the owner-confirmed gantry deck so the roof and adjoining gantries read as one level. Derived, not independently confirmed. |
 | `bheta.condenser.ledge` | **2.750"** | `assumed` | The inner ledge is Exposed + Insignificant, i.e. the rules explicitly say to ignore the slight height difference, so this value is cosmetic. CONFIRM WITH OWNER. ⚠ within 0.25" of the 3" rules threshold — **not** snapped |
 | `bheta.condenser.battlement` | **3.750"** | `assumed` | Battlements modelled as 0.75" of Light parapet above the roof. CONFIRM WITH OWNER. ⚠ within 0.25" of the 4" rules threshold — **not** snapped |
 
 ### Heights to confirm with the owner (highest value first)
 
-1. **`bheta.gantry.deck` (3.0", assumed)** — no published measurement for the
-   Bheta-Decima gantries could be found (GW product pages, Tale of Painters and
-   Goonhammer reviews, and the Kerlin killzone PDF were all checked). This is
-   the single most load-bearing assumed value: it decides every climb, drop and
-   Vantage interaction on six maps. `bheta.condenser.roof`, `.ledge` and
-   `.battlement` follow from it.
+1. ~~**`bheta.gantry.deck`**~~ — **CONFIRMED by the owner 2026-08-17 at 3.0"**. No
+   published measurement exists (GW product pages, Tale of Painters and Goonhammer
+   reviews, and the Kerlin killzone PDF were all checked), so this was the single
+   most load-bearing assumed value: it decides every climb, drop and Vantage
+   interaction on six maps. `bheta.condenser.roof` (3.0") follows from it and is
+   confirmed with it; `.ledge` (2.75") and `.battlement` (3.75") remain derived
+   assumptions, though both are cosmetic — the ledge is Exposed + Insignificant, so
+   the rules say to ignore its height difference.
 2. **`volkus.smallRuin.top` (2.0"), `volkus.heavyRubble.top` (1.5"),
    `volkus.lightRubble.top` (1.0")** — no published figures. These sit right on
    the 2" free-drop threshold, so they change how operatives cross the board.

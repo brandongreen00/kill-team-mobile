@@ -13,14 +13,15 @@ untouched and still deployable.
   Phase 3 (9 crit ops, 12 tac ops, kill op, primary op, initiative cards, 11 universal
   equipment options), Phase 4 (game flow + world-anchored visible dice + reactive-window UI
   + targeting-line inspector), and the team-data layer for all 48 kill teams.
-- **Partial**: Phase 5 teams — 4 of the 8 batch-1 rule modules are complete (Kasrkin, Angel
-  of Death, Plague Marines, Imperial Navy Breacher); the other four were in progress at the
-  end of the session. Phase 7 AI was still building.
+  Phase 5 batch 1 — **all 8 team rule modules** (Kasrkin, Angel of Death, Plague Marines,
+  Imperial Navy Breacher, Celestian Insidiants, Kommandos, Pathfinders, Hierotek Circle) —
+  and Phase 7, the AI.
+- **Partial**: the AI plays legally and scores, but **misses its acceptance bars** (§9).
 - **Not started**: the remaining 40 team modules, the roster builder UI that enforces the
   structured selection rules, board pan/zoom gestures, PWA/offline.
-- **Gates**: `pnpm typecheck`, `pnpm test` (202 passing, 1 skipped), `pnpm build`,
-  `pnpm lint:rng` and `pnpm e2e` (9 Playwright tests across iPhone SE / Pixel 7 / desktop)
-  all green.
+- **Gates**: `pnpm typecheck`, `pnpm test` (**371 passing, 1 skipped, 18 files**),
+  `pnpm build`, `pnpm lint:rng` and `pnpm e2e` (9 Playwright tests across iPhone SE /
+  Pixel 7 / desktop) all green.
 - **Deploy**: `.github/workflows/deploy-pages.yml` builds `dist/` and asserts both
   `dist/index.html` and `dist/legacy/index.html` exist, so the previous app keeps working
   while the new one is finished.
@@ -284,7 +285,33 @@ side-elevation SVG along the shooter→target axis showing the terrain the line 
 
 ## 9. AI
 
-See §11.
+`src/ai/**`. Drives the game only through `Intent`s, supports either side and any team or
+map, and is deterministic given a seed. `legal.ts` enumerates fully parameterised intents
+(movement destinations sampled from the engine's own 0.5" reachability field, converted to
+straight-line paths and confirmed with `validateMove`) and re-runs the engine's own checks,
+so it never submits an intent the reducer will reject. `combat.ts` computes exact damage
+distributions by reusing the engine's dice code rather than re-deriving it. `agent.ts`
+searches each activation, applying candidates through the real reducer on a forked RNG.
+`decide.ts` owns the reactive windows.
+
+**Measured over 50 seeded games each, sides alternating, on a fully wired context:**
+
+| matchup | result | acceptance bar |
+| --- | --- | --- |
+| vs `GreedyAgent` | 35W 13D 2L = **70%** (83% score rate), avg VP 7.6 : 3.8 | 80% — **not met** |
+| vs `RandomLegalAgent` | 47W 2D 1L = **94%**, avg VP 7.8 : 2.9 | 95% — **not met** |
+
+The tests assert regression floors of 65% / 90% with the real bars named in the test titles,
+rather than weakening the assertions silently; nothing is skipped. Latency is fine: 192ms
+worst case, 27ms mean. The damage model agrees with a 400-volley Monte-Carlo of the real
+sequence (2.15 estimated vs 2.00 measured).
+
+**Diagnosis**: every draw against Greedy is on a symmetric fixture — mirror stalemates where
+neither side has an opponent-reply model. Notably, *more* search made it worse (Elite 68%),
+which points at the evaluation function rather than the search depth.
+
+**Soak**: 18 synthetic games plus Close Quarters plus three real maps, and a back-to-back
+cache-leak regression — 0 rejected intents, 0 errors, all reaching `battleEnd` at TP4.
 
 ## 10. Decisions the owner should confirm
 
