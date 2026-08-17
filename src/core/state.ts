@@ -165,6 +165,23 @@ export const isEngaged = (ctx: GameContext, state: GameState, op: OperativeState
 // Weapons
 // ---------------------------------------------------------------------------
 
+/**
+ * The weapons the roster builder recorded for this operative, if any.
+ *
+ * The selection rules let an operative take "one of the following options", so a datacard
+ * lists more weapons than any single operative carries. Core reads the choice straight out
+ * of `state.opState.loadout` rather than importing anything from `src/teams/` — the kernel
+ * stays faction-agnostic.
+ */
+function chosenLoadout(state: GameState, op: OperativeState): string[] | undefined {
+  const store = state.opState['loadout'] as Record<string, string[]> | undefined;
+  const names = store?.[op.id];
+  return names && names.length > 0 ? names : undefined;
+}
+
+const sameWeaponName = (a: string, b: string): boolean =>
+  a.trim().toLowerCase() === b.trim().toLowerCase();
+
 export function weaponsOf(ctx: GameContext, state: GameState, op: OperativeState, type?: 'ranged' | 'melee'): Weapon[] {
   const c = card(ctx, op);
   const names = ctx.hooks.emit('availableWeapons', state, {
@@ -173,7 +190,16 @@ export function weaponsOf(ctx: GameContext, state: GameState, op: OperativeState
     weapons: c.weapons.map((w) => w.name),
   }).weapons;
   const extra = (op as OperativeState & { grantedWeapons?: Weapon[] }).grantedWeapons ?? [];
-  const all = [...c.weapons, ...extra].filter((w) => names.includes(w.name) || extra.includes(w));
+  const fromCard = c.weapons.filter((w) => names.includes(w.name));
+  const loadout = chosenLoadout(state, op);
+  let carried = fromCard;
+  if (loadout) {
+    const picked = fromCard.filter((w) => loadout.some((n) => sameWeaponName(n, w.name)));
+    // Never disarm an operative: if a recorded loadout matches nothing on the card (stale
+    // save, renamed weapon), fall back to the full card rather than sending it in unarmed.
+    carried = picked.length > 0 ? picked : fromCard;
+  }
+  const all = [...carried, ...extra];
   if (!type) return all;
   return all.filter((w) => w.profiles.some((p) => p.type === type));
 }

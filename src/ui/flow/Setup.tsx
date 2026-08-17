@@ -12,6 +12,8 @@ import type { Store } from '../store.ts';
 import type { TeamData } from '../data.ts';
 import type { PlayerId, Vec2 } from '../../core/types.ts';
 import { otherPlayer } from '../../core/types.ts';
+import { RosterBuilder } from '../roster/RosterBuilder.tsx';
+import { applyLoadouts } from '../../teams/selection.ts';
 
 export interface SetupProps {
   store: Store;
@@ -27,6 +29,8 @@ const LABEL: Record<PlayerId, string> = { p1: 'Player 1', p2: 'Player 2' };
 export function Setup({ store, teams, pendingPlacement, setPendingPlacement }: SetupProps) {
   const { state, ctx } = store;
   const [handedOver, setHandedOver] = useState<PlayerId | null>(null);
+  /** `state.setup.step` is nudged directly for the reveal (the reducer has no intent for it). */
+  const [, force] = useState(0);
   const step = state.setup.step;
 
   if (state.phase !== 'setup') return null;
@@ -84,9 +88,25 @@ export function Setup({ store, teams, pendingPlacement, setPendingPlacement }: S
         <section class="card">
           <h2>Reveal</h2>
           <p class="muted">Both kill teams are selected. Reveal them simultaneously.</p>
-          <button class="primary" onClick={() => (state.setup.step = 'deploy')}>
-            Reveal and continue
-          </button>
+          <div class="row">
+            {PLAYERS.map((p) => (
+              <span key={p} class="tag">
+                {LABEL[p]}: {teams.find((t) => t.id === state.teams[p].teamId)?.name ?? state.teams[p].teamId} ·{' '}
+                {state.teams[p].operativeIds.length} operatives
+              </span>
+            ))}
+          </div>
+          <div class="row" style={{ marginTop: 8 }}>
+            <button
+              class="primary"
+              onClick={() => {
+                state.setup.step = 'deploy';
+                force((n) => n + 1);
+              }}
+            >
+              Reveal and continue
+            </button>
+          </div>
         </section>
       );
     }
@@ -102,30 +122,29 @@ export function Setup({ store, teams, pendingPlacement, setPendingPlacement }: S
       );
     }
     return (
-      <section class="card">
-        <h2>Select operatives — {LABEL[next]}</h2>
-        {teams.length === 0 && (
-          <p class="muted">
-            No kill-team data found. Run <code>pnpm teams:scrape &amp;&amp; pnpm teams:normalise</code>.
-          </p>
-        )}
-        <div class="row">
-          {teams.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => {
-                // Provisional roster: the full selection-rule builder lives in the roster screen;
-                // this picks the first legal-looking set so a battle can start.
-                const picks = (t.datacards ?? []).slice(0, 6).map((dc) => ({ datacardId: dc.id }));
-                store.dispatch({ t: 'SelectRoster', player: next, teamId: t.id, operatives: picks });
-                setHandedOver(null);
-              }}
-            >
-              {t.name}
-            </button>
-          ))}
-        </div>
-      </section>
+      <RosterBuilder
+        // A fresh builder per player: pass-and-play must never show one player the other's picks.
+        key={next}
+        teams={teams}
+        title={`Select operatives — ${LABEL[next]}`}
+        confirmLabel={`Lock in ${LABEL[next]}'s kill team`}
+        onConfirm={({ teamId, picks, weapons }) => {
+          const ok = store.dispatch({
+            t: 'SelectRoster',
+            player: next,
+            teamId,
+            operatives: picks.map((p, i) => ({
+              datacardId: p.datacardId,
+              ...(p.loadoutIds?.[0] ? { loadoutId: p.loadoutIds[0] } : p.loadoutId ? { loadoutId: p.loadoutId } : {}),
+              weapons: weapons[i] ?? [],
+            })),
+          });
+          // The reducer keeps no loadout of its own, so the resolved weapons are recorded in the
+          // op-state scratch space the team modules read (`selection.applyLoadouts`).
+          if (ok) applyLoadouts(store.state, store.state.teams[next].operativeIds, weapons);
+          setHandedOver(null);
+        }}
+      />
     );
   }
 

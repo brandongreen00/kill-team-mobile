@@ -5,7 +5,7 @@ import { defaultDecisionOption } from '../src/core/decisions.ts';
 import { validateMove } from '../src/core/movement.ts';
 import { buildTerrainIndex, wallRouteDistance } from '../src/core/terrain.ts';
 import { counteractCandidates, readyStep, whoActivates } from '../src/core/phases.ts';
-import { aplOf, isInjured, moveOf } from '../src/core/state.ts';
+import { aplOf, isInjured, moveOf, weaponsOf } from '../src/core/state.ts';
 import { heavyBlock, rect, testContext, testMap, vantagePlatform } from './fixtures.ts';
 import type { GameContext } from '../src/core/context.ts';
 import type { GameState, KillzoneMap, TerrainFeature } from '../src/core/types.ts';
@@ -360,5 +360,28 @@ describe('hook stat modifiers actually reach the dice', () => {
     });
     // "the total can never be more than -1 or +1 from its normal APL"
     expect(aplOf(ctx, s, op)).toBe(3);
+  });
+});
+
+describe('the roster builder\'s loadout choice reaches the battle', () => {
+  it('restricts an operative to the weapons its loadout selected', () => {
+    const ctx = testContext();
+    const s = battle(ctx, testMap(), 1);
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    // The fixture datacard carries a lasgun and fists.
+    expect(weaponsOf(ctx, s, op).map((w) => w.name).sort()).toEqual(['fists', 'lasgun']);
+    // A selection option that took only the lasgun must not leave fists on the card.
+    s.opState['loadout'] = { [op.id]: ['lasgun'] };
+    expect(weaponsOf(ctx, s, op).map((w) => w.name)).toEqual(['lasgun']);
+    expect(weaponsOf(ctx, s, op, 'melee')).toHaveLength(0);
+  });
+
+  it('never disarms an operative when a recorded loadout matches nothing on the card', () => {
+    const ctx = testContext();
+    const s = battle(ctx, testMap(), 1);
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    // A stale save or a renamed weapon must not send an operative in unarmed.
+    s.opState['loadout'] = { [op.id]: ['a weapon that no longer exists'] };
+    expect(weaponsOf(ctx, s, op).map((w) => w.name).sort()).toEqual(['fists', 'lasgun']);
   });
 });

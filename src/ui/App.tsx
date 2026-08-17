@@ -14,6 +14,7 @@ import { ActivationPanel } from './ActivationPanel.tsx';
 import { Setup, placeAt } from './flow/Setup.tsx';
 import { TargetingInspector } from './TargetingInspector.tsx';
 import { MapBrowser } from './MapBrowser.tsx';
+import { RosterBuilder } from './roster/RosterBuilder.tsx';
 import { Store, setStore } from './store.ts';
 import { createGameContext } from '../core/game.ts';
 import { SeededRng } from '../core/rng.ts';
@@ -21,7 +22,10 @@ import { createBattle } from '../core/init.ts';
 import { loadMaps, loadTeams, type TeamData } from './data.ts';
 import type { GameState, KillzoneMap, PlayerId } from '../core/types.ts';
 
-type Tab = 'board' | 'play' | 'log';
+type Tab = 'board' | 'play' | 'log' | 'roster';
+
+const TAB_ICON: Record<Tab, string> = { board: '🗺', play: '⚔', log: '📜', roster: '📋' };
+const TAB_LABEL: Record<Tab, string> = { board: 'Board', play: 'Play', log: 'Log', roster: 'Rosters' };
 
 export function App() {
   const [maps, setMaps] = useState<KillzoneMap[]>([]);
@@ -39,11 +43,14 @@ export function App() {
       const [m, t] = await Promise.all([loadMaps(), loadTeams()]);
       setMaps(m);
       setTeams(t);
-      // A fully wired context: ops, equipment and the initiative-card flow included.
+      // A fully wired context: ops, equipment, the initiative-card flow and — so a roster's
+      // kill team actually plays by its own rules — every implemented team module.
+      const { BATCH_1 } = await import('../teams/index.ts');
       const ctx = createGameContext({
         rng: new SeededRng(1),
         maps: m,
         datacards: t.flatMap((team) => team.datacards ?? []),
+        teams: BATCH_1,
       });
       const map = m[0] ?? fallbackMap();
       const s = new Store(createBattle(ctx, { map, seed: 1, mode: 'match' }), ctx);
@@ -138,6 +145,15 @@ export function App() {
     </>
   );
 
+  /** The builder outside a battle: prepare and save kill teams before you sit down to play. */
+  const rosterPane = (
+    <RosterBuilder
+      teams={teams}
+      title="Roster builder"
+      onCancel={() => setTab(isDesktop ? 'play' : 'board')}
+    />
+  );
+
   const logPane = (
     <section class="card">
       <h2>Battle log</h2>
@@ -159,11 +175,18 @@ export function App() {
         <span class="tag">{state.map.name}</span>
         <div class="spacer" />
         {decision && <span class="tag" style={{ color: 'var(--accent)' }}>decision: {decision.who}</span>}
+        {isDesktop && (
+          <button onClick={() => setTab(tab === 'roster' ? 'play' : 'roster')} aria-pressed={tab === 'roster'}>
+            {tab === 'roster' ? '← Back to the battle' : '📋 Rosters'}
+          </button>
+        )}
       </header>
 
       {/* Only one layout mounts at a time: the board is expensive, and two live copies
           would also make every DOM query ambiguous. */}
-      {isDesktop ? (
+      {tab === 'roster' ? (
+        <main class="page">{rosterPane}</main>
+      ) : isDesktop ? (
         <div class="layout">
           <aside class="page">{playPane}</aside>
           {boardPane}
@@ -184,10 +207,10 @@ export function App() {
 
       {!isDesktop && (
       <nav class="m-tabs" role="tablist">
-        {(['board', 'play', 'log'] as Tab[]).map((t) => (
+        {(['board', 'play', 'roster', 'log'] as Tab[]).map((t) => (
           <button key={t} role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>
-            <span aria-hidden="true">{t === 'board' ? '🗺' : t === 'play' ? '⚔' : '📜'}</span>
-            <span>{t === 'board' ? 'Board' : t === 'play' ? 'Play' : 'Log'}</span>
+            <span aria-hidden="true">{TAB_ICON[t]}</span>
+            <span>{TAB_LABEL[t]}</span>
           </button>
         ))}
       </nav>

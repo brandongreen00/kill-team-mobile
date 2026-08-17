@@ -83,6 +83,50 @@ select, input { min-height: var(--tap); font-size: 15px; background: var(--panel
 .firing-line line { animation: tracer .6s ease-out; }
 @keyframes tracer { from { stroke-dashoffset: 4; } to { stroke-dashoffset: 0; } }
 
+/* --- roster builder ------------------------------------------------------ */
+.roster { max-width: 900px; margin-inline: auto; }
+.roster h2 { margin-top: 0; }
+.roster input, .roster select, .roster textarea { max-width: 100%; }
+.roster ul { list-style: none; margin: 6px 0; padding: 0; }
+.roster li { margin-bottom: 6px; min-width: 0; overflow-wrap: anywhere; }
+
+.team-list button { width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  padding: 8px 10px; text-align: left; }
+.team-list .team-name { font-weight: 600; }
+
+.roster-status { position: sticky; top: 0; z-index: 2; gap: 6px; padding: 6px 0; margin: 8px 0;
+  background: var(--panel); border-bottom: 1px solid var(--line); }
+.roster-status.is-ok .tag { color: var(--ok); border-color: var(--ok); }
+
+.legality { font-size: 13px; }
+.legality .err { color: var(--danger); }
+.legality .todo { color: var(--muted); }
+.ok-line { color: var(--ok); font-size: 13px; margin: 6px 0; }
+p.err { color: var(--danger); font-size: 13px; }
+.warn-tag { color: var(--accent); border-color: var(--accent); }
+.warn-block summary { color: var(--accent); font-size: 13px; min-height: var(--tap); display: flex; align-items: center; }
+.rules-block summary, .roster-library summary { color: var(--muted); font-size: 13px;
+  min-height: var(--tap); display: flex; align-items: center; }
+.rules-block pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; color: var(--muted); }
+
+.op-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px; margin-bottom: 8px; }
+.op-card .op-head { gap: 6px; }
+.op-card .op-stats { gap: 4px; margin: 6px 0; }
+.op-remove { min-height: var(--tap); min-width: var(--tap); }
+.op-choice { display: flex; flex-direction: column; gap: 2px; margin: 6px 0; }
+.op-choice select { width: 100%; }
+.op-weapons { font-size: 13px; }
+.op-weapons li { border-top: 1px solid var(--line); padding-top: 4px; }
+.op-weapons .tag { margin-left: 6px; }
+
+.entry-list li { border-top: 1px solid var(--line); padding-top: 6px; }
+.entry-list .row { align-items: flex-start; flex-wrap: nowrap; }
+.entry-list .entry-text { min-width: 0; }
+.entry-list .why { color: var(--danger); }
+.add { min-width: var(--tap); font-size: 20px; line-height: 1; }
+.roster-io { width: 100%; font-size: 15px; font-family: ui-monospace, monospace; background: var(--panel-2);
+  color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 6px; }
+
 /* --- map browser --------------------------------------------------------- */
 .contact-sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
 .thumb { padding: 4px; height: auto; min-height: 0; display: flex; flex-direction: column; gap: 4px;
