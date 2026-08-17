@@ -8,6 +8,7 @@
  * it is ever offered to an agent.
  */
 import { actionCost, allActions, availableActions, getAction, type ActionDef } from '../core/actions.ts';
+import { reduce } from '../core/reducer.ts';
 import type { GameContext } from '../core/context.ts';
 import { terrain } from '../core/context.ts';
 import type { ActionParams, Intent } from '../core/intents.ts';
@@ -142,6 +143,18 @@ export function actionCandidates(
     .map((d) => d.id)
     .filter((id): id is MoveAction => id === 'Reposition' || id === 'Dash' || id === 'Fall Back' || id === 'Charge');
   if (moveActions.length > 0) primeMoveField(ctx, state, op, moveActions, opts.moveStep ?? 0.5, hardCap);
+  // One memoised ranking shared by every movement action: the four actions sample the same
+  // field, and `cheapPositionScore` is called once per candidate cell rather than four times.
+  const rankMemo = new Map<string, number>();
+  const rank = (pos: { x: number; y: number }): number => {
+    const key = `${pos.x.toFixed(2)},${pos.y.toFixed(2)}`;
+    let value = rankMemo.get(key);
+    if (value === undefined) {
+      value = cheapPositionScore(ctx, state, op, pos, pc);
+      rankMemo.set(key, value);
+    }
+    return value;
+  };
 
   for (const def of defs) {
     if (SKIP_ACTIONS.has(def.id)) continue;
@@ -150,7 +163,7 @@ export function actionCandidates(
       case 'Dash':
       case 'Fall Back':
       case 'Charge':
-        out.push(...moveCandidates(ctx, state, op, def, def.id as MoveAction, pc, moveLimit, hardCap, opts.moveStep));
+        out.push(...moveCandidates(ctx, state, op, def, def.id as MoveAction, pc, moveLimit, hardCap, opts.moveStep, rank));
         break;
       case 'Shoot':
         out.push(...shootCandidates(ctx, state, op, def));
@@ -200,7 +213,7 @@ export function actionCandidates(
  * matters is nearly always a marker the operative controls or an enemy nearby.
  */
 function missionCandidates(ctx: GameContext, state: GameState, op: OperativeState, def: ActionDef): Candidate[] {
-  const attempts: ActionParams[] = [{}];
+  const attempts: ActionParams[] = [];
   for (const marker of markersNear(ctx, state, op)) {
     attempts.push({ markerId: marker.id });
     attempts.push({ markerId: marker.id, markerPos: { ...op.pos } });
@@ -215,6 +228,14 @@ function missionCandidates(ctx: GameContext, state: GameState, op: OperativeStat
   }
   attempts.push({ targetPos: { ...op.pos }, markerPos: { ...op.pos } });
 
+  // The no-params attempt goes LAST: several ops accept it in `check` and then fail in
+  // `perform` ("select an enemy operative"), which the reducer reverts AND records as a
+  // rejection. Parameterised variants are tried first, and every survivor is confirmed with a
+  // trial `reduce` on a forked RNG so a mission action can never be rejected in the real game.
+  attempts.push({});
+  const probeCtx: GameContext = { ...ctx, rng: ctx.rng.fork(`legal:${op.id}:${def.id}:${state.seq}`) };
+  delete probeCtx.terrainCache;
+
   const out: Candidate[] = [];
   const seen = new Set<string>();
   for (const params of attempts) {
@@ -222,8 +243,16 @@ function missionCandidates(ctx: GameContext, state: GameState, op: OperativeStat
     const key = JSON.stringify(params);
     if (seen.has(key)) continue;
     seen.add(key);
+    if (!def.check(ctx, state, op, params).ok) continue;
+    const trial = reduce(state, { t: 'PerformAction', operativeId: op.id, action: def.id, params }, probeCtx);
+    if (!trial.ok) continue;
     // Mission actions are the whole point of an op, so they outrank a marginal reposition.
-    push(out, ctx, state, op, def, params, 'action', 24, `${def.name}${params.markerId ? ` ${params.markerId}` : ''}`);
+    out.push({
+      intent: { t: 'PerformAction', operativeId: op.id, action: def.id, params },
+      kind: 'action',
+      hint: 24,
+      label: `${def.name}${params.markerId ? ` ${params.markerId}` : ''}`,
+    });
   }
   return out;
 }
@@ -273,6 +302,7 @@ function moveCandidates(
   limit: number,
   hardCap?: number,
   step?: number,
+  rank?: (pos: { x: number; y: number }) => number,
 ): Candidate[] {
   const extraTargets = pc.objectives.map((m) => m.pos);
   if (action === 'Charge') {
@@ -283,7 +313,7 @@ function moveCandidates(
     ...(hardCap !== undefined ? { hardCap } : {}),
     ...(step !== undefined ? { step } : {}),
     extraTargets,
-    rank: (pos) => cheapPositionScore(ctx, state, op, pos, pc),
+    rank: rank ?? ((pos) => cheapPositionScore(ctx, state, op, pos, pc)),
   });
   const out: Candidate[] = [];
   for (const move of moves) {
@@ -293,7 +323,7 @@ function moveCandidates(
     out.push({
       intent: { t: 'PerformAction', operativeId: op.id, action: def.id, params },
       kind: 'action',
-      hint: cheapPositionScore(ctx, state, op, move.pos, pc),
+      hint: rank ? rank(move.pos) : cheapPositionScore(ctx, state, op, move.pos, pc),
       label: `${action} to ${move.pos.x.toFixed(1)},${move.pos.y.toFixed(1)}`,
     });
   }
@@ -315,6 +345,7 @@ function shootCandidates(ctx: GameContext, state: GameState, op: OperativeState,
       kind: 'action',
       hint: 10 * shotValue(plan),
       label: `shoot ${plan.targetId} with ${plan.weaponName}`,
+      meta: { shotEffective: plan.estimate.effective, shotKillProb: plan.estimate.killProb, targetId: plan.targetId },
     });
   }
   return out;
@@ -336,6 +367,13 @@ function meleeCandidates(ctx: GameContext, state: GameState, op: OperativeState,
       kind: 'action',
       hint: 10 * fightValue(plan),
       label: `fight ${plan.targetId}`,
+      meta: {
+        fightDealt: plan.estimate.dealt,
+        fightTaken: plan.estimate.taken,
+        fightKillProb: plan.estimate.killProb,
+        fightDeathProb: plan.estimate.deathProb,
+        targetId: plan.targetId,
+      },
     });
   }
   return out;

@@ -95,22 +95,24 @@ export function evaluate(
   const control = objectiveControl(ctx, state);
   const a = snapshot(ctx, state, me, control);
   const b = snapshot(ctx, state, them, control);
+  const u = urgency(state, a.vp - b.vp);
 
   let score = 0;
   score += w.vp * (a.vp - b.vp);
-  score += w.objective * (a.objectives - b.objectives);
-  score += w.operative * (a.value - b.value);
-  score += w.wounds * (a.health - b.health);
-  score += w.cp * (a.cp - b.cp);
+  score += w.objective * u.scoring * (a.objectives - b.objectives);
+  score += w.operative * u.survival * (a.value - b.value);
+  score += w.wounds * u.survival * (a.health - b.health);
+  score += w.cp * u.survival * (a.cp - b.cp);
   score += w.carry * (a.carrying - b.carrying);
-  score += w.mission * (missionProgress(state, me) - missionProgress(state, them));
+  score += w.mission * u.scoring * (missionProgress(state, me) - missionProgress(state, them));
 
   if (!opts.fast && (w.threat !== 0 || w.exposure !== 0)) {
     score += w.threat * threatScore(ctx, state, me);
     score -= w.exposure * threatScore(ctx, state, them);
   }
 
-  if (w.advance !== 0) score += w.advance * (advanceScore(ctx, state, me) - advanceScore(ctx, state, them));
+  if (w.advance !== 0)
+    score += w.advance * u.scoring * (advanceScore(ctx, state, me) - advanceScore(ctx, state, them));
 
   // A finished battle is worth exactly its result — no proxy term can outweigh losing.
   if (state.phase === 'battleEnd') {
@@ -133,6 +135,24 @@ export function missionProgress(state: GameState, player: PlayerId): number {
   }
   for (const effect of state.effects) if (effect.player === player && effect.source.kind === 'op') n++;
   return n;
+}
+
+/**
+ * The turning-point clock.
+ *
+ * Four turning points, then the battle ends and every surviving operative is worth exactly
+ * nothing: only VP is banked. So in the last turning point — and harder still when the game is
+ * tied or lost — scoring is worth more and staying alive is worth less. Without this the AI
+ * plays a drawn position exactly as cautiously in turning point 4 as in turning point 1, which
+ * is how two careful kill teams end 4:4 having never contested anything.
+ */
+export function urgency(state: GameState, vpLead: number): { scoring: number; survival: number } {
+  const last = state.turningPoint >= (state.maxTurningPoints || 4);
+  const penultimate = state.turningPoint >= (state.maxTurningPoints || 4) - 1;
+  if (!penultimate) return { scoring: 1, survival: 1 };
+  const behind = vpLead <= 0;
+  if (last) return behind ? { scoring: 2.2, survival: 0.35 } : { scoring: 1.3, survival: 0.7 };
+  return behind ? { scoring: 1.4, survival: 0.8 } : { scoring: 1, survival: 1 };
 }
 
 /** Negative distance from each operative to the objective it is closest to. */
@@ -183,6 +203,8 @@ export interface PositionContext {
   enemies: OperativeState[];
   /** Weights, so a difficulty can retune positioning as well as search. */
   weights: EvalWeights;
+  /** Turning-point clock, so late-game positioning stops fearing return fire. */
+  urgency: { scoring: number; survival: number };
 }
 
 export function positionContext(ctx: GameContext, state: GameState, op: OperativeState, weights: EvalWeights): PositionContext {
@@ -191,6 +213,7 @@ export function positionContext(ctx: GameContext, state: GameState, op: Operativ
     objectives: Object.values(state.markers).filter((m) => m.kind === 'objective'),
     enemies: aliveOperatives(state, otherPlayer(op.player)),
     weights,
+    urgency: urgency(state, state.teams[op.player].vp - state.teams[otherPlayer(op.player)].vp),
   };
 }
 
@@ -214,8 +237,8 @@ export function cheapPositionScore(
   let score = 0;
   for (const m of pc.objectives) {
     const gap = baseGap(pos, c.base, op.rot, m.pos, { shape: 'round', mm: m.diameterMm }, 0);
-    if (gap <= 1) score += 26;
-    else score -= Math.min(gap, 20) * 0.85;
+    if (gap <= 1) score += 26 * pc.urgency.scoring;
+    else score -= Math.min(gap, 20) * 0.85 * pc.urgency.scoring;
   }
   let nearest = Infinity;
   for (const e of pc.enemies) nearest = Math.min(nearest, dist(pos, e.pos));

@@ -105,6 +105,19 @@ export interface Agent {
 /** A legal intent plus enough metadata to score it without re-deriving the params. */
 export interface Candidate {
   intent: Intent;
+  /**
+   * Pre-computed analytic outcome for attacks. Scoring a Shoot from its exact damage
+   * distribution is both cheaper and lower-variance than rolling it in a simulation.
+   */
+  meta?: {
+    shotEffective?: number;
+    shotKillProb?: number;
+    fightDealt?: number;
+    fightTaken?: number;
+    fightKillProb?: number;
+    fightDeathProb?: number;
+    targetId?: string;
+  };
   kind:
     | 'decision'
     | 'gambit'

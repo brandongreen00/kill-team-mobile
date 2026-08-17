@@ -47,7 +47,9 @@ export const HOOK_NAMES = [
   'onWeaponRules',
   'onSelectWeapon',
   'onCollectAttackDice',
+  'onSelectTarget',
   'onValidTarget',
+  'onStunTest',
   'onRollAttack',
   'onAttackDiceRetained',
   'onDefenceDice',
@@ -188,6 +190,21 @@ export interface HookEvents {
   };
   onSelectWeapon: { state: GameState; ctx: AttackContext; allowed: boolean; reason?: string };
   onCollectAttackDice: { state: GameState; ctx: AttackContext; count: number; mods: StatMods };
+  /**
+   * The Select Valid Target step, before the target is checked. A rule may substitute the
+   * target — "…becomes the valid target instead (even if it wouldn't normally be valid for
+   * this)" (Celestian Insidiants' HOLY DEFENDER, Pathfinders' SAVIOUR PROTOCOLS). The
+   * substitute inherits the original's cover/obscured, exactly as those rules print it.
+   */
+  onSelectTarget: {
+    state: GameState;
+    attacker: OperativeState;
+    target: OperativeState;
+    weaponName: string;
+    profile: WeaponProfile;
+    rules: WeaponRule[];
+    redirectTo?: string;
+  };
   onValidTarget: {
     state: GameState;
     attacker: OperativeState;
@@ -197,7 +214,23 @@ export interface HookEvents {
     /** Overrides discovered by rules (Seek, smoke, Bheta restrictions). */
     ignoreCoverTerrain: 'none' | 'light' | 'all';
     forceVisible: boolean;
+    /**
+     * "Having other friendly operatives within an enemy operative's control range doesn't
+     * prevent that enemy operative from being selected" (Pathfinders' SUPPORTING FIRE).
+     */
+    ignoreFriendlyControlRange?: boolean;
+    /**
+     * Determine visibility, cover and obscured from THIS operative instead of the shooter —
+     * "treat that operative as the active operative for the purposes of determining a valid
+     * target, cover and obscured" (the Hierotek Circle's Magnify weapon rule).
+     */
+    viewFrom?: OperativeState;
   };
+  /**
+   * A stun test rolled by the Stun Grenade action, before its 3+ threshold is applied.
+   * Rules that add to it (Celestian Insidiants' PSYK-OUT GRENADES) push into `damage`.
+   */
+  onStunTest: { state: GameState; thrower: OperativeState; target: OperativeState; roll: number; damage: number };
   onRollAttack: { state: GameState; ctx: AttackContext; dice: number[]; rerolls: RerollGrant[] };
   onAttackDiceRetained: {
     state: GameState;

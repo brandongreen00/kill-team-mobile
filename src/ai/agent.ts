@@ -20,7 +20,8 @@ import { reduce } from '../core/reducer.ts';
 import type { Rng } from '../core/rng.ts';
 import { aliveOperatives, aplOf } from '../core/state.ts';
 import type { GameState, OperativeState, PlayerId } from '../core/types.ts';
-import { shotPlans, shotValue } from './combat.ts';
+import { operativeValue, shotPlans, shotValue } from './combat.ts';
+import { startingWounds } from '../core/state.ts';
 import { decideOption, DEFAULT_POLICY, type DecisionPolicy } from './decide.ts';
 import { evaluate, objectivesHeldFrom, positionContext, positionScore, roleOf } from './eval.ts';
 import { enumerateCandidates, interruptCandidates } from './legal.ts';
@@ -215,10 +216,20 @@ export class TacticalAgent implements Agent {
       if (options.length === 0) break;
       const beam = this.beamOf(options);
       const basePos = beam.some(movesOperative) ? this.positionTerm(ctx, current, opId) : 0;
+      const base = this.score(ctx, current, player);
       let bestScore = score;
       let bestIntent: Intent | null = null;
       let bestState: GameState | null = null;
       for (const cand of beam) {
+        const analytic = this.analyticScore(ctx, current, player, cand, base);
+        if (analytic !== null) {
+          if (analytic > bestScore) {
+            bestScore = analytic;
+            bestIntent = cand.intent;
+            bestState = null; // resolved once, below, only if this candidate wins
+          }
+          continue;
+        }
         const outcome = this.evaluateCandidate(ctx, current, player, cand, `step${depth}:${opId}`, opId, basePos);
         if (!outcome) continue;
         if (outcome.score > bestScore) {
@@ -228,9 +239,12 @@ export class TacticalAgent implements Agent {
         }
         if (this.exhausted()) break;
       }
-      if (!bestIntent || !bestState) break;
+      if (!bestIntent) break;
+      // The winner is applied once so planning can continue from the real resulting state.
+      const applied = bestState ?? this.simulate(ctx, current, [bestIntent], player, `apply${depth}:${opId}`);
+      if (!applied) break;
       steps.push({ intent: bestIntent, operativeId: opId });
-      current = bestState;
+      current = applied;
       score = bestScore;
     }
 
@@ -266,10 +280,12 @@ export class TacticalAgent implements Agent {
     const basePos = beam.some(movesOperative) ? this.positionTerm(ctx, state, active.id) : 0;
     let best: { intent: Intent; score: number } | null = null;
     for (const cand of beam) {
-      const outcome = this.evaluateCandidate(ctx, state, player, cand, `single:${active.id}`, active.id, basePos);
-      if (!outcome) continue;
-      const score = outcome.score + this.noise(rng);
-      if (!best || score > best.score) best = { intent: cand.intent, score };
+      const analytic = this.analyticScore(ctx, state, player, cand, baseline);
+      const score =
+        (analytic ?? this.evaluateCandidate(ctx, state, player, cand, `single:${active.id}`, active.id, basePos)?.score) ??
+        Number.NEGATIVE_INFINITY;
+      const noisy = score + this.noise(rng);
+      if (!best || noisy > best.score) best = { intent: cand.intent, score: noisy };
       if (this.exhausted()) break;
     }
     if (best && best.score > baseline) return best.intent;
@@ -375,6 +391,46 @@ export class TacticalAgent implements Agent {
   private beamOf(options: Candidate[]): Candidate[] {
     const sorted = [...options].sort((a, b) => b.hint - a.hint);
     return sorted.slice(0, this.cfg.beam);
+  }
+
+  /**
+   * Score an attack analytically instead of rolling it: `combat.ts` gives the exact damage
+   * distribution, so this is both cheaper than a simulation and free of dice variance.
+   * Returns null when the candidate is not an attack.
+   */
+  private analyticScore(
+    ctx: GameContext,
+    state: GameState,
+    player: PlayerId,
+    cand: Candidate,
+    base: number,
+  ): number | null {
+    const meta = cand.meta;
+    if (!meta || !meta.targetId) return null;
+    const target = state.operatives[meta.targetId];
+    if (!target || target.removed) return null;
+    const w = this.cfg.weights;
+    const targetValue = operativeValue(ctx, target);
+    const targetMax = Math.max(1, startingWounds(ctx, target));
+    let score = base;
+    if (meta.shotEffective !== undefined) {
+      const killed = meta.shotKillProb ?? 0;
+      score += w.wounds * targetValue * (meta.shotEffective / targetMax);
+      score += w.operative * targetValue * killed;
+      return score;
+    }
+    if (meta.fightDealt !== undefined) {
+      const me = state.activeOperativeId ? state.operatives[state.activeOperativeId] : undefined;
+      const myValue = me ? operativeValue(ctx, me) : 0;
+      const myMax = me ? Math.max(1, startingWounds(ctx, me)) : 1;
+      score += w.wounds * targetValue * (meta.fightDealt / targetMax);
+      score += w.operative * targetValue * (meta.fightKillProb ?? 0);
+      score -= w.wounds * myValue * ((meta.fightTaken ?? 0) / myMax);
+      score -= w.operative * myValue * (meta.fightDeathProb ?? 0);
+      return score;
+    }
+    void player;
+    return null;
   }
 
   /** Simulate a candidate `rollouts` times (dice differ per rollout) and average the score. */

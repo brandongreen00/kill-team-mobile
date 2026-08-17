@@ -9,7 +9,17 @@
 import { registerAction } from '../actions.ts';
 import { terrain } from '../context.ts';
 import { baseGap, dist } from '../geometry.ts';
-import { addEffect, aliveOperatives, body, card, enemiesInControlRange, gapBetween, log, recordRoll } from '../state.ts';
+import {
+  addEffect,
+  aliveOperatives,
+  body,
+  card,
+  enemiesInControlRange,
+  gapBetween,
+  inflictDamage,
+  log,
+  recordRoll,
+} from '../state.ts';
 import { isVisible } from '../visibility.ts';
 import { parseWeaponRules } from '../weaponRules.ts';
 import { equipmentText, grenadeProfile } from './text.ts';
@@ -142,6 +152,10 @@ registerAction({
     for (const victim of inBlast) {
       const roll = ctx.rng.d6();
       recordRoll(state, 'stun', [roll], op.player, `stun test vs ${victim.letter}`);
+      // Rules that add to a stun test (Celestian Insidiants' PSYK-OUT GRENADES) read the
+      // unmodified result and push damage of their own.
+      const extra = ctx.hooks.emit('onStunTest', state, { state, thrower: op, target: victim, roll, damage: 0 }).damage;
+      if (extra > 0) inflictDamage(ctx, state, victim, extra, 'other');
       if (roll < 3) continue;
       victim.aplMods.push(-1);
       addEffect(state, {

@@ -14,6 +14,7 @@ import type { GameContext } from '../../src/core/context.ts';
 import { createGameContext } from '../../src/core/game.ts';
 import { SeededRng } from '../../src/core/rng.ts';
 import { parseWeaponRules } from '../../src/core/weaponRules.ts';
+import { hasEffect, type TeamModule } from '../../src/core/hooks.ts';
 import type { Datacard, KillzoneMap, TerrainFeature } from '../../src/core/types.ts';
 import type { RosterSpec } from '../../src/ai/runner.ts';
 import { heavyBlock, makeCard, rect, testMap, vantagePlatform } from '../fixtures.ts';
@@ -201,6 +202,39 @@ export function realMaps(limit = 3): KillzoneMap[] {
 // Ops + context
 // ---------------------------------------------------------------------------
 
+/**
+ * A minimal kill team module, so the AI is exercised against the same seam a real team uses:
+ * a firefight ploy priced by `aiHints.ployValue`, and role hints.
+ */
+export const aiTeamModule: TeamModule = {
+  id: 'ai.test',
+  register(reg, player) {
+    reg.on(
+      'onStatMod',
+      { id: `ai.test.grit:${player}`, sourceText: 'Test team rule: +1 Save while the Bulwark ploy is active.', player },
+      (ev) => {
+        if (ev.operative.player !== player) return;
+        if (hasEffect(ev.state, 'ai.test.bulwark', { player })) ev.mods.save += 1;
+      },
+    );
+  },
+  ploys: [
+    {
+      id: 'ai.bulwark',
+      name: 'Bulwark',
+      kind: 'firefight',
+      cp: 1,
+      text: 'Improve the Save stat of friendly operatives by 1 until the end of the turning point.',
+      usable: (state, player) => ({ ok: !hasEffect(state, 'ai.test.bulwark', { player }) }),
+    },
+  ],
+  equipment: [],
+  aiHints: {
+    roles: { 'ai.blade': 'melee', 'ai.sniper': 'sniper', 'ai.gunner': 'gunner', 'ai.trooper': 'objective' },
+    ployValue: { 'ai.bulwark': 12 },
+  },
+};
+
 /** Crit op used by the AI tests: Secure — objective control, the bread and butter of KT. */
 export const CRIT_OP_ID = 'crit.secure';
 
@@ -208,6 +242,11 @@ export const CRIT_OP_ID = 'crit.secure';
 export const TAC_OP_P1 = 'tac.dominate';
 export const TAC_OP_P2 = 'tac.rout';
 
-export function aiContext(seed = 1): GameContext {
-  return createGameContext({ rng: new SeededRng(seed), datacards: aiDatacards(), maps: syntheticMaps() });
+export function aiContext(seed = 1, withTeam = false): GameContext {
+  return createGameContext({
+    rng: new SeededRng(seed),
+    datacards: aiDatacards(),
+    maps: syntheticMaps(),
+    ...(withTeam ? { teams: [aiTeamModule] } : {}),
+  });
 }

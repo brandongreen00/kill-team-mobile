@@ -234,11 +234,14 @@ function buildPath(
   const attempts: Vec2[][] = [[cell.pos]];
   const mid = { x: (op.pos.x + cell.pos.x) / 2, y: (op.pos.y + cell.pos.y) / 2 };
   attempts.push([mid, cell.pos]);
-  // Two perpendicular dog-legs, which get around a corner the straight line clips.
-  const dx = cell.pos.x - op.pos.x;
-  const dy = cell.pos.y - op.pos.y;
-  attempts.push([{ x: op.pos.x + dx, y: op.pos.y }, cell.pos]);
-  attempts.push([{ x: op.pos.x, y: op.pos.y + dy }, cell.pos]);
+  // Two perpendicular dog-legs, which get around a corner the straight line clips. Only worth
+  // the extra `validateMove` calls for a Charge, where reaching the target is the whole point.
+  if (action === 'Charge') {
+    const dx = cell.pos.x - op.pos.x;
+    const dy = cell.pos.y - op.pos.y;
+    attempts.push([{ x: op.pos.x + dx, y: op.pos.y }, cell.pos]);
+    attempts.push([{ x: op.pos.x, y: op.pos.y + dy }, cell.pos]);
+  }
 
   for (const points of attempts) {
     const path: MovePath = { points };

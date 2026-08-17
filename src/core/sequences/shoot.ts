@@ -122,20 +122,6 @@ export function checkTarget(
   const range = ruleOf(rules, 'Range');
   if (range && distance > (range.x ?? 0) + 1e-6) return { ...base, reason: `out of Range ${range.x}"` };
 
-  // "has no friendly operatives within its control range" — friendly to the ATTACKER.
-  const friendlyBlock = aliveOperatives(state, attacker.player).some(
-    (f) => f.id !== attacker.id && inControlRange(ctx, state, f, target),
-  );
-  if (friendlyBlock && !opts.pointBlank)
-    return { ...base, reason: 'a friendly operative is within the target’s control range' };
-
-  const vis = isVisible(index, a, t);
-  if (!vis.visible && !opts.pointBlank)
-    return { ...base, reason: `not visible${vis.blockedBy ? ` (${vis.blockedBy.types.join('+')} terrain)` : ''}` };
-
-  const vAcc = target.order === 'engage' ? vantageAccurate(index, a, t) : 0;
-  const vantageDeniesLight = a.z - t.z >= 2 - 1e-6 && target.order === 'conceal' && vantageAccurate(index, a, t) > 0;
-
   const seekAll = hasRule(rules, 'Seek');
   const seekLight = hasRule(rules, 'SeekLight');
   const hookEv = ctx.hooks.emit('onValidTarget', state, {
@@ -145,12 +131,33 @@ export function checkTarget(
     valid: true,
     ignoreCoverTerrain: seekAll ? 'all' : seekLight ? 'light' : 'none',
     forceVisible: false,
+    ignoreFriendlyControlRange: false,
   });
 
-  const cover = coverAndObscured(index, a, t, {
+  // "has no friendly operatives within its control range" — friendly to the ATTACKER.
+  // Pathfinders' SUPPORTING FIRE lifts it, so the hook is consulted first.
+  const friendlyBlock = aliveOperatives(state, attacker.player).some(
+    (f) => f.id !== attacker.id && inControlRange(ctx, state, f, target),
+  );
+  if (friendlyBlock && !opts.pointBlank && !hookEv.ignoreFriendlyControlRange)
+    return { ...base, reason: 'a friendly operative is within the target’s control range' };
+
+  // A rule may look through another operative's eyes (Magnify): visibility, cover and
+  // obscured are then determined from THAT operative, while range stays the shooter's.
+  const view = hookEv.viewFrom ? body(ctx, hookEv.viewFrom) : a;
+
+  const vis = isVisible(index, view, t);
+  if (!vis.visible && !opts.pointBlank && !hookEv.forceVisible)
+    return { ...base, reason: `not visible${vis.blockedBy ? ` (${vis.blockedBy.types.join('+')} terrain)` : ''}` };
+
+  const vAcc = target.order === 'engage' ? vantageAccurate(index, view, t) : 0;
+  const vantageDeniesLight =
+    view.z - t.z >= 2 - 1e-6 && target.order === 'conceal' && vantageAccurate(index, view, t) > 0;
+
+  const cover = coverAndObscured(index, view, t, {
     ignoreCoverTerrain: hookEv.ignoreCoverTerrain,
     vantageDeniesLightCover: vantageDeniesLight,
-    ignore: vantageIgnoreFilter(index, a, t),
+    ignore: vantageIgnoreFilter(index, view, t),
   });
 
   // Smoke grenades create a dynamic obscuring area.
@@ -253,18 +260,37 @@ export function startShoot(
   if (!w) return { ok: false, reason: `operative has no ranged weapon '${weaponName}'` };
   const profile = findProfile(w, profileName);
   if (!profile) return { ok: false, reason: `weapon '${weaponName}' has no profile '${profileName}'` };
-  const target = state.operatives[targetId];
-  if (!target || target.removed) return { ok: false, reason: 'no such target' };
-  const rules = effectiveRules(ctx, state, profile, { operative: attacker, target, weaponName });
+  const intended = state.operatives[targetId];
+  if (!intended || intended.removed) return { ok: false, reason: 'no such target' };
+  const rules = effectiveRules(ctx, state, profile, { operative: attacker, target: intended, weaponName });
 
-  const check = checkTarget(ctx, state, attacker, target, profile, rules, { pointBlank: opts.pointBlank ?? false });
+  let check = checkTarget(ctx, state, attacker, intended, profile, rules, { pointBlank: opts.pointBlank ?? false });
+  // "…becomes the valid target instead (even if it wouldn't normally be valid for this).
+  //  That operative is only in cover or obscured if the original target was."
+  let target = intended;
+  const sub = ctx.hooks.emit('onSelectTarget', state, {
+    state,
+    attacker,
+    target: intended,
+    weaponName,
+    profile,
+    rules,
+  }).redirectTo;
+  if (sub && sub !== intended.id) {
+    const redirected = state.operatives[sub];
+    if (redirected && !redirected.removed) {
+      target = redirected;
+      check = { ...check, valid: true, distance: gapBetween(ctx, attacker, redirected) };
+      log(state, { kind: 'action', player: target.player, text: `${target.letter} becomes the target instead` });
+    }
+  }
   if (!check.valid) return { ok: false, reason: check.reason ?? 'not a valid target' };
 
   const seq: ShootSequence = {
     kind: 'shoot',
     step: 'start',
     attackerId: attacker.id,
-    targetId,
+    targetId: target.id,
     queue: secondaryTargets(ctx, state, attacker, target, profile, rules).map((o) => o.id),
     resolvedTargets: [],
     weaponName,
@@ -291,7 +317,7 @@ export function startShoot(
     kind: 'action',
     player: attacker.player,
     text: `${attacker.letter} shoots ${target.letter} with ${weaponName}${profileName ? ` (${profileName})` : ''}`,
-    data: { attackerId: attacker.id, targetId, weaponName },
+    data: { attackerId: attacker.id, targetId: target.id, weaponName },
   });
   return { ok: true };
 }

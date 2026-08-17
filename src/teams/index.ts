@@ -8,6 +8,8 @@ import { kasrkin } from './kasrkin/index.ts';
 import { angelOfDeath } from './angel-of-death/index.ts';
 import { plagueMarines } from './plague-marines/index.ts';
 import { imperialNavyBreacher } from './imperial-navy-breacher/index.ts';
+import { celestianInsidiants } from './celestian-insidiants/index.ts';
+import { kommandos } from './kommandos/index.ts';
 
 /** Phase 5 batch 1. */
 export const BATCH_1: KtTeamModule[] = [
@@ -15,6 +17,8 @@ export const BATCH_1: KtTeamModule[] = [
   angelOfDeath,
   plagueMarines,
   imperialNavyBreacher,
+  celestianInsidiants,
+  kommandos,
 ];
 
 export const TEAM_MODULES: Map<string, KtTeamModule> = new Map(BATCH_1.map((m) => [m.id, m]));
@@ -25,7 +29,7 @@ export function teamModule(id: string): KtTeamModule {
   return m;
 }
 
-export { kasrkin, angelOfDeath, plagueMarines, imperialNavyBreacher };
+export { kasrkin, angelOfDeath, plagueMarines, imperialNavyBreacher, celestianInsidiants, kommandos };
 export type { KtTeamModule } from './helpers.ts';
 export { defaultRoster, validateRosterFor, type RosterPickIn, type RosterValidation } from './selection.ts';
 export { TEAM_DATA, teamData, type TeamData } from './data.ts';
