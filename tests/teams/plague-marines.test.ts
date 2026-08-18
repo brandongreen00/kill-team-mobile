@@ -3,12 +3,15 @@
  * Source: https://wahapedia.ru/kill-team3/kill-teams/plague-marines/
  */
 import { describe, expect, it } from 'vitest';
+import { counteractCandidates, whoActivates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { inflictDamage } from '../../src/core/state.ts';
+import { kasrkin } from '../../src/teams/kasrkin/index.ts';
 import { hasPoison, plagueMarines, POISON } from '../../src/teams/plague-marines/index.ts';
 import { teamData } from '../../src/teams/data.ts';
 import { activate, battle, opWith, rosterIncluding, teamContext } from './harness.ts';
+import type { GameContext } from '../../src/core/context.ts';
 import type { GameState, WeaponProfile } from '../../src/core/types.ts';
 
 const DATA = teamData('plague-marines');
@@ -56,6 +59,78 @@ describe('PLAGUE MARINES data (pinned against data/teams/plague-marines.json)', 
     expect(plagueMarines.ploys.filter((p) => p.kind === 'strategy')).toHaveLength(4);
     expect(plagueMarines.ploys.filter((p) => p.kind === 'firefight')).toHaveLength(4);
     expect(plagueMarines.equipment).toHaveLength(4);
+  });
+});
+
+// ---------------------------------------------------------------------------
+describe('Astartes — "Each friendly PLAGUE MARINE operative can counteract regardless of its order"', () => {
+  /**
+   * `counteractCandidates` (`src/core/phases.ts`) emits `onCounteract` for every expended,
+   * not-yet-counteracted operative with `allowed = (order === 'engage')` as the default, so this
+   * clause can widen the list. p2 is KASRKIN — no such clause — so the same battle also pins the
+   * un-widened core rule and proves the Plague Marine handler is scoped to friendlies.
+   */
+  function counteractSetup(): { ctx: GameContext; state: GameState } {
+    const ctx = teamContext([plagueMarines, kasrkin], { seed: 4 });
+    const state = battle({
+      ctx,
+      p1: { module: plagueMarines, picks: rosterIncluding(plagueMarines, ROLES) },
+      p2: { module: kasrkin },
+    });
+    // Everyone has activated this turning point, and everyone is on a Conceal order.
+    for (const id of [...state.teams.p1.operativeIds, ...state.teams.p2.operativeIds]) {
+      const op = state.operatives[id]!;
+      op.ready = false;
+      op.expended = true;
+      op.order = 'conceal';
+    }
+    return { ctx, state };
+  }
+
+  it('a Conceal, expended PLAGUE MARINE is a counteract candidate — and an Engage one still is', () => {
+    const { ctx, state } = counteractSetup();
+    const concealed = opWith(state, 'p1', 'plague-marines.warrior');
+    const engaged = opWith(state, 'p1', 'plague-marines.champion');
+    state.operatives[engaged]!.order = 'engage';
+    const ids = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(ids).toContain(concealed); // "regardless of its order"
+    expect(ids).toContain(engaged);
+  });
+
+  it('widens the order requirement only: expended, once per turning point and On Guard still bite', () => {
+    const { ctx, state } = counteractSetup();
+    const done = opWith(state, 'p1', 'plague-marines.warrior');
+    state.operatives[done]!.counteractedThisTP = true;
+    const guarded = opWith(state, 'p1', 'plague-marines.fighter');
+    state.operatives[guarded]!.guardSpentTP = state.turningPoint;
+    const notExpended = opWith(state, 'p1', 'plague-marines.bombardier');
+    state.operatives[notExpended]!.expended = false;
+    const ids = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(ids).not.toContain(done);
+    expect(ids).not.toContain(guarded);
+    expect(ids).not.toContain(notExpended);
+    expect(ids).toContain(opWith(state, 'p1', 'plague-marines.icon-bearer')); // still Conceal + expended
+  });
+
+  it('is friendly-only: an enemy Conceal operative is not widened, an enemy Engage one still counteracts', () => {
+    const { ctx, state } = counteractSetup();
+    const foeConceal = state.teams.p2.operativeIds[0]!;
+    const foeEngage = state.teams.p2.operativeIds[1]!;
+    state.operatives[foeEngage]!.order = 'engage';
+    const ids = counteractCandidates(ctx, state, 'p2').map((o) => o.id);
+    expect(ids).not.toContain(foeConceal); // KASRKIN print no "regardless of its order" clause
+    expect(ids).toContain(foeEngage); // the printed core default
+  });
+
+  it('the counteract turn is actually offered while every friendly operative is on Conceal', () => {
+    const { ctx, state } = counteractSetup();
+    for (const id of state.teams.p2.operativeIds) {
+      const op = state.operatives[id]!;
+      op.ready = true;
+      op.expended = false;
+    }
+    state.activePlayer = 'p1';
+    expect(whoActivates(state, ctx)).toEqual({ player: 'p1', mode: 'counteract' });
   });
 });
 

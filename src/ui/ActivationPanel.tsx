@@ -14,7 +14,7 @@ export function ActivationPanel({ store }: { store: Store }) {
   const { state, ctx } = store;
   const [weapon, setWeapon] = useState<string>('');
   const active = state.activeOperativeId ? state.operatives[state.activeOperativeId] : undefined;
-  const turn = whoActivates(state);
+  const turn = whoActivates(state, ctx);
 
   if (state.phase !== 'firefight') {
     return (

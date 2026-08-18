@@ -281,7 +281,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
 
     // ---- firefight phase -------------------------------------------------
     case 'ActivateOperative': {
-      const turn = whoActivates(next);
+      const turn = whoActivates(next, ctx);
       if (!turn || turn.player !== intent.player || turn.mode !== 'activate')
         return fail('it is not your activation');
       const op = next.operatives[intent.operativeId];
@@ -300,7 +300,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
     }
 
     case 'Counteract': {
-      const turn = whoActivates(next);
+      const turn = whoActivates(next, ctx);
       if (!turn || turn.player !== intent.player || turn.mode !== 'counteract')
         return fail('you cannot counteract right now');
       const candidates = counteractCandidates(ctx, next, intent.player);
@@ -397,7 +397,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       removeIncapacitated(ctx, next);
       next.activePlayer = otherPlayer(op.player);
       log(next, { kind: 'action', player: op.player, text: `${op.letter} is expended` });
-      if (!counteracting && whoActivates(next) === null) advanceTurningPoint(ctx, next);
+      if (!counteracting && whoActivates(next, ctx) === null) advanceTurningPoint(ctx, next);
       return ok(next);
     }
 
@@ -652,7 +652,7 @@ export function legalIntents(ctx: GameContext, state: GameState, player: PlayerI
     return out;
   }
   if (state.phase === 'firefight') {
-    const turn = whoActivates(state);
+    const turn = whoActivates(state, ctx);
     if (turn?.player === player) {
       if (turn.mode === 'activate' && !state.activeOperativeId) {
         for (const op of aliveOperatives(state, player).filter((o) => o.ready)) {

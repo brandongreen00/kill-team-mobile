@@ -37,6 +37,7 @@ import type {
 import { otherPlayer } from '../core/types.ts';
 import { TEAM_DATA, teamData, type TeamData, type TeamRuleText } from './data.ts';
 import { validateRosterFor, type RosterPickIn, type RosterValidation } from './selection.ts';
+import rareRulesJson from '../../data/teams/_rare-weapon-rules.json';
 
 // ---------------------------------------------------------------------------
 // Static datacard catalogue
@@ -583,30 +584,29 @@ export function defaultGambits(reg: HookRegistry, T: TeamHooks): void {
   }
 }
 
-/** The verbatim rare-rule definitions, from data/teams/_rare-weapon-rules.json. */
-const RARE_RULE_TEXT: Record<string, string> = {
-  AntiPSYKER:
-    'Whenever this weapon is being used against an operative that has the PSYKER keyword, add 1 to both Dmg stats of this weapon and it has the Lethal 5+ weapon rule.',
-  ConcealedPosition:
-    'This operative can only use this weapon the first time it’s performing the Shoot action during the battle.',
-  Detonate:
-    'Don’t select a valid target. Instead, shoot against each operative within 2" of your Mine marker, unless Heavy terrain is wholly intervening between that operative and that marker. Each of those operatives cannot be in cover or obscured. Roll each sequence separately in an order of your choice. This weapon cannot be selected if your Mine marker isn’t in the killzone. At the end of the action, remove your Mine marker from the killzone. In a killzone that uses the close quarters rules (e.g. Killzone: Tomb World), this weapon has the Lethal 5+ weapon rule.',
-  Explosive:
-    'This operative can perform the Shoot action with this weapon while within control range of an enemy operative. Don’t select a valid target. Instead, this operative is always the primary target and cannot be in cover or obscured.',
-  Magnify:
-    'Whenever this operative is performing the Shoot action with this weapon, if the target is visible to this operative, and another friendly HIEROTEK CIRCLE APPRENTEK or HIEROTEK CIRCLE CRYPTEK operative that has an Engage order and isn’t within control range of enemy operatives is visible to this operative, you can use this rule. If you do, treat that operative as the active operative for the purposes of determining a valid target, cover and obscured. If you do, this weapon has the Ceaseless weapon rule until the end of that action.',
-  PSYCHIC: 'PSYCHIC — a weapon keyword; rules that refer to PSYCHIC weapons and PSYCHIC actions use it.',
-  Poison:
-    'In the Resolve Attack Dice step, if you inflict damage with any successes, the operative this weapon is being used against (excluding friendly PLAGUE MARINE operatives) gains one of your Poison tokens (if it doesn’t already have one). Whenever an operative that has one of your Poison tokens is activated, inflict 1 damage on it.',
-  Shield:
-    'Whenever this operative is fighting or retaliating with this weapon, each of your blocks can be allocated to block two unresolved successes (instead of one).',
-  Toxic:
-    'Whenever this operative is using this weapon against an enemy operative that has one of your Poison tokens, add 1 to both Dmg stats of this weapon.',
-};
+/**
+ * The verbatim rare-rule definitions, read out of the generated registry
+ * `data/teams/_rare-weapon-rules.json` — never retyped (CLAUDE.md: rules as data).
+ *
+ * `PSYCHIC` is the one rule the source defines nowhere: it is a weapon keyword other rules
+ * read (docs/TEAM-DATA.md §3), so its registry entry carries `referencedIn` instead of a
+ * definition and the fallback below states exactly that.
+ */
+const RARE_RULE_REGISTRY: Record<string, string> = Object.fromEntries(
+  (rareRulesJson as { rules: { id: string; definition: string; referencedIn?: string[] }[] }).rules.map((r) => [
+    r.id,
+    r.definition.trim().length > 0
+      ? r.definition
+      : `${r.id} — a weapon keyword with no printed definition; it is read by other rules (${(r.referencedIn ?? []).length} of them).`,
+  ]),
+);
 
 export function rareRuleText(id: string): string {
-  const t = RARE_RULE_TEXT[id];
-  if (!t) throw new Error(`No verbatim text for rare weapon rule '${id}' — add it to RARE_RULE_TEXT`);
+  const t = RARE_RULE_REGISTRY[id];
+  if (!t)
+    throw new Error(
+      `No verbatim text for rare weapon rule '${id}' — it is not in data/teams/_rare-weapon-rules.json (re-run pnpm teams:normalise)`,
+    );
   return t;
 }
 

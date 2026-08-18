@@ -502,6 +502,7 @@ Every row is also in the team's `notes[]` and is printed by `validate.py`. Nothi
 | `warpcoven` | SORCERER TEMPYRION: footnote ^1 also grants ['force stave, PSYCHIC weapons on their datacard'] — not a named datacard weapon, left for the team module | see `notes[]` |
 | `warpcoven` | SORCERER WARPFIRE: footnote ^1 also grants ['force stave, PSYCHIC weapons on their datacard'] — not a named datacard weapon, left for the team module | see `notes[]` |
 | `warpcoven` | no datacard in this team carries the LEADER keyword — the leader is not marked on the source page | see `notes[]` |
+| `wolf-scouts` | Wolf Scout Frosteye: unique action 'HUNTER’S SENSES' text is truncated — the bullet list of selectable weapon rules the printed colon introduces is absent, and `notes[]` is empty (found while implementing batch 2, not flagged by `validate.py`) | nothing; the team module needs an explicit list |
 | `wrecka-krew` | Breaka Boy Demolisha: weapon 'Tankhammer (detonate)' prints DMG '*' (resolved by a rule, not a number) — dmgN/dmgC recorded as 0 | see `notes[]` |
 | `wrecka-krew` | Tankbusta Rokkiteer: weapon 'Pulsa rokkit' prints DMG '-' (resolved by a rule, not a number) — dmgN/dmgC recorded as 0 | see `notes[]` |
 

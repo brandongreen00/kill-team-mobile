@@ -219,8 +219,13 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
 
   // ASTARTES — "it can perform either two Shoot actions or two Fight actions"; the second is
   // registered as its own action below (action restrictions forbid repeating one).
-  // "Each friendly ANGEL OF DEATH operative can counteract regardless of its order."
+
+  // ASTARTES — "Each friendly ANGEL OF DEATH operative can counteract regardless of its order."
+  // `counteractCandidates` emits with `allowed = (order === 'engage')` as the printed DEFAULT,
+  // so this widens it for every friendly operative with the keyword. It only ever widens: the
+  // expended requirement, once-per-turning-point and the On Guard lockout stay the core's job.
   reg.on('onCounteract', T.bind('angel-of-death.rule.astartes', 12), (ev) => {
+    if (ev.allowed) return;
     if (!T.mineKw(ev.operative, 'ANGEL OF DEATH')) return;
     ev.allowed = true;
   });

@@ -6,6 +6,8 @@ import { describe, expect, it } from 'vitest';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { actionCost, getAction } from '../../src/core/actions.ts';
+import { counteractCandidates, whoActivates } from '../../src/core/phases.ts';
+import { HookRegistry } from '../../src/core/hooks.ts';
 import { inflictDamage } from '../../src/core/state.ts';
 import {
   angelOfDeath,
@@ -225,10 +227,41 @@ describe('Astartes — "it can perform either two Shoot actions or two Fight act
 
   it('"Each friendly ANGEL OF DEATH operative can counteract regardless of its order"', () => {
     const { ctx, state } = setup();
-    const op = state.operatives[opWith(state, 'p1', 'angel-of-death.intercessor-warrior')]!;
-    op.order = 'conceal';
-    const ev = ctx.hooks.emit('onCounteract', state, { state, operative: op, allowed: false });
-    expect(ev.allowed).toBe(true);
+    // Every friendly operative is expended on a Conceal order; the enemy still has activations left.
+    for (const id of state.teams['p1'].operativeIds) {
+      const op = state.operatives[id]!;
+      op.ready = false;
+      op.expended = true;
+      op.order = 'conceal';
+    }
+    // Core default is "expended and has an Engage order", so without Astartes p1 would have no
+    // counteract at all here and the turn would pass straight back to p2.
+    expect(whoActivates(state, ctx)).toEqual({ player: 'p1', mode: 'counteract' });
+
+    const conceal = state.operatives[opWith(state, 'p1', 'angel-of-death.intercessor-warrior')]!;
+    const engage = state.operatives[opWith(state, 'p1', 'angel-of-death.assault-intercessor-warrior')]!;
+    const spent = state.operatives[opWith(state, 'p1', 'angel-of-death.eliminator-sniper')]!;
+    const guarded = state.operatives[opWith(state, 'p1', 'angel-of-death.heavy-intercessor-gunner')]!;
+    const enemy = state.operatives[opWith(state, 'p2', 'angel-of-death.intercessor-warrior')]!;
+    engage.order = 'engage';
+    spent.counteractedThisTP = true; // "can counteract once during the turning point"
+    guarded.guardSpentTP = state.turningPoint; // "cannot counteract during the turning point" after On Guard
+    enemy.ready = false;
+    enemy.expended = true;
+    enemy.order = 'conceal';
+
+    const mine = counteractCandidates(ctx, state, 'p1').map((o) => o.id);
+    expect(mine).toContain(conceal.id); // widened by Astartes — a Conceal order is no bar
+    expect(mine).toContain(engage.id); // the printed default is untouched
+    expect(mine).not.toContain(spent.id); // once per turning point still holds
+    expect(mine).not.toContain(guarded.id); // the On Guard lockout still holds
+    expect(mine).not.toContain(enemy.id); // "EACH FRIENDLY ANGEL OF DEATH operative"
+
+    // Scope check: p1's own binding leaves an enemy operative at the core default.
+    const p1Only = new HookRegistry();
+    angelOfDeath.register(p1Only, 'p1', ctx);
+    expect(p1Only.emit('onCounteract', state, { state, operative: enemy, allowed: false }).allowed).toBe(false);
+    expect(p1Only.emit('onCounteract', state, { state, operative: conceal, allowed: false }).allowed).toBe(true);
   });
 });
 

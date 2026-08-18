@@ -210,7 +210,24 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
   }
 
   // ---- printed constraints -------------------------------------------------
-  const countRole = (role: string): number => resolved.filter((r) => norm(r.entry.role) === norm(role)).length;
+  /**
+   * "…can only include up to one GRAVIS operative."
+   *
+   * A printed cap names a role on the selection list most of the time, but sometimes it names a
+   * datacard KEYWORD that several list rows share — the Deathwatch GRAVIS cap covers the
+   * BOMBARD, BREACHER and HORDE-SLAYER rows. Matching only `entry.role` made that constraint
+   * dead, and `defaultRoster` happily produced a two-GRAVIS kill team the validator accepted.
+   * So: match the role first, and fall back to the keyword when no row carries that role.
+   */
+  const roleMatches = (entry: SelectionEntry, role: string): boolean => norm(entry.role) === norm(role);
+  const anyRowHasRole = (role: string): boolean => selectionEntries(data).some((e) => roleMatches(e, role));
+  const countRole = (role: string): number => {
+    if (anyRowHasRole(role)) return resolved.filter((r) => roleMatches(r.entry, role)).length;
+    return resolved.filter((r) => {
+      const card = data.datacards.find((c) => c.id === r.entry.datacardId);
+      return (card?.keywords ?? []).some((k) => norm(k) === norm(role));
+    }).length;
+  };
   for (const c of sel.constraints) {
     if (c.kind === 'maxCount') {
       const cc = c as { role: string; max: number };
