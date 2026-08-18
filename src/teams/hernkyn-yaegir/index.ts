@@ -20,7 +20,7 @@
 import { getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain } from '../../core/context.ts';
 import { successes } from '../../core/dice.ts';
-import { baseRadius, dist, distancePointToPoly, pointInPoly } from '../../core/geometry.ts';
+import { baseRadius, baseWhollyWithin, dist, distancePointToPoly, pointInPoly } from '../../core/geometry.ts';
 import { HookRegistry, type RerollGrant } from '../../core/hooks.ts';
 import { validateMove } from '../../core/movement.ts';
 import { sideWeapon } from '../../core/sequences/fight.ts';
@@ -63,6 +63,7 @@ import {
   enemiesInControlRange,
   gambitUsed,
   grantWeapon,
+  grantedWeapons,
   grantFreeAction,
   hasEquipment,
   removeMarker,
@@ -233,11 +234,15 @@ export function minefieldMarkers(state: GameState, player: PlayerId): MarkerStat
 function ensureMinefield(T: TeamHooks, state: GameState): void {
   const made = bucket(state, 'hy.minefieldMade');
   if (made[T.player]) return;
-  const owner = T.friendlies(state).find((o) => o.datacardId === C.ironbraek);
-  if (!owner) {
-    if (T.friendlies(state).length > 0) made[T.player] = true; // no IRONBRAEK in this kill team
+  const roster = T.friendlies(state);
+  if (roster.length === 0) return; // the kill team has not been selected yet
+  if (!roster.some((o) => o.datacardId === C.ironbraek)) {
+    made[T.player] = true; // no IRONBRAEK in this kill team, so no Minefield markers
     return;
   }
+  // Undeployed operatives sit off the board at (-100,-100); wait until the IRONBRAEK is placed.
+  const owner = roster.find((o) => o.datacardId === C.ironbraek && o.pos.x > -50);
+  if (!owner) return;
   made[T.player] = true;
 
   // "three of them are HY-Pex mines … and two are blank" — which is which is hidden from the
@@ -250,9 +255,17 @@ function ensureMinefield(T: TeamHooks, state: GameState): void {
   }
   const isMine = new Set(order.slice(0, 3));
 
+  // One lattice, sorted outwards from the IRONBRAEK, so each marker takes the nearest legal spot.
+  const map = state.map;
+  const lattice: Vec2[] = [];
+  for (let x = 1; x <= map.board.w - 1; x += 1)
+    for (let y = 1; y <= map.board.h - 1; y += 1) lattice.push({ x, y });
+  lattice.sort((a, b) => dist(a, owner.pos) - dist(b, owner.pos) || a.x - b.x || a.y - b.y);
+  const zone = minefieldZone(T, state);
+
   const placed: Vec2[] = [];
   for (let i = 0; i < 5; i++) {
-    const pos = nextMinefieldPos(T, state, owner, placed);
+    const pos = lattice.find((p) => minefieldPosLegal(zone, p, placed));
     if (!pos) break;
     placed.push(pos);
     const marker: MarkerState = {
@@ -274,52 +287,47 @@ function ensureMinefield(T: TeamHooks, state: GameState): void {
   });
 }
 
-function nextMinefieldPos(
-  T: TeamHooks,
-  state: GameState,
-  owner: OperativeState,
-  placed: Vec2[],
-): Vec2 | undefined {
-  const map = state.map;
-  const enemyZones = map.dropZones[T.player === 'p1' ? 'p2' : 'p1'] ?? [];
-  const others = Object.values(state.markers).filter((m) => m.flags['minefield'] !== true);
-  const avoid: { poly: Vec2[] }[] = [];
-  const solid: { poly: Vec2[] }[] = [];
+/** Everything the printed placement constraints measure against, gathered once. */
+interface MinefieldZone {
+  board: { w: number; h: number };
+  enemyZones: Vec2[][];
+  others: { pos: Vec2; r: number }[];
+  avoid: Vec2[][];
+  solid: Vec2[][];
+}
+
+function minefieldZone(T: TeamHooks, state: GameState): MinefieldZone {
+  const avoid: Vec2[][] = [];
+  const solid: Vec2[][] = [];
   if (T.ctx) {
     for (const part of terrain(T.ctx, state).parts) {
-      if (hasType(part, 'Accessible') || part.role === 'accessPoint') avoid.push(part);
-      if (part.solid !== false && part.z0 <= EPS) solid.push(part);
+      if (hasType(part, 'Accessible') || part.role === 'accessPoint') avoid.push(part.poly);
+      else if (part.solid !== false && part.z0 <= EPS) solid.push(part.poly);
     }
   }
-  const ok = (p: Vec2): boolean => {
-    if (p.x < MARKER_R || p.y < MARKER_R || p.x > map.board.w - MARKER_R || p.y > map.board.h - MARKER_R) return false;
-    // "more than 6\" from your opponent's drop zone"
-    for (const zone of enemyZones) if (distancePointToPoly(p, zone) - MARKER_R <= 6 + EPS) return false;
-    // "more than 6\" from … your other Minefield markers"
-    for (const q of placed) if (dist(p, q) - 2 * MARKER_R <= 6 + EPS) return false;
-    // "more than 2\" from other markers"
-    for (const m of others) {
-      const r = baseRadius({ shape: 'round', mm: m.diameterMm });
-      if (dist(p, m.pos) - MARKER_R - r <= 2 + EPS) return false;
-    }
-    // "more than 2\" from … access points and Accessible terrain"
-    for (const part of avoid) if (distancePointToPoly(p, part.poly) - MARKER_R <= 2 + EPS) return false;
-    for (const part of solid) if (pointInPoly(p, part.poly)) return false;
-    return true;
+  return {
+    board: { w: state.map.board.w, h: state.map.board.h },
+    enemyZones: state.map.dropZones[T.player === 'p1' ? 'p2' : 'p1'] ?? [],
+    others: Object.values(state.markers)
+      .filter((m) => m.flags['minefield'] !== true)
+      .map((m) => ({ pos: m.pos, r: baseRadius({ shape: 'round', mm: m.diameterMm }) })),
+    avoid,
+    solid,
   };
-  let best: Vec2 | undefined;
-  let bestD = Infinity;
-  for (let x = 1; x <= map.board.w - 1; x += 1) {
-    for (let y = 1; y <= map.board.h - 1; y += 1) {
-      const p = { x, y };
-      const d = dist(p, owner.pos);
-      if (d >= bestD) continue;
-      if (!ok(p)) continue;
-      best = p;
-      bestD = d;
-    }
-  }
-  return best;
+}
+
+function minefieldPosLegal(zone: MinefieldZone, p: Vec2, placed: Vec2[]): boolean {
+  if (p.x < MARKER_R || p.y < MARKER_R || p.x > zone.board.w - MARKER_R || p.y > zone.board.h - MARKER_R) return false;
+  // "more than 6\" from … your other Minefield markers"
+  for (const q of placed) if (dist(p, q) - 2 * MARKER_R <= 6 + EPS) return false;
+  // "more than 2\" from other markers"
+  for (const m of zone.others) if (dist(p, m.pos) - MARKER_R - m.r <= 2 + EPS) return false;
+  // "more than 6\" from your opponent's drop zone"
+  for (const poly of zone.enemyZones) if (distancePointToPoly(p, poly) - MARKER_R <= 6 + EPS) return false;
+  // "more than 2\" from … access points and Accessible terrain"
+  for (const poly of zone.avoid) if (distancePointToPoly(p, poly) - MARKER_R <= 2 + EPS) return false;
+  for (const poly of zone.solid) if (pointInPoly(p, poly)) return false;
+  return true;
 }
 
 /**
@@ -584,7 +592,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   //  damage total computed before this hook can run, so the discarded dice are also cancelled
   //  where they land: no further attack damage from THAT sequence reaches the operative.
   reg.on('onDamage', T.bindText(A.outrightConviction, abilityText(C.theyn, A.outrightConviction), 9), (ev) => {
-    if (ev.kind !== 'attack') return;
+    if (ev.kind !== 'attack' || !ev.state.sequence) return;
     const shield = effectOn(ev.state, ev.target.id, E.convictionShield);
     if (!shield || shield.data?.['seq'] !== seqKey(ev.state)) return;
     ev.amount = 0;
@@ -714,11 +722,15 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     ensureMinefield(T, ev.state);
   });
   reg.on('onActivationStart', T.bindText(A.minefield, abilityText(C.ironbraek, A.minefield), 12), (ev) => {
+    void ev.operative;
     ensureMinefield(T, ev.state);
-    checkMinefield(T, ev.state);
   });
+  // The trap is sprung at the END of an activation, not at its start: `EndActivation` calls
+  // `removeIncapacitated` immediately after this hook, so an operative a mine kills leaves the
+  // killzone cleanly instead of activating while incapacitated.
   reg.on('onActivationEnd', T.bindText(A.hyPexMines, abilityText(C.ironbraek, A.hyPexMines), 12), (ev) => {
     void ev.operative;
+    ensureMinefield(T, ev.state);
     checkMinefield(T, ev.state);
   });
   // "Whenever this operative is readied, if it's not within control range of enemy operatives,
@@ -819,11 +831,8 @@ function dauntlessCandidates(T: TeamHooks, state: GameState): OperativeState[] {
 
 function whollyInDropZone(T: TeamHooks, state: GameState, op: OperativeState): boolean {
   const zones = state.map.dropZones[state.setup.dropZone[op.player] ?? op.player] ?? [];
-  const card = T.card(op);
-  const r = baseRadius(card?.base ?? { shape: 'round', mm: 28 });
-  return zones.some(
-    (zone) => pointInPoly(op.pos, zone) && distancePointToPoly(op.pos, zone) >= r - EPS,
-  );
+  const base = T.card(op)?.base ?? { shape: 'round' as const, mm: 28 };
+  return baseWhollyWithin(op.pos, base, op.rot, zones);
 }
 
 /** "All remaining attack dice are discarded (including yours if this operative is fighting…)." */
@@ -1168,6 +1177,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
   reg.on('availableWeapons', T.bind(EQ.plasmaKnives, 30), (ev) => {
     if (!hasEquipment(ev.state, T.player, EQ.plasmaKnives)) return;
     if (!T.mineKw(ev.operative, KW)) return;
+    if (grantedWeapons(ev.operative).some((w) => same(w.name, PLASMA_KNIFE_WEAPON.name))) return;
     if (carriesOwnPlasmaKnife(T, ev.state, ev.operative)) return;
     grantWeapon(ev.operative, structuredClone(PLASMA_KNIFE_WEAPON));
   });

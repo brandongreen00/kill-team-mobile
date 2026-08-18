@@ -256,10 +256,19 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
    * "TROOPER" must not also exempt RECON-TROOPER, VOX-TROOPER or DEMO-TROOPER, which are
    * different operatives that happen to end in the same word.
    */
+  const allRoles = selectionEntries(data).map((e) => norm(e.role));
   const isExemptRole = (role: string): boolean => {
     const n = norm(role);
     if (uniqueExcept.has(n)) return true;
-    return n.split(/\s+/).some((token) => uniqueExcept.has(token));
+    // Fall back to the role KEYWORD only when the list prints no row of that exact name. Hunter
+    // Clade exempts "GUNNER" and "WARRIOR" but prints only prefixed rows (SKITARII RANGER GUNNER,
+    // RANGER WARRIOR), so the exemption must mean those. Hearthkyn Salvager exempts the same two
+    // words and prints a plain WARRIOR row *beside* a JUMP PACK WARRIOR row — there the exemption
+    // names the plain operative, and the jump-pack one is a different operative that is still
+    // unique. Kasrkin is the same shape with TROOPER beside RECON-/VOX-/DEMO-TROOPER.
+    return n
+      .split(/\s+/)
+      .some((token) => uniqueExcept.has(token) && !allRoles.includes(token));
   };
   const byIndex = new Map<number, number>();
   for (const r of resolved) byIndex.set(r.index, (byIndex.get(r.index) ?? 0) + 1);

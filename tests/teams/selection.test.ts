@@ -176,6 +176,25 @@ describe('selection rules (shared, driven by data/teams/<slug>.json)', () => {
     expect(validateRosterFor(data, defaultRoster(data)).errors).toEqual([]);
   });
 
+  it('HEARTHKYN SALVAGER: the WARRIOR exemption does NOT leak to JUMP PACK WARRIOR', () => {
+    // The list prints a plain WARRIOR row BESIDE a JUMP PACK WARRIOR row, so the printed
+    // exemption names the plain operative; the jump-pack one is a different operative and stays
+    // unique. Hunter Clade is the opposite shape — no plain row at all — so there the keyword
+    // fallback must fire. The rule that satisfies both: fall back to the keyword only when the
+    // list prints no row of that exact name.
+    const data = teamData('hearthkyn-salvager');
+    const roles = data.selection.list.map((e) => e.role);
+    expect(roles).toContain('WARRIOR');
+    expect(roles).toContain('JUMP PACK WARRIOR');
+    const picks = defaultRoster(data);
+    expect(validateRosterFor(data, picks).errors).toEqual([]);
+    const jump = picks.filter((p) => p.datacardId.endsWith('jump-pack-warrior'));
+    expect(jump).toHaveLength(1);
+    // A second one is refused as a repeat.
+    const twice = validateRosterFor(data, [...picks, { ...jump[0]! }]);
+    expect(twice.errors.join(' ')).toContain('only include each operative on this list once');
+  });
+
   it('KASRKIN: the TROOPER exemption does NOT leak to RECON-TROOPER, VOX-TROOPER or DEMO-TROOPER', () => {
     // Token matching, deliberately not substring matching — those are different operatives.
     const data = teamData('kasrkin');
