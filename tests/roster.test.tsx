@@ -318,8 +318,6 @@ describe('every kill team can be fielded', () => {
   const KNOWN_GAPS: Record<string, string> = {
     battleclade:
       'COMBAT SERVITOR parses two role-level maxCount rows (1 and 3); the printed rule caps them per WEAPON ("up to one with meltagun... up to three with incendine igniter"), so the stricter row makes the 8-operative group unfillable',
-    'inquisitorial-agent':
-      'the second group of 5 may come from REQUISITIONED operatives defined in the Inquisitorial Requisition faction rule rather than from the selection list',
   };
 
   for (const slug of slugs) {

@@ -23,6 +23,15 @@ import wolfScoutsJson from '../../data/teams/wolf-scouts.json';
 import legionaryJson from '../../data/teams/legionary.json';
 import nemesisClawJson from '../../data/teams/nemesis-claw.json';
 import warpcovenJson from '../../data/teams/warpcoven.json';
+// Batch 3 — Imperium, non-Astartes.
+import deathKorpsJson from '../../data/teams/death-korps.json';
+import exactionSquadJson from '../../data/teams/exaction-squad.json';
+import novitiatesJson from '../../data/teams/novitiates.json';
+import sanctifiersJson from '../../data/teams/sanctifiers.json';
+import ratlingsJson from '../../data/teams/ratlings.json';
+import inquisitorialAgentJson from '../../data/teams/inquisitorial-agent.json';
+import elucidianStarstriderJson from '../../data/teams/elucidian-starstrider.json';
+import spectreSquadJson from '../../data/teams/spectre-squad.json';
 import type { Datacard } from '../core/types.ts';
 
 export interface LoadoutOption {
@@ -169,6 +178,14 @@ export const TEAM_DATA: Record<string, TeamData> = {
   legionary: normalise(legionaryJson),
   'nemesis-claw': normalise(nemesisClawJson),
   warpcoven: normalise(warpcovenJson),
+  'death-korps': normalise(deathKorpsJson),
+  'exaction-squad': normalise(exactionSquadJson),
+  novitiates: normalise(novitiatesJson),
+  sanctifiers: normalise(sanctifiersJson),
+  ratlings: normalise(ratlingsJson),
+  'inquisitorial-agent': normalise(inquisitorialAgentJson),
+  'elucidian-starstrider': normalise(elucidianStarstriderJson),
+  'spectre-squad': normalise(spectreSquadJson),
 };
 
 export function teamData(id: string): TeamData {
