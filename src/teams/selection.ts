@@ -44,8 +44,8 @@ const norm = (s: string): string => s.trim().toLowerCase();
  * The groups a roster must fill, with every `sameAsAbove` group folded into the list group it
  * refers back to (docs/TEAM-DATA.md §5: "`sameAsAbove` (Inquisitorial Agent's second block)").
  */
-export function groupTargets(sel: TeamData['selection']): { index: number; count: number; rawText: string }[] {
-  const out: { index: number; count: number; rawText: string }[] = [];
+export function groupTargets(sel: TeamData['selection']): { index: number; count: number; rawText: string; kind: string }[] {
+  const out: { index: number; count: number; rawText: string; kind: string }[] = [];
   for (const g of sel.groups ?? []) {
     if (g.kind === 'sameAsAbove' && out.length > 0) {
       const prev = out[out.length - 1]!;
@@ -53,7 +53,7 @@ export function groupTargets(sel: TeamData['selection']): { index: number; count
       prev.rawText = `${prev.rawText} ${g.rawText.trim()}`;
       continue;
     }
-    out.push({ index: g.index, count: g.count, rawText: g.rawText });
+    out.push({ index: g.index, count: g.count, rawText: g.rawText, kind: g.kind });
   }
   return out;
 }
@@ -213,6 +213,19 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
     if (cost !== group.count) {
       fail('groupCount', `${group.rawText.trim()} — ${cost} selected`);
     }
+    // "Every ELUCIDIAN STARSTRIDER operative in the following list:" — an `every` group is a
+    // FIXED roster, so each printed row must appear exactly its own `count` times. Checking only
+    // the group total let `defaultRoster` field ELUCIA VHANE plus nine CANIDs and call it legal.
+    if (group.kind !== 'every') continue;
+    selectionEntries(data).forEach((entry, index) => {
+      // The leader is printed in both `leaderList` and `list`, and a leader pick resolves to the
+      // `leaderList` row; its count is already checked by the leader check above.
+      if (entry.group !== group.index || entry.isLeader) return;
+      const want = entry.count ?? 1;
+      const got = resolved.filter((r) => r.index === index).length;
+      if (got !== want)
+        fail('groupCount', `${group.rawText.trim()} — ${want} ${entry.role}, ${got} selected`);
+    });
   }
 
   // ---- uniqueness ----------------------------------------------------------
@@ -381,6 +394,17 @@ export function defaultRoster(data: TeamData): RosterPickIn[] {
     // SERGEANT, ..."), skipping left the roster with nothing but the leader. The leader's
     // pick is already counted in `filled` below, so a group of exactly one leader fills
     // itself and needs no special case.
+    // An `every` group is a fixed roster: take each printed row exactly `count` times.
+    if (group.kind === 'every') {
+      entries.forEach((entry, index) => {
+        // `isLeader` rows are already placed by the leader pass above — the leader of an `every`
+        // roster is printed in both `leaderList` and `list` (as it is for any in-list leader).
+        if (entry.group !== group.index || entry.isLeader) return;
+        const have = picks.filter((p) => resolveEntry(data, p)?.index === index).length;
+        for (let n = have; n < (entry.count ?? 1); n++) picks.push(pickOf(entry, index, n));
+      });
+      continue;
+    }
     let filled = picks
       .map((p) => resolveEntry(data, p))
       .filter((r) => r && r.entry.group === group.index)

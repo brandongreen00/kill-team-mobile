@@ -139,6 +139,30 @@ describe('selection rules (shared, driven by data/teams/<slug>.json)', () => {
     expect(same.errors.join(' ')).toContain('each GUNNER operative must have a different option');
   });
 
+  it('ELUCIDIAN STARSTRIDER: "Every ELUCIDIAN STARSTRIDER operative in the following list" is a FIXED roster', () => {
+    const data = teamData('elucidian-starstrider');
+    const group = data.selection.groups.find((g) => g.kind === 'every')!;
+    expect(group.rawText).toContain('Every');
+    // Each printed row must appear exactly its own `count` times — checking only the group total
+    // let the default roster field ELUCIA VHANE plus nine CANIDs and call it legal.
+    const picks = defaultRoster(data);
+    expect(validateRosterFor(data, picks).errors).toEqual([]);
+    const byCard = new Map<string, number>();
+    for (const p of picks) byCard.set(p.datacardId, (byCard.get(p.datacardId) ?? 0) + 1);
+    expect(byCard.get('elucidian-starstrider.canid')).toBe(1);
+    expect(byCard.get('elucidian-starstrider.voidsman')).toBe(4); // 3 with lasgun + 1 with rotor cannon
+    expect(picks).toHaveLength(data.selection.totalOperatives);
+
+    // Swapping any row for another copy of a different row is refused, naming the printed group.
+    const canid = picks.find((p) => p.datacardId === 'elucidian-starstrider.canid')!;
+    const swapped = picks.map((p) =>
+      p.datacardId === 'elucidian-starstrider.voidmaster' ? { ...canid } : p,
+    );
+    const v = validateRosterFor(data, swapped);
+    expect(v.ok).toBe(false);
+    expect(v.errors.join(' ')).toContain('Every ELUCIDIAN STARSTRIDER operative');
+  });
+
   it('a weapon no selection option names is always available, including Limited x weapons', () => {
     const data = teamData('imperial-navy-breacher');
     const grenadier = data.datacards.find((c) => c.id === 'imperial-navy-breacher.navis-grenadier')!;

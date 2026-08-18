@@ -531,7 +531,7 @@ export function defineTeam(spec: TeamSpec): KtTeamModule {
     ...data.firefightPloys.map((p): PloyDef => ployDef(p, 'firefight', spec)),
   ];
 
-  for (const id of spec.rareRules ?? data.rareWeaponRules) registerRareWeaponRule(id, rareRuleText(id), data.id);
+  for (const id of spec.rareRules ?? data.rareWeaponRules) registerRareWeaponRule(id, rareRuleTextFor(data, id), data.id);
   for (const def of spec.actions?.(data) ?? []) registerAction(def);
 
   const register = (reg: HookRegistry, player: PlayerId, ctx?: GameContext): void => {
@@ -608,6 +608,39 @@ export function rareRuleText(id: string): string {
       `No verbatim text for rare weapon rule '${id}' — it is not in data/teams/_rare-weapon-rules.json (re-run pnpm teams:normalise)`,
     );
   return t;
+}
+
+/** The printed NAME of a rare rule ('AntiPSYKER' -> 'Anti-PSYKER'), for locating a team's own copy. */
+const RARE_RULE_NAME: Record<string, string> = Object.fromEntries(
+  (rareRulesJson as { rules: { id: string; name: string }[] }).rules.map((r) => [r.id, r.name]),
+);
+
+/**
+ * The definition of a rare weapon rule **as this kill team prints it**.
+ *
+ * The generated registry stores one definition per rule id, taken from whichever team the
+ * normaliser resolved it from — but teams genuinely differ (docs/DECISIONS.md D-025: Anti-PSYKER
+ * adds a Dmg bump on the Novitiates' Condemnor and does not on the Celestian Insidiants' own
+ * footnote). Resolution order mirrors the normaliser's, against THIS team's data first:
+ * a datacard ability of that name, then a faction rule of that name, then a `*Name:` footnote
+ * line inside any faction rule, and only then the shared registry.
+ */
+export function rareRuleTextFor(data: TeamData, id: string): string {
+  const name = RARE_RULE_NAME[id] ?? id;
+  const lower = name.toLowerCase();
+  for (const card of data.datacards) {
+    const ability = card.abilities.find((a) => a.name.trim().toLowerCase() === lower);
+    if (ability) return ability.text;
+  }
+  const rule = data.factionRules.find((r) => r.name.trim().toLowerCase() === lower);
+  if (rule) return rule.text;
+  // "*Anti-PSYKER: Whenever this weapon is being used against…" — a footnote inside a rule.
+  const marker = new RegExp(`^\\s*[*^]\\d*\\s*${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*:\\s*(.+)$`, 'im');
+  for (const r of data.factionRules) {
+    const m = marker.exec(r.text);
+    if (m?.[1]) return m[1].trim();
+  }
+  return rareRuleText(id);
 }
 
 export { aliveOperatives, log, enemiesInControlRange, aplOf, otherPlayer };

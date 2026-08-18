@@ -36,22 +36,43 @@ export const UNIVERSAL_WEAPON_RULES = [
 
 const UNIVERSAL_SET = new Set<string>(UNIVERSAL_WEAPON_RULES);
 
-/** Rare rules registered by team modules, with the verbatim text for the tooltip. */
-const rareRegistry = new Map<string, { text: string; teams: Set<string> }>();
+/**
+ * Rare rules registered by team modules, with the verbatim text for the tooltip.
+ *
+ * The SAME rule id can be printed differently by different kill teams, so the text is kept per
+ * team as well as generically. Anti-PSYKER is the proven case: the Novitiates' Condemnor prints
+ * "…add 1 to both Dmg stats of this weapon and it has the Lethal 5+ weapon rule", while the
+ * Celestian Insidiants' own footnote prints only "…it has the Lethal 5+ weapon rule"
+ * (docs/DECISIONS.md D-025). Showing one team the other's wording is simply wrong.
+ */
+const rareRegistry = new Map<string, { text: string; teams: Set<string>; byTeam: Map<string, string> }>();
 
 export function registerRareWeaponRule(id: string, text: string, teamId: string): void {
-  const entry = rareRegistry.get(id) ?? { text, teams: new Set<string>() };
+  const entry = rareRegistry.get(id) ?? { text, teams: new Set<string>(), byTeam: new Map<string, string>() };
   entry.text ||= text;
   entry.teams.add(teamId);
+  if (text) entry.byTeam.set(teamId, text);
   rareRegistry.set(id, entry);
+}
+
+/** The verbatim definition as THIS kill team prints it, falling back to the generic one. */
+export function rareWeaponRuleText(id: string, teamId?: string): string | undefined {
+  const entry = rareRegistry.get(id);
+  if (!entry) return undefined;
+  return (teamId ? entry.byTeam.get(teamId) : undefined) ?? entry.text;
 }
 
 export function isKnownWeaponRule(id: string): boolean {
   return UNIVERSAL_SET.has(id) || rareRegistry.has(id);
 }
 
-export function rareWeaponRules(): { id: string; text: string; teams: string[] }[] {
-  return [...rareRegistry.entries()].map(([id, v]) => ({ id, text: v.text, teams: [...v.teams] }));
+export function rareWeaponRules(): { id: string; text: string; teams: string[]; byTeam: Record<string, string> }[] {
+  return [...rareRegistry.entries()].map(([id, v]) => ({
+    id,
+    text: v.text,
+    teams: [...v.teams],
+    byTeam: Object.fromEntries(v.byTeam),
+  }));
 }
 
 export function assertKnownRules(rules: WeaponRule[], where: string): void {
