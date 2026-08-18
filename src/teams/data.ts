@@ -32,6 +32,15 @@ import ratlingsJson from '../../data/teams/ratlings.json';
 import inquisitorialAgentJson from '../../data/teams/inquisitorial-agent.json';
 import elucidianStarstriderJson from '../../data/teams/elucidian-starstrider.json';
 import spectreSquadJson from '../../data/teams/spectre-squad.json';
+// Batch 4 — Aeldari, Drukhari, Leagues of Votann.
+import bladesOfKhaineJson from '../../data/teams/blades-of-khaine.json';
+import corsairVoidscarredJson from '../../data/teams/corsair-voidscarred.json';
+import voidDancerTroupeJson from '../../data/teams/void-dancer-troupe.json';
+import exoditeDragonMastersJson from '../../data/teams/exodite-dragon-masters.json';
+import handOfTheArchonJson from '../../data/teams/hand-of-the-archon.json';
+import mandrakesJson from '../../data/teams/mandrakes.json';
+import hearthkynSalvagerJson from '../../data/teams/hearthkyn-salvager.json';
+import hernkynYaegirJson from '../../data/teams/hernkyn-yaegir.json';
 import type { Datacard } from '../core/types.ts';
 
 export interface LoadoutOption {
@@ -186,6 +195,14 @@ export const TEAM_DATA: Record<string, TeamData> = {
   'inquisitorial-agent': normalise(inquisitorialAgentJson),
   'elucidian-starstrider': normalise(elucidianStarstriderJson),
   'spectre-squad': normalise(spectreSquadJson),
+  'blades-of-khaine': normalise(bladesOfKhaineJson),
+  'corsair-voidscarred': normalise(corsairVoidscarredJson),
+  'void-dancer-troupe': normalise(voidDancerTroupeJson),
+  'exodite-dragon-masters': normalise(exoditeDragonMastersJson),
+  'hand-of-the-archon': normalise(handOfTheArchonJson),
+  mandrakes: normalise(mandrakesJson),
+  'hearthkyn-salvager': normalise(hearthkynSalvagerJson),
+  'hernkyn-yaegir': normalise(hernkynYaegirJson),
 };
 
 export function teamData(id: string): TeamData {
