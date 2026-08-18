@@ -40,6 +40,24 @@ export interface RosterValidation {
 
 const norm = (s: string): string => s.trim().toLowerCase();
 
+/**
+ * The groups a roster must fill, with every `sameAsAbove` group folded into the list group it
+ * refers back to (docs/TEAM-DATA.md §5: "`sameAsAbove` (Inquisitorial Agent's second block)").
+ */
+export function groupTargets(sel: TeamData['selection']): { index: number; count: number; rawText: string; kind: string }[] {
+  const out: { index: number; count: number; rawText: string; kind: string }[] = [];
+  for (const g of sel.groups ?? []) {
+    if (g.kind === 'sameAsAbove' && out.length > 0) {
+      const prev = out[out.length - 1]!;
+      prev.count += g.count;
+      prev.rawText = `${prev.rawText} ${g.rawText.trim()}`;
+      continue;
+    }
+    out.push({ index: g.index, count: g.count, rawText: g.rawText, kind: g.kind });
+  }
+  return out;
+}
+
 /** Stable id for a selection row: several rows can share a datacard (Kasrkin GUNNER ×5). */
 export function entryId(data: TeamData, index: number): string {
   const entry = selectionEntries(data)[index];
@@ -185,12 +203,29 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
   }
 
   // ---- per-group counts ("1 PLASMACYTE REANIMATOR operative") ---------------
-  for (const group of sel.groups ?? []) {
+  // A `sameAsAbove` group draws from the SAME list the preceding group did — "5 INQUISITORIAL
+  // AGENT operatives selected from the list above, or REQUISITIONED operatives…". No selection
+  // entry is tagged with its index, so it is folded into its source group and the two counts are
+  // summed; otherwise it is a group of five that nothing can ever fill.
+  for (const group of groupTargets(sel)) {
     const inGroup = resolved.filter((r) => r.entry.group === group.index);
     const cost = inGroup.reduce((n, r) => n + r.entry.selectionCost, 0);
     if (cost !== group.count) {
       fail('groupCount', `${group.rawText.trim()} — ${cost} selected`);
     }
+    // "Every ELUCIDIAN STARSTRIDER operative in the following list:" — an `every` group is a
+    // FIXED roster, so each printed row must appear exactly its own `count` times. Checking only
+    // the group total let `defaultRoster` field ELUCIA VHANE plus nine CANIDs and call it legal.
+    if (group.kind !== 'every') continue;
+    selectionEntries(data).forEach((entry, index) => {
+      // The leader is printed in both `leaderList` and `list`, and a leader pick resolves to the
+      // `leaderList` row; its count is already checked by the leader check above.
+      if (entry.group !== group.index || entry.isLeader) return;
+      const want = entry.count ?? 1;
+      const got = resolved.filter((r) => r.index === index).length;
+      if (got !== want)
+        fail('groupCount', `${group.rawText.trim()} — ${want} ${entry.role}, ${got} selected`);
+    });
   }
 
   // ---- uniqueness ----------------------------------------------------------
@@ -198,15 +233,42 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
   for (const c of sel.constraints) {
     if (c.kind === 'uniqueExcept') for (const role of (c as { roles: string[] }).roles) uniqueExcept.add(norm(role));
   }
+  // An explicit printed cap on a role overrides the blanket "each operative once": the
+  // Inquisitorial Agent prints "your kill team can only include each operative on this list once,
+  // unless you're not including any REQUISITIONED operatives, in which case you can include up to
+  // two GUN SERVITOR operatives", which scrapes as a `maxCount` of 2 alongside the uniqueness
+  // constraint. Without this the cap and the uniqueness rule contradict each other and the role
+  // can never be taken twice.
+  const explicitCap = new Map<string, number>();
+  for (const c of sel.constraints)
+    if (c.kind === 'maxCount') {
+      const cc = c as { role: string; max: number };
+      explicitCap.set(norm(cc.role), cc.max);
+    }
   const byIndex = new Map<number, number>();
   for (const r of resolved) byIndex.set(r.index, (byIndex.get(r.index) ?? 0) + 1);
   for (const [index, n] of byIndex) {
     const entry = selectionEntries(data)[index]!;
     if (n <= 1) continue;
-    const exempt = uniqueExcept.has(norm(entry.role)) || !entry.uniqueUnlessRole;
+    const cap = explicitCap.get(norm(entry.role));
+    const exempt = uniqueExcept.has(norm(entry.role)) || !entry.uniqueUnlessRole || (cap !== undefined && n <= cap);
     if (!exempt) {
       fail('unique', `your kill team can only include each operative on this list once — ${entry.role} selected ${n} times`);
     }
+  }
+
+  // "(each must have a different option)" — two picks of the same row cannot share a loadout.
+  for (const c of sel.constraints) {
+    if (c.kind !== 'distinctOptions') continue;
+    const cc = c as unknown as { role: string };
+    const role = norm(cc.role);
+    const picksOfRole = resolved.filter((r) => norm(r.entry.role) === role);
+    if (picksOfRole.length <= 1) continue;
+    const keys = picksOfRole.map((r) =>
+      [...(r.pick.loadoutIds ?? []), ...(r.pick.loadoutId ? [r.pick.loadoutId] : [])].sort().join('+'),
+    );
+    if (new Set(keys).size !== keys.length)
+      fail('distinctOptions', `each ${cc.role} operative must have a different option`);
   }
 
   // ---- printed constraints -------------------------------------------------
@@ -300,15 +362,23 @@ export function loadoutOf(state: GameState, operativeId: string): string[] | und
 export function defaultRoster(data: TeamData): RosterPickIn[] {
   const entries = selectionEntries(data);
   const picks: RosterPickIn[] = [];
-  const pickOf = (entry: SelectionEntry, index: number): RosterPickIn => ({
-    datacardId: entry.datacardId,
-    entryId: entryId(data, index),
-    loadoutIds: [
-      ...(entry.loadouts[0] ? [entry.loadouts[0].id] : []),
-      ...entry.optionGroups.map((g) => g.choices[0]?.id).filter((x): x is string => Boolean(x)),
-      ...entry.fixedChoiceGroups.map((g) => g.choices[0]?.id).filter((x): x is string => Boolean(x)),
-    ],
-  });
+  /**
+   * `nth` is how many times this row has already been taken. A row that may be repeated under an
+   * explicit cap usually also prints "(each must have a different option)", so the nth pick takes
+   * the nth loadout where the row offers one — the Inquisitorial Agent's two GUN SERVITORs.
+   */
+  const pickOf = (entry: SelectionEntry, index: number, nth = 0): RosterPickIn => {
+    const at = <T>(xs: T[]): T | undefined => xs[Math.min(nth, xs.length - 1)];
+    return {
+      datacardId: entry.datacardId,
+      entryId: entryId(data, index),
+      loadoutIds: [
+        ...(entry.loadouts.length > 0 ? [at(entry.loadouts)!.id] : []),
+        ...entry.optionGroups.map((g) => at(g.choices)?.id).filter((x): x is string => Boolean(x)),
+        ...entry.fixedChoiceGroups.map((g) => at(g.choices)?.id).filter((x): x is string => Boolean(x)),
+      ],
+    };
+  };
 
   // Leader group(s) first — every group whose entries are marked isLeader.
   entries.forEach((entry, index) => {
@@ -318,12 +388,23 @@ export function defaultRoster(data: TeamData): RosterPickIn[] {
   });
 
   // Then fill each remaining group to its printed count, in list order.
-  for (const group of data.selection.groups ?? []) {
+  for (const group of groupTargets(data.selection)) {
     // Do NOT skip a group just because the leader belongs to it. When the leader is drawn
     // from the same list ("5 DEATHWATCH operatives selected from the following list: WATCH
     // SERGEANT, ..."), skipping left the roster with nothing but the leader. The leader's
     // pick is already counted in `filled` below, so a group of exactly one leader fills
     // itself and needs no special case.
+    // An `every` group is a fixed roster: take each printed row exactly `count` times.
+    if (group.kind === 'every') {
+      entries.forEach((entry, index) => {
+        // `isLeader` rows are already placed by the leader pass above — the leader of an `every`
+        // roster is printed in both `leaderList` and `list` (as it is for any in-list leader).
+        if (entry.group !== group.index || entry.isLeader) return;
+        const have = picks.filter((p) => resolveEntry(data, p)?.index === index).length;
+        for (let n = have; n < (entry.count ?? 1); n++) picks.push(pickOf(entry, index, n));
+      });
+      continue;
+    }
     let filled = picks
       .map((p) => resolveEntry(data, p))
       .filter((r) => r && r.entry.group === group.index)
@@ -335,10 +416,11 @@ export function defaultRoster(data: TeamData): RosterPickIn[] {
         const entry = entries[index]!;
         if (entry.group !== group.index || entry.isLeader) continue;
         if (filled + entry.selectionCost > group.count) continue;
-        const trial = [...picks, pickOf(entry, index)];
+        const nth = picks.filter((p) => resolveEntry(data, p)?.index === index).length;
+        const trial = [...picks, pickOf(entry, index, nth)];
         const check = validateRosterFor(data, trial);
         if (check.codes.some((c) => !COUNT_CODES.includes(c))) continue;
-        picks.push(pickOf(entry, index));
+        picks.push(pickOf(entry, index, nth));
         filled += entry.selectionCost;
         added = true;
         break;

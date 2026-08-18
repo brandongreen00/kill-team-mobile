@@ -389,6 +389,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // The Select Weapon step is the only moment the engine tells a rule that a NEW shot is
   // starting, so it is where the ammunition is armed and where a stale one is dropped.
   reg.on('onSelectWeapon', T.bind(RULE_SPECIAL_ISSUE, 12), (ev) => {
+    if (ev.dryRun) return; // a `check` is a legality query — never mutate (see onSelectWeapon)
     const shooter = ev.ctx.attacker;
     if (shooter.player !== T.player) return;
     const eff = effectOn(ev.state, shooter.id, AMMO_EFFECT);

@@ -1061,6 +1061,7 @@ describe('PHOBOS STRIKE TEAM faction equipment', () => {
       state,
       ctx: attackCtx(shooter, carbine, 'Marksman bolt carbine', foe),
       allowed: true,
+      dryRun: false,
     });
     expect(effectiveRules(ctx, state, carbine, use).some((r) => r.id === 'Piercing' && r.x === 1)).toBe(true);
     // Another operative's weapon is untouched — the rule names the weapon that was selected.

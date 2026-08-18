@@ -20,6 +20,14 @@ import { wolfScouts } from './wolf-scouts/index.ts';
 import { legionary } from './legionary/index.ts';
 import { nemesisClaw } from './nemesis-claw/index.ts';
 import { warpcoven } from './warpcoven/index.ts';
+import { deathKorps } from './death-korps/index.ts';
+import { exactionSquad } from './exaction-squad/index.ts';
+import { novitiates } from './novitiates/index.ts';
+import { sanctifiers } from './sanctifiers/index.ts';
+import { ratlings } from './ratlings/index.ts';
+import { inquisitorialAgent } from './inquisitorial-agent/index.ts';
+import { elucidianStarstrider } from './elucidian-starstrider/index.ts';
+import { spectreSquad } from './spectre-squad/index.ts';
 
 /** Phase 5 batch 1. */
 export const BATCH_1: KtTeamModule[] = [
@@ -45,8 +53,20 @@ export const BATCH_2: KtTeamModule[] = [
   warpcoven,
 ];
 
+/** Phase 6 batch 3 — Imperium, non-Astartes. */
+export const BATCH_3: KtTeamModule[] = [
+  deathKorps,
+  exactionSquad,
+  novitiates,
+  sanctifiers,
+  ratlings,
+  inquisitorialAgent,
+  elucidianStarstrider,
+  spectreSquad,
+];
+
 /** Every implemented kill team, in batch order. */
-export const ALL_TEAM_MODULES: KtTeamModule[] = [...BATCH_1, ...BATCH_2];
+export const ALL_TEAM_MODULES: KtTeamModule[] = [...BATCH_1, ...BATCH_2, ...BATCH_3];
 
 export const TEAM_MODULES: Map<string, KtTeamModule> = new Map(ALL_TEAM_MODULES.map((m) => [m.id, m]));
 
@@ -73,6 +93,14 @@ export {
   legionary,
   nemesisClaw,
   warpcoven,
+  deathKorps,
+  exactionSquad,
+  novitiates,
+  sanctifiers,
+  ratlings,
+  inquisitorialAgent,
+  elucidianStarstrider,
+  spectreSquad,
 };
 export type { KtTeamModule } from './helpers.ts';
 export { defaultRoster, validateRosterFor, type RosterPickIn, type RosterValidation } from './selection.ts';

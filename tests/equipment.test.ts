@@ -374,6 +374,7 @@ describe('Explosive Grenades', () => {
       state: game.state,
       ctx: attackContext(game, a, enemy, 'Frag grenade'),
       allowed: true,
+      dryRun: false,
     });
     expect(ev.allowed).toBe(false);
   });

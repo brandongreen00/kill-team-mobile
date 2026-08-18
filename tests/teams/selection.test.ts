@@ -90,6 +90,79 @@ describe('selection rules (shared, driven by data/teams/<slug>.json)', () => {
     expect(validateRosterFor(data, picks).errors.join(' ')).toMatch(/more than 2 WEAPONS EXPERT/);
   });
 
+  it('INQUISITORIAL AGENT: "5 … selected from the list above" — a sameAsAbove group draws from the list it refers back to', () => {
+    const data = teamData('inquisitorial-agent');
+    // The printed second block is `kind: 'sameAsAbove'` with no selection entries of its own, so
+    // counting it as a separate group made it unfillable and the team impossible to field.
+    const same = data.selection.groups.find((g) => g.kind === 'sameAsAbove')!;
+    expect(same.count).toBe(5);
+    expect(data.selection.list.some((e) => e.group === same.index)).toBe(false);
+    const picks = defaultRoster(data);
+    const v = validateRosterFor(data, picks);
+    expect(v.errors).toEqual([]);
+    expect(picks).toHaveLength(data.selection.totalOperatives);
+  });
+
+  it('INQUISITORIAL AGENT: an explicit printed cap beats the blanket "each operative once"', () => {
+    // "…your kill team can only include each operative on this list once, unless you're not
+    // including any REQUISITIONED operatives, in which case you can include up to two GUN
+    // SERVITOR operatives, but each one must have different options."
+    const data = teamData('inquisitorial-agent');
+    expect(data.selection.constraints).toContainEqual({ kind: 'maxCount', role: 'GUN SERVITOR', max: 2 });
+    const servitors = defaultRoster(data).filter((p) => p.datacardId === 'inquisitorial-agent.requisitioned-gun-servitor');
+    expect(servitors).toHaveLength(2);
+    // "…but each one must have different options."
+    const opts = servitors.map((p) => (p.loadoutIds ?? []).join('+'));
+    expect(new Set(opts).size).toBe(2);
+  });
+
+  it('EXACTION SQUAD: "you can only include up to two GUNNER operatives (each must have a different option)"', () => {
+    const data = teamData('exaction-squad');
+    expect(data.selection.constraints).toContainEqual({ kind: 'distinctOptions', role: 'GUNNER' });
+    const offset = data.selection.leaderList.length;
+    const idx = data.selection.list.findIndex((e) => e.role === 'GUNNER');
+    const entry = data.selection.list[idx]!;
+    const gunner = (optId: string) => ({
+      datacardId: entry.datacardId,
+      entryId: entryId(data, offset + idx),
+      loadoutIds: [optId],
+    });
+    const base = defaultRoster(data).filter((p) => p.datacardId !== entry.datacardId);
+
+    // Two GUNNERs with DIFFERENT options: the distinctOptions rule is satisfied.
+    const differing = validateRosterFor(data, [...base, gunner(entry.loadouts[0]!.id), gunner(entry.loadouts[1]!.id)]);
+    expect(differing.errors.join(' ')).not.toContain('must have a different option');
+
+    // The same option twice is refused.
+    const same = validateRosterFor(data, [...base, gunner(entry.loadouts[0]!.id), gunner(entry.loadouts[0]!.id)]);
+    expect(same.ok).toBe(false);
+    expect(same.errors.join(' ')).toContain('each GUNNER operative must have a different option');
+  });
+
+  it('ELUCIDIAN STARSTRIDER: "Every ELUCIDIAN STARSTRIDER operative in the following list" is a FIXED roster', () => {
+    const data = teamData('elucidian-starstrider');
+    const group = data.selection.groups.find((g) => g.kind === 'every')!;
+    expect(group.rawText).toContain('Every');
+    // Each printed row must appear exactly its own `count` times — checking only the group total
+    // let the default roster field ELUCIA VHANE plus nine CANIDs and call it legal.
+    const picks = defaultRoster(data);
+    expect(validateRosterFor(data, picks).errors).toEqual([]);
+    const byCard = new Map<string, number>();
+    for (const p of picks) byCard.set(p.datacardId, (byCard.get(p.datacardId) ?? 0) + 1);
+    expect(byCard.get('elucidian-starstrider.canid')).toBe(1);
+    expect(byCard.get('elucidian-starstrider.voidsman')).toBe(4); // 3 with lasgun + 1 with rotor cannon
+    expect(picks).toHaveLength(data.selection.totalOperatives);
+
+    // Swapping any row for another copy of a different row is refused, naming the printed group.
+    const canid = picks.find((p) => p.datacardId === 'elucidian-starstrider.canid')!;
+    const swapped = picks.map((p) =>
+      p.datacardId === 'elucidian-starstrider.voidmaster' ? { ...canid } : p,
+    );
+    const v = validateRosterFor(data, swapped);
+    expect(v.ok).toBe(false);
+    expect(v.errors.join(' ')).toContain('Every ELUCIDIAN STARSTRIDER operative');
+  });
+
   it('a weapon no selection option names is always available, including Limited x weapons', () => {
     const data = teamData('imperial-navy-breacher');
     const grenadier = data.datacards.find((c) => c.id === 'imperial-navy-breacher.navis-grenadier')!;
