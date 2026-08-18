@@ -416,7 +416,7 @@ function offerActOfFaith(
       if (spec.operative.wounds <= act.cost) continue; // "but not enough to incapacitate it"
       options.push({
         id: `chastise:${act.id}`,
-        label: `AUTO-CHASTISERS: inflict ${act.cost} damage on ${spec.operative.letter} and use ${act.name} for free`,
+        label: `AUTO-CHASTISERS: inflict ${act.cost} damage on ${spec.operative.name} and use ${act.name} for free`,
         data: { act: act.id, chastise: true },
       });
     }
@@ -430,7 +430,7 @@ function offerActOfFaith(
     id: `faith-${state.seq++}`,
     who: T.player,
     kind: ACT_DECISION,
-    prompt: `${spec.operative.letter}: use an ACT OF FAITH? (${faith} Faith point${faith === 1 ? '' : 's'} held)`,
+    prompt: `${spec.operative.name}: use an ACT OF FAITH? (${faith} Faith point${faith === 1 ? '' : 's'} held)`,
     sourceText: shortQuote(text(RULE_ACTS_OF_FAITH)),
     optional: true,
     ctx: { pool: spec.pool, operativeId: spec.operative.id, attacking: spec.attacking },
@@ -464,7 +464,7 @@ function resolveActDecision(
     log(state, {
       kind: 'action',
       player,
-      text: `AUTO-CHASTISERS: ${op.letter} takes ${act.cost} damage for a free ${act.name}`,
+      text: `AUTO-CHASTISERS: ${op.name} takes ${act.cost} damage for a free ${act.name}`,
     });
   } else if (faithPoints(state, player) < act.cost) {
     return;
@@ -519,7 +519,7 @@ function resolveActDecision(
         id: `faith2-${state.seq++}`,
         who: player,
         kind: ACT_DECISION,
-        prompt: `ICON OF FAITH: a second, different ACT OF FAITH for ${op.letter}?`,
+        prompt: `ICON OF FAITH: a second, different ACT OF FAITH for ${op.name}?`,
         sourceText: shortQuote(text(EQ.iconOfFaith)),
         optional: true,
         ctx: { pool: key, operativeId: op.id, attacking: led.attacking },
@@ -757,7 +757,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'dice',
       player: T.player,
-      text: `Riposte: ${blocker.letter} blocks and strikes ${foe.letter} for ${ev.ctx.profile.dmgC}`,
+      text: `Riposte: ${blocker.name} blocks and strikes ${foe.name} for ${ev.ctx.profile.dmgC}`,
     });
     inflictDamage(T.ctx, ev.state, foe, ev.ctx.profile.dmgC, 'attack');
   });
@@ -838,7 +838,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Medic!: ${medic.letter} saves ${victim.letter} (1 wound remaining)`,
+      text: `Medic!: ${medic.name} saves ${victim.name} (1 wound remaining)`,
     });
   });
   reg.on('onStatMod', T.bind(A.medic, 12), (ev) => {
@@ -953,7 +953,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'dice',
       player: T.player,
-      text: `Auto-broadcaster: ${ev.ctx.attacker.letter} cannot re-roll its attack dice`,
+      text: `Auto-broadcaster: ${ev.ctx.attacker.name} cannot re-roll its attack dice`,
     });
   });
   // "If this operative is removed from the killzone, remove your Auto-broadcaster marker."
@@ -1013,7 +1013,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Defenders of the Faith: one success against ${ev.target.letter} inflicts ${halved} instead of ${one}`,
+      text: `Defenders of the Faith: one success against ${ev.target.name} inflicts ${halved} instead of ${one}`,
     });
   });
 
@@ -1038,7 +1038,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
         log(ev.state, {
           kind: 'ploy',
           player: T.player,
-          text: `Blessed Rejuvenation: ${op.letter} regains ${op.wounds - before} lost wounds`,
+          text: `Blessed Rejuvenation: ${op.name} regains ${op.wounds - before} lost wounds`,
         });
     }
   });
@@ -1079,7 +1079,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       if (!visible(T, ev.state, ev.operative, enemy)) continue;
       gainFaith(ev.state, T.player, 1, 'Glorious Martyrdom');
       const d3 = T.ctx.rng.d3();
-      recordRoll(ev.state, 'novitiates.martyrdom', [d3], T.player, `Glorious Martyrdom vs ${enemy.letter}`);
+      recordRoll(ev.state, 'novitiates.martyrdom', [d3], T.player, `Glorious Martyrdom vs ${enemy.name}`);
       inflictDamage(T.ctx, ev.state, enemy, d3, 'other');
     }
     delete flags[T.player];
@@ -1110,14 +1110,14 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   reg.on('onActivationStart', T.bind(FP.blazingInferno, 21), (ev) => {
     if (!hasToken(ev.state, ev.operative.id, BLAZE_TOKEN, T.player) || !T.ctx) return;
     const d3 = T.ctx.rng.d3();
-    recordRoll(ev.state, 'novitiates.blaze', [d3], T.player, `Blaze vs ${ev.operative.letter}`);
+    recordRoll(ev.state, 'novitiates.blaze', [d3], T.player, `Blaze vs ${ev.operative.name}`);
     inflictDamage(T.ctx, ev.state, ev.operative, d3, 'other');
     if (ev.operative.incapacitated || ev.operative.removed) return;
     ev.state.pending.push({
       id: `blaze-${ev.state.seq++}`,
       who: ev.operative.player,
       kind: BLAZE_DECISION,
-      prompt: `${ev.operative.letter} is ablaze — subtract 1 APL this activation to remove the Blaze token?`,
+      prompt: `${ev.operative.name} is ablaze — subtract 1 APL this activation to remove the Blaze token?`,
       sourceText: shortQuote(text(FP.blazingInferno)),
       optional: true,
       ctx: { operativeId: ev.operative.id, owner: T.player },
@@ -1161,7 +1161,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Blinding Aura: ${enemy.letter} cannot select ${friendly.letter} beyond 2"`,
+      text: `Blinding Aura: ${enemy.name} cannot select ${friendly.name} beyond 2"`,
     });
   });
   reg.on('onValidTarget', T.bind(FP.blindingAura, 21), (ev) => {
@@ -1279,7 +1279,7 @@ function decisionHandler(
     log(state, {
       kind: 'action',
       player: op.player,
-      text: `${op.letter} smothers the Blaze token (-1 APL this activation)`,
+      text: `${op.name} smothers the Blaze token (-1 APL this activation)`,
     });
     return true;
   }
@@ -1376,7 +1376,7 @@ function actions(data: typeof DATA): ActionDef[] {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: state.activeOperativeId !== target.id },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: STIRRING RHETORIC → ${target.letter} (+1 APL)` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: STIRRING RHETORIC → ${target.name} (+1 APL)` });
         return { ok: true };
       },
     }),
@@ -1413,7 +1413,7 @@ function actions(data: typeof DATA): ActionDef[] {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: AUTO-BROADCASTER marker at ${pos.x.toFixed(1)}, ${pos.y.toFixed(1)}`,
+          text: `${op.name}: AUTO-BROADCASTER marker at ${pos.x.toFixed(1)}, ${pos.y.toFixed(1)}`,
         });
         return { ok: true };
       },
@@ -1442,7 +1442,7 @@ function actions(data: typeof DATA): ActionDef[] {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: state.activeOperativeId !== target.id },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: WHIP INTO FRENZY → ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: WHIP INTO FRENZY → ${target.name}` });
         return { ok: true };
       },
     }),
@@ -1469,7 +1469,7 @@ function actions(data: typeof DATA): ActionDef[] {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: CHIRURGEON'S TOOLS heals ${target.letter} for ${target.wounds - before}`,
+          text: `${op.name}: CHIRURGEON'S TOOLS heals ${target.name} for ${target.wounds - before}`,
         });
         return { ok: true };
       },

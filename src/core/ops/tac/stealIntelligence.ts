@@ -65,7 +65,7 @@ registerAction({
     marker.pos = { ...op.pos };
     marker.z = op.z;
     if (!op.carryingMarkerId) op.carryingMarkerId = marker.id;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} picks up an Intelligence marker` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} picks up an Intelligence marker` });
     return { ok: true };
   },
 });
@@ -97,7 +97,7 @@ export const stealIntelligenceOp: OpModule = {
       log(ev.state, {
         kind: 'action',
         player: owner,
-        text: `An Intelligence mission marker is placed where ${ev.operative.letter} fell`,
+        text: `An Intelligence mission marker is placed where ${ev.operative.name} fell`,
       });
       // A carrier that dies drops everything it was holding (the core rules only move the one
       // marker recorded on the operative).

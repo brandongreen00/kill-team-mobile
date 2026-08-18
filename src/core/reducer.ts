@@ -35,7 +35,7 @@ import { baseWhollyWithin, baseGap } from './geometry.ts';
 import { baseTouchesHazardous } from './terrain.ts';
 import type { Intent } from './intents.ts';
 import type { GameState, KillzoneMap, OperativeState, PlayerId } from './types.ts';
-import { otherPlayer } from './types.ts';
+import { otherPlayer, playerLabel } from './types.ts';
 
 export interface ReduceOutcome {
   state: GameState;
@@ -70,11 +70,11 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
         if (next.phase === 'setup') return reduce(next, intent, ctx);
         const decider = next.initiative ? otherPlayer(next.initiative) : 'p1';
         next.initiative = decider;
-        log(next, { kind: 'system', text: `Tie — the player without initiative (${decider}) decides` });
+        log(next, { kind: 'system', text: `Tie — the player without initiative (${playerLabel(decider)}) decides` });
       } else {
         next.setup.toAct = r.winner;
         if (next.phase !== 'setup') next.initiative = r.winner;
-        log(next, { kind: 'system', text: `${r.winner} wins the roll-off` });
+        log(next, { kind: 'system', text: `${playerLabel(r.winner)} wins the roll-off` });
       }
       // Approved Ops: starting with the roll-off LOSER, players alternate playing an
       // initiative card or passing until both pass.
@@ -85,7 +85,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
 
     case 'ChooseInitiative': {
       next.initiative = intent.choice;
-      log(next, { kind: 'system', text: `${intent.choice} has initiative` });
+      log(next, { kind: 'system', text: `${playerLabel(intent.choice)} has initiative` });
       return ok(next);
     }
 
@@ -95,7 +95,10 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       next.setup.step = 'selectOperatives';
       // "the initiative player picks a drop zone, opponent gets the Re-roll initiative card"
       ctx.grantSetupRerollCard?.(next, otherPlayer(intent.player));
-      log(next, { kind: 'system', text: `${intent.player} takes the ${intent.zone} drop zone` });
+      log(next, {
+        kind: 'system',
+        text: `${playerLabel(intent.player)} takes the ${intent.zone === 'p1' ? 'orange' : 'grey'} drop zone`,
+      });
       return ok(next);
     }
 
@@ -103,16 +106,24 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       const team = next.teams[intent.player];
       team.teamId = intent.teamId;
       team.operativeIds = [];
+      const cards = intent.operatives.map((pick) => ctx.datacards.get(pick.datacardId));
+      const missingIdx = cards.findIndex((dc) => !dc);
+      if (missingIdx >= 0) return fail(`unknown datacard '${intent.operatives[missingIdx]!.datacardId}'`);
+      const letters = intent.operatives.map((_, i) => letterFor(i));
+      const names = displayNames(
+        cards.map((dc) => dc!.name),
+        letters,
+      );
       let letterIdx = 0;
       for (const pick of intent.operatives) {
-        const dc = ctx.datacards.get(pick.datacardId);
-        if (!dc) return fail(`unknown datacard '${pick.datacardId}'`);
+        const dc = cards[letterIdx]!;
         const id = `${intent.player}-${letterIdx}`;
         const op: OperativeState = {
           id,
           player: intent.player,
           datacardId: pick.datacardId,
-          letter: letterFor(letterIdx++),
+          letter: letters[letterIdx]!,
+          name: names[letterIdx]!,
           pos: { x: -100, y: -100 },
           z: 0,
           rot: 0,
@@ -131,10 +142,19 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
         };
         next.operatives[id] = op;
         team.operativeIds.push(id);
+        letterIdx++;
       }
       team.startingSize = team.operativeIds.length;
       rebuildHooks(ctx, next);
-      log(next, { kind: 'system', player: intent.player, text: `${intent.teamId}: ${team.operativeIds.length} operatives selected` });
+      const teamName = intent.teamId
+        .split('-')
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
+      log(next, {
+        kind: 'system',
+        player: intent.player,
+        text: `${playerLabel(intent.player)} fields ${teamName} (${team.operativeIds.length} operatives)`,
+      });
       return ok(next);
     }
 
@@ -187,7 +207,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       else settleZ(ctx, next, op);
       next.setup.deployedCount[intent.player] = (next.setup.deployedCount[intent.player] ?? 0) + 1;
       ctx.hooks.emit('onDeploy', next, { state: next, operative: op });
-      log(next, { kind: 'action', player: intent.player, text: `${op.letter} deploys` });
+      log(next, { kind: 'action', player: intent.player, text: `${op.name} deploys` });
       return ok(next);
     }
 
@@ -295,7 +315,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       next.activePlayer = intent.player;
       next.firefightStep = 'performActions';
       ctx.hooks.emit('onActivationStart', next, { state: next, operative: op });
-      log(next, { kind: 'action', player: intent.player, text: `${op.letter} activates (${intent.order})` });
+      log(next, { kind: 'action', player: intent.player, text: `${op.name} activates (${intent.order})` });
       return ok(next);
     }
 
@@ -313,7 +333,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       next.activeOperativeId = op.id;
       next.activePlayer = intent.player;
       next.opState['counteract'] = { operativeId: op.id, actionsUsed: 0 };
-      log(next, { kind: 'action', player: intent.player, text: `${op.letter} counteracts` });
+      log(next, { kind: 'action', player: intent.player, text: `${op.name} counteracts` });
       return ok(next);
     }
 
@@ -396,7 +416,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       delete next.opState['counteract'];
       removeIncapacitated(ctx, next);
       next.activePlayer = otherPlayer(op.player);
-      log(next, { kind: 'action', player: op.player, text: `${op.letter} is expended` });
+      log(next, { kind: 'action', player: op.player, text: `${op.name} is expended` });
       if (!counteracting && whoActivates(next, ctx) === null) advanceTurningPoint(ctx, next);
       return ok(next);
     }
@@ -460,7 +480,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       }
       // "Once during each enemy operative's activation" — the window is spent either way.
       delete next.opState['guardOffer'];
-      log(next, { kind: 'action', player: intent.player, text: `${op.letter} interrupts with On Guard` });
+      log(next, { kind: 'action', player: intent.player, text: `${op.name} interrupts with On Guard` });
       return ok(next);
     }
 
@@ -472,7 +492,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
         for (const g of guardInterruptCandidates(next, intent.player)) {
           if (baseGap(g.pos, card(ctx, g).base, g.rot, active.pos, card(ctx, active).base, active.rot) <= 1) {
             g.onGuard = false;
-            log(next, { kind: 'action', player: intent.player, text: `${g.letter} loses Guard` });
+            log(next, { kind: 'action', player: intent.player, text: `${g.name} loses Guard` });
           }
         }
       }
@@ -511,7 +531,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
     case 'Concede': {
       next.phase = 'battleEnd';
       next.winner = otherPlayer(intent.player);
-      log(next, { kind: 'system', text: `${intent.player} concedes` });
+      log(next, { kind: 'system', text: `${playerLabel(intent.player)} concedes` });
       return ok(next);
     }
 
@@ -552,6 +572,22 @@ function clone(state: GameState): GameState {
 
 function letterFor(i: number): string {
   return String.fromCharCode(65 + (i % 26)) + (i >= 26 ? String(Math.floor(i / 26)) : '');
+}
+
+/**
+ * Short display names from datacard names: leading words every card in the roster shares
+ * (usually the team name — "Kasrkin Trooper" → "Trooper") are stripped, then duplicates get
+ * their board letter as a suffix so every name stays unique within the team.
+ */
+function displayNames(cardNames: string[], letters: string[]): string[] {
+  let words = cardNames.map((n) => n.trim().split(/\s+/));
+  while (words.every((w) => w.length >= 2) && new Set(words.map((w) => w[0]!.toLowerCase())).size === 1) {
+    words = words.map((w) => w.slice(1));
+  }
+  const base = words.map((w) => w.join(' '));
+  const uses = new Map<string, number>();
+  for (const b of base) uses.set(b, (uses.get(b) ?? 0) + 1);
+  return base.map((b, i) => ((uses.get(b) ?? 0) > 1 ? `${b} ${letters[i]}` : b));
 }
 
 function removeIncapacitatedAfterAction(ctx: GameContext, state: GameState): void {

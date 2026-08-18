@@ -15,7 +15,7 @@ import { log, recordRoll } from '../state.ts';
 import { opScratch, pushOpDecision, PLAYERS } from './common.ts';
 import { INITIATIVE_CARD_TEXT } from './text.ts';
 import type { GameState, PendingDecision, PlayerId } from '../types.ts';
-import { otherPlayer } from '../types.ts';
+import { otherPlayer, playerLabel } from '../types.ts';
 
 export const REROLL_CARD = 'ic.reroll';
 export const INITIATIVE_CARDS = INITIATIVE_CARD_TEXT.cards;
@@ -69,7 +69,7 @@ export function grantSetupRerollCard(state: GameState, player: PlayerId): void {
   const cards = state.teams[player].initiativeCards;
   if (cards.includes(REROLL_CARD)) return;
   cards.push(REROLL_CARD);
-  log(state, { kind: 'system', player, text: 'Gains the Re-roll initiative card' });
+  log(state, { kind: 'system', player, text: `${playerLabel(player)} gains the Re-roll initiative card` });
 }
 
 function cardDecision(state: GameState, player: PlayerId): void {

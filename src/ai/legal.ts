@@ -95,7 +95,7 @@ export function enumerateCandidates(
           intent: { t: 'ActivateOperative', player, operativeId: op.id, order },
           kind: 'activate',
           hint: 0,
-          label: `activate ${op.letter} (${order})`,
+          label: `activate ${op.name} (${order})`,
         });
       }
     }
@@ -108,7 +108,7 @@ export function enumerateCandidates(
       intent: { t: 'Counteract', player, operativeId: op.id },
       kind: 'counteract',
       hint: 0,
-      label: `counteract with ${op.letter}`,
+      label: `counteract with ${op.name}`,
     });
   }
   out.push({ intent: { t: 'DeclineCounteract', player }, kind: 'counteract', hint: 0, label: 'decline counteract' });
@@ -465,7 +465,7 @@ export function interruptCandidates(ctx: GameContext, state: GameState, player: 
           },
           kind: 'interrupt',
           hint: 10 * shotValue(plan),
-          label: `interrupt: ${guard.letter} shoots`,
+          label: `interrupt: ${guard.name} shoots`,
         });
       }
       const melee = enemiesInControlRange(ctx, state, guard);
@@ -484,7 +484,7 @@ export function interruptCandidates(ctx: GameContext, state: GameState, player: 
           },
           kind: 'interrupt',
           hint: 10 * fightValue(plan),
-          label: `interrupt: ${guard.letter} fights`,
+          label: `interrupt: ${guard.name} fights`,
         });
       }
     }

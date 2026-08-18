@@ -275,7 +275,7 @@ export function receiveOrder(T: TeamHooks, state: GameState, op: OperativeState,
   log(state, {
     kind: 'action',
     player: T.player,
-    text: `${op.letter} receives the ${ORDER_LABEL[order]} order`,
+    text: `${op.name} receives the ${ORDER_LABEL[order]} order`,
     data: { operativeId: op.id, order },
   });
   maybeRelay(T, state, op, order);
@@ -286,7 +286,7 @@ export function receiveEveryOrder(T: TeamHooks, state: GameState, op: OperativeS
   if (!T.mineKw(op, KW) || op.removed) return;
   dropEffects(state, (e) => e.rule === ORDER_EFFECT && e.operativeId === op.id && e.player === T.player);
   for (const order of ORDERS) addOrder(T, state, op, order);
-  log(state, { kind: 'ploy', player: T.player, text: `${op.letter} receives every GUARDSMAN ORDER`, data: { operativeId: op.id } });
+  log(state, { kind: 'ploy', player: T.player, text: `${op.name} receives every GUARDSMAN ORDER`, data: { operativeId: op.id } });
 }
 
 /**
@@ -321,7 +321,7 @@ function maybeRelay(T: TeamHooks, state: GameState, op: OperativeState, order: G
   log(state, {
     kind: 'action',
     player: T.player,
-    text: `${op.letter} relays the ${ORDER_LABEL[order]} order to the whole kill team (-1 APL)`,
+    text: `${op.name} relays the ${ORDER_LABEL[order]} order to the whole kill team (-1 APL)`,
   });
 }
 
@@ -355,7 +355,7 @@ function issueOrder(
   if (hasEquipment(state, T.player, EQ.commBeads) && typeof named === 'string') {
     const one = T.friendlies(state, KW).find((o) => o.id === named);
     if (one) {
-      log(state, { kind: 'action', player: T.player, text: `Comm-beads: only ${one.letter} receives that order` });
+      log(state, { kind: 'action', player: T.player, text: `Comm-beads: only ${one.name} receives that order` });
       receiveOrder(T, state, one, order);
       return;
     }
@@ -665,7 +665,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfTurningPoint' },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Bring it Down!: ${target.letter} is marked` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Bring it Down!: ${target.name} is marked` });
   });
   // "Whenever a friendly DEATH KORPS operative is shooting against, fighting against or
   //  retaliating against that enemy operative, that friendly operative's weapons have the
@@ -693,7 +693,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     const profile = damageProfile(T, ev.state);
     if (!profile || ev.amount !== profile.dmgN) return;
     if (!useOncePerTP(ev.state, `death-korps.bruiser:${ev.target.id}`)) return;
-    log(ev.state, { kind: 'action', player: T.player, text: `${ev.target.letter} shrugs off a normal success (Bruiser)` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${ev.target.name} shrugs off a normal success (Bruiser)` });
     ev.amount = 0;
   });
   // "If this operative is incapacitated during the Fight action, you can strike the enemy
@@ -711,7 +711,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     const mine = successes(pool);
     const die = mine.find((d) => d.state === 'crit') ?? mine[0];
     if (!die) return;
-    log(ev.state, { kind: 'action', player: T.player, text: `${op.letter} strikes once more before falling (Bruiser)` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${op.name} strikes once more before falling (Bruiser)` });
     resolveFightDie(T.ctx, ev.state, seq, side, die.id, 'strike');
   });
 
@@ -746,7 +746,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Directive: ${pick.letter} activates after ${op.letter}`,
+      text: `Directive: ${pick.name} activates after ${op.name}`,
       data: { operativeId: pick.id },
     });
   });
@@ -826,7 +826,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       ...(victimIsActive ? { data: { pending: true } } : {}),
       expiry: { kind: 'endOfNextActivation', operativeId: victim.id, armed: false },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `Medic! ${medic.letter} keeps ${victim.letter} on 1 wound` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Medic! ${medic.name} keeps ${victim.name} on 1 wound` });
   });
   reg.on('onActivationStart', T.bind(A.medic, 14), (ev) => {
     if (ev.operative.player !== T.player) return;
@@ -951,7 +951,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Group Activation: ${other.letter} activates next`,
+      text: `Group Activation: ${other.name} activates next`,
       data: { operativeId: other.id },
     });
   });
@@ -967,7 +967,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       id: `dkVeteranOrder-${ev.state.seq++}`,
       who: T.player,
       kind: VETERAN_ORDER_DECISION,
-      prompt: `${op.letter}: Veteran Guardsman — receive one GUARDSMAN ORDER`,
+      prompt: `${op.name}: Veteran Guardsman — receive one GUARDSMAN ORDER`,
       sourceText: shortQuote(abilityText(C.veteran, A.veteranGuardsman)),
       optional: true,
       options: [
@@ -1148,7 +1148,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Regroup: ${movers.length} operative(s) rally on ${leader.letter}`,
+      text: `Regroup: ${movers.length} operative(s) rally on ${leader.name}`,
     });
   });
 
@@ -1204,7 +1204,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `In Death, Atonement: ${dying?.letter ?? 'that operative'} performs one free action before it is removed (resolve at the table — the engine has no free-action-on-death seam)`,
+      text: `In Death, Atonement: ${dying?.name ?? 'that operative'} performs one free action before it is removed (resolve at the table — the engine has no free-action-on-death seam)`,
     });
   });
 }
@@ -1361,7 +1361,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: MEDIKIT restores ${heal} wounds to ${target.letter}`,
+          text: `${op.name}: MEDIKIT restores ${heal} wounds to ${target.name}`,
         });
         return { ok: true };
       },
@@ -1399,7 +1399,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: SPOT — ${target.letter} is spotted (the printed effect list is missing from the source data)`,
+          text: `${op.name}: SPOT — ${target.name} is spotted (the printed effect list is missing from the source data)`,
         });
         return { ok: true };
       },
@@ -1439,7 +1439,7 @@ function actions(data: typeof DATA) {
           // "Until the end of that operative's next activation, add 1 to its APL stat."
           expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SIGNAL — ${target.letter} +1 APL` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SIGNAL — ${target.name} +1 APL` });
         return { ok: true };
       },
     }),
@@ -1495,7 +1495,7 @@ registerAction({
     marker.pos = { ...op.pos };
     marker.z = op.z;
     op.carryingMarkerId = marker.id;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} picks up the Mine marker` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} picks up the Mine marker` });
     return { ok: true };
   },
 });
@@ -1523,7 +1523,7 @@ registerAction({
     marker.pos = { ...pos.pos! };
     marker.z = op.z;
     op.carryingMarkerId = undefined;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} places the Mine marker` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} places the Mine marker` });
     // "…and whenever it performs the Place Marker action on that marker, it can immediately
     //  perform a free Dash action."
     grantFreeAction(state, op, {

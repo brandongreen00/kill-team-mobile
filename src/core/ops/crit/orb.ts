@@ -56,7 +56,7 @@ registerAction({
     if (!dest) return { ok: false, reason: 'there is no centre objective marker to move the Orb token to' };
     delete orb.flags['orb'];
     dest.flags['orb'] = true;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} moves the Orb token to ${dest.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} moves the Orb token to ${dest.id}` });
     return { ok: true };
   },
 });

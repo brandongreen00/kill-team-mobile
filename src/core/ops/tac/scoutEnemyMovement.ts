@@ -61,7 +61,7 @@ registerAction({
     const target = state.operatives[params.targetOperativeId!]!;
     scratch(state).monitored[target.id] = state.turningPoint;
     revealTacOp(state, op.player, 'a friendly operative performed the Scout action');
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} scouts ${target.letter} (monitored)` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} scouts ${target.name} (monitored)` });
     return { ok: true };
   },
 });

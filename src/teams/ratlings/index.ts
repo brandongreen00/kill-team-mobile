@@ -353,7 +353,7 @@ function abilities(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfTurningPoint' },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Target Designation: ${target.letter}` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Target Designation: ${target.name}` });
   });
   // "…whenever a friendly RATLING operative is shooting that enemy operative with a rifle,
   //  that weapon has the Lethal 5+ weapon rule."
@@ -534,7 +534,7 @@ function abilities(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Bayonet Charge: ${op.letter} inflicts ${damage} on ${victim.letter}`,
+      text: `Bayonet Charge: ${op.name} inflicts ${damage} on ${victim.name}`,
     });
     inflictDamage(T.ctx, ev.state, victim, damage, 'other');
   });
@@ -596,7 +596,7 @@ function abilities(reg: HookRegistry, T: TeamHooks): void {
         // the penalty covers its NEXT activation either way.
         expiry: { kind: 'endOfNextActivation', operativeId: victim.id, armed: victim.id !== ev.operative.id },
       });
-      log(ev.state, { kind: 'action', player: T.player, text: `${victim.letter} trips a Tripwire (-1 APL)` });
+      log(ev.state, { kind: 'action', player: T.player, text: `${victim.name} trips a Tripwire (-1 APL)` });
     }
   });
 
@@ -620,7 +620,7 @@ function abilities(reg: HookRegistry, T: TeamHooks): void {
     if (T.mine(ev.target) && T.kw(ev.target, KW) && !isBig(T, ev.target)) {
       if (!ourMines(ev.state)) return;
       ev.amount = 0; // "…they cannot … take damage from them"
-      log(ev.state, { kind: 'action', player: T.player, text: `${ev.target.letter} ignores your Mines` });
+      log(ev.state, { kind: 'action', player: T.player, text: `${ev.target.name} ignores your Mines` });
       return;
     }
     if (ev.target.player === T.player || !ourMines(ev.state)) return;
@@ -918,7 +918,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: op.id },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Larcenous: ${op.letter} only needs to contest a marker` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Larcenous: ${op.name} only needs to contest a marker` });
   });
 
   // ---- SHARPSHOT (firefight) --------------------------------------------
@@ -943,7 +943,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     const op = shootAndHideCandidate(T, ev.state);
     if (!op) return;
     op.order = 'conceal';
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Shoot and Hide: ${op.letter} takes a Conceal order` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Shoot and Hide: ${op.name} takes a Conceal order` });
   });
 }
 
@@ -1391,7 +1391,7 @@ function actions(data: typeof DATA): ActionDef[] {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: SLINGSHOT to (${op.pos.x.toFixed(1)}, ${op.pos.y.toFixed(1)})`,
+          text: `${op.name}: SLINGSHOT to (${op.pos.x.toFixed(1)}, ${op.pos.y.toFixed(1)})`,
         });
         return { ok: true };
       },
@@ -1410,7 +1410,7 @@ function actions(data: typeof DATA): ActionDef[] {
           // Removed at the start of this operative's next activation (see `bookkeeping`).
           expiry: { kind: 'endOfBattle' },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: OPTICS` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: OPTICS` });
         return { ok: true };
       },
     }),
@@ -1438,7 +1438,7 @@ function actions(data: typeof DATA): ActionDef[] {
           data: { spotterId: op.id },
           expiry: { kind: 'endOfTurningPoint' },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SPOT on ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SPOT on ${target.name}` });
         return { ok: true };
       },
     }),
@@ -1469,7 +1469,7 @@ function actions(data: typeof DATA): ActionDef[] {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: INTERCEPT COMMUNICATIONS — ${target.letter} +1 APL`,
+          text: `${op.name}: INTERCEPT COMMUNICATIONS — ${target.name} +1 APL`,
         });
         return { ok: true };
       },

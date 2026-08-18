@@ -273,7 +273,7 @@ export function giveToken(
     player: spec.player,
     expiry: spec.expiry ?? { kind: 'endOfBattle' },
   });
-  log(state, { kind: 'action', player: spec.player, text: `${op.letter} gains a ${token} token` });
+  log(state, { kind: 'action', player: spec.player, text: `${op.name} gains a ${token} token` });
 }
 
 export function removeToken(state: GameState, operativeId: string, token: string): void {
@@ -325,7 +325,7 @@ export function grantFreeAction(
   log(state, {
     kind: 'ploy',
     player: op.player,
-    text: `${op.letter} gains a free ${spec.only ? spec.only.join('/') : '1AP'} action`,
+    text: `${op.name} gains a free ${spec.only ? spec.only.join('/') : '1AP'} action`,
     data: { operativeId: op.id, source: spec.sourceId },
   });
 }

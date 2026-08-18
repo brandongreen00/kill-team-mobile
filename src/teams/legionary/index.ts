@@ -139,7 +139,7 @@ export function setMarkOfChaos(
     return false;
   }
   bucket(state, 'legionary.marks')[operativeId] = mark;
-  log(state, { kind: 'system', player, text: `${op.letter} has the ${mark} Marks of Chaos keyword` });
+  log(state, { kind: 'system', player, text: `${op.name} has the ${mark} Marks of Chaos keyword` });
   return true;
 }
 
@@ -385,7 +385,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: champion.id },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `${champion.letter}: In the Eyes of the Gods (+1 APL)` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${champion.name}: In the Eyes of the Gods (+1 APL)` });
   });
 
   // ---- CHOSEN › Daemonic Aura -------------------------------------------
@@ -427,7 +427,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (!chosen || chosen.player !== T.player || chosen.datacardId !== 'legionary.chosen') return;
     if (chosen.incapacitated || chosen.removed) return; // "if it isn't incapacitated"
     const gained = heal(T, chosen, d3(T, ev.state, 'SOUL GORGE D3+1') + 1);
-    log(ev.state, { kind: 'action', player: T.player, text: `${chosen.letter}: Soul Gorge regains ${gained} wounds` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${chosen.name}: Soul Gorge regains ${gained} wounds` });
   });
 
   // ---- ANOINTED › Unleash Daemon ----------------------------------------
@@ -442,7 +442,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       id: `unleash-${ev.state.seq++}`,
       who: T.player,
       kind: UNLEASH_DECISION,
-      prompt: `${op.letter}: use Unleash Daemon? (once per battle)`,
+      prompt: `${op.name}: use Unleash Daemon? (once per battle)`,
       sourceText: shortQuote(abilityText('legionary.anointed', 'legionary.anointed.unleash-daemon')),
       optional: true,
       ctx: { operativeId: op.id, player: T.player },
@@ -524,7 +524,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       data: { targetId: wounded.id },
       expiry: { kind: 'endOfTurningPoint' },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `${user.letter}: Siphon Life targets ${wounded.letter}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${user.name}: Siphon Life targets ${wounded.name}` });
   });
   reg.on('onStrikeResolved', T.bind('legionary.balefire-acolyte.siphon-life', 13), (ev) => {
     const user = ev.ctx.attacker;
@@ -544,7 +544,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (regained <= 0) return;
     const gained = heal(T, patient, regained);
     if (gained > 0)
-      log(ev.state, { kind: 'action', player: T.player, text: `Siphon Life: ${patient.letter} regains ${gained} wounds` });
+      log(ev.state, { kind: 'action', player: T.player, text: `Siphon Life: ${patient.name} regains ${gained} wounds` });
   });
 
   // ---- BUTCHER › Devastating Onslaught ----------------------------------
@@ -621,7 +621,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     //  taint that objective marker" — one shared flag, read by both players' registrations.
     marker.flags['legionaryTainted'] = T.player;
     ev.cp += 1;
-    log(ev.state, { kind: 'system', player: T.player, text: `${bearer.letter} taints ${marker.id} (+1CP)` });
+    log(ev.state, { kind: 'system', player: T.player, text: `${bearer.name} taints ${marker.id} (+1CP)` });
   });
 
   // ---- SHRIVETALON › Vicious Reflexes ------------------------------------
@@ -657,7 +657,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfNextActivation', operativeId: other.id, armed: false },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `Horrifying Dismemberment: ${other.letter} −1 APL` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Horrifying Dismemberment: ${other.name} −1 APL` });
   });
 
   // ---- WARRIOR › Infernal Pact ------------------------------------------
@@ -672,7 +672,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       id: `infernal-${ev.state.seq++}`,
       who: T.player,
       kind: INFERNAL_DECISION,
-      prompt: `${op.letter}: Infernal Pact — change its Marks of Chaos keyword? (once per battle)`,
+      prompt: `${op.name}: Infernal Pact — change its Marks of Chaos keyword? (once per battle)`,
       sourceText: shortQuote(abilityText('legionary.warrior', 'legionary.warrior.infernal-pact')),
       optional: true,
       ctx: { operativeId: op.id, player: T.player },
@@ -722,9 +722,9 @@ function decisionHandler(
         marker.z = op.z;
       }
       op.carryingMarkerId = undefined as unknown as string | undefined;
-      log(state, { kind: 'action', player, text: `${op.letter} places its marker for 0AP (Unleash Daemon)` });
+      log(state, { kind: 'action', player, text: `${op.name} places its marker for 0AP (Unleash Daemon)` });
     }
-    log(state, { kind: 'action', player, text: `${op.letter} unleashes the daemon within` });
+    log(state, { kind: 'action', player, text: `${op.name} unleashes the daemon within` });
     return true;
   }
 
@@ -892,7 +892,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Unending Bloodshed: ${dying.letter} strikes ${foe.letter} before being removed`,
+      text: `Unending Bloodshed: ${dying.name} strikes ${foe.name} before being removed`,
     });
   });
 
@@ -944,7 +944,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfNextActivation', operativeId: victim.id, armed: false },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Sickening Captivation: ${victim.letter} −1 APL` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Sickening Captivation: ${victim.name} −1 APL` });
   });
 
   // ---- MUTABILITY AND CHANGE (firefight, 1CP) ---------------------------
@@ -973,7 +973,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
         player: T.player,
         expiry: { kind: 'endOfTurningPoint' },
       });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Mutability and Change: ${op.letter} +1 APL` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Mutability and Change: ${op.name} +1 APL` });
   });
   reg.on('canPerformAction', T.bind('legionary.fp.mutability-and-change', 21), (ev) => {
     if (ev.operative.player !== T.player) return;
@@ -1026,7 +1026,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
       // this turning point and that step, so the effect expires at the end of the turning point.
       expiry: { kind: 'endOfTurningPoint' },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Warded Armour: ${op.letter} has a 2+ Save` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Warded Armour: ${op.name} has a 2+ Save` });
   });
   reg.on('onStatMod', T.bind(WARDED_GAMBIT, 31), (ev) => {
     const eff = effectOn(ev.state, ev.operative.id, WARDED);
@@ -1067,7 +1067,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
       data: { weapon: ev.ctx.weaponName },
       expiry: { kind: 'endOfActivation', operativeId: op.id },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `${op.letter}: Tainted Rounds (Rending)` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${op.name}: Tainted Rounds (Rending)` });
   });
   reg.on('onWeaponRules', T.bind('legionary.eq.tainted-rounds', 31), (ev) => {
     const eff = effectOn(ev.state, ev.operative.id, TAINTED_ROUNDS);
@@ -1106,7 +1106,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
       id: `talisman-${ev.state.seq++}`,
       who: T.player,
       kind: TALISMAN_DECISION,
-      prompt: `${op.letter}: inflict D3 damage on it to turn one fail into a normal success?`,
+      prompt: `${op.name}: inflict D3 damage on it to turn one fail into a normal success?`,
       sourceText: shortQuote(text(TALISMAN_GAMBIT)),
       optional: true,
       ctx: { operativeId: op.id, player: T.player },
@@ -1148,7 +1148,7 @@ function actions(data: typeof DATA) {
           z: op.z,
           flags: { grisly: true },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: GRISLY MARK placed` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: GRISLY MARK placed` });
         return { ok: true };
       },
     }),

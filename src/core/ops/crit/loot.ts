@@ -41,7 +41,7 @@ registerAction({
   perform(ctx, state, op, params) {
     const marker = state.markers[params.markerId!]!;
     marker.flags['lootedTP'] = state.turningPoint;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} loots ${marker.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} loots ${marker.id}` });
     awardVP(ctx, state, op.player, ID, Math.min(1, roomThisTP(state, op.player, ID, PER_TP_CAP)), 'Loot');
     return { ok: true };
   },

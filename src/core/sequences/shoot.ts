@@ -354,7 +354,7 @@ export function startShoot(
     if (redirected && !redirected.removed) {
       target = redirected;
       check = { ...check, valid: true, distance: gapBetween(ctx, attacker, redirected) };
-      log(state, { kind: 'action', player: target.player, text: `${target.letter} becomes the target instead` });
+      log(state, { kind: 'action', player: target.player, text: `${target.name} becomes the target instead` });
     }
   }
   if (!check.valid) return { ok: false, reason: check.reason ?? 'not a valid target' };
@@ -389,7 +389,7 @@ export function startShoot(
   log(state, {
     kind: 'action',
     player: attacker.player,
-    text: `${attacker.letter} shoots ${target.letter} with ${weaponName}${profileName ? ` (${profileName})` : ''}`,
+    text: `${attacker.name} shoots ${target.name} with ${weaponName}${profileName ? ` (${profileName})` : ''}`,
     data: { attackerId: attacker.id, targetId: target.id, weaponName },
   });
   return { ok: true };
@@ -458,7 +458,7 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
             id: `cover-${state.seq++}`,
             who: seq.defender,
             kind: 'coverOrObscured',
-            prompt: `${target.letter} would be both in cover from and obscured by the same terrain feature — choose one`,
+            prompt: `${target.name} would be both in cover from and obscured by the same terrain feature — choose one`,
             sourceText:
               'An operative cannot be in cover from and obscured by the same terrain feature. If it would be, the defender must select one of them (cover or obscured) for that sequence.',
             options: [
@@ -486,7 +486,7 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
         // worsens a Hit stat through this hook inert (e.g. the Breachers' GRENADIER).
         const hit = hitStat(ctx, state, attacker, profile, seq, mods.mods.hit);
         const results = ctx.rng.roll(toRoll);
-        recordRoll(state, 'attack', results, seq.attacker, `${seq.weaponName} vs ${target.letter}`);
+        recordRoll(state, 'attack', results, seq.attacker, `${seq.weaponName} vs ${target.name}`);
         addRolled(seq.attack, results, hit, lethalOpts(rules));
         if (accurate > 0) addAutoNormal(seq.attack, accurate, 'Accurate');
         log(state, {
@@ -585,7 +585,7 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
           count -= coverSaves;
         }
         const results = ctx.rng.roll(count);
-        recordRoll(state, 'defence', results, seq.defender, `${target.letter} save ${save}+`);
+        recordRoll(state, 'defence', results, seq.defender, `${target.name} save ${save}+`);
         addRolled(seq.defence, results, save);
         for (let i = 0; i < coverSaves; i++) {
           const die = addAutoNormal(seq.defence, 1, 'cover save')[0]!;
@@ -838,7 +838,7 @@ function resolveAttackDice(
   log(state, {
     kind: 'dice',
     player: seq.attacker,
-    text: `${unblockedCrits} crit + ${unblockedNormals} normal unblocked → ${damage} damage to ${target.letter}`,
+    text: `${unblockedCrits} crit + ${unblockedNormals} normal unblocked → ${damage} damage to ${target.name}`,
     data: { unblockedCrits, unblockedNormals, damage },
   });
 
@@ -853,7 +853,7 @@ function resolveAttackDice(
       operativeId: target.id,
       expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
     });
-    log(state, { kind: 'action', player: seq.defender, text: `${target.letter} is stunned (-1 APL)` });
+    log(state, { kind: 'action', player: seq.defender, text: `${target.name} is stunned (-1 APL)` });
   }
 
   ctx.hooks.emit('onStrikeResolved', state, {
@@ -891,7 +891,7 @@ function nextTarget(ctx: GameContext, state: GameState, seq: ShootSequence): voi
   seq.usedRetention = [];
   seq.coverChoiceMade = true;
   seq.step = 'rollAttack';
-  log(state, { kind: 'action', player: seq.attacker, text: `Secondary target: ${next.letter}` });
+  log(state, { kind: 'action', player: seq.attacker, text: `Secondary target: ${next.name}` });
 }
 
 function finishShoot(
@@ -915,7 +915,7 @@ function finishShoot(
     recordRoll(state, 'hot', [roll], seq.attacker, seq.weaponName);
     if (profile && roll < profile.hit) {
       inflictDamage(ctx, state, attacker, roll * 2, 'other');
-      log(state, { kind: 'dice', player: seq.attacker, text: `Hot: rolled ${roll} → ${roll * 2} damage to ${attacker.letter}` });
+      log(state, { kind: 'dice', player: seq.attacker, text: `Hot: rolled ${roll} → ${roll * 2} damage to ${attacker.name}` });
     } else {
       log(state, { kind: 'dice', player: seq.attacker, text: `Hot: rolled ${roll} — no damage` });
     }

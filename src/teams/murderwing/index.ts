@@ -322,7 +322,7 @@ function applyBoost(ctx: GameContext, state: GameState, op: OperativeState, plan
   log(state, {
     kind: 'action',
     player: op.player,
-    text: `${op.letter} does a BOOST (${plan.inches}") during the ${base} action`,
+    text: `${op.name} does a BOOST (${plan.inches}") during the ${base} action`,
     data: { operativeId: op.id, action: base, inches: plan.inches },
   });
 }
@@ -521,21 +521,21 @@ function attemptBoon(T: TeamHooks, state: GameState, op: OperativeState, what: s
   if (pts > 3 && pts < 6) return false;
   if (!useOncePerSequence(state, `murderwing.damnation:${op.id}`)) return false;
   if (pts >= 6) {
-    log(state, { kind: 'action', player: op.player, text: `${op.letter}: ${what} resolves (6 Damnation points)` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name}: ${what} resolves (6 Damnation points)` });
     return true;
   }
   const roll = ctx.rng.d6();
   recordRoll(state, 'damnation', [roll], op.player, `Path to Damnation (${pts} points)`);
   if (roll > pts) {
     setDamnation(state, op.id, pts + 1);
-    log(state, { kind: 'action', player: op.player, text: `${op.letter}: ${what} — ${roll} beats ${pts}, +1 Damnation point` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name}: ${what} — ${roll} beats ${pts}, +1 Damnation point` });
     return true;
   }
   if (roll === pts) {
-    log(state, { kind: 'action', player: op.player, text: `${op.letter}: ${what} — ${roll} equals ${pts}, no effect` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name}: ${what} — ${roll} equals ${pts}, no effect` });
     return false;
   }
-  log(state, { kind: 'action', player: op.player, text: `${op.letter}: ${what} — ${roll} is less than ${pts}` });
+  log(state, { kind: 'action', player: op.player, text: `${op.name}: ${what} — ${roll} is less than ${pts}` });
   inflictDamage(ctx, state, op, pts, 'other');
   return false;
 }
@@ -612,7 +612,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     // "roll two D6, or one D6 if that enemy operative has a higher Wounds stat than this operative"
     const n = (T.card(enemy)?.wounds ?? 0) > (T.card(hunt)?.wounds ?? 0) ? 1 : 2;
     const results = ctx.rng.roll(n);
-    recordRoll(ev.state, 'pinnedPrey', results, T.player, `Pinned Prey vs ${enemy.letter}`);
+    recordRoll(ev.state, 'pinnedPrey', results, T.player, `Pinned Prey vs ${enemy.name}`);
     if (!results.some((r) => r >= 4)) return;
     effect(ev.state, {
       rule: PINNED,
@@ -622,7 +622,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: enemy.id },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `Pinned Prey: ${enemy.letter} cannot Fall Back` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Pinned Prey: ${enemy.name} cannot Fall Back` });
   });
   reg.on('canPerformAction', T.bind('murderwing.huntmaster.pinned-prey', 12), (ev) => {
     if (ev.operative.player === T.player) return;
@@ -693,7 +693,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       .find((o) => o?.player === T.player && o.datacardId === 'murderwing.champion');
     if (!champ || champ.id === victim.id) return;
     ev.state.teams[T.player].cp += 1;
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Path to Glory: ${champ.letter} gains 1CP` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Path to Glory: ${champ.name} gains 1CP` });
   });
 
   // ---- CURSECLAW › Frenzied Attack --------------------------------------
@@ -723,7 +723,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'dice',
       player: T.player,
-      text: `Frenzied Attack: ${victim.letter} strikes ${foe.letter} for ${crit ? profile.dmgC : profile.dmgN}`,
+      text: `Frenzied Attack: ${victim.name} strikes ${foe.name} for ${crit ? profile.dmgC : profile.dmgN}`,
     });
     inflictDamage(ctx, ev.state, foe, crit ? profile.dmgC : profile.dmgN, 'attack');
   });
@@ -756,7 +756,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfNextActivation', operativeId: pick.id, armed: false },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `Horrifying Dismemberment: ${pick.letter} −1 APL` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Horrifying Dismemberment: ${pick.name} −1 APL` });
   });
 
   // ---- RAPTOR › Thrill of Flight (the injured half) ----------------------
@@ -881,7 +881,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Malicious Narcissism: ${chosen.letter} delays its activation`,
+      text: `Malicious Narcissism: ${chosen.name} delays its activation`,
     });
   });
   // "Note that you cannot counteract until that friendly MURDERWING operative is expended."
@@ -920,7 +920,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Murderous Descent: ${diver.letter} interrupts ${enemy.letter} with a free Charge`,
+      text: `Murderous Descent: ${diver.name} interrupts ${enemy.name} with a free Charge`,
     });
   });
 
@@ -955,7 +955,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Long Forgotten Honour: ${me.letter} ends the fight and falls back`,
+      text: `Long Forgotten Honour: ${me.name} ends the fight and falls back`,
     });
   });
 
@@ -978,7 +978,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Wings of Darkness: ${chosen.letter} can BOOST an additional 3"`,
+      text: `Wings of Darkness: ${chosen.name} can BOOST an additional 3"`,
     });
   });
   // "…but it cannot perform the Shoot, Fight or Carving Blow action until the next turning point."
@@ -1162,7 +1162,7 @@ function gambits(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Chaos Champion: ${target.letter} gains the Challenge token (${rule})`,
+      text: `Chaos Champion: ${target.name} gains the Challenge token (${rule})`,
     });
   });
 }
@@ -1195,7 +1195,7 @@ function actions(data: TeamData): ActionDef[] {
         const myScore = mine + card(ctx, op).wounds;
         const theirScore = theirs + card(ctx, target).wounds;
         if (myScore <= theirScore) {
-          log(state, { kind: 'action', player: op.player, text: `${op.letter}: SNATCH fails (${myScore} vs ${theirScore})` });
+          log(state, { kind: 'action', player: op.player, text: `${op.name}: SNATCH fails (${myScore} vs ${theirScore})` });
           return { ok: true };
         }
         const began = dist(op.pos, target.pos);
@@ -1214,8 +1214,8 @@ function actions(data: TeamData): ActionDef[] {
           kind: 'action',
           player: op.player,
           text: moved
-            ? `${op.letter}: SNATCH drags ${target.letter} in (${myScore} vs ${theirScore})`
-            : `${op.letter}: SNATCH wins but ${target.letter} has nowhere it can be placed`,
+            ? `${op.name}: SNATCH drags ${target.name} in (${myScore} vs ${theirScore})`
+            : `${op.name}: SNATCH wins but ${target.name} has nowhere it can be placed`,
         });
         return { ok: true };
       },
@@ -1240,10 +1240,10 @@ function actions(data: TeamData): ActionDef[] {
         for (const victim of carvingBlowVictims(ctx, state, op)) {
           const a = ctx.rng.d3();
           const b = ctx.rng.d3();
-          recordRoll(state, 'carvingBlow', [a, b], op.player, `CARVING BLOW vs ${victim.letter}`);
+          recordRoll(state, 'carvingBlow', [a, b], op.player, `CARVING BLOW vs ${victim.name}`);
           inflictDamage(ctx, state, victim, a + b, 'other');
         }
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: CARVING BLOW` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: CARVING BLOW` });
         return { ok: true };
       },
     }),
@@ -1267,7 +1267,7 @@ function actions(data: TeamData): ActionDef[] {
         const b = ctx.rng.d3();
         recordRoll(state, 'strikeFromAbove', [a, b], op.player, 'STRIKE FROM ABOVE 2D3+1');
         inflictDamage(ctx, state, target, a + b + 1, 'other');
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: STRIKE FROM ABOVE hits ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: STRIKE FROM ABOVE hits ${target.name}` });
         return { ok: true };
       },
     }),
@@ -1296,10 +1296,10 @@ function actions(data: TeamData): ActionDef[] {
         const target = state.operatives[params.targetOperativeId!]!;
         if (shriekMode(ctx, state, op, target) !== 'normal') markBoostAction(state, op, 'murderwing.shrieker.act.shriek');
         const d3 = ctx.rng.d3();
-        recordRoll(state, 'shriek', [d3], op.player, `SHRIEK vs ${target.letter}`);
+        recordRoll(state, 'shriek', [d3], op.player, `SHRIEK vs ${target.name}`);
         inflictDamage(ctx, state, target, d3, 'other');
         applyAplPenalty(state, target, op.player, 'murderwing.shrieker.act.shriek');
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SHRIEK — ${target.letter} takes ${d3} and −1 APL` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SHRIEK — ${target.name} takes ${d3} and −1 APL` });
         return { ok: true };
       },
     }),
@@ -1376,7 +1376,7 @@ registerAction({
     const d3 = ctx.rng.d3();
     recordRoll(state, 'sliceFromAbove', [d3], op.player, 'SLICE FROM ABOVE D3+1');
     inflictDamage(ctx, state, target, d3 + 1, 'other');
-    log(state, { kind: 'action', player: op.player, text: `${op.letter}: SLICE FROM ABOVE hits ${target.letter}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name}: SLICE FROM ABOVE hits ${target.name}` });
     return { ok: true };
   },
 });
@@ -1406,7 +1406,7 @@ registerAction({
     const target = (params.targetOperativeId ? state.operatives[params.targetOperativeId] : undefined) ?? engaged[0]!;
     markBoostAction(state, op, 'murderwing.eq.clawed-armour');
     inflictDamage(ctx, state, target, 1, 'other');
-    log(state, { kind: 'action', player: op.player, text: `${op.letter}: CLAWED CHARGE hits ${target.letter}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name}: CLAWED CHARGE hits ${target.name}` });
     return { ok: true };
   },
 });
@@ -1432,12 +1432,12 @@ registerAction({
   perform(ctx, state, op) {
     for (const target of voxCryTargets(ctx, state, op)) {
       const roll = ctx.rng.d6();
-      recordRoll(state, 'stunTest', [roll], op.player, `VOX-CRY vs ${target.letter}`);
+      recordRoll(state, 'stunTest', [roll], op.player, `VOX-CRY vs ${target.name}`);
       const ev = ctx.hooks.emit('onStunTest', state, { state, thrower: op, target, roll, damage: 0 });
       if (ev.damage > 0) inflictDamage(ctx, state, target, ev.damage, 'other');
       if (ev.roll < 3) continue;
       applyAplPenalty(state, target, op.player, 'murderwing.eq.vox-casters');
-      log(state, { kind: 'action', player: op.player, text: `VOX-CRY stuns ${target.letter} (−1 APL)` });
+      log(state, { kind: 'action', player: op.player, text: `VOX-CRY stuns ${target.name} (−1 APL)` });
     }
     return { ok: true };
   },

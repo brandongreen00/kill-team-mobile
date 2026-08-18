@@ -285,7 +285,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `In Midnight Clad: ${target.letter} is obscured`,
+      text: `In Midnight Clad: ${target.name} is obscured`,
       data: { operativeId: target.id },
     });
   });
@@ -309,7 +309,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (!hasToken(ev.state, ev.operative.id, TERRORCHEM, T.player)) return;
     if (!T.ctx) return;
     const d3 = T.ctx.rng.d3();
-    recordRoll(ev.state, 'terrorchem', [d3], T.player, `Terrorchem D3 vs ${ev.operative.letter}`);
+    recordRoll(ev.state, 'terrorchem', [d3], T.player, `Terrorchem D3 vs ${ev.operative.name}`);
     inflictDamage(T.ctx, ev.state, ev.operative, d3, 'other');
   });
 
@@ -372,7 +372,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Flay Them Alive: ${chosen.letter} cannot control markers or perform mission actions`,
+      text: `Flay Them Alive: ${chosen.name} cannot control markers or perform mission actions`,
       data: { operativeId: chosen.id },
     });
   });
@@ -463,7 +463,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Portent: ${ev.target.letter} ignores ${dmgN} damage (1 Prescience point spent)`,
+      text: `Portent: ${ev.target.name} ignores ${dmgN} damage (1 Prescience point spent)`,
     });
   });
 
@@ -526,7 +526,7 @@ function checkPoisonedObjectives(T: TeamHooks, state: GameState): void {
       log(state, {
         kind: 'action',
         player: T.player,
-        text: `POISON OBJECTIVE: ${e.letter} takes ${damage} damage from the poisoned objective`,
+        text: `POISON OBJECTIVE: ${e.name} takes ${damage} damage from the poisoned objective`,
       });
       break;
     }
@@ -552,9 +552,9 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     const victim = victims[0];
     if (!victim) return;
     const d3 = T.ctx.rng.d3();
-    recordRoll(ev.state, 'weHaveComeForYou', [d3], T.player, `WE HAVE COME FOR YOU vs ${victim.letter}`);
+    recordRoll(ev.state, 'weHaveComeForYou', [d3], T.player, `WE HAVE COME FOR YOU vs ${victim.name}`);
     inflictDamage(T.ctx, ev.state, victim, d3, 'other');
-    log(ev.state, { kind: 'ploy', player: T.player, text: `We Have Come For You: ${d3} damage to ${victim.letter}` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `We Have Come For You: ${d3} damage to ${victim.name}` });
   });
 
   // ---- THE BLACK HUNT (strategy, 1CP) -------------------------------------
@@ -614,7 +614,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     }
     const roll = T.ctx.rng.d6();
     const apl = aplOf(T.ctx, ev.state, target);
-    recordRoll(ev.state, 'voxScream', [roll], T.player, `VOX SCREAM vs ${target.letter} (APL ${apl})`);
+    recordRoll(ev.state, 'voxScream', [roll], T.player, `VOX SCREAM vs ${target.name} (APL ${apl})`);
     if (roll <= apl) {
       // "this ploy isn't used, the CP spent on it is refunded and you cannot use this ploy
       //  again during this turning point" — the reducer already banked the once-per-TP entry.
@@ -634,7 +634,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Vox Scream stuns ${target.letter} (${roll} vs APL ${apl})` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Vox Scream stuns ${target.name} (${roll} vs APL ${apl})` });
   });
 
   // ---- DEATH TO THE FALSE EMPEROR (firefight, 1CP) ------------------------
@@ -776,14 +776,14 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     const dice = (T.card(foe)?.wounds ?? 0) > (T.card(snarer)?.wounds ?? 0) ? 1 : 2;
     const results: number[] = [];
     for (let i = 0; i < dice; i++) results.push(T.ctx.rng.d6());
-    recordRoll(ev.state, 'chainSnare', results, T.player, `CHAIN SNARE ${dice}D6 vs ${foe.letter}`);
+    recordRoll(ev.state, 'chainSnare', results, T.player, `CHAIN SNARE ${dice}D6 vs ${foe.name}`);
     if (!results.some((r) => r >= 4)) return;
     bucket(ev.state, 'nemesisClaw.chainSnare')[`${foe.id}:tp${ev.state.turningPoint}`] = true;
     useOncePerTP(ev.state, `nemesisClaw.chainSnare:${T.player}`);
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Chain Snare bites into ${foe.letter} — it cannot Fall Back during this activation`,
+      text: `Chain Snare bites into ${foe.name} — it cannot Fall Back during this activation`,
     });
   });
   reg.on('canPerformAction', T.bind(EQ_CHAIN_SNARE, 30), (ev) => {
@@ -878,7 +878,7 @@ function actions(data: typeof DATA) {
         useOncePerTP(state, `nemesisClaw.premonition:${op.id}`);
         setPrescience(state, op.player, prescience(state, op.player) - 1);
         state.teams[op.player].cp += 1;
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: PREMONITION — 1 Prescience point spent, +1CP` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: PREMONITION — 1 Prescience point spent, +1CP` });
         return { ok: true };
       },
     }),
@@ -909,7 +909,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: POISON OBJECTIVE — the ${marker.id} objective marker gains a Terrorchem token`,
+          text: `${op.name}: POISON OBJECTIVE — the ${marker.id} objective marker gains a Terrorchem token`,
         });
         return { ok: true };
       },
@@ -951,7 +951,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: DISCONCERTING MIMICRY (${option}) on ${target.letter}`,
+          text: `${op.name}: DISCONCERTING MIMICRY (${option}) on ${target.name}`,
         });
         return { ok: true };
       },
@@ -985,10 +985,10 @@ function mimicryDash(
     if (!v.ok) continue;
     target.pos = { ...v.endPos };
     target.z = v.endZ;
-    log(state, { kind: 'action', player: op.player, text: `${target.letter} performs a free Dash (Disconcerting Mimicry)` });
+    log(state, { kind: 'action', player: op.player, text: `${target.name} performs a free Dash (Disconcerting Mimicry)` });
     return;
   }
-  log(state, { kind: 'action', player: op.player, text: `${target.letter} has no legal Dash destination` });
+  log(state, { kind: 'action', player: op.player, text: `${target.name} has no legal Dash destination` });
 }
 
 // ---------------------------------------------------------------------------

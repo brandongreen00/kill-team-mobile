@@ -89,7 +89,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Breach and Clear: ${partner.letter} activates after ${ev.operative.letter}`,
+      text: `Breach and Clear: ${partner.name} activates after ${ev.operative.name}`,
     });
   });
 
@@ -501,7 +501,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfTurningPoint' },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SPOT` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SPOT` });
         return { ok: true };
       },
     }),
@@ -524,7 +524,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfActivation', operativeId: op.id },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: BOOST (+6" Move)` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: BOOST (+6" Move)` });
         return { ok: true };
       },
     }),
@@ -546,7 +546,7 @@ function actions(data: typeof DATA) {
           data: { partId: params.partId },
           expiry: { kind: 'endOfBattle' },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: WELD SHUT` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: WELD SHUT` });
         return { ok: true };
       },
     }),
@@ -565,7 +565,7 @@ function actions(data: typeof DATA) {
           owner: op.player,
           flags: { breachPoint: true },
         };
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: BREACH POINT` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: BREACH POINT` });
         return { ok: true };
       },
     }),
@@ -595,7 +595,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: WAYFIND — ${target.letter} +1 APL` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: WAYFIND — ${target.name} +1 APL` });
         return { ok: true };
       },
     }),
@@ -624,7 +624,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfActivation', operativeId: cat.id },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: REMOTE CONTROL` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: REMOTE CONTROL` });
         return { ok: true };
       },
     }),
@@ -662,7 +662,7 @@ function actions(data: typeof DATA) {
             expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
           });
         }
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: INTERFERENCE PULSE (${roll})` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: INTERFERENCE PULSE (${roll})` });
         return { ok: true };
       },
     }),

@@ -87,7 +87,7 @@ export function makeInspiring(state: GameState, op: OperativeState, sourceId: st
     player: op.player,
     expiry: { kind: 'endOfBattle' },
   });
-  log(state, { kind: 'action', player: op.player, text: `${op.letter} becomes INSPIRING (${why})` });
+  log(state, { kind: 'action', player: op.player, text: `${op.name} becomes INSPIRING (${why})` });
 }
 
 // ---------------------------------------------------------------------------
@@ -159,7 +159,7 @@ function applyBenediction(
   log(state, {
     kind: 'action',
     player: op.player,
-    text: `Martyrdom${martyr ? ` (${martyr.letter})` : ''}: ${op.letter} gains the ${benediction} BENEDICTION`,
+    text: `Martyrdom${martyr ? ` (${martyr.name})` : ''}: ${op.name} gains the ${benediction} BENEDICTION`,
   });
 }
 
@@ -217,7 +217,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if ((T.card(victim)?.wounds ?? 0) < 6) return;
     const killer = incapacitator(ev.state, victim);
     if (!killer || !T.mineKw(killer, KW)) return;
-    makeInspiring(ev.state, killer, 'celestian-insidiants.rule.inspiration', `incapacitated ${victim.letter}`);
+    makeInspiring(ev.state, killer, 'celestian-insidiants.rule.inspiration', `incapacitated ${victim.name}`);
   });
   // "Performs the Charge action, before it moves, it becomes INSPIRING." — `isInspiring`
   // already reads the in-flight Charge; this writes the lasting effect.
@@ -333,7 +333,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (abjuror.wounds <= ev.target.wounds) return;
     useOncePerTP(ev.state, `celestian.holyDefender:${T.player}`);
     ev.redirectTo = abjuror.id;
-    log(ev.state, { kind: 'action', player: T.player, text: `Holy Defender: ${abjuror.letter} shields ${ev.target.letter}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Holy Defender: ${abjuror.name} shields ${ev.target.name}` });
   });
 
   // ---- CENSOR › Virge of Admonition Icon Bearer --------------------------
@@ -420,7 +420,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       id: `ultimatum-${ev.state.seq++}`,
       who: enemy.player,
       kind: ULTIMATUM_DECISION,
-      prompt: `${mortisanctus.letter} issues an ultimatum to ${enemy.letter} — accept or decline?`,
+      prompt: `${mortisanctus.name} issues an ultimatum to ${enemy.name} — accept or decline?`,
       sourceText: shortQuote(abilityText('celestian-insidiants.insidiant-mortisanctus', 'celestian-insidiants.insidiant-mortisanctus.zealous-ultimatum')),
       options: [
         { id: 'accept', label: 'Accept the ultimatum', data: { targetId: enemy.id, player: T.player } },
@@ -579,7 +579,7 @@ function offerMartyrdom(T: TeamHooks, state: GameState, martyr: OperativeState):
       if (b === 'ardour' && T.kw(op, 'SUPERIOR')) continue;
       options.push({
         id: `${op.id}|${b}`,
-        label: `${op.letter}: ${b}${near.some((n) => n.id === op.id) ? '' : ' (Vocifera Mortis)'}`,
+        label: `${op.name}: ${b}${near.some((n) => n.id === op.id) ? '' : ' (Vocifera Mortis)'}`,
         data: { operativeId: op.id, benediction: b, martyrId: martyr.id, far: !near.some((n) => n.id === op.id) },
       });
     }
@@ -589,7 +589,7 @@ function offerMartyrdom(T: TeamHooks, state: GameState, martyr: OperativeState):
     id: `martyrdom-${state.seq++}`,
     who: T.player,
     kind: MARTYRDOM_DECISION,
-    prompt: `${martyr.letter} is martyred — select an operative and a BENEDICTION`,
+    prompt: `${martyr.name} is martyred — select an operative and a BENEDICTION`,
     sourceText: shortQuote(text('celestian-insidiants.rule.martyrdom')),
     options,
   });
@@ -687,7 +687,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
         player: T.player,
         expiry: { kind: 'endOfTurningPoint' },
       });
-      log(ev.state, { kind: 'ploy', player: T.player, text: `${enemy.letter} gains a Suspicion token` });
+      log(ev.state, { kind: 'ploy', player: T.player, text: `${enemy.name} gains a Suspicion token` });
     }
   });
   reg.on('onWeaponRules', T.bind('celestian-insidiants.sp.suspect-eliminate', 21), (ev) => {
@@ -745,7 +745,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     const profile = currentProfileOf(T, ev.state, ev.operative);
     const dmg = die.state === 'crit' ? (profile?.dmgC ?? 3) : (profile?.dmgN ?? 2);
     die.state = 'struck';
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Glory to the Martyrs: ${ev.operative.letter} strikes for ${dmg}` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Glory to the Martyrs: ${ev.operative.name} strikes for ${dmg}` });
     const res = inflictDamage(T.ctx, ev.state, enemy, dmg, 'attack');
     if (res.incapacitated) {
       makeInspiring(ev.state, ev.operative, 'celestian-insidiants.fp.glory-to-the-martyrs', 'Glory to the Martyrs');
@@ -779,7 +779,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       if (enemy.id === ev.struck.id) continue; // "each OTHER enemy operative"
       if (T.gap(fighter, enemy) > 2 + 1e-6 || !visible(T, ev.state, fighter, enemy)) continue;
       const d3 = T.ctx.rng.d3();
-      recordRoll(ev.state, 'faithAndFury', [d3], T.player, `Faith & Fury vs ${enemy.letter}`);
+      recordRoll(ev.state, 'faithAndFury', [d3], T.player, `Faith & Fury vs ${enemy.name}`);
       inflictDamage(T.ctx, ev.state, enemy, d3, 'other');
       if ((T.card(enemy)?.wounds ?? 0) >= 6 && enemy.incapacitated)
         makeInspiring(ev.state, fighter, 'celestian-insidiants.fp.faith-fury', 'Faith & Fury');
@@ -849,7 +849,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     setRelicUses(ev.state, T.player, used + 1);
     if (rolls.some((r) => r === 6)) {
       ev.amount = 0;
-      log(ev.state, { kind: 'action', player: T.player, text: `Saintly Relics: ${ev.target.letter} ignores the damage` });
+      log(ev.state, { kind: 'action', player: T.player, text: `Saintly Relics: ${ev.target.name} ignores the damage` });
     }
   });
 
@@ -869,7 +869,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
       id: `flagellate-${ev.state.seq++}`,
       who: T.player,
       kind: FLAGELLATOR_DECISION,
-      prompt: `${ev.operative.letter}: use the AUTO-FLAGELLATOR?`,
+      prompt: `${ev.operative.name}: use the AUTO-FLAGELLATOR?`,
       sourceText: shortQuote(text('celestian-insidiants.eq.auto-flagellator')),
       optional: true,
       ctx: { operativeId: ev.operative.id },
@@ -990,7 +990,7 @@ function actions(data: typeof DATA) {
             data: { steps: 1 },
             expiry: { kind: 'endOfBattle' },
           });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: NULLIFYING RITUAL (null range ${nullRange(state, op)}")` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: NULLIFYING RITUAL (null range ${nullRange(state, op)}")` });
         return { ok: true };
       },
     }),
@@ -1018,7 +1018,7 @@ function actions(data: typeof DATA) {
               ? 'restoration'
               : choice;
         applyBenediction(ctx, state, target, benediction, source);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SPEAK OF HER DEEDS (${source.letter} → ${target.letter})` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SPEAK OF HER DEEDS (${source.name} → ${target.name})` });
         return { ok: true };
       },
     }),

@@ -442,14 +442,14 @@ function blaze(reg: HookRegistry, T: TeamHooks): void {
     if (!hasToken(ev.state, ev.operative.id, BLAZE_TOKEN, T.player)) return;
     if (!T.ctx) return;
     const d3 = T.ctx.rng.d3();
-    recordRoll(ev.state, 'blaze', [d3], T.player, `Blaze D3 vs ${ev.operative.letter}`);
+    recordRoll(ev.state, 'blaze', [d3], T.player, `Blaze D3 vs ${ev.operative.name}`);
     inflictDamage(T.ctx, ev.state, ev.operative, d3, 'other');
     if (ev.operative.incapacitated || ev.operative.removed) return;
     ev.state.pending.push({
       id: `blaze-${ev.state.seq++}`,
       who: ev.operative.player,
       kind: BLAZE_DECISION,
-      prompt: `${ev.operative.letter} is ablaze — choose how to remove the Blaze token`,
+      prompt: `${ev.operative.name} is ablaze — choose how to remove the Blaze token`,
       sourceText: shortQuote(text(R_BLAZE)),
       ctx: { operativeId: ev.operative.id, owner: T.player },
       options: [
@@ -483,7 +483,7 @@ function sermon(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfBattle' },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Ministorum Sermon: ${chosen.letter} is the ORATOR` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Ministorum Sermon: ${chosen.name} is the ORATOR` });
   });
 
   // "Whenever a friendly SANCTIFIER operative is ACTIVATED within 3" … that friendly
@@ -592,7 +592,7 @@ function confessor(reg: HookRegistry, T: TeamHooks): void {
     useOncePerBattle(ev.state, `sanctifiers.declamation:${T.player}`);
     const roll = T.ctx.rng.d6();
     const apl = aplOf(T.ctx, ev.state, enemy);
-    recordRoll(ev.state, 'commandingDeclamation', [roll], T.player, `vs ${enemy.letter} (APL ${apl})`);
+    recordRoll(ev.state, 'commandingDeclamation', [roll], T.player, `vs ${enemy.name} (APL ${apl})`);
     if (roll <= apl) {
       log(ev.state, { kind: 'action', player: T.player, text: `Commanding Declamation: ${roll} vs APL ${apl} — no effect` });
       return;
@@ -601,7 +601,7 @@ function confessor(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Commanding Declamation: ${enemy.letter} loses one action this activation`,
+      text: `Commanding Declamation: ${enemy.name} loses one action this activation`,
     });
   });
 }
@@ -687,7 +687,7 @@ function conflagrator(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Twin Torrent: ${attacker.letter} also shoots ${second.letter}`,
+      text: `Twin Torrent: ${attacker.name} also shoots ${second.name}`,
     });
   });
   // The engine's secondary targets inherit the primary's cover/obscured (Blast/Torrent), but
@@ -814,7 +814,7 @@ function persecutor(reg: HookRegistry, T: TeamHooks): void {
     const profile = fightProfileOf(T, ev.state, op);
     const dmg = die.state === 'crit' ? (profile?.dmgC ?? 0) : (profile?.dmgN ?? 0);
     die.state = 'struck';
-    log(ev.state, { kind: 'action', player: T.player, text: `Fanatical Retribution: ${op.letter} strikes for ${dmg}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Fanatical Retribution: ${op.name} strikes for ${dmg}` });
     inflictDamage(T.ctx, ev.state, foe, dmg, 'attack');
   });
 }
@@ -877,7 +877,7 @@ function miraculist(reg: HookRegistry, T: TeamHooks): void {
       kind: 'ability',
       only: ['Dash', 'Fall Back'],
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `Miracle: ${op.letter} survives with 1 wound` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Miracle: ${op.name} survives with 1 wound` });
   });
   reg.on('onMoveDistance', T.bind(A_MIRACLE, 13), (ev) => {
     if (ev.action !== 'Fall Back' || ev.operative.player !== T.player) return;
@@ -1001,17 +1001,17 @@ function decisionHandler(
     // "Subtract 1 from the operative's APL stat until the end of that activation to remove that token."
     tempApl(state, op, -1, R_BLAZE, shortQuote(text(R_BLAZE)));
     dropToken(state, op.id, BLAZE_TOKEN, owner);
-    log(state, { kind: 'decision', player: op.player, text: `${op.letter} smothers the Blaze token (−1 APL)` });
+    log(state, { kind: 'decision', player: op.player, text: `${op.name} smothers the Blaze token (−1 APL)` });
     return true;
   }
   // "Roll one D6: on a 3+, remove that token."
   const roll = ctx.rng.d6();
-  recordRoll(state, 'blaze', [roll], op.player, `Blaze removal 3+ (${op.letter})`);
+  recordRoll(state, 'blaze', [roll], op.player, `Blaze removal 3+ (${op.name})`);
   if (roll >= 3) {
     dropToken(state, op.id, BLAZE_TOKEN, owner);
-    log(state, { kind: 'decision', player: op.player, text: `${op.letter} puts out the Blaze token (${roll})` });
+    log(state, { kind: 'decision', player: op.player, text: `${op.name} puts out the Blaze token (${roll})` });
   } else {
-    log(state, { kind: 'decision', player: op.player, text: `${op.letter} is still ablaze (${roll})` });
+    log(state, { kind: 'decision', player: op.player, text: `${op.name} is still ablaze (${roll})` });
   }
   return true;
 }
@@ -1100,7 +1100,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     if (perDie <= 0 || ev.amount < perDie) return;
     if (!useOncePerTP(ev.state, `sanctifiers.rosarius:${T.player}`)) return;
     ev.amount -= perDie;
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Rosarius: ${ev.target.letter} ignores ${perDie} damage` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Rosarius: ${ev.target.name} ignores ${perDie} damage` });
   });
 
   // ---- ARDENT ERADICATION (firefight) -----------------------------------
@@ -1173,7 +1173,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Unwavering Devotion: ${shield.letter} shields ${first.letter}`,
+      text: `Unwavering Devotion: ${shield.name} shields ${first.name}`,
     });
   });
 }
@@ -1223,7 +1223,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     if (!ev.ctx.rules.some((r) => r.id === 'Blaze')) return;
     if (!hasToken(ev.state, ev.struck.id, DOUSED_TOKEN, T.player)) return;
     dropToken(ev.state, ev.struck.id, DOUSED_TOKEN, T.player);
-    log(ev.state, { kind: 'action', player: T.player, text: `${ev.struck.letter} loses its Doused token` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${ev.struck.name} loses its Doused token` });
   });
 
   // ---- PURITY SEALS ------------------------------------------------------
@@ -1260,7 +1260,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     if (!orator) return;
     const rolls = [T.ctx.rng.d6(), T.ctx.rng.d6(), T.ctx.rng.d6()];
     const total = rolls.reduce((a, b) => a + b, 0);
-    recordRoll(ev.state, 'ecclesiarchyTexts', rolls, T.player, `3D6 vs ${orator.letter} (${orator.wounds} wounds)`);
+    recordRoll(ev.state, 'ecclesiarchyTexts', rolls, T.player, `3D6 vs ${orator.name} (${orator.wounds} wounds)`);
     if (total < orator.wounds) {
       ev.cp += 1;
       log(ev.state, { kind: 'ploy', player: T.player, text: `Ecclesiarchy Texts: ${total} < ${orator.wounds} — gain 1CP` });
@@ -1470,7 +1470,7 @@ function flyAction(id: string, name: string, mode: 'Reposition' | 'Fall Back' | 
           .filter((e) => inControlRange(ctx, state, op, e))
           .map((e) => e.id);
       }
-      log(state, { kind: 'action', player: op.player, text: `${op.letter} FLIES (${name})` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name} FLIES (${name})` });
       return { ok: true };
     },
   };
@@ -1492,7 +1492,7 @@ function actions(data: typeof DATA): ActionDef[] {
         if (!target) return { ok: false, reason: 'select one other friendly SANCTIFIER operative visible to and within 2"' };
         // "Until the end of that operative's next activation, add 1 to its APL stat."
         tempApl(state, target, 1, ACT_INCENTIVISE, shortQuote(actionText(CHERUB, ACT_INCENTIVISE)));
-        log(state, { kind: 'action', player: op.player, text: `${op.letter} incentivises ${target.letter} (+1 APL)` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name} incentivises ${target.name} (+1 APL)` });
         return { ok: true };
       },
     }),
@@ -1504,7 +1504,7 @@ function actions(data: typeof DATA): ActionDef[] {
         // "Change this operative's order."
         const wanted = params.choice === 'engage' || params.choice === 'conceal' ? params.choice : undefined;
         op.order = wanted ?? (op.order === 'engage' ? 'conceal' : 'engage');
-        log(state, { kind: 'action', player: op.player, text: `${op.letter} changes its order to ${op.order}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name} changes its order to ${op.order}` });
         return { ok: true };
       },
     }),
@@ -1524,9 +1524,9 @@ function actions(data: typeof DATA): ActionDef[] {
         // "…to regain up to 2D3 lost wounds."
         const rolls = [ctx.rng.d3(), ctx.rng.d3()];
         const heal = rolls[0]! + rolls[1]!;
-        recordRoll(state, 'medikit', rolls, op.player, `MEDIKIT 2D3 on ${target.letter}`);
+        recordRoll(state, 'medikit', rolls, op.player, `MEDIKIT 2D3 on ${target.name}`);
         target.wounds = Math.min(card(ctx, target).wounds, target.wounds + heal);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter} heals ${target.letter} for ${heal}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name} heals ${target.name} for ${heal}` });
         return { ok: true };
       },
     }),
@@ -1568,7 +1568,7 @@ function actions(data: typeof DATA): ActionDef[] {
         ].sort(byId);
         for (const victim of victims) {
           const roll = ctx.rng.d6();
-          recordRoll(state, 'dousedTest', [roll], op.player, `doused test on ${victim.letter}`);
+          recordRoll(state, 'dousedTest', [roll], op.player, `doused test on ${victim.name}`);
           if (roll < 3) continue; // "roll one D6: on a 3+, it gains one of your Doused tokens"
           giveToken(state, victim, DOUSED_TOKEN, {
             sourceId: EQ_ORBS,

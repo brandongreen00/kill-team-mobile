@@ -122,7 +122,7 @@ registerAction({
     if (barricadeSpotIsLegal(ctx, state, shieldPoly(rebuilt), id)) {
       state.placedFeatures.push(rebuilt);
       ctx.terrainCache = undefined as unknown as GameContext['terrainCache'];
-      log(state, { kind: 'action', player: op.player, text: `${op.letter} moves with the portable barricade` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name} moves with the portable barricade` });
     } else {
       log(state, {
         kind: 'action',

@@ -60,7 +60,7 @@ export const routOp: OpModule = {
       const want = card(ctx, victim).wounds >= 12 ? 2 : 1;
       const grant = Math.min(want, roomThisTP(state, player, ID, PER_TP_CAP));
       if (grant <= 0) continue;
-      if (awardVP(ctx, state, player, ID, grant, `Rout: ${killer.letter} incapacitated ${victim.letter}`) > 0)
+      if (awardVP(ctx, state, player, ID, grant, `Rout: ${killer.name} incapacitated ${victim.name}`) > 0)
         revealTacOp(state, player, 'the first time you score VP from this op');
     }
   },

@@ -99,7 +99,7 @@ export function TargetingInspector({ ctx, state, shooter, target, onClose }: Tar
   return (
     <section class="card">
       <h2>
-        Targeting line — {shooter.letter} → {target.letter}
+        Targeting line — {shooter.name} → {target.name}
         {onClose && (
           <button style={{ float: 'right', minHeight: 32 }} onClick={onClose} aria-label="Close">
             ✕
@@ -160,8 +160,8 @@ export function TargetingInspector({ ctx, state, shooter, target, onClose }: Tar
 
       <ul class="muted" style={{ paddingLeft: 18, marginTop: 8 }}>
         <li>
-          {shooter.letter}: feet {r.shooterZ.toFixed(2)}", head {r.shooterHeadZ.toFixed(2)}" ·{' '}
-          {target.letter}: feet {r.targetZ.toFixed(2)}", top {r.targetTopZ.toFixed(2)}"
+          {shooter.name}: feet {r.shooterZ.toFixed(2)}", head {r.shooterHeadZ.toFixed(2)}" ·{' '}
+          {target.name}: feet {r.targetZ.toFixed(2)}", top {r.targetTopZ.toFixed(2)}"
         </li>
         {!r.visible && r.blockedBy && (
           <li>
@@ -191,7 +191,7 @@ export function TargetingInspector({ ctx, state, shooter, target, onClose }: Tar
         {r.crossed.length === 0 && <li>No terrain is intervening.</li>}
         {r.vantage > 0 && (
           <li>
-            {shooter.letter} is on Vantage terrain {(r.shooterZ - r.targetZ).toFixed(1)}" above the target — Accurate{' '}
+            {shooter.name} is on Vantage terrain {(r.shooterZ - r.targetZ).toFixed(1)}" above the target — Accurate{' '}
             {r.vantage}.
           </li>
         )}

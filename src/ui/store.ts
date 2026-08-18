@@ -13,6 +13,8 @@ export class Store {
   private listeners = new Set<Listener>();
   /** Every intent applied, so a battle can be exported and replayed. */
   readonly history: Intent[] = [];
+  /** Why the most recent dispatch was rejected — surfaced inline next to the control that caused it. */
+  lastError: string | null = null;
 
   constructor(
     public state: GameState,
@@ -27,6 +29,7 @@ export class Store {
   dispatch(intent: Intent): boolean {
     const out = reduce(this.state, intent, this.ctx);
     this.state = out.state;
+    this.lastError = out.ok ? null : (out.reason ?? 'that is not a legal move');
     if (out.ok) this.history.push(intent);
     for (const l of this.listeners) l();
     return out.ok;
@@ -36,6 +39,7 @@ export class Store {
   reset(state: GameState): void {
     this.state = state;
     this.history.length = 0;
+    this.lastError = null;
     for (const l of this.listeners) l();
   }
 

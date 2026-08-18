@@ -77,7 +77,7 @@ export function giveMarkerlight(state: GameState, target: OperativeState, player
   log(state, {
     kind: 'action',
     player,
-    text: `${target.letter} has ${markerlightTokens(state, target, player)} Markerlight token(s)`,
+    text: `${target.name} has ${markerlightTokens(state, target, player)} Markerlight token(s)`,
   });
 }
 
@@ -180,7 +180,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     );
     if (!moved) return;
     removeOneMarkerlight(ev.state, ev.operative, T.player);
-    log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.letter} shakes off a Markerlight token` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.name} shakes off a Markerlight token` });
   });
 
   // ---- SHAS'UI › Art of War (STRATEGIC GAMBIT) ---------------------------
@@ -332,7 +332,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
         expiry: { kind: 'endOfNextActivation', operativeId: o.id, armed: false },
       });
     }
-    log(ev.state, { kind: 'action', player: T.player, text: `Medic!: ${victim.letter} stays on 1 wound` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Medic!: ${victim.name} stays on 1 wound` });
   });
 
   // ---- MARKSMAN › Inertial Dampener --------------------------------------
@@ -559,7 +559,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     if (!drone) return;
     useOncePerTP(ev.state, `pathfinders.saviour:${T.player}`);
     ev.redirectTo = drone.id;
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Saviour Protocols: ${drone.letter} takes the hit` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Saviour Protocols: ${drone.name} takes the hit` });
   });
 
   // POINT-BLANK FUSILLADE (firefight)
@@ -585,7 +585,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     // "If that friendly operative is ready, has an Engage order and is retaliating with a
     //  pulse weapon, you resolve the first attack dice."
     if (defender.ready && defender.order === 'engage' && /pulse/i.test(ranged.name)) seq.turn = 'defender';
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Point-blank Fusillade: ${defender.letter} fights with its ${ranged.name}` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Point-blank Fusillade: ${defender.name} fights with its ${ranged.name}` });
   });
 }
 
@@ -696,7 +696,7 @@ function markerlightAction(datacardId: string, actionId: string) {
         data: { targetId: target.id },
         expiry: { kind: 'endOfActivation', operativeId: op.id },
       });
-      log(state, { kind: 'action', player: op.player, text: `${op.letter}: MARKERLIGHT on ${target.letter}` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name}: MARKERLIGHT on ${target.name}` });
       return { ok: true };
     },
   });
@@ -761,7 +761,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfActivation', operativeId: drone.id },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: REMOTE PILOT (${drone.letter})` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: REMOTE PILOT (${drone.name})` });
         return { ok: true };
       },
     }),
@@ -787,7 +787,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SYSTEM JAM on ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SYSTEM JAM on ${target.name}` });
         return { ok: true };
       },
     }),
@@ -813,7 +813,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SIGNAL — ${target.letter} +1 APL` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SIGNAL — ${target.name} +1 APL` });
         return { ok: true };
       },
     }),
@@ -835,7 +835,7 @@ function actions(data: typeof DATA) {
         recordRoll(state, 'medikit', [heal], op.player, 'MEDIKIT 2D3');
         const max = ctx.datacards.get(target.datacardId)?.wounds ?? target.wounds + heal;
         target.wounds = Math.min(max, target.wounds + heal);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: MEDIKIT restores ${heal} wounds` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: MEDIKIT restores ${heal} wounds` });
         return { ok: true };
       },
     }),
@@ -854,7 +854,7 @@ function actions(data: typeof DATA) {
           // "Until the start of this operative's next activation or until it's incapacitated."
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: PULSE ACCELERATOR` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: PULSE ACCELERATOR` });
         return { ok: true };
       },
     }),
@@ -924,7 +924,7 @@ registerAction({
         expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
       });
     }
-    log(state, { kind: 'action', player: op.player, text: `${op.letter}: PHOTON GRENADE (${roll})` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name}: PHOTON GRENADE (${roll})` });
     return { ok: true };
   },
 });

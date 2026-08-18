@@ -407,7 +407,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (!seq || seq.defenderId !== ev.ctx.attacker.id) return;
     if (!hasRule(ev.ctx.rules, 'Repress')) return;
     seq.turn = 'defender';
-    log(ev.state, { kind: 'dice', player: T.player, text: `Repress: ${ev.ctx.attacker.letter} resolves the first attack dice` });
+    log(ev.state, { kind: 'dice', player: T.player, text: `Repress: ${ev.ctx.attacker.name} resolves the first attack dice` });
   });
 
   // ---- PROCTOR-EXACTANT › Assault Shield ---------------------------------
@@ -553,7 +553,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       kind: 'ability',
       only: ['Dash'],
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `Medic!: ${victim.letter} stays on 1 wound` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Medic!: ${victim.name} stays on 1 wound` });
   });
   reg.on('onIncapacitated', T.bind(AB_MEDIC, 11), (ev) => {
     if (!effectOn(ev.state, ev.operative.id, MEDIC_SHIELD)) return;
@@ -1007,7 +1007,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfTurningPoint' },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Execution Order marks ${foe.letter}` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Execution Order marks ${foe.name}` });
   });
 }
 
@@ -1121,7 +1121,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: ev.operative.id },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `MANACLES hold ${ev.operative.letter}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `MANACLES hold ${ev.operative.name}` });
   });
   reg.on('canPerformAction', T.bind(EQ_MANACLES, 31), (ev) => {
     if (ev.action !== 'Fall Back' || ev.operative.player === T.player) return;
@@ -1247,7 +1247,7 @@ function actions(data: typeof DATA): ActionDef[] {
             owner: op.player,
             flags: { nuncioAquila: true },
           };
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: DEPLOY NUNCIO-AQUILA` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: DEPLOY NUNCIO-AQUILA` });
         return { ok: true };
       },
     }),
@@ -1269,7 +1269,7 @@ function actions(data: typeof DATA): ActionDef[] {
         recordRoll(state, 'medikit', [heal], op.player, 'MEDIKIT 2D3');
         const max = ctx.datacards.get(target.datacardId)?.wounds ?? target.wounds + heal;
         target.wounds = Math.min(max, target.wounds + heal);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: MEDIKIT restores ${heal} wounds` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: MEDIKIT restores ${heal} wounds` });
         return { ok: true };
       },
     }),
@@ -1296,7 +1296,7 @@ function actions(data: typeof DATA): ActionDef[] {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: R-VR COMMAND — ${drop} becomes ${spare}`,
+          text: `${op.name}: R-VR COMMAND — ${drop} becomes ${spare}`,
         });
         return { ok: true };
       },
@@ -1325,7 +1325,7 @@ function actions(data: typeof DATA): ActionDef[] {
           data: { by: op.id },
           expiry: { kind: 'endOfBattle' },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: APPREHEND on ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: APPREHEND on ${target.name}` });
         return { ok: true };
       },
     }),
@@ -1346,7 +1346,7 @@ function actions(data: typeof DATA): ActionDef[] {
         untilNextActivation(state, op, VERISCANT_TOKEN, ACT_VERISCANT, actionTextOf(MALOCATOR, ACT_VERISCANT), {
           on: target.id,
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: VERISCANT on ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: VERISCANT on ${target.name}` });
         return { ok: true };
       },
     }),
@@ -1358,7 +1358,7 @@ function actions(data: typeof DATA): ActionDef[] {
       check: (ctx, state, op) => notEngaged(ctx, state, op),
       perform: (_ctx, state, op) => {
         untilNextActivation(state, op, OPTICS_EFFECT, ACT_OPTICS, actionTextOf(MARKSMAN, ACT_OPTICS));
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: OPTICS` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: OPTICS` });
         return { ok: true };
       },
     }),
@@ -1382,7 +1382,7 @@ function actions(data: typeof DATA): ActionDef[] {
           player: op.player,
           expiry: { kind: 'endOfTurningPoint' }, // "Until the end of the turning point"
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SPOT on ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SPOT on ${target.name}` });
         return { ok: true };
       },
     }),
@@ -1409,7 +1409,7 @@ function actions(data: typeof DATA): ActionDef[] {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SIGNAL — ${target.letter} +1 APL` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SIGNAL — ${target.name} +1 APL` });
         return { ok: true };
       },
     }),

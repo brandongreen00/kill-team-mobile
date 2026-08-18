@@ -609,7 +609,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     }
     useOncePerTP(ev.state, psaPhaseKey(T.player));
     bucket(ev.state, 'es.psaUsed')[`${T.player}:${name.toLowerCase()}`] = true;
-    log(ev.state, { kind: 'action', player: T.player, text: `${op.letter} calls in the ${name}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${op.name} calls in the ${name}` });
   });
 
   // "Instead, the target has a cover save if any part of its base is underneath Vantage terrain."
@@ -636,7 +636,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (!foe || foe.removed) return;
     if (!useOncePerSequence(ev.state, `es.digitalLasers:${vhane.id}`)) return;
     inflictDamage(T.ctx, ev.state, foe, 1, 'other');
-    log(ev.state, { kind: 'action', player: T.player, text: `${vhane.letter}: Digital Lasers (1 damage)` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${vhane.name}: Digital Lasers (1 damage)` });
   });
 
   // Merciless — works when shooting, fighting AND retaliating: `onWeaponRules` is emitted by
@@ -686,11 +686,11 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       log(ev.state, {
         kind: 'ploy',
         player: T.player,
-        text: `${vhane.letter}: Reputation to Maintain — a fifth WARRANT OF TRADE use`,
+        text: `${vhane.name}: Reputation to Maintain — a fifth WARRANT OF TRADE use`,
       });
     } else {
       ev.state.teams[T.player].cp += 1;
-      log(ev.state, { kind: 'ploy', player: T.player, text: `${vhane.letter}: Reputation to Maintain (+1CP)` });
+      log(ev.state, { kind: 'ploy', player: T.player, text: `${vhane.name}: Reputation to Maintain (+1CP)` });
     }
   });
 
@@ -770,7 +770,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     const { profile } = sideWeapon(T.ctx, ev.state, seq, side);
     const dmg = die.state === 'crit' ? profile.dmgC : profile.dmgN;
     die.state = 'struck';
-    log(ev.state, { kind: 'dice', player: T.player, text: `${op.letter}: Zealot strikes ${foe.letter} for ${dmg}` });
+    log(ev.state, { kind: 'dice', player: T.player, text: `${op.name}: Zealot strikes ${foe.name} for ${dmg}` });
     inflictDamage(T.ctx, ev.state, foe, dmg, 'attack');
   });
 
@@ -829,7 +829,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     );
     if (!maester) return;
     const roll = d6(T, ev.state, 'CALIBRATE VOLTAGHEIST: Field D6');
-    log(ev.state, { kind: 'action', player: T.player, text: `${maester.letter}: voltagheist field burns ${foe.letter}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${maester.name}: voltagheist field burns ${foe.name}` });
     inflictDamage(T.ctx, ev.state, foe, roll, 'other');
   });
   // "…until the start of this operative's next activation."
@@ -896,7 +896,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       threshold: currentApl(T, ev.state, victim),
       only: ['Dash'],
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `${adept.letter}: Medic! saves ${victim.letter}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${adept.name}: Medic! saves ${victim.name}` });
   });
 
   // Normaliser Helm — the two stat changes an injured operative suffers, cancelled where the
@@ -949,7 +949,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (normal.dmg < 3 && ev.amount < op.wounds) return;
     useOncePerBattle(ev.state, `es.hardy:${op.id}`);
     ev.amount = Math.max(0, ev.amount - normal.dmg);
-    log(ev.state, { kind: 'action', player: T.player, text: `${op.letter}: Hardy ignores ${normal.dmg} damage` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${op.name}: Hardy ignores ${normal.dmg} damage` });
   });
 
   // UNCOMPROMISING FIRE — "…or during an activation in which it performed the Shoot action
@@ -1047,7 +1047,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'dice',
       player: T.player,
-      text: `STAKE CLAIM: ${op.letter} retains a ${promoted === 'crit' ? 'normal success as a critical' : 'fail as a normal'} success`,
+      text: `STAKE CLAIM: ${op.name} retains a ${promoted === 'crit' ? 'normal success as a critical' : 'fail as a normal'} success`,
     });
   });
 
@@ -1067,7 +1067,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     if (cut <= 0) return;
     useOncePerTP(ev.state, `es.undaunted:${ev.target.id}`);
     ev.amount = Math.max(0, ev.amount - cut);
-    log(ev.state, { kind: 'action', player: T.player, text: `UNDAUNTED EXPLORERS: ${ev.target.letter} halves ${dmg} to ${halved}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `UNDAUNTED EXPLORERS: ${ev.target.name} halves ${dmg} to ${halved}` });
   });
 
   // ---- QUICK MARCH (strategy) --------------------------------------------
@@ -1142,7 +1142,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: op.id },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `SURVIVALIST: ${op.letter} regains ${gained} wounds` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `SURVIVALIST: ${op.name} regains ${gained} wounds` });
   });
   // "…during that activation you can ignore any changes to its APL stat." `aplOf` reads
   // `op.aplMods` and `StatMods.apl` into the SAME clamp, and it reads the array before it
@@ -1171,7 +1171,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: op.id },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `GREAT ENDURANCE: ${op.letter} +1 APL` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `GREAT ENDURANCE: ${op.name} +1 APL` });
   });
   reg.on('onStatMod', T.bind(FP.greatEndurance, 21), (ev) => {
     if (ev.operative.player !== T.player) return; // both players register every handler
@@ -1203,7 +1203,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `WELL-DRILLED: ${other.letter} activates immediately after ${active.letter}`,
+      text: `WELL-DRILLED: ${other.name} activates immediately after ${active.name}`,
     });
   });
 }
@@ -1245,7 +1245,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     b[target.id] = stamp;
     die.state = 'normal';
     die.note = 'Armoured Undersuit';
-    log(ev.state, { kind: 'dice', player: T.player, text: `${target.letter}: Armoured Undersuit retains a 4 as a normal success` });
+    log(ev.state, { kind: 'dice', player: T.player, text: `${target.name}: Armoured Undersuit retains a 4 as a normal success` });
   });
 
   // ---- HOT SHOT CAPACITOR PACKS ------------------------------------------
@@ -1274,7 +1274,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
       data: { weapon: ev.ctx.weaponName.toLowerCase() },
       expiry: { kind: 'endOfTurningPoint' }, // "until the end of the turning point"
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `${op.letter}: Hot Shot Capacitor Packs (${ev.ctx.weaponName})` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${op.name}: Hot Shot Capacitor Packs (${ev.ctx.weaponName})` });
   });
   reg.on('onWeaponRules', T.bind(EQ.hotShot, 31), (ev) => {
     if (ev.operative.player !== T.player) return;
@@ -1372,7 +1372,7 @@ function actions(data: typeof DATA) {
           threshold: aplBefore(ctx, state, op),
           only: ['Dash', 'Reposition', 'Pick Up Marker', 'Place Marker'],
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: GATHER` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: GATHER` });
         return { ok: true };
       },
     }),
@@ -1382,7 +1382,7 @@ function actions(data: typeof DATA) {
       check: (ctx, state, op) => notEngaged(ctx, state, op),
       perform: (_ctx, state, op) => {
         op.order = op.order === 'engage' ? 'conceal' : 'engage';
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: TRAINED ASSASSIN — order is now ${op.order}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: TRAINED ASSASSIN — order is now ${op.order}` });
         return { ok: true };
       },
     }),
@@ -1407,7 +1407,7 @@ function actions(data: typeof DATA) {
           // and when it performs this action again; the expiry is the engine-side backstop.
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: CALIBRATE VOLTAGHEIST (${mode})` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: CALIBRATE VOLTAGHEIST (${mode})` });
         return { ok: true };
       },
     }),
@@ -1433,7 +1433,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: HEALING SERUM — ${target.letter} regains ${target.wounds - before} wounds`,
+          text: `${op.name}: HEALING SERUM — ${target.name} regains ${target.wounds - before} wounds`,
         });
         return { ok: true };
       },
@@ -1460,7 +1460,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfActivation', operativeId: op.id },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: UNCOMPROMISING FIRE (relic laspistol first)` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: UNCOMPROMISING FIRE (relic laspistol first)` });
         return getAction('Shoot')!.perform(ctx, state, op, { weaponName: 'Relic laspistol', targetId: target.id });
       },
     }),

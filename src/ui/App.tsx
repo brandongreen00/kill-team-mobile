@@ -3,9 +3,14 @@
  * board on its own full-height page; desktop (>=900px) shows board + rails together.
  *
  * The dice/decision surface is deliberately available on BOTH layouts: on a phone the
- * decision panel docks under the board so a reactive window never hides the dice.
+ * decision panel docks under the board so a reactive window never hides the dice. The same
+ * dock carries the tap-to-move controls and the deployment hint, because anything that says
+ * "tap the board" must be visible WHILE the board is.
+ *
+ * What the rail shows follows the battle: killzone picking only exists before the battle
+ * starts, the setup wizard only during setup, the action sheet only during the firefight.
  */
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { useIsDesktop } from './useMedia.ts';
 import { Board } from './Board.tsx';
 import { SequenceOverlay } from './SequenceOverlay.tsx';
@@ -15,12 +20,16 @@ import { Setup, placeAt } from './flow/Setup.tsx';
 import { TargetingInspector } from './TargetingInspector.tsx';
 import { MapBrowser } from './MapBrowser.tsx';
 import { RosterBuilder } from './roster/RosterBuilder.tsx';
+import { DropZoneHighlight, MoveControls, MoveOverlay, type MovePlan } from './MovePlanner.tsx';
 import { Store, setStore } from './store.ts';
 import { createGameContext } from '../core/game.ts';
 import { SeededRng } from '../core/rng.ts';
 import { createBattle } from '../core/init.ts';
+import { gambitOptions } from '../core/phases.ts';
 import { loadMaps, loadTeams, type TeamData } from './data.ts';
+import type { MoveAction } from '../core/movement.ts';
 import type { GameState, KillzoneMap, PlayerId } from '../core/types.ts';
+import { playerLabel } from '../core/types.ts';
 
 type Tab = 'board' | 'play' | 'log' | 'roster';
 
@@ -35,6 +44,8 @@ export function App() {
   const [tab, setTab] = useState<Tab>('board');
   const isDesktop = useIsDesktop();
   const [placement, setPlacement] = useState<{ operativeId: string; player: PlayerId } | null>(null);
+  /** The armed tap-to-move plan; board taps append waypoints while it is set. */
+  const [movePlan, setMovePlan] = useState<MovePlan | null>(null);
   /** Targeting-line inspector: tap a shooter, then a target. */
   const [inspect, setInspect] = useState<{ from?: string; to?: string }>({});
 
@@ -77,11 +88,17 @@ export function App() {
 
   const state: GameState = store.state;
   const decision = state.pending[0];
+  const inBattle = state.phase !== 'setup';
 
   // A reactive window must be answered before anything else: jump to it on a phone.
   useEffect(() => {
     if (decision && tab === 'log') setTab('board');
   }, [decision?.id]);
+
+  // The plan belongs to the operative that armed it: if the activation moved on, disarm.
+  useEffect(() => {
+    if (movePlan && state.activeOperativeId !== movePlan.operativeId) setMovePlan(null);
+  }, [state.activeOperativeId]);
 
   const pickMap = (id: string) => {
     const map = maps.find((m) => m.id === id);
@@ -89,18 +106,44 @@ export function App() {
     store.reset(createBattle(store.ctx, { map, seed: state.seed, mode: state.mode }));
   };
 
+  /** "Tap the board" only works while the board is on screen — switch a phone to it. */
+  const showBoard = () => {
+    if (!isDesktop) setTab('board');
+  };
+
+  const armPlacement = (p: { operativeId: string; player: PlayerId } | null) => {
+    setPlacement(p);
+    if (p) showBoard();
+  };
+
+  const armMove = (operativeId: string, action: MoveAction) => {
+    setMovePlan({ operativeId, action, points: [] });
+    showBoard();
+  };
+
   const boardPane = (
     <div class="board-wrap">
       <Board
         state={state}
-        overlays={<SequenceOverlay state={state} decision={decision} />}
-        selectedId={inspect.from}
+        overlays={
+          <>
+            <SequenceOverlay state={state} decision={decision} />
+            {placement && <DropZoneHighlight state={state} player={placement.player} />}
+            {movePlan && <MoveOverlay ctx={store.ctx} state={state} plan={movePlan} />}
+          </>
+        }
+        selectedId={movePlan?.operativeId ?? inspect.from}
         onOperativeClick={(op) => {
+          if (movePlan || placement) return; // aiming taps never re-target the inspector
           setInspect((cur) => (cur.from && cur.from !== op.id ? { from: cur.from, to: op.id } : { from: op.id }));
         }}
         onBoardClick={(world) => {
           if (placement) {
             if (placeAt(store, placement, world)) setPlacement(null);
+            return;
+          }
+          if (movePlan) {
+            setMovePlan({ ...movePlan, points: [...movePlan.points, world] });
             return;
           }
           setInspect({});
@@ -121,27 +164,21 @@ export function App() {
           onClose={() => setInspect({})}
         />
       )}
-      <Setup store={store} teams={teams} pendingPlacement={placement} setPendingPlacement={setPlacement} />
-      <ActivationPanel store={store} />
-      <section class="card">
-        <h2>Battle</h2>
-        <div class="row">
-          <span class="tag">TP {Math.max(1, state.turningPoint)}/{state.maxTurningPoints}</span>
-          <span class="tag">{state.phase}</span>
-          {state.initiative && <span class="tag">initiative: {state.initiative}</span>}
-        </div>
-        <div class="row" style={{ marginTop: 8 }}>
-          {(['p1', 'p2'] as PlayerId[]).map((p) => (
-            <span key={p} class="tag">
-              {p.toUpperCase()} · {state.teams[p].vp} VP · {state.teams[p].cp} CP
-            </span>
-          ))}
-        </div>
-        <div class="row" style={{ marginTop: 8 }}>
-          <button onClick={() => store.dispatch({ t: 'AdvancePhase' })}>Advance phase</button>
-        </div>
-      </section>
-      <MapBrowser ctx={store.ctx} maps={maps} selectedId={state.map.id} onPick={(m) => pickMap(m.id)} />
+      {movePlan && isDesktop && <MoveControls store={store} plan={movePlan} onChange={setMovePlan} />}
+      <Setup store={store} teams={teams} pendingPlacement={placement} setPendingPlacement={armPlacement} />
+      {state.phase === 'strategy' && <StrategyPanel store={store} />}
+      <ActivationPanel
+        key={state.activeOperativeId ?? 'none'}
+        store={store}
+        movePlan={movePlan}
+        onArmMove={armMove}
+      />
+      {inBattle && <BattleCard store={store} />}
+      {/* Picking a killzone resets the battle, so the browser only exists before rosters are
+          locked in — never while a game is being set up on the table, never during one. */}
+      {state.phase === 'setup' && (state.setup.step === 'rollOff' || state.setup.step === 'chooseDropZone') && (
+        <MapBrowser ctx={store.ctx} maps={maps} selectedId={state.map.id} onPick={(m) => pickMap(m.id)} />
+      )}
     </>
   );
 
@@ -154,19 +191,26 @@ export function App() {
     />
   );
 
-  const logPane = (
+  const logPane = <LogPanel state={state} />;
+
+  /** Whatever the board needs answered right now, docked under it on a phone. */
+  const boardDock = decision ? (
+    <DecisionPanel store={store} decision={decision} />
+  ) : movePlan ? (
+    <MoveControls store={store} plan={movePlan} onChange={setMovePlan} />
+  ) : placement ? (
     <section class="card">
-      <h2>Battle log</h2>
-      <div class="log">
-        {state.log.length === 0 && <p class="muted">Nothing has happened yet.</p>}
-        {state.log.slice(-250).map((l) => (
-          <div key={l.seq} class={l.kind}>
-            <span class="muted">TP{l.tp}</span> {l.text}
-          </div>
-        ))}
+      <h2>Deploy</h2>
+      <p class="muted">
+        Tap inside your highlighted drop zone to place{' '}
+        <strong>{state.operatives[placement.operativeId]?.name}</strong>.
+      </p>
+      {store.lastError && <p class="err">✖ {store.lastError}</p>}
+      <div class="row">
+        <button onClick={() => setPlacement(null)}>Cancel</button>
       </div>
     </section>
-  );
+  ) : null;
 
   return (
     <>
@@ -174,7 +218,7 @@ export function App() {
         <h1>Kill Team</h1>
         <span class="tag">{state.map.name}</span>
         <div class="spacer" />
-        {decision && <span class="tag" style={{ color: 'var(--accent)' }}>decision: {decision.who}</span>}
+        {decision && <span class="tag" style={{ color: 'var(--accent)' }}>decision: {playerLabel(decision.who)}</span>}
         {isDesktop && (
           <button onClick={() => setTab(tab === 'roster' ? 'play' : 'roster')} aria-pressed={tab === 'roster'}>
             {tab === 'roster' ? '← Back to the battle' : '📋 Rosters'}
@@ -195,11 +239,7 @@ export function App() {
       ) : (
         <>
           {tab === 'board' && boardPane}
-          {tab === 'board' && decision && (
-            <div class="page dock">
-              <DecisionPanel store={store} decision={decision} />
-            </div>
-          )}
+          {tab === 'board' && boardDock && <div class="page dock">{boardDock}</div>}
           {tab === 'play' && <main class="page">{playPane}</main>}
           {tab === 'log' && <main class="page">{logPane}</main>}
         </>
@@ -216,6 +256,163 @@ export function App() {
       </nav>
       )}
     </>
+  );
+}
+
+/** Scoreboard + the one flow control the current phase actually needs. */
+function BattleCard({ store }: { store: Store }) {
+  const { state } = store;
+  const anyReady = Object.values(state.operatives).some((o) => o.ready && !o.removed);
+  return (
+    <section class="card">
+      <h2>Battle</h2>
+      <div class="row">
+        <span class="tag">TP {Math.max(1, state.turningPoint)}/{state.maxTurningPoints}</span>
+        <span class="tag">{state.phase === 'battleEnd' ? 'battle over' : `${state.phase} phase`}</span>
+        {state.initiative && state.phase !== 'battleEnd' && (
+          <span class="tag">initiative: {playerLabel(state.initiative)}</span>
+        )}
+      </div>
+      <div class="row" style={{ marginTop: 8 }}>
+        {(['p1', 'p2'] as PlayerId[]).map((p) => (
+          <span key={p} class="tag">
+            {playerLabel(p)} · {state.teams[p].vp} VP · {state.teams[p].cp} CP
+          </span>
+        ))}
+      </div>
+      {state.phase === 'firefight' && (
+        <div class="row" style={{ marginTop: 8 }}>
+          <button
+            disabled={anyReady}
+            title={anyReady ? 'Operatives still have activations left this turning point' : undefined}
+            onClick={() => store.dispatch({ t: 'AdvancePhase' })}
+          >
+            End turning point
+          </button>
+        </div>
+      )}
+      {state.phase === 'endOfTP' && (
+        <div class="row" style={{ marginTop: 8 }}>
+          <button class="primary" onClick={() => store.dispatch({ t: 'AdvancePhase' })}>
+            Start turning point {state.turningPoint + 1}
+          </button>
+        </div>
+      )}
+      {state.phase === 'battleEnd' && (
+        <p style={{ marginTop: 8 }}>
+          <strong>
+            {state.winner && state.winner !== 'draw'
+              ? `${playerLabel(state.winner)} wins ${state.teams[state.winner].vp} VP to ${
+                  state.teams[state.winner === 'p1' ? 'p2' : 'p1'].vp
+                } VP.`
+              : `A draw — ${state.teams.p1.vp} VP each.`}
+          </strong>
+        </p>
+      )}
+    </section>
+  );
+}
+
+/** The Strategy phase, step by step — roll off, ready up, then alternate gambits. */
+function StrategyPanel({ store }: { store: Store }) {
+  const { state, ctx } = store;
+  if (state.phase !== 'strategy') return null;
+  const rolled = state.log.some((l) => l.tp === state.turningPoint && l.text.startsWith('Initiative roll-off'));
+  return (
+    <section class="card">
+      <h2>Strategy — turning point {state.turningPoint}</h2>
+      {state.strategyStep === 'initiative' && (
+        <>
+          <p class="muted">Roll off for initiative; initiative cards can change the result.</p>
+          <div class="row">
+            <button class={rolled ? undefined : 'primary'} onClick={() => store.dispatch({ t: 'RollOff', kind: 'initiative' })}>
+              🎲 Roll off
+            </button>
+            <button
+              class={rolled ? 'primary' : undefined}
+              disabled={!rolled}
+              title={rolled ? undefined : 'Roll off for initiative first'}
+              onClick={() => store.dispatch({ t: 'AdvancePhase' })}
+            >
+              Continue to Ready step
+            </button>
+          </div>
+        </>
+      )}
+      {state.strategyStep === 'ready' && (
+        <>
+          <p class="muted">All operatives ready up, and each player gains command points.</p>
+          <div class="row">
+            <button class="primary" onClick={() => store.dispatch({ t: 'AdvancePhase' })}>
+              Continue to Gambits
+            </button>
+          </div>
+        </>
+      )}
+      {state.strategyStep === 'gambit' && (
+        <>
+          <p class="muted">
+            Starting with {playerLabel(state.initiative ?? 'p1')}, alternate using a strategic gambit or
+            passing until both players pass.
+          </p>
+          {(['p1', 'p2'] as PlayerId[]).map((p) => {
+            const options = gambitOptions(ctx, state, p);
+            return (
+              <div key={p} class="row" style={{ marginTop: 6 }}>
+                <strong style={{ minWidth: 70 }}>{playerLabel(p)}</strong>
+                <span class="tag">{state.teams[p].cp} CP</span>
+                {state.teams[p].passedGambit ? (
+                  <span class="tag">passed</span>
+                ) : (
+                  <>
+                    {options.map((o) => (
+                      <button
+                        key={o.id}
+                        title={o.sourceText}
+                        onClick={() => store.dispatch({ t: 'UseGambit', player: p, gambitId: o.id })}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                    <button onClick={() => store.dispatch({ t: 'PassGambit', player: p })}>Pass</button>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </>
+      )}
+    </section>
+  );
+}
+
+/** The battle log, kept scrolled to the newest entry unless the reader scrolled back up. */
+function LogPanel({ state }: { state: GameState }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const stick = useRef(true);
+  useEffect(() => {
+    const el = ref.current;
+    if (el && stick.current) el.scrollTop = el.scrollHeight;
+  }, [state.log.length]);
+  return (
+    <section class="card">
+      <h2>Battle log</h2>
+      <div
+        class="log"
+        ref={ref}
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          stick.current = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
+        }}
+      >
+        {state.log.length === 0 && <p class="muted">Nothing has happened yet.</p>}
+        {state.log.slice(-250).map((l) => (
+          <div key={l.seq} class={l.kind}>
+            <span class="muted">TP{l.tp}</span> {l.text}
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 

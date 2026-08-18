@@ -48,7 +48,7 @@ registerAction({
       // "Until the start of the next turning point"
       expiry: { kind: 'endOfTurningPoint' },
     });
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} resupplies from an Ammo Cache` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} resupplies from an Ammo Cache` });
     return { ok: true };
   },
 });

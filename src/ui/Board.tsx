@@ -370,7 +370,6 @@ export function Board({
           {Object.values(state.operatives)
             .filter((o) => !o.removed && o.pos.x > -50)
             .map((op) => {
-              const dc = state.map ? undefined : undefined;
               const r = 0.63; // refined per datacard by the caller-supplied overlay
               const colour = op.player === 'p1' ? '#f6a35a' : '#9fb2c9';
               return (
@@ -399,7 +398,7 @@ export function Board({
                       {op.letter}
                     </text>
                   </g>
-                  <title>{`${op.letter} — ${op.order}, ${op.wounds} wounds${op.onGuard ? ', on Guard' : ''}`}</title>
+                  <title>{`${op.name} (${op.letter}) — ${op.order}, ${op.wounds} wounds${op.onGuard ? ', on Guard' : ''}`}</title>
                 </g>
               );
             })}

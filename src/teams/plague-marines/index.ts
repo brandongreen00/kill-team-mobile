@@ -124,7 +124,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (healed <= 0) return;
     champion.wounds += healed;
     spendHeal(ev.state, T.player, healed);
-    log(ev.state, { kind: 'action', player: T.player, text: `Grandfather’s Blessing: ${champion.letter} regains ${healed} wounds` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Grandfather’s Blessing: ${champion.name} regains ${healed} wounds` });
   });
 
   // ---- ICON BEARER › Icon Bearer -----------------------------------------
@@ -259,7 +259,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Nurglings: ${target.letter} −1 APL` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Nurglings: ${target.name} −1 APL` });
   });
 
   // VIRULENT POISON (firefight)
@@ -412,7 +412,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
       const dmg = T.ctx?.rng.d3() ?? 1;
       recordRoll(ev.state, 'poisonVents', [dmg], T.player, 'Poison Vents D3 damage');
       if (T.ctx) inflictDamage(T.ctx, ev.state, ev.operative, dmg, 'other');
-      log(ev.state, { kind: 'action', player: T.player, text: `Poison Vents inflict ${dmg} damage on ${ev.operative.letter}` });
+      log(ev.state, { kind: 'action', player: T.player, text: `Poison Vents inflict ${dmg} damage on ${ev.operative.name}` });
     }
   });
 }
@@ -442,7 +442,7 @@ function actions(data: typeof DATA) {
           );
           if (gap > 2 + 1e-6) continue;
           const d3 = ctx.rng.d3();
-          recordRoll(state, 'flail', [d3], op.player, `FLAIL vs ${other.letter}`);
+          recordRoll(state, 'flail', [d3], op.player, `FLAIL vs ${other.name}`);
           inflictDamage(ctx, state, other, d3 + 2, 'other');
           if (other.player !== op.player && d3 === 3) {
             giveToken(state, other, POISON, {
@@ -452,7 +452,7 @@ function actions(data: typeof DATA) {
             });
           }
         }
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: FLAIL` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: FLAIL` });
         return { ok: true };
       },
     }),
@@ -488,7 +488,7 @@ function actions(data: typeof DATA) {
             player: op.player,
           });
         }
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: POISONOUS MIASMA on ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: POISONOUS MIASMA on ${target.name}` });
         return { ok: true };
       },
     }),
@@ -513,7 +513,7 @@ function actions(data: typeof DATA) {
         const heal = a + b === 7 ? 7 : Math.max(a, b);
         const max = ctx.datacards.get(target.datacardId)?.wounds ?? target.wounds + heal;
         target.wounds = Math.min(max, target.wounds + heal);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: PUTRESCENT VITALITY restores ${heal} wounds` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: PUTRESCENT VITALITY restores ${heal} wounds` });
         return { ok: true };
       },
     }),

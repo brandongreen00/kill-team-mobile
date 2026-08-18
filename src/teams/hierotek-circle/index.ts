@@ -109,7 +109,7 @@ function reanimate(
   op.aplMods = [];
   op.onGuard = false;
   removeMarker(state, marker.id);
-  log(state, { kind: 'action', player: op.player, text: `${op.letter} is REANIMATED (1 wound, ${order})` });
+  log(state, { kind: 'action', player: op.player, text: `${op.name} is REANIMATED (1 wound, ${order})` });
   // Living Metal resolves "after resolving all other rules in this step", so an operative
   // reanimated during the Ready step still regains its D3+1.
   if (livingMetalDone(state, op.player)) livingMetal(ctx, state, op);
@@ -165,11 +165,11 @@ function offerReanimation(T: TeamHooks, state: GameState, tried: string[]): void
   const options: PendingDecision['options'] = [];
   for (const m of markers.sort((a, b) => (a.id < b.id ? -1 : 1))) {
     const opId = String(m.flags['forOperative'] ?? '');
-    const letter = state.operatives[opId]?.letter ?? '?';
+    const name = state.operatives[opId]?.name ?? '?';
     for (const order of ['engage', 'conceal'] as const) {
       options.push({
         id: `${m.id}|${order}`,
-        label: `Roll for ${letter}'s Reanimation marker (${order})`,
+        label: `Roll for ${name}'s Reanimation marker (${order})`,
         data: { markerId: m.id, order, tried },
       });
     }
@@ -271,7 +271,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     // "…also removing any tokens and rules effects it had."
     dropEffects(ev.state, (e) => e.operativeId === op.id);
     op.aplMods = [];
-    log(ev.state, { kind: 'action', player: T.player, text: `${op.letter} leaves a Reanimation marker` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${op.name} leaves a Reanimation marker` });
   });
   reg.on('onReadyStep', T.bind('hierotek-circle.rule.reanimation-protocols', 12), (ev) => {
     if (ev.player !== T.player) return;
@@ -353,7 +353,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfBattle' },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `${ev.struck.letter} gains a DEATHMARKed token` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${ev.struck.name} gains a DEATHMARKed token` });
   });
   reg.on('onWeaponRules', T.bind('hierotek-circle.deathmark.deathmarked', 13), (ev) => {
     if (ev.type !== 'ranged' || ev.operative.datacardId !== 'hierotek-circle.deathmark') return;
@@ -414,7 +414,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     recordRoll(ev.state, 'visionOfMadness', [roll], T.player, 'VISION OF MADNESS');
     if (roll >= aplOf(T.ctx, ev.state, ev.operative)) {
       ev.operative.aplMods.push(-1);
-      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.letter} is gripped by madness (-1 APL)` });
+      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.name} is gripped by madness (-1 APL)` });
     }
     dropEffects(ev.state, (e) => e === token);
   });
@@ -724,7 +724,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfActivation', operativeId: target.id },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: INTERSTITIAL COMMAND (${target.letter})` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: INTERSTITIAL COMMAND (${target.name})` });
         return { ok: true };
       },
     };
@@ -750,7 +750,7 @@ function actions(data: typeof DATA) {
         const spot = params.targetPos ?? { x: op.pos.x + 1.5, y: op.pos.y };
         target.pos = { ...spot };
         settleZ(ctx, state, target);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: TIMESPLINTER moves ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: TIMESPLINTER moves ${target.name}` });
         return { ok: true };
       },
     }),
@@ -766,7 +766,7 @@ function actions(data: typeof DATA) {
           z: op.z,
           flags: { nanomine: true },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: COUNTERTEMPORAL NANOMINE` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: COUNTERTEMPORAL NANOMINE` });
         return { ok: true };
       },
     }),
@@ -788,7 +788,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: CHRONOMETRON on ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: CHRONOMETRON on ${target.name}` });
         return { ok: true };
       },
     }),
@@ -808,7 +808,7 @@ function actions(data: typeof DATA) {
           z: op.z,
           flags: { despair: true },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: HARBINGER OF DESPAIR` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: HARBINGER OF DESPAIR` });
         return { ok: true };
       },
     }),
@@ -823,7 +823,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: NIGHTMARE SHROUD` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: NIGHTMARE SHROUD` });
         return { ok: true };
       },
     }),
@@ -845,7 +845,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: VISION OF MADNESS on ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: VISION OF MADNESS on ${target.name}` });
         return { ok: true };
       },
     }),
@@ -870,7 +870,7 @@ function actions(data: typeof DATA) {
         recordRoll(state, 'canoptekRepair', [heal], op.player, 'CANOPTEK REPAIR 2D3');
         const max = ctx.datacards.get(target.datacardId)?.wounds ?? target.wounds + heal;
         target.wounds = Math.min(max, target.wounds + heal);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: CANOPTEK REPAIR (+${heal})` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: CANOPTEK REPAIR (+${heal})` });
         return { ok: true };
       },
     }),
@@ -898,7 +898,7 @@ function actions(data: typeof DATA) {
           data: { weapon: weapon.name, rules: chosenRules },
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: AUGMENT WEAPON (${chosenRules.join(' + ')})` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: AUGMENT WEAPON (${chosenRules.join(' + ')})` });
         return { ok: true };
       },
     }),
@@ -920,7 +920,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: REINFORCE METAL on ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: REINFORCE METAL on ${target.name}` });
         return { ok: true };
       },
     }),
@@ -938,7 +938,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: MULTI-DIMENSIONAL VISION` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: MULTI-DIMENSIONAL VISION` });
         return { ok: true };
       },
     }),
@@ -964,7 +964,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: ACCELERATE (${target.letter} +1 APL)` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: ACCELERATE (${target.name} +1 APL)` });
         return { ok: true };
       },
     }),
@@ -985,7 +985,7 @@ function actions(data: typeof DATA) {
         const roll = ctx.rng.d6();
         recordRoll(state, 'reanimate', [roll], op.player, 'REANIMATE 3+');
         if (roll >= 3) reanimate(ctx, state, marker, params.choice === 'engage' ? 'engage' : 'conceal', { expended: true });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: REANIMATE (${roll})` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: REANIMATE (${roll})` });
         return { ok: true };
       },
     }),

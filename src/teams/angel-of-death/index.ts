@@ -151,7 +151,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (!hasTactic(T, ev.state, ev.operative, 'resolute')) return;
     if (ev.operative.aplMods.length > 0) {
       ev.operative.aplMods = [];
-      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.letter} is RESOLUTE — APL changes ignored` });
+      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.name} is RESOLUTE — APL changes ignored` });
     }
   });
   reg.on('onCounteract', T.bindText('aod.tactic.resolute', TACTIC_TEXT.resolute), (ev) => {
@@ -206,7 +206,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (ev.amount !== dmgN || dmgN === 0) return; // "when an attack dice inflicts Normal Dmg"
     if (!useOncePerBattle(ev.state, `aod.ironHalo:${ev.target.id}`)) return;
     ev.amount = 0;
-    log(ev.state, { kind: 'action', player: T.player, text: `${ev.target.letter}: Iron Halo ignores the damage` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${ev.target.name}: Iron Halo ignores the damage` });
   });
 
   // GRENADIER: "improve the Hit stat of that weapon by 1" for frag and krak grenades.
@@ -455,7 +455,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: OPTICS` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: OPTICS` });
         return { ok: true };
       },
     }),

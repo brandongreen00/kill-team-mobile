@@ -115,7 +115,7 @@ registerAction({
       flags: { activationsLeft: 999, d3, armed: false },
     };
     spendGrenade(state, op.player, UTILITY_ID, 'smoke');
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} throws a smoke grenade` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} throws a smoke grenade` });
     return { ok: true };
   },
 });
@@ -152,7 +152,7 @@ registerAction({
     );
     for (const victim of inBlast) {
       const roll = ctx.rng.d6();
-      recordRoll(state, 'stun', [roll], op.player, `stun test vs ${victim.letter}`);
+      recordRoll(state, 'stun', [roll], op.player, `stun test vs ${victim.name}`);
       // Rules that add to a stun test (Celestian Insidiants' PSYK-OUT GRENADES) read the
       // unmodified result and push damage of their own.
       const extra = ctx.hooks.emit('onStunTest', state, { state, thrower: op, target: victim, roll, damage: 0 }).damage;
@@ -166,9 +166,9 @@ registerAction({
         operativeId: victim.id,
         expiry: { kind: 'endOfNextActivation', operativeId: victim.id, armed: false },
       });
-      log(state, { kind: 'action', player: victim.player, text: `${victim.letter} is stunned (-1 APL)` });
+      log(state, { kind: 'action', player: victim.player, text: `${victim.name} is stunned (-1 APL)` });
     }
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} throws a stun grenade` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} throws a stun grenade` });
     return { ok: true };
   },
 });

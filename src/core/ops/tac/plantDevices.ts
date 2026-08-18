@@ -47,7 +47,7 @@ registerAction({
     const marker = state.markers[params.markerId!]!;
     marker.flags[flag(op.player)] = true;
     revealTacOp(state, op.player, 'a friendly operative performed the Plant Device action');
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} plants a Device token on ${marker.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} plants a Device token on ${marker.id}` });
     return { ok: true };
   },
 });

@@ -47,7 +47,7 @@ registerAction({
     const marker = state.markers[params.markerId!]!;
     marker.flags['downloaded'] = true;
     marker.flags['downloadedBy'] = op.player;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} downloads ${marker.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} downloads ${marker.id}` });
     const vp = state.turningPoint >= 4 ? 2 : 1;
     awardVP(ctx, state, op.player, ID, vp, `Download in turning point ${state.turningPoint}`);
     return { ok: true };

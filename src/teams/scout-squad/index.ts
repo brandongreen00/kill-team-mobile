@@ -491,7 +491,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     removeMarker(state, marker.id);
     const damage = T.ctx.rng.d3() + T.ctx.rng.d3();
     recordRoll(state, 'boobyTrap', [damage], T.player, 'Booby Trap 2D3');
-    log(state, { kind: 'action', player: T.player, text: `${victim.letter} triggers a Booby Trap (${damage} damage)` });
+    log(state, { kind: 'action', player: T.player, text: `${victim.name} triggers a Booby Trap (${damage} damage)` });
     inflictDamage(T.ctx, state, victim, damage, 'mine');
   };
   reg.on('onActivationStart', T.bind(FS, 14), (ev) => springTraps(ev.state));
@@ -563,7 +563,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
         player: T.player,
         expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
       });
-      log(ev.state, { kind: 'ploy', player: T.player, text: `Tactical Manoeuvre: ${op.letter} +1 APL` });
+      log(ev.state, { kind: 'ploy', player: T.player, text: `Tactical Manoeuvre: ${op.name} +1 APL` });
     } else if (ev.ployId === DIVERSION_GAMBIT) {
       const op = chosenOperative(ev.state, ev.data, nearKillzoneEdge(ev.state, T.enemies(ev.state)));
       if (!op) return;
@@ -577,7 +577,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
         player: T.player,
         expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
       });
-      log(ev.state, { kind: 'ploy', player: T.player, text: `Diversion: ${op.letter} -1 APL` });
+      log(ev.state, { kind: 'ploy', player: T.player, text: `Diversion: ${op.name} -1 APL` });
     }
   });
 
@@ -845,7 +845,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       log(ev.state, {
         kind: 'ploy',
         player: T.player,
-        text: `Adaptable Training: ${op.letter} changes order to ${op.order}`,
+        text: `Adaptable Training: ${op.name} changes order to ${op.order}`,
       });
     }
   });
@@ -887,7 +887,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: op.id },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Astartes Training: ${op.letter} gains a second Shoot/Fight` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Astartes Training: ${op.name} gains a second Shoot/Fight` });
   });
 
   // ---- RAW PHYSIOLOGY (firefight, 1CP) -----------------------------------
@@ -943,7 +943,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'dice',
       player: T.player,
-      text: `Emboldened Aspirant: ${me.letter} retains a normal success as a critical success`,
+      text: `Emboldened Aspirant: ${me.name} retains a normal success as a critical success`,
     });
   });
 
@@ -1058,7 +1058,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Targeting Oculars: ${ev.attacker.letter}'s ranged weapons have Lethal 5+ and Saturate (${used + 1}/${OCULARS_PER_TP})`,
+      text: `Targeting Oculars: ${ev.attacker.name}'s ranged weapons have Lethal 5+ and Saturate (${used + 1}/${OCULARS_PER_TP})`,
     });
   });
   reg.on('onWeaponRules', T.bind('scout-squad.eq.targeting-oculars', 31), (ev) => {
@@ -1134,7 +1134,7 @@ function actions(data: typeof DATA) {
           // "Until the start of this operative's next activation"
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: OPTICS (enemies cannot be obscured)` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: OPTICS (enemies cannot be obscured)` });
         return { ok: true };
       },
     }),
@@ -1165,7 +1165,7 @@ function actions(data: typeof DATA) {
           // "Until the end of the turning point"
           expiry: { kind: 'endOfTurningPoint' },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: TRACK ENEMY marks ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: TRACK ENEMY marks ${target.name}` });
         return { ok: true };
       },
     }),
@@ -1185,7 +1185,7 @@ function actions(data: typeof DATA) {
           //  (whichever comes first)" — `isScanned` drops it the moment it is incapacitated.
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: AUSPEX SCAN (enemies within 8")` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: AUSPEX SCAN (enemies within 8")` });
         return { ok: true };
       },
     }),
@@ -1237,7 +1237,7 @@ registerAction({
     log(state, {
       kind: 'action',
       player: op.player,
-      text: `${op.letter}: Guidance and Experience — ${target.letter} +1 APL`,
+      text: `${op.name}: Guidance and Experience — ${target.name} +1 APL`,
     });
     return { ok: true };
   },

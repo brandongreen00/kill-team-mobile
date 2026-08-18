@@ -66,7 +66,7 @@ registerAction({
       flags: { pickUpAllowed: true },
     };
     op.carryingMarkerId = id;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} retrieves from ${marker.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} retrieves from ${marker.id}` });
     // "The first time each objective marker is searched by friendly operatives, you score 1VP."
     if (awardVP(ctx, state, op.player, ID, 1, `Retrieval: ${marker.id} searched`) > 0)
       revealTacOp(state, op.player, 'the first time you score VP from this op');

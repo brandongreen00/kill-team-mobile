@@ -274,7 +274,7 @@ function setTome(state: GameState, op: OperativeState, tome: Tome): void {
     data: { tome },
     expiry: { kind: 'endOfBattle' },
   });
-  log(state, { kind: 'action', player: op.player, text: `${op.letter} has the ${tome} INQUISITORIAL TOME rule` });
+  log(state, { kind: 'action', player: op.player, text: `${op.name} has the ${tome} INQUISITORIAL TOME rule` });
 }
 
 const TOMES_GAMBIT = AB.tomes;
@@ -320,7 +320,7 @@ function setQuarry(T: TeamHooks, state: GameState, target: OperativeState, why: 
     data: { targetId: target.id },
     expiry: { kind: 'endOfTurningPoint' },
   });
-  log(state, { kind: 'ploy', player: T.player, text: `${why}: ${target.letter} is the quarry` });
+  log(state, { kind: 'ploy', player: T.player, text: `${why}: ${target.name} is the quarry` });
 }
 
 /** D-016: the named enemy, else the enemy closest to any friendly operative. */
@@ -527,7 +527,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       id: `iatomes-${ev.state.seq++}`,
       who: T.player,
       kind: TOMES_DECISION,
-      prompt: `${ev.operative.letter}: select INQUISITORIAL TOME rules`,
+      prompt: `${ev.operative.name}: select INQUISITORIAL TOME rules`,
       sourceText: shortQuote(abilityText(CARD.interrogator, AB.tomes)),
       ctx: { player: T.player },
       options: [
@@ -632,7 +632,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Group Activation: ${partner.letter} must activate next`,
+      text: `Group Activation: ${partner.name} must activate next`,
     });
   });
 
@@ -707,7 +707,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (!cur || ev.amount !== cur.profile.dmgN) return; // "from one NORMAL success"
     if (!useOncePerTP(ev.state, `inquisitorial-agent.weathered:${ev.target.id}`)) return;
     ev.amount = 0;
-    log(ev.state, { kind: 'action', player: T.player, text: `Weathered: ${ev.target.letter} ignores ${cur.profile.dmgN} damage` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Weathered: ${ev.target.name} ignores ${cur.profile.dmgN} damage` });
   });
 
   // =========================================================================
@@ -727,7 +727,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     const mineWounds = T.card(enlightener)?.wounds ?? 0;
     const roll = T.ctx.rng.d6();
     const modified = roll - (foeWounds > mineWounds ? 1 : 0) + (isWounded(T.ctx, foe) ? 1 : 0);
-    recordRoll(ev.state, 'noEscape', [roll], T.player, `No Escape vs ${foe.letter} (modified ${modified})`);
+    recordRoll(ev.state, 'noEscape', [roll], T.player, `No Escape vs ${foe.name} (modified ${modified})`);
     if (modified < 4) return;
     effect(ev.state, {
       rule: NO_ESCAPE_EFFECT,
@@ -737,7 +737,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: foe.id },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `No Escape: ${foe.letter} cannot Fall Back this activation` });
+    log(ev.state, { kind: 'action', player: T.player, text: `No Escape: ${foe.name} cannot Fall Back this activation` });
   });
   reg.on('canPerformAction', T.bind(AB.noEscape, 13), (ev) => {
     if (ev.action !== 'Fall Back' || ev.operative.player === T.player) return;
@@ -867,7 +867,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Irrepressible Purpose: ${op.letter} strikes ${foe.letter} for ${dmg}`,
+      text: `Irrepressible Purpose: ${op.name} strikes ${foe.name} for ${dmg}`,
     });
     inflictDamage(T.ctx, ev.state, foe, dmg, 'attack');
   });
@@ -900,7 +900,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       sourceText: shortQuote(abilityText(CARD.gunServitor, AB.lobotomised)),
       until: 'activation',
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `Lobotomised: ${op.letter} +1 APL` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Lobotomised: ${op.name} +1 APL` });
   });
 
   // =========================================================================
@@ -1015,7 +1015,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       kind: 'ability',
       only: ['Dash'],
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `Medic!: ${medic.letter} saves ${victim.letter}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Medic!: ${medic.name} saves ${victim.name}` });
   });
 
   // =========================================================================
@@ -1110,7 +1110,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     const foe = (chosen ? ev.state.operatives[chosen] : undefined) ?? nearestEnemy(T, ev.state);
     if (!foe) return;
     const d3 = T.ctx.rng.d3();
-    recordRoll(ev.state, 'denounce', [d3], T.player, `Denounce ${foe.letter}`);
+    recordRoll(ev.state, 'denounce', [d3], T.player, `Denounce ${foe.name}`);
     effect(ev.state, {
       rule: DENOUNCE_EFFECT,
       source: { kind: 'ploy', id: SP.denounce },
@@ -1123,7 +1123,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Denounce (${cost}CP): ${foe.letter} is silenced for ${d3} enemy activations`,
+      text: `Denounce (${cost}CP): ${foe.name} is silenced for ${d3} enemy activations`,
     });
   });
   reg.on('canPerformAction', T.bind(SP.denounce, 21), (ev) => {
@@ -1441,7 +1441,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'dice',
       player: T.player,
-      text: `Armoured Bodysuits: ${defender.letter} retains a 4 as a normal success`,
+      text: `Armoured Bodysuits: ${defender.name} retains a 4 as a normal success`,
     });
   });
 
@@ -1696,7 +1696,7 @@ function actions(data: typeof DATA): ActionDef[] {
           data: { ruleId: pick.id, ruleName: pick.name },
           expiry: { kind: 'endOfNextActivation', operativeId: foe.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: CHASTEN — ${foe.letter} loses ${pick.name}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: CHASTEN — ${foe.name} loses ${pick.name}` });
         return { ok: true };
       },
     }),
@@ -1729,7 +1729,7 @@ function actions(data: typeof DATA): ActionDef[] {
           data: { mysticId: op.id },
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: SCRY — ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: SCRY — ${target.name}` });
         return { ok: true };
       },
     }),
@@ -1765,7 +1765,7 @@ function actions(data: typeof DATA): ActionDef[] {
         recordRoll(state, 'medikit', [heal], op.player, 'MEDIKIT 2D3');
         const max = ctx.datacards.get(target.datacardId)?.wounds ?? target.wounds + heal;
         target.wounds = Math.min(max, target.wounds + heal);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: MEDIKIT — ${target.letter} regains ${heal}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: MEDIKIT — ${target.name} regains ${heal}` });
         return { ok: true };
       },
     }),
@@ -1800,7 +1800,7 @@ function actions(data: typeof DATA): ActionDef[] {
         sourceText: shortQuote(actionTextOf(CARD.scionVox, ACT.signal)),
         until: 'nextActivation',
       });
-      log(state, { kind: 'action', player: op.player, text: `${op.letter}: SIGNAL — ${target.letter} +1 APL` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name}: SIGNAL — ${target.name} +1 APL` });
       return { ok: true };
     },
   };

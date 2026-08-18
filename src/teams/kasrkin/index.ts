@@ -237,7 +237,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
         expiry: { kind: 'endOfNextActivation', operativeId: o.id, armed: false },
       });
     }
-    log(ev.state, { kind: 'action', player: T.player, text: `Medic! ${medic.letter} keeps ${victim.letter} on 1 wound` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Medic! ${medic.name} keeps ${victim.name} on 1 wound` });
   });
 
   // DEMO-TROOPER › Blast Padding
@@ -567,7 +567,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: TACTICAL COMMAND — ${target.letter} gains ${SKILL_LABEL[skill]}`,
+          text: `${op.name}: TACTICAL COMMAND — ${target.name} gains ${SKILL_LABEL[skill]}`,
         });
         return { ok: true };
       },
@@ -591,7 +591,7 @@ function actions(data: typeof DATA) {
         recordRoll(state, 'medikit', [heal], op.player, 'MEDIKIT 2D3');
         const max = ctx.datacards.get(target.datacardId)?.wounds ?? target.wounds + heal;
         target.wounds = Math.min(max, target.wounds + heal);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: MEDIKIT restores ${heal} wounds to ${target.letter}` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: MEDIKIT restores ${heal} wounds to ${target.name}` });
         return { ok: true };
       },
     }),
@@ -610,7 +610,7 @@ function actions(data: typeof DATA) {
           // "Until the start of this operative's next activation or until it's incapacitated."
           expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: AUSPEX SCAN (enemies within 8" are being scanned)` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: AUSPEX SCAN (enemies within 8" are being scanned)` });
         return { ok: true };
       },
     }),
@@ -636,7 +636,7 @@ function actions(data: typeof DATA) {
           player: op.player,
           expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: BATTLE COMMS — ${target.letter} +1 APL` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: BATTLE COMMS — ${target.name} +1 APL` });
         return { ok: true };
       },
     }),

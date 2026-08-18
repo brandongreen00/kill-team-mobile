@@ -336,7 +336,7 @@ function packLeader(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Grizzled Veteran: ${op.letter} survives on 1 wound and the remaining attack dice are discarded`,
+      text: `Grizzled Veteran: ${op.name} survives on 1 wound and the remaining attack dice are discarded`,
     });
   });
 }
@@ -561,7 +561,7 @@ function ensureHaywireMarker(T: TeamHooks, state: GameState, op: OperativeState)
   });
   marker.carriedBy = op.id;
   op.carryingMarkerId = marker.id;
-  log(state, { kind: 'action', player: T.player, text: `${op.letter} is carrying your Haywire Mine marker` });
+  log(state, { kind: 'action', player: T.player, text: `${op.name} is carrying your Haywire Mine marker` });
 }
 
 function trapmaster(reg: HookRegistry, T: TeamHooks): void {
@@ -602,7 +602,7 @@ function trapmaster(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `${op.letter}: the Haywire Mine marker cannot be placed and is removed with it`,
+      text: `${op.name}: the Haywire Mine marker cannot be placed and is removed with it`,
     });
   });
 
@@ -774,7 +774,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Savage Fighters: ${retaliator.letter} inflicts ${d3 + 1} damage on ${foe.letter}`,
+      text: `Savage Fighters: ${retaliator.name} inflicts ${d3 + 1} damage on ${foe.name}`,
     });
   });
 
@@ -1012,7 +1012,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: HEALING BALMS restores ${heal} wounds to ${target.letter}`,
+          text: `${op.name}: HEALING BALMS restores ${heal} wounds to ${target.name}`,
         });
         return { ok: true };
       },
@@ -1054,7 +1054,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: HUNTER’S SENSES — instigator bolt carbine gains ${choice}`,
+          text: `${op.name}: HUNTER’S SENSES — instigator bolt carbine gains ${choice}`,
         });
         return { ok: true };
       },
@@ -1091,12 +1091,12 @@ function actions(data: typeof DATA) {
           log(state, {
             kind: 'action',
             player: op.player,
-            text: `${op.letter}: CALL THE STORM — ${target.letter} is obscured within your STORM`,
+            text: `${op.name}: CALL THE STORM — ${target.name} is obscured within your STORM`,
           });
           return { ok: true };
         }
         placeStorm(state, op.player, params.targetPos ?? { ...op.pos }, CALL_THE_STORM);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: CALL THE STORM` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: CALL THE STORM` });
         return { ok: true };
       },
     }),
@@ -1277,7 +1277,7 @@ registerAction({
     log(state, {
       kind: 'action',
       player: op.player,
-      text: `${op.letter} changes its order to ${op.order} instead of performing an action`,
+      text: `${op.name} changes its order to ${op.order} instead of performing an action`,
     });
     return { ok: true };
   },
@@ -1301,7 +1301,7 @@ registerAction({
   },
   perform(_ctx, state, op) {
     op.onGuard = true;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} goes on Guard (Storm-veiled Execution)` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} goes on Guard (Storm-veiled Execution)` });
     return { ok: true };
   },
 });
@@ -1368,7 +1368,7 @@ registerAction({
     marker.pos = { ...pos };
     marker.z = op.z;
     op.carryingMarkerId = undefined as unknown as string | undefined;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} places the Haywire Mine marker` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} places the Haywire Mine marker` });
     return { ok: true };
   },
 });

@@ -64,7 +64,7 @@ registerAction({
       flags: { pickUpAllowed: true },
     };
     revealTacOp(state, op.player, 'the Plant Banner action was performed');
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} plants the Banner mission marker` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} plants the Banner mission marker` });
     return { ok: true };
   },
 });

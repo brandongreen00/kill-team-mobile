@@ -92,6 +92,28 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
           </p>
         ) : (
           <>
+            {/* The player's own kill teams come first — they are what gets fielded most. */}
+            {library.length > 0 && (
+              <>
+                <h2>Your kill teams</h2>
+                <ul class="team-list saved-list">
+                  {library.map((r) => (
+                    <li key={r.id} class="row" style={{ flexWrap: 'nowrap' }}>
+                      <button onClick={() => load(r)} style={{ flex: 1 }}>
+                        <span class="team-name">{r.name}</span>
+                        <span class="muted">
+                          {teams.find((t) => t.id === r.teamId)?.name ?? r.teamId} · {r.picks.length} operatives
+                        </span>
+                      </button>
+                      <button class="op-remove" aria-label={`Delete ${r.name}`} onClick={() => setLibrary(deleteRoster(r.id))}>
+                        🗑
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <h2>All kill teams</h2>
+              </>
+            )}
             <p class="muted">Choose a kill team, then select operatives as its printed requirements allow.</p>
             <input
               type="search"
@@ -143,6 +165,7 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
           io={io}
           setIo={setIo}
           onImport={(text) => setLibrary(importRosters(text))}
+          showList={false}
         />
         {onCancel && (
           <div class="row" style={{ marginTop: 8 }}>
@@ -377,26 +400,30 @@ interface LibraryProps {
   onImport: (text: string) => void;
   io: { text: string; note?: string; error?: string };
   setIo: (io: { text: string; note?: string; error?: string }) => void;
+  /** The team picker lists the saved kill teams itself, so its Library is import/export only. */
+  showList?: boolean;
 }
 
-function Library({ library, teams, onLoad, onDelete, onImport, io, setIo }: LibraryProps) {
+function Library({ library, teams, onLoad, onDelete, onImport, io, setIo, showList = true }: LibraryProps) {
   const teamName = (id: string) => teams.find((t) => t.id === id)?.name ?? id;
   return (
     <details class="roster-library" style={{ marginTop: 12 }}>
-      <summary>Saved rosters ({library.length})</summary>
+      <summary>{showList ? `Saved rosters (${library.length})` : 'Import / export rosters'}</summary>
       {library.length === 0 && <p class="muted">Saved rosters live in this browser, and survive a reload.</p>}
-      <ul>
-        {library.map((r) => (
-          <li key={r.id} class="row">
-            <button onClick={() => onLoad(r)}>
-              {r.name} <span class="muted">· {teamName(r.teamId)} · {r.picks.length} operatives</span>
-            </button>
-            <button aria-label={`Delete ${r.name}`} onClick={() => onDelete(r.id)}>
-              🗑
-            </button>
-          </li>
-        ))}
-      </ul>
+      {showList && (
+        <ul>
+          {library.map((r) => (
+            <li key={r.id} class="row">
+              <button onClick={() => onLoad(r)}>
+                {r.name} <span class="muted">· {teamName(r.teamId)} · {r.picks.length} operatives</span>
+              </button>
+              <button aria-label={`Delete ${r.name}`} onClick={() => onDelete(r.id)}>
+                🗑
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
       <div class="row">
         <button onClick={() => setIo({ text: exportRosters(library), note: 'Copy this JSON to keep or share the rosters.' })}>
           ⬇ Export JSON

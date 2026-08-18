@@ -266,7 +266,7 @@ function ammoApply(state: GameState, op: OperativeState, choice: string): void {
   log(state, {
     kind: 'action',
     player: op.player,
-    text: `${op.letter}: Special Issue Ammunition — ${option.label}`,
+    text: `${op.name}: Special Issue Ammunition — ${option.label}`,
     data: { operativeId: op.id, ammo: option.id },
   });
 }
@@ -527,7 +527,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Advanced Omni-Scrambler: ${enemy.letter} is jammed until ${roll} enemy operatives have activated`,
+      text: `Advanced Omni-Scrambler: ${enemy.name} is jammed until ${roll} enemy operatives have activated`,
     });
   });
   // "…that enemy operative cannot be activated or perform actions until one of the following
@@ -593,7 +593,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'dice',
       player: T.player,
-      text: `Clandestine Headtaker: ${headtaker.letter} resolves another success as a strike`,
+      text: `Clandestine Headtaker: ${headtaker.name} resolves another success as a strike`,
     });
     inflictDamage(T.ctx, ev.state, victim, crit ? ev.ctx.profile.dmgC : ev.ctx.profile.dmgN, 'attack');
   });
@@ -610,7 +610,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (!seq || !seq.free || seq.attackerId !== op.id) return; // the On Guard interrupt shot
     if (!useOncePerTP(ev.state, `deathwatch.vigilantMarksman:${op.id}`)) return;
     op.onGuard = true; // "it can immediately perform a free Guard action"
-    log(ev.state, { kind: 'action', player: T.player, text: `${op.letter} goes back on Guard (Vigilant Marksman)` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${op.name} goes back on Guard (Vigilant Marksman)` });
   });
   // Restore the Guard the reducer cleared after `Guard (Vigilant Marksman)` (see that action).
   reg.on('onActivationEnd', T.bind('deathwatch.marksman-veteran.vigilant-marksman', 13), (ev) => {
@@ -797,7 +797,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     if (!op || op.player !== T.player) return;
     const asked = ev.data?.['order'];
     op.order = asked === 'conceal' || asked === 'engage' ? asked : op.order === 'engage' ? 'conceal' : 'engage';
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Auspicator Tracking: ${op.letter} → ${op.order}` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Auspicator Tracking: ${op.name} → ${op.order}` });
   });
 
   // ---- TRANSHUMAN PHYSIOLOGY (firefight) ----------------------------------
@@ -859,7 +859,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     const victim = ev.state.operatives[seq.defenderId];
     if (!victim || victim.removed || victim.incapacitated || !T.ctx) return;
     if (!useOncePerTP(ev.state, `deathwatch.digitalWeapons:${T.player}`)) return;
-    log(ev.state, { kind: 'action', player: T.player, text: `Digital Weapons: 1 damage to ${victim.letter}` });
+    log(ev.state, { kind: 'action', player: T.player, text: `Digital Weapons: 1 damage to ${victim.name}` });
     inflictDamage(T.ctx, ev.state, victim, 1, 'other');
   });
 
@@ -1132,7 +1132,7 @@ registerAction({
       data: { actionsAt: op.actionsThisActivation.length },
       expiry: { kind: 'endOfActivation', operativeId: op.id },
     });
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} goes on Guard (Vigilant Marksman)` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} goes on Guard (Vigilant Marksman)` });
     return { ok: true };
   },
 });
@@ -1182,13 +1182,13 @@ registerAction({
       recordRoll(state, 'bioscryerCuffs', [heal], op.player, 'SANCTUS-V BIOSCRYER CUFFS D3');
       const max = ctx.datacards.get(op.datacardId)?.wounds ?? op.wounds + heal;
       op.wounds = Math.min(max, op.wounds + heal);
-      log(state, { kind: 'action', player: op.player, text: `${op.letter}: Bioscryer Cuffs restore ${heal} wounds` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name}: Bioscryer Cuffs restore ${heal} wounds` });
     } else if (choice === 'apl') {
       op.aplMods = []; // "Remove any changes to that friendly operative's APL stat."
-      log(state, { kind: 'action', player: op.player, text: `${op.letter}: Bioscryer Cuffs clear its APL changes` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name}: Bioscryer Cuffs clear its APL changes` });
     } else if (token) {
       dropEffects(state, (e) => e === token);
-      log(state, { kind: 'action', player: op.player, text: `${op.letter}: Bioscryer Cuffs purge a ${token.rule} token` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name}: Bioscryer Cuffs purge a ${token.rule} token` });
     }
     return { ok: true };
   },

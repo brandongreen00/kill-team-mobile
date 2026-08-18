@@ -145,7 +145,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (ev.operative.datacardId !== 'kommandos.grot' || ev.operative.player !== T.player) return;
     if (ev.operative.order === 'engage') {
       ev.operative.order = 'conceal';
-      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.letter} cannot have an Engage order (Sneaky Zogger)` });
+      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.name} cannot have an Engage order (Sneaky Zogger)` });
     }
   });
   // "Whenever this operative is in cover, it cannot be selected as a valid target, taking
@@ -223,7 +223,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     // "whenever you determine this operative's order, you cannot select Conceal"
     if (ev.operative.order === 'conceal') {
       ev.operative.order = 'engage';
-      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.letter} cannot have a Conceal order (Stoopid)` });
+      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.name} cannot have a Conceal order (Stoopid)` });
     }
   });
 
@@ -260,7 +260,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
       if (T.gap(squig, other) > radius + 1e-6) continue;
       inflictDamage(T.ctx, ev.state, other, profile.dmgN, 'other');
     }
-    log(ev.state, { kind: 'action', player: T.player, text: `${squig.letter}: Boom! (${rolls.join(', ')})` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${squig.name}: Boom! (${rolls.join(', ')})` });
   });
 }
 
@@ -339,7 +339,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     const profile = currentDamageProfile(T, ev.state);
     if (profile && ev.amount >= profile.dmgC && profile.dmgC !== profile.dmgN) return;
     if (!useOncePerTP(ev.state, `kommandos.justAScratch:${T.player}`)) return;
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Just a Scratch: ${ev.target.letter} ignores ${ev.amount} damage` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Just a Scratch: ${ev.target.name} ignores ${ev.amount} damage` });
     ev.amount = 0;
   });
 
@@ -569,7 +569,7 @@ function actions(data: typeof DATA) {
         player: op.player,
         expiry: { kind: 'endOfNextActivation', operativeId: r.target.id, armed: false },
       });
-      log(state, { kind: 'action', player: op.player, text: `${op.letter}: ${r.target.letter} +1 APL` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name}: ${r.target.name} +1 APL` });
       return { ok: true };
     },
   });
@@ -594,7 +594,7 @@ function actions(data: typeof DATA) {
       perform: (_ctx, state, op, params) => {
         const pos = params.targetPos ?? { ...op.pos };
         placeTeamMarker(state, { id: `kommandos.breach.${op.id}`, kind: 'generic', player: op.player, pos, z: op.z, flags: { breach: true } });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: BREACH marker placed` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: BREACH marker placed` });
         return { ok: true };
       },
     }),
@@ -620,7 +620,7 @@ function actions(data: typeof DATA) {
       perform: (ctx, state, op, params) => {
         op.pos = { ...params.targetPos! };
         settleZ(ctx, state, op);
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: GRAPPLING HOOK` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: GRAPPLING HOOK` });
         return { ok: true };
       },
     }),

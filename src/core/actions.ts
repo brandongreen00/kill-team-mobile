@@ -9,7 +9,14 @@
  */
 import { baseGap, dist } from './geometry.ts';
 import { terrain, type GameContext } from './context.ts';
-import { validateMove, type MoveOptions } from './movement.ts';
+import {
+  moveBudget,
+  moveOptionsFor,
+  validateMove,
+  type MoveAction,
+  type MoveOptions,
+  type MoveValidation,
+} from './movement.ts';
 import {
   aliveOperatives,
   aplOf,
@@ -26,7 +33,7 @@ import {
 import { startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
 import { startFight, advanceFight } from './sequences/fight.ts';
 import { hasType } from './terrain.ts';
-import type { ActionParams } from './intents.ts';
+import type { ActionParams, MovePath } from './intents.ts';
 import type { GameState, OperativeState, PlayerId } from './types.ts';
 import { otherPlayer } from './types.ts';
 
@@ -98,6 +105,27 @@ function moveCheck(
   return v.ok ? { ok: true } : { ok: false, reason: v.reason ?? 'illegal move' };
 }
 
+/**
+ * The exact validation the reducer will run for a movement action, for the board's
+ * tap-to-move preview: what this returns as ok, `PerformAction` accepts.
+ */
+export function previewMove(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  action: MoveAction,
+  path: MovePath,
+): MoveValidation {
+  return validateMove(ctx, state, op, path, withCounteractCap(state, op, moveOptionsFor(action)));
+}
+
+/** The inches available to a movement action right now (counteract cap applied). */
+export function moveBudgetFor(ctx: GameContext, state: GameState, op: OperativeState, action: MoveAction): number {
+  const opts = withCounteractCap(state, op, moveOptionsFor(action));
+  const budget = moveBudget(ctx, state, op, opts);
+  return opts.hardCap !== undefined ? Math.min(budget, opts.hardCap) : budget;
+}
+
 function applyMove(
   ctx: GameContext,
   state: GameState,
@@ -125,7 +153,7 @@ function applyMove(
   log(state, {
     kind: 'action',
     player: op.player,
-    text: `${op.letter} performs ${label} (${v.total}")`,
+    text: `${op.name} performs ${label} (${v.total}")`,
     data: { operativeId: op.id, action: label, inches: v.total, legs: v.legs.length },
   });
   return { ok: true };
@@ -143,7 +171,7 @@ function checkMines(ctx: GameContext, state: GameState, op: OperativeState): voi
     recordRoll(state, 'mine', [d3], op.player, 'Mines D3+3');
     delete state.markers[marker.id];
     inflictDamage(ctx, state, op, d3 + 3, 'mine');
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} triggers Mines: ${d3}+3 damage` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} triggers Mines: ${d3}+3 damage` });
   }
 }
 
@@ -277,7 +305,7 @@ registerAction({
     marker.pos = { ...op.pos };
     marker.z = op.z;
     op.carryingMarkerId = marker.id;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} picks up the ${marker.kind} marker` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} picks up the ${marker.kind} marker` });
     return { ok: true };
   },
 });
@@ -307,7 +335,7 @@ registerAction({
     marker.pos = params.markerPos ? { ...params.markerPos } : { ...op.pos };
     marker.z = op.z;
     op.carryingMarkerId = undefined as unknown as string | undefined;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} places the ${marker.kind} marker` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} places the ${marker.kind} marker` });
     return { ok: true };
   },
 });
@@ -399,7 +427,7 @@ registerAction({
   },
   perform(_ctx, state, op) {
     op.onGuard = true;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} goes on Guard` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} goes on Guard` });
     return { ok: true };
   },
 });
@@ -477,7 +505,7 @@ registerAction({
     for (const sibling of part.feature.parts) {
       if (sibling.role === 'hatch') state.terrainState[sibling.id] = { state: next };
     }
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} ${next === 'open' ? 'opens' : 'closes'} a hatchway` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} ${next === 'open' ? 'opens' : 'closes'} a hatchway` });
     return { ok: true };
   },
 });
@@ -513,7 +541,7 @@ registerAction({
       const oc = card(ctx, other);
       if (baseGap(other.pos, oc.base, other.rot, centre, { shape: 'round', mm: 20 }, 0) > 1 + 1e-6) continue;
       const roll = ctx.rng.d6();
-      recordRoll(state, 'breach', [roll], op.player, `concussion vs ${other.letter}`);
+      recordRoll(state, 'breach', [roll], op.player, `concussion vs ${other.name}`);
       if (roll >= 4) {
         other.aplMods.push(-1);
         state.effects.push({
@@ -526,7 +554,7 @@ registerAction({
         inflictDamage(ctx, state, other, Math.ceil(roll / 2), 'other');
       }
     }
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} breaches a breach point` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} breaches a breach point` });
     return { ok: true };
   },
 });

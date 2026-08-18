@@ -67,7 +67,7 @@ export const envoyOp: OpModule = {
         if (used.includes(op.id) || ignoredByEffect(ev.state, op.id)) continue;
         ev.options.push({
           id: `${GAMBIT_PREFIX}${op.id}`,
-          label: `Envoy: ${op.letter}`,
+          label: `Envoy: ${op.name}`,
           sourceText: opText(ID),
         });
       }
@@ -91,6 +91,6 @@ export const envoyOp: OpModule = {
     if (!whollyWithin(ctx, envoy, territoryOf(state, otherPlayer(player)))) return;
     if (isEngagedWithEnemy(ctx, state, envoy)) return;
     const unharmed = envoy.wounds >= (s.woundsAtTPStart[envoy.id] ?? envoy.wounds);
-    awardVP(ctx, state, player, ID, unharmed ? 2 : 1, `Envoy: ${envoy.letter} in enemy territory`);
+    awardVP(ctx, state, player, ID, unharmed ? 2 : 1, `Envoy: ${envoy.name} in enemy territory`);
   },
 };

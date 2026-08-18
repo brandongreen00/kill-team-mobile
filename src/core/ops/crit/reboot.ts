@@ -101,7 +101,7 @@ registerAction({
   perform(_ctx, state, op, params) {
     const marker = state.markers[params.markerId!]!;
     delete marker.flags['inertTP'];
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} reboots ${marker.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} reboots ${marker.id}` });
     return { ok: true };
   },
 });

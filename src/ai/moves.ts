@@ -9,12 +9,22 @@
 import type { GameContext } from '../core/context.ts';
 import { baseGap, dist } from '../core/geometry.ts';
 import type { MovePath } from '../core/intents.ts';
-import { moveBudget, reachableCells, validateMove, type MoveOptions } from '../core/movement.ts';
+import {
+  moveBudget,
+  moveOptionsFor,
+  reachableCells,
+  validateMove,
+  type MoveAction,
+  type MoveOptions,
+} from '../core/movement.ts';
 import { aliveOperatives, card } from '../core/state.ts';
 import type { GameState, OperativeState, Vec2 } from '../core/types.ts';
 import { otherPlayer } from '../core/types.ts';
 
-export type MoveAction = 'Reposition' | 'Dash' | 'Fall Back' | 'Charge';
+// moveOptionsFor moved into the core so the UI's tap-to-move preview runs the same options;
+// re-exported here for existing importers.
+export { moveOptionsFor } from '../core/movement.ts';
+export type { MoveAction } from '../core/movement.ts';
 
 export interface MoveCandidate {
   action: MoveAction;
@@ -23,19 +33,6 @@ export interface MoveCandidate {
   z: number;
   /** Inches charged by the engine. */
   cost: number;
-}
-
-/** The exact MoveOptions the reducer will use for this action — never looser. */
-export function moveOptionsFor(action: MoveAction, hardCap?: number): MoveOptions {
-  const base: MoveOptions =
-    action === 'Reposition'
-      ? { action: 'Reposition', mustNotFinishEngaged: true }
-      : action === 'Dash'
-        ? { action: 'Dash', noClimb: true, mustNotFinishEngaged: true }
-        : action === 'Fall Back'
-          ? { action: 'Fall Back', mayEnterEnemyControlRange: true, mustNotFinishEngaged: true }
-          : { action: 'Charge', bonusInches: 2, mayEnterEnemyControlRange: true, mustFinishEngaged: true };
-  return hardCap === undefined ? base : { ...base, hardCap };
 }
 
 interface Cell {

@@ -63,7 +63,7 @@ registerAction({
     log(state, {
       kind: 'action',
       player: op.player,
-      text: `${op.letter} compiles data at ${marker.id} (${marker.flags['data']} Data points)`,
+      text: `${op.name} compiles data at ${marker.id} (${marker.flags['data']} Data points)`,
     });
     return { ok: true };
   },
@@ -93,7 +93,7 @@ registerAction({
     const marker = state.markers[params.markerId!]!;
     const points = Number(marker.flags['data'] ?? 0);
     marker.flags['data'] = 0;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} sends ${points} Data point(s) from ${marker.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} sends ${points} Data point(s) from ${marker.id}` });
     awardVP(ctx, state, op.player, ID, points, `Send Data (${points} Data points)`);
     return { ok: true };
   },

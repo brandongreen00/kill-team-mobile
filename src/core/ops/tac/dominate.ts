@@ -70,7 +70,7 @@ export const dominateOp: OpModule = {
       while (left > 0 && roomThisTP(state, player, ID, PER_TP_CAP) > 0) {
         left -= 1;
         s.tokens[operativeId] = left;
-        awardVP(ctx, state, player, ID, 1, `Dominate: token removed from ${op.letter}`);
+        awardVP(ctx, state, player, ID, 1, `Dominate: token removed from ${op.name}`);
       }
     }
   },

@@ -86,7 +86,7 @@ export function startFight(
   log(state, {
     kind: 'action',
     player: attacker.player,
-    text: `${attacker.letter} fights ${defender.letter} with ${weaponName}`,
+    text: `${attacker.name} fights ${defender.name} with ${weaponName}`,
     data: { attackerId: attacker.id, defenderId, weaponName },
   });
   return { ok: true };
@@ -309,14 +309,14 @@ function rollSide(ctx: GameContext, state: GameState, seq: FightSequence, side: 
   // Assists improve the Hit stat by 1 each; hook modifiers stack on top of that.
   const hit = hitOf(ctx, state, op, profile, assists + ev.mods.hit);
   const results = ctx.rng.roll(toRoll);
-  recordRoll(state, 'fight', results, op.player, `${op.letter} ${name}`);
+  recordRoll(state, 'fight', results, op.player, `${op.name} ${name}`);
   const lethal = lethalThreshold(rules);
   addRolled(pool, results, hit, lethal !== undefined ? { lethal } : {});
   if (accurate > 0) addAutoNormal(pool, accurate, 'Accurate');
   log(state, {
     kind: 'dice',
     player: op.player,
-    text: `${op.letter} fight dice (${hit}+${assists > 0 ? `, +${assists} assist` : ''}): ${results.join(', ')}`,
+    text: `${op.name} fight dice (${hit}+${assists > 0 ? `, +${assists} assist` : ''}): ${results.join(', ')}`,
     data: { pool: side, results, hit, assists },
   });
 }
@@ -399,7 +399,7 @@ export function resolveFightDie(
     log(state, {
       kind: 'dice',
       player: me.player,
-      text: `${me.letter} strikes ${them.letter} for ${dmg}${crit ? ' (critical)' : ''}`,
+      text: `${me.name} strikes ${them.name} for ${dmg}${crit ? ' (critical)' : ''}`,
     });
     // Devastating x in melee inflicts on each retained critical success as it is retained;
     // we apply it on the strike so it is visible in the ticker.
@@ -414,7 +414,7 @@ export function resolveFightDie(
       if (victim) {
         victim.state = 'discarded';
         victim.note = 'Shock';
-        log(state, { kind: 'dice', player: me.player, text: `Shock discards one of ${them.letter}'s successes` });
+        log(state, { kind: 'dice', player: me.player, text: `Shock discards one of ${them.name}'s successes` });
       }
     }
     ctx.hooks.emit('onStrikeResolved', state, {
@@ -474,9 +474,9 @@ export function resolveFightDie(
       const wasCrit = victim.state === 'crit';
       victim.state = 'blocked';
       blocked++;
-      log(state, { kind: 'dice', player: me.player, text: `${me.letter} blocks a ${wasCrit ? 'critical' : 'normal'} success` });
+      log(state, { kind: 'dice', player: me.player, text: `${me.name} blocks a ${wasCrit ? 'critical' : 'normal'} success` });
     }
-    if (blocked === 0) log(state, { kind: 'dice', player: me.player, text: `${me.letter} blocks (nothing to block)` });
+    if (blocked === 0) log(state, { kind: 'dice', player: me.player, text: `${me.name} blocks (nothing to block)` });
   }
 
   // "or one operative in that fight is incapacitated" — stop mid-sequence.

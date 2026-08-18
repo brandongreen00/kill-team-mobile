@@ -6,8 +6,8 @@ One responsive codebase (Preact + SVG). No separate mobile build.
 
 | Breakpoint | Layout |
 | --- | --- |
-| < 900px (phone portrait, phone landscape) | Full-height board page + a bottom tab bar (Board / Play / Log). The decision panel docks **under the board** on the Board tab so a reactive window never hides the dice. |
-| ≥ 900px (tablet landscape, desktop) | Three columns: action rail (decisions, setup, activation, score, killzone browser) · board · log. |
+| < 900px (phone portrait, phone landscape) | Full-height board page + a bottom tab bar (Board / Play / Log). Anything that says "tap the board" docks **under the board** on the Board tab — the decision panel, the tap-to-move controls, the deployment hint — and arming a placement or a move auto-switches to the Board tab. |
+| ≥ 900px (tablet landscape, desktop) | Three columns: action rail · board · log. The rail follows the battle: setup wizard + killzone browser before the battle, strategy panel / action sheet / battle scoreboard during it (D-038). |
 
 Only one layout mounts at a time (`useIsDesktop`, kept in sync with the media query in
 `styles.css`). Rendering both would mean two live boards and ambiguous DOM queries.
@@ -23,17 +23,50 @@ smoke suite asserts zero horizontal overflow and zero console errors on all thre
 ## State → screen
 
 ```
-setup.step = rollOff          -> Setup: "Roll off" (dice into the log)
-           = chooseDropZone   -> Setup: initiative choice + drop-zone choice
+setup.step = rollOff          -> Setup: "Roll off" (dice into the log); killzone browser visible
+           = chooseDropZone   -> Setup: initiative choice + drop-zone choice; killzone browser visible
            = selectOperatives -> Setup: hand-over screen, then the roster builder (secret)
-           = deploy           -> Setup: "Place X" arms a placement; tap the board to drop it
-phase = strategy              -> ActivationPanel shows the step; gambits in the action rail
+           = deploy           -> Setup: "Place <name>" arms a placement; the drop zone lights up;
+                                 tap inside it to drop the operative (rejections shown inline)
+phase = strategy              -> StrategyPanel: roll-off -> ready -> alternating gambits/pass
 phase = firefight, no active  -> ActivationPanel: activate (Engage/Conceal) or counteract
-phase = firefight, active op  -> ActivationPanel: the action sheet + shoot/fight target lists
+phase = firefight, active op  -> ActivationPanel: the action sheet + shoot/fight target lists;
+                                 movement actions arm the tap-to-move planner (below)
+phase = firefight             -> BattleCard: score + "End turning point" (disabled while any
+                                 operative is still ready)
 state.sequence != null        -> SequenceOverlay draws the dice above the operatives
 state.pending[0] != null      -> DecisionPanel takes over (and docks under the board on phones)
-phase = battleEnd             -> final score, kill grades, reveal
+phase = battleEnd             -> BattleCard: winner and final score
 ```
+
+## Names, not letters
+
+Panels, buttons, prompts and the log all call an operative by `op.name` — derived at
+`SelectRoster` from its datacard, unique within the team ("Sergeant", "Trooper C" — D-036).
+The board token still draws the single letter (a 25mm circle fits nothing more), and the
+panels show that letter in a small chip next to the name so token and text stay linked.
+
+## Tap-to-move (`src/ui/MovePlanner.tsx`)
+
+Movement was the first thing the owner could not figure out — the old buttons needed a
+`path` nobody could supply. Now a movement action (Reposition / Dash / Fall Back / Charge /
+Move With Barricade) ARMS a plan instead of dispatching:
+
+- a dashed range ring (straight-line budget, `moveBudgetFor`) appears around the operative;
+- each board tap lays a waypoint — multiple taps turn corners; Undo removes the last;
+- the path is validated live by the action's own `check` (`previewMove` supplies the inches),
+  drawn green with `total" / budget"` when legal, red with the blocking rule's reason when not;
+- Confirm dispatches the exact validated `PerformAction`, so the reducer accepts what the
+  preview approved (D-037).
+
+On a phone, arming switches to the Board tab and the controls dock under the board. The
+plan is disarmed if the active operative changes.
+
+The action sheet also resolves what it can before dispatching: Pick Up Marker finds its
+marker, target buttons route through whichever Shoot/Fight variant is currently legal
+("Shoot (Astartes)" for the second shot), and every weapon profile (frag/krak) is a separate
+entry in the weapon select. A button that cannot work is disabled with the rule's reason in
+its tooltip — never a silent rejection.
 
 ## Dice
 

@@ -59,7 +59,7 @@ registerAction({
     const marker = state.markers[params.markerId!]!;
     marker.flags[clearedFlag(op.player)] = state.turningPoint;
     revealTacOp(state, op.player, 'a friendly operative performed the Clear action');
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} clears ${marker.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} clears ${marker.id}` });
     return { ok: true };
   },
 });

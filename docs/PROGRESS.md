@@ -2,6 +2,36 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-18 — Playability pass on the game UI (owner feedback)
+
+**Landed this session (branch `claude/kill-team-ui-review-dilt11`)** — the owner's first
+hands-on session surfaced four blockers; all fixed, plus the deeper issues found on review:
+
+- **Tap-to-move.** Reposition/Dash/Fall Back/Charge (and Move With Barricade) previously
+  dispatched with no path and were silently rejected — movement was impossible from the UI.
+  They now arm a planner: a range ring appears, each board tap lays a waypoint, the path is
+  validated live by the engine's own `check` (green/red, inches used, the rule that blocks
+  it), and Confirm dispatches the exact validated intent. On a phone, arming auto-switches
+  to the Board tab and the controls dock under the board (D-037).
+- **Operatives have names.** `SelectRoster` derives a unique-within-team display name from
+  each datacard ("Trooper C", "Sergeant"); every panel, button, prompt and log line uses it.
+  Letters remain as the board-token glyph (D-036).
+- **The rail follows the battle.** The killzone browser only exists before rosters lock
+  (picking a map resets the battle); the Battle card's blind "Advance phase" is gone —
+  setup, a new Strategy panel (roll-off → ready → alternating gambits, the first gambit UI),
+  and an "End turning point" button that stays disabled while operatives are ready (D-038).
+- **Saved kill teams first.** The team picker lists the player's saved rosters above the
+  full team list instead of a collapsed footer.
+- Also: deployment highlights the active drop zone and shows rejection reasons inline;
+  Pick Up Marker resolves its marker instead of silently failing; Shoot/Fight team variants
+  ("Shoot (Astartes)") are reachable through the target buttons; weapon profiles (frag/krak)
+  are selectable; the battle log auto-scrolls; system log lines say "Player 1", not "p1".
+- Coverage: `tests/names.test.ts` pins the naming rules; full suite (1314), e2e smoke and a
+  scripted browser run through setup → deploy → strategy → firefight → tap-to-move all green.
+
+**Next** — pass-and-play `viewer` gating for the action sheet, oval-base facing control in
+the planner, and a way to aim unique actions that need a target operative.
+
 ## 2026-08-17 — Phases 0, 2 and 4 landed; 1, 3, 5 and 7 in flight
 
 **Landed this session (branch `claude/kill-team-mobile-overhaul-ohtkmd`)**

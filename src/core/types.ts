@@ -28,6 +28,9 @@ export type Poly = Vec2[];
 
 export const otherPlayer = (p: PlayerId): PlayerId => (p === 'p1' ? 'p2' : 'p1');
 
+/** Human-facing player label for the log and UI ('p1' → 'Player 1'). */
+export const playerLabel = (p: PlayerId): string => (p === 'p1' ? 'Player 1' : 'Player 2');
+
 // ---------------------------------------------------------------------------
 // Terrain (2.5D): every terrain part is an extruded polygon.
 // ---------------------------------------------------------------------------
@@ -290,8 +293,14 @@ export interface OperativeState {
   id: string;
   player: PlayerId;
   datacardId: string;
-  /** Display letter, unique within a team. */
+  /** Display letter, unique within a team — the glyph drawn on the board token. */
   letter: string;
+  /**
+   * Display name, unique within a team: the datacard name with any title words every card in
+   * the roster shares stripped, letter-suffixed when the roster fields duplicates
+   * ("Sharpshooter", "Trooper C"). This is what panels, buttons and the log call the operative.
+   */
+  name: string;
   pos: Vec2;
   z: number;
   /** Facing in degrees, used for oval bases. */

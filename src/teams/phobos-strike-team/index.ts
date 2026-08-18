@@ -399,7 +399,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Omni-Scrambler: ${target.letter} is jammed until ${threshold} enemy operatives have activated`,
+      text: `Omni-Scrambler: ${target.name} is jammed until ${threshold} enemy operatives have activated`,
     });
   });
   reg.on('canPerformAction', T.bind(RULE.omniScrambler, 17), (ev) => {
@@ -492,7 +492,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Tactical Advantage: ${sergeant.letter} makes that firefight ploy cost 0CP`,
+      text: `Tactical Advantage: ${sergeant.name} makes that firefight ploy cost 0CP`,
     });
   });
 
@@ -586,7 +586,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Medic! ${medic.letter} keeps ${victim.letter} on ${wounds} wounds`,
+      text: `Medic! ${medic.name} keeps ${victim.name} on ${wounds} wounds`,
     });
   });
   reg.on('onActivationStart', T.bind(A.medic, 13), (ev) => {
@@ -692,7 +692,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `${op.letter} changes its order to Engage (Track Target)`,
+      text: `${op.name} changes its order to Engage (Track Target)`,
     });
   });
 
@@ -730,7 +730,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(state, {
       kind: 'action',
       player: T.player,
-      text: `${victim.letter} sets off the Haywire Mine (${damage} damage, -1 APL)`,
+      text: `${victim.name} sets off the Haywire Mine (${damage} damage, -1 APL)`,
     });
     inflictDamage(T.ctx, state, victim, damage, 'mine');
   };
@@ -750,7 +750,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `${op.letter}'s Haywire Mine marker cannot be placed and is removed with it`,
+      text: `${op.name}'s Haywire Mine marker cannot be placed and is removed with it`,
     });
   });
   // The universal Place Marker action cannot express "cannot be placed within an enemy
@@ -1048,7 +1048,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: HELIX GAUNTLET restores ${heal} wounds to ${target.letter}`,
+          text: `${op.name}: HELIX GAUNTLET restores ${heal} wounds to ${target.name}`,
         });
         return { ok: true };
       },
@@ -1071,7 +1071,7 @@ function actions(data: typeof DATA) {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: AUSPEX SCAN (enemies within 8" cannot be obscured)`,
+          text: `${op.name}: AUSPEX SCAN (enemies within 8" cannot be obscured)`,
         });
         return { ok: true };
       },
@@ -1155,7 +1155,7 @@ registerAction({
     log(state, {
       kind: 'action',
       player: op.player,
-      text: `${op.letter}: GUERRILLA WARFARE — order changed to ${op.order}`,
+      text: `${op.name}: GUERRILLA WARFARE — order changed to ${op.order}`,
     });
     return { ok: true };
   },
@@ -1192,7 +1192,7 @@ registerAction({
   },
   perform(_ctx, state, op) {
     op.onGuard = true;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} goes on Guard (Track Target)` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} goes on Guard (Track Target)` });
     return { ok: true };
   },
 });
@@ -1239,7 +1239,7 @@ function registerCarriedMarker(spec: CarriedMarkerSpec): void {
       marker.pos = { ...op.pos };
       marker.z = op.z;
       op.carryingMarkerId = marker.id;
-      log(state, { kind: 'action', player: op.player, text: `${op.letter} picks up the ${marker.id} marker` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name} picks up the ${marker.id} marker` });
       return { ok: true };
     },
   });
@@ -1269,7 +1269,7 @@ function registerCarriedMarker(spec: CarriedMarkerSpec): void {
       marker.pos = { ...pos.pos! };
       marker.z = op.z;
       op.carryingMarkerId = undefined;
-      log(state, { kind: 'action', player: op.player, text: `${op.letter} places the ${marker.id} marker` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name} places the ${marker.id} marker` });
       if (spec.freeDash) {
         grantFreeAction(state, op, {
           sourceId: spec.placeId,

@@ -323,7 +323,7 @@ export function inflictDamage(
   log(state, {
     kind: 'action',
     player: target.player,
-    text: `${target.letter} takes ${dmg} damage (${target.wounds} wounds left)`,
+    text: `${target.name} takes ${dmg} damage (${target.wounds} wounds left)`,
     data: { operativeId: target.id, damage: dmg, kind },
   });
   if (target.wounds <= 0 && !target.incapacitated) {
@@ -339,7 +339,7 @@ export function inflictDamage(
       if (target.wounds <= 0) target.wounds = 1;
       return { inflicted: dmg, incapacitated: false };
     }
-    log(state, { kind: 'action', player: target.player, text: `${target.letter} is incapacitated` });
+    log(state, { kind: 'action', player: target.player, text: `${target.name} is incapacitated` });
     return { inflicted: dmg, incapacitated: true };
   }
   return { inflicted: dmg, incapacitated: false };
@@ -361,7 +361,7 @@ export function removeIncapacitated(ctx: GameContext, state: GameState): void {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter} places the ${marker.kind} marker before being removed (0AP)`,
+          text: `${op.name} places the ${marker.kind} marker before being removed (0AP)`,
         });
       }
       op.carryingMarkerId = undefined as unknown as string | undefined;
@@ -369,7 +369,7 @@ export function removeIncapacitated(ctx: GameContext, state: GameState): void {
     op.removed = true;
     op.ready = false;
     op.onGuard = false;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} is removed from the killzone` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} is removed from the killzone` });
   }
 }
 

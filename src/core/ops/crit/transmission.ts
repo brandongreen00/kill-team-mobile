@@ -40,7 +40,7 @@ registerAction({
     const marker = state.markers[params.markerId!]!;
     // "transmitting until the start of the next turning point"
     marker.flags['transmittingTP'] = state.turningPoint;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} initiates transmission at ${marker.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} initiates transmission at ${marker.id}` });
     return { ok: true };
   },
 });

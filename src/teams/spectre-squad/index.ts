@@ -346,7 +346,7 @@ function tryInterrupt(T: TeamHooks, state: GameState, enemy: OperativeState): vo
   log(state, {
     kind: 'ploy',
     player: T.player,
-    text: `Elite Fieldcraft: ${chosen.letter} interrupts ${enemy.letter}'s activation`,
+    text: `Elite Fieldcraft: ${chosen.name} interrupts ${enemy.name}'s activation`,
     data: { operativeId: chosen.id, enemyId: enemy.id, points: fieldcraftPoints(state, T.player) },
   });
 }
@@ -579,7 +579,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Medic! ${medic.letter} keeps ${victim.letter} on 1 wound`,
+      text: `Medic! ${medic.name} keeps ${victim.name} on 1 wound`,
     });
   });
   reg.on('canPerformAction', T.bind(A.medic, 11), (ev) => {
@@ -654,7 +654,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `${op.letter}'s Melta Mine marker cannot be placed and is removed with it`,
+      text: `${op.name}'s Melta Mine marker cannot be placed and is removed with it`,
     });
   });
   // The universal Place Marker action cannot express "cannot be placed within an enemy
@@ -685,7 +685,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     log(state, {
       kind: 'action',
       player: T.player,
-      text: `${victim.letter} sets off the Melta Mine (${damage} damage)`,
+      text: `${victim.name} sets off the Melta Mine (${damage} damage)`,
     });
     inflictDamage(T.ctx, state, victim, damage, 'mine');
   };
@@ -1011,7 +1011,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Silent Killers: ${striker.letter} inflicts 3 additional damage`,
+      text: `Silent Killers: ${striker.name} inflicts 3 additional damage`,
     });
   });
   reg.on('onStrikeResolved', T.bind(FP.silentKillers, 21), (ev) => {
@@ -1163,7 +1163,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Tvid-feed Triangulation: ${target.letter} cannot be obscured`,
+      text: `Tvid-feed Triangulation: ${target.name} cannot be obscured`,
     });
   });
 
@@ -1254,7 +1254,7 @@ function actions(data: typeof DATA): ActionDef[] {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: ISSUE MISSION — ${target.letter} can interrupt while expended`,
+          text: `${op.name}: ISSUE MISSION — ${target.name} can interrupt while expended`,
         });
         return { ok: true };
       },
@@ -1299,7 +1299,7 @@ function actions(data: typeof DATA): ActionDef[] {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: MEDIKIT restores ${heal} wounds to ${target.letter}`,
+          text: `${op.name}: MEDIKIT restores ${heal} wounds to ${target.name}`,
         });
         return { ok: true };
       },
@@ -1342,7 +1342,7 @@ function actions(data: typeof DATA): ActionDef[] {
         log(state, {
           kind: 'action',
           player: op.player,
-          text: `${op.letter}: LOAD WEAPON — ${target.letter} gains a free Shoot action`,
+          text: `${op.name}: LOAD WEAPON — ${target.name} gains a free Shoot action`,
         });
         return { ok: true };
       },
@@ -1384,7 +1384,7 @@ function signalPerform(
     player: op.player,
     expiry: { kind: 'endOfNextActivation', operativeId: target.id, armed: false },
   });
-  log(state, { kind: 'action', player: op.player, text: `${op.letter}: SIGNAL — ${target.letter} +1 APL` });
+  log(state, { kind: 'action', player: op.player, text: `${op.name}: SIGNAL — ${target.name} +1 APL` });
   return { ok: true };
 }
 
@@ -1451,7 +1451,7 @@ registerAction({
     if (op.order === 'conceal') {
       op.order = 'engage';
       rememberOrder(state, op);
-      log(state, { kind: 'action', player: op.player, text: `${op.letter} changes its order to Engage (Elite Fieldcraft)` });
+      log(state, { kind: 'action', player: op.player, text: `${op.name} changes its order to Engage (Elite Fieldcraft)` });
     }
     const pointBlank = enemiesInControlRange(ctx, state, op).length > 0;
     if (!pointBlank) return getAction('Shoot')!.perform(ctx, state, op, params);
@@ -1569,7 +1569,7 @@ registerAction({
       // "Until the start of this operative's next activation."
       expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
     });
-    log(state, { kind: 'action', player: op.player, text: `${op.letter}: ADVANCED CAMOUFLAGE` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name}: ADVANCED CAMOUFLAGE` });
     return { ok: true };
   },
 });
@@ -1600,7 +1600,7 @@ registerAction({
     marker.pos = { ...op.pos };
     marker.z = op.z;
     op.carryingMarkerId = marker.id;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} picks up the Melta Mine marker` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} picks up the Melta Mine marker` });
     return { ok: true };
   },
 });
@@ -1627,7 +1627,7 @@ registerAction({
     marker.pos = { ...pos.pos! };
     marker.z = op.z;
     op.carryingMarkerId = undefined;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} places the Melta Mine marker` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} places the Melta Mine marker` });
     // "whenever it performs the Place Marker action on that marker, it can immediately
     //  perform a free Dash action"
     grantFreeAction(state, op, {

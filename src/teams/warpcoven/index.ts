@@ -257,7 +257,7 @@ export function setBoon(
   }
   const weapon = opts.weapon ?? defaultAstralWeapon(op);
   store[operativeId] = { boon, ...(weapon ? { weapon } : {}), astral: 'devastating' };
-  log(state, { kind: 'system', player: op.player, text: `${op.letter} has the ${BOON_NAME[boon]} BOON OF TZEENTCH` });
+  log(state, { kind: 'system', player: op.player, text: `${op.name} has the ${BOON_NAME[boon]} BOON OF TZEENTCH` });
   return { ok: true };
 }
 
@@ -272,7 +272,7 @@ export function setAstralChoice(state: GameState, operativeId: string, choice: '
   if (!rec) return;
   rec.astral = choice;
   const op = state.operatives[operativeId];
-  if (op) log(state, { kind: 'system', player: op.player, text: `${op.letter}: Astral Bombardment — ${choice}` });
+  if (op) log(state, { kind: 'system', player: op.player, text: `${op.name}: Astral Bombardment — ${choice}` });
 }
 
 function defaultAstralWeapon(op: OperativeState): string | undefined {
@@ -607,7 +607,7 @@ function abilities(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfNextActivation', operativeId: ev.struck.id, armed: false },
     });
-    log(ev.state, { kind: 'action', player: T.player, text: `${ev.struck.letter} gains a Mindburn token` });
+    log(ev.state, { kind: 'action', player: T.player, text: `${ev.struck.name} gains a Mindburn token` });
   });
   reg.on('onStatMod', mindburnBind(12), (ev) => {
     // "Whenever an operative has one of your Mindburn tokens, worsen the Hit stat of its weapons
@@ -635,7 +635,7 @@ function abilities(reg: HookRegistry, T: TeamHooks): void {
         player: T.player,
         expiry: { kind: 'endOfActivation', operativeId: ev.operative.id },
       });
-      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.letter}: Sorcerous Automata (-1 APL)` });
+      log(ev.state, { kind: 'action', player: T.player, text: `${ev.operative.name}: Sorcerous Automata (-1 APL)` });
     });
     reg.on('onStatMod', bind(11), (ev) => {
       if (ev.operative.datacardId !== cardId || ev.operative.player !== T.player) return;
@@ -946,7 +946,7 @@ function firefightPloys(reg: HookRegistry, T: TeamHooks): void {
     if (!op) return;
     if (String(ev.data?.['mode'] ?? 'dash') === 'order') {
       op.order = op.order === 'engage' ? 'conceal' : 'engage';
-      log(ev.state, { kind: 'ploy', player: T.player, text: `Capricious Plan: ${op.letter} changes its order to ${op.order}` });
+      log(ev.state, { kind: 'ploy', player: T.player, text: `Capricious Plan: ${op.name} changes its order to ${op.order}` });
       return;
     }
     effect(ev.state, {
@@ -957,7 +957,7 @@ function firefightPloys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: op.id },
     });
-    log(ev.state, { kind: 'ploy', player: T.player, text: `Capricious Plan: ${op.letter} can perform a free Dash` });
+    log(ev.state, { kind: 'ploy', player: T.player, text: `Capricious Plan: ${op.name} can perform a free Dash` });
   });
 
   // ---- PSYCHIC CABAL (1CP) ------------------------------------------------
@@ -1009,7 +1009,7 @@ function firefightPloys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Psychic Cabal: ${receiver.letter} gains ${weapon ? weapon.name : (action?.name ?? '')} from ${donor.letter}`,
+      text: `Psychic Cabal: ${receiver.name} gains ${weapon ? weapon.name : (action?.name ?? '')} from ${donor.name}`,
     });
   });
   reg.on('availableWeapons', T.bind('warpcoven.fp.psychic-cabal', 21), (ev) => {
@@ -1062,7 +1062,7 @@ function firefightPloys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, {
       kind: 'ploy',
       player: T.player,
-      text: `Mutant Herd: ${first.letter} and ${partner.letter} activate at the same time`,
+      text: `Mutant Herd: ${first.name} and ${partner.name} activate at the same time`,
     });
   });
 }
@@ -1132,7 +1132,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
       id: `scrolls-${ev.state.seq++}`,
       who: T.player,
       kind: SCROLLS_DECISION,
-      prompt: `${ev.operative.letter}: select a different BOON OF TZEENTCH (Sorcerous Scrolls)`,
+      prompt: `${ev.operative.name}: select a different BOON OF TZEENTCH (Sorcerous Scrolls)`,
       optional: true,
       sourceText: shortQuote(text('warpcoven.eq.sorcerous-scrolls')),
       options,
@@ -1200,7 +1200,7 @@ function actions(data: typeof DATA): ActionDef[] {
             player: op.player,
             expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
           });
-          log(state, { kind: 'action', player: op.player, text: `${op.letter}: PROTECTED BY FATE on ${target.letter}` });
+          log(state, { kind: 'action', player: op.player, text: `${op.name}: PROTECTED BY FATE on ${target.name}` });
           return { ok: true };
         },
       }),
@@ -1231,7 +1231,7 @@ function actions(data: typeof DATA): ActionDef[] {
             player: op.player,
             expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
           });
-          log(state, { kind: 'action', player: op.player, text: `${op.letter}: RAVAGE DESTINY on ${target.letter}` });
+          log(state, { kind: 'action', player: op.player, text: `${op.name}: RAVAGE DESTINY on ${target.name}` });
           return { ok: true };
         },
       }),
@@ -1266,7 +1266,7 @@ function actions(data: typeof DATA): ActionDef[] {
           log(state, {
             kind: 'action',
             player: op.player,
-            text: `${op.letter}: RECONSTITUTION RITUAL restores ${heal} wounds to ${target.letter}`,
+            text: `${op.name}: RECONSTITUTION RITUAL restores ${heal} wounds to ${target.name}`,
           });
           return { ok: true };
         },
@@ -1304,7 +1304,7 @@ function actions(data: typeof DATA): ActionDef[] {
             z: target.z,
             flags: { targetId: target.id },
           });
-          log(state, { kind: 'action', player: op.player, text: `${op.letter}: TEMPORAL FLUX marker placed by ${target.letter}` });
+          log(state, { kind: 'action', player: op.player, text: `${op.name}: TEMPORAL FLUX marker placed by ${target.name}` });
           return { ok: true };
         },
       }),
@@ -1333,7 +1333,7 @@ function actions(data: typeof DATA): ActionDef[] {
             player: op.player,
             expiry: { kind: 'endOfNextActivation', operativeId: op.id, armed: false },
           });
-          log(state, { kind: 'action', player: op.player, text: `${op.letter}: ALIGHT — ${target.letter} gains an Alight token` });
+          log(state, { kind: 'action', player: op.player, text: `${op.name}: ALIGHT — ${target.name} gains an Alight token` });
           return { ok: true };
         },
       }),
@@ -1352,7 +1352,7 @@ function actions(data: typeof DATA): ActionDef[] {
           // "Until the Ready step of the next Strategy phase."
           expiry: { kind: 'endOfTurningPoint' },
         });
-        log(state, { kind: 'action', player: op.player, text: `${op.letter}: BRAYHORN (+1" Move for friendly TZAANGOR)` });
+        log(state, { kind: 'action', player: op.player, text: `${op.name}: BRAYHORN (+1" Move for friendly TZAANGOR)` });
         return { ok: true };
       },
     }),
@@ -1394,7 +1394,7 @@ function temporalFlux(reg: HookRegistry, T: TeamHooks): void {
         carried.pos = { ...op.pos };
         carried.z = op.z;
       }
-      log(ev.state, { kind: 'action', player: T.player, text: `${op.letter} is removed and set back up by the Temporal Flux marker` });
+      log(ev.state, { kind: 'action', player: T.player, text: `${op.name} is removed and set back up by the Temporal Flux marker` });
     }
     removeMarker(ev.state, marker.id);
   });
@@ -1700,7 +1700,7 @@ function applyFlight(ctx: GameContext, state: GameState, op: OperativeState, pla
   log(state, {
     kind: 'action',
     player: op.player,
-    text: `${op.letter} FLIES (${base}, Immaterial Flight) to ${op.pos.x.toFixed(1)},${op.pos.y.toFixed(1)}`,
+    text: `${op.name} FLIES (${base}, Immaterial Flight) to ${op.pos.x.toFixed(1)},${op.pos.y.toFixed(1)}`,
   });
 }
 

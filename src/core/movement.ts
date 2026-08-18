@@ -54,6 +54,24 @@ export interface MoveValidation {
   endZ: number;
 }
 
+/** The movement actions a player aims on the board with tap-to-move. */
+export type MoveAction = 'Reposition' | 'Dash' | 'Fall Back' | 'Charge' | 'Move With Barricade';
+
+/** The exact MoveOptions the reducer will use for a movement action — never looser. */
+export function moveOptionsFor(action: MoveAction, hardCap?: number): MoveOptions {
+  const base: MoveOptions =
+    action === 'Reposition'
+      ? { action: 'Reposition', mustNotFinishEngaged: true }
+      : action === 'Dash'
+        ? { action: 'Dash', noClimb: true, mustNotFinishEngaged: true }
+        : action === 'Fall Back'
+          ? { action: 'Fall Back', mayEnterEnemyControlRange: true, mustNotFinishEngaged: true }
+          : action === 'Move With Barricade'
+            ? { action: 'Move With Barricade', noClimb: true, mustNotFinishEngaged: true }
+            : { action: 'Charge', bonusInches: 2, mayEnterEnemyControlRange: true, mustFinishEngaged: true };
+  return hardCap === undefined ? base : { ...base, hardCap };
+}
+
 export interface MoveOptions {
   action: 'Reposition' | 'Dash' | 'Fall Back' | 'Charge' | 'Move With Barricade' | 'Counteract' | 'Free';
   /** Dash: "it cannot climb during this move, but it can drop and jump". */

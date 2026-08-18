@@ -161,14 +161,15 @@ export function Setup({ store, teams, pendingPlacement, setPendingPlacement }: S
       </p>
       {pendingPlacement ? (
         <p>
-          Tap the board to place <strong>{state.operatives[pendingPlacement.operativeId]?.letter}</strong>.{' '}
+          Tap the board inside your highlighted drop zone to place{' '}
+          <strong>{state.operatives[pendingPlacement.operativeId]?.name}</strong>.{' '}
           <button onClick={() => setPendingPlacement(null)}>Cancel</button>
         </p>
       ) : (
         <div class="row">
           {undeployed.map((op) => (
             <button key={op.id} onClick={() => setPendingPlacement({ operativeId: op.id, player: deployer })}>
-              Place {op.letter}
+              Place {op.name}
             </button>
           ))}
           {undeployed.length === 0 && (
@@ -178,6 +179,7 @@ export function Setup({ store, teams, pendingPlacement, setPendingPlacement }: S
           )}
         </div>
       )}
+      {store.lastError && <p class="err">✖ {store.lastError}</p>}
     </section>
   );
 }

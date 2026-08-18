@@ -39,7 +39,7 @@ registerAction({
   perform(_ctx, state, op, params) {
     const marker = state.markers[params.markerId!]!;
     marker.flags['secured'] = op.player;
-    log(state, { kind: 'action', player: op.player, text: `${op.letter} secures ${marker.id}` });
+    log(state, { kind: 'action', player: op.player, text: `${op.name} secures ${marker.id}` });
     return { ok: true };
   },
 });
