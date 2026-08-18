@@ -28,6 +28,14 @@ import { ratlings } from './ratlings/index.ts';
 import { inquisitorialAgent } from './inquisitorial-agent/index.ts';
 import { elucidianStarstrider } from './elucidian-starstrider/index.ts';
 import { spectreSquad } from './spectre-squad/index.ts';
+import { bladesOfKhaine } from './blades-of-khaine/index.ts';
+import { corsairVoidscarred } from './corsair-voidscarred/index.ts';
+import { voidDancerTroupe } from './void-dancer-troupe/index.ts';
+import { exoditeDragonMasters } from './exodite-dragon-masters/index.ts';
+import { handOfTheArchon } from './hand-of-the-archon/index.ts';
+import { mandrakes } from './mandrakes/index.ts';
+import { hearthkynSalvager } from './hearthkyn-salvager/index.ts';
+import { hernkynYaegir } from './hernkyn-yaegir/index.ts';
 
 /** Phase 5 batch 1. */
 export const BATCH_1: KtTeamModule[] = [
@@ -65,8 +73,20 @@ export const BATCH_3: KtTeamModule[] = [
   spectreSquad,
 ];
 
+/** Phase 6 batch 4 — Aeldari, Drukhari, Leagues of Votann. */
+export const BATCH_4: KtTeamModule[] = [
+  bladesOfKhaine,
+  corsairVoidscarred,
+  voidDancerTroupe,
+  exoditeDragonMasters,
+  handOfTheArchon,
+  mandrakes,
+  hearthkynSalvager,
+  hernkynYaegir,
+];
+
 /** Every implemented kill team, in batch order. */
-export const ALL_TEAM_MODULES: KtTeamModule[] = [...BATCH_1, ...BATCH_2, ...BATCH_3];
+export const ALL_TEAM_MODULES: KtTeamModule[] = [...BATCH_1, ...BATCH_2, ...BATCH_3, ...BATCH_4];
 
 export const TEAM_MODULES: Map<string, KtTeamModule> = new Map(ALL_TEAM_MODULES.map((m) => [m.id, m]));
 
@@ -101,6 +121,14 @@ export {
   inquisitorialAgent,
   elucidianStarstrider,
   spectreSquad,
+  bladesOfKhaine,
+  corsairVoidscarred,
+  voidDancerTroupe,
+  exoditeDragonMasters,
+  handOfTheArchon,
+  mandrakes,
+  hearthkynSalvager,
+  hernkynYaegir,
 };
 export type { KtTeamModule } from './helpers.ts';
 export { defaultRoster, validateRosterFor, type RosterPickIn, type RosterValidation } from './selection.ts';
