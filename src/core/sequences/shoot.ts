@@ -247,6 +247,71 @@ export function effectiveRules(
 // Sequence
 // ---------------------------------------------------------------------------
 
+/**
+ * The Select Weapon gate, shared by the Shoot action's `check` (as a dry run) and by
+ * `startShoot`. Cover and obscured are not known at this point in the sequence and are passed as
+ * false in both cases, so the dry run sees exactly what the real emit sees.
+ */
+function emitSelectWeapon(
+  ctx: GameContext,
+  state: GameState,
+  attacker: OperativeState,
+  intended: OperativeState,
+  weaponName: string,
+  profile: WeaponProfile,
+  rules: WeaponRule[],
+  opts: { pointBlank: boolean; dryRun: boolean },
+): { ok: boolean; reason?: string } {
+  const pick = ctx.hooks.emit('onSelectWeapon', state, {
+    state,
+    ctx: {
+      attacker,
+      defender: intended,
+      weaponName,
+      profile,
+      rules,
+      type: 'ranged',
+      secondary: false,
+      pointBlank: opts.pointBlank,
+      inCover: false,
+      obscured: false,
+      vantageAccurate: 0,
+      distance: gapBetween(ctx, attacker, intended),
+    },
+    allowed: true,
+    dryRun: opts.dryRun,
+  });
+  return pick.allowed ? { ok: true } : { ok: false, reason: pick.reason ?? `${weaponName} cannot be selected` };
+}
+
+/**
+ * Can this operative select this weapon profile at all? Called from the Shoot action's `check`
+ * so a profile-level restriction is visible BEFORE an intent is committed. Without it the AI
+ * offers a shot the sequence then refuses, which lands in `state.rejected` (docs/DECISIONS.md
+ * D-026: whatever `check` accepts, `perform` must be able to complete).
+ */
+export function canSelectWeapon(
+  ctx: GameContext,
+  state: GameState,
+  attacker: OperativeState,
+  weaponName: string,
+  profileName: string | undefined,
+  targetId: string,
+  opts: { pointBlank?: boolean } = {},
+): { ok: boolean; reason?: string } {
+  const w = weaponsOf(ctx, state, attacker, 'ranged').find((x) => x.name === weaponName);
+  if (!w) return { ok: true };
+  const profile = findProfile(w, profileName);
+  if (!profile) return { ok: true };
+  const intended = state.operatives[targetId];
+  if (!intended || intended.removed) return { ok: true };
+  const rules = effectiveRules(ctx, state, profile, { operative: attacker, target: intended, weaponName });
+  return emitSelectWeapon(ctx, state, attacker, intended, weaponName, profile, rules, {
+    pointBlank: opts.pointBlank ?? false,
+    dryRun: true,
+  });
+}
+
 export function startShoot(
   ctx: GameContext,
   state: GameState,
@@ -266,25 +331,11 @@ export function startShoot(
 
   // Select Weapon: a rule may forbid THIS profile (the rare `Concealed Position` weapon rule,
   // "this operative can only use this weapon the first time it's performing the Shoot action").
-  const pick = ctx.hooks.emit('onSelectWeapon', state, {
-    state,
-    ctx: {
-      attacker,
-      defender: intended,
-      weaponName,
-      profile,
-      rules,
-      type: 'ranged',
-      secondary: false,
-      pointBlank: opts.pointBlank ?? false,
-      inCover: false,
-      obscured: false,
-      vantageAccurate: 0,
-      distance: gapBetween(ctx, attacker, intended),
-    },
-    allowed: true,
+  const pick = emitSelectWeapon(ctx, state, attacker, intended, weaponName, profile, rules, {
+    pointBlank: opts.pointBlank ?? false,
+    dryRun: false,
   });
-  if (!pick.allowed) return { ok: false, reason: pick.reason ?? `${weaponName} cannot be selected` };
+  if (!pick.ok) return pick;
 
   let check = checkTarget(ctx, state, attacker, intended, profile, rules, { pointBlank: opts.pointBlank ?? false });
   // "…becomes the valid target instead (even if it wouldn't normally be valid for this).

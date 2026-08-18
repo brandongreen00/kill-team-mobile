@@ -753,6 +753,7 @@ function bookkeeping(reg: HookRegistry, T: TeamHooks): void {
    * sequence. Reported as a seam.
    */
   reg.on('onSelectWeapon', T.bindText('ratlings.sequenceUpkeep', text(EQ.purloinedRations), 5), (ev) => {
+    if (ev.dryRun) return; // a `check` is a legality query — never mutate (see onSelectWeapon)
     if (ev.ctx.attacker.player !== T.player) return;
     dropEffects(
       ev.state,

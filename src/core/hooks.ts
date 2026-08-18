@@ -188,7 +188,18 @@ export interface HookEvents {
     retaliating: boolean;
     rules: WeaponRule[];
   };
-  onSelectWeapon: { state: GameState; ctx: AttackContext; allowed: boolean; reason?: string };
+  /**
+   * May this operative use THIS weapon profile for this shot? A profile-level restriction that
+   * `availableWeapons` (which is per weapon) cannot express — the rare `Concealed Position` rule
+   * sits on a sniper rifle's `concealed` profile alone, leaving its mobile and stationary
+   * profiles legal.
+   *
+   * Emitted TWICE per shot: once from the Shoot action's `check` with `dryRun: true`, so the AI
+   * and the UI can see the restriction before committing an intent, and once from `startShoot`
+   * with `dryRun: false`. **A handler that changes state must return early on `dryRun`** — a
+   * `check` is a legality query the AI runs many times per turn and it must not mutate.
+   */
+  onSelectWeapon: { state: GameState; ctx: AttackContext; allowed: boolean; reason?: string; dryRun: boolean };
   onCollectAttackDice: { state: GameState; ctx: AttackContext; count: number; mods: StatMods };
   /**
    * The Select Valid Target step, before the target is checked. A rule may substitute the

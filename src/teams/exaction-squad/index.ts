@@ -340,6 +340,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   //  payload's `ignoreFriendlyControlRange` (Pathfinders' SUPPORTING FIRE added it).
   //  The rule is free, so it is always used (docs/DECISIONS.md D-022).
   reg.on('onSelectWeapon', T.bind(RULE_RUTHLESS, 10), (ev) => {
+    if (ev.dryRun) return; // a `check` is a legality query — never mutate (see onSelectWeapon)
     if (ev.ctx.attacker.player !== T.player) return;
     // `onValidTarget` carries no weapon, and the grenade carve-out is per weapon — so the weapon
     // chosen for THIS Shoot action is recorded here (startShoot emits this immediately before
@@ -1143,6 +1144,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
    * (Torrent 1") is never taken — see the report.
    */
   reg.on('onSelectWeapon', T.bind(EQ_SHELLS, 30), (ev) => {
+    if (ev.dryRun) return; // a `check` is a legality query — never mutate (see onSelectWeapon)
     if (!T.ctx || !hasEquipment(ev.state, T.player, EQ_SHELLS)) return;
     if (ev.ctx.type !== 'ranged' || !T.mineKw(ev.ctx.attacker, KW)) return;
     if (!SHOTGUNS.includes(ev.ctx.weaponName.trim().toLowerCase())) return;

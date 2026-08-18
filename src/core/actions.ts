@@ -23,7 +23,7 @@ import {
   settleZ,
   weaponsOf,
 } from './state.ts';
-import { startShoot, advanceShoot } from './sequences/shoot.ts';
+import { startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
 import { startFight, advanceFight } from './sequences/fight.ts';
 import { hasType } from './terrain.ts';
 import type { ActionParams } from './intents.ts';
@@ -339,7 +339,9 @@ registerAction({
       if (moved && !(heavy.only && op.actionsThisActivation.every((a) => a === heavy.only || !isMove(a))))
         return { ok: false, reason: `${w!.name} is Heavy — it cannot be used in an activation in which the operative moved` };
     }
-    return { ok: true };
+    // A rule may forbid THIS profile (the rare `Concealed Position` weapon rule). Asked here as
+    // well as in the sequence so the refusal is visible before the intent is committed.
+    return canSelectWeapon(ctx, state, op, params.weaponName, params.profileName, params.targetId);
   },
   perform(ctx, state, op, params) {
     const r = startShoot(ctx, state, op, params.weaponName!, params.profileName, params.targetId!);

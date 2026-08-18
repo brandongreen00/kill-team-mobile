@@ -472,6 +472,7 @@ describe('KOMMANDOS unique actions and abilities', () => {
         distance: 8,
       },
       allowed: true,
+      dryRun: false,
     });
     expect(ev.allowed).toBe(false);
   });

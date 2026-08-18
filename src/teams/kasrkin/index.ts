@@ -273,14 +273,20 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     ev.extraCoverSaves = Math.max(ev.extraCoverSaves, 1);
   });
 
-  // SHARPSHOOTER › Concealed Position (rare weapon rule).
-  reg.on('availableWeapons', T.bind('kasrkin.sharpshooter.concealed-position', 11), (ev) => {
-    if (ev.operative.player !== T.player) return;
-    const concealed = (T.card(ev.operative)?.weapons ?? []).filter((w) =>
-      w.profiles.some((p) => p.rules.some((r) => r.id === 'ConcealedPosition')),
-    );
-    if (concealed.length === 0 || !hasShotBefore(ev.state, ev.operative.id)) return;
-    ev.weapons = ev.weapons.filter((n) => !concealed.some((w) => w.name === n));
+  // SHARPSHOOTER › Concealed Position (rare weapon rule): "This operative can only use this
+  // weapon the first time it's performing the Shoot action during the battle."
+  //
+  // The rule sits on the hot-shot marksman rifle's `concealed` PROFILE alone — its `mobile` and
+  // `stationary` profiles carry no such restriction. `availableWeapons` is per WEAPON, so the
+  // filter this used to be removed the whole rifle after the first shot and cost the Sharpshooter
+  // both of its other profiles. `onSelectWeapon` is per profile, and since it is now also emitted
+  // from the Shoot action's `check` the refusal reaches the AI before it commits an intent.
+  reg.on('onSelectWeapon', T.bind('kasrkin.sharpshooter.concealed-position', 11), (ev) => {
+    if (ev.ctx.attacker.player !== T.player) return;
+    if (!ev.ctx.profile.rules.some((r) => r.id === 'ConcealedPosition')) return;
+    if (!hasShotBefore(ev.state, ev.ctx.attacker.id)) return;
+    ev.allowed = false;
+    ev.reason = 'Concealed Position: only the first Shoot action of the battle';
   });
   reg.on('onCollectAttackDice', T.bind('kasrkin.sharpshooter.concealed-position', 13), (ev) => {
     if (ev.ctx.type !== 'ranged' || ev.ctx.attacker.player !== T.player) return;

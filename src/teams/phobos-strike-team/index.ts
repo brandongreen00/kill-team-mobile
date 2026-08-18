@@ -986,6 +986,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
   //  rule. If you do, until the end of the turning point, that weapon has the Piercing 1
   //  weapon rule."
   reg.on('onSelectWeapon', T.bind(EQ.specialAmmo, 30), (ev) => {
+    if (ev.dryRun) return; // a `check` is a legality query — never mutate (see onSelectWeapon)
     if (!hasEquipment(ev.state, T.player, EQ.specialAmmo)) return;
     if (!T.mineKw(ev.ctx.attacker, KW)) return;
     if (!AMMO_WEAPONS.includes(ev.ctx.weaponName.toLowerCase())) return;

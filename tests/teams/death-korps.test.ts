@@ -876,6 +876,7 @@ describe('SAPPER — Mine Layer, Detonate; SNIPER — Concealed Position; TROOPE
       state,
       ctx: attackCtx(sniper, foe, 'Long-las', profileOf(C.sniper, 'Long-las', 'concealed')),
       allowed: true,
+      dryRun: false,
     });
     expect(pick.allowed).toBe(false);
   });

@@ -806,6 +806,7 @@ describe('MALOCATOR, MARKSMAN, REVELATUM, SUBDUCTOR, VIGILANT and VOX-SIGNIFIER'
           distance: 5,
         },
         allowed: true,
+      dryRun: false,
       });
     expect(emit(concealed).allowed).toBe(true);
     (state.opState['exaction-squad.hasShot'] as Record<string, unknown>) = { [marksman.id]: true };
@@ -1345,6 +1346,7 @@ describe('EXACTION SQUAD faction equipment', () => {
         distance: 6,
       },
       allowed: true,
+      dryRun: false,
     });
     expect(state.effects.some((e) => e.rule === 'exaction-squad.shells')).toBe(false);
     // A 3+ Save target (the SUBDUCTOR) takes the printed Piercing 1 branch.
@@ -1366,6 +1368,7 @@ describe('EXACTION SQUAD faction equipment', () => {
         distance: 6,
       },
       allowed: true,
+      dryRun: false,
     });
     const eff = state.effects.find((e) => e.rule === 'exaction-squad.shells');
     expect(eff?.data?.['rule']).toBe('Piercing');

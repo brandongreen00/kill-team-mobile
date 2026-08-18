@@ -1052,6 +1052,7 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
   // "…you can use this rule" is free, so it is auto-used on the first bolt pistol / boltgun Shoot
   // action of each turning point (docs/DECISIONS.md D-022).
   reg.on('onSelectWeapon', T.bind('legionary.eq.tainted-rounds', 30), (ev) => {
+    if (ev.dryRun) return; // a `check` is a legality query — never mutate (see onSelectWeapon)
     if (!hasEquipment(ev.state, T.player, 'legionary.eq.tainted-rounds')) return;
     const op = ev.ctx.attacker;
     if (op.player !== T.player || !T.kw(op, KW)) return;

@@ -10,7 +10,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
-import { BATCH_1, BATCH_2 } from '../../src/teams/index.ts';
+import { BATCH_1, BATCH_2, BATCH_3 } from '../../src/teams/index.ts';
 import { defaultRoster } from '../../src/teams/selection.ts';
 import type { KtTeamModule } from '../../src/teams/helpers.ts';
 import { mapById, realMaps, teamContext } from './harness.ts';
@@ -58,6 +58,7 @@ function soak(mine: KtTeamModule, foe: KtTeamModule, mapId: string, seed: number
 const BATCHES: { name: string; modules: KtTeamModule[]; seedBase: number }[] = [
   { name: 'batch-1', modules: BATCH_1, seedBase: 1000 },
   { name: 'batch-2', modules: BATCH_2, seedBase: 2000 },
+  { name: 'batch-3', modules: BATCH_3, seedBase: 3000 },
 ];
 
 for (const batch of BATCHES) {

@@ -4,6 +4,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { reduce } from '../../src/core/reducer.ts';
+import { canSelectWeapon } from '../../src/core/sequences/shoot.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { moveBudget } from '../../src/core/movement.ts';
 import { availableActions } from '../../src/core/actions.ts';
@@ -532,21 +533,39 @@ describe('KASRKIN abilities', () => {
     expect(ev.rerolls.some((r) => r.id === 'kasrkin.blastPadding')).toBe(true);
   });
 
-  it('Concealed Position: the concealed profile is unavailable after the SHARPSHOOTER has shot once', () => {
+  it('Concealed Position: "only the first time it\'s performing the Shoot action during the battle" — the concealed profile alone', () => {
     const { ctx, state } = setup();
     const sniper = state.operatives[opWith(state, 'p1', 'kasrkin.sharpshooter')]!;
-    const before = ctx.hooks.emit('availableWeapons', state, {
-      state,
-      operative: sniper,
-      weapons: ['Hot-shot marksman rifle', 'Gun butt'],
-    }).weapons;
-    expect(before).toContain('Hot-shot marksman rifle');
+    const foe = state.operatives[opWith(state, 'p2', 'kasrkin.trooper')]!;
+    const rifle = DATA.datacards
+      .find((c) => c.id === 'kasrkin.sharpshooter')!
+      .weapons.find((w) => w.name === 'Hot-shot marksman rifle')!;
+    // The rule sits on the `concealed` profile alone — mobile and stationary are unrestricted.
+    const carries = (n: string): boolean =>
+      rifle.profiles.find((p) => p.name === n)!.rules.some((r) => r.id === 'ConcealedPosition');
+    expect(carries('concealed')).toBe(true);
+    expect(carries('mobile')).toBe(false);
+    expect(carries('stationary')).toBe(false);
+
+    const ask = (profileName: string) =>
+      canSelectWeapon(ctx, state, sniper, 'Hot-shot marksman rifle', profileName, foe.id);
+
+    // Before it has shot, every profile is selectable.
+    expect(ask('concealed').ok).toBe(true);
+    expect(ask('mobile').ok).toBe(true);
+
     state.opState['kasrkin.shot'] = { [sniper.id]: true };
-    const after = ctx.hooks.emit('availableWeapons', state, {
+
+    // After its first Shoot only the concealed profile is refused; the rifle itself is NOT lost.
+    expect(ask('concealed').ok).toBe(false);
+    expect(ask('concealed').reason).toContain('Concealed Position');
+    expect(ask('mobile').ok).toBe(true);
+    expect(ask('stationary').ok).toBe(true);
+    const available = ctx.hooks.emit('availableWeapons', state, {
       state,
       operative: sniper,
       weapons: ['Hot-shot marksman rifle', 'Gun butt'],
     }).weapons;
-    expect(after).not.toContain('Hot-shot marksman rifle');
+    expect(available).toContain('Hot-shot marksman rifle');
   });
 });
