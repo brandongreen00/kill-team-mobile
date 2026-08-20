@@ -2,8 +2,9 @@
  * Selection rules — one shared, data-driven validator for every kill team.
  * Each case quotes the printed selection requirement it pins.
  */
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { teamData } from '../../src/teams/data.ts';
+import { teamData, type TeamData } from '../../src/teams/data.ts';
 import {
   alwaysAvailableWeapons,
   defaultRoster,
@@ -161,6 +162,66 @@ describe('selection rules (shared, driven by data/teams/<slug>.json)', () => {
     const v = validateRosterFor(data, swapped);
     expect(v.ok).toBe(false);
     expect(v.errors.join(' ')).toContain('Every ELUCIDIAN STARSTRIDER operative');
+  });
+
+  it('HUNTER CLADE: "Other than GUNNER and WARRIOR operatives…" exempts a role keyword, prefix and all', () => {
+    // hunter-clade is a later batch, so read the raw JSON rather than the module registry.
+    const data = JSON.parse(readFileSync('data/teams/hunter-clade.json', 'utf8')) as TeamData;
+    expect(data.selection.constraints).toContainEqual({ kind: 'uniqueExcept', roles: ['GUNNER', 'WARRIOR'] });
+    // The printed rows keep their sub-group prefix, so exact-equality matching never fired and
+    // the team could not field a legal kill team at all.
+    const roles = data.selection.list.map((e) => e.role);
+    expect(roles).toContain('RANGER WARRIOR');
+    expect(roles).not.toContain('WARRIOR');
+    expect(validateRosterFor(data, defaultRoster(data)).errors).toEqual([]);
+  });
+
+  it('HEARTHKYN SALVAGER: the WARRIOR exemption does NOT leak to JUMP PACK WARRIOR', () => {
+    // The list prints a plain WARRIOR row BESIDE a JUMP PACK WARRIOR row, so the printed
+    // exemption names the plain operative; the jump-pack one is a different operative and stays
+    // unique. Hunter Clade is the opposite shape — no plain row at all — so there the keyword
+    // fallback must fire. The rule that satisfies both: fall back to the keyword only when the
+    // list prints no row of that exact name.
+    const data = teamData('hearthkyn-salvager');
+    const roles = data.selection.list.map((e) => e.role);
+    expect(roles).toContain('WARRIOR');
+    expect(roles).toContain('JUMP PACK WARRIOR');
+    const picks = defaultRoster(data);
+    expect(validateRosterFor(data, picks).errors).toEqual([]);
+    const jump = picks.filter((p) => p.datacardId.endsWith('jump-pack-warrior'));
+    expect(jump).toHaveLength(1);
+    // A second one is refused as a repeat.
+    const twice = validateRosterFor(data, [...picks, { ...jump[0]! }]);
+    expect(twice.errors.join(' ')).toContain('only include each operative on this list once');
+  });
+
+  it('KASRKIN: the TROOPER exemption does NOT leak to RECON-TROOPER, VOX-TROOPER or DEMO-TROOPER', () => {
+    // Token matching, deliberately not substring matching — those are different operatives.
+    const data = teamData('kasrkin');
+    const picks = defaultRoster(data);
+    const recon = picks.find((p) => p.datacardId === 'kasrkin.recon-trooper');
+    expect(recon).toBeDefined();
+    const twice = validateRosterFor(data, [...picks, { ...recon! }]);
+    expect(twice.errors.join(' ')).toContain('only include each operative on this list once');
+  });
+
+  it('VOID-DANCER TROUPE: "up to one fusion pistol" is enforced, and the default roster respects it', () => {
+    const data = teamData('void-dancer-troupe');
+    expect(data.selection.constraints).toContainEqual({ kind: 'maxItem', item: 'fusion pistol', max: 1 });
+    const picks = defaultRoster(data);
+    const v = validateRosterFor(data, picks);
+    expect(v.errors).toEqual([]);
+    const fusion = v.weapons.filter((ws) => ws.some((w) => w.toLowerCase() === 'fusion pistol'));
+    expect(fusion.length).toBeLessThanOrEqual(1);
+  });
+
+  it('CORSAIR VOIDSCARRED: "your kill team cannot include both a blaster and a wraithcannon"', () => {
+    const data = teamData('corsair-voidscarred');
+    expect(data.selection.constraints).toContainEqual({
+      kind: 'exclusiveItems',
+      items: ['blaster', 'wraithcannon'],
+    });
+    expect(validateRosterFor(data, defaultRoster(data)).errors).toEqual([]);
   });
 
   it('a weapon no selection option names is always available, including Limited x weapons', () => {

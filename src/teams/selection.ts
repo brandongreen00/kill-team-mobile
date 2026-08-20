@@ -245,13 +245,38 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
       const cc = c as { role: string; max: number };
       explicitCap.set(norm(cc.role), cc.max);
     }
+  /**
+   * "Other than GUNNER and WARRIOR operatives, your kill team can only include each operative on
+   * this list once." The exempt token is the ROLE KEYWORD, but a scraped row keeps whatever
+   * sub-group prefix the page printed — "SKITARII RANGER GUNNER", "VANGUARD WARRIOR" — so exact
+   * equality never matched and the printed exemption never fired, leaving Hunter Clade unable to
+   * field a legal kill team.
+   *
+   * Matching is on SPACE-separated tokens, deliberately not substrings: the Kasrkin exempt
+   * "TROOPER" must not also exempt RECON-TROOPER, VOX-TROOPER or DEMO-TROOPER, which are
+   * different operatives that happen to end in the same word.
+   */
+  const allRoles = selectionEntries(data).map((e) => norm(e.role));
+  const isExemptRole = (role: string): boolean => {
+    const n = norm(role);
+    if (uniqueExcept.has(n)) return true;
+    // Fall back to the role KEYWORD only when the list prints no row of that exact name. Hunter
+    // Clade exempts "GUNNER" and "WARRIOR" but prints only prefixed rows (SKITARII RANGER GUNNER,
+    // RANGER WARRIOR), so the exemption must mean those. Hearthkyn Salvager exempts the same two
+    // words and prints a plain WARRIOR row *beside* a JUMP PACK WARRIOR row — there the exemption
+    // names the plain operative, and the jump-pack one is a different operative that is still
+    // unique. Kasrkin is the same shape with TROOPER beside RECON-/VOX-/DEMO-TROOPER.
+    return n
+      .split(/\s+/)
+      .some((token) => uniqueExcept.has(token) && !allRoles.includes(token));
+  };
   const byIndex = new Map<number, number>();
   for (const r of resolved) byIndex.set(r.index, (byIndex.get(r.index) ?? 0) + 1);
   for (const [index, n] of byIndex) {
     const entry = selectionEntries(data)[index]!;
     if (n <= 1) continue;
     const cap = explicitCap.get(norm(entry.role));
-    const exempt = uniqueExcept.has(norm(entry.role)) || !entry.uniqueUnlessRole || (cap !== undefined && n <= cap);
+    const exempt = isExemptRole(entry.role) || !entry.uniqueUnlessRole || (cap !== undefined && n <= cap);
     if (!exempt) {
       fail('unique', `your kill team can only include each operative on this list once — ${entry.role} selected ${n} times`);
     }
@@ -295,6 +320,18 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
       const cc = c as { role: string; max: number };
       if (countRole(cc.role) > cc.max)
         fail('maxCount', `you cannot select more than ${cc.max} ${cc.role} operatives (${countRole(cc.role)} selected)`);
+    } else if (c.kind === 'maxItem') {
+      // "…can only include up to one fusion pistol", "…up to two darklight weapons". The
+      // resolved weapon list per pick is already computed above, so this is a plain count.
+      const cc = c as unknown as { item: string; max: number };
+      const n = weapons.filter((ws) => ws.some((w) => norm(w) === norm(cc.item))).length;
+      if (n > cc.max) fail('maxItem', `your kill team can only include up to ${cc.max} ${cc.item} (${n} selected)`);
+    } else if (c.kind === 'exclusiveItems') {
+      // "Your kill team cannot include both a blaster and a wraithcannon."
+      const cc = c as unknown as { items: string[] };
+      const present = cc.items.filter((item) => weapons.some((ws) => ws.some((w) => norm(w) === norm(item))));
+      if (present.length > 1)
+        fail('exclusiveItems', `your kill team cannot include both ${cc.items.join(' and ')}`);
     } else if (c.kind === 'requires') {
       const cc = c as { role: string; requiresRole: string };
       if (countRole(cc.role) > 0 && countRole(cc.requiresRole) === 0)
@@ -368,7 +405,7 @@ export function defaultRoster(data: TeamData): RosterPickIn[] {
    * the nth loadout where the row offers one — the Inquisitorial Agent's two GUN SERVITORs.
    */
   const pickOf = (entry: SelectionEntry, index: number, nth = 0): RosterPickIn => {
-    const at = <T>(xs: T[]): T | undefined => xs[Math.min(nth, xs.length - 1)];
+    const at = <T>(xs: T[]): T | undefined => (xs.length === 0 ? undefined : xs[nth % xs.length]);
     return {
       datacardId: entry.datacardId,
       entryId: entryId(data, index),
@@ -416,11 +453,25 @@ export function defaultRoster(data: TeamData): RosterPickIn[] {
         const entry = entries[index]!;
         if (entry.group !== group.index || entry.isLeader) continue;
         if (filled + entry.selectionCost > group.count) continue;
+        // Try this row's options in turn, not just its first. A printed cap on a WEAPON
+        // ("up to one fusion pistol") is broken by whichever option happens to sit first on
+        // several rows, and always taking `loadouts[0]` made those teams unfillable — which is
+        // why `maxItem` could not be enforced before (docs/DECISIONS.md D-030).
         const nth = picks.filter((p) => resolveEntry(data, p)?.index === index).length;
-        const trial = [...picks, pickOf(entry, index, nth)];
-        const check = validateRosterFor(data, trial);
-        if (check.codes.some((c) => !COUNT_CODES.includes(c))) continue;
-        picks.push(pickOf(entry, index, nth));
+        const variants = Math.max(
+          1,
+          entry.loadouts.length,
+          ...entry.optionGroups.map((g) => g.choices.length),
+          ...entry.fixedChoiceGroups.map((g) => g.choices.length),
+        );
+        let chosen: RosterPickIn | undefined;
+        for (let v = 0; v < variants && !chosen; v++) {
+          const candidate = pickOf(entry, index, nth + v);
+          const check = validateRosterFor(data, [...picks, candidate]);
+          if (!check.codes.some((c) => !COUNT_CODES.includes(c))) chosen = candidate;
+        }
+        if (!chosen) continue;
+        picks.push(chosen);
         filled += entry.selectionCost;
         added = true;
         break;
