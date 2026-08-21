@@ -16,6 +16,7 @@ the whole of `data/maps/**` is reproducible from the committed PNGs.
 pnpm maps:extract       # python3 tools/maps/extract_cards.py            (~6 min)
 pnpm maps:overlay       # python3 tools/maps/render_overlay.py           (~30 s)
 pnpm maps:validate      # python3 tools/maps/validate_maps.py            (~2 min)
+pnpm maps:test          # python3 tools/maps/test_extract.py             (~5 s)
 
 python3 tools/maps/extract_cards.py volkus-1 gallowdark-3   # a subset
 python3 tools/maps/validate_maps.py --json                  # machine readable
@@ -47,6 +48,7 @@ extracted as `bheta-decima-5`.
 | `extract_cards.py` | the pipeline; writes `data/maps` and `data/terrain` |
 | `render_overlay.py` | `docs/maps/overlays/*.png` — extraction over the card, and beside it |
 | `validate_maps.py` | the acceptance gates (G1–G9), used for the QA table in `docs/MAPS.md` |
+| `test_extract.py` | detector regression tests on synthetic cards — the only part of this pipeline CI can run |
 
 ## Method
 
@@ -141,8 +143,8 @@ Per killzone:
   decomposed into axis-aligned rectangles so each wall bar is its own part.
   White dashes across a wall are **doors** (`keys/VS2.png`: *"The position of a
   door is represented by these thick white dashed lines"*); a white dashed
-  *rectangle* marks a piece standing on an upper level, and cutting along it
-  separates that piece from the level it sits on.
+  *rectangle* marks a piece that tucks under the adjacent raised level (D-014),
+  and that rectangle — not the green — is the piece's footprint.
 * **Bheta-Decima** — gantry decks and the condenser are traced from green and
   separated along their printed outline; decks that were one blob before that cut
   are touching, i.e. *"treated as the same terrain"*, and share a `groupId`. A
@@ -156,6 +158,46 @@ Per killzone:
   `keys/TW3.jpg`: *"ACCESS POINT POSITION ON WALL"*. Teleport pads, the
   sarcophagus and debris come from the black label chips.
 
+### 5a. Dashed rectangles (D-014)
+
+`dashed_rects()` recognises an outline by **geometry**, never by a count of dash
+segments. A count is scale-dependent and a dashed rectangle is not: piece I
+(2 × 3.5") has a 264px perimeter and ~20 segments, piece K (0.75 × 1.979") has
+131px and ~8, and the opaque label pill — which on these cards sits *on* the
+outline rather than inside it — swallows two to four more. The old `parts >= 5`
+gate therefore fired on every large rectangle and missed every small one, and a
+missed rectangle is not a null result: the piece stays in `chips`, so
+`split_blob_by_chips()` carves it out of the neighbouring green blob and
+*both* pieces end up wrong.
+
+What is tested instead, on the group of dashes:
+
+1. the fitted box is at least 0.5" on both sides;
+2. essentially every dash (≥ 90 % of them) lies within 4px of that box's
+   perimeter — **rectangularity**, which is the property D-014 actually depends
+   on;
+3. the dashes cover at least 35 % of the **visible** perimeter overall and 25 %
+   of each visible edge, so an outline missing a whole side is rejected.
+
+"Visible" is the other half of the fix. Label pills and objective markers are
+opaque: the card cannot print a dash under one, so the perimeter they hide is
+dropped from both sides of the coverage ratio rather than counted as a miss.
+Their boxes are also *bridged* during grouping — a pill on a piece narrower than
+itself cuts the outline into two arcs, and those arcs are one rectangle.
+
+Dashes are grouped twice: an isotropic dilation (which joins the two strokes
+meeting at a corner) and directional ones that close the gaps *along* an edge,
+where the printed rhythm varies. If the wider grouping swallows two pieces
+printed less than ~0.9" apart, the box fails the geometry test and the tighter
+grouping is retried inside it, so a close pair degrades to two rectangles rather
+than to none.
+
+`tools/maps/test_extract.py` pins all of this on synthetic cards drawn to the
+same conventions, at every Volkus rubble size, in both rotations, across three
+dash rhythms, with the pill in the middle of an edge and on a corner. The
+official cards are GW IP and not in the repository, so this is the only part of
+the pipeline CI can run.
+
 ### 6. Templates and the IoU gate
 
 The same physical piece is drawn with the same vector art on every card, so a
@@ -166,6 +208,15 @@ The template footprint is the piece's own outline (upper level / rubble /
 pad), falling back to the largest wall bar for pieces that are nothing but wall.
 
 `data/terrain/<killzone>.json` carries those templates as local-space footprints.
+
+The gate has two tiers. Below **0.92** a feature is reported; below **0.85** the
+polygon is not the piece it claims to be and `validate_maps.py` fails, because
+nothing downstream — board render, visibility, movement — can tell a corrupted
+footprint from a real one. Genuine exceptions are allow-listed by
+`(mapId, label)` in `IOU_ALLOW` with the reason, and an entry whose feature now
+fits is itself a gate failure, so the list cannot outlive the bug it documents.
+`tests/maps-rubble.test.ts` carries the same list from the other side: every
+rubble piece must be a 4-vertex rectangle at its template size.
 
 ## Known limitations
 

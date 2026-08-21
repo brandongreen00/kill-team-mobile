@@ -2,6 +2,37 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-20 — Phase 1 maps: D-014 dashed-rectangle recall (D-039)
+
+**Landed**
+- `dashed_rects()` rewritten to recognise an outline by geometry rather than by a fixed count of
+  dash segments, which missed every small dashed rectangle on every Volkus card and, through
+  `split_blob_by_chips()`, corrupted the neighbouring piece as well. Details in
+  `tools/maps/README.md` §5a and `docs/DECISIONS.md` D-039.
+- `validate_maps.py` G7 gained a hard tier: below IoU **0.85** a feature fails the build. Genuine
+  exceptions are allow-listed by `(mapId, label)` with a reason, and a stale entry is itself a
+  failure.
+- New tests: `tools/maps/test_extract.py` (detector, on synthetic cards drawn to the card
+  conventions — the official cards are GW IP and not in the repo) and `tests/maps-rubble.test.ts`
+  (every rubble piece is a 4-vertex rectangle at its template size, across all four killzones).
+  Both are in CI; CI now installs the extractor's Python deps and runs `maps:test` + `maps:validate`.
+- `docs/MAPS.md` §6 corrected: it previously explained these IoUs as "the visible part of an
+  overlapped piece", which is not what was happening.
+
+**Next**
+1. **Re-run `pnpm maps:extract && pnpm maps:overlay && pnpm maps:validate` on a machine that has
+   `docs/context-pack/`** and delete the `_D014` entries from `IOU_ALLOW` and `PENDING`. The data in
+   `data/maps/volkus/**` is still the old, wrong geometry — the fix is in the tool, not yet in the
+   output.
+2. Stronghold B (IoU 0.57–0.79 on maps 1–3) — the only piece with two upper levels; unrelated to
+   D-014 and still unexplained.
+3. `bheta-decima-6` B/D (0.40/0.48) — a merged blob split wrongly; same shape as D-014, different
+   cause (`bheta_features()` never calls `dashed_rects()`).
+4. `data/terrain/volkus.json` → `footprints` stores one placed part instead of the union, so
+   multi-part pieces (strongholds, small ruins) read at half their built extent.
+
+---
+
 ## 2026-08-17 — Phases 0, 2 and 4 landed; 1, 3, 5 and 7 in flight
 
 **Landed this session (branch `claude/kill-team-mobile-overhaul-ohtkmd`)**

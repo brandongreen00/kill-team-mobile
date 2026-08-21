@@ -186,7 +186,7 @@ at most one friendly operative — carried as `maxOperatives: 1`.
 | G4 | every feature labelled | 1 exception: `tomb-world-1.B?-1` |
 | G5 | exactly 3 objectives (p1/p2/centre) | pass on all 24 |
 | G6 | drop-zone depth is a printed value | pass — Volkus 6"/3", Bheta-Decima 6"/4"/3", CQ 4.3125" (long-edge) / 4.28125" (short-edge) |
-| G7 | fitted-template IoU ≥ 0.92 | median 0.97–1.00 on every map; 20 individual features below the gate (see §6) |
+| G7 | fitted-template IoU: ≥ 0.92 is reported, **< 0.85 fails the build** | median 0.97–1.00 on every map; 20 features below 0.92, of which 13 are below 0.85 and carry an explicit allow-list entry with a reason (`IOU_ALLOW` in `validate_maps.py`) — see §6 |
 | G8 | CQ wall centrelines within 0.1" of the lattice | worst 0.0003" |
 | G9 | 180° rotational symmetry | reported, not gated (0.09–0.58; the layouts are asymmetric by design) |
 
@@ -199,19 +199,44 @@ derived centre line): **≤ 0.041" on all 24 maps**.
 
 ## 6. Known nits
 
-* **20 features below the 0.92 IoU gate** (out of 353). All are on Volkus,
-  Bheta-Decima 6 and two close-quarters maps, and all have the same cause: the
-  card draws only the *visible* part of a piece that is overlapped by another
-  piece, so the traced footprint is smaller than the physical piece.
-  - Volkus `K`/`J`/`I`/`G` (0.23–0.88): rubble pieces that tuck under a raised
-    level (D-014). Where the dashed outline is unbroken the extractor recovers
-    the full rectangle; where an objective marker or a wall breaks the outline it
-    falls back to the visible green, which is what these IoUs measure.
-  - Volkus `A`, `C`, `D` (0.56–0.90) and Bheta-Decima 6 `B`, `D` (0.40–0.48):
-    upper levels / gantry decks partly hidden behind another piece.
+* **20 features below the 0.92 IoU gate** (out of 353), 13 of them below the
+  0.85 hard floor and therefore allow-listed by name in `validate_maps.py`.
+  - **Volkus `K`/`J` and their hosts `A`, `C`, `D` (0.23–0.79) — D-014
+    dashed-rectangle recall.** *An earlier version of this section said these
+    pieces were "the visible part of a piece overlapped by another piece". That
+    was wrong.* `dashed_rects()` used to gate on a fixed count of dash segments,
+    which every small dashed rectangle fails: piece K's 131px perimeter carries
+    ~8 segments and the label pill, printed **on** the outline, hides two to
+    four of them. When the outline is missed the piece stays in `chips`, so
+    `split_blob_by_chips()` hands it a slice of its neighbour's green blob — a
+    16–26 vertex fragment of somebody else's silhouette — and the neighbour
+    loses that same slice. Both ends of the pair are corrupted, and nothing
+    downstream can tell. The detector is fixed (see `tools/maps/README.md` §5);
+    the six affected features stay allow-listed **until `pnpm maps:extract` is
+    re-run against the cards**, which needs the local context pack.
+  - **Volkus `G`, `I` where D-014 *did* fire (0.88–0.93).** The returned box is
+    the outer extent of the dash stroke rather than its centreline, so the
+    footprint comes out up to 0.084" (2px) large on both axes. Left as-is
+    deliberately: the two independent measurements of the same piece disagree
+    about it (`I` on maps 1–2 traces from green at exactly the dashed box's
+    size, `G` on maps 4–6 traces 2px smaller), and picking a side needs the
+    cards, not a guess.
+  - Volkus `B` (0.57–0.79) on maps 1–3: Stronghold B is the only piece with two
+    upper levels (3.0" and 6.0") and fits low on maps where D-014 played no
+    part. **Not** a dashed-rectangle problem; tracked on its own.
+  - Bheta-Decima 6 `B`, `D` (0.40–0.48): the condenser and the gantry beside it
+    trace as one blob on that card and the split cuts it wrongly — the same
+    *shape* of failure as D-014 (a merged blob divided between two chips) but a
+    different cause: `bheta_features()` never calls `dashed_rects()`. Needs the
+    card to diagnose.
   - `tomb-world-1` `A2` (0.51) and its one unlabelled wall: two label chips on
     that card are unreadable, so one long wall is tiled as two 1-square segments.
   - `tomb-world-5` `C5` (0.91) is a hair under the gate.
+* **`data/terrain/volkus.json` → `footprints` is wrong for multi-part pieces.**
+  It stores one placed part rather than the union of them, so Stronghold A reads
+  as 5.374 × 5.563 against a built 8 × 6, and the small ruins E/F as a single
+  0.208" wall strip. Rubble pieces G–N round-trip correctly, which is why it is
+  easy to miss. Tracked separately from D-014.
 * **Parts the cards do not draw** are described in `data/terrain/*.json` `notes`
   but are absent from the geometry: the Volkus stronghold's broken vent
   (Blocking), the three barrel containers on Stronghold A (Blocking + Heavy),

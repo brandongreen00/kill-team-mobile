@@ -24,6 +24,15 @@ jobs:
         run: pnpm lint:rng
       - name: Unit tests
         run: pnpm test
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Map extractor deps
+        run: pip install --quiet numpy scipy scikit-image Pillow
+      - name: Map extractor detector tests
+        run: pnpm maps:test
+      - name: Map acceptance gates
+        run: pnpm maps:validate
       - name: Build
         run: pnpm build
       - name: Legacy app still ships
