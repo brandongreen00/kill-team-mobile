@@ -46,10 +46,46 @@ DROP_DEPTHS = {
     'gallowdark': [C.CQ_BORDER_X + C.CQ_SQUARE, C.CQ_BORDER_Y + C.CQ_SQUARE],
     'tomb-world': [C.CQ_BORDER_X + C.CQ_SQUARE, C.CQ_BORDER_Y + C.CQ_SQUARE],
 }
-IOU_GATE = 0.92
+IOU_GATE = 0.92        # quality target: below this a feature is reported
+IOU_FAIL = 0.85        # ... and below this it does not ship
+
+# The only features allowed below IOU_FAIL, each with the reason it is not a
+# blocker. Keyed by (mapId, label); a label that repeats on one map covers
+# every instance of it. Nothing may be added here without a reason, and an
+# entry whose feature now fits is itself a gate failure, so the list cannot
+# quietly outlive the bug it documents.
+_D014 = ('D-014 dashed-rectangle recall: pending a re-extract from the cards with the '
+         'fixed dashed_rects(). See docs/MAPS.md section 6.')
+_STRONGHOLD_B = ('chronic: Stronghold B is the only piece with two upper levels (3.0" and '
+                 '6.0") and fits low on cards where D-014 played no part. Filed separately.')
+IOU_ALLOW = {
+    # --- missed dashed rectangles: the piece is a slice of its host's blob ---
+    ('volkus-3', 'K'): _D014,
+    ('volkus-5', 'J'): _D014,
+    ('volkus-6', 'K'): _D014,
+    # --- and the hosts they were carved out of ---
+    ('volkus-3', 'D'): _D014,
+    ('volkus-5', 'C'): _D014,
+    ('volkus-6', 'A'): _D014,
+    ('volkus-6', 'C'): _D014,
+    # --- unrelated to D-014, tracked on their own ---
+    ('volkus-1', 'B'): _STRONGHOLD_B,
+    ('volkus-2', 'B'): _STRONGHOLD_B,
+    ('volkus-3', 'B'): _STRONGHOLD_B,
+    ('bheta-decima-6', 'B'): (
+        'the condenser and the gantry beside it trace as one blob on this card and '
+        'split_blob_by_chips cuts it wrongly. Same shape as D-014, different cause; '
+        'needs the card to diagnose.'),
+    ('bheta-decima-6', 'D'): (
+        'as bheta-decima-6 B: the condenser loses the slice the gantry took.'),
+    ('tomb-world-1', 'A2'): (
+        'a long wall tiled as the wrong run length; close-quarters walls are fitted per '
+        'lattice edge, not from this piece geometry. Tracked with the CQ tiler.'),
+}
 
 
-def check(m):
+def check(m, allowed=None):
+    allowed = set() if allowed is None else allowed
     kz = m['killzone']
     W, H = m['board']['w'], m['board']['h']
     fails, warns, info = [], [], {}
@@ -128,16 +164,25 @@ def check(m):
             fails.append('G6 %s drop depth %.4f" not a printed value' % (who, d))
     info['dropDepth'] = (m['source']['qa']['dropDepthP1'], m['source']['qa']['dropDepthP2'])
 
-    # G7 templates
+    # G7 templates. Below IOU_GATE is reported; below IOU_FAIL the polygon is
+    # not the piece it claims to be and the build stops, because nothing
+    # downstream -- board render, visibility, movement -- can tell.
     ious = [f['qa']['templateIoU'] for f in m['features'] if 'qa' in f]
     if ious:
         info['iouMin'] = round(min(ious), 4)
         info['iouMedian'] = round(float(np.median(ious)), 4)
-        bad = [f for f in m['features']
-               if 'qa' in f and f['qa']['templateIoU'] < IOU_GATE]
-        for f in bad:
-            warns.append('G7 %s IoU %.3f < %.2f' % (f.get('label'), f['qa']['templateIoU'],
-                                                    IOU_GATE))
+        for f in m['features']:
+            if 'qa' not in f or f['qa']['templateIoU'] >= IOU_GATE:
+                continue
+            iou, label = f['qa']['templateIoU'], f.get('label')
+            if iou >= IOU_FAIL:
+                warns.append('G7 %s IoU %.3f < %.2f' % (label, iou, IOU_GATE))
+            elif (m['id'], label) in IOU_ALLOW:
+                allowed.add((m['id'], label))
+                warns.append('G7 %s IoU %.3f < %.2f, allow-listed: %s'
+                             % (label, iou, IOU_FAIL, IOU_ALLOW[(m['id'], label)]))
+            else:
+                fails.append('G7 %s IoU %.3f < %.2f' % (label, iou, IOU_FAIL))
 
     # G8 lattice alignment
     if m['closeQuarters']:
@@ -201,9 +246,10 @@ def main(argv):
     as_json = '--json' in argv
     report = {}
     nfail = 0
+    allowed = set()
     for path in sorted(glob.glob(os.path.join(MAPS, '*', '*.json'))):
         m = json.load(open(path))
-        fails, warns, info = check(m)
+        fails, warns, info = check(m, allowed)
         report[m['id']] = dict(fails=fails, warns=warns, info=info)
         nfail += len(fails)
         if not as_json:
@@ -213,10 +259,20 @@ def main(argv):
                 print('      ! ' + f)
             for w in warns:
                 print('      ~ ' + w)
+    # An allow-list entry that is no longer needed is itself a failure: the
+    # exception outliving the bug is how a gate rots back into a warning.
+    stale = ['G7 allow-list entry %s %s no longer needed - remove it' % k
+             for k in sorted(IOU_ALLOW) if k not in allowed]
+    if stale:
+        report['_allowList'] = dict(fails=stale, warns=[], info={})
+        nfail += len(stale)
+
     if as_json:
         print(json.dumps(report, indent=1))
     else:
-        print('\n%d maps, %d gate failures' % (len(report), nfail))
+        for f in stale:
+            print('%-16s %-4s  ! %s' % ('(allow-list)', 'FAIL', f))
+        print('\n%d maps, %d gate failures' % (len(report) - ('_allowList' in report), nfail))
     return 1 if nfail else 0
 
 

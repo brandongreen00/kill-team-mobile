@@ -17,6 +17,7 @@
     "maps:extract": "python3 tools/maps/extract_cards.py",
     "maps:overlay": "python3 tools/maps/render_overlay.py",
     "maps:validate": "python3 tools/maps/validate_maps.py",
+    "maps:test": "python3 tools/maps/test_extract.py",
     "teams:scrape": "python3 tools/teams/scrape_wahapedia.py",
     "teams:normalise": "python3 tools/teams/normalise.py",
     "soak": "vitest run tests/soak --reporter=basic"

@@ -372,37 +372,208 @@ def marker_boxes(objectives, r=21):
             for cx, cy in (o['px'] for o in objectives)]
 
 
-def dashed_rects(img, ink, chip_boxes):
+# --- D-014 dashed-rectangle detection --------------------------------------
+# A dashed rectangle is recognised by its GEOMETRY, never by how many dash
+# segments survived. A segment count is scale-dependent: piece I (2 x 3.5") has
+# a 264px perimeter and ~20 dashes, piece K (0.75 x 1.979") has 131px and ~8 --
+# and the opaque label pill, which on these cards sits ON the outline rather
+# than inside it, swallows two to four of them. The old `parts >= 5` gate
+# therefore fired on every large rectangle and missed every small one, which
+# left the small piece in `chips` to be carved out of its neighbour's green
+# blob -- corrupting both.
+DASH_MAX_AREA = 120        # px^2 of one printed dash
+DASH_MAX_EXTENT = 18       # px, its longest side
+DASH_GROUP_PX = 11         # px, the isotropic dilation that joins dashes at a corner
+DASH_RUN_PX = 21           # px, and the directional one that closes gaps ALONG an edge
+RECT_MIN_SIDE = 12         # px, 0.5" at the 24 px/in card scale
+RECT_BAND = 4              # px, how far a dash may sit off the fitted edge
+RECT_MIN_COVER = 0.35      # dash coverage of the VISIBLE perimeter, all edges
+RECT_EDGE_COVER = 0.25     # ... and of each visible edge on its own
+RECT_OFF_BAND = 0.10       # share of a group's dashes allowed off the perimeter
+OVERLAY_PAD = 2            # px of slop around an opaque overlay box
+
+
+def _boxes_mask(shape, boxes, pad=0):
+    """Union of pixel boxes, grown by `pad` and clipped to `shape`."""
+    m = np.zeros(shape, bool)
+    H, W = shape
+    for (x0, y0, x1, y1) in boxes:
+        m[max(0, int(y0) - pad):min(H, int(y1) + pad),
+          max(0, int(x0) - pad):min(W, int(x1) + pad)] = True
+    return m
+
+
+def _perimeter_band(shape, box, band=RECT_BAND):
+    """Pixels within `band` of the outline of `box`."""
+    x0, y0, x1, y1 = box
+    H, W = shape
+    outer = np.zeros(shape, bool)
+    outer[max(0, y0 - band):min(H, y1 + band), max(0, x0 - band):min(W, x1 + band)] = True
+    if x1 - x0 > 2 * band and y1 - y0 > 2 * band:
+        outer[y0 + band:y1 - band, x0 + band:x1 - band] = False
+    return outer
+
+
+def _edge_windows(shape, box, band=RECT_BAND):
+    """The four edges of `box` as (rows, cols, axis) slices.
+
+    `axis` is the array axis to collapse ACROSS the stroke, so that what is
+    left is one sample per pixel of edge run.
+    """
+    x0, y0, x1, y1 = box
+    H, W = shape
+
+    def rr(a, b):
+        return slice(max(0, a), max(0, min(H, b)))
+
+    def cc(a, b):
+        return slice(max(0, a), max(0, min(W, b)))
+
+    return [
+        (rr(y0 - band, y0 + band), cc(x0, x1), 0),     # top
+        (rr(y1 - band, y1 + band), cc(x0, x1), 0),     # bottom
+        (rr(y0, y1), cc(x0 - band, x0 + band), 1),     # left
+        (rr(y0, y1), cc(x1 - band, x1 + band), 1),     # right
+    ]
+
+
+def _edge_coverage(group, blocked, box, band=RECT_BAND):
+    """Per edge, (dashed samples, visible samples) along its run.
+
+    A sample hidden under an opaque overlay is dropped from BOTH counts: the
+    card cannot show a dash there, so it is not evidence either way. That is
+    what lets a small rectangle whose label pill covers a third of its
+    perimeter still be recognised.
+    """
+    out = []
+    for rows, cols, axis in _edge_windows(group.shape, box, band):
+        d, b = group[rows, cols], blocked[rows, cols]
+        if d.size == 0:
+            out.append((0, 0))
+            continue
+        hidden = b.mean(axis) >= 0.5
+        seen = ~hidden
+        out.append((int((d.any(axis) & seen).sum()), int(seen.sum())))
+    return out
+
+
+def _accept_group(group, blocked):
+    """The bounding box of `group`, if `group` is a dashed rectangle."""
+    if not group.any():
+        return None
+    ys, xs = np.where(group)
+    box = (int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1)
+    return box if _accept_rect(group, blocked, box) else None
+
+
+def _accept_rect(group, blocked, box):
+    """Is `group` a dashed rectangle with corners at `box`?
+
+    Three properties, all scale-free: the box is big enough to be a piece,
+    essentially every dash lies on its perimeter (rectangularity), and the
+    dashes cover enough of the perimeter that is actually visible -- each edge
+    on its own, and all four together.
+    """
+    x0, y0, x1, y1 = box
+    if x1 - x0 < RECT_MIN_SIDE or y1 - y0 < RECT_MIN_SIDE:
+        return False
+    n = int(group.sum())
+    if not n:
+        return False
+    if int((group & ~_perimeter_band(group.shape, box)).sum()) > RECT_OFF_BAND * n:
+        return False
+    cov = _edge_coverage(group, blocked, box)
+    if any(c < RECT_EDGE_COVER * v for c, v in cov if v):
+        return False
+    seen = sum(v for _, v in cov)
+    return bool(seen) and sum(c for c, _ in cov) >= RECT_MIN_COVER * seen
+
+
+def _bridge_overlays(grow, boxes, pad=OVERLAY_PAD):
+    """Let the grouping run through an opaque overlay printed on an outline.
+
+    The label pill hides the dashes underneath it, cutting the outline into two
+    arcs that the grouping dilation cannot bridge. When dashes reach the same
+    pill from two or more sides they are one outline, so the pill is filled in.
+    """
+    H, W = grow.shape
+    for (x0, y0, x1, y1) in boxes:
+        ya, yb = max(0, int(y0) - pad), min(H, int(y1) + pad)
+        xa, xb = max(0, int(x0) - pad), min(W, int(x1) + pad)
+        if yb <= ya or xb <= xa:
+            continue
+        sides = sum(bool(s.size and s.any()) for s in (
+            grow[ya:yb, max(0, xa - 1):xa], grow[ya:yb, xb:min(W, xb + 1)],
+            grow[max(0, ya - 1):ya, xa:xb], grow[yb:min(H, yb + 1), xa:xb]))
+        if sides >= 2:
+            grow[ya:yb, xa:xb] = True
+    return grow
+
+
+def dashed_rects(img, ink, chip_boxes, occluders=()):
     """Rectangles drawn in thick white dashes.
 
     keys/VS2.png: white dashed lines mark a door when they cross a wall, and a
-    rectangle of them marks a rubble piece standing on an upper level. Dashes on
-    a wall are excluded here (they are handled as doors), so what is left is the
-    upper-level outlines. Returns their pixel bounding boxes.
+    rectangle of them marks a piece that tucks under the adjacent raised
+    terrain (D-014). Dashes on a wall are excluded here (they are handled as
+    doors), so what is left is those outlines. Returns their pixel bounding
+    boxes.
+
+    `chip_boxes` and `occluders` are the opaque things printed over the card --
+    label pills and objective markers. They are cut from the dash evidence (a
+    pill's white letter is not a dash) and the perimeter they hide is then
+    discounted rather than counted as a miss.
     """
+    shape = img.shape[:2]
+    blocked = _boxes_mask(shape, list(chip_boxes) + list(occluders), OVERLAY_PAD)
+
     white = (img >= 235).all(2)
     white &= ~ndimage.binary_dilation(ink, np.ones((7, 7), bool))
-    for (x0, y0, x1, y1) in chip_boxes:
-        white[max(0, y0 - 2):y1 + 2, max(0, x0 - 2):x1 + 2] = False
+    white &= ~blocked
+
     dash = np.zeros_like(white)
-    n = 0
     for blob in G.component_masks(white, 4):
         ys, xs = np.where(blob)
-        if blob.sum() <= 120 and max(ys.max() - ys.min(), xs.max() - xs.min()) <= 18:
+        if (blob.sum() <= DASH_MAX_AREA and
+                max(ys.max() - ys.min(), xs.max() - xs.min()) <= DASH_MAX_EXTENT):
             dash |= blob
-            n += 1
-    lab, k = ndimage.label(ndimage.binary_dilation(dash, np.ones((11, 11), bool)))
+    if not dash.any():
+        return []
+
+    # Group dashes into outlines two ways. `tight` is the isotropic dilation,
+    # which joins the two strokes meeting at a corner. `loose` adds directional
+    # dilations that close the gaps ALONG an edge -- that is where the printed
+    # rhythm varies, and closing it there cannot pull in a piece lying
+    # alongside. Both then run through the overlay bridge, because a label pill
+    # printed on the outline cuts it into two arcs neither dilation can join.
+    overlays = list(chip_boxes) + list(occluders)
+    tight = ndimage.binary_dilation(dash, np.ones((DASH_GROUP_PX, DASH_GROUP_PX), bool))
+    loose = (tight | ndimage.binary_dilation(dash, np.ones((1, DASH_RUN_PX), bool))
+             | ndimage.binary_dilation(dash, np.ones((DASH_RUN_PX, 1), bool)))
+    tight = _bridge_overlays(tight, overlays)
+    loose = _bridge_overlays(loose, overlays)
+
     out = []
-    for i in range(1, k + 1):
-        cl = (lab == i) & dash
-        parts = ndimage.label(cl)[1]
-        ys, xs = np.where(cl)
-        if parts < 5:
+    lab, _n = ndimage.label(loose)
+    for i, sl in enumerate(ndimage.find_objects(lab), start=1):
+        # The cell's box is the DILATED extent, so anything smaller than a
+        # piece cannot contain one -- skip it before touching the image.
+        if sl is None or (sl[1].stop - sl[1].start < RECT_MIN_SIDE
+                          or sl[0].stop - sl[0].start < RECT_MIN_SIDE):
             continue
-        w, hh = xs.max() - xs.min(), ys.max() - ys.min()
-        if w < 12 or hh < 12:
+        cell = lab == i
+        box = _accept_group(cell & dash, blocked)
+        if box is not None:
+            out.append(box)
             continue
-        out.append((int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1))
+        # The wider grouping can swallow two pieces printed less than
+        # DASH_RUN_PX apart; fall back to the tight grouping inside this cell
+        # rather than losing both.
+        sub, ks = ndimage.label(tight & cell)
+        for j in range(1, ks + 1):
+            box = _accept_group((sub == j) & dash, blocked)
+            if box is not None:
+                out.append(box)
     return out
 
 
@@ -455,7 +626,7 @@ def volkus_features(img, frame, objectives):
     # rectangle is therefore the piece's real footprint, and the raised level
     # it tucks under stays continuous across it (its green is NOT cut).
     under = {}
-    for box in dashed_rects(img, ink, chip_boxes):
+    for box in dashed_rects(img, ink, chip_boxes, marker_boxes(objectives)):
         owner = None
         for t, (cx, cy) in chips.items():
             if box[0] <= cx < box[2] and box[1] <= cy < box[3]:
