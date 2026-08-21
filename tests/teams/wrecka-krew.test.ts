@@ -389,14 +389,17 @@ describe('WRECKA KREW selection', () => {
     );
   });
 
-  it('defaultRoster is a legal 8-operative kill team that fields all 7 datacards', () => {
+  it('defaultRoster is a legal 8-operative kill team', () => {
     const picks = defaultRoster(DATA);
-    expect(picks).toHaveLength(DATA.selection.totalOperatives);
     expect(picks).toHaveLength(8);
     expect(validateRosterFor(DATA, picks).ok).toBe(true);
-    expect(new Set(picks.map((p) => p.datacardId))).toEqual(new Set(ALL_ROLES));
-    expect(picks.filter((p) => p.datacardId === BOMB_SQUIG)).toHaveLength(2);
-    expect(picks[0]!.datacardId).toBe(BOSS_NOB);
+    // It does NOT field all seven datacards: FIGHTER and GUNNER are exempt from the once-only
+    // rule (D-041), so the printed-order fill repeats the first exempt row rather than spreading.
+    // That is the printed default, not a bug — a coverage-maximising roster for soak purposes is
+    // a separate concern (docs/DECISIONS.md D-042).
+    const fielded = new Set(picks.map((p) => p.datacardId));
+    expect(fielded.size).toBeLessThan(ALL_ROLES.length);
+    expect(fielded.has(BOSS_NOB)).toBe(true);
   });
 
   /**
@@ -405,23 +408,23 @@ describe('WRECKA KREW selection', () => {
    * match (the fallback looks up a token of the ROW's name in the exempt set, and "FIGHTER" is not
    * in it). Only the data facts are pinned here — see the report.
    */
-  it('DATA: the uniqueExcept roles are the long names while the list rows print the short ones', () => {
+  it('"Other than BOMB SQUIG, BREAKA BOY FIGHTER and TANKBUSTA GUNNER operatives…" exempts the short rows', () => {
     const roles = DATA.selection.list.map((e) => e.role);
     expect(roles).toEqual(['BOMB SQUIG', 'BREAKA BOY DEMOLISHA', 'FIGHTER', 'KRUSHA', 'GUNNER', 'ROKKITEER']);
     const exempt = (DATA.selection.constraints[0] as { roles: string[] }).roles;
     expect(exempt).toContain('BREAKA BOY FIGHTER');
     expect(exempt).toContain('TANKBUSTA GUNNER');
+    // The exempt NAME is longer than the printed row — the reverse of Hunter Clade, where the
+    // exempt word was shorter than the row. Both now resolve (docs/DECISIONS.md D-041).
     expect(roles).not.toContain('BREAKA BOY FIGHTER');
-    expect(roles).not.toContain('TANKBUSTA GUNNER');
-    // A second FIGHTER is therefore refused, though the printed sentence exempts it.
     const two = defaultRoster(DATA)
       .filter((p) => p.datacardId !== KRUSHA)
       .concat([{ datacardId: FIGHTER }]);
-    const result = validateRosterFor(DATA, two);
-    expect(result.ok).toBe(false);
-    expect(result.codes).toContain('unique');
-    // …while a second BOMB SQUIG, whose row IS printed with the exempt name, is fine.
-    expect(defaultRoster(DATA).filter((p) => p.datacardId === BOMB_SQUIG)).toHaveLength(2);
+    expect(validateRosterFor(DATA, two).codes).not.toContain('unique');
+    // A row the sentence does NOT name is still unique. ROKKITEER is not in the default roster
+    // (the greedy fill repeats the now-exempt FIGHTER instead), so add two to make the pair.
+    const dupe = defaultRoster(DATA).concat([{ datacardId: ROKKITEER }, { datacardId: ROKKITEER }]);
+    expect(validateRosterFor(DATA, dupe).codes).toContain('unique');
   });
 });
 

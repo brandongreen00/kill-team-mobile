@@ -58,6 +58,17 @@ export function groupTargets(sel: TeamData['selection']): { index: number; count
   return out;
 }
 
+/**
+ * Does this weapon name match the item a printed cap names? The sentence is written in the plural
+ * ("your kill team can only include up to two fusion blasters") while the weapon is singular
+ * ("Fusion blaster"), so an exact match silently dropped the cap.
+ */
+function sameItem(weapon: string, item: string): boolean {
+  const a = norm(weapon);
+  const b = norm(item);
+  return a === b || `${a}s` === b || a === `${b}s`;
+}
+
 /** Stable id for a selection row: several rows can share a datacard (Kasrkin GUNNER ×5). */
 export function entryId(data: TeamData, index: number): string {
   const entry = selectionEntries(data)[index];
@@ -266,9 +277,15 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
     // words and prints a plain WARRIOR row *beside* a JUMP PACK WARRIOR row — there the exemption
     // names the plain operative, and the jump-pack one is a different operative that is still
     // unique. Kasrkin is the same shape with TROOPER beside RECON-/VOX-/DEMO-TROOPER.
-    return n
-      .split(/\s+/)
-      .some((token) => uniqueExcept.has(token) && !allRoles.includes(token));
+    // Forward: the exempt word is a token of a longer printed row — Hunter Clade exempts "GUNNER"
+    // and prints "SKITARII RANGER GUNNER".
+    if (n.split(/\s+/).some((token) => uniqueExcept.has(token) && !allRoles.includes(token))) return true;
+    // Reverse: the exempt NAME is longer than the row — Wrecka Krew exempts "BREAKA BOY FIGHTER"
+    // and "TANKBUSTA GUNNER" while printing the rows as plain "FIGHTER" and "GUNNER".
+    const tokens = new Set(n.split(/\s+/));
+    return [...uniqueExcept].some(
+      (ex) => !allRoles.includes(ex) && ex.split(/\s+/).length > tokens.size && n !== ex && ex.split(/\s+/).includes(n),
+    );
   };
   const byIndex = new Map<number, number>();
   for (const r of resolved) byIndex.set(r.index, (byIndex.get(r.index) ?? 0) + 1);
@@ -324,12 +341,12 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
       // "…can only include up to one fusion pistol", "…up to two darklight weapons". The
       // resolved weapon list per pick is already computed above, so this is a plain count.
       const cc = c as unknown as { item: string; max: number };
-      const n = weapons.filter((ws) => ws.some((w) => norm(w) === norm(cc.item))).length;
+      const n = weapons.filter((ws) => ws.some((w) => sameItem(w, cc.item))).length;
       if (n > cc.max) fail('maxItem', `your kill team can only include up to ${cc.max} ${cc.item} (${n} selected)`);
     } else if (c.kind === 'exclusiveItems') {
       // "Your kill team cannot include both a blaster and a wraithcannon."
       const cc = c as unknown as { items: string[] };
-      const present = cc.items.filter((item) => weapons.some((ws) => ws.some((w) => norm(w) === norm(item))));
+      const present = cc.items.filter((item) => weapons.some((ws) => ws.some((w) => sameItem(w, item))));
       if (present.length > 1)
         fail('exclusiveItems', `your kill team cannot include both ${cc.items.join(' and ')}`);
     } else if (c.kind === 'requires') {

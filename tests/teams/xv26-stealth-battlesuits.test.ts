@@ -293,25 +293,27 @@ describe('XV26 STEALTH BATTLESUITS data (pinned against data/teams/xv26-stealth-
     expect(ACT.focusedMarkerligh.endsWith('focused-markerligh')).toBe(true);
   });
 
-  it('DATA PROBLEM: the printed fusion-blaster cap is scraped in the PLURAL, so `maxItem` matches no weapon', () => {
+  it('"Your kill team can only include up to two fusion blasters." — a plural cap still matches', () => {
     expect(DATA.selection.constraints).toContainEqual({ kind: 'maxItem', item: 'fusion blasters', max: 2 });
     expect(DATA.selection.rawText).toContain('Your kill team can only include up to two fusion blasters.');
-    // `validateRosterFor` compares a constraint's `item` with the weapon NAME, and the datacards
-    // print "Fusion blaster" — so the now-enforced D-036 branch counts zero and the cap is dead.
+    // The datacards print the weapon SINGULAR, so an exact match made the cap dead. The validator
+    // now tolerates the printed plural (docs/DECISIONS.md D-040).
     expect(DATA.datacards.flatMap((c) => c.weapons).some((w) => w.name === 'Fusion blaster')).toBe(true);
     expect(DATA.datacards.flatMap((c) => c.weapons).some((w) => w.name === 'fusion blasters')).toBe(false);
+    const fusion = (id: string) => ({ datacardId: id, weapons: ['Fusion blaster'] });
     const picks = [
       { datacardId: SHAS_VRE, entryId: 'xv26-stealth-battlesuits.sel0.shas-vre' },
       { datacardId: MV75_MARKER_DRONE, entryId: 'xv26-stealth-battlesuits.sel1.mv75-marker-drone' },
       { datacardId: MV15_GUN_DRONE, entryId: 'xv26-stealth-battlesuits.sel2.mv15-gun-drone' },
-      { datacardId: DESIGNATOR, loadoutIds: ['xv26-stealth-battlesuits.fn1o2'] },
-      { datacardId: INFILTRATOR, loadoutIds: ['xv26-stealth-battlesuits.fn1o2'] },
-      { datacardId: LIBERATOR, loadoutIds: ['xv26-stealth-battlesuits.fn1o2'] },
-      { datacardId: LODESTAR, loadoutIds: ['xv26-stealth-battlesuits.fn1o2'] },
+      fusion(DESIGNATOR),
+      fusion(INFILTRATOR),
+      fusion(LIBERATOR),
+      fusion(LODESTAR),
     ];
     const v = validateRosterFor(DATA, picks);
-    expect(v.weapons.filter((ws) => ws.includes('Fusion blaster')).length).toBeGreaterThan(2);
-    expect(v.ok).toBe(true); // five fusion blasters validate — the cap never fires
+    expect(v.ok).toBe(false);
+    expect(v.codes).toContain('maxItem');
+    expect(v.errors.join(' ')).toContain('up to 2 fusion blasters');
   });
 
   it('DATA PROBLEM: the SHAS’VRE row lists BOTH options in `alwaysWeapons`, so it carries both guns', () => {
@@ -337,6 +339,9 @@ describe('XV26 STEALTH BATTLESUITS selection', () => {
     const picks = defaultRoster(DATA);
     expect(picks).toHaveLength(7);
     expect(validateRosterFor(DATA, picks).ok).toBe(true);
+    // The printed-order fill repeats INFILTRATOR, the first repeatable row, so three datacards
+    // never appear in the default roster or in the shared soak. That is the printed default; a
+    // coverage-maximising soak roster is a separate concern (docs/DECISIONS.md D-042).
     expect(picks.filter((p) => p.datacardId === INFILTRATOR)).toHaveLength(3);
     const fielded = new Set(picks.map((p) => p.datacardId));
     expect([...fielded].sort()).toEqual([SHAS_VRE, DESIGNATOR, INFILTRATOR, MV15_GUN_DRONE, MV75_MARKER_DRONE].sort());
