@@ -36,6 +36,14 @@ import { handOfTheArchon } from './hand-of-the-archon/index.ts';
 import { mandrakes } from './mandrakes/index.ts';
 import { hearthkynSalvager } from './hearthkyn-salvager/index.ts';
 import { hernkynYaegir } from './hernkyn-yaegir/index.ts';
+import { canoptekCircle } from './canoptek-circle/index.ts';
+import { raveners } from './raveners/index.ts';
+import { wyrmblade } from './wyrmblade/index.ts';
+import { broodBrother } from './brood-brother/index.ts';
+import { vespidStingwings } from './vespid-stingwings/index.ts';
+import { xv26StealthBattlesuits } from './xv26-stealth-battlesuits/index.ts';
+import { wreckaKrew } from './wrecka-krew/index.ts';
+import { farstalkerKinband } from './farstalker-kinband/index.ts';
 
 /** Phase 5 batch 1. */
 export const BATCH_1: KtTeamModule[] = [
@@ -85,8 +93,26 @@ export const BATCH_4: KtTeamModule[] = [
   hernkynYaegir,
 ];
 
+/** Phase 6 batch 5 — Necron, Tyranid, T'au, Ork. */
+export const BATCH_5: KtTeamModule[] = [
+  canoptekCircle,
+  raveners,
+  wyrmblade,
+  broodBrother,
+  vespidStingwings,
+  xv26StealthBattlesuits,
+  wreckaKrew,
+  farstalkerKinband,
+];
+
 /** Every implemented kill team, in batch order. */
-export const ALL_TEAM_MODULES: KtTeamModule[] = [...BATCH_1, ...BATCH_2, ...BATCH_3, ...BATCH_4];
+export const ALL_TEAM_MODULES: KtTeamModule[] = [
+  ...BATCH_1,
+  ...BATCH_2,
+  ...BATCH_3,
+  ...BATCH_4,
+  ...BATCH_5,
+];
 
 export const TEAM_MODULES: Map<string, KtTeamModule> = new Map(ALL_TEAM_MODULES.map((m) => [m.id, m]));
 
@@ -129,6 +155,14 @@ export {
   mandrakes,
   hearthkynSalvager,
   hernkynYaegir,
+  canoptekCircle,
+  raveners,
+  wyrmblade,
+  broodBrother,
+  vespidStingwings,
+  xv26StealthBattlesuits,
+  wreckaKrew,
+  farstalkerKinband,
 };
 export type { KtTeamModule } from './helpers.ts';
 export { defaultRoster, validateRosterFor, type RosterPickIn, type RosterValidation } from './selection.ts';

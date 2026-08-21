@@ -22,9 +22,13 @@ describe('selection rules (shared, driven by data/teams/<slug>.json)', () => {
       const result = mod.validateRoster(picks);
       expect(result.errors).toEqual([]);
       expect(result.ok).toBe(true);
-      // "N <TEAM> operatives selected from the following list" — leader + slots.
+      // "N <TEAM> operatives selected from the following list" — leader + slots, counted in
+      // SELECTIONS, not in picks. An entry can cost 2 ("these operatives count as two selections
+      // each" — Wyrmblade) or 0.5 (the Breachers' C.A.T. UNIT and GHEISTSKULL), so a pick count
+      // is not the printed quantity. Wyrmblade fills 13 slots with 11 operatives.
       const sel = mod.data.selection;
-      expect(picks.length).toBeGreaterThanOrEqual(sel.slots);
+      const cost = picks.reduce((n, p) => n + (resolveEntry(mod.data, p)?.entry.selectionCost ?? 1), 0);
+      expect(cost).toBeGreaterThanOrEqual(sel.slots);
     });
 
     it(`${mod.id}: an empty roster is rejected with a helpful message`, () => {

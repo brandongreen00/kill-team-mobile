@@ -6,9 +6,12 @@
 import { describe, expect, it } from 'vitest';
 import { availableActions, getAction } from '../../src/core/actions.ts';
 import { addRolled, newPool, type DicePool } from '../../src/core/dice.ts';
+import { createGameContext } from '../../src/core/game.ts';
 import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
 import { readyStep } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
+import { SeededRng } from '../../src/core/rng.ts';
+import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
 import { advanceFight, sideWeapon, startFight } from '../../src/core/sequences/fight.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { aliveOperatives, aplOf, hitOf, inflictDamage, moveOf, saveOf, weaponsOf } from '../../src/core/state.ts';
@@ -68,7 +71,7 @@ import {
   wreckaPoints,
 } from '../../src/teams/wrecka-krew/index.ts';
 import { bucket } from '../../src/teams/helpers.ts';
-import { act, activate, battle, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
+import { act, activate, battle, mapById, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import { heavyBlock, rect, testMap } from '../fixtures.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
@@ -1345,7 +1348,7 @@ describe('BREAKA BOY DEMOLISHA', () => {
     expect(s.operatives[foe.id]!.wounds).toBe(after);
   });
 
-  it('Detonate damage "cannot be ignored or reduced" — Reckless Temperament and JUST A SCRATCH bounce off it', () => {
+  it('Detonate damage "cannot be ignored or reduced" — the restore is the LAST onDamage handler in the tree', () => {
     expect(abilityText(DEMOLISHA, AB_DETONATE)).toContain(
       'Damage from this weapon rule cannot be ignored or reduced.',
     );
@@ -1369,6 +1372,24 @@ describe('BREAKA BOY DEMOLISHA', () => {
       }).state,
     );
     expect(s.operatives[otherDemo.id]!.wounds).toBe(40 - (3 + 6));
+
+    // …and a rule that DOES reduce it is undone: the restore binds at priority 99, above every
+    // other onDamage handler in the tree.
+    ctx.hooks.on(
+      'onDamage',
+      { id: 'test.greedyReduction', sourceText: 'a rule that zeroes any damage', priority: 90 },
+      (ev) => {
+        ev.amount = 0;
+      },
+    );
+    bucket(s, 'wrecka-krew.detonateDamage')[otherDemo.id] = { amount: 9, player: 'p1' };
+    const before = s.operatives[otherDemo.id]!.wounds;
+    inflictDamage(ctx, s, s.operatives[otherDemo.id]!, 9, 'other');
+    expect(s.operatives[otherDemo.id]!.wounds).toBe(before - 9);
+    // Without the marker the same handler wins, which is what makes the restore a real seam.
+    delete bucket(s, 'wrecka-krew.detonateDamage')[otherDemo.id];
+    inflictDamage(ctx, s, s.operatives[otherDemo.id]!, 9, 'other');
+    expect(s.operatives[otherDemo.id]!.wounds).toBe(before - 9);
   });
 });
 
@@ -1776,7 +1797,7 @@ describe('AI hints', () => {
     expect(Object.keys(hints.equipmentValue!).sort()).toEqual(DATA.equipment.map((e) => e.id).sort());
   });
 
-  it('a whole activation of every datacard produces no rejected intents', () => {
+  it('a whole activation of every datacard produces no rejected intents (every unique action, no params)', () => {
     const { ctx, state } = setup({ seed: 3 });
     let s = state;
     const spread: Vec2[] = [
@@ -1805,4 +1826,38 @@ describe('AI hints', () => {
     }
     expect(s.rejected.map((r) => r.reason)).toEqual([]);
   });
+});
+
+// ---------------------------------------------------------------------------
+describe('WRECKA KREW bot-vs-bot soak (zero rejected intents)', () => {
+  for (const mapId of ['volkus-1', 'gallowdark-1']) {
+    it(`plays a full mirror game on ${mapId}`, () => {
+      clearDeployCache();
+      clearMoveCache();
+      const map = mapById(mapId);
+      const ctx = createGameContext({
+        rng: new SeededRng(41),
+        datacards: wreckaKrew.datacards,
+        maps: [map],
+        teams: [wreckaKrew],
+      });
+      for (const eq of wreckaKrew.equipmentDefs) ctx.equipment.set(eq.id, eq);
+      const roster = defaultRoster(wreckaKrew.data).map((p) => ({ datacardId: p.datacardId }));
+      const result = playGame({
+        ctx,
+        map,
+        seed: 41,
+        critOpId: 'crit.secure',
+        rosters: {
+          p1: { teamId: wreckaKrew.id, operatives: roster, equipment: wreckaKrew.equipment.slice(0, 4).map((e) => e.id) },
+          p2: { teamId: wreckaKrew.id, operatives: roster, equipment: wreckaKrew.equipment.slice(0, 2).map((e) => e.id) },
+        },
+        agents: { p1: new GreedyAgent(), p2: new RandomLegalAgent() },
+        maxIntents: 4000,
+      });
+      expect(result.rejected).toEqual([]);
+      expect(result.error).toBeUndefined();
+      expect(result.state.phase).toBe('battleEnd');
+    }, 60_000);
+  }
 });

@@ -10,7 +10,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
-import { BATCH_1, BATCH_2, BATCH_3, BATCH_4 } from '../../src/teams/index.ts';
+import { BATCH_1, BATCH_2, BATCH_3, BATCH_4, BATCH_5 } from '../../src/teams/index.ts';
 import { defaultRoster } from '../../src/teams/selection.ts';
 import type { KtTeamModule } from '../../src/teams/helpers.ts';
 import { mapById, realMaps, teamContext } from './harness.ts';
@@ -60,6 +60,7 @@ const BATCHES: { name: string; modules: KtTeamModule[]; seedBase: number }[] = [
   { name: 'batch-2', modules: BATCH_2, seedBase: 2000 },
   { name: 'batch-3', modules: BATCH_3, seedBase: 3000 },
   { name: 'batch-4', modules: BATCH_4, seedBase: 4000 },
+  { name: 'batch-5', modules: BATCH_5, seedBase: 5000 },
 ];
 
 for (const batch of BATCHES) {

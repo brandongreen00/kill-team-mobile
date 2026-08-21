@@ -678,7 +678,7 @@ function demolisha(reg: HookRegistry, T: TeamHooks): void {
       recordRoll(ev.state, 'detonate', rolls, T.player, `Detonate ${dice}D6+6 vs ${victim.letter}`);
       const amount = rolls.reduce((a, b) => a + b, 0) + 6;
       // "Damage from this weapon rule cannot be ignored or reduced" — see the restore below.
-      bucket(ev.state, UNSTOPPABLE)[victim.id] = amount;
+      bucket(ev.state, UNSTOPPABLE)[victim.id] = { amount, player: T.player };
       inflictDamage(T.ctx, ev.state, victim, amount, 'other');
       delete bucket(ev.state, UNSTOPPABLE)[victim.id];
     }
@@ -707,15 +707,17 @@ function demolisha(reg: HookRegistry, T: TeamHooks): void {
    * already had its turn, and the printed amount is restored over the top of it.
    */
   reg.on('onDamage', T.bind(AB_DETONATE, 99), (ev) => {
-    const forced = bucket(ev.state, UNSTOPPABLE)[ev.target.id];
-    if (typeof forced !== 'number') return;
-    if (ev.amount === forced) return;
-    ev.amount = forced;
+    const forced = bucket(ev.state, UNSTOPPABLE)[ev.target.id] as
+      | { amount: number; player: PlayerId }
+      | undefined;
+    if (!forced || forced.player !== T.player) return;
+    if (ev.amount === forced.amount) return;
     log(ev.state, {
       kind: 'action',
       player: T.player,
-      text: `Detonate damage cannot be ignored or reduced: ${forced} stands`,
+      text: `Detonate damage cannot be ignored or reduced: ${forced.amount} stands (was reduced to ${ev.amount})`,
     });
+    ev.amount = forced.amount;
   });
 }
 
