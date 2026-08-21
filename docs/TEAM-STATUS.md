@@ -162,10 +162,10 @@ cannot move into another chunk. So every implemented team's JSON lands in the ma
 | --- | --- | --- |
 | batch 1 (8 teams) | 552 kB | 135 kB |
 | batch 2 (16 teams) | 852 kB | 193 kB |
-| batch 4 (32 teams) | **1,479 kB** | **321 kB** |
+| batch 4 (32 teams) | 1,479 kB | 321 kB |
+| batch 5 (40 teams) | **1,777 kB** | **382 kB** |
 
-That is 2.4× the batch-1 size for 4× the teams, and the last 16 teams will add roughly as much
-again. `teamData()` is synchronous and every module calls it at import time, so fixing this means
+The last 8 teams will push it past 2 MB. `teamData()` is synchronous and every module calls it at import time, so fixing this means
 making team data async or generating a small per-team static slice — a real design change, flagged
 rather than papered over. **It is now the largest single item of technical debt in the tree.**
 `teamData()` is synchronous and every module calls it at import time, so fixing this means making
@@ -244,6 +244,47 @@ Full detail per team is in the notes column above. The ones that matter beyond t
   WAY SEEKER. Legal, but the shared soak never exercises those rules. A coverage-maximising roster
   for soak purposes would be worth more than the current first-legal-row-wins fill.
 
+## Data problems found while implementing batch 5
+
+The batch-5 pre-check for the batch-3 truncation bug found none — and one agent found one anyway.
+
+- **A sixth `SPOT`-shaped truncation.** `farstalker-kinband`'s LONG-SIGHT action ends at its lead-in
+  with the effect list absent, after Death Korps, Ratlings, Inquisitorial Agent, Wolf Scouts and
+  Hearthkyn Salvager. **Six rules are now blocked outright by this one scraper defect**, and it
+  survives a targeted pre-check, so the fix has to be in `normalise.py`, not in vigilance.
+- **Three Brood Brother datacards cannot appear in ANY legal kill team.** MAGUS, PATRIARCH and
+  PRIMUS are printed as rows of an ordinary list group but are flagged `isLeader`, so selecting one
+  gives two leaders and the roster is always rejected. The printed rule is the `custom` constraint
+  — "If one of these operatives is selected for deployment, your COMMANDER operative loses the
+  LEADER keyword for the battle" — which is the one constraint kind still unenforced. **Verified
+  directly, not taken on trust.** It needs the per-team hook `custom` implies; guessing a general
+  rule from one team would be wrong.
+- **`BURROW1AP` — an action printed inside a faction rule with its AP glued to its name.** The
+  Raveners' most-used action has no id, no `name` and no `ap` field; the module has to slice it out
+  of prose. Same class as Murderwing's, Sanctifiers' and Exodite's equipment-granted actions, but
+  this one is a core faction mechanic.
+- **`CONSPIRE`'s printed text has lost its leading character** — `brood-brother.primus.act.conspire`
+  begins `"ou gain 1CP."`. A new shape: a truncated first word, not a truncated effect list.
+- **`FOCUSED MARKERLIGH`** — the XV26 Designator's unique action is missing its final T, in both
+  the name and the scraped id.
+- **`maxItem` with the literal item "times" is confirmed on a THIRD team** (brood-brother, after
+  death-korps and ratlings) — `normalise.py` mis-parsing a footnote beginning "Up to three times,
+  instead of selecting one of these operatives…". The footnote's real content produced no
+  constraint at all.
+- **Wyrmblade's HEAVY GUNNER and CULT AGENT caps are mis-parsed into one dead constraint**, and
+  three more equipment weapon tables parse to `rules: []` (Wyrmblade's Blasting charge loses Range
+  4"/Blast 1"/Saturate). That is now **eight teams** with a weapon table printed inside a faction
+  rule or equipment entry losing its WR row.
+- **`_rare-weapon-rules.json` is wrong for a fourth Detonate team and for Salvo.** The registry's
+  Detonate is the Imperial Navy Breachers' remote-detonator wording, which is substantially wrong
+  for Wrecka Krew; its Salvo is missing the secondary-target sentence this team prints. D-033's
+  per-team resolution means each module quotes its own text correctly, but the shared registry
+  should not be treated as authoritative.
+- **`uniqueActions[].keywords` is absent — not empty — on five batch-5 teams**, confirming the
+  corsair-voidscarred variant. Every batch since it was first reported has reproduced it.
+- **`markerGuide` keeps naming tokens no rule places** (Raveners' Heightened Senses, Vespid's
+  Neutron Grenade) and is empty where tokens exist (Wyrmblade's Soulsight and Mines).
+
 ## Known engine gaps (not team bugs)
 
 - **Team-raised choices go through `GameContext.decisionHandlers`** (a team pushes its handler in
@@ -301,10 +342,16 @@ Full detail per team is in the notes column above. The ones that matter beyond t
   the activation instead (Legionary's MALIGNANT AURA, Nemesis Claw's WE HAVE COME FOR YOU,
   Murderwing's WARP FUEL).
 - **Only `kind: 'custom'` is still unenforced** (warpcoven, inquisitorial-agent, brood-brother,
-  blooded, gellerpox-infected) — by definition it needs a per-team hook. Everything else the
-  scraper emits is now checked: `uniqueExcept` (D-037), `maxCount` including keyword-scoped
-  (D-029), `requires`, `groupCap`, `halfSelection`, `distinctOptions`, `sameAsAbove` (D-035),
-  `every` as a fixed roster (D-034), and `maxItem` + `exclusiveItems` (D-036).
+  blooded, gellerpox-infected) — by definition it needs a per-team hook, and for **brood-brother it
+  blocks three datacards from any legal roster**. Everything else the scraper emits is now checked:
+  `uniqueExcept` (D-037/D-038/D-041), `maxCount` including keyword-scoped (D-029), `requires`,
+  `groupCap`, `halfSelection`, `distinctOptions`, `sameAsAbove` (D-035), `every` as a fixed roster
+  (D-034), and `maxItem` + `exclusiveItems` (D-036/D-040).
+- **The shared soak never exercises a large share of the rule surface**, because `defaultRoster` is
+  first-legal-row-wins and repeats the first repeatable row: xv26 fields 5 of 8 datacards,
+  brood-brother 9 of 15, inquisitorial-agent 11 of 18. Nine agents across batches 3–5 reported it
+  independently. Changing the printed default is the wrong fix (D-042); the soak needs its own
+  coverage-maximising roster.
 - **A unique action's target legality must live in `check`, not `perform`.** `src/ai/legal.ts`
   `missionCandidates` offers friendly AND enemy targets and only re-runs `def.check`, so anything
   `perform` refuses becomes a rejected intent. Found twice while soaking batch 1's second half —
