@@ -456,6 +456,11 @@ button.primary {
   font-weight: 700;
   min-height: var(--tap-lg);
 }
+button.primary:disabled {
+  background: var(--surface-2);
+  color: var(--ink-3);
+  border-color: var(--line);
+}
 button.ghost {
   background: transparent;
   border-color: transparent;
@@ -479,11 +484,15 @@ button.icon-only {
 /* Full-width stacked actions — the phone default, so nothing lands ragged. */
 .actions {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--s2);
   padding-bottom: var(--s2);
 }
+.actions > * {
+  min-width: 0;
+}
 .actions.two-up {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 .actions button {
   width: 100%;
@@ -828,6 +837,7 @@ textarea {
   display: block;
   margin-top: 3px;
   font-size: var(--t-xs);
+  font-weight: 400;
   line-height: 1.3;
   min-height: calc(var(--t-xs) * 1.3);
   color: var(--ink-3);

@@ -355,9 +355,18 @@ describe('frameRect points the board at what matters', () => {
     expect(vp.y + vp.h).toBeLessThanOrEqual(BOARD.h + 1e-9);
   });
 
-  it('returns a legal window for a rect bigger than the board, or a degenerate one', () => {
+  it('never zooms out past fill, so a framing request can never letterbox', () => {
+    // Framing means "point the camera at this". Asking for more than fits frames as much as
+    // fits — it does not fall back to the fit window, which on a portrait pane would bring
+    // back the black bars the whole model exists to remove.
     const huge = frameRect({ x: -50, y: -50, w: 500, h: 500 }, BOARD, PORTRAIT, 1);
-    expect(isFitViewport(huge, BOARD, PORTRAIT)).toBe(true);
+    close(huge.w, fillViewport(BOARD, PORTRAIT).w, 1e-9);
+    expect(isFitViewport(huge, BOARD, PORTRAIT)).toBe(false);
+    expect(huge.y).toBeGreaterThanOrEqual(-1e-9);
+    expect(huge.y + huge.h).toBeLessThanOrEqual(BOARD.h + 1e-9);
+  });
+
+  it('returns a legal window for a degenerate rect', () => {
     const empty = frameRect({ x: 15, y: 11, w: 0, h: 0 }, BOARD, PORTRAIT, 0);
     expect(Number.isFinite(empty.x) && Number.isFinite(empty.w)).toBe(true);
     expect(empty.w).toBeGreaterThan(0);

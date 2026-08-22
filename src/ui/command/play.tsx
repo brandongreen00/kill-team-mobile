@@ -23,8 +23,8 @@ import { counteractCandidates, gambitOptions, whoActivates } from '../../core/ph
 import { otherPlayer, type OperativeState, type PlayerId, type Vec2 } from '../../core/types.ts';
 import type { Store } from '../store.ts';
 import { IconCheck, IconConceal, IconEngage, IconMelee, IconMove, IconTarget, IconUndo } from '../icons.tsx';
-import type { CommandAction, CommandPlan, UiState } from './types.ts';
-import { rectAround } from './types.ts';
+import type { CommandPlan, UiState, WorldRect } from './types.ts';
+import { rectAround, rectOfPolys } from './types.ts';
 
 const LABEL: Record<PlayerId, string> = { p1: 'Player 1', p2: 'Player 2' };
 const MOVE_ACTIONS: readonly MoveAction[] = ['Reposition', 'Dash', 'Fall Back', 'Charge'];
@@ -120,9 +120,9 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
       step: `Turning point ${state.turningPoint} · Firefight`,
       title: `${LABEL[turn.player]} may counteract`,
       help: 'One free 1AP action (excluding Guard), moving no more than 2". Counteracting is not an activation, so action restrictions do not apply.',
-      frame: null,
       detent: candidates.length > 0 ? 'half' : 'rest',
       turnOf: turn.player,
+      frame: framing(candidates),
       targetIds: candidates.map((o) => o.id),
       armed: { onOperative: (op) => store.dispatch({ t: 'Counteract', player: turn.player, operativeId: op.id }) },
       actions: [
@@ -179,9 +179,12 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
   return {
     id: 'firefight.activate',
     step: `Turning point ${state.turningPoint} · Firefight`,
-    title: `${LABEL[turn.player]} — choose an operative`,
+    title: `${LABEL[turn.player]} activates`,
     help: 'Tap one of your ringed operatives on the killzone, or pick it from the list below.',
-    frame: null,
+    // Point the board at the operatives being chosen between. Without this the killzone sits
+    // wherever the last screen left it, and the player is asked to pick from a list of things
+    // that are not on screen.
+    frame: framing(ready),
     detent: 'rest',
     turnOf: turn.player,
     targetIds: ready.map((o) => o.id),
@@ -367,8 +370,12 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
     actions: [
       {
         id: 'end',
-        label: counteracting ? 'End counteract' : left > 0 ? `End activation (${left}AP unspent)` : 'End activation',
-        tone: 'primary',
+        label: counteracting ? 'End counteract' : left > 0 ? `End activation — ${left}AP unspent` : 'End activation',
+        // Quiet while AP remain: ending an activation cannot be undone (it is the point at
+        // which the opponent activates), and it sits directly under a scrolling action list
+        // where a mis-flick would land on it. It only becomes the obvious next tap once
+        // there is genuinely nothing left to spend.
+        tone: counteracting || left === 0 ? 'primary' : 'quiet',
         icon: <IconCheck size={20} />,
         onClick: () => {
           store.dispatch({ t: 'EndActivation', operativeId: op.id });
@@ -551,6 +558,17 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
       </div>
     ),
   };
+}
+
+/**
+ * A window containing every one of these operatives, with a couple of inches of context.
+ * Null for an empty list, which leaves the player's own framing alone.
+ */
+function framing(ops: readonly OperativeState[]): WorldRect | null {
+  const box = rectOfPolys(ops.map((o) => [o.pos]));
+  if (!box) return null;
+  const pad = 3;
+  return { x: box.x - pad, y: box.y - pad, w: box.w + pad * 2, h: box.h + pad * 2 };
 }
 
 /** The geometric distance, as opposed to what the rules charge for it. */

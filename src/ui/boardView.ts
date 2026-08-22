@@ -181,10 +181,15 @@ export function frameRect(
   // Widen to whichever dimension does not fit, so the whole rect is inside the window.
   // Clamp the width to the legal range FIRST: widening it afterwards (which the zoom limit
   // does for a small rect) would slide the rect off the centre of the window.
+  //
+  // The ceiling is the FILL width, not the fit width. Framing is "point the camera at this";
+  // if a large rect were allowed to zoom out past fill, the pane would letterbox and the
+  // black bars this whole model exists to remove would come back. Asking to frame more than
+  // fits simply frames as much as fits.
   const w = clamp(
     Math.max(wantW, wantH * aspect),
     minViewportWidth(board, limits),
-    maxViewportWidth(board, limits),
+    Math.max(minViewportWidth(board, limits), fillViewport(board, limits).w),
   );
   const h = w / aspect;
   const cx = finite(rect.x, 0) + finite(rect.w, 0) / 2;
