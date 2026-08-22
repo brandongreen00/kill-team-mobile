@@ -50,12 +50,28 @@ import vespidStingwingsJson from '../../data/teams/vespid-stingwings.json';
 import xv26StealthBattlesuitsJson from '../../data/teams/xv26-stealth-battlesuits.json';
 import wreckaKrewJson from '../../data/teams/wrecka-krew.json';
 import farstalkerKinbandJson from '../../data/teams/farstalker-kinband.json';
+// Batch 6 — Chaos and the awkward squad.
+import bloodedJson from '../../data/teams/blooded.json';
+import chaosCultJson from '../../data/teams/chaos-cult.json';
+import fellgorRavagerJson from '../../data/teams/fellgor-ravager.json';
+import goremongerJson from '../../data/teams/goremonger.json';
+import gellerpoxInfectedJson from '../../data/teams/gellerpox-infected.json';
+import battlecladeJson from '../../data/teams/battleclade.json';
+import hunterCladeJson from '../../data/teams/hunter-clade.json';
+import tempestusAquilonsJson from '../../data/teams/tempestus-aquilons.json';
 import type { Datacard } from '../core/types.ts';
 
 export interface LoadoutOption {
   id: string;
   label: string;
   weapons: string[];
+  /**
+   * Inline "A or B" alternatives inside one printed option: "Autopistol **or** laspistol;
+   * chainsword **or** power weapon" is one option with two choice groups, pick one from each.
+   * The scraper records them here and leaves `weapons` empty, so a reader that ignores this
+   * field gives the operative every weapon the card does not name elsewhere instead.
+   */
+  choiceGroups?: string[][];
 }
 
 export interface OptionGroup {
@@ -220,6 +236,14 @@ export const TEAM_DATA: Record<string, TeamData> = {
   'xv26-stealth-battlesuits': normalise(xv26StealthBattlesuitsJson),
   'wrecka-krew': normalise(wreckaKrewJson),
   'farstalker-kinband': normalise(farstalkerKinbandJson),
+  blooded: normalise(bloodedJson),
+  'chaos-cult': normalise(chaosCultJson),
+  'fellgor-ravager': normalise(fellgorRavagerJson),
+  goremonger: normalise(goremongerJson),
+  'gellerpox-infected': normalise(gellerpoxInfectedJson),
+  battleclade: normalise(battlecladeJson),
+  'hunter-clade': normalise(hunterCladeJson),
+  'tempestus-aquilons': normalise(tempestusAquilonsJson),
 };
 
 export function teamData(id: string): TeamData {

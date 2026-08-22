@@ -69,6 +69,19 @@ function sameItem(weapon: string, item: string): boolean {
   return a === b || `${a}s` === b || a === `${b}s`;
 }
 
+/**
+ * The footnote markers a selection row carries. Almost every row carries one (`*`, `^1`), but a
+ * row can belong to SEVERAL and the scraper joins them — the Blooded plasma GUNNER is `"^1,2"`,
+ * the only such row in all 48 teams. Matching a `groupCap` by string equality let that row escape
+ * its printed cap entirely, and the default roster fielded four of a maximum three.
+ */
+function footnoteMarkers(entry: SelectionEntry): string[] {
+  const raw = entry.footnoteGroup;
+  if (!raw) return [];
+  const out = (raw.match(/\*+|\^?\d+/g) ?? []).map((t) => (/^\d/.test(t) ? `^${t}` : t));
+  return out.length > 0 ? out : [raw];
+}
+
 /** Stable id for a selection row: several rows can share a datacard (Kasrkin GUNNER ×5). */
 export function entryId(data: TeamData, index: number): string {
   const entry = selectionEntries(data)[index];
@@ -87,7 +100,10 @@ export function namedWeapons(data: TeamData, datacardId: string): Set<string> {
   for (const entry of selectionEntries(data)) {
     if (entry.datacardId !== datacardId) continue;
     for (const w of [...entry.fixedWeapons, ...entry.alwaysWeapons]) out.add(norm(w));
-    for (const l of entry.loadouts) for (const w of l.weapons) out.add(norm(w));
+    for (const l of entry.loadouts) {
+      for (const w of l.weapons) out.add(norm(w));
+      for (const g of l.choiceGroups ?? []) for (const w of g) out.add(norm(w));
+    }
     for (const g of [...entry.optionGroups, ...entry.fixedChoiceGroups])
       for (const c of g.choices) for (const w of c.weapons) out.add(norm(w));
   }
@@ -108,8 +124,26 @@ export function weaponsForPick(data: TeamData, entry: SelectionEntry, pick: Rost
   const card = data.datacards.find((c) => c.id === entry.datacardId);
   const chosenIds = new Set([...(pick.loadoutIds ?? []), ...(pick.loadoutId ? [pick.loadoutId] : [])]);
   const picked = new Set<string>();
-  for (const w of [...entry.fixedWeapons, ...entry.alwaysWeapons]) picked.add(norm(w));
-  for (const l of entry.loadouts) if (chosenIds.has(l.id)) for (const w of l.weapons) picked.add(norm(w));
+  // A weapon an option's choice group OFFERS is not "always available" — it is the thing being
+  // chosen between. The scraper puts them in `alwaysWeapons` anyway, which handed the operative
+  // every alternative at once: the Blooded CHIEFTAIN got both pistols, the Hunter Clade GUNNER
+  // all three of arc rifle / plasma caliver / transuranic arquebus, and the Death Korps CONFIDANT
+  // all four of its two either/or pairs. Reported independently in batches 3, 4 and 5.
+  const offered = new Set<string>();
+  for (const l of entry.loadouts) for (const g of l.choiceGroups ?? []) for (const w of g) offered.add(norm(w));
+  for (const w of entry.fixedWeapons) picked.add(norm(w));
+  for (const w of entry.alwaysWeapons) if (!offered.has(norm(w))) picked.add(norm(w));
+  for (const l of entry.loadouts) {
+    if (!chosenIds.has(l.id)) continue;
+    for (const w of l.weapons) picked.add(norm(w));
+    // "Autopistol or laspistol; chainsword or power weapon" — one from each group. Honour an
+    // explicit choice in `pick.weapons`, else take the first, which is what `defaultRoster` means.
+    for (const g of l.choiceGroups ?? []) {
+      const named = g.find((w) => (pick.weapons ?? []).some((x) => norm(x) === norm(w)));
+      const chosen = named ?? g[0];
+      if (chosen) picked.add(norm(chosen));
+    }
+  }
   for (const g of [...entry.optionGroups, ...entry.fixedChoiceGroups])
     for (const c of g.choices) if (chosenIds.has(c.id)) for (const w of c.weapons) picked.add(norm(w));
   // Explicit weapon names (used by the importer / AI) count as choices too.
@@ -340,9 +374,19 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
     } else if (c.kind === 'maxItem') {
       // "…can only include up to one fusion pistol", "…up to two darklight weapons". The
       // resolved weapon list per pick is already computed above, so this is a plain count.
-      const cc = c as unknown as { item: string; max: number };
-      const n = weapons.filter((ws) => ws.some((w) => sameItem(w, cc.item))).length;
-      if (n > cc.max) fail('maxItem', `your kill team can only include up to ${cc.max} ${cc.item} (${n} selected)`);
+      // "up to one COMBAT SERVITOR operative with meltagun" — a cap can name the ROLE it applies
+      // to as well as the weapon, in which case only that role's picks count.
+      const cc = c as unknown as { item: string; max: number; role?: string };
+      const n = resolved.filter(
+        (r, i) =>
+          (cc.role === undefined || roleMatches(r.entry, cc.role)) &&
+          (weapons[i] ?? []).some((w) => sameItem(w, cc.item)),
+      ).length;
+      if (n > cc.max)
+        fail(
+          'maxItem',
+          `your kill team can only include up to ${cc.max} ${cc.role ? `${cc.role} operatives with ` : ''}${cc.item} (${n} selected)`,
+        );
     } else if (c.kind === 'exclusiveItems') {
       // "Your kill team cannot include both a blaster and a wraithcannon."
       const cc = c as unknown as { items: string[] };
@@ -355,12 +399,14 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
         fail('requires', `you can only select a ${cc.role} operative if your kill team includes a ${cc.requiresRole} operative`);
     } else if (c.kind === 'groupCap') {
       const cc = c as { group: string; max: number };
-      const n = resolved.filter((r) => r.entry.footnoteGroup === cc.group).length;
+      const n = resolved.filter((r) => footnoteMarkers(r.entry).includes(cc.group)).length;
       if (n > cc.max)
         fail('groupCap', `${sel.footnotes[cc.group] ?? `at most ${cc.max} of these operatives combined`} (${n} selected)`);
     } else if (c.kind === 'halfSelection') {
       const cc = c as { group: string; max: number };
-      const cost = resolved.filter((r) => r.entry.footnoteGroup === cc.group).reduce((n, r) => n + r.entry.selectionCost, 0);
+      const cost = resolved
+        .filter((r) => footnoteMarkers(r.entry).includes(cc.group))
+        .reduce((n, r) => n + r.entry.selectionCost, 0);
       if (cost > cc.max)
         fail('halfSelection', `${sel.footnotes[cc.group] ?? 'these operatives count as half a selection each'} (${cost} selections used)`);
     }

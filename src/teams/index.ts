@@ -44,6 +44,14 @@ import { vespidStingwings } from './vespid-stingwings/index.ts';
 import { xv26StealthBattlesuits } from './xv26-stealth-battlesuits/index.ts';
 import { wreckaKrew } from './wrecka-krew/index.ts';
 import { farstalkerKinband } from './farstalker-kinband/index.ts';
+import { blooded } from './blooded/index.ts';
+import { chaosCult } from './chaos-cult/index.ts';
+import { fellgorRavager } from './fellgor-ravager/index.ts';
+import { goremonger } from './goremonger/index.ts';
+import { gellerpoxInfected } from './gellerpox-infected/index.ts';
+import { battleclade } from './battleclade/index.ts';
+import { hunterClade } from './hunter-clade/index.ts';
+import { tempestusAquilons } from './tempestus-aquilons/index.ts';
 
 /** Phase 5 batch 1. */
 export const BATCH_1: KtTeamModule[] = [
@@ -105,13 +113,26 @@ export const BATCH_5: KtTeamModule[] = [
   farstalkerKinband,
 ];
 
-/** Every implemented kill team, in batch order. */
+/** Phase 6 batch 6 — Chaos and the awkward squad. The last eight. */
+export const BATCH_6: KtTeamModule[] = [
+  blooded,
+  chaosCult,
+  fellgorRavager,
+  goremonger,
+  gellerpoxInfected,
+  battleclade,
+  hunterClade,
+  tempestusAquilons,
+];
+
+/** All 48 kill teams of Warhammer 40,000 Kill Team, 3rd edition. */
 export const ALL_TEAM_MODULES: KtTeamModule[] = [
   ...BATCH_1,
   ...BATCH_2,
   ...BATCH_3,
   ...BATCH_4,
   ...BATCH_5,
+  ...BATCH_6,
 ];
 
 export const TEAM_MODULES: Map<string, KtTeamModule> = new Map(ALL_TEAM_MODULES.map((m) => [m.id, m]));
@@ -163,6 +184,14 @@ export {
   xv26StealthBattlesuits,
   wreckaKrew,
   farstalkerKinband,
+  blooded,
+  chaosCult,
+  fellgorRavager,
+  goremonger,
+  gellerpoxInfected,
+  battleclade,
+  hunterClade,
+  tempestusAquilons,
 };
 export type { KtTeamModule } from './helpers.ts';
 export { defaultRoster, validateRosterFor, type RosterPickIn, type RosterValidation } from './selection.ts';

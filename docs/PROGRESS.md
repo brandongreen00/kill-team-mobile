@@ -104,6 +104,44 @@ with no shared idea of what the player was in the middle of.
    alone would rewind the RNG).
 5. Move waypoints (a path around a corner currently costs two actions) and a screen-space dice
    dock (dice are sized in world inches, so they shrink with the zoom).
+## 2026-08-22 — Phase 6 complete: all 48 kill teams (batches 2–6)
+
+**Landed**
+- **Every kill team in the game has a rule module.** Batches 2–6 added 40 teams to batch 1's 8:
+  Astartes & Heretic Astartes, Imperium non-Astartes, Aeldari/Drukhari/Votann, Necron/Tyranid/
+  T'au/Ork, and Chaos. Per-rule counts, every partial and every reminder-only clause with its
+  engine reason, are in `docs/TEAM-STATUS.md` — 48 honest rows.
+- **Every team fields a legal roster.** `tests/roster.test.tsx`'s `KNOWN_GAPS` map is deleted
+  rather than emptied. Nine printed selection shapes that were silently unenforced or actively
+  wrong now work: `sameAsAbove` folding, `every` as a fixed roster, keyword-scoped `maxCount`,
+  `distinctOptions`, `maxItem` (incl. plural and role-scoped), `exclusiveItems`, the `uniqueExcept`
+  keyword fallback in both directions, footnote membership, and `choiceGroups` (D-029, D-034..D-045).
+- **Four engine seams**, all additive and all forced by a printed sentence: `onCounteract` emitted
+  before the Engage-order test (D-028), `onSelectWeapon` emitted from the Shoot action's `check`
+  with a `dryRun` flag (D-032), per-team rare weapon rule text (D-033), and a scraper fix for
+  compound and weapon-qualified selection caps (D-043).
+- **The soak ring rings six batches** — 48 pairings × 2 maps, 96 games, zero rejected intents.
+- Suite: **3303 tests** across 62 files, up from 457 at the end of batch 1.
+
+**Bugs this phase found in already-merged work**
+- Angels of Death and Plague Marines shipped in batch 1 with an `onCounteract` handler that could
+  never fire; Kasrkin's Concealed Position removed the Sharpshooter's whole rifle instead of the
+  one restricted profile.
+- Four teams were fielding the wrong weapons because `LoadoutOption` never modelled `choiceGroups`
+  — reported as three separate per-team oddities across batches 3, 4 and 5 before the cause was
+  found (D-045).
+- The Deathwatch GRAVIS cap, the Blooded `^1` cap and the Elucidian fixed roster each accepted an
+  illegal kill team.
+
+**Next**
+- `fight.ts` still emits no `onRollAttack` (D-031) — cited by teams in every batch and the highest
+  value seam left. It needs all existing handlers audited for a `ctx.type` guard first.
+- No end-of-move position hook: the single most-reported gap across all six batches.
+- `tools/teams/normalise.py`: 8 data defects ranked by cost in `docs/TEAM-STATUS.md`
+  § "What the six batches found in the data". The truncated effect lists block 6 rules outright.
+- The bundle is 2,081 kB / 442 kB gzipped and is now the largest technical debt in the tree.
+- A coverage-maximising roster for the soak (D-042): the printed default leaves whole rules
+  untested for many teams.
 
 ## 2026-08-20 — Phase 1 maps: D-014 dashed-rectangle recall (D-039)
 
