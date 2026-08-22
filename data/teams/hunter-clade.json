@@ -1,2346 +1,2351 @@
 {
- "id": "hunter-clade",
- "name": "Hunter Clade",
- "faction": "Adeptus Mechanicus",
- "grandFaction": "Imperium",
- "archetypes": [
-  "Seek & Destroy",
-  "Recon"
- ],
- "booksVersion": "January ’26",
- "books": [
-  {
-   "book": "Hunter Clade",
-   "kind": "Faction",
-   "edition": "3",
-   "version": "January ’26",
-   "lastUpdate": "January 2026",
-   "pdf": "https://assets.warhammer-community.com/eng_28-01_kill_team_team_rules_hunter_clade-iw4pezoqcm-axjoncdqci.pdf"
-  }
- ],
- "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/hunter-clade/",
- "scrapedAt": "2026-08-17T04:08:58+00:00",
- "source": "cache",
- "selection": {
-  "leader": {
-   "role": null,
-   "datacardId": null,
-   "count": 1,
-   "loadouts": [],
-   "optionGroups": [],
-   "loadoutMode": "choice",
-   "fixedWeapons": [],
-   "alwaysWeapons": [],
-   "choices": [
-    "SICARIAN INFILTRATOR PRINCEPS",
-    "SICARIAN RUSTSTALKER PRINCEPS",
-    "SKITARII RANGER ALPHA",
-    "SKITARII VANGUARD ALPHA"
-   ],
-   "inList": false
-  },
-  "slots": 9,
-  "totalOperatives": 10,
-  "groups": [
-   {
-    "index": 1,
-    "count": 1,
-    "kind": "list",
-    "roles": [
-     "SICARIAN INFILTRATOR PRINCEPS",
-     "SICARIAN RUSTSTALKER PRINCEPS",
-     "SKITARII RANGER ALPHA",
-     "SKITARII VANGUARD ALPHA"
-    ],
-    "rawText": "1 HUNTER CLADE operative selected from the following list:"
-   },
-   {
-    "index": 2,
-    "count": 9,
-    "kind": "list",
-    "roles": [
-     "WARRIOR INFILTRATOR",
-     "WARRIOR SICARIAN",
-     "SKITARII RANGER DIKTAT",
-     "SKITARII RANGER GUNNER",
-     "SKITARII RANGER SURVEYOR",
-     "RANGER WARRIOR",
-     "SKITARII VANGUARD DIKTAT",
-     "SKITARII VANGUARD GUNNER",
-     "SKITARII VANGUARD SURVEYOR",
-     "VANGUARD WARRIOR"
-    ],
-    "rawText": "9 HUNTER CLADE operatives selected from the following list:"
-   }
+  "id": "hunter-clade",
+  "name": "Hunter Clade",
+  "faction": "Adeptus Mechanicus",
+  "grandFaction": "Imperium",
+  "archetypes": [
+    "Seek & Destroy",
+    "Recon"
   ],
-  "list": [
-   {
-    "role": "WARRIOR INFILTRATOR",
-    "datacardAnchor": "Sicarian-Infiltrator-Warrior",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [
-     {
-      "id": "hunter-clade.g2e1.g1",
-      "label": "Flechette blaster or stubcarbine",
-      "choices": [
-       {
-        "id": "hunter-clade.g2e1.g1o1",
-        "label": "Flechette blaster",
-        "weapons": [
-         "Flechette blaster"
-        ]
-       },
-       {
-        "id": "hunter-clade.g2e1.g1o2",
-        "label": "stubcarbine",
-        "weapons": [
-         "Stubcarbine"
-        ]
-       }
-      ]
-     },
-     {
-      "id": "hunter-clade.g2e1.g2",
-      "label": "Power weapon or taser goad",
-      "choices": [
-       {
-        "id": "hunter-clade.g2e1.g2o1",
-        "label": "Power weapon",
-        "weapons": [
-         "Power weapon"
-        ]
-       },
-       {
-        "id": "hunter-clade.g2e1.g2o2",
-        "label": "taser goad",
-        "weapons": [
-         "Taser goad"
-        ]
-       }
-      ]
-     }
-    ],
-    "loadoutMode": "combine",
-    "selectionCost": 1,
-    "footnoteGroup": "*",
-    "requires": [],
-    "rawText": "WARRIOR INFILTRATOR* with one option from each of the following:",
-    "group": 2,
-    "datacardId": "hunter-clade.sicarian-infiltrator-warrior",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": []
-   },
-   {
-    "role": "WARRIOR SICARIAN",
-    "datacardAnchor": "",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [
-     {
-      "id": "hunter-clade.g2e2.opt1",
-      "label": "Chordclaw & transonic razor",
-      "weapons": [
-       "Chordclaw & transonic razor"
-      ]
-     },
-     {
-      "id": "hunter-clade.g2e2.opt2",
-      "label": "Transonic blades",
-      "weapons": [
-       "Transonic blades"
-      ]
-     }
-    ],
-    "optionGroups": [],
-    "loadoutMode": "choice",
-    "selectionCost": 1,
-    "footnoteGroup": "*",
-    "requires": [],
-    "rawText": "WARRIOR SICARIAN* with one of the following options:",
-    "group": 2,
-    "datacardId": "hunter-clade.sicarian-ruststalker-warrior",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": []
-   },
-   {
-    "role": "SKITARII RANGER DIKTAT",
-    "datacardAnchor": "Skitarii-Ranger-Diktat",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "SKITARII RANGER DIKTAT",
-    "group": 2,
-    "datacardId": "hunter-clade.skitarii-ranger-diktat",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Galvanic rifle",
-     "Gun butt"
-    ]
-   },
-   {
-    "role": "SKITARII RANGER GUNNER",
-    "datacardAnchor": "Skitarii-Ranger-Gunner",
-    "count": 1,
-    "fixedWeapons": [
-     "Gun butt"
-    ],
-    "fixedChoiceGroups": [],
-    "loadouts": [
-     {
-      "id": "hunter-clade.g2e4.opt1",
-      "label": "Arc rifle, plasma caliver or transuranic arquebus",
-      "weapons": [],
-      "choiceGroups": [
-       [
-        "Arc rifle",
-        "Plasma caliver",
-        "Transuranic arquebus"
-       ]
-      ]
-     }
-    ],
-    "optionGroups": [],
-    "loadoutMode": "choice",
-    "selectionCost": 1,
-    "footnoteGroup": "*",
-    "requires": [],
-    "rawText": "SKITARII RANGER GUNNER* with gun butt and one of the following options:",
-    "group": 2,
-    "datacardId": "hunter-clade.skitarii-ranger-gunner",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Arc rifle",
-     "Plasma caliver",
-     "Transuranic arquebus"
-    ]
-   },
-   {
-    "role": "SKITARII RANGER SURVEYOR",
-    "datacardAnchor": "Skitarii-Ranger-Surveyor",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "SKITARII RANGER SURVEYOR",
-    "group": 2,
-    "datacardId": "hunter-clade.skitarii-ranger-surveyor",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Galvanic rifle",
-     "Gun butt"
-    ]
-   },
-   {
-    "role": "RANGER WARRIOR",
-    "datacardAnchor": "Skitarii-Ranger-Warrior",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "RANGER WARRIOR",
-    "group": 2,
-    "datacardId": "hunter-clade.skitarii-ranger-warrior",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Galvanic rifle",
-     "Gun butt"
-    ]
-   },
-   {
-    "role": "SKITARII VANGUARD DIKTAT",
-    "datacardAnchor": "Skitarii-Vanguard-Diktat",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "SKITARII VANGUARD DIKTAT",
-    "group": 2,
-    "datacardId": "hunter-clade.skitarii-vanguard-diktat",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Radium carbine",
-     "Gun butt"
-    ]
-   },
-   {
-    "role": "SKITARII VANGUARD GUNNER",
-    "datacardAnchor": "Skitarii-Vanguard-Gunner",
-    "count": 1,
-    "fixedWeapons": [
-     "Gun butt"
-    ],
-    "fixedChoiceGroups": [],
-    "loadouts": [
-     {
-      "id": "hunter-clade.g2e8.opt1",
-      "label": "Arc rifle, plasma caliver or transuranic arquebus",
-      "weapons": [],
-      "choiceGroups": [
-       [
-        "Arc rifle",
-        "Plasma caliver",
-        "Transuranic arquebus"
-       ]
-      ]
-     }
-    ],
-    "optionGroups": [],
-    "loadoutMode": "choice",
-    "selectionCost": 1,
-    "footnoteGroup": "*",
-    "requires": [],
-    "rawText": "SKITARII VANGUARD GUNNER* with gun butt and one of the following options:",
-    "group": 2,
-    "datacardId": "hunter-clade.skitarii-vanguard-gunner",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Arc rifle",
-     "Plasma caliver",
-     "Transuranic arquebus"
-    ]
-   },
-   {
-    "role": "SKITARII VANGUARD SURVEYOR",
-    "datacardAnchor": "Skitarii-Vanguard-Surveyor",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "SKITARII VANGUARD SURVEYOR",
-    "group": 2,
-    "datacardId": "hunter-clade.skitarii-vanguard-surveyor",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Radium carbine",
-     "Gun butt"
-    ]
-   },
-   {
-    "role": "VANGUARD WARRIOR",
-    "datacardAnchor": "Skitarii-Vanguard-Warrior",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "VANGUARD WARRIOR",
-    "group": 2,
-    "datacardId": "hunter-clade.skitarii-vanguard-warrior",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Radium carbine",
-     "Gun butt"
-    ]
-   }
+  "booksVersion": "January ’26",
+  "books": [
+    {
+      "book": "Hunter Clade",
+      "kind": "Faction",
+      "edition": "3",
+      "version": "January ’26",
+      "lastUpdate": "January 2026",
+      "pdf": "https://assets.warhammer-community.com/eng_28-01_kill_team_team_rules_hunter_clade-iw4pezoqcm-axjoncdqci.pdf"
+    }
   ],
-  "leaderList": [
-   {
-    "role": "SICARIAN INFILTRATOR PRINCEPS",
-    "datacardAnchor": "Sicarian-Infiltrator-Princeps",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [
-     {
-      "id": "hunter-clade.g1e1.g1",
-      "label": "Flechette blaster or stubcarbine",
+  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/hunter-clade/",
+  "scrapedAt": "2026-08-17T04:08:58+00:00",
+  "source": "cache",
+  "selection": {
+    "leader": {
+      "role": null,
+      "datacardId": null,
+      "count": 1,
+      "loadouts": [],
+      "optionGroups": [],
+      "loadoutMode": "choice",
+      "fixedWeapons": [],
+      "alwaysWeapons": [],
       "choices": [
-       {
-        "id": "hunter-clade.g1e1.g1o1",
-        "label": "Flechette blaster",
-        "weapons": [
-         "Flechette blaster"
-        ]
-       },
-       {
-        "id": "hunter-clade.g1e1.g1o2",
-        "label": "stubcarbine",
-        "weapons": [
-         "Stubcarbine"
-        ]
-       }
-      ]
-     },
-     {
-      "id": "hunter-clade.g1e1.g2",
-      "label": "Power weapon or taser goad",
-      "choices": [
-       {
-        "id": "hunter-clade.g1e1.g2o1",
-        "label": "Power weapon",
-        "weapons": [
-         "Power weapon"
-        ]
-       },
-       {
-        "id": "hunter-clade.g1e1.g2o2",
-        "label": "taser goad",
-        "weapons": [
-         "Taser goad"
-        ]
-       }
-      ]
-     }
-    ],
-    "loadoutMode": "combine",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "SICARIAN INFILTRATOR PRINCEPS with one option from each of the following:",
-    "group": 1,
-    "datacardId": "hunter-clade.sicarian-infiltrator-princeps",
-    "isLeader": true,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": []
-   },
-   {
-    "role": "SICARIAN RUSTSTALKER PRINCEPS",
-    "datacardAnchor": "Sicarian-Ruststalker-Princeps",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "SICARIAN RUSTSTALKER PRINCEPS",
-    "group": 1,
-    "datacardId": "hunter-clade.sicarian-ruststalker-princeps",
-    "isLeader": true,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Chordclaw & transonic blades"
-    ]
-   },
-   {
-    "role": "SKITARII RANGER ALPHA",
-    "datacardAnchor": "Skitarii-Ranger-Alpha",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [
-     {
-      "id": "hunter-clade.g1e3.opt1",
-      "label": "Galvanic rifle; gun butt",
-      "weapons": [
-       "Galvanic rifle",
-       "Gun butt"
-      ]
-     },
-     {
-      "id": "hunter-clade.g1e3.opt2",
-      "label": "Master-crafted radium pistol; power weapon",
-      "weapons": [
-       "Master-crafted radium pistol",
-       "Power weapon"
-      ]
-     }
-    ],
-    "optionGroups": [
-     {
-      "id": "hunter-clade.g1e3.g1",
-      "label": "Arc pistol or phosphor blast pistol",
-      "choices": [
-       {
-        "id": "hunter-clade.g1e3.g1o1",
-        "label": "Arc pistol",
-        "weapons": [
-         "Arc pistol"
-        ]
-       },
-       {
-        "id": "hunter-clade.g1e3.g1o2",
-        "label": "phosphor blast pistol",
-        "weapons": [
-         "Phosphor blast pistol"
-        ]
-       }
-      ]
-     },
-     {
-      "id": "hunter-clade.g1e3.g2",
-      "label": "Arc maul or taser goad",
-      "choices": [
-       {
-        "id": "hunter-clade.g1e3.g2o1",
-        "label": "Arc maul",
-        "weapons": [
-         "Arc maul"
-        ]
-       },
-       {
-        "id": "hunter-clade.g1e3.g2o2",
-        "label": "taser goad",
-        "weapons": [
-         "Taser goad"
-        ]
-       }
-      ]
-     }
-    ],
-    "loadoutMode": "either",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "SKITARII RANGER ALPHA with one of the following options:",
-    "group": 1,
-    "datacardId": "hunter-clade.skitarii-ranger-alpha",
-    "isLeader": true,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": []
-   },
-   {
-    "role": "SKITARII VANGUARD ALPHA",
-    "datacardAnchor": "Skitarii-Vanguard-Alpha",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [
-     {
-      "id": "hunter-clade.g1e4.opt1",
-      "label": "Radium carbine; gun butt",
-      "weapons": [
-       "Radium carbine",
-       "Gun butt"
-      ]
-     },
-     {
-      "id": "hunter-clade.g1e4.opt2",
-      "label": "Master-crafted radium pistol; power weapon",
-      "weapons": [
-       "Master-crafted radium pistol",
-       "Power weapon"
-      ]
-     }
-    ],
-    "optionGroups": [
-     {
-      "id": "hunter-clade.g1e4.g1",
-      "label": "Arc pistol or phosphor blast pistol",
-      "choices": [
-       {
-        "id": "hunter-clade.g1e4.g1o1",
-        "label": "Arc pistol",
-        "weapons": [
-         "Arc pistol"
-        ]
-       },
-       {
-        "id": "hunter-clade.g1e4.g1o2",
-        "label": "phosphor blast pistol",
-        "weapons": [
-         "Phosphor blast pistol"
-        ]
-       }
-      ]
-     },
-     {
-      "id": "hunter-clade.g1e4.g2",
-      "label": "Arc maul or taser goad",
-      "choices": [
-       {
-        "id": "hunter-clade.g1e4.g2o1",
-        "label": "Arc maul",
-        "weapons": [
-         "Arc maul"
-        ]
-       },
-       {
-        "id": "hunter-clade.g1e4.g2o2",
-        "label": "taser goad",
-        "weapons": [
-         "Taser goad"
-        ]
-       }
-      ]
-     }
-    ],
-    "loadoutMode": "either",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "SKITARII VANGUARD ALPHA with one of the following options:",
-    "group": 1,
-    "datacardId": "hunter-clade.skitarii-vanguard-alpha",
-    "isLeader": true,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": []
-   }
-  ],
-  "constraints": [
-   {
-    "kind": "uniqueExcept",
-    "roles": [
-     "GUNNER",
-     "WARRIOR"
-    ]
-   },
-   {
-    "kind": "maxCount",
-    "role": "DIKTAT",
-    "max": 1
-   },
-   {
-    "kind": "maxCount",
-    "role": "SURVEYOR operative and up to five SICARIAN",
-    "max": 1
-   },
-   {
-    "kind": "maxItem",
-    "item": "arc rifle",
-    "max": 1
-   },
-   {
-    "kind": "maxItem",
-    "item": "plasma caliver",
-    "max": 1
-   },
-   {
-    "kind": "maxItem",
-    "item": "transuranic arquebus",
-    "max": 1
-   },
-   {
-    "kind": "groupCap",
-    "group": "*",
-    "max": 7
-   }
-  ],
-  "footnotes": {
-   "*": "You cannot select more than seven of these operatives combined."
-  },
-  "footnoteOptions": {
-   "*": {
-    "text": "You cannot select more than seven of these operatives combined.",
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": []
-   }
-  },
-  "designerNotes": [],
-  "rawText": "1 HUNTER CLADE operative selected from the following list:\n\nSICARIAN INFILTRATOR PRINCEPS with one option from each of the following:\n\nFlechette blaster or stubcarbine\n\nPower weapon or taser goad\n\nSICARIAN RUSTSTALKER PRINCEPS\n\nSKITARII RANGER ALPHA with one of the following options:\n\nGalvanic rifle; gun butt\n\nMaster-crafted radium pistol; power weapon\n\nOr one option from each of the following:\n\nArc pistol or phosphor blast pistol\n\nArc maul or taser goad\n\nSKITARII VANGUARD ALPHA with one of the following options:\n\nRadium carbine; gun butt\n\nMaster-crafted radium pistol; power weapon\n\nOr one option from each of the following:\n\nArc pistol or phosphor blast pistol\n\nArc maul or taser goad\n\n9 HUNTER CLADE operatives selected from the following list:\n\nWARRIOR INFILTRATOR* with one option from each of the following:\n\nFlechette blaster or stubcarbine\n\nPower weapon or taser goad\n\nWARRIOR SICARIAN* with one of the following options:\n\nChordclaw & transonic razor\n\nTransonic blades\n\nSKITARII RANGER DIKTAT\n\nSKITARII RANGER GUNNER* with gun butt and one of the following options:\n\nArc rifle, plasma caliver or transuranic arquebus\n\nSKITARII RANGER SURVEYOR\n\nRANGER WARRIOR\n\nSKITARII VANGUARD DIKTAT\n\nSKITARII VANGUARD GUNNER* with gun butt and one of the following options:\n\nArc rifle, plasma caliver or transuranic arquebus\n\nSKITARII VANGUARD SURVEYOR\n\nVANGUARD WARRIOR\n\nOther than GUNNER and WARRIOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to one DIKTAT operative, up to one SURVEYOR operative and up to five SICARIAN operatives. Your kill team can only include up to one arc rifle, up to one plasma caliver and up to one transuranic arquebus.\n\n* You cannot select more than seven of these operatives combined."
- },
- "datacards": [
-  {
-   "id": "hunter-clade.sicarian-ruststalker-princeps",
-   "teamId": "hunter-clade",
-   "name": "Sicarian Ruststalker Princeps",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "LEADER",
-    "SICARIAN",
-    "RUSTSTALKER",
-    "PRINCEPS"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 40
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 11,
-   "weapons": [
-    {
-     "name": "Chordclaw & transonic blades",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 5,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Balanced",
-         "raw": "Balanced"
-        },
-        {
-         "id": "Rending",
-         "raw": "Rending"
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.sicarian-ruststalker-princeps.canticle-of-destruction",
-     "name": "Canticle of Destruction",
-     "text": "Whenever a friendly HUNTER CLADE RUSTSTALKER operative within 3\" of this operative is fighting, the first time you strike with a critical success during that sequence, inflict 1 additional damage."
+        "SICARIAN INFILTRATOR PRINCEPS",
+        "SICARIAN RUSTSTALKER PRINCEPS",
+        "SKITARII RANGER ALPHA",
+        "SKITARII VANGUARD ALPHA"
+      ],
+      "inList": false
     },
-    {
-     "id": "hunter-clade.sicarian-ruststalker-princeps.wasteland-stalker",
-     "name": "Wasteland Stalker",
-     "text": "Whenever an operative is shooting this operative, if you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain."
-    },
-    {
-     "id": "hunter-clade.sicarian-ruststalker-princeps.control-protocol",
-     "name": "Control Protocol",
-     "text": "You can use the Command Override firefight ploy for 0CP if the specified friendly HUNTER CLADE operative is visible to this operative."
-    }
-   ],
-   "uniqueActions": [],
-   "fluff": "Excelling in assassination missions and surprise attacks, Princeps lead their Ruststalkers in the hunt for any their Tech-Priest masters have marked for death. In their lives, Princeps have claimed many foes in the most hazardous of environments."
-  },
-  {
-   "id": "hunter-clade.sicarian-infiltrator-princeps",
-   "teamId": "hunter-clade",
-   "name": "Sicarian Infiltrator Princeps",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "LEADER",
-    "SICARIAN",
-    "INFILTRATOR",
-    "PRINCEPS"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 40
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 11,
-   "weapons": [
-    {
-     "name": "Flechette blaster",
-     "profiles": [
+    "slots": 9,
+    "totalOperatives": 10,
+    "groups": [
       {
-       "type": "ranged",
-       "atk": 5,
-       "hit": 3,
-       "dmgN": 2,
-       "dmgC": 2,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Saturate",
-         "raw": "Saturate"
-        },
-        {
-         "id": "Silent",
-         "raw": "Silent"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Stubcarbine",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Ceaseless",
-         "raw": "Ceaseless"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Power weapon",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Taser goad",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        },
-        {
-         "id": "Shock",
-         "raw": "Shock"
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.sicarian-infiltrator-princeps.canticle-of-shroudpsalm",
-     "name": "Canticle of Shroudpsalm",
-     "text": "Whenever a friendly HUNTER CLADE INFILTRATOR operative is within 3\" of this operative, has a Conceal order and is in cover, that friendly operative cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"."
-    },
-    {
-     "id": "hunter-clade.sicarian-infiltrator-princeps.control-protocol",
-     "name": "Control Protocol",
-     "text": "You can use the Command Override firefight ploy for 0CP if the specified friendly HUNTER CLADE operative is visible to this operative."
-    }
-   ],
-   "uniqueActions": [],
-   "fluff": "Sicarian Infiltrator Princeps have a greater detachment from emotion than even others of their kind. No hunting mission is too dangerous for them, and no assassination task too harrowing."
-  },
-  {
-   "id": "hunter-clade.skitarii-ranger-alpha",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Ranger Alpha",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "LEADER",
-    "SKITARII",
-    "RANGER",
-    "ALPHA"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 8,
-   "weapons": [
-    {
-     "name": "Arc pistol",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        },
-        {
-         "id": "Stun",
-         "raw": "Stun"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Galvanic rifle",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Heavy",
-         "only": "Reposition",
-         "raw": "Heavy (Reposition only)"
-        },
-        {
-         "id": "PiercingCrits",
-         "x": 1,
-         "raw": "Piercing Crits 1"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Master-crafted radium pistol",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 2,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Balanced",
-         "raw": "Balanced"
-        },
-        {
-         "id": "Rending",
-         "raw": "Rending"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Phosphor blast pistol",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Blast",
-         "x": 1,
-         "raw": "Blast 1\""
-        },
-        {
-         "id": "Severe",
-         "raw": "Severe"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Arc maul",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Shock",
-         "raw": "Shock"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    },
-    {
-     "name": "Power weapon",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Taser goad",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        },
-        {
-         "id": "Shock",
-         "raw": "Shock"
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.skitarii-ranger-alpha.canticle-of-elimination",
-     "name": "Canticle of Elimination",
-     "text": "Whenever a friendly HUNTER CLADE RANGER operative is within 3\" of this operative, that friendly operative’s ranged weapons have the Punishing weapon rule."
-    },
-    {
-     "id": "hunter-clade.skitarii-ranger-alpha.targeting-protocol",
-     "name": "Targeting Protocol",
-     "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
-    },
-    {
-     "id": "hunter-clade.skitarii-ranger-alpha.control-protocol",
-     "name": "Control Protocol",
-     "text": "You can use the Command Override firefight ploy for 0CP if the specified friendly HUNTER CLADE operative is visible to this operative."
-    }
-   ],
-   "uniqueActions": [],
-   "fluff": "Ranger Alphas are the most dedicated of their kind, relied upon to formulate reconnaissance and hunting parameters, and to lead their Hunter Clade in gruelling duties."
-  },
-  {
-   "id": "hunter-clade.skitarii-vanguard-alpha",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Vanguard Alpha",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "LEADER",
-    "SKITARII",
-    "VANGUARD",
-    "ALPHA"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 8,
-   "weapons": [
-    {
-     "name": "Arc pistol",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        },
-        {
-         "id": "Stun",
-         "raw": "Stun"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Master-crafted radium pistol",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 2,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Balanced",
-         "raw": "Balanced"
-        },
-        {
-         "id": "Rending",
-         "raw": "Rending"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Phosphor blast pistol",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Blast",
-         "x": 1,
-         "raw": "Blast 1\""
-        },
-        {
-         "id": "Severe",
-         "raw": "Severe"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Radium carbine",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 2,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Rending",
-         "raw": "Rending"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Arc maul",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Shock",
-         "raw": "Shock"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    },
-    {
-     "name": "Power weapon",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Taser goad",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        },
-        {
-         "id": "Shock",
-         "raw": "Shock"
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.skitarii-vanguard-alpha.canticle-of-the-glow",
-     "name": "Canticle of the Glow",
-     "text": "Whenever an enemy operative is within 3\" of this operative, if it’s under the effects of the Rad-Saturation rule, also subtract 1 from the Atk stat of that enemy operative’s weapons."
-    },
-    {
-     "id": "hunter-clade.skitarii-vanguard-alpha.rad-saturation",
-     "name": "Rad-Saturation",
-     "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
-    },
-    {
-     "id": "hunter-clade.skitarii-vanguard-alpha.control-protocol",
-     "name": "Control Protocol",
-     "text": "You can use the Command Override firefight ploy for 0CP if the specified friendly HUNTER CLADE operative is visible to this operative."
-    }
-   ],
-   "uniqueActions": [],
-   "fluff": "Skitarii Alphas have passed a point called the Crux Mechanicus. With bodies more machine than flesh, they enact Tech-Priest overseers’ orders like holy commands."
-  },
-  {
-   "id": "hunter-clade.sicarian-infiltrator-warrior",
-   "teamId": "hunter-clade",
-   "name": "Sicarian Infiltrator Warrior",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SICARIAN",
-    "INFILTRATOR",
-    "WARRIOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 40
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 10,
-   "weapons": [
-    {
-     "name": "Flechette blaster",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 5,
-       "hit": 3,
-       "dmgN": 2,
-       "dmgC": 2,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Saturate",
-         "raw": "Saturate"
-        },
-        {
-         "id": "Silent",
-         "raw": "Silent"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Stubcarbine",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Ceaseless",
-         "raw": "Ceaseless"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Power weapon",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Taser goad",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        },
-        {
-         "id": "Shock",
-         "raw": "Shock"
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [],
-   "uniqueActions": [],
-   "fluff": "Experts in penetrating enemy strongholds, Sicarian Infiltrator Warriors emit a white noise that attacks their foes’ sensoriums with a painful neurostatic bombardment."
-  },
-  {
-   "id": "hunter-clade.sicarian-ruststalker-warrior",
-   "teamId": "hunter-clade",
-   "name": "Sicarian Ruststalker Warrior",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SICARIAN",
-    "RUSTSTALKER",
-    "WARRIOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 40
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 10,
-   "weapons": [
-    {
-     "name": "Chordclaw & transonic razor",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 5,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Balanced",
-         "raw": "Balanced"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Transonic blades",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 5,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Rending",
-         "raw": "Rending"
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.sicarian-ruststalker-warrior.wasteland-stalker",
-     "name": "Wasteland Stalker",
-     "text": "Whenever an operative is shooting this operative, if you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain."
-    }
-   ],
-   "uniqueActions": [],
-   "fluff": "Ruststalker Warriors fall upon their foes in a stabbing, slashing frenzy, unleashing a blur of attacks. They are selected for kill team duties due to their level of dogged determination to hunt quarries to the death, above and beyond others of their kind."
-  },
-  {
-   "id": "hunter-clade.skitarii-ranger-diktat",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Ranger Diktat",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SKITARII",
-    "RANGER",
-    "DIKTAT"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 7,
-   "weapons": [
-    {
-     "name": "Galvanic rifle",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Heavy",
-         "only": "Reposition",
-         "raw": "Heavy (Reposition only)"
-        },
-        {
-         "id": "PiercingCrits",
-         "x": 1,
-         "raw": "Piercing Crits 1"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.skitarii-ranger-diktat.targeting-protocol",
-     "name": "Targeting Protocol",
-     "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
-    }
-   ],
-   "uniqueActions": [
-    {
-     "id": "hunter-clade.skitarii-ranger-diktat.act.signal",
-     "name": "SIGNAL",
-     "ap": 1,
-     "text": "SUPPORT. Select one other friendly HUNTER CLADE operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
-    }
-   ],
-   "fluff": "The enhanced data-tethers carried by these Skitarii enable them to communicate directly with their Tech-Priest masters. It is a great honour indeed to be chosen to carry one, as it is seen as the mouthpiece of the Tech-Priests, who are said to be prophets of the Machine God himself."
-  },
-  {
-   "id": "hunter-clade.skitarii-ranger-gunner",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Ranger Gunner",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SKITARII",
-    "RANGER",
-    "GUNNER"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 7,
-   "weapons": [
-    {
-     "name": "Arc rifle",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        },
-        {
-         "id": "Stun",
-         "raw": "Stun"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Plasma caliver",
-     "profiles": [
-      {
-       "name": "standard",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        }
-       ]
+        "index": 1,
+        "count": 1,
+        "kind": "list",
+        "roles": [
+          "SICARIAN INFILTRATOR PRINCEPS",
+          "SICARIAN RUSTSTALKER PRINCEPS",
+          "SKITARII RANGER ALPHA",
+          "SKITARII VANGUARD ALPHA"
+        ],
+        "rawText": "1 HUNTER CLADE operative selected from the following list:"
       },
       {
-       "name": "supercharge",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 5,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Hot",
-         "raw": "Hot"
-        },
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        },
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        }
-       ]
+        "index": 2,
+        "count": 9,
+        "kind": "list",
+        "roles": [
+          "WARRIOR INFILTRATOR",
+          "WARRIOR SICARIAN",
+          "SKITARII RANGER DIKTAT",
+          "SKITARII RANGER GUNNER",
+          "SKITARII RANGER SURVEYOR",
+          "RANGER WARRIOR",
+          "SKITARII VANGUARD DIKTAT",
+          "SKITARII VANGUARD GUNNER",
+          "SKITARII VANGUARD SURVEYOR",
+          "VANGUARD WARRIOR"
+        ],
+        "rawText": "9 HUNTER CLADE operatives selected from the following list:"
       }
-     ]
-    },
-    {
-     "name": "Transuranic arquebus",
-     "profiles": [
+    ],
+    "list": [
       {
-       "name": "mobile",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 3,
-       "rules": [
-        {
-         "id": "Devastating",
-         "x": 2,
-         "raw": "Devastating 2"
-        },
-        {
-         "id": "Heavy",
-         "only": "Dash",
-         "raw": "Heavy (Dash only)"
-        },
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        }
-       ]
+        "role": "WARRIOR INFILTRATOR",
+        "datacardAnchor": "Sicarian-Infiltrator-Warrior",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [
+          {
+            "id": "hunter-clade.g2e1.g1",
+            "label": "Flechette blaster or stubcarbine",
+            "choices": [
+              {
+                "id": "hunter-clade.g2e1.g1o1",
+                "label": "Flechette blaster",
+                "weapons": [
+                  "Flechette blaster"
+                ]
+              },
+              {
+                "id": "hunter-clade.g2e1.g1o2",
+                "label": "stubcarbine",
+                "weapons": [
+                  "Stubcarbine"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "hunter-clade.g2e1.g2",
+            "label": "Power weapon or taser goad",
+            "choices": [
+              {
+                "id": "hunter-clade.g2e1.g2o1",
+                "label": "Power weapon",
+                "weapons": [
+                  "Power weapon"
+                ]
+              },
+              {
+                "id": "hunter-clade.g2e1.g2o2",
+                "label": "taser goad",
+                "weapons": [
+                  "Taser goad"
+                ]
+              }
+            ]
+          }
+        ],
+        "loadoutMode": "combine",
+        "selectionCost": 1,
+        "footnoteGroup": "*",
+        "requires": [],
+        "rawText": "WARRIOR INFILTRATOR* with one option from each of the following:",
+        "group": 2,
+        "datacardId": "hunter-clade.sicarian-infiltrator-warrior",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": []
       },
       {
-       "name": "stationary",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 2,
-       "dmgN": 4,
-       "dmgC": 3,
-       "rules": [
-        {
-         "id": "Devastating",
-         "x": 3,
-         "raw": "Devastating 3"
-        },
-        {
-         "id": "Heavy",
-         "raw": "Heavy"
-        },
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        },
-        {
-         "id": "Severe",
-         "raw": "Severe"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.skitarii-ranger-gunner.targeting-protocol",
-     "name": "Targeting Protocol",
-     "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
-    }
-   ],
-   "uniqueActions": [],
-   "fluff": "In the hunt for the most dangerous of hereteks or xenos aggressors, a forge world’s ruling Tech-Priests may issue high-performing Hunter Clade Rangers with advanced weaponry. Strange, esoteric technologies power such armaments, rendering them lethal indeed to the Rangers’ foes."
-  },
-  {
-   "id": "hunter-clade.skitarii-ranger-surveyor",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Ranger Surveyor",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SKITARII",
-    "RANGER",
-    "SURVEYOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 7,
-   "weapons": [
-    {
-     "name": "Galvanic rifle",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Heavy",
-         "only": "Reposition",
-         "raw": "Heavy (Reposition only)"
-        },
-        {
-         "id": "PiercingCrits",
-         "x": 1,
-         "raw": "Piercing Crits 1"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.skitarii-ranger-surveyor.targeting-protocol",
-     "name": "Targeting Protocol",
-     "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
-    }
-   ],
-   "uniqueActions": [
-    {
-     "id": "hunter-clade.skitarii-ranger-surveyor.act.spot",
-     "name": "SPOT",
-     "ap": 1,
-     "text": "SUPPORT. Select one enemy operative visible to this operative. Until the end of the turning point, whenever a friendly HUNTER CLADE operative within 3\" of this operative is shooting that enemy operative, you can use this effect. If you do:\n\nThis operative cannot perform this action while within control range of an enemy operative."
-    }
-   ],
-   "fluff": "The omnispex wielded by these Skitarii is a device fitted with a Raptor-class machine spirit. This can glean all kinds of data from a killzone and from a Hunter Clade’s enemies. Not only is it useful for the kill team in battle, but such information is a fine devotion to the Machine God in itself."
-  },
-  {
-   "id": "hunter-clade.skitarii-ranger-warrior",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Ranger Warrior",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SKITARII",
-    "RANGER",
-    "WARRIOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 7,
-   "weapons": [
-    {
-     "name": "Galvanic rifle",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Heavy",
-         "only": "Reposition",
-         "raw": "Heavy (Reposition only)"
-        },
-        {
-         "id": "PiercingCrits",
-         "x": 1,
-         "raw": "Piercing Crits 1"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.skitarii-ranger-warrior.targeting-protocol",
-     "name": "Targeting Protocol",
-     "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
-    }
-   ],
-   "uniqueActions": [],
-   "fluff": "Skitarii Ranger Warriors hunt the foes of the Machine God relentlessly, and their bionically enhanced stamina is legendary. They pursue like patient predators, inexorably tracking their prey before taking the killing shot with their long rifles of ancient design."
-  },
-  {
-   "id": "hunter-clade.skitarii-vanguard-diktat",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Vanguard Diktat",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SKITARII",
-    "VANGUARD",
-    "DIKTAT"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 7,
-   "weapons": [
-    {
-     "name": "Radium carbine",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 2,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Rending",
-         "raw": "Rending"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.skitarii-vanguard-diktat.rad-saturation",
-     "name": "Rad-Saturation",
-     "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
-    }
-   ],
-   "uniqueActions": [
-    {
-     "id": "hunter-clade.skitarii-vanguard-diktat.act.signal",
-     "name": "SIGNAL",
-     "ap": 1,
-     "text": "SUPPORT. Select one other friendly HUNTER CLADE operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
-    }
-   ],
-   "fluff": "To be a Diktat among Skitarii is to be obeyed without question, due to their direct link with the Tech-Priests. Hunter Clades receiving word from their masters through these warriors are filled with zealous conviction, willing to drive through unimaginable terrors to find and slay their quarry."
-  },
-  {
-   "id": "hunter-clade.skitarii-vanguard-gunner",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Vanguard Gunner",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SKITARII",
-    "VANGUARD",
-    "GUNNER"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 7,
-   "weapons": [
-    {
-     "name": "Arc rifle",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        },
-        {
-         "id": "Stun",
-         "raw": "Stun"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Plasma caliver",
-     "profiles": [
-      {
-       "name": "standard",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        }
-       ]
+        "role": "WARRIOR SICARIAN",
+        "datacardAnchor": "",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [
+          {
+            "id": "hunter-clade.g2e2.opt1",
+            "label": "Chordclaw & transonic razor",
+            "weapons": [
+              "Chordclaw & transonic razor"
+            ]
+          },
+          {
+            "id": "hunter-clade.g2e2.opt2",
+            "label": "Transonic blades",
+            "weapons": [
+              "Transonic blades"
+            ]
+          }
+        ],
+        "optionGroups": [],
+        "loadoutMode": "choice",
+        "selectionCost": 1,
+        "footnoteGroup": "*",
+        "requires": [],
+        "rawText": "WARRIOR SICARIAN* with one of the following options:",
+        "group": 2,
+        "datacardId": "hunter-clade.sicarian-ruststalker-warrior",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": []
       },
       {
-       "name": "supercharge",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 5,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Hot",
-         "raw": "Hot"
-        },
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        },
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Transuranic arquebus",
-     "profiles": [
-      {
-       "name": "mobile",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 3,
-       "rules": [
-        {
-         "id": "Devastating",
-         "x": 2,
-         "raw": "Devastating 2"
-        },
-        {
-         "id": "Heavy",
-         "only": "Dash",
-         "raw": "Heavy (Dash only)"
-        },
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        }
-       ]
+        "role": "SKITARII RANGER DIKTAT",
+        "datacardAnchor": "Skitarii-Ranger-Diktat",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "SKITARII RANGER DIKTAT",
+        "group": 2,
+        "datacardId": "hunter-clade.skitarii-ranger-diktat",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Galvanic rifle",
+          "Gun butt"
+        ]
       },
       {
-       "name": "stationary",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 2,
-       "dmgN": 4,
-       "dmgC": 3,
-       "rules": [
+        "role": "SKITARII RANGER GUNNER",
+        "datacardAnchor": "Skitarii-Ranger-Gunner",
+        "count": 1,
+        "fixedWeapons": [
+          "Gun butt"
+        ],
+        "fixedChoiceGroups": [],
+        "loadouts": [
+          {
+            "id": "hunter-clade.g2e4.opt1",
+            "label": "Arc rifle, plasma caliver or transuranic arquebus",
+            "weapons": [],
+            "choiceGroups": [
+              [
+                "Arc rifle",
+                "Plasma caliver",
+                "Transuranic arquebus"
+              ]
+            ]
+          }
+        ],
+        "optionGroups": [],
+        "loadoutMode": "choice",
+        "selectionCost": 1,
+        "footnoteGroup": "*",
+        "requires": [],
+        "rawText": "SKITARII RANGER GUNNER* with gun butt and one of the following options:",
+        "group": 2,
+        "datacardId": "hunter-clade.skitarii-ranger-gunner",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Arc rifle",
+          "Plasma caliver",
+          "Transuranic arquebus"
+        ]
+      },
+      {
+        "role": "SKITARII RANGER SURVEYOR",
+        "datacardAnchor": "Skitarii-Ranger-Surveyor",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "SKITARII RANGER SURVEYOR",
+        "group": 2,
+        "datacardId": "hunter-clade.skitarii-ranger-surveyor",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Galvanic rifle",
+          "Gun butt"
+        ]
+      },
+      {
+        "role": "RANGER WARRIOR",
+        "datacardAnchor": "Skitarii-Ranger-Warrior",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "RANGER WARRIOR",
+        "group": 2,
+        "datacardId": "hunter-clade.skitarii-ranger-warrior",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Galvanic rifle",
+          "Gun butt"
+        ]
+      },
+      {
+        "role": "SKITARII VANGUARD DIKTAT",
+        "datacardAnchor": "Skitarii-Vanguard-Diktat",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "SKITARII VANGUARD DIKTAT",
+        "group": 2,
+        "datacardId": "hunter-clade.skitarii-vanguard-diktat",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Radium carbine",
+          "Gun butt"
+        ]
+      },
+      {
+        "role": "SKITARII VANGUARD GUNNER",
+        "datacardAnchor": "Skitarii-Vanguard-Gunner",
+        "count": 1,
+        "fixedWeapons": [
+          "Gun butt"
+        ],
+        "fixedChoiceGroups": [],
+        "loadouts": [
+          {
+            "id": "hunter-clade.g2e8.opt1",
+            "label": "Arc rifle, plasma caliver or transuranic arquebus",
+            "weapons": [],
+            "choiceGroups": [
+              [
+                "Arc rifle",
+                "Plasma caliver",
+                "Transuranic arquebus"
+              ]
+            ]
+          }
+        ],
+        "optionGroups": [],
+        "loadoutMode": "choice",
+        "selectionCost": 1,
+        "footnoteGroup": "*",
+        "requires": [],
+        "rawText": "SKITARII VANGUARD GUNNER* with gun butt and one of the following options:",
+        "group": 2,
+        "datacardId": "hunter-clade.skitarii-vanguard-gunner",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Arc rifle",
+          "Plasma caliver",
+          "Transuranic arquebus"
+        ]
+      },
+      {
+        "role": "SKITARII VANGUARD SURVEYOR",
+        "datacardAnchor": "Skitarii-Vanguard-Surveyor",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "SKITARII VANGUARD SURVEYOR",
+        "group": 2,
+        "datacardId": "hunter-clade.skitarii-vanguard-surveyor",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Radium carbine",
+          "Gun butt"
+        ]
+      },
+      {
+        "role": "VANGUARD WARRIOR",
+        "datacardAnchor": "Skitarii-Vanguard-Warrior",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "VANGUARD WARRIOR",
+        "group": 2,
+        "datacardId": "hunter-clade.skitarii-vanguard-warrior",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Radium carbine",
+          "Gun butt"
+        ]
+      }
+    ],
+    "leaderList": [
+      {
+        "role": "SICARIAN INFILTRATOR PRINCEPS",
+        "datacardAnchor": "Sicarian-Infiltrator-Princeps",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [
+          {
+            "id": "hunter-clade.g1e1.g1",
+            "label": "Flechette blaster or stubcarbine",
+            "choices": [
+              {
+                "id": "hunter-clade.g1e1.g1o1",
+                "label": "Flechette blaster",
+                "weapons": [
+                  "Flechette blaster"
+                ]
+              },
+              {
+                "id": "hunter-clade.g1e1.g1o2",
+                "label": "stubcarbine",
+                "weapons": [
+                  "Stubcarbine"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "hunter-clade.g1e1.g2",
+            "label": "Power weapon or taser goad",
+            "choices": [
+              {
+                "id": "hunter-clade.g1e1.g2o1",
+                "label": "Power weapon",
+                "weapons": [
+                  "Power weapon"
+                ]
+              },
+              {
+                "id": "hunter-clade.g1e1.g2o2",
+                "label": "taser goad",
+                "weapons": [
+                  "Taser goad"
+                ]
+              }
+            ]
+          }
+        ],
+        "loadoutMode": "combine",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "SICARIAN INFILTRATOR PRINCEPS with one option from each of the following:",
+        "group": 1,
+        "datacardId": "hunter-clade.sicarian-infiltrator-princeps",
+        "isLeader": true,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": []
+      },
+      {
+        "role": "SICARIAN RUSTSTALKER PRINCEPS",
+        "datacardAnchor": "Sicarian-Ruststalker-Princeps",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "SICARIAN RUSTSTALKER PRINCEPS",
+        "group": 1,
+        "datacardId": "hunter-clade.sicarian-ruststalker-princeps",
+        "isLeader": true,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Chordclaw & transonic blades"
+        ]
+      },
+      {
+        "role": "SKITARII RANGER ALPHA",
+        "datacardAnchor": "Skitarii-Ranger-Alpha",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [
+          {
+            "id": "hunter-clade.g1e3.opt1",
+            "label": "Galvanic rifle; gun butt",
+            "weapons": [
+              "Galvanic rifle",
+              "Gun butt"
+            ]
+          },
+          {
+            "id": "hunter-clade.g1e3.opt2",
+            "label": "Master-crafted radium pistol; power weapon",
+            "weapons": [
+              "Master-crafted radium pistol",
+              "Power weapon"
+            ]
+          }
+        ],
+        "optionGroups": [
+          {
+            "id": "hunter-clade.g1e3.g1",
+            "label": "Arc pistol or phosphor blast pistol",
+            "choices": [
+              {
+                "id": "hunter-clade.g1e3.g1o1",
+                "label": "Arc pistol",
+                "weapons": [
+                  "Arc pistol"
+                ]
+              },
+              {
+                "id": "hunter-clade.g1e3.g1o2",
+                "label": "phosphor blast pistol",
+                "weapons": [
+                  "Phosphor blast pistol"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "hunter-clade.g1e3.g2",
+            "label": "Arc maul or taser goad",
+            "choices": [
+              {
+                "id": "hunter-clade.g1e3.g2o1",
+                "label": "Arc maul",
+                "weapons": [
+                  "Arc maul"
+                ]
+              },
+              {
+                "id": "hunter-clade.g1e3.g2o2",
+                "label": "taser goad",
+                "weapons": [
+                  "Taser goad"
+                ]
+              }
+            ]
+          }
+        ],
+        "loadoutMode": "either",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "SKITARII RANGER ALPHA with one of the following options:",
+        "group": 1,
+        "datacardId": "hunter-clade.skitarii-ranger-alpha",
+        "isLeader": true,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": []
+      },
+      {
+        "role": "SKITARII VANGUARD ALPHA",
+        "datacardAnchor": "Skitarii-Vanguard-Alpha",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [
+          {
+            "id": "hunter-clade.g1e4.opt1",
+            "label": "Radium carbine; gun butt",
+            "weapons": [
+              "Radium carbine",
+              "Gun butt"
+            ]
+          },
+          {
+            "id": "hunter-clade.g1e4.opt2",
+            "label": "Master-crafted radium pistol; power weapon",
+            "weapons": [
+              "Master-crafted radium pistol",
+              "Power weapon"
+            ]
+          }
+        ],
+        "optionGroups": [
+          {
+            "id": "hunter-clade.g1e4.g1",
+            "label": "Arc pistol or phosphor blast pistol",
+            "choices": [
+              {
+                "id": "hunter-clade.g1e4.g1o1",
+                "label": "Arc pistol",
+                "weapons": [
+                  "Arc pistol"
+                ]
+              },
+              {
+                "id": "hunter-clade.g1e4.g1o2",
+                "label": "phosphor blast pistol",
+                "weapons": [
+                  "Phosphor blast pistol"
+                ]
+              }
+            ]
+          },
+          {
+            "id": "hunter-clade.g1e4.g2",
+            "label": "Arc maul or taser goad",
+            "choices": [
+              {
+                "id": "hunter-clade.g1e4.g2o1",
+                "label": "Arc maul",
+                "weapons": [
+                  "Arc maul"
+                ]
+              },
+              {
+                "id": "hunter-clade.g1e4.g2o2",
+                "label": "taser goad",
+                "weapons": [
+                  "Taser goad"
+                ]
+              }
+            ]
+          }
+        ],
+        "loadoutMode": "either",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "SKITARII VANGUARD ALPHA with one of the following options:",
+        "group": 1,
+        "datacardId": "hunter-clade.skitarii-vanguard-alpha",
+        "isLeader": true,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": []
+      }
+    ],
+    "constraints": [
+      {
+        "kind": "uniqueExcept",
+        "roles": [
+          "GUNNER",
+          "WARRIOR"
+        ]
+      },
+      {
+        "kind": "maxCount",
+        "role": "DIKTAT",
+        "max": 1
+      },
+      {
+        "kind": "maxCount",
+        "role": "SURVEYOR",
+        "max": 1
+      },
+      {
+        "kind": "maxCount",
+        "role": "SICARIAN",
+        "max": 5
+      },
+      {
+        "kind": "maxItem",
+        "item": "arc rifle",
+        "max": 1
+      },
+      {
+        "kind": "maxItem",
+        "item": "plasma caliver",
+        "max": 1
+      },
+      {
+        "kind": "maxItem",
+        "item": "transuranic arquebus",
+        "max": 1
+      },
+      {
+        "kind": "groupCap",
+        "group": "*",
+        "max": 7
+      }
+    ],
+    "footnotes": {
+      "*": "You cannot select more than seven of these operatives combined."
+    },
+    "footnoteOptions": {
+      "*": {
+        "text": "You cannot select more than seven of these operatives combined.",
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": []
+      }
+    },
+    "designerNotes": [],
+    "rawText": "1 HUNTER CLADE operative selected from the following list:\n\nSICARIAN INFILTRATOR PRINCEPS with one option from each of the following:\n\nFlechette blaster or stubcarbine\n\nPower weapon or taser goad\n\nSICARIAN RUSTSTALKER PRINCEPS\n\nSKITARII RANGER ALPHA with one of the following options:\n\nGalvanic rifle; gun butt\n\nMaster-crafted radium pistol; power weapon\n\nOr one option from each of the following:\n\nArc pistol or phosphor blast pistol\n\nArc maul or taser goad\n\nSKITARII VANGUARD ALPHA with one of the following options:\n\nRadium carbine; gun butt\n\nMaster-crafted radium pistol; power weapon\n\nOr one option from each of the following:\n\nArc pistol or phosphor blast pistol\n\nArc maul or taser goad\n\n9 HUNTER CLADE operatives selected from the following list:\n\nWARRIOR INFILTRATOR* with one option from each of the following:\n\nFlechette blaster or stubcarbine\n\nPower weapon or taser goad\n\nWARRIOR SICARIAN* with one of the following options:\n\nChordclaw & transonic razor\n\nTransonic blades\n\nSKITARII RANGER DIKTAT\n\nSKITARII RANGER GUNNER* with gun butt and one of the following options:\n\nArc rifle, plasma caliver or transuranic arquebus\n\nSKITARII RANGER SURVEYOR\n\nRANGER WARRIOR\n\nSKITARII VANGUARD DIKTAT\n\nSKITARII VANGUARD GUNNER* with gun butt and one of the following options:\n\nArc rifle, plasma caliver or transuranic arquebus\n\nSKITARII VANGUARD SURVEYOR\n\nVANGUARD WARRIOR\n\nOther than GUNNER and WARRIOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to one DIKTAT operative, up to one SURVEYOR operative and up to five SICARIAN operatives. Your kill team can only include up to one arc rifle, up to one plasma caliver and up to one transuranic arquebus.\n\n* You cannot select more than seven of these operatives combined."
+  },
+  "datacards": [
+    {
+      "id": "hunter-clade.sicarian-ruststalker-princeps",
+      "teamId": "hunter-clade",
+      "name": "Sicarian Ruststalker Princeps",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "LEADER",
+        "SICARIAN",
+        "RUSTSTALKER",
+        "PRINCEPS"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 40
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 11,
+      "weapons": [
         {
-         "id": "Devastating",
-         "x": 3,
-         "raw": "Devastating 3"
+          "name": "Chordclaw & transonic blades",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 5,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Balanced",
+                  "raw": "Balanced"
+                },
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.sicarian-ruststalker-princeps.canticle-of-destruction",
+          "name": "Canticle of Destruction",
+          "text": "Whenever a friendly HUNTER CLADE RUSTSTALKER operative within 3\" of this operative is fighting, the first time you strike with a critical success during that sequence, inflict 1 additional damage."
         },
         {
-         "id": "Heavy",
-         "raw": "Heavy"
+          "id": "hunter-clade.sicarian-ruststalker-princeps.wasteland-stalker",
+          "name": "Wasteland Stalker",
+          "text": "Whenever an operative is shooting this operative, if you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain."
         },
         {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
+          "id": "hunter-clade.sicarian-ruststalker-princeps.control-protocol",
+          "name": "Control Protocol",
+          "text": "You can use the Command Override firefight ploy for 0CP if the specified friendly HUNTER CLADE operative is visible to this operative."
+        }
+      ],
+      "uniqueActions": [],
+      "fluff": "Excelling in assassination missions and surprise attacks, Princeps lead their Ruststalkers in the hunt for any their Tech-Priest masters have marked for death. In their lives, Princeps have claimed many foes in the most hazardous of environments."
+    },
+    {
+      "id": "hunter-clade.sicarian-infiltrator-princeps",
+      "teamId": "hunter-clade",
+      "name": "Sicarian Infiltrator Princeps",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "LEADER",
+        "SICARIAN",
+        "INFILTRATOR",
+        "PRINCEPS"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 40
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 11,
+      "weapons": [
+        {
+          "name": "Flechette blaster",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 5,
+              "hit": 3,
+              "dmgN": 2,
+              "dmgC": 2,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Saturate",
+                  "raw": "Saturate"
+                },
+                {
+                  "id": "Silent",
+                  "raw": "Silent"
+                }
+              ]
+            }
+          ]
         },
         {
-         "id": "Severe",
-         "raw": "Severe"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.skitarii-vanguard-gunner.rad-saturation",
-     "name": "Rad-Saturation",
-     "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
-    }
-   ],
-   "uniqueActions": [],
-   "fluff": "These Skitarii wield some of the most dangerous man-portable weapons in a forge world’s arsenal – to the carrier as well as the Omnissiah’s enemies. To have survived long enough to join a Hunter Clade while carrying this kind of weapon shows the Machine God’s favour."
-  },
-  {
-   "id": "hunter-clade.skitarii-vanguard-surveyor",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Vanguard Surveyor",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SKITARII",
-    "VANGUARD",
-    "SURVEYOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 7,
-   "weapons": [
-    {
-     "name": "Radium carbine",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 2,
-       "dmgC": 4,
-       "rules": [
+          "name": "Stubcarbine",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Ceaseless",
+                  "raw": "Ceaseless"
+                }
+              ]
+            }
+          ]
+        },
         {
-         "id": "Rending",
-         "raw": "Rending"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "hunter-clade.skitarii-vanguard-surveyor.rad-saturation",
-     "name": "Rad-Saturation",
-     "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
-    }
-   ],
-   "uniqueActions": [
-    {
-     "id": "hunter-clade.skitarii-vanguard-surveyor.act.spot",
-     "name": "SPOT",
-     "ap": 1,
-     "text": "SUPPORT. Select one enemy operative visible to this operative. Until the end of the turning point, whenever a friendly HUNTER CLADE operative within 3\" of this operative is shooting that enemy operative, you can use this effect. If you do:\n\nThis operative cannot perform this action while within control range of an enemy operative."
-    }
-   ],
-   "fluff": "The omnispex’s machine spirit can read heat emissions, data signatures and biological waveforms, even at extreme range. Should it be kept focused for an extended period, it will reveal the enemy’s weaknesses. This is perfect for Hunter Clades, whose primary purpose is to eliminate key targets."
-  },
-  {
-   "id": "hunter-clade.skitarii-vanguard-warrior",
-   "teamId": "hunter-clade",
-   "name": "Skitarii Vanguard Warrior",
-   "keywords": [
-    "HUNTER CLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "SKITARII",
-    "VANGUARD",
-    "WARRIOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 6,
-   "save": 4,
-   "wounds": 7,
-   "weapons": [
-    {
-     "name": "Radium carbine",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 2,
-       "dmgC": 4,
-       "rules": [
+          "name": "Power weapon",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                }
+              ]
+            }
+          ]
+        },
         {
-         "id": "Rending",
-         "raw": "Rending"
+          "name": "Taser goad",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                },
+                {
+                  "id": "Shock",
+                  "raw": "Shock"
+                }
+              ]
+            }
+          ]
         }
-       ]
-      }
-     ]
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.sicarian-infiltrator-princeps.canticle-of-shroudpsalm",
+          "name": "Canticle of Shroudpsalm",
+          "text": "Whenever a friendly HUNTER CLADE INFILTRATOR operative is within 3\" of this operative, has a Conceal order and is in cover, that friendly operative cannot be selected as a valid target, taking precedence over all other rules (e.g. Seek, Vantage terrain) except being within 2\"."
+        },
+        {
+          "id": "hunter-clade.sicarian-infiltrator-princeps.control-protocol",
+          "name": "Control Protocol",
+          "text": "You can use the Command Override firefight ploy for 0CP if the specified friendly HUNTER CLADE operative is visible to this operative."
+        }
+      ],
+      "uniqueActions": [],
+      "fluff": "Sicarian Infiltrator Princeps have a greater detachment from emotion than even others of their kind. No hunting mission is too dangerous for them, and no assassination task too harrowing."
     },
     {
-     "name": "Gun butt",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [
+      "id": "hunter-clade.skitarii-ranger-alpha",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Ranger Alpha",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "LEADER",
+        "SKITARII",
+        "RANGER",
+        "ALPHA"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 8,
+      "weapons": [
+        {
+          "name": "Arc pistol",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                },
+                {
+                  "id": "Stun",
+                  "raw": "Stun"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Galvanic rifle",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Heavy",
+                  "only": "Reposition",
+                  "raw": "Heavy (Reposition only)"
+                },
+                {
+                  "id": "PiercingCrits",
+                  "x": 1,
+                  "raw": "Piercing Crits 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Master-crafted radium pistol",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 2,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Balanced",
+                  "raw": "Balanced"
+                },
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Phosphor blast pistol",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Blast",
+                  "x": 1,
+                  "raw": "Blast 1\""
+                },
+                {
+                  "id": "Severe",
+                  "raw": "Severe"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Arc maul",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Shock",
+                  "raw": "Shock"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        },
+        {
+          "name": "Power weapon",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Taser goad",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                },
+                {
+                  "id": "Shock",
+                  "raw": "Shock"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-ranger-alpha.canticle-of-elimination",
+          "name": "Canticle of Elimination",
+          "text": "Whenever a friendly HUNTER CLADE RANGER operative is within 3\" of this operative, that friendly operative’s ranged weapons have the Punishing weapon rule."
+        },
+        {
+          "id": "hunter-clade.skitarii-ranger-alpha.targeting-protocol",
+          "name": "Targeting Protocol",
+          "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
+        },
+        {
+          "id": "hunter-clade.skitarii-ranger-alpha.control-protocol",
+          "name": "Control Protocol",
+          "text": "You can use the Command Override firefight ploy for 0CP if the specified friendly HUNTER CLADE operative is visible to this operative."
+        }
+      ],
+      "uniqueActions": [],
+      "fluff": "Ranger Alphas are the most dedicated of their kind, relied upon to formulate reconnaissance and hunting parameters, and to lead their Hunter Clade in gruelling duties."
+    },
     {
-     "id": "hunter-clade.skitarii-vanguard-warrior.rad-saturation",
-     "name": "Rad-Saturation",
-     "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
+      "id": "hunter-clade.skitarii-vanguard-alpha",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Vanguard Alpha",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "LEADER",
+        "SKITARII",
+        "VANGUARD",
+        "ALPHA"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 8,
+      "weapons": [
+        {
+          "name": "Arc pistol",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                },
+                {
+                  "id": "Stun",
+                  "raw": "Stun"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Master-crafted radium pistol",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 2,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Balanced",
+                  "raw": "Balanced"
+                },
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Phosphor blast pistol",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Blast",
+                  "x": 1,
+                  "raw": "Blast 1\""
+                },
+                {
+                  "id": "Severe",
+                  "raw": "Severe"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Radium carbine",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 2,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Arc maul",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Shock",
+                  "raw": "Shock"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        },
+        {
+          "name": "Power weapon",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Taser goad",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                },
+                {
+                  "id": "Shock",
+                  "raw": "Shock"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-vanguard-alpha.canticle-of-the-glow",
+          "name": "Canticle of the Glow",
+          "text": "Whenever an enemy operative is within 3\" of this operative, if it’s under the effects of the Rad-Saturation rule, also subtract 1 from the Atk stat of that enemy operative’s weapons."
+        },
+        {
+          "id": "hunter-clade.skitarii-vanguard-alpha.rad-saturation",
+          "name": "Rad-Saturation",
+          "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
+        },
+        {
+          "id": "hunter-clade.skitarii-vanguard-alpha.control-protocol",
+          "name": "Control Protocol",
+          "text": "You can use the Command Override firefight ploy for 0CP if the specified friendly HUNTER CLADE operative is visible to this operative."
+        }
+      ],
+      "uniqueActions": [],
+      "fluff": "Skitarii Alphas have passed a point called the Crux Mechanicus. With bodies more machine than flesh, they enact Tech-Priest overseers’ orders like holy commands."
+    },
+    {
+      "id": "hunter-clade.sicarian-infiltrator-warrior",
+      "teamId": "hunter-clade",
+      "name": "Sicarian Infiltrator Warrior",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SICARIAN",
+        "INFILTRATOR",
+        "WARRIOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 40
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 10,
+      "weapons": [
+        {
+          "name": "Flechette blaster",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 5,
+              "hit": 3,
+              "dmgN": 2,
+              "dmgC": 2,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Saturate",
+                  "raw": "Saturate"
+                },
+                {
+                  "id": "Silent",
+                  "raw": "Silent"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Stubcarbine",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Ceaseless",
+                  "raw": "Ceaseless"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Power weapon",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Taser goad",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                },
+                {
+                  "id": "Shock",
+                  "raw": "Shock"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "abilities": [],
+      "uniqueActions": [],
+      "fluff": "Experts in penetrating enemy strongholds, Sicarian Infiltrator Warriors emit a white noise that attacks their foes’ sensoriums with a painful neurostatic bombardment."
+    },
+    {
+      "id": "hunter-clade.sicarian-ruststalker-warrior",
+      "teamId": "hunter-clade",
+      "name": "Sicarian Ruststalker Warrior",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SICARIAN",
+        "RUSTSTALKER",
+        "WARRIOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 40
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 10,
+      "weapons": [
+        {
+          "name": "Chordclaw & transonic razor",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 5,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Balanced",
+                  "raw": "Balanced"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Transonic blades",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 5,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.sicarian-ruststalker-warrior.wasteland-stalker",
+          "name": "Wasteland Stalker",
+          "text": "Whenever an operative is shooting this operative, if you can retain any cover saves, you can retain one additional cover save, or you can retain one cover save as a critical success instead. This isn’t cumulative with improved cover saves from Vantage terrain."
+        }
+      ],
+      "uniqueActions": [],
+      "fluff": "Ruststalker Warriors fall upon their foes in a stabbing, slashing frenzy, unleashing a blur of attacks. They are selected for kill team duties due to their level of dogged determination to hunt quarries to the death, above and beyond others of their kind."
+    },
+    {
+      "id": "hunter-clade.skitarii-ranger-diktat",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Ranger Diktat",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SKITARII",
+        "RANGER",
+        "DIKTAT"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 7,
+      "weapons": [
+        {
+          "name": "Galvanic rifle",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Heavy",
+                  "only": "Reposition",
+                  "raw": "Heavy (Reposition only)"
+                },
+                {
+                  "id": "PiercingCrits",
+                  "x": 1,
+                  "raw": "Piercing Crits 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-ranger-diktat.targeting-protocol",
+          "name": "Targeting Protocol",
+          "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
+        }
+      ],
+      "uniqueActions": [
+        {
+          "id": "hunter-clade.skitarii-ranger-diktat.act.signal",
+          "name": "SIGNAL",
+          "ap": 1,
+          "text": "SUPPORT. Select one other friendly HUNTER CLADE operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+        }
+      ],
+      "fluff": "The enhanced data-tethers carried by these Skitarii enable them to communicate directly with their Tech-Priest masters. It is a great honour indeed to be chosen to carry one, as it is seen as the mouthpiece of the Tech-Priests, who are said to be prophets of the Machine God himself."
+    },
+    {
+      "id": "hunter-clade.skitarii-ranger-gunner",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Ranger Gunner",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SKITARII",
+        "RANGER",
+        "GUNNER"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 7,
+      "weapons": [
+        {
+          "name": "Arc rifle",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                },
+                {
+                  "id": "Stun",
+                  "raw": "Stun"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Plasma caliver",
+          "profiles": [
+            {
+              "name": "standard",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                }
+              ]
+            },
+            {
+              "name": "supercharge",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 5,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Hot",
+                  "raw": "Hot"
+                },
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                },
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Transuranic arquebus",
+          "profiles": [
+            {
+              "name": "mobile",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 3,
+              "rules": [
+                {
+                  "id": "Devastating",
+                  "x": 2,
+                  "raw": "Devastating 2"
+                },
+                {
+                  "id": "Heavy",
+                  "only": "Dash",
+                  "raw": "Heavy (Dash only)"
+                },
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                }
+              ]
+            },
+            {
+              "name": "stationary",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 2,
+              "dmgN": 4,
+              "dmgC": 3,
+              "rules": [
+                {
+                  "id": "Devastating",
+                  "x": 3,
+                  "raw": "Devastating 3"
+                },
+                {
+                  "id": "Heavy",
+                  "raw": "Heavy"
+                },
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                },
+                {
+                  "id": "Severe",
+                  "raw": "Severe"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-ranger-gunner.targeting-protocol",
+          "name": "Targeting Protocol",
+          "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
+        }
+      ],
+      "uniqueActions": [],
+      "fluff": "In the hunt for the most dangerous of hereteks or xenos aggressors, a forge world’s ruling Tech-Priests may issue high-performing Hunter Clade Rangers with advanced weaponry. Strange, esoteric technologies power such armaments, rendering them lethal indeed to the Rangers’ foes."
+    },
+    {
+      "id": "hunter-clade.skitarii-ranger-surveyor",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Ranger Surveyor",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SKITARII",
+        "RANGER",
+        "SURVEYOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 7,
+      "weapons": [
+        {
+          "name": "Galvanic rifle",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Heavy",
+                  "only": "Reposition",
+                  "raw": "Heavy (Reposition only)"
+                },
+                {
+                  "id": "PiercingCrits",
+                  "x": 1,
+                  "raw": "Piercing Crits 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-ranger-surveyor.targeting-protocol",
+          "name": "Targeting Protocol",
+          "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
+        }
+      ],
+      "uniqueActions": [
+        {
+          "id": "hunter-clade.skitarii-ranger-surveyor.act.spot",
+          "name": "SPOT",
+          "ap": 1,
+          "text": "SUPPORT. Select one enemy operative visible to this operative. Until the end of the turning point, whenever a friendly HUNTER CLADE operative within 3\" of this operative is shooting that enemy operative, you can use this effect. If you do:\n\nThis operative cannot perform this action while within control range of an enemy operative."
+        }
+      ],
+      "fluff": "The omnispex wielded by these Skitarii is a device fitted with a Raptor-class machine spirit. This can glean all kinds of data from a killzone and from a Hunter Clade’s enemies. Not only is it useful for the kill team in battle, but such information is a fine devotion to the Machine God in itself."
+    },
+    {
+      "id": "hunter-clade.skitarii-ranger-warrior",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Ranger Warrior",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SKITARII",
+        "RANGER",
+        "WARRIOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 7,
+      "weapons": [
+        {
+          "name": "Galvanic rifle",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Heavy",
+                  "only": "Reposition",
+                  "raw": "Heavy (Reposition only)"
+                },
+                {
+                  "id": "PiercingCrits",
+                  "x": 1,
+                  "raw": "Piercing Crits 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-ranger-warrior.targeting-protocol",
+          "name": "Targeting Protocol",
+          "text": "Whenever this operative is shooting, if it hasn’t moved during the activation, or if it’s a counteraction, ranged weapons on its datacard have the Lethal 5+ weapon rule. Note this operative isn’t restricted from moving after shooting."
+        }
+      ],
+      "uniqueActions": [],
+      "fluff": "Skitarii Ranger Warriors hunt the foes of the Machine God relentlessly, and their bionically enhanced stamina is legendary. They pursue like patient predators, inexorably tracking their prey before taking the killing shot with their long rifles of ancient design."
+    },
+    {
+      "id": "hunter-clade.skitarii-vanguard-diktat",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Vanguard Diktat",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SKITARII",
+        "VANGUARD",
+        "DIKTAT"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 7,
+      "weapons": [
+        {
+          "name": "Radium carbine",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 2,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-vanguard-diktat.rad-saturation",
+          "name": "Rad-Saturation",
+          "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
+        }
+      ],
+      "uniqueActions": [
+        {
+          "id": "hunter-clade.skitarii-vanguard-diktat.act.signal",
+          "name": "SIGNAL",
+          "ap": 1,
+          "text": "SUPPORT. Select one other friendly HUNTER CLADE operative visible to and within 6\" of this operative. Until the end of that operative’s next activation, add 1 to its APL stat.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+        }
+      ],
+      "fluff": "To be a Diktat among Skitarii is to be obeyed without question, due to their direct link with the Tech-Priests. Hunter Clades receiving word from their masters through these warriors are filled with zealous conviction, willing to drive through unimaginable terrors to find and slay their quarry."
+    },
+    {
+      "id": "hunter-clade.skitarii-vanguard-gunner",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Vanguard Gunner",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SKITARII",
+        "VANGUARD",
+        "GUNNER"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 7,
+      "weapons": [
+        {
+          "name": "Arc rifle",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                },
+                {
+                  "id": "Stun",
+                  "raw": "Stun"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Plasma caliver",
+          "profiles": [
+            {
+              "name": "standard",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                }
+              ]
+            },
+            {
+              "name": "supercharge",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 5,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Hot",
+                  "raw": "Hot"
+                },
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                },
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Transuranic arquebus",
+          "profiles": [
+            {
+              "name": "mobile",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 3,
+              "rules": [
+                {
+                  "id": "Devastating",
+                  "x": 2,
+                  "raw": "Devastating 2"
+                },
+                {
+                  "id": "Heavy",
+                  "only": "Dash",
+                  "raw": "Heavy (Dash only)"
+                },
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                }
+              ]
+            },
+            {
+              "name": "stationary",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 2,
+              "dmgN": 4,
+              "dmgC": 3,
+              "rules": [
+                {
+                  "id": "Devastating",
+                  "x": 3,
+                  "raw": "Devastating 3"
+                },
+                {
+                  "id": "Heavy",
+                  "raw": "Heavy"
+                },
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                },
+                {
+                  "id": "Severe",
+                  "raw": "Severe"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-vanguard-gunner.rad-saturation",
+          "name": "Rad-Saturation",
+          "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
+        }
+      ],
+      "uniqueActions": [],
+      "fluff": "These Skitarii wield some of the most dangerous man-portable weapons in a forge world’s arsenal – to the carrier as well as the Omnissiah’s enemies. To have survived long enough to join a Hunter Clade while carrying this kind of weapon shows the Machine God’s favour."
+    },
+    {
+      "id": "hunter-clade.skitarii-vanguard-surveyor",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Vanguard Surveyor",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SKITARII",
+        "VANGUARD",
+        "SURVEYOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 7,
+      "weapons": [
+        {
+          "name": "Radium carbine",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 2,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-vanguard-surveyor.rad-saturation",
+          "name": "Rad-Saturation",
+          "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
+        }
+      ],
+      "uniqueActions": [
+        {
+          "id": "hunter-clade.skitarii-vanguard-surveyor.act.spot",
+          "name": "SPOT",
+          "ap": 1,
+          "text": "SUPPORT. Select one enemy operative visible to this operative. Until the end of the turning point, whenever a friendly HUNTER CLADE operative within 3\" of this operative is shooting that enemy operative, you can use this effect. If you do:\n\nThis operative cannot perform this action while within control range of an enemy operative."
+        }
+      ],
+      "fluff": "The omnispex’s machine spirit can read heat emissions, data signatures and biological waveforms, even at extreme range. Should it be kept focused for an extended period, it will reveal the enemy’s weaknesses. This is perfect for Hunter Clades, whose primary purpose is to eliminate key targets."
+    },
+    {
+      "id": "hunter-clade.skitarii-vanguard-warrior",
+      "teamId": "hunter-clade",
+      "name": "Skitarii Vanguard Warrior",
+      "keywords": [
+        "HUNTER CLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "SKITARII",
+        "VANGUARD",
+        "WARRIOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 6,
+      "save": 4,
+      "wounds": 7,
+      "weapons": [
+        {
+          "name": "Radium carbine",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 2,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Gun butt",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "hunter-clade.skitarii-vanguard-warrior.rad-saturation",
+          "name": "Rad-Saturation",
+          "text": "Whenever an enemy operative is within 2\" of friendly HUNTER CLADE VANGUARD operatives, worsen the Hit stat of that enemy operative’s weapons by 1. This isn’t cumulative with being injured."
+        }
+      ],
+      "uniqueActions": [],
+      "fluff": "So much radiation pours from these Skitarii and their ammunition that they contaminate the air around them. Showing toughness, resilience and dauntless bravery above others of their kind, Vanguard Warriors advance into the fray, securing key positions for their Hunter Clade."
     }
-   ],
-   "uniqueActions": [],
-   "fluff": "So much radiation pours from these Skitarii and their ammunition that they contaminate the air around them. Showing toughness, resilience and dauntless bravery above others of their kind, Vanguard Warriors advance into the fray, securing key positions for their Hunter Clade."
-  }
- ],
- "factionRules": [
-  {
-   "id": "hunter-clade.rule.doctrina-imperatives",
-   "name": "Doctrina Imperatives",
-   "text": "At the end of the Select Operatives step, select one DOCTRINA IMPERATIVE to be a Primary Mode for your kill team until the end of the battle (note that selecting a Primary Mode doesn’t automatically give you the effects of that DOCTRINA IMPERATIVE for the battle; you must still select it as a STRATEGIC GAMBIT, as below).\n\nSTRATEGIC GAMBIT. Select one DOCTRINA IMPERATIVE for friendly HUNTER CLADE operatives to have until the Ready step of the next Strategy phase. Each DOCTRINA IMPERATIVE has both an Optimisation and a Deprecation rule. Both are in effect while your kill team has that DOCTRINA IMPERATIVE. Once per battle, when you select the DOCTRINA IMPERATIVE that’s your kill team’s Primary Mode, you can ignore its Deprecation rule.\n\nProtector Imperative\n\nOptimisation: Friendly HUNTER CLADE operatives’ ranged weapons have the Ceaseless weapon rule.\n\nDeprecation: Worsen the Hit stat of friendly HUNTER CLADE operatives’ melee weapons by 1. This isn’t cumulative with being injured.\n\nConqueror Imperative\n\nOptimisation: Friendly HUNTER CLADE operatives’ melee weapons have the Ceaseless weapon rule.\n\nDeprecation: Worsen the Hit stat of friendly HUNTER CLADE operatives’ ranged weapons by 1. This isn’t cumulative with being injured.\n\nBulwark Imperative\n\nOptimisation: Normal Dmg of 3 or more inflicts 1 less damage on friendly HUNTER CLADE operatives.\n\nDeprecation: Subtract 1\" from the Move stat of friendly HUNTER CLADE operatives.\n\nAggressor Imperative\n\nOptimisation: Add 1\" to the Move stat of friendly HUNTER CLADE operatives.\n\nDeprecation: Worsen the Save stat of friendly HUNTER CLADE operatives by 1.\n\nNeutral Imperative\n\nOptimisation: None.\n\nDeprecation: None.",
-   "fluff": "Tech-Priests dictate protocols for the Hunter Clade to follow as they move through their mission, straining the programming of the Skitarii and Sicarians in order to optimise their current status, to the detriment of all else."
-  }
- ],
- "strategyPloys": [
-  {
-   "id": "hunter-clade.sp.debilitating-irradiation",
-   "name": "DEBILITATING IRRADIATION",
-   "text": "Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly HUNTER CLADE VANGUARD operative, if that enemy operative is under the effects of the Rad-Saturation rule (see VANGUARD operatives), subtract 1 from the Normal Dmg stat of its weapons (to a minimum of 3).",
-   "cp": 1,
-   "fluff": "The Skitarii Vanguard push forward, shrouded in clouds of radiation. Those caught in this lethal miasma find their combat abilities greatly degraded."
-  },
-  {
-   "id": "hunter-clade.sp.neurostatic-interference",
-   "name": "NEUROSTATIC INTERFERENCE",
-   "text": "Whenever an enemy operative within 6\" of a friendly HUNTER CLADE INFILTRATOR operative is shooting, fighting or retaliating, your opponent cannot re-roll their attack dice.",
-   "cp": 1,
-   "fluff": "Sicarian Infiltrators confound their foes by emitting hissing static and electromagnetic pulses that cloud minds and interfere with vox-networks."
-  },
-  {
-   "id": "hunter-clade.sp.scouting-protocol",
-   "name": "SCOUTING PROTOCOL",
-   "text": "Each friendly HUNTER CLADE RANGER operative that has a Conceal order and is more than 6\" from enemy operatives can immediately perform a free Dash action in an order of your choice. You cannot use this ploy during the first turning point.",
-   "cp": 1,
-   "fluff": "Operating as advanced scouts, Skitarii Rangers avoid close combat, darting from cover to cover to evade the attention of their enemies."
-  },
-  {
-   "id": "hunter-clade.sp.accelerant-agents",
-   "name": "ACCELERANT AGENTS",
-   "text": "During each friendly HUNTER CLADE RUSTSTALKER operative’s activation, it can perform two Fight actions, and one of them can be free.\n\nFirefight Ploys\nCONTROL EDICT\n\nThe leader of a Hunter Clade assumes partial control of another member of their kill team, coordinating precision strikes with the nearby operative.\nUse this firefight ploy when it’s your turn to activate a friendly operative. Select one friendly HUNTER CLADE LEADER operative and one other ready friendly HUNTER CLADE operative visible to and within 3\" of that LEADER operative; activate one of them as normal. When that first friendly operative you activate is expended, you can activate the other friendly operative before your opponent activates. When that other operative is expended, your opponent then activates as normal. Whenever you use this ploy, you cannot select more than one HUNTER CLADE SICARIAN operative.\n\nSCRAPCODE OVERLOAD\n\nThe Hunter Clade’s Infiltrator releases an enormous bombardment of static and scrapcode that disrupts communication channels, reduces enemy coordination and allows the kill team to seize objectives and materiel from under their foe's nose.\nUse this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative is activated. Alternatively, use this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative, or an enemy operative within 3\" of that friendly operative, would perform the Pick Up Marker or a mission action (excluding Operate Hatch). Until the start of that friendly operative’s next activation, whenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of that friendly operative. Note this isn’t a change to the APL stat, so any changes are cumulative with this, and this can change control of a marker before performing the action.\n\nCOMMAND OVERRIDE\n\nBy activating command overrides, the imperatives of individual operatives can be altered in response to evershifting mission parameters.\nUse this firefight ploy when you activate a friendly HUNTER CLADE operative. Select a DOCTRINA IMPERATIVE for that operative to have instead of its current one (if any) until the Ready step of the next Strategy phase.\n\nOMNISSIAH’S IMPERATIVE\n\nThe most extreme form of doctrina imperative, this protocol pushes an operative’s wiring beyond safe limits, providing additional combat power at the cost of burned circuitry and charred flesh.\nUse this firefight ploy during a friendly HUNTER CLADE operative’s activation. Alternatively, use it when an enemy operative is shooting a friendly HUNTER CLADE operative, at the end of the Roll Attack Dice step. Until the Ready step of the next Strategy phase, that friendly operative has an additional rule determined by its current DOCTRINA IMPERATIVE as follows: \n\nProtector: This operative’s ranged weapons have the Severe weapon rule. \n\nConqueror: Whenever this operative is fighting, after resolving your first attack dice during that sequence, you can immediately resolve another (before your opponent).\n\nBulwark: Improve this operative’s Save stat by 1. In addition, whenever an operative is shooting this operative, you can collect and roll one additional defence dice. If you use this ploy during a Shoot action, this operative’s Save stat is changed immediately (this takes precedence over the core rules).\n\nAggressor: You can ignore the first vertical distance of 2\" this operative moves during one climb up.\n\nNeutral: None.\n\nNote that you can use this ploy after rolling attack or defence dice for this operative, or before or after retaining or re-rolling those dice.\n\nFaction Equipment\nRAD BOMBARDMENT\n\nWith a short binharic transmission, the Hunter Clade call down a radioactive bombardment. Mortar rounds rain down, emitting swathes of irradiating energy that flush the enemy from cover or force them to retreat from critical objectives.\nOnce per battle STRATEGIC GAMBIT in any turning point after the first. Select one objective marker or your opponent’s drop zone. Roll one D6 separately for each enemy operative within control range of that selected objective marker or within that drop zone, and subtract 1 if any part of that enemy operative’s base is underneath Vantage terrain: on a 4+, subtract 1 from that operative’s APL stat until the end of its next activation; on a 6, also inflict D3 damage on it (roll separately for each).\n\nREDUNDANCY SYSTEMS\n\nExpected to operate behind enemy lines for extended periods, Hunter Clade operatives are often upgraded with redundancy augmetics such as backup lungs and emergency blood packs, ensuring that they remain capable of functioning even after suffering terrible damage.\nOnce per turning point, when a friendly HUNTER CLADE operative is activated, if it’s not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+2 lost wounds.\n\nREFRACTOR FIELD\n\nA miniaturised shield generator given to key warriors of the Adeptus Mechanicus, this device projects a barrier of energy that deflects shots and preserves the machine form of the bearer.\nOnce per turning point, when an operative is shooting a friendly HUNTER CLADE operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.\n\nEXTREMIS MIND-LINK\n\nThis technology allows Hunter Clade leaders to retain close control over their Skitarii and Sicarian soldiers. In turn, the soldiery see the mind-link as a blessed thing, for the edicts transmitted to them are surely the will of the Omnissiah.\nOnce per battle, you can use the Control Edict firefight ploy for 0CP, but instead of activating the selected friendly operatives in succession, activate them at the same time. Complete their activations action by action in any order.",
-   "cp": 1,
-   "fluff": "Sicarian Ruststalkers are flooded with aggressioninducing binharic code, inciting within them a lust for violence and enabling them to strike with blinding speed and nightmarish force."
-  }
- ],
- "firefightPloys": [
-  {
-   "id": "hunter-clade.fp.control-edict",
-   "name": "CONTROL EDICT",
-   "text": "Use this firefight ploy when it’s your turn to activate a friendly operative. Select one friendly HUNTER CLADE LEADER operative and one other ready friendly HUNTER CLADE operative visible to and within 3\" of that LEADER operative; activate one of them as normal. When that first friendly operative you activate is expended, you can activate the other friendly operative before your opponent activates. When that other operative is expended, your opponent then activates as normal. Whenever you use this ploy, you cannot select more than one HUNTER CLADE SICARIAN operative.",
-   "cp": 1,
-   "fluff": "The leader of a Hunter Clade assumes partial control of another member of their kill team, coordinating precision strikes with the nearby operative."
-  },
-  {
-   "id": "hunter-clade.fp.scrapcode-overload",
-   "name": "SCRAPCODE OVERLOAD",
-   "text": "Use this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative is activated. Alternatively, use this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative, or an enemy operative within 3\" of that friendly operative, would perform the Pick Up Marker or a mission action (excluding Operate Hatch). Until the start of that friendly operative’s next activation, whenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of that friendly operative. Note this isn’t a change to the APL stat, so any changes are cumulative with this, and this can change control of a marker before performing the action.",
-   "cp": 1,
-   "fluff": "The Hunter Clade’s Infiltrator releases an enormous bombardment of static and scrapcode that disrupts communication channels, reduces enemy coordination and allows the kill team to seize objectives and materiel from under their foe's nose."
-  },
-  {
-   "id": "hunter-clade.fp.command-override",
-   "name": "COMMAND OVERRIDE",
-   "text": "Use this firefight ploy when you activate a friendly HUNTER CLADE operative. Select a DOCTRINA IMPERATIVE for that operative to have instead of its current one (if any) until the Ready step of the next Strategy phase.",
-   "cp": 1,
-   "fluff": "By activating command overrides, the imperatives of individual operatives can be altered in response to evershifting mission parameters."
-  },
-  {
-   "id": "hunter-clade.fp.omnissiahs-imperative",
-   "name": "OMNISSIAH’S IMPERATIVE",
-   "text": "Use this firefight ploy during a friendly HUNTER CLADE operative’s activation. Alternatively, use it when an enemy operative is shooting a friendly HUNTER CLADE operative, at the end of the Roll Attack Dice step. Until the Ready step of the next Strategy phase, that friendly operative has an additional rule determined by its current DOCTRINA IMPERATIVE as follows: \n\nProtector: This operative’s ranged weapons have the Severe weapon rule. \n\nConqueror: Whenever this operative is fighting, after resolving your first attack dice during that sequence, you can immediately resolve another (before your opponent).\n\nBulwark: Improve this operative’s Save stat by 1. In addition, whenever an operative is shooting this operative, you can collect and roll one additional defence dice. If you use this ploy during a Shoot action, this operative’s Save stat is changed immediately (this takes precedence over the core rules).\n\nAggressor: You can ignore the first vertical distance of 2\" this operative moves during one climb up.\n\nNeutral: None.\n\nNote that you can use this ploy after rolling attack or defence dice for this operative, or before or after retaining or re-rolling those dice.\n\nFaction Equipment\nRAD BOMBARDMENT\n\nWith a short binharic transmission, the Hunter Clade call down a radioactive bombardment. Mortar rounds rain down, emitting swathes of irradiating energy that flush the enemy from cover or force them to retreat from critical objectives.\nOnce per battle STRATEGIC GAMBIT in any turning point after the first. Select one objective marker or your opponent’s drop zone. Roll one D6 separately for each enemy operative within control range of that selected objective marker or within that drop zone, and subtract 1 if any part of that enemy operative’s base is underneath Vantage terrain: on a 4+, subtract 1 from that operative’s APL stat until the end of its next activation; on a 6, also inflict D3 damage on it (roll separately for each).\n\nREDUNDANCY SYSTEMS\n\nExpected to operate behind enemy lines for extended periods, Hunter Clade operatives are often upgraded with redundancy augmetics such as backup lungs and emergency blood packs, ensuring that they remain capable of functioning even after suffering terrible damage.\nOnce per turning point, when a friendly HUNTER CLADE operative is activated, if it’s not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+2 lost wounds.\n\nREFRACTOR FIELD\n\nA miniaturised shield generator given to key warriors of the Adeptus Mechanicus, this device projects a barrier of energy that deflects shots and preserves the machine form of the bearer.\nOnce per turning point, when an operative is shooting a friendly HUNTER CLADE operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.\n\nEXTREMIS MIND-LINK\n\nThis technology allows Hunter Clade leaders to retain close control over their Skitarii and Sicarian soldiers. In turn, the soldiery see the mind-link as a blessed thing, for the edicts transmitted to them are surely the will of the Omnissiah.\nOnce per battle, you can use the Control Edict firefight ploy for 0CP, but instead of activating the selected friendly operatives in succession, activate them at the same time. Complete their activations action by action in any order.",
-   "cp": 1,
-   "fluff": "The most extreme form of doctrina imperative, this protocol pushes an operative’s wiring beyond safe limits, providing additional combat power at the cost of burned circuitry and charred flesh."
-  }
- ],
- "equipment": [
-  {
-   "id": "hunter-clade.eq.rad-bombardment",
-   "name": "RAD BOMBARDMENT",
-   "text": "Once per battle STRATEGIC GAMBIT in any turning point after the first. Select one objective marker or your opponent’s drop zone. Roll one D6 separately for each enemy operative within control range of that selected objective marker or within that drop zone, and subtract 1 if any part of that enemy operative’s base is underneath Vantage terrain: on a 4+, subtract 1 from that operative’s APL stat until the end of its next activation; on a 6, also inflict D3 damage on it (roll separately for each).",
-   "fluff": "With a short binharic transmission, the Hunter Clade call down a radioactive bombardment. Mortar rounds rain down, emitting swathes of irradiating energy that flush the enemy from cover or force them to retreat from critical objectives."
-  },
-  {
-   "id": "hunter-clade.eq.redundancy-systems",
-   "name": "REDUNDANCY SYSTEMS",
-   "text": "Once per turning point, when a friendly HUNTER CLADE operative is activated, if it’s not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+2 lost wounds.",
-   "fluff": "Expected to operate behind enemy lines for extended periods, Hunter Clade operatives are often upgraded with redundancy augmetics such as backup lungs and emergency blood packs, ensuring that they remain capable of functioning even after suffering terrible damage."
-  },
-  {
-   "id": "hunter-clade.eq.refractor-field",
-   "name": "REFRACTOR FIELD",
-   "text": "Once per turning point, when an operative is shooting a friendly HUNTER CLADE operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.",
-   "fluff": "A miniaturised shield generator given to key warriors of the Adeptus Mechanicus, this device projects a barrier of energy that deflects shots and preserves the machine form of the bearer."
-  },
-  {
-   "id": "hunter-clade.eq.extremis-mind-link",
-   "name": "EXTREMIS MIND-LINK",
-   "text": "Once per battle, you can use the Control Edict firefight ploy for 0CP, but instead of activating the selected friendly operatives in succession, activate them at the same time. Complete their activations action by action in any order.",
-   "fluff": "This technology allows Hunter Clade leaders to retain close control over their Skitarii and Sicarian soldiers. In turn, the soldiery see the mind-link as a blessed thing, for the edicts transmitted to them are surely the will of the Omnissiah."
-  }
- ],
- "markerGuide": "",
- "notes": [
-  "selection entry 'WARRIOR SICARIAN' has no datacard link on the page; matched by name to Sicarian Ruststalker Warrior"
- ],
- "rareWeaponRules": []
+  ],
+  "factionRules": [
+    {
+      "id": "hunter-clade.rule.doctrina-imperatives",
+      "name": "Doctrina Imperatives",
+      "text": "At the end of the Select Operatives step, select one DOCTRINA IMPERATIVE to be a Primary Mode for your kill team until the end of the battle (note that selecting a Primary Mode doesn’t automatically give you the effects of that DOCTRINA IMPERATIVE for the battle; you must still select it as a STRATEGIC GAMBIT, as below).\n\nSTRATEGIC GAMBIT. Select one DOCTRINA IMPERATIVE for friendly HUNTER CLADE operatives to have until the Ready step of the next Strategy phase. Each DOCTRINA IMPERATIVE has both an Optimisation and a Deprecation rule. Both are in effect while your kill team has that DOCTRINA IMPERATIVE. Once per battle, when you select the DOCTRINA IMPERATIVE that’s your kill team’s Primary Mode, you can ignore its Deprecation rule.\n\nProtector Imperative\n\nOptimisation: Friendly HUNTER CLADE operatives’ ranged weapons have the Ceaseless weapon rule.\n\nDeprecation: Worsen the Hit stat of friendly HUNTER CLADE operatives’ melee weapons by 1. This isn’t cumulative with being injured.\n\nConqueror Imperative\n\nOptimisation: Friendly HUNTER CLADE operatives’ melee weapons have the Ceaseless weapon rule.\n\nDeprecation: Worsen the Hit stat of friendly HUNTER CLADE operatives’ ranged weapons by 1. This isn’t cumulative with being injured.\n\nBulwark Imperative\n\nOptimisation: Normal Dmg of 3 or more inflicts 1 less damage on friendly HUNTER CLADE operatives.\n\nDeprecation: Subtract 1\" from the Move stat of friendly HUNTER CLADE operatives.\n\nAggressor Imperative\n\nOptimisation: Add 1\" to the Move stat of friendly HUNTER CLADE operatives.\n\nDeprecation: Worsen the Save stat of friendly HUNTER CLADE operatives by 1.\n\nNeutral Imperative\n\nOptimisation: None.\n\nDeprecation: None.",
+      "fluff": "Tech-Priests dictate protocols for the Hunter Clade to follow as they move through their mission, straining the programming of the Skitarii and Sicarians in order to optimise their current status, to the detriment of all else."
+    }
+  ],
+  "strategyPloys": [
+    {
+      "id": "hunter-clade.sp.debilitating-irradiation",
+      "name": "DEBILITATING IRRADIATION",
+      "text": "Whenever an enemy operative is shooting against, fighting against or retaliating against a friendly HUNTER CLADE VANGUARD operative, if that enemy operative is under the effects of the Rad-Saturation rule (see VANGUARD operatives), subtract 1 from the Normal Dmg stat of its weapons (to a minimum of 3).",
+      "cp": 1,
+      "fluff": "The Skitarii Vanguard push forward, shrouded in clouds of radiation. Those caught in this lethal miasma find their combat abilities greatly degraded."
+    },
+    {
+      "id": "hunter-clade.sp.neurostatic-interference",
+      "name": "NEUROSTATIC INTERFERENCE",
+      "text": "Whenever an enemy operative within 6\" of a friendly HUNTER CLADE INFILTRATOR operative is shooting, fighting or retaliating, your opponent cannot re-roll their attack dice.",
+      "cp": 1,
+      "fluff": "Sicarian Infiltrators confound their foes by emitting hissing static and electromagnetic pulses that cloud minds and interfere with vox-networks."
+    },
+    {
+      "id": "hunter-clade.sp.scouting-protocol",
+      "name": "SCOUTING PROTOCOL",
+      "text": "Each friendly HUNTER CLADE RANGER operative that has a Conceal order and is more than 6\" from enemy operatives can immediately perform a free Dash action in an order of your choice. You cannot use this ploy during the first turning point.",
+      "cp": 1,
+      "fluff": "Operating as advanced scouts, Skitarii Rangers avoid close combat, darting from cover to cover to evade the attention of their enemies."
+    },
+    {
+      "id": "hunter-clade.sp.accelerant-agents",
+      "name": "ACCELERANT AGENTS",
+      "text": "During each friendly HUNTER CLADE RUSTSTALKER operative’s activation, it can perform two Fight actions, and one of them can be free.\n\nFirefight Ploys\nCONTROL EDICT\n\nThe leader of a Hunter Clade assumes partial control of another member of their kill team, coordinating precision strikes with the nearby operative.\nUse this firefight ploy when it’s your turn to activate a friendly operative. Select one friendly HUNTER CLADE LEADER operative and one other ready friendly HUNTER CLADE operative visible to and within 3\" of that LEADER operative; activate one of them as normal. When that first friendly operative you activate is expended, you can activate the other friendly operative before your opponent activates. When that other operative is expended, your opponent then activates as normal. Whenever you use this ploy, you cannot select more than one HUNTER CLADE SICARIAN operative.\n\nSCRAPCODE OVERLOAD\n\nThe Hunter Clade’s Infiltrator releases an enormous bombardment of static and scrapcode that disrupts communication channels, reduces enemy coordination and allows the kill team to seize objectives and materiel from under their foe's nose.\nUse this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative is activated. Alternatively, use this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative, or an enemy operative within 3\" of that friendly operative, would perform the Pick Up Marker or a mission action (excluding Operate Hatch). Until the start of that friendly operative’s next activation, whenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of that friendly operative. Note this isn’t a change to the APL stat, so any changes are cumulative with this, and this can change control of a marker before performing the action.\n\nCOMMAND OVERRIDE\n\nBy activating command overrides, the imperatives of individual operatives can be altered in response to evershifting mission parameters.\nUse this firefight ploy when you activate a friendly HUNTER CLADE operative. Select a DOCTRINA IMPERATIVE for that operative to have instead of its current one (if any) until the Ready step of the next Strategy phase.\n\nOMNISSIAH’S IMPERATIVE\n\nThe most extreme form of doctrina imperative, this protocol pushes an operative’s wiring beyond safe limits, providing additional combat power at the cost of burned circuitry and charred flesh.\nUse this firefight ploy during a friendly HUNTER CLADE operative’s activation. Alternatively, use it when an enemy operative is shooting a friendly HUNTER CLADE operative, at the end of the Roll Attack Dice step. Until the Ready step of the next Strategy phase, that friendly operative has an additional rule determined by its current DOCTRINA IMPERATIVE as follows: \n\nProtector: This operative’s ranged weapons have the Severe weapon rule. \n\nConqueror: Whenever this operative is fighting, after resolving your first attack dice during that sequence, you can immediately resolve another (before your opponent).\n\nBulwark: Improve this operative’s Save stat by 1. In addition, whenever an operative is shooting this operative, you can collect and roll one additional defence dice. If you use this ploy during a Shoot action, this operative’s Save stat is changed immediately (this takes precedence over the core rules).\n\nAggressor: You can ignore the first vertical distance of 2\" this operative moves during one climb up.\n\nNeutral: None.\n\nNote that you can use this ploy after rolling attack or defence dice for this operative, or before or after retaining or re-rolling those dice.\n\nFaction Equipment\nRAD BOMBARDMENT\n\nWith a short binharic transmission, the Hunter Clade call down a radioactive bombardment. Mortar rounds rain down, emitting swathes of irradiating energy that flush the enemy from cover or force them to retreat from critical objectives.\nOnce per battle STRATEGIC GAMBIT in any turning point after the first. Select one objective marker or your opponent’s drop zone. Roll one D6 separately for each enemy operative within control range of that selected objective marker or within that drop zone, and subtract 1 if any part of that enemy operative’s base is underneath Vantage terrain: on a 4+, subtract 1 from that operative’s APL stat until the end of its next activation; on a 6, also inflict D3 damage on it (roll separately for each).\n\nREDUNDANCY SYSTEMS\n\nExpected to operate behind enemy lines for extended periods, Hunter Clade operatives are often upgraded with redundancy augmetics such as backup lungs and emergency blood packs, ensuring that they remain capable of functioning even after suffering terrible damage.\nOnce per turning point, when a friendly HUNTER CLADE operative is activated, if it’s not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+2 lost wounds.\n\nREFRACTOR FIELD\n\nA miniaturised shield generator given to key warriors of the Adeptus Mechanicus, this device projects a barrier of energy that deflects shots and preserves the machine form of the bearer.\nOnce per turning point, when an operative is shooting a friendly HUNTER CLADE operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.\n\nEXTREMIS MIND-LINK\n\nThis technology allows Hunter Clade leaders to retain close control over their Skitarii and Sicarian soldiers. In turn, the soldiery see the mind-link as a blessed thing, for the edicts transmitted to them are surely the will of the Omnissiah.\nOnce per battle, you can use the Control Edict firefight ploy for 0CP, but instead of activating the selected friendly operatives in succession, activate them at the same time. Complete their activations action by action in any order.",
+      "cp": 1,
+      "fluff": "Sicarian Ruststalkers are flooded with aggressioninducing binharic code, inciting within them a lust for violence and enabling them to strike with blinding speed and nightmarish force."
+    }
+  ],
+  "firefightPloys": [
+    {
+      "id": "hunter-clade.fp.control-edict",
+      "name": "CONTROL EDICT",
+      "text": "Use this firefight ploy when it’s your turn to activate a friendly operative. Select one friendly HUNTER CLADE LEADER operative and one other ready friendly HUNTER CLADE operative visible to and within 3\" of that LEADER operative; activate one of them as normal. When that first friendly operative you activate is expended, you can activate the other friendly operative before your opponent activates. When that other operative is expended, your opponent then activates as normal. Whenever you use this ploy, you cannot select more than one HUNTER CLADE SICARIAN operative.",
+      "cp": 1,
+      "fluff": "The leader of a Hunter Clade assumes partial control of another member of their kill team, coordinating precision strikes with the nearby operative."
+    },
+    {
+      "id": "hunter-clade.fp.scrapcode-overload",
+      "name": "SCRAPCODE OVERLOAD",
+      "text": "Use this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative is activated. Alternatively, use this firefight ploy when a friendly HUNTER CLADE INFILTRATOR operative, or an enemy operative within 3\" of that friendly operative, would perform the Pick Up Marker or a mission action (excluding Operate Hatch). Until the start of that friendly operative’s next activation, whenever determining control of a marker, treat the total APL stat of enemy operatives that contest it as 1 lower if at least one of those enemy operatives is within 3\" of that friendly operative. Note this isn’t a change to the APL stat, so any changes are cumulative with this, and this can change control of a marker before performing the action.",
+      "cp": 1,
+      "fluff": "The Hunter Clade’s Infiltrator releases an enormous bombardment of static and scrapcode that disrupts communication channels, reduces enemy coordination and allows the kill team to seize objectives and materiel from under their foe's nose."
+    },
+    {
+      "id": "hunter-clade.fp.command-override",
+      "name": "COMMAND OVERRIDE",
+      "text": "Use this firefight ploy when you activate a friendly HUNTER CLADE operative. Select a DOCTRINA IMPERATIVE for that operative to have instead of its current one (if any) until the Ready step of the next Strategy phase.",
+      "cp": 1,
+      "fluff": "By activating command overrides, the imperatives of individual operatives can be altered in response to evershifting mission parameters."
+    },
+    {
+      "id": "hunter-clade.fp.omnissiahs-imperative",
+      "name": "OMNISSIAH’S IMPERATIVE",
+      "text": "Use this firefight ploy during a friendly HUNTER CLADE operative’s activation. Alternatively, use it when an enemy operative is shooting a friendly HUNTER CLADE operative, at the end of the Roll Attack Dice step. Until the Ready step of the next Strategy phase, that friendly operative has an additional rule determined by its current DOCTRINA IMPERATIVE as follows: \n\nProtector: This operative’s ranged weapons have the Severe weapon rule. \n\nConqueror: Whenever this operative is fighting, after resolving your first attack dice during that sequence, you can immediately resolve another (before your opponent).\n\nBulwark: Improve this operative’s Save stat by 1. In addition, whenever an operative is shooting this operative, you can collect and roll one additional defence dice. If you use this ploy during a Shoot action, this operative’s Save stat is changed immediately (this takes precedence over the core rules).\n\nAggressor: You can ignore the first vertical distance of 2\" this operative moves during one climb up.\n\nNeutral: None.\n\nNote that you can use this ploy after rolling attack or defence dice for this operative, or before or after retaining or re-rolling those dice.\n\nFaction Equipment\nRAD BOMBARDMENT\n\nWith a short binharic transmission, the Hunter Clade call down a radioactive bombardment. Mortar rounds rain down, emitting swathes of irradiating energy that flush the enemy from cover or force them to retreat from critical objectives.\nOnce per battle STRATEGIC GAMBIT in any turning point after the first. Select one objective marker or your opponent’s drop zone. Roll one D6 separately for each enemy operative within control range of that selected objective marker or within that drop zone, and subtract 1 if any part of that enemy operative’s base is underneath Vantage terrain: on a 4+, subtract 1 from that operative’s APL stat until the end of its next activation; on a 6, also inflict D3 damage on it (roll separately for each).\n\nREDUNDANCY SYSTEMS\n\nExpected to operate behind enemy lines for extended periods, Hunter Clade operatives are often upgraded with redundancy augmetics such as backup lungs and emergency blood packs, ensuring that they remain capable of functioning even after suffering terrible damage.\nOnce per turning point, when a friendly HUNTER CLADE operative is activated, if it’s not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+2 lost wounds.\n\nREFRACTOR FIELD\n\nA miniaturised shield generator given to key warriors of the Adeptus Mechanicus, this device projects a barrier of energy that deflects shots and preserves the machine form of the bearer.\nOnce per turning point, when an operative is shooting a friendly HUNTER CLADE operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.\n\nEXTREMIS MIND-LINK\n\nThis technology allows Hunter Clade leaders to retain close control over their Skitarii and Sicarian soldiers. In turn, the soldiery see the mind-link as a blessed thing, for the edicts transmitted to them are surely the will of the Omnissiah.\nOnce per battle, you can use the Control Edict firefight ploy for 0CP, but instead of activating the selected friendly operatives in succession, activate them at the same time. Complete their activations action by action in any order.",
+      "cp": 1,
+      "fluff": "The most extreme form of doctrina imperative, this protocol pushes an operative’s wiring beyond safe limits, providing additional combat power at the cost of burned circuitry and charred flesh."
+    }
+  ],
+  "equipment": [
+    {
+      "id": "hunter-clade.eq.rad-bombardment",
+      "name": "RAD BOMBARDMENT",
+      "text": "Once per battle STRATEGIC GAMBIT in any turning point after the first. Select one objective marker or your opponent’s drop zone. Roll one D6 separately for each enemy operative within control range of that selected objective marker or within that drop zone, and subtract 1 if any part of that enemy operative’s base is underneath Vantage terrain: on a 4+, subtract 1 from that operative’s APL stat until the end of its next activation; on a 6, also inflict D3 damage on it (roll separately for each).",
+      "fluff": "With a short binharic transmission, the Hunter Clade call down a radioactive bombardment. Mortar rounds rain down, emitting swathes of irradiating energy that flush the enemy from cover or force them to retreat from critical objectives."
+    },
+    {
+      "id": "hunter-clade.eq.redundancy-systems",
+      "name": "REDUNDANCY SYSTEMS",
+      "text": "Once per turning point, when a friendly HUNTER CLADE operative is activated, if it’s not within control range of enemy operatives, you can use this rule. If you do, that friendly operative regains up to D3+2 lost wounds.",
+      "fluff": "Expected to operate behind enemy lines for extended periods, Hunter Clade operatives are often upgraded with redundancy augmetics such as backup lungs and emergency blood packs, ensuring that they remain capable of functioning even after suffering terrible damage."
+    },
+    {
+      "id": "hunter-clade.eq.refractor-field",
+      "name": "REFRACTOR FIELD",
+      "text": "Once per turning point, when an operative is shooting a friendly HUNTER CLADE operative, at the start of the Roll Defence Dice step, you can use this rule. If you do, worsen the x of the Piercing weapon rule by 1 (if any) until the end of that sequence. Note that Piercing 1 would therefore be ignored.",
+      "fluff": "A miniaturised shield generator given to key warriors of the Adeptus Mechanicus, this device projects a barrier of energy that deflects shots and preserves the machine form of the bearer."
+    },
+    {
+      "id": "hunter-clade.eq.extremis-mind-link",
+      "name": "EXTREMIS MIND-LINK",
+      "text": "Once per battle, you can use the Control Edict firefight ploy for 0CP, but instead of activating the selected friendly operatives in succession, activate them at the same time. Complete their activations action by action in any order.",
+      "fluff": "This technology allows Hunter Clade leaders to retain close control over their Skitarii and Sicarian soldiers. In turn, the soldiery see the mind-link as a blessed thing, for the edicts transmitted to them are surely the will of the Omnissiah."
+    }
+  ],
+  "markerGuide": "",
+  "notes": [
+    "selection entry 'WARRIOR SICARIAN' has no datacard link on the page; matched by name to Sicarian Ruststalker Warrior"
+  ],
+  "rareWeaponRules": []
 }

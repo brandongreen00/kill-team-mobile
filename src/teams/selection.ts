@@ -340,9 +340,19 @@ export function validateRosterFor(data: TeamData, picks: RosterPickIn[]): Roster
     } else if (c.kind === 'maxItem') {
       // "…can only include up to one fusion pistol", "…up to two darklight weapons". The
       // resolved weapon list per pick is already computed above, so this is a plain count.
-      const cc = c as unknown as { item: string; max: number };
-      const n = weapons.filter((ws) => ws.some((w) => sameItem(w, cc.item))).length;
-      if (n > cc.max) fail('maxItem', `your kill team can only include up to ${cc.max} ${cc.item} (${n} selected)`);
+      // "up to one COMBAT SERVITOR operative with meltagun" — a cap can name the ROLE it applies
+      // to as well as the weapon, in which case only that role's picks count.
+      const cc = c as unknown as { item: string; max: number; role?: string };
+      const n = resolved.filter(
+        (r, i) =>
+          (cc.role === undefined || roleMatches(r.entry, cc.role)) &&
+          (weapons[i] ?? []).some((w) => sameItem(w, cc.item)),
+      ).length;
+      if (n > cc.max)
+        fail(
+          'maxItem',
+          `your kill team can only include up to ${cc.max} ${cc.role ? `${cc.role} operatives with ` : ''}${cc.item} (${n} selected)`,
+        );
     } else if (c.kind === 'exclusiveItems') {
       // "Your kill team cannot include both a blaster and a wraithcannon."
       const cc = c as unknown as { items: string[] };

@@ -154,16 +154,17 @@ describe('roster builder — the shared validator decides, the screen quotes it'
       .filter((d) => supportProblems(d).length > 0)
       .map((d) => d.id)
       .sort();
-    // This list must only ever shrink. Deathwatch, Elucidian Starstrider, Gellerpox Infected
-    // and Wolf Scouts were on it until the validator learned that a leader drawn from the
-    // same list consumes one of the printed selections rather than sitting on top of them.
-    // What is left is two genuine data problems, not validator arithmetic:
-    //   battleclade         — the printed rule caps COMBAT SERVITOR per WEAPON ("up to one
-    //                         with meltagun... up to three with incendine igniter"); the
-    //                         scrape flattened it to two role-level maxCount rows, 1 and 3.
-    //   inquisitorial-agent — its second group of 5 may be REQUISITIONED operatives defined
-    //                         in a faction rule, which are not on the selection list.
-    expect(flagged).toEqual(['battleclade', 'inquisitorial-agent']);
+    // This list must only ever shrink. Deathwatch, Elucidian Starstrider, Gellerpox Infected and
+    // Wolf Scouts came off it when the validator learned that a leader drawn from the same list
+    // consumes one of the printed selections; battleclade came off it when the per-WEAPON COMBAT
+    // SERVITOR cap was fixed in the scraper (D-043) rather than worked around here.
+    //
+    // One is left, and it is a real limitation rather than validator arithmetic:
+    //   inquisitorial-agent — its second group of 5 may be REQUISITIONED operatives defined in a
+    //                         faction rule, drawn from SIX OTHER kill teams' lists. The team is
+    //                         fieldable via the "from the list above" branch (D-035); what is
+    //                         flagged is that the requisition branch is not offered.
+    expect(flagged).toEqual(['inquisitorial-agent']);
   });
 });
 
@@ -262,35 +263,22 @@ describe('roster builder (rendered)', () => {
     expect(card?.querySelector('.op-weapons .tag')?.textContent).toContain('always carried');
   });
 
-  it('will not let a rules gap pass silently: unsupported teams say so, and say so on the button', () => {
-    // BATTLECLADE's printed rule caps COMBAT SERVITOR operatives per WEAPON ("up to one with
-    // meltagun... up to three with incendine igniter"), but the scrape flattened that into two
-    // role-level maxCount rows, 1 and 3. The stricter row makes the 8-operative group
-    // unfillable, so the screen says so out loud and the confirm button admits that legality
-    // is not being enforced for this team.
-    //
-    // DEATHWATCH used to be in this test. It is not a gap any more: its WATCH SERGEANT is
-    // drawn from the same list as everyone else, and the validator now counts a list-drawn
-    // leader toward the slots instead of on top of them.
+  it('will not let a rules gap pass silently: the screen says which printed rules it cannot check', () => {
+    // INQUISITORIAL AGENT is the last team with a printed selection rule the validator cannot
+    // express: its second group of five may be REQUISITIONED operatives defined in a faction
+    // rule and drawn from six OTHER kill teams' lists. The team IS fieldable through the "from
+    // the list above" branch (D-035), so — unlike battleclade before D-043 — this is a warning
+    // rather than a dead end, and the screen has to say so without blocking a legal roster.
     let confirmed: ConfirmedRoster | null = null;
-    const team = JSON.parse(readFile('data/teams/battleclade.json')) as { name: string };
+    const team = JSON.parse(readFile('data/teams/inquisitorial-agent.json')) as { name: string };
     act(() => {
       render(<RosterBuilder teams={[team as never]} onConfirm={(r) => (confirmed = r)} confirmLabel="Lock in" />, root);
     });
     click(byText('.team-list button', team.name));
-    // The gap is stated on screen, quoting the group it cannot fill.
-    expect(root.querySelector('.warn-block')?.textContent ?? '').toMatch(/cannot be filled/);
-
-    // And it is a dead end, not an escape hatch: adding every offered operative still cannot
-    // reach a legal roster, so confirm stays disabled rather than shipping an illegal team.
-    const confirm = () => byText('button', 'Lock in') as HTMLButtonElement;
-    expect(confirm().disabled).toBe(true);
-    for (let i = 0; i < 24; i++) {
-      const add = root.querySelector('button.add:not([disabled])');
-      if (!add) break;
-      click(add);
-    }
-    expect(confirm().disabled).toBe(true);
+    // The gap is stated on screen, quoting the printed rule it cannot check.
+    const warn = root.querySelector('.warn-block')?.textContent ?? '';
+    expect(warn).toMatch(/rules? this app does not check/i);
+    expect(warn).toMatch(/REQUISITIONED/i);
     expect(confirmed).toBeNull();
   });
 });
@@ -312,25 +300,17 @@ describe('every kill team can be fielded', () => {
     expect(slugs).toHaveLength(48);
   });
 
-  // A team whose printed rules the shared validator cannot express is surfaced in the UI as
-  // a rules gap. That list must only shrink, and every entry needs a reason — so it is
-  // asserted here rather than left as a comment.
-  const KNOWN_GAPS: Record<string, string> = {
-    battleclade:
-      'COMBAT SERVITOR parses two role-level maxCount rows (1 and 3); the printed rule caps them per WEAPON ("up to one with meltagun... up to three with incendine igniter"), so the stricter row makes the 8-operative group unfillable',
-  };
-
+  // There is no KNOWN_GAPS map any more: **every one of the 48 printed kill teams can be
+  // fielded**. The last entry was battleclade, whose COMBAT SERVITOR cap is printed per WEAPON
+  // ("up to one with meltagun… up to three with incendine igniter") and was scraped as two
+  // contradictory role-level rows — fixed in tools/teams/constraints.py (D-043), not worked
+  // around here. If a future re-scrape breaks a team, this test fails rather than a stale
+  // exception hiding it.
   for (const slug of slugs) {
     it(`${slug}: defaultRoster produces a legal kill team`, () => {
       const data = JSON.parse(readFileSync(`data/teams/${slug}.json`, 'utf8')) as TeamData;
       const picks = defaultRoster(data);
       const v = validateRosterFor(data, picks);
-      if (KNOWN_GAPS[slug]) {
-        // Documented gap: assert it still fails, so fixing it fails this test and forces the
-        // entry to be removed rather than quietly left behind.
-        expect(v.ok, `${slug} now validates — remove it from KNOWN_GAPS`).toBe(false);
-        return;
-      }
       expect(v.ok, `${slug}: ${v.errors.join(' | ')}`).toBe(true);
       expect(picks.length).toBeGreaterThan(0);
     });
