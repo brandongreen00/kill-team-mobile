@@ -23,8 +23,17 @@ RE_UNIQUE = re.compile(r"(?i)your kill team " + _ONCE)
 RE_COUNTS_AS = re.compile(r"(?i)these operatives count as (\w+) selections? each")
 RE_NOT_BOTH = re.compile(
     r"(?i)your kill team cannot include both an? (.+?) and an? ([^.]+)")
+# The role is matched CASE-SENSITIVELY (`(?-i:...)`), so an uppercase role keyword cannot swallow
+# the lowercase prose that follows it. With a plain `(?i)` on the whole pattern, "up to one
+# SURVEYOR operative and up to five SICARIAN operatives" captured the role as
+# "SURVEYOR operative and up to five SICARIAN" — one dead constraint instead of two live ones.
+#
+# Group 3 captures a trailing "with <weapon>" qualifier: "up to one COMBAT SERVITOR operative
+# WITH MELTAGUN" caps the WEAPON, not the role, and dropping it made the Battleclade's
+# 8-operative group unfillable.
 RE_MAX_ROLE = re.compile(
-    r"(?i)(?:include |and )?up to (\w+) (%s) operatives?(?:\s*\(([^)]*)\))?" % ROLE)
+    r"(?i:(?:include |and )?up to )(\w+) ((?-i:%s)) operatives?"
+    r"(?:\s+with ([a-z][a-z \-]*[a-z]))?(?:\s*\(([^)]*)\))?" % ROLE)
 RE_MAX_ITEM = re.compile(r"(?i)up to (\w+) ([a-z][^,.;]*?)(?=[,.;]|\s+and\s+up to|$)")
 RE_GROUP_CAP = re.compile(
     r"(?i)you cannot select more than (\w+) (?:of these operatives|operatives with these weapons)? ?combined")
@@ -54,7 +63,7 @@ def split_roles(blob: str) -> list[str]:
     return [p.strip(" .") for p in parts if p.strip(" .")]
 
 
-def parse_constraints(free_text: str, slug: str) -> tuple[list[dict], dict[str, str]]:
+def parse_constraints(free_text: str, slug: str, emit_custom: bool = True) -> tuple[list[dict], dict[str, str]]:
     """-> (constraints, footnote marker -> verbatim footnote text)."""
     constraints: list[dict] = []
     footnotes: dict[str, str] = {}
@@ -86,9 +95,16 @@ def parse_constraints(free_text: str, slug: str) -> tuple[list[dict], dict[str, 
                 n = num(mm.group(1))
                 if n is None:
                     continue
-                add({"kind": "maxCount", "role": mm.group(2).strip(), "max": n})
-                if mm.group(3) and RE_DISTINCT.search(mm.group(3)):
-                    add({"kind": "distinctOptions", "role": mm.group(2).strip()})
+                role, with_item, paren = mm.group(2).strip(), mm.group(3), mm.group(4)
+                if with_item:
+                    # "up to one COMBAT SERVITOR operative with meltagun" — the printed cap is on
+                    # the WEAPON. A role-level cap here would be wrong (and, where the same role
+                    # appears twice with different weapons, contradictory).
+                    add({"kind": "maxItem", "item": with_item.strip(), "max": n, "role": role})
+                else:
+                    add({"kind": "maxCount", "role": role, "max": n})
+                if paren and RE_DISTINCT.search(paren):
+                    add({"kind": "distinctOptions", "role": role})
                 matched = True
 
             if not RE_MAX_ROLE.search(sent):
@@ -136,7 +152,7 @@ def parse_constraints(free_text: str, slug: str) -> tuple[list[dict], dict[str, 
                      "group": marker or None})
                 matched = True
 
-            if not matched and len(sent.split()) > 3:
+            if emit_custom and not matched and len(sent.split()) > 3:
                 head = " ".join(re.sub(r"[^A-Za-z0-9 ]", " ", sent).split()[:6])
                 add({"kind": "custom", "text": sent, "hook": f"{slug}.{slugify(head)}"})
 

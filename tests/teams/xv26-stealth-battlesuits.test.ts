@@ -316,12 +316,27 @@ describe('XV26 STEALTH BATTLESUITS data (pinned against data/teams/xv26-stealth-
     expect(v.errors.join(' ')).toContain('up to 2 fusion blasters');
   });
 
-  it('DATA PROBLEM: the SHAS’VRE row lists BOTH options in `alwaysWeapons`, so it carries both guns', () => {
+  it('"with pulse pistol and one of the following options" — the SHAS’VRE carries ONE of the two guns', () => {
     const leader = DATA.selection.leaderList[0]!;
     expect(leader.rawText).toContain('with pulse pistol and one of the following options');
+    // The single printed option is "Burst cannon or fusion blaster" — a choice group, not two
+    // weapons. The scraper still copies both alternatives into `alwaysWeapons`, but a weapon a
+    // choice group OFFERS is no longer also treated as always available, so the leader no longer
+    // goes to war carrying both heavy weapons at once.
     expect(leader.alwaysWeapons).toEqual(['Burst cannon', 'Fusion blaster']);
+    expect(leader.loadouts[0]).toMatchObject({
+      label: 'Burst cannon or fusion blaster',
+      weapons: [],
+      choiceGroups: [['Burst cannon', 'Fusion blaster']],
+    });
     const v = validateRosterFor(DATA, defaultRoster(DATA));
-    expect(v.weapons[0]).toEqual(['Burst cannon', 'Fusion blaster', 'Pulse pistol']);
+    expect(v.ok).toBe(true);
+    expect(v.weapons[0]).toEqual(['Burst cannon', 'Pulse pistol']);
+    // The other alternative is reachable by naming it on the pick — and is still exactly one gun.
+    const fusionLeader = defaultRoster(DATA).map((p, i) => (i === 0 ? { ...p, weapons: ['Fusion blaster'] } : p));
+    const fv = validateRosterFor(DATA, fusionLeader);
+    expect(fv.ok).toBe(true);
+    expect(fv.weapons[0]).toEqual(['Fusion blaster', 'Pulse pistol']);
   });
 });
 

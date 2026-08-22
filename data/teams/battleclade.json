@@ -1,1027 +1,1029 @@
 {
- "id": "battleclade",
- "name": "Battleclade",
- "faction": "Adeptus Mechanicus",
- "grandFaction": "Imperium",
- "archetypes": [
-  "Infiltration",
-  "Recon"
- ],
- "booksVersion": "APRIL ’26",
- "books": [
-  {
-   "book": "Battleclade",
-   "kind": "Faction",
-   "edition": "3",
-   "version": "APRIL ’26",
-   "lastUpdate": "April 2026",
-   "pdf": "https://assets.warhammer-community.com/eng_29-04_kill_team_team_rules_battleclade-hdnhljvvjh-qv26vge1tg.pdf"
-  }
- ],
- "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/battleclade/",
- "scrapedAt": "2026-08-17T04:08:58+00:00",
- "source": "cache",
- "selection": {
-  "leader": {
-   "role": "TECHNOARCHEOLOGIST",
-   "datacardId": "battleclade.technoarcheologist",
-   "count": 1,
-   "loadouts": [],
-   "optionGroups": [],
-   "loadoutMode": "fixed",
-   "fixedWeapons": [],
-   "alwaysWeapons": [
-    "Eradication pistol",
-    "Servo-arc claw"
-   ],
-   "choices": [
-    "TECHNOARCHEOLOGIST"
-   ],
-   "inList": false
-  },
-  "slots": 9,
-  "totalOperatives": 10,
-  "groups": [
-   {
-    "index": 1,
-    "count": 1,
-    "kind": "fixed",
-    "roles": [
-     "TECHNOARCHEOLOGIST"
-    ],
-    "rawText": "1 BATTLECLADE TECHNOARCHEOLOGIST operative"
-   },
-   {
-    "index": 2,
-    "count": 1,
-    "kind": "fixed",
-    "roles": [
-     "SERVITOR UNDERSEER"
-    ],
-    "rawText": "1 BATTLECLADE SERVITOR UNDERSEER operative"
-   },
-   {
-    "index": 3,
-    "count": 8,
-    "kind": "list",
-    "roles": [
-     "AUTO-PROXY SERVITOR",
-     "SERVITOR BREACHER",
-     "COMBAT SERVITOR",
-     "GUN SERVITOR",
-     "GUN SERVITOR",
-     "TECHNOMEDIC SERVITOR"
-    ],
-    "rawText": "8 BATTLECLADE operatives selected from the following list:"
-   }
+  "id": "battleclade",
+  "name": "Battleclade",
+  "faction": "Adeptus Mechanicus",
+  "grandFaction": "Imperium",
+  "archetypes": [
+    "Infiltration",
+    "Recon"
   ],
-  "list": [
-   {
-    "role": "SERVITOR UNDERSEER",
-    "datacardAnchor": "Battleclade-Servitor-Underseer",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "1 BATTLECLADE SERVITOR UNDERSEER operative",
-    "group": 2,
-    "datacardId": "battleclade.servitor-underseer",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Master-crafted radium pistol",
-     "Dataspikes"
-    ]
-   },
-   {
-    "role": "AUTO-PROXY SERVITOR",
-    "datacardAnchor": "Battleclade-Auto-Proxy-Servitor",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "AUTO-PROXY SERVITOR",
-    "group": 3,
-    "datacardId": "battleclade.auto-proxy-servitor",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Taser goad"
-    ]
-   },
-   {
-    "role": "SERVITOR BREACHER",
-    "datacardAnchor": "Battleclade-Breacher-Servitor",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "SERVITOR BREACHER",
-    "group": 3,
-    "datacardId": "battleclade.breacher-servitor",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Lascutter",
-     "Hydraulic pincer & lascutter"
-    ]
-   },
-   {
-    "role": "COMBAT SERVITOR",
-    "datacardAnchor": "Battleclade-Combat-Servitor",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [
-     {
-      "id": "battleclade.g3e3.opt1",
-      "label": "Servo-claw; incendine igniter",
-      "weapons": [
-       "Servo-claw",
-       "Incendine igniter"
-      ]
-     },
-     {
-      "id": "battleclade.g3e3.opt2",
-      "label": "Servo-claw; meltagun",
-      "weapons": [
-       "Servo-claw",
-       "Meltagun"
-      ]
-     },
-     {
-      "id": "battleclade.g3e3.opt3",
-      "label": "Servo-claw; phosphor blaster",
-      "weapons": [
-       "Servo-claw",
-       "Phosphor blaster"
-      ]
-     }
-    ],
-    "optionGroups": [],
-    "loadoutMode": "choice",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "COMBAT SERVITOR with one of the following options:",
-    "group": 3,
-    "datacardId": "battleclade.combat-servitor",
-    "isLeader": false,
-    "uniqueUnlessRole": false,
-    "alwaysWeapons": []
-   },
-   {
-    "role": "GUN SERVITOR",
-    "datacardAnchor": "Battleclade-Gun-Servitor",
-    "count": 1,
-    "fixedWeapons": [
-     "Heavy arc rifle",
-     "Augmetic claw"
-    ],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "GUN SERVITOR with heavy arc rifle and augmetic claw",
-    "group": 3,
-    "datacardId": "battleclade.gun-servitor",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": []
-   },
-   {
-    "role": "GUN SERVITOR",
-    "datacardAnchor": "Battleclade-Gun-Servitor",
-    "count": 1,
-    "fixedWeapons": [
-     "Heavy bolter",
-     "Augmetic claw"
-    ],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "GUN SERVITOR with heavy bolter and augmetic claw",
-    "group": 3,
-    "datacardId": "battleclade.gun-servitor",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": []
-   },
-   {
-    "role": "TECHNOMEDIC SERVITOR",
-    "datacardAnchor": "Battleclade-Technomedic-Servitor",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "TECHNOMEDIC SERVITOR",
-    "group": 3,
-    "datacardId": "battleclade.technomedic-servitor",
-    "isLeader": false,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Servo-chirurgic claw"
-    ]
-   }
-  ],
-  "leaderList": [
-   {
-    "role": "TECHNOARCHEOLOGIST",
-    "datacardAnchor": "Battleclade-Technoarcheologist",
-    "count": 1,
-    "fixedWeapons": [],
-    "fixedChoiceGroups": [],
-    "loadouts": [],
-    "optionGroups": [],
-    "loadoutMode": "fixed",
-    "selectionCost": 1,
-    "footnoteGroup": null,
-    "requires": [],
-    "rawText": "1 BATTLECLADE TECHNOARCHEOLOGIST operative",
-    "group": 1,
-    "datacardId": "battleclade.technoarcheologist",
-    "isLeader": true,
-    "uniqueUnlessRole": true,
-    "alwaysWeapons": [
-     "Eradication pistol",
-     "Servo-arc claw"
-    ]
-   }
-  ],
-  "constraints": [
-   {
-    "kind": "uniqueExcept",
-    "roles": [
-     "COMBAT SERVITOR"
-    ]
-   },
-   {
-    "kind": "maxCount",
-    "role": "COMBAT SERVITOR",
-    "max": 1
-   },
-   {
-    "kind": "maxCount",
-    "role": "COMBAT SERVITOR",
-    "max": 3
-   }
-  ],
-  "footnotes": {},
-  "footnoteOptions": {},
-  "designerNotes": [],
-  "rawText": "1 BATTLECLADE TECHNOARCHEOLOGIST operative\n\n1 BATTLECLADE SERVITOR UNDERSEER operative\n\n8 BATTLECLADE operatives selected from the following list:\n\nAUTO-PROXY SERVITOR\n\nSERVITOR BREACHER\n\nCOMBAT SERVITOR with one of the following options:\n\nServo-claw; incendine igniter\n\nServo-claw; meltagun\n\nServo-claw; phosphor blaster\n\nGUN SERVITOR with heavy arc rifle and augmetic claw\n\nGUN SERVITOR with heavy bolter and augmetic claw\n\nTECHNOMEDIC SERVITOR\n\nOther than COMBAT SERVITOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to one COMBAT SERVITOR operative with meltagun, and it can only include up to three COMBAT SERVITOR operatives with incendine igniter."
- },
- "datacards": [
-  {
-   "id": "battleclade.technoarcheologist",
-   "teamId": "battleclade",
-   "name": "Battleclade Technoarcheologist",
-   "keywords": [
-    "BATTLECLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "TECH-PRIEST",
-    "LEADER",
-    "TECHNOARCHEOLOGIST"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 32
-   },
-   "apl": 3,
-   "move": 6,
-   "save": 3,
-   "wounds": 9,
-   "weapons": [
+  "booksVersion": "APRIL ’26",
+  "books": [
     {
-     "name": "Eradication pistol",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 2,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Devastating",
-         "x": 3,
-         "dist": 1.0,
-         "raw": "1\" Devastating 3"
-        },
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        }
-       ]
-      }
-     ]
+      "book": "Battleclade",
+      "kind": "Faction",
+      "edition": "3",
+      "version": "APRIL ’26",
+      "lastUpdate": "April 2026",
+      "pdf": "https://assets.warhammer-community.com/eng_29-04_kill_team_team_rules_battleclade-hdnhljvvjh-qv26vge1tg.pdf"
+    }
+  ],
+  "sourceUrl": "https://wahapedia.ru/kill-team3/kill-teams/battleclade/",
+  "scrapedAt": "2026-08-17T04:08:58+00:00",
+  "source": "cache",
+  "selection": {
+    "leader": {
+      "role": "TECHNOARCHEOLOGIST",
+      "datacardId": "battleclade.technoarcheologist",
+      "count": 1,
+      "loadouts": [],
+      "optionGroups": [],
+      "loadoutMode": "fixed",
+      "fixedWeapons": [],
+      "alwaysWeapons": [
+        "Eradication pistol",
+        "Servo-arc claw"
+      ],
+      "choices": [
+        "TECHNOARCHEOLOGIST"
+      ],
+      "inList": false
     },
-    {
-     "name": "Servo-arc claw",
-     "profiles": [
+    "slots": 9,
+    "totalOperatives": 10,
+    "groups": [
       {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Severe",
-         "raw": "Severe"
-        },
-        {
-         "id": "Shock",
-         "raw": "Shock"
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "battleclade.technoarcheologist.seeker-of-divine-arcana",
-     "name": "Seeker of Divine Arcana",
-     "text": "STRATEGIC GAMBIT. You can immediately change this operative’s order and/or it can immediately perform a free Omniscanner, Fall Back, Place Marker, Pick Up Marker, Reposition or mission action. If it’s the Fall Back or Reposition action and this operative isn’t carrying a marker, it must end that move either within your drop zone (if this isn’t possible, then as close as possible to it), or with an objective marker or one of your mission markers within its control range."
-    }
-   ],
-   "uniqueActions": [
-    {
-     "id": "battleclade.technoarcheologist.act.omniscanner",
-     "name": "OMNISCANNER",
-     "ap": 1,
-     "text": "Select one enemy operative visible to or within 8\" of this operative to gain one of your Omniscanner tokens. Whenever a friendly BATTLECLADE operative is shooting against, fighting against or retaliating against an enemy operative that has one of your Omniscanner tokens, that friendly operative’s weapons have the Ceaseless weapon rule.\n\nThis operative cannot perform this action while within control range of an enemy operative."
-    }
-   ],
-   "fluff": "Technoarcheologists are ferociously acquisitive Tech-Priests who specialise in unearthing mechanistic arcana and exotic resources. They use delving expertise and powerful scanners to pinpoint the location of the prizes they seek, and provide a zealous focus to the unthinking thralls who serve them."
-  },
-  {
-   "id": "battleclade.auto-proxy-servitor",
-   "teamId": "battleclade",
-   "name": "Battleclade Auto-Proxy Servitor",
-   "keywords": [
-    "BATTLECLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "AUTO-PROXY",
-    "SERVITOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 5,
-   "save": 4,
-   "wounds": 8,
-   "weapons": [
-    {
-     "name": "Taser goad",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        },
-        {
-         "id": "Shock",
-         "raw": "Shock"
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [
-    {
-     "id": "battleclade.auto-proxy-servitor.achillan-eye",
-     "name": "Achillan Eye",
-     "text": "Whenever a friendly BATTLECLADE operative is shooting an enemy operative visible to this operative, that friendly operative’s ranged weapons have the Saturate weapon rule. This rule has no effect if this operative is within control range of an enemy operative."
-    }
-   ],
-   "uniqueActions": [
-    {
-     "id": "battleclade.auto-proxy-servitor.act.gaze-of-the-omnissiah",
-     "name": "GAZE OF THE OMNISSIAH",
-     "ap": 1,
-     "text": "Select one enemy operative visible to this operative. Until the end of the turning point, whenever a friendly BATTLECLADE operative is shooting that enemy operative, you can use this effect. If you do:\n\nThis operative cannot perform this action while within control range of an enemy operative."
-    }
-   ],
-   "fluff": "Auto-Proxy Servitors function as specialist data relays. They carry an achillan eye – a powerful divinitory scanner – which they use to identify enemy weak points and local instabilities, and a dataspike, with which they hack control nodes or pass on updated subroutines to fellow servitors."
-  },
-  {
-   "id": "battleclade.breacher-servitor",
-   "teamId": "battleclade",
-   "name": "Battleclade Breacher Servitor",
-   "keywords": [
-    "BATTLECLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "BREACHER",
-    "SERVITOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 5,
-   "save": 4,
-   "wounds": 8,
-   "weapons": [
-    {
-     "name": "Lascutter",
-     "profiles": [
-      {
-       "name": "close range",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 2,
-         "raw": "Range 2\""
-        },
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        },
-        {
-         "id": "Piercing",
-         "x": 2,
-         "raw": "Piercing 2"
-        }
-       ]
+        "index": 1,
+        "count": 1,
+        "kind": "fixed",
+        "roles": [
+          "TECHNOARCHEOLOGIST"
+        ],
+        "rawText": "1 BATTLECLADE TECHNOARCHEOLOGIST operative"
       },
       {
-       "name": "short range",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 6,
-         "raw": "Range 6\""
-        },
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Hydraulic pincer & lascutter",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Lethal",
-         "x": 5,
-         "raw": "Lethal 5+"
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [],
-   "uniqueActions": [
-    {
-     "id": "battleclade.breacher-servitor.act.breach",
-     "name": "BREACH",
-     "ap": 1,
-     "text": "Place one of your Breach markers within this operative’s control range as close as possible to a terrain feature within control range of it. Whenever an operative is within 1\" of that marker, it treats parts of that terrain feature that are no more than 1\" thick as Accessible terrain.\n\nThis operative cannot perform this action while within control range of an enemy operative, or if a terrain feature isn’t within its control range."
-    }
-   ],
-   "fluff": "Breacher Servitors clear a path to their Battleclade’s goal and ensure their master’s extraction route is unobstructed. With their high-energy lascutter and other specialist tools, they carve courses through natural obstacles, security bulkheads, shielded fortifications, or even the flesh and armour of the foe."
-  },
-  {
-   "id": "battleclade.combat-servitor",
-   "teamId": "battleclade",
-   "name": "Battleclade Combat Servitor",
-   "keywords": [
-    "BATTLECLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "COMBAT",
-    "SERVITOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 5,
-   "save": 4,
-   "wounds": 8,
-   "weapons": [
-    {
-     "name": "Incendine igniter",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 2,
-       "dmgN": 4,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 6,
-         "raw": "Range 6\""
-        },
-        {
-         "id": "Saturate",
-         "raw": "Saturate"
-        },
-        {
-         "id": "Torrent",
-         "x": 1,
-         "raw": "Torrent 1\""
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Meltagun",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 6,
-       "dmgC": 3,
-       "rules": [
-        {
-         "id": "Range",
-         "x": 6,
-         "raw": "Range 6\""
-        },
-        {
-         "id": "Devastating",
-         "x": 4,
-         "raw": "Devastating 4"
-        },
-        {
-         "id": "Piercing",
-         "x": 2,
-         "raw": "Piercing 2"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Phosphor blaster",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
-        {
-         "id": "Blast",
-         "x": 1,
-         "raw": "Blast 1\""
-        },
-        {
-         "id": "Severe",
-         "raw": "Severe"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Servo-claw",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [],
-   "uniqueActions": [],
-   "fluff": "Repurposed from local menial thralls or specially constructed for the mission at hand, Combat Servitors are implanted with martial imperative programming and weapon grafts. They are ideal guardians, unthinkingly ready and willing to kill or lay down their existences to protect their masters’ interests."
-  },
-  {
-   "id": "battleclade.gun-servitor",
-   "teamId": "battleclade",
-   "name": "Battleclade Gun Servitor",
-   "keywords": [
-    "BATTLECLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "GUN",
-    "SERVITOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 32
-   },
-   "apl": 2,
-   "move": 5,
-   "save": 4,
-   "wounds": 11,
-   "weapons": [
-    {
-     "name": "Heavy arc rifle",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 5,
-       "hit": 4,
-       "dmgN": 4,
-       "dmgC": 6,
-       "rules": [
-        {
-         "id": "Heavy",
-         "only": "Dash",
-         "raw": "Heavy (Dash only)"
-        },
-        {
-         "id": "Piercing",
-         "x": 1,
-         "raw": "Piercing 1"
-        },
-        {
-         "id": "Stun",
-         "raw": "Stun"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "name": "Heavy bolter",
-     "profiles": [
-      {
-       "name": "focused",
-       "type": "ranged",
-       "atk": 5,
-       "hit": 4,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Heavy",
-         "only": "Dash",
-         "raw": "Heavy (Dash only)"
-        },
-        {
-         "id": "PiercingCrits",
-         "x": 1,
-         "raw": "Piercing Crits 1"
-        }
-       ]
+        "index": 2,
+        "count": 1,
+        "kind": "fixed",
+        "roles": [
+          "SERVITOR UNDERSEER"
+        ],
+        "rawText": "1 BATTLECLADE SERVITOR UNDERSEER operative"
       },
       {
-       "name": "sweeping",
-       "type": "ranged",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
-        {
-         "id": "Heavy",
-         "only": "Dash",
-         "raw": "Heavy (Dash only)"
-        },
-        {
-         "id": "PiercingCrits",
-         "x": 1,
-         "raw": "Piercing Crits 1"
-        },
-        {
-         "id": "Torrent",
-         "x": 1,
-         "raw": "Torrent 1\""
-        }
-       ]
+        "index": 3,
+        "count": 8,
+        "kind": "list",
+        "roles": [
+          "AUTO-PROXY SERVITOR",
+          "SERVITOR BREACHER",
+          "COMBAT SERVITOR",
+          "GUN SERVITOR",
+          "GUN SERVITOR",
+          "TECHNOMEDIC SERVITOR"
+        ],
+        "rawText": "8 BATTLECLADE operatives selected from the following list:"
       }
-     ]
+    ],
+    "list": [
+      {
+        "role": "SERVITOR UNDERSEER",
+        "datacardAnchor": "Battleclade-Servitor-Underseer",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "1 BATTLECLADE SERVITOR UNDERSEER operative",
+        "group": 2,
+        "datacardId": "battleclade.servitor-underseer",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Master-crafted radium pistol",
+          "Dataspikes"
+        ]
+      },
+      {
+        "role": "AUTO-PROXY SERVITOR",
+        "datacardAnchor": "Battleclade-Auto-Proxy-Servitor",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "AUTO-PROXY SERVITOR",
+        "group": 3,
+        "datacardId": "battleclade.auto-proxy-servitor",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Taser goad"
+        ]
+      },
+      {
+        "role": "SERVITOR BREACHER",
+        "datacardAnchor": "Battleclade-Breacher-Servitor",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "SERVITOR BREACHER",
+        "group": 3,
+        "datacardId": "battleclade.breacher-servitor",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Lascutter",
+          "Hydraulic pincer & lascutter"
+        ]
+      },
+      {
+        "role": "COMBAT SERVITOR",
+        "datacardAnchor": "Battleclade-Combat-Servitor",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [
+          {
+            "id": "battleclade.g3e3.opt1",
+            "label": "Servo-claw; incendine igniter",
+            "weapons": [
+              "Servo-claw",
+              "Incendine igniter"
+            ]
+          },
+          {
+            "id": "battleclade.g3e3.opt2",
+            "label": "Servo-claw; meltagun",
+            "weapons": [
+              "Servo-claw",
+              "Meltagun"
+            ]
+          },
+          {
+            "id": "battleclade.g3e3.opt3",
+            "label": "Servo-claw; phosphor blaster",
+            "weapons": [
+              "Servo-claw",
+              "Phosphor blaster"
+            ]
+          }
+        ],
+        "optionGroups": [],
+        "loadoutMode": "choice",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "COMBAT SERVITOR with one of the following options:",
+        "group": 3,
+        "datacardId": "battleclade.combat-servitor",
+        "isLeader": false,
+        "uniqueUnlessRole": false,
+        "alwaysWeapons": []
+      },
+      {
+        "role": "GUN SERVITOR",
+        "datacardAnchor": "Battleclade-Gun-Servitor",
+        "count": 1,
+        "fixedWeapons": [
+          "Heavy arc rifle",
+          "Augmetic claw"
+        ],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "GUN SERVITOR with heavy arc rifle and augmetic claw",
+        "group": 3,
+        "datacardId": "battleclade.gun-servitor",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": []
+      },
+      {
+        "role": "GUN SERVITOR",
+        "datacardAnchor": "Battleclade-Gun-Servitor",
+        "count": 1,
+        "fixedWeapons": [
+          "Heavy bolter",
+          "Augmetic claw"
+        ],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "GUN SERVITOR with heavy bolter and augmetic claw",
+        "group": 3,
+        "datacardId": "battleclade.gun-servitor",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": []
+      },
+      {
+        "role": "TECHNOMEDIC SERVITOR",
+        "datacardAnchor": "Battleclade-Technomedic-Servitor",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "TECHNOMEDIC SERVITOR",
+        "group": 3,
+        "datacardId": "battleclade.technomedic-servitor",
+        "isLeader": false,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Servo-chirurgic claw"
+        ]
+      }
+    ],
+    "leaderList": [
+      {
+        "role": "TECHNOARCHEOLOGIST",
+        "datacardAnchor": "Battleclade-Technoarcheologist",
+        "count": 1,
+        "fixedWeapons": [],
+        "fixedChoiceGroups": [],
+        "loadouts": [],
+        "optionGroups": [],
+        "loadoutMode": "fixed",
+        "selectionCost": 1,
+        "footnoteGroup": null,
+        "requires": [],
+        "rawText": "1 BATTLECLADE TECHNOARCHEOLOGIST operative",
+        "group": 1,
+        "datacardId": "battleclade.technoarcheologist",
+        "isLeader": true,
+        "uniqueUnlessRole": true,
+        "alwaysWeapons": [
+          "Eradication pistol",
+          "Servo-arc claw"
+        ]
+      }
+    ],
+    "constraints": [
+      {
+        "kind": "uniqueExcept",
+        "roles": [
+          "COMBAT SERVITOR"
+        ]
+      },
+      {
+        "kind": "maxItem",
+        "item": "meltagun",
+        "max": 1,
+        "role": "COMBAT SERVITOR"
+      },
+      {
+        "kind": "maxItem",
+        "item": "incendine igniter",
+        "max": 3,
+        "role": "COMBAT SERVITOR"
+      }
+    ],
+    "footnotes": {},
+    "footnoteOptions": {},
+    "designerNotes": [],
+    "rawText": "1 BATTLECLADE TECHNOARCHEOLOGIST operative\n\n1 BATTLECLADE SERVITOR UNDERSEER operative\n\n8 BATTLECLADE operatives selected from the following list:\n\nAUTO-PROXY SERVITOR\n\nSERVITOR BREACHER\n\nCOMBAT SERVITOR with one of the following options:\n\nServo-claw; incendine igniter\n\nServo-claw; meltagun\n\nServo-claw; phosphor blaster\n\nGUN SERVITOR with heavy arc rifle and augmetic claw\n\nGUN SERVITOR with heavy bolter and augmetic claw\n\nTECHNOMEDIC SERVITOR\n\nOther than COMBAT SERVITOR operatives, your kill team can only include each operative on this list once. Your kill team can only include up to one COMBAT SERVITOR operative with meltagun, and it can only include up to three COMBAT SERVITOR operatives with incendine igniter."
+  },
+  "datacards": [
+    {
+      "id": "battleclade.technoarcheologist",
+      "teamId": "battleclade",
+      "name": "Battleclade Technoarcheologist",
+      "keywords": [
+        "BATTLECLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "TECH-PRIEST",
+        "LEADER",
+        "TECHNOARCHEOLOGIST"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 32
+      },
+      "apl": 3,
+      "move": 6,
+      "save": 3,
+      "wounds": 9,
+      "weapons": [
+        {
+          "name": "Eradication pistol",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 2,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Devastating",
+                  "x": 3,
+                  "dist": 1.0,
+                  "raw": "1\" Devastating 3"
+                },
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Servo-arc claw",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Severe",
+                  "raw": "Severe"
+                },
+                {
+                  "id": "Shock",
+                  "raw": "Shock"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "battleclade.technoarcheologist.seeker-of-divine-arcana",
+          "name": "Seeker of Divine Arcana",
+          "text": "STRATEGIC GAMBIT. You can immediately change this operative’s order and/or it can immediately perform a free Omniscanner, Fall Back, Place Marker, Pick Up Marker, Reposition or mission action. If it’s the Fall Back or Reposition action and this operative isn’t carrying a marker, it must end that move either within your drop zone (if this isn’t possible, then as close as possible to it), or with an objective marker or one of your mission markers within its control range."
+        }
+      ],
+      "uniqueActions": [
+        {
+          "id": "battleclade.technoarcheologist.act.omniscanner",
+          "name": "OMNISCANNER",
+          "ap": 1,
+          "text": "Select one enemy operative visible to or within 8\" of this operative to gain one of your Omniscanner tokens. Whenever a friendly BATTLECLADE operative is shooting against, fighting against or retaliating against an enemy operative that has one of your Omniscanner tokens, that friendly operative’s weapons have the Ceaseless weapon rule.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+        }
+      ],
+      "fluff": "Technoarcheologists are ferociously acquisitive Tech-Priests who specialise in unearthing mechanistic arcana and exotic resources. They use delving expertise and powerful scanners to pinpoint the location of the prizes they seek, and provide a zealous focus to the unthinking thralls who serve them."
     },
     {
-     "name": "Augmetic claw",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 4,
-       "dmgN": 4,
-       "dmgC": 5,
-       "rules": [
+      "id": "battleclade.auto-proxy-servitor",
+      "teamId": "battleclade",
+      "name": "Battleclade Auto-Proxy Servitor",
+      "keywords": [
+        "BATTLECLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "AUTO-PROXY",
+        "SERVITOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 5,
+      "save": 4,
+      "wounds": 8,
+      "weapons": [
         {
-         "id": "Brutal",
-         "raw": "Brutal"
+          "name": "Taser goad",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                },
+                {
+                  "id": "Shock",
+                  "raw": "Shock"
+                }
+              ]
+            }
+          ]
         }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [],
-   "uniqueActions": [],
-   "fluff": "Gun Servitors are bulky and unsubtle weapons platforms fitted with range-finders and servo-stabilisers. Ferocious implants such as heavy bolters enable them to scour hordes of enemies from any sites of interest to their masters, while with more esoteric heavy arc rifles they can send out crackling bolts that fry corrupted mechanisms as easily as flesh and bone."
-  },
-  {
-   "id": "battleclade.servitor-underseer",
-   "teamId": "battleclade",
-   "name": "Battleclade Servitor Underseer",
-   "keywords": [
-    "BATTLECLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "TECH-PRIEST",
-    "SERVITOR UNDERSEER"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 32
-   },
-   "apl": 3,
-   "move": 6,
-   "save": 3,
-   "wounds": 9,
-   "weapons": [
-    {
-     "name": "Master-crafted radium pistol",
-     "profiles": [
-      {
-       "type": "ranged",
-       "atk": 4,
-       "hit": 3,
-       "dmgN": 2,
-       "dmgC": 4,
-       "rules": [
+      ],
+      "abilities": [
         {
-         "id": "Range",
-         "x": 8,
-         "raw": "Range 8\""
-        },
-        {
-         "id": "Balanced",
-         "raw": "Balanced"
-        },
-        {
-         "id": "Rending",
-         "raw": "Rending"
+          "id": "battleclade.auto-proxy-servitor.achillan-eye",
+          "name": "Achillan Eye",
+          "text": "Whenever a friendly BATTLECLADE operative is shooting an enemy operative visible to this operative, that friendly operative’s ranged weapons have the Saturate weapon rule. This rule has no effect if this operative is within control range of an enemy operative."
         }
-       ]
-      }
-     ]
+      ],
+      "uniqueActions": [
+        {
+          "id": "battleclade.auto-proxy-servitor.act.gaze-of-the-omnissiah",
+          "name": "GAZE OF THE OMNISSIAH",
+          "ap": 1,
+          "text": "Select one enemy operative visible to this operative. Until the end of the turning point, whenever a friendly BATTLECLADE operative is shooting that enemy operative, you can use this effect. If you do:\n\nThis operative cannot perform this action while within control range of an enemy operative."
+        }
+      ],
+      "fluff": "Auto-Proxy Servitors function as specialist data relays. They carry an achillan eye – a powerful divinitory scanner – which they use to identify enemy weak points and local instabilities, and a dataspike, with which they hack control nodes or pass on updated subroutines to fellow servitors."
     },
     {
-     "name": "Dataspikes",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 3,
-       "hit": 5,
-       "dmgN": 2,
-       "dmgC": 3,
-       "rules": []
-      }
-     ]
-    }
-   ],
-   "abilities": [],
-   "uniqueActions": [
-    {
-     "id": "battleclade.servitor-underseer.act.datacoronal-accumulator",
-     "name": "DATACORONAL ACCUMULATOR",
-     "ap": 1,
-     "text": "SUPPORT. Determine the friendly BATTLECLADE operatives within 6\" of this operative and/or a friendly BATTLECLADE AUTO-PROXY operative, then roll one D3. If the result is equal to or less than the number of objective markers those friendly operatives contest, you gain 1CP. For the purposes of the Comms Device universal equipment, the operative the distance is being determined from must control your Comms Device marker to add 3\" to its distance requirement for this rule.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+      "id": "battleclade.breacher-servitor",
+      "teamId": "battleclade",
+      "name": "Battleclade Breacher Servitor",
+      "keywords": [
+        "BATTLECLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "BREACHER",
+        "SERVITOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 5,
+      "save": 4,
+      "wounds": 8,
+      "weapons": [
+        {
+          "name": "Lascutter",
+          "profiles": [
+            {
+              "name": "close range",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 2,
+                  "raw": "Range 2\""
+                },
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                },
+                {
+                  "id": "Piercing",
+                  "x": 2,
+                  "raw": "Piercing 2"
+                }
+              ]
+            },
+            {
+              "name": "short range",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 6,
+                  "raw": "Range 6\""
+                },
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Hydraulic pincer & lascutter",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Lethal",
+                  "x": 5,
+                  "raw": "Lethal 5+"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "abilities": [],
+      "uniqueActions": [
+        {
+          "id": "battleclade.breacher-servitor.act.breach",
+          "name": "BREACH",
+          "ap": 1,
+          "text": "Place one of your Breach markers within this operative’s control range as close as possible to a terrain feature within control range of it. Whenever an operative is within 1\" of that marker, it treats parts of that terrain feature that are no more than 1\" thick as Accessible terrain.\n\nThis operative cannot perform this action while within control range of an enemy operative, or if a terrain feature isn’t within its control range."
+        }
+      ],
+      "fluff": "Breacher Servitors clear a path to their Battleclade’s goal and ensure their master’s extraction route is unobstructed. With their high-energy lascutter and other specialist tools, they carve courses through natural obstacles, security bulkheads, shielded fortifications, or even the flesh and armour of the foe."
     },
     {
-     "id": "battleclade.servitor-underseer.act.network-override",
-     "name": "NETWORK OVERRIDE",
-     "ap": 1,
-     "text": "SUPPORT. Select one friendly BATTLECLADE SERVITOR operative within 6\" of either this operative or a friendly BATTLECLADE AUTO-PROXY operative to immediately NETWORK COUNTERACT (you don’t have to TRANSFER POWER to do so) or perform a free Dash action. Continue this operative’s activation after doing so. For the purposes of the Comms Device universal equipment, the operative the distance is being determined from must control that marker.\n\nThis operative can perform this action twice during its activation, but cannot perform this action while within control range of an enemy operative."
-    }
-   ],
-   "fluff": "Minor Tech-Priests specialising in the reprogramming and oversight of their cybernetic thralls, Servitor Underseers’ skills are highly valued by more senior Tech-Priests. They translate the mission’s priorities into complex subroutines that they feed to their servitor wards via their commandment array."
-  },
-  {
-   "id": "battleclade.technomedic-servitor",
-   "teamId": "battleclade",
-   "name": "Battleclade Technomedic Servitor",
-   "keywords": [
-    "BATTLECLADE",
-    "IMPERIUM",
-    "ADEPTUS MECHANICUS",
-    "MEDIC",
-    "TECHNOMEDIC",
-    "SERVITOR"
-   ],
-   "base": {
-    "shape": "round",
-    "mm": 25
-   },
-   "apl": 2,
-   "move": 5,
-   "save": 4,
-   "wounds": 8,
-   "weapons": [
-    {
-     "name": "Servo-chirurgic claw",
-     "profiles": [
-      {
-       "type": "melee",
-       "atk": 4,
-       "hit": 4,
-       "dmgN": 3,
-       "dmgC": 4,
-       "rules": [
+      "id": "battleclade.combat-servitor",
+      "teamId": "battleclade",
+      "name": "Battleclade Combat Servitor",
+      "keywords": [
+        "BATTLECLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "COMBAT",
+        "SERVITOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 5,
+      "save": 4,
+      "wounds": 8,
+      "weapons": [
         {
-         "id": "Rending",
-         "raw": "Rending"
+          "name": "Incendine igniter",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 2,
+              "dmgN": 4,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 6,
+                  "raw": "Range 6\""
+                },
+                {
+                  "id": "Saturate",
+                  "raw": "Saturate"
+                },
+                {
+                  "id": "Torrent",
+                  "x": 1,
+                  "raw": "Torrent 1\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Meltagun",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 6,
+              "dmgC": 3,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 6,
+                  "raw": "Range 6\""
+                },
+                {
+                  "id": "Devastating",
+                  "x": 4,
+                  "raw": "Devastating 4"
+                },
+                {
+                  "id": "Piercing",
+                  "x": 2,
+                  "raw": "Piercing 2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Phosphor blaster",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Blast",
+                  "x": 1,
+                  "raw": "Blast 1\""
+                },
+                {
+                  "id": "Severe",
+                  "raw": "Severe"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Servo-claw",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": []
+            }
+          ]
         }
-       ]
-      }
-     ]
-    }
-   ],
-   "abilities": [
+      ],
+      "abilities": [],
+      "uniqueActions": [],
+      "fluff": "Repurposed from local menial thralls or specially constructed for the mission at hand, Combat Servitors are implanted with martial imperative programming and weapon grafts. They are ideal guardians, unthinkingly ready and willing to kill or lay down their existences to protect their masters’ interests."
+    },
     {
-     "id": "battleclade.technomedic-servitor.mechanosuture-array",
-     "name": "Mechanosuture Array",
-     "text": "Once per turning point, when another friendly BATTLECLADE operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. If this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
-    }
-   ],
-   "uniqueActions": [
+      "id": "battleclade.gun-servitor",
+      "teamId": "battleclade",
+      "name": "Battleclade Gun Servitor",
+      "keywords": [
+        "BATTLECLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "GUN",
+        "SERVITOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 32
+      },
+      "apl": 2,
+      "move": 5,
+      "save": 4,
+      "wounds": 11,
+      "weapons": [
+        {
+          "name": "Heavy arc rifle",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 5,
+              "hit": 4,
+              "dmgN": 4,
+              "dmgC": 6,
+              "rules": [
+                {
+                  "id": "Heavy",
+                  "only": "Dash",
+                  "raw": "Heavy (Dash only)"
+                },
+                {
+                  "id": "Piercing",
+                  "x": 1,
+                  "raw": "Piercing 1"
+                },
+                {
+                  "id": "Stun",
+                  "raw": "Stun"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Heavy bolter",
+          "profiles": [
+            {
+              "name": "focused",
+              "type": "ranged",
+              "atk": 5,
+              "hit": 4,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Heavy",
+                  "only": "Dash",
+                  "raw": "Heavy (Dash only)"
+                },
+                {
+                  "id": "PiercingCrits",
+                  "x": 1,
+                  "raw": "Piercing Crits 1"
+                }
+              ]
+            },
+            {
+              "name": "sweeping",
+              "type": "ranged",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Heavy",
+                  "only": "Dash",
+                  "raw": "Heavy (Dash only)"
+                },
+                {
+                  "id": "PiercingCrits",
+                  "x": 1,
+                  "raw": "Piercing Crits 1"
+                },
+                {
+                  "id": "Torrent",
+                  "x": 1,
+                  "raw": "Torrent 1\""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Augmetic claw",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 4,
+              "dmgN": 4,
+              "dmgC": 5,
+              "rules": [
+                {
+                  "id": "Brutal",
+                  "raw": "Brutal"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "abilities": [],
+      "uniqueActions": [],
+      "fluff": "Gun Servitors are bulky and unsubtle weapons platforms fitted with range-finders and servo-stabilisers. Ferocious implants such as heavy bolters enable them to scour hordes of enemies from any sites of interest to their masters, while with more esoteric heavy arc rifles they can send out crackling bolts that fry corrupted mechanisms as easily as flesh and bone."
+    },
     {
-     "id": "battleclade.technomedic-servitor.act.expedient-repair",
-     "name": "EXPEDIENT REPAIR",
-     "ap": 1,
-     "text": "Select one friendly BATTLECLADE operative within this operative’s control range to regain up to D3+3 lost wounds. It cannot be an operative that the Mechanosuture Array rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+      "id": "battleclade.servitor-underseer",
+      "teamId": "battleclade",
+      "name": "Battleclade Servitor Underseer",
+      "keywords": [
+        "BATTLECLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "TECH-PRIEST",
+        "SERVITOR UNDERSEER"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 32
+      },
+      "apl": 3,
+      "move": 6,
+      "save": 3,
+      "wounds": 9,
+      "weapons": [
+        {
+          "name": "Master-crafted radium pistol",
+          "profiles": [
+            {
+              "type": "ranged",
+              "atk": 4,
+              "hit": 3,
+              "dmgN": 2,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Range",
+                  "x": 8,
+                  "raw": "Range 8\""
+                },
+                {
+                  "id": "Balanced",
+                  "raw": "Balanced"
+                },
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Dataspikes",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 3,
+              "hit": 5,
+              "dmgN": 2,
+              "dmgC": 3,
+              "rules": []
+            }
+          ]
+        }
+      ],
+      "abilities": [],
+      "uniqueActions": [
+        {
+          "id": "battleclade.servitor-underseer.act.datacoronal-accumulator",
+          "name": "DATACORONAL ACCUMULATOR",
+          "ap": 1,
+          "text": "SUPPORT. Determine the friendly BATTLECLADE operatives within 6\" of this operative and/or a friendly BATTLECLADE AUTO-PROXY operative, then roll one D3. If the result is equal to or less than the number of objective markers those friendly operatives contest, you gain 1CP. For the purposes of the Comms Device universal equipment, the operative the distance is being determined from must control your Comms Device marker to add 3\" to its distance requirement for this rule.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+        },
+        {
+          "id": "battleclade.servitor-underseer.act.network-override",
+          "name": "NETWORK OVERRIDE",
+          "ap": 1,
+          "text": "SUPPORT. Select one friendly BATTLECLADE SERVITOR operative within 6\" of either this operative or a friendly BATTLECLADE AUTO-PROXY operative to immediately NETWORK COUNTERACT (you don’t have to TRANSFER POWER to do so) or perform a free Dash action. Continue this operative’s activation after doing so. For the purposes of the Comms Device universal equipment, the operative the distance is being determined from must control that marker.\n\nThis operative can perform this action twice during its activation, but cannot perform this action while within control range of an enemy operative."
+        }
+      ],
+      "fluff": "Minor Tech-Priests specialising in the reprogramming and oversight of their cybernetic thralls, Servitor Underseers’ skills are highly valued by more senior Tech-Priests. They translate the mission’s priorities into complex subroutines that they feed to their servitor wards via their commandment array."
+    },
+    {
+      "id": "battleclade.technomedic-servitor",
+      "teamId": "battleclade",
+      "name": "Battleclade Technomedic Servitor",
+      "keywords": [
+        "BATTLECLADE",
+        "IMPERIUM",
+        "ADEPTUS MECHANICUS",
+        "MEDIC",
+        "TECHNOMEDIC",
+        "SERVITOR"
+      ],
+      "base": {
+        "shape": "round",
+        "mm": 25
+      },
+      "apl": 2,
+      "move": 5,
+      "save": 4,
+      "wounds": 8,
+      "weapons": [
+        {
+          "name": "Servo-chirurgic claw",
+          "profiles": [
+            {
+              "type": "melee",
+              "atk": 4,
+              "hit": 4,
+              "dmgN": 3,
+              "dmgC": 4,
+              "rules": [
+                {
+                  "id": "Rending",
+                  "raw": "Rending"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "abilities": [
+        {
+          "id": "battleclade.technomedic-servitor.mechanosuture-array",
+          "name": "Mechanosuture Array",
+          "text": "Once per turning point, when another friendly BATTLECLADE operative would be incapacitated while visible to and within 3\" of this operative, you can use this rule, providing neither this nor that operative is within control range of an enemy operative. If you do, that friendly operative isn’t incapacitated, has 1 wound remaining and cannot be incapacitated for the remainder of the action. After that action, that friendly operative can immediately perform a free Dash action, but must end that move within this operative’s control range. If this rule was used during that friendly operative’s activation, that activation ends. You cannot use this rule if this operative is incapacitated, or if it’s a Shoot action and this operative would be a primary or secondary target."
+        }
+      ],
+      "uniqueActions": [
+        {
+          "id": "battleclade.technomedic-servitor.act.expedient-repair",
+          "name": "EXPEDIENT REPAIR",
+          "ap": 1,
+          "text": "Select one friendly BATTLECLADE operative within this operative’s control range to regain up to D3+3 lost wounds. It cannot be an operative that the Mechanosuture Array rule was used on during this turning point.\n\nThis operative cannot perform this action while within control range of an enemy operative."
+        }
+      ],
+      "fluff": "On forge worlds, a servitor’s Human components are rarely repaired. Battleclades, however, often operate unsupported in dangerous territories, on missions where no tool can be easily replaced. Technomedics use a mix of crude biosurgery and mechanical repairs to keep the team’s cybernetic operatives functioning under fire for long enough to fulfil their purpose. 1"
     }
-   ],
-   "fluff": "On forge worlds, a servitor’s Human components are rarely repaired. Battleclades, however, often operate unsupported in dangerous territories, on missions where no tool can be easily replaced. Technomedics use a mix of crude biosurgery and mechanical repairs to keep the team’s cybernetic operatives functioning under fire for long enough to fulfil their purpose. 1"
-  }
- ],
- "factionRules": [
-  {
-   "id": "battleclade.rule.noospheric-network",
-   "name": "Noospheric Network",
-   "text": "Once during each friendly BATTLECLADE SERVITOR operative’s activation, before or after it performs an action, you can spend 1AP to TRANSFER POWER. \n\nAfter that activation, you can NETWORK COUNTERACT with one other friendly BATTLECLADE SERVITOR operative before your opponent activates. Whenever you NETWORK COUNTERACT with a friendly operative, first select its order. It can then perform a 1AP action for free, but cannot move more than 2\" during that action. Once it’s done so, your opponent then activates as normal.\n\nAn operative cannot TRANSFER POWER or NETWORK COUNTERACT if it has an APL stat of less than 2 (e.g. if the stat has been changed to less than 2 by a rule). NETWORK COUNTERACT is a counteraction, but the operative doesn’t need to be expended with an Engage order to do it. That means if they’re ready when they NETWORK COUNTERACT, they can still be activated as normal later in the turning point. An operative that does NETWORK COUNTERACT cannot do so again, or counteract, during the same turning point.",
-   "fluff": "Servitors are yoked to their Tech-Priest masters by an invisible web of control. This noospheric network enables servitors to be rapidly reorganised, transferring processing power to other thralls who might better serve the Tech-Priests’ immediate wishes. While some are left to conform to their basic programming, others are instructed with key tasks that must be fulfilled for the glory of the Machine God."
-  }
- ],
- "strategyPloys": [
-  {
-   "id": "battleclade.sp.noospheric-possession",
-   "name": "NOOSPHERIC POSSESSION",
-   "text": "SUPPORT. Whenever a friendly BATTLECLADE SERVITOR operative is within 6\" of a friendly BATTLECLADE AUTO-PROXY or BATTLECLADE SERVITOR UNDERSEER operative, that friendly SERVITOR operative’s weapons have the Accurate 1 weapon rule.\n\nFor the purposes of the Comms Device universal equipment, the operative the distance is being determined from must control your Comms Device marker to add 3\" to its distance requirement for this rule.",
-   "cp": 1,
-   "fluff": "By broadcasting portions of their neural architecture into their thralls, sometimes via a well-positioned relay, manipulative Servitor Underseers effectively possess their tools to better direct the Omnissiah’s wrath."
-  },
-  {
-   "id": "battleclade.sp.duty-of-reclamation",
-   "name": "DUTY OF RECLAMATION",
-   "text": "Once per action, you can use the Command Re-roll firefight ploy for 0CP if the attack or defence dice was rolled for a friendly BATTLECLADE operative that contests an objective marker or one of your mission markers.",
-   "cp": 1,
-   "fluff": "Embedded in Battleclade operatives are lurking strands of enhanced binharic doctrine. These instructions await the moment to activate, triggered by the proximity of a Tech-Priest’s designated prize."
-  },
-  {
-   "id": "battleclade.sp.incantation-of-the-iron-soul",
-   "name": "INCANTATION OF THE IRON SOUL",
-   "text": "Whenever an attack dice inflicts damage of 3 or more on a friendly BATTLECLADE operative, roll one D6: on a 4+, subtract 1 from that inflicted damage.",
-   "cp": 1,
-   "fluff": "Through chanted binharic praise from the Tech-Priests, or sparked by holy subroutines, microactuators lock into bracing positions and reserve power cells are brought online. The flesh may be weak, but the sacred invulnerability of the Machine God’s augmetic blessings is evident to all."
-  },
-  {
-   "id": "battleclade.sp.prioritised-acquisition",
-   "name": "PRIORITISED ACQUISITION",
-   "text": "Select one objective marker or one of your mission markers.\n\nWhenever determining control of that marker, treat the total APL stat of friendly BATTLECLADE operatives that contest it as 1 higher if at least one friendly BATTLECLADE operative contests that marker. Note this isn’t a change to the APL stat, so any changes are cumulative with this.\n\nWhenever a friendly BATTLECLADE operative is within 3\" of that marker, add 1 to the Atk stat of its melee weapons (to a maximum of 4).\n\nFirefight Ploys\nSYSTEM EXORCISM\n\nBy redirecting sensory pathways, purging contaminants or unleashing feral machine spirits to consume tainted logic loops, the elite operatives of a Battleclade can exorcise many dangerous afflictions.\nUse this firefight ploy when you would activate a friendly BATTLECLADE operative. Remove one rules effect or stat change your opponent has applied to it (e.g. Poison token, -1APL, cannot be activated or perform actions, etc.), then activate it. This ploy cannot allow it to regain lost wounds or ignore the effects of being injured, remove mission pack rules.\n\nREMOTE ACCESS\n\nProjecting a canticle of hexamathic authority, the most worthy Tech-Priests can commune with intransigent machine spirits even without physical contact.\nUse this firefight ploy during a friendly BATTLECLADE TECH-PRIEST operative’s activation. Once during that activation, you can use one of the following rules:\n\nThat operative doesn’t require a marker to be within its control range to perform a mission action that usually requires this (this takes precedence over that action’s conditions). Instead, the marker must be within 4\" of it and no enemy operatives can contest that marker. However, you can ignore enemy operatives within control range of other friendly BATTLECLADE operatives when determining this.\n\nThat operative doesn’t require a hatchway’s access point to be within its control range to perform an Operate Hatch action. Instead, that access point must be within 4\" of it.\n\nAUTO-FERRIC SUPPLICATION\n\nIn extremis, the Omnissiah’s faithful channel their zeal into shielding energy projectors and the refractive realignment of their bionic body parts.\nUse this firefight ploy when an operative is shooting a friendly BATTLECLADE TECH-PRIEST operative, at the start of the Roll Attack Dice step. Until the end of the sequence, ignore the Piercing weapon rule.\n\nSERVILE SURROGACY\n\nDeeply woven into each thrall’s cybernetic programming is the instinct to bodily shield their masters should they be threatened.\nUse this firefight ploy when a friendly BATTLECLADE TECH-PRIEST operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one friendly BATTLECLADE SERVITOR operative visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that SERVITOR operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that SERVITOR operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.\n\nFaction Equipment\nCOVERT GUISES\n\nUsing filthy bodysuits of local design, falsified insignia or emitters that broadcast shrouding static-filled hisses to foil biological senses, this Battleclade can infiltrate into restricted areas undetected.\nAfter revealing this equipment option, roll one D3. As a STRATEGIC GAMBIT in the first turning point, a number of friendly BATTLECLADE operatives equal to the result that are wholly within your drop zone can immediately perform a free Reposition action, but must end that move wholly within 3\" of your drop zone. Your TECHNOARCHEOLOGIST operative cannot perform more than one Reposition action in the Strategy phase of the first turning point (i.e. as a result of the Seeker of Divine Arcana rule as well).\n\nELECTROMANTIC CAPACITORS\n\nWired into an operative’s numerous mechanical components, these devices can charge the bodies of a clandestine team with coruscating arcs of the sacred Motive Force.\nFriendly BATTLECLADE operatives’ melee weapons have the Shock weapon rule. Whenever a friendly BATTLECLADE operative is retaliating, its melee weapons also have the Severe weapon rule.\n\nCONCEALED APPARATUS\n\nSeemingly lightly equipped servitors can, at an imperative from their master, swiftly assemble far more deadly apparatus, the components of which were hidden in body cavities or as entirely different mechanisms.\nOnce per battle, one COMBAT SERVITOR or GUN SERVITOR operative can use another weapon option on its datacard it didn’t select for the battle.\n\nNEUROCYCLIC RESERVE CELLS\n\nBattleclades are granted these devices to accelerate servitor capabilities.\nOnce per turning point whenever you TRANSFER POWER, you can use this rule. If you do, you can TRANSFER POWER for 0AP (this takes precedence over the normal Noospheric Network rules).",
-   "cp": 1,
-   "fluff": "Acquisition is a holy task to a Technoarcheologist, and their zealous fanaticism bleeds into their binharic instructions. Faced with the sacrilege of thieves, aggression protocols are initiated and biochemical stimulants are released in their thralls, endowing all with a measure of their master’s repugnance."
-  }
- ],
- "firefightPloys": [
-  {
-   "id": "battleclade.fp.system-exorcism",
-   "name": "SYSTEM EXORCISM",
-   "text": "Use this firefight ploy when you would activate a friendly BATTLECLADE operative. Remove one rules effect or stat change your opponent has applied to it (e.g. Poison token, -1APL, cannot be activated or perform actions, etc.), then activate it. This ploy cannot allow it to regain lost wounds or ignore the effects of being injured, remove mission pack rules.",
-   "cp": 1,
-   "fluff": "By redirecting sensory pathways, purging contaminants or unleashing feral machine spirits to consume tainted logic loops, the elite operatives of a Battleclade can exorcise many dangerous afflictions."
-  },
-  {
-   "id": "battleclade.fp.remote-access",
-   "name": "REMOTE ACCESS",
-   "text": "Use this firefight ploy during a friendly BATTLECLADE TECH-PRIEST operative’s activation. Once during that activation, you can use one of the following rules:\n\nThat operative doesn’t require a marker to be within its control range to perform a mission action that usually requires this (this takes precedence over that action’s conditions). Instead, the marker must be within 4\" of it and no enemy operatives can contest that marker. However, you can ignore enemy operatives within control range of other friendly BATTLECLADE operatives when determining this.\n\nThat operative doesn’t require a hatchway’s access point to be within its control range to perform an Operate Hatch action. Instead, that access point must be within 4\" of it.",
-   "cp": 1,
-   "fluff": "Projecting a canticle of hexamathic authority, the most worthy Tech-Priests can commune with intransigent machine spirits even without physical contact."
-  },
-  {
-   "id": "battleclade.fp.auto-ferric-supplication",
-   "name": "AUTO-FERRIC SUPPLICATION",
-   "text": "Use this firefight ploy when an operative is shooting a friendly BATTLECLADE TECH-PRIEST operative, at the start of the Roll Attack Dice step. Until the end of the sequence, ignore the Piercing weapon rule.",
-   "cp": 1,
-   "fluff": "In extremis, the Omnissiah’s faithful channel their zeal into shielding energy projectors and the refractive realignment of their bionic body parts."
-  },
-  {
-   "id": "battleclade.fp.servile-surrogacy",
-   "name": "SERVILE SURROGACY",
-   "text": "Use this firefight ploy when a friendly BATTLECLADE TECH-PRIEST operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one friendly BATTLECLADE SERVITOR operative visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that SERVITOR operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that SERVITOR operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.\n\nFaction Equipment\nCOVERT GUISES\n\nUsing filthy bodysuits of local design, falsified insignia or emitters that broadcast shrouding static-filled hisses to foil biological senses, this Battleclade can infiltrate into restricted areas undetected.\nAfter revealing this equipment option, roll one D3. As a STRATEGIC GAMBIT in the first turning point, a number of friendly BATTLECLADE operatives equal to the result that are wholly within your drop zone can immediately perform a free Reposition action, but must end that move wholly within 3\" of your drop zone. Your TECHNOARCHEOLOGIST operative cannot perform more than one Reposition action in the Strategy phase of the first turning point (i.e. as a result of the Seeker of Divine Arcana rule as well).\n\nELECTROMANTIC CAPACITORS\n\nWired into an operative’s numerous mechanical components, these devices can charge the bodies of a clandestine team with coruscating arcs of the sacred Motive Force.\nFriendly BATTLECLADE operatives’ melee weapons have the Shock weapon rule. Whenever a friendly BATTLECLADE operative is retaliating, its melee weapons also have the Severe weapon rule.\n\nCONCEALED APPARATUS\n\nSeemingly lightly equipped servitors can, at an imperative from their master, swiftly assemble far more deadly apparatus, the components of which were hidden in body cavities or as entirely different mechanisms.\nOnce per battle, one COMBAT SERVITOR or GUN SERVITOR operative can use another weapon option on its datacard it didn’t select for the battle.\n\nNEUROCYCLIC RESERVE CELLS\n\nBattleclades are granted these devices to accelerate servitor capabilities.\nOnce per turning point whenever you TRANSFER POWER, you can use this rule. If you do, you can TRANSFER POWER for 0AP (this takes precedence over the normal Noospheric Network rules).",
-   "cp": 1,
-   "fluff": "Deeply woven into each thrall’s cybernetic programming is the instinct to bodily shield their masters should they be threatened."
-  }
- ],
- "equipment": [
-  {
-   "id": "battleclade.eq.covert-guises",
-   "name": "COVERT GUISES",
-   "text": "After revealing this equipment option, roll one D3. As a STRATEGIC GAMBIT in the first turning point, a number of friendly BATTLECLADE operatives equal to the result that are wholly within your drop zone can immediately perform a free Reposition action, but must end that move wholly within 3\" of your drop zone. Your TECHNOARCHEOLOGIST operative cannot perform more than one Reposition action in the Strategy phase of the first turning point (i.e. as a result of the Seeker of Divine Arcana rule as well).",
-   "fluff": "Using filthy bodysuits of local design, falsified insignia or emitters that broadcast shrouding static-filled hisses to foil biological senses, this Battleclade can infiltrate into restricted areas undetected."
-  },
-  {
-   "id": "battleclade.eq.electromantic-capacitors",
-   "name": "ELECTROMANTIC CAPACITORS",
-   "text": "Friendly BATTLECLADE operatives’ melee weapons have the Shock weapon rule. Whenever a friendly BATTLECLADE operative is retaliating, its melee weapons also have the Severe weapon rule.",
-   "fluff": "Wired into an operative’s numerous mechanical components, these devices can charge the bodies of a clandestine team with coruscating arcs of the sacred Motive Force."
-  },
-  {
-   "id": "battleclade.eq.concealed-apparatus",
-   "name": "CONCEALED APPARATUS",
-   "text": "Once per battle, one COMBAT SERVITOR or GUN SERVITOR operative can use another weapon option on its datacard it didn’t select for the battle.",
-   "fluff": "Seemingly lightly equipped servitors can, at an imperative from their master, swiftly assemble far more deadly apparatus, the components of which were hidden in body cavities or as entirely different mechanisms."
-  },
-  {
-   "id": "battleclade.eq.neurocyclic-reserve-cells",
-   "name": "NEUROCYCLIC RESERVE CELLS",
-   "text": "Once per turning point whenever you TRANSFER POWER, you can use this rule. If you do, you can TRANSFER POWER for 0AP (this takes precedence over the normal Noospheric Network rules).",
-   "fluff": "Battleclades are granted these devices to accelerate servitor capabilities."
-  }
- ],
- "markerGuide": "Omniscanner token\n\nPrioritised Acquisition token\n\nGaze of the Omnissiah token\n\nMechanosuture Array token\n\nNetwork Counteract token\n\nBreach marker",
- "notes": [],
- "rareWeaponRules": []
+  ],
+  "factionRules": [
+    {
+      "id": "battleclade.rule.noospheric-network",
+      "name": "Noospheric Network",
+      "text": "Once during each friendly BATTLECLADE SERVITOR operative’s activation, before or after it performs an action, you can spend 1AP to TRANSFER POWER. \n\nAfter that activation, you can NETWORK COUNTERACT with one other friendly BATTLECLADE SERVITOR operative before your opponent activates. Whenever you NETWORK COUNTERACT with a friendly operative, first select its order. It can then perform a 1AP action for free, but cannot move more than 2\" during that action. Once it’s done so, your opponent then activates as normal.\n\nAn operative cannot TRANSFER POWER or NETWORK COUNTERACT if it has an APL stat of less than 2 (e.g. if the stat has been changed to less than 2 by a rule). NETWORK COUNTERACT is a counteraction, but the operative doesn’t need to be expended with an Engage order to do it. That means if they’re ready when they NETWORK COUNTERACT, they can still be activated as normal later in the turning point. An operative that does NETWORK COUNTERACT cannot do so again, or counteract, during the same turning point.",
+      "fluff": "Servitors are yoked to their Tech-Priest masters by an invisible web of control. This noospheric network enables servitors to be rapidly reorganised, transferring processing power to other thralls who might better serve the Tech-Priests’ immediate wishes. While some are left to conform to their basic programming, others are instructed with key tasks that must be fulfilled for the glory of the Machine God."
+    }
+  ],
+  "strategyPloys": [
+    {
+      "id": "battleclade.sp.noospheric-possession",
+      "name": "NOOSPHERIC POSSESSION",
+      "text": "SUPPORT. Whenever a friendly BATTLECLADE SERVITOR operative is within 6\" of a friendly BATTLECLADE AUTO-PROXY or BATTLECLADE SERVITOR UNDERSEER operative, that friendly SERVITOR operative’s weapons have the Accurate 1 weapon rule.\n\nFor the purposes of the Comms Device universal equipment, the operative the distance is being determined from must control your Comms Device marker to add 3\" to its distance requirement for this rule.",
+      "cp": 1,
+      "fluff": "By broadcasting portions of their neural architecture into their thralls, sometimes via a well-positioned relay, manipulative Servitor Underseers effectively possess their tools to better direct the Omnissiah’s wrath."
+    },
+    {
+      "id": "battleclade.sp.duty-of-reclamation",
+      "name": "DUTY OF RECLAMATION",
+      "text": "Once per action, you can use the Command Re-roll firefight ploy for 0CP if the attack or defence dice was rolled for a friendly BATTLECLADE operative that contests an objective marker or one of your mission markers.",
+      "cp": 1,
+      "fluff": "Embedded in Battleclade operatives are lurking strands of enhanced binharic doctrine. These instructions await the moment to activate, triggered by the proximity of a Tech-Priest’s designated prize."
+    },
+    {
+      "id": "battleclade.sp.incantation-of-the-iron-soul",
+      "name": "INCANTATION OF THE IRON SOUL",
+      "text": "Whenever an attack dice inflicts damage of 3 or more on a friendly BATTLECLADE operative, roll one D6: on a 4+, subtract 1 from that inflicted damage.",
+      "cp": 1,
+      "fluff": "Through chanted binharic praise from the Tech-Priests, or sparked by holy subroutines, microactuators lock into bracing positions and reserve power cells are brought online. The flesh may be weak, but the sacred invulnerability of the Machine God’s augmetic blessings is evident to all."
+    },
+    {
+      "id": "battleclade.sp.prioritised-acquisition",
+      "name": "PRIORITISED ACQUISITION",
+      "text": "Select one objective marker or one of your mission markers.\n\nWhenever determining control of that marker, treat the total APL stat of friendly BATTLECLADE operatives that contest it as 1 higher if at least one friendly BATTLECLADE operative contests that marker. Note this isn’t a change to the APL stat, so any changes are cumulative with this.\n\nWhenever a friendly BATTLECLADE operative is within 3\" of that marker, add 1 to the Atk stat of its melee weapons (to a maximum of 4).\n\nFirefight Ploys\nSYSTEM EXORCISM\n\nBy redirecting sensory pathways, purging contaminants or unleashing feral machine spirits to consume tainted logic loops, the elite operatives of a Battleclade can exorcise many dangerous afflictions.\nUse this firefight ploy when you would activate a friendly BATTLECLADE operative. Remove one rules effect or stat change your opponent has applied to it (e.g. Poison token, -1APL, cannot be activated or perform actions, etc.), then activate it. This ploy cannot allow it to regain lost wounds or ignore the effects of being injured, remove mission pack rules.\n\nREMOTE ACCESS\n\nProjecting a canticle of hexamathic authority, the most worthy Tech-Priests can commune with intransigent machine spirits even without physical contact.\nUse this firefight ploy during a friendly BATTLECLADE TECH-PRIEST operative’s activation. Once during that activation, you can use one of the following rules:\n\nThat operative doesn’t require a marker to be within its control range to perform a mission action that usually requires this (this takes precedence over that action’s conditions). Instead, the marker must be within 4\" of it and no enemy operatives can contest that marker. However, you can ignore enemy operatives within control range of other friendly BATTLECLADE operatives when determining this.\n\nThat operative doesn’t require a hatchway’s access point to be within its control range to perform an Operate Hatch action. Instead, that access point must be within 4\" of it.\n\nAUTO-FERRIC SUPPLICATION\n\nIn extremis, the Omnissiah’s faithful channel their zeal into shielding energy projectors and the refractive realignment of their bionic body parts.\nUse this firefight ploy when an operative is shooting a friendly BATTLECLADE TECH-PRIEST operative, at the start of the Roll Attack Dice step. Until the end of the sequence, ignore the Piercing weapon rule.\n\nSERVILE SURROGACY\n\nDeeply woven into each thrall’s cybernetic programming is the instinct to bodily shield their masters should they be threatened.\nUse this firefight ploy when a friendly BATTLECLADE TECH-PRIEST operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one friendly BATTLECLADE SERVITOR operative visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that SERVITOR operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that SERVITOR operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.\n\nFaction Equipment\nCOVERT GUISES\n\nUsing filthy bodysuits of local design, falsified insignia or emitters that broadcast shrouding static-filled hisses to foil biological senses, this Battleclade can infiltrate into restricted areas undetected.\nAfter revealing this equipment option, roll one D3. As a STRATEGIC GAMBIT in the first turning point, a number of friendly BATTLECLADE operatives equal to the result that are wholly within your drop zone can immediately perform a free Reposition action, but must end that move wholly within 3\" of your drop zone. Your TECHNOARCHEOLOGIST operative cannot perform more than one Reposition action in the Strategy phase of the first turning point (i.e. as a result of the Seeker of Divine Arcana rule as well).\n\nELECTROMANTIC CAPACITORS\n\nWired into an operative’s numerous mechanical components, these devices can charge the bodies of a clandestine team with coruscating arcs of the sacred Motive Force.\nFriendly BATTLECLADE operatives’ melee weapons have the Shock weapon rule. Whenever a friendly BATTLECLADE operative is retaliating, its melee weapons also have the Severe weapon rule.\n\nCONCEALED APPARATUS\n\nSeemingly lightly equipped servitors can, at an imperative from their master, swiftly assemble far more deadly apparatus, the components of which were hidden in body cavities or as entirely different mechanisms.\nOnce per battle, one COMBAT SERVITOR or GUN SERVITOR operative can use another weapon option on its datacard it didn’t select for the battle.\n\nNEUROCYCLIC RESERVE CELLS\n\nBattleclades are granted these devices to accelerate servitor capabilities.\nOnce per turning point whenever you TRANSFER POWER, you can use this rule. If you do, you can TRANSFER POWER for 0AP (this takes precedence over the normal Noospheric Network rules).",
+      "cp": 1,
+      "fluff": "Acquisition is a holy task to a Technoarcheologist, and their zealous fanaticism bleeds into their binharic instructions. Faced with the sacrilege of thieves, aggression protocols are initiated and biochemical stimulants are released in their thralls, endowing all with a measure of their master’s repugnance."
+    }
+  ],
+  "firefightPloys": [
+    {
+      "id": "battleclade.fp.system-exorcism",
+      "name": "SYSTEM EXORCISM",
+      "text": "Use this firefight ploy when you would activate a friendly BATTLECLADE operative. Remove one rules effect or stat change your opponent has applied to it (e.g. Poison token, -1APL, cannot be activated or perform actions, etc.), then activate it. This ploy cannot allow it to regain lost wounds or ignore the effects of being injured, remove mission pack rules.",
+      "cp": 1,
+      "fluff": "By redirecting sensory pathways, purging contaminants or unleashing feral machine spirits to consume tainted logic loops, the elite operatives of a Battleclade can exorcise many dangerous afflictions."
+    },
+    {
+      "id": "battleclade.fp.remote-access",
+      "name": "REMOTE ACCESS",
+      "text": "Use this firefight ploy during a friendly BATTLECLADE TECH-PRIEST operative’s activation. Once during that activation, you can use one of the following rules:\n\nThat operative doesn’t require a marker to be within its control range to perform a mission action that usually requires this (this takes precedence over that action’s conditions). Instead, the marker must be within 4\" of it and no enemy operatives can contest that marker. However, you can ignore enemy operatives within control range of other friendly BATTLECLADE operatives when determining this.\n\nThat operative doesn’t require a hatchway’s access point to be within its control range to perform an Operate Hatch action. Instead, that access point must be within 4\" of it.",
+      "cp": 1,
+      "fluff": "Projecting a canticle of hexamathic authority, the most worthy Tech-Priests can commune with intransigent machine spirits even without physical contact."
+    },
+    {
+      "id": "battleclade.fp.auto-ferric-supplication",
+      "name": "AUTO-FERRIC SUPPLICATION",
+      "text": "Use this firefight ploy when an operative is shooting a friendly BATTLECLADE TECH-PRIEST operative, at the start of the Roll Attack Dice step. Until the end of the sequence, ignore the Piercing weapon rule.",
+      "cp": 1,
+      "fluff": "In extremis, the Omnissiah’s faithful channel their zeal into shielding energy projectors and the refractive realignment of their bionic body parts."
+    },
+    {
+      "id": "battleclade.fp.servile-surrogacy",
+      "name": "SERVILE SURROGACY",
+      "text": "Use this firefight ploy when a friendly BATTLECLADE TECH-PRIEST operative is selected as the valid target of a Shoot action or to fight against during the Fight action. Select one friendly BATTLECLADE SERVITOR operative visible to and within 3\" of that first friendly operative to become the valid target or to be fought against (as appropriate) instead (even if it wouldn’t normally be valid for this). If it’s the Fight action, treat that SERVITOR operative as being within the fighting operative’s control range for the duration of that action. If it’s the Shoot action, that SERVITOR operative is only in cover or obscured if the original target was.\n\nThis ploy has no effect if it’s the Shoot action and the ranged weapon has the Blast or Torrent weapon rule.\n\nFaction Equipment\nCOVERT GUISES\n\nUsing filthy bodysuits of local design, falsified insignia or emitters that broadcast shrouding static-filled hisses to foil biological senses, this Battleclade can infiltrate into restricted areas undetected.\nAfter revealing this equipment option, roll one D3. As a STRATEGIC GAMBIT in the first turning point, a number of friendly BATTLECLADE operatives equal to the result that are wholly within your drop zone can immediately perform a free Reposition action, but must end that move wholly within 3\" of your drop zone. Your TECHNOARCHEOLOGIST operative cannot perform more than one Reposition action in the Strategy phase of the first turning point (i.e. as a result of the Seeker of Divine Arcana rule as well).\n\nELECTROMANTIC CAPACITORS\n\nWired into an operative’s numerous mechanical components, these devices can charge the bodies of a clandestine team with coruscating arcs of the sacred Motive Force.\nFriendly BATTLECLADE operatives’ melee weapons have the Shock weapon rule. Whenever a friendly BATTLECLADE operative is retaliating, its melee weapons also have the Severe weapon rule.\n\nCONCEALED APPARATUS\n\nSeemingly lightly equipped servitors can, at an imperative from their master, swiftly assemble far more deadly apparatus, the components of which were hidden in body cavities or as entirely different mechanisms.\nOnce per battle, one COMBAT SERVITOR or GUN SERVITOR operative can use another weapon option on its datacard it didn’t select for the battle.\n\nNEUROCYCLIC RESERVE CELLS\n\nBattleclades are granted these devices to accelerate servitor capabilities.\nOnce per turning point whenever you TRANSFER POWER, you can use this rule. If you do, you can TRANSFER POWER for 0AP (this takes precedence over the normal Noospheric Network rules).",
+      "cp": 1,
+      "fluff": "Deeply woven into each thrall’s cybernetic programming is the instinct to bodily shield their masters should they be threatened."
+    }
+  ],
+  "equipment": [
+    {
+      "id": "battleclade.eq.covert-guises",
+      "name": "COVERT GUISES",
+      "text": "After revealing this equipment option, roll one D3. As a STRATEGIC GAMBIT in the first turning point, a number of friendly BATTLECLADE operatives equal to the result that are wholly within your drop zone can immediately perform a free Reposition action, but must end that move wholly within 3\" of your drop zone. Your TECHNOARCHEOLOGIST operative cannot perform more than one Reposition action in the Strategy phase of the first turning point (i.e. as a result of the Seeker of Divine Arcana rule as well).",
+      "fluff": "Using filthy bodysuits of local design, falsified insignia or emitters that broadcast shrouding static-filled hisses to foil biological senses, this Battleclade can infiltrate into restricted areas undetected."
+    },
+    {
+      "id": "battleclade.eq.electromantic-capacitors",
+      "name": "ELECTROMANTIC CAPACITORS",
+      "text": "Friendly BATTLECLADE operatives’ melee weapons have the Shock weapon rule. Whenever a friendly BATTLECLADE operative is retaliating, its melee weapons also have the Severe weapon rule.",
+      "fluff": "Wired into an operative’s numerous mechanical components, these devices can charge the bodies of a clandestine team with coruscating arcs of the sacred Motive Force."
+    },
+    {
+      "id": "battleclade.eq.concealed-apparatus",
+      "name": "CONCEALED APPARATUS",
+      "text": "Once per battle, one COMBAT SERVITOR or GUN SERVITOR operative can use another weapon option on its datacard it didn’t select for the battle.",
+      "fluff": "Seemingly lightly equipped servitors can, at an imperative from their master, swiftly assemble far more deadly apparatus, the components of which were hidden in body cavities or as entirely different mechanisms."
+    },
+    {
+      "id": "battleclade.eq.neurocyclic-reserve-cells",
+      "name": "NEUROCYCLIC RESERVE CELLS",
+      "text": "Once per turning point whenever you TRANSFER POWER, you can use this rule. If you do, you can TRANSFER POWER for 0AP (this takes precedence over the normal Noospheric Network rules).",
+      "fluff": "Battleclades are granted these devices to accelerate servitor capabilities."
+    }
+  ],
+  "markerGuide": "Omniscanner token\n\nPrioritised Acquisition token\n\nGaze of the Omnissiah token\n\nMechanosuture Array token\n\nNetwork Counteract token\n\nBreach marker",
+  "notes": [],
+  "rareWeaponRules": []
 }
