@@ -173,8 +173,11 @@ export function frameRect(
 ): Viewport {
   const aspect = aspectOf(board, limits);
   const pad = Math.max(0, finite(padIn, 0));
-  const wantW = Math.max(0, finite(rect.w, 0)) + pad * 2;
-  const wantH = Math.max(0, finite(rect.h, 0)) + pad * 2;
+  // Cap the padded rect at the board. A 6x22 drop zone padded by 1.5" asks for 25" of a 22"
+  // board, and the extra 3" come back as letterbox bars — the exact thing the pane-aspect
+  // lock exists to remove.
+  const wantW = Math.min(board.w, Math.max(0, finite(rect.w, 0)) + pad * 2);
+  const wantH = Math.min(board.h, Math.max(0, finite(rect.h, 0)) + pad * 2);
   // Widen to whichever dimension does not fit, so the whole rect is inside the window.
   // Clamp the width to the legal range FIRST: widening it afterwards (which the zoom limit
   // does for a small rect) would slide the rect off the centre of the window.

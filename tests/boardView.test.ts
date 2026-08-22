@@ -346,6 +346,15 @@ describe('frameRect points the board at what matters', () => {
     close(BOARD.h - (vp.y + vp.h / 2), 11, 1e-6);
   });
 
+  it('never asks to see past the board edge, so a full-height rect draws no bars', () => {
+    // A drop zone is 6" x 22" — the board's whole height. Padding it vertically would demand
+    // 25" of a 22" board, and those 3" come back as letterbox bars.
+    const vp = frameRect(DROP_ZONE, BOARD, PORTRAIT, 1.5);
+    close(vp.y, 0, 1e-9);
+    close(vp.h, BOARD.h, 1e-9);
+    expect(vp.y + vp.h).toBeLessThanOrEqual(BOARD.h + 1e-9);
+  });
+
   it('returns a legal window for a rect bigger than the board, or a degenerate one', () => {
     const huge = frameRect({ x: -50, y: -50, w: 500, h: 500 }, BOARD, PORTRAIT, 1);
     expect(isFitViewport(huge, BOARD, PORTRAIT)).toBe(true);

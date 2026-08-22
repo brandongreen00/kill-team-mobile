@@ -161,6 +161,19 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       return ok(next);
     }
 
+    case 'BeginDeployment': {
+      // The reveal. Until this existed the UI reached in and assigned `setup.step` itself,
+      // which meant the transition was invisible to the log, to a replay and to any other
+      // view of the same state.
+      if (next.setup.step !== 'selectOperatives') return fail('kill teams are not being selected');
+      const empty = (['p1', 'p2'] as PlayerId[]).filter((p) => next.teams[p].operativeIds.length === 0);
+      if (empty.length > 0) return fail(`${empty.join(' and ')} has not selected a kill team`);
+      next.setup.step = 'deploy';
+      next.setup.revealed = { p1: true, p2: true };
+      log(next, { kind: 'system', text: 'Both kill teams are revealed' });
+      return ok(next);
+    }
+
     case 'DeployOperative': {
       const op = next.operatives[intent.operativeId];
       if (!op) return fail('no such operative');
