@@ -48,7 +48,7 @@ export function App() {
   const [ui, setUiState] = useState<UiState>(emptyUi);
   const [detent, setDetent] = useState<Detent>('rest');
   const [sheetRest, setSheetRest] = useState(140);
-  const [toasts, setToasts] = useState<{ id: number; text: string }[]>([]);
+  const [toasts, setToasts] = useState<{ id: number; text: string; count: number }[]>([]);
   const isDesktop = useIsDesktop();
 
   const setUi = useCallback((patch: Partial<UiState>) => setUiState((s) => ({ ...s, ...patch })), []);
@@ -78,16 +78,29 @@ export function App() {
   // --- rejections become sentences -------------------------------------
   // Every hook below runs on every render, store or no store: an early return above a hook
   // is a hooks-order bug, and the old shell had one.
+  //
+  // ONE toast at a time, and a repeat of the same reason refreshes it with a count rather
+  // than stacking. Aiming into an illegal spot four times in a row is one piece of news, not
+  // four, and four stacked toasts covered the very sheet the player was reading.
   const lastToastSeq = useRef(0);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     const rejection = store?.lastRejection;
     if (!rejection || rejection.seq === lastToastSeq.current) return;
     lastToastSeq.current = rejection.seq;
-    const id = rejection.seq;
-    setToasts((t) => [...t.slice(-2), { id, text: rejection.reason }]);
-    const timer = setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), TOAST_MS);
-    return () => clearTimeout(timer);
+    setToasts((t) => {
+      const cur = t[0];
+      return cur && cur.text === rejection.reason
+        ? [{ ...cur, count: cur.count + 1 }]
+        : [{ id: rejection.seq, text: rejection.reason, count: 1 }];
+    });
+    // The timer must NOT be an effect cleanup: the next rejection re-runs the effect, and
+    // cancelling the previous toast's timer there is what left them on screen for ever.
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToasts([]), TOAST_MS);
   }, [store?.lastRejection?.seq]);
+
+  useEffect(() => () => (toastTimer.current ? clearTimeout(toastTimer.current) : undefined), []);
 
   const plan: CommandPlan | null = useMemo(
     () => (store ? commandPlan({ store, teams, ui, setUi }) : null),
@@ -314,6 +327,7 @@ export function App() {
         <div key={t.id} class="toast is-danger">
           <IconAlert size={20} />
           <span>{t.text}</span>
+          {t.count > 1 && <span class="toast-count">×{t.count}</span>}
         </div>
       ))}
     </div>

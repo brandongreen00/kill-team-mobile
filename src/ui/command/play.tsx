@@ -145,7 +145,7 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
     return {
       id: 'firefight.order',
       step: `Turning point ${state.turningPoint} · Firefight`,
-      title: `Activate ${chosen.letter} — ${dc.name}`,
+      title: `${chosen.letter} — ${dc.name}`,
       help: 'Choose its order. It keeps that order until it is next activated. Engage can shoot, fight and be shot at; Conceal cannot be shot at while in cover, and cannot shoot.',
       frame: rectAround(chosen, 9),
       detent: 'half',
@@ -171,8 +171,8 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
   return {
     id: 'firefight.activate',
     step: `Turning point ${state.turningPoint} · Firefight`,
-    title: `${LABEL[turn.player]} — activate an operative`,
-    help: 'Tap one of your operatives on the killzone, or pick it from the list.',
+    title: `${LABEL[turn.player]} — choose an operative`,
+    help: 'Tap one of your ringed operatives on the killzone, or pick it from the list below.',
     frame: null,
     detent: 'rest',
     turnOf: turn.player,
@@ -329,8 +329,8 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
   return {
     id: 'firefight.move',
     step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}`,
-    title: `${action} — aim on the killzone`,
-    help: `Up to ${budget.toFixed(0)}". Tap where ${op.letter} should end up; drag to adjust. Two fingers pan.`,
+    title: `${action} ${op.letter}`,
+    help: `Up to ${budget.toFixed(0)}". Tap where ${op.letter} should end up; drag to adjust, two fingers to pan. The shaded area is everywhere it can legally reach.`,
     armedNote: check
       ? check.ok
         ? `${check.total.toFixed(1)}" of ${budget.toFixed(0)}"`
@@ -351,9 +351,12 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
     },
     highlights: (
       <g style={{ pointerEvents: 'none' }}>
+        {/* The engine's own reachability field, cell by cell. They are drawn a hair larger
+            than the 0.5" step so the squares merge into one readable area instead of a
+            stipple; the colour comes from `.reach` in the stylesheet. */}
         <g class="reach">
           {[...cells.values()].map((c, i) => (
-            <rect key={i} x={c.pos.x - 0.25} y={c.pos.y - 0.25} width={0.5} height={0.5} fill="#62d08a" opacity={0.14} />
+            <rect key={i} x={c.pos.x - 0.29} y={c.pos.y - 0.29} width={0.58} height={0.58} />
           ))}
         </g>
         {ui.move?.dest && (
@@ -424,7 +427,7 @@ function shootPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, weaponNam
   return {
     id: 'firefight.shoot',
     step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}`,
-    title: chosen ? `Shoot ${chosen.target.letter} with the ${weaponName}` : `Shoot — pick a target`,
+    title: chosen ? `Shoot ${chosen.target.letter}` : 'Pick a target',
     help: chosen
       ? `${chosen.check.distance.toFixed(1)}" · ${chosen.check.obscured ? 'obscured' : chosen.check.inCover ? 'in cover' : 'no cover'}`
       : 'Tap an outlined enemy on the killzone, or pick one from the list.',

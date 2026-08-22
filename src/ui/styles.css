@@ -572,11 +572,13 @@ textarea {
    Toasts — the reducer's rejection reason, which the old UI discarded.
    ========================================================================= */
 
+/* Under the top bar, not above the sheet: a toast must never cover the control the player
+   is being told about. */
 .toasts {
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  bottom: calc(var(--sheet-rest) + var(--s4));
+  top: calc(var(--safe-top) + var(--topbar-h) + var(--s2));
   z-index: 40;
   display: grid;
   gap: var(--s2);
@@ -603,9 +605,15 @@ textarea {
 }
 @keyframes toast-in {
   from {
-    transform: translateY(8px);
+    transform: translateY(-8px);
     opacity: 0;
   }
+}
+.toast-count {
+  margin-left: auto;
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
 }
 
 /* =========================================================================
@@ -912,6 +920,18 @@ textarea {
 .legal-zone {
   animation: zone-pulse 2.6s ease-in-out infinite;
 }
+
+/* Where the active operative can get to. Drawn as one merged shape rather than a grid of
+   cells so it reads as an area at a glance. */
+/* Opacity on the GROUP, not on each cell: the cells overlap by design so they merge into
+   one shape, and per-cell alpha turns those overlaps into a lattice. */
+.reach {
+  opacity: 0.22;
+}
+.reach rect {
+  fill: #62d08a;
+  stroke: none;
+}
 @keyframes zone-pulse {
   0%,
   100% {
@@ -1082,7 +1102,7 @@ details.disclosure pre {
     font-size: var(--t-base);
   }
   .toasts {
-    bottom: var(--s4);
+    top: calc(var(--topbar-h) + var(--s4));
   }
   .overlay-page {
     /* On desktop a route is a centred panel, not a full takeover. */
