@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle } from '../src/core/init.ts';
-import { reduce } from '../src/core/reducer.ts';
+import { canDeployAt, reduce } from '../src/core/reducer.ts';
+import { deployBatchRemaining, deployToAct, gambitToAct } from '../src/core/phases.ts';
+import { actionAvailability } from '../src/core/actions.ts';
 import { defaultDecisionOption } from '../src/core/decisions.ts';
 import {
   accurateValue,
@@ -256,5 +258,122 @@ describe('action restrictions and AP (core rules › Perform Actions)', () => {
     const second = reduce(s, { t: 'PerformAction', operativeId: a, action: 'Reposition', params: { path: { points: [{ x: 9, y: 11 }] } } }, ctx);
     expect(second.ok).toBe(false);
     expect(second.reason).toContain('action restrictions');
+  });
+});
+
+// ---------------------------------------------------------------------------
+/**
+ * Selectors the UI reads instead of deriving. Each of these was a rule living in
+ * `src/ui/**` — which meant the app was the only thing that knew it, and nothing tested it.
+ */
+describe('order-of-play selectors', () => {
+  const battleWith = (p1: number, p2: number) => {
+    const ctx = testContext();
+    let s = createBattle(ctx, { map: ctx.maps.get('test-open')!, seed: 5 });
+    s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: Array.from({ length: p1 }, () => ({ datacardId: 'test.trooper' })) }, ctx).state;
+    s = reduce(s, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: Array.from({ length: p2 }, () => ({ datacardId: 'test.trooper' })) }, ctx).state;
+    s.initiative = 'p1';
+    return { ctx, s };
+  };
+
+  it('alternates deployment in thirds, rounding up, starting with initiative', () => {
+    // "Starting with the player that has initiative, players alternate setting up one third
+    // of their kill team (rounding up)." Six operatives each: 2, 2, 2.
+    const { s } = battleWith(6, 6);
+    expect(deployToAct(s)).toBe('p1');
+    expect(deployBatchRemaining(s, 'p1')).toBe(2);
+
+    s.setup.deployedCount = { p1: 2 };
+    expect(deployToAct(s)).toBe('p2');
+    s.setup.deployedCount = { p1: 2, p2: 2 };
+    expect(deployToAct(s)).toBe('p1');
+    s.setup.deployedCount = { p1: 6, p2: 2 };
+    // One side finished: the other keeps going rather than the turn stalling.
+    expect(deployToAct(s)).toBe('p2');
+    s.setup.deployedCount = { p1: 6, p2: 6 };
+    expect(deployToAct(s)).toBeNull();
+  });
+
+  it('rounds a third UP, so a five-operative kill team places 2, 2, 1', () => {
+    const { s } = battleWith(5, 5);
+    expect(deployBatchRemaining(s, 'p1')).toBe(2);
+    s.setup.deployedCount = { p1: 4 };
+    expect(deployBatchRemaining(s, 'p1')).toBe(1);
+  });
+
+  it('alternates gambits from the initiative player until both have passed', () => {
+    const { s } = battleWith(3, 3);
+    expect(gambitToAct(s)).toBe('p1');
+    s.teams.p1.passedGambit = true;
+    expect(gambitToAct(s)).toBe('p2');
+    s.teams.p1.passedGambit = false;
+    s.teams.p2.passedGambit = true;
+    expect(gambitToAct(s)).toBe('p1');
+    s.teams.p1.passedGambit = true;
+    expect(gambitToAct(s)).toBeNull();
+  });
+});
+
+describe('canDeployAt is the reducer, exported', () => {
+  const setUp = () => {
+    const ctx = testContext();
+    let s = createBattle(ctx, { map: ctx.maps.get('test-open')!, seed: 5 });
+    s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: [{ datacardId: 'test.trooper' }, { datacardId: 'test.trooper' }] }, ctx).state;
+    s.setup.dropZone = { p1: 'p1', p2: 'p2' };
+    return { ctx, s };
+  };
+
+  it('gives the same verdict, in the same words, as DeployOperative itself', () => {
+    const { ctx, s } = setUp();
+    const op = s.operatives['p1-0']!;
+    for (const pos of [{ x: 3, y: 11 }, { x: 20, y: 11 }, { x: 5.9, y: 11 }]) {
+      const selector = canDeployAt(ctx, s, op, pos);
+      const viaReducer = reduce(s, { t: 'DeployOperative', player: 'p1', operativeId: op.id, pos }, ctx);
+      expect(selector.ok).toBe(viaReducer.ok);
+      if (!selector.ok) expect(selector.reason).toBe(viaReducer.reason);
+    }
+  });
+
+  it('refuses a base that is not wholly within the drop zone, or is on another base', () => {
+    const { ctx, s } = setUp();
+    const a = s.operatives['p1-0']!;
+    expect(canDeployAt(ctx, s, a, { x: 3, y: 11 }).ok).toBe(true);
+    expect(canDeployAt(ctx, s, a, { x: 5.9, y: 11 }).reason).toMatch(/wholly within your drop zone/);
+    const placed = reduce(s, { t: 'DeployOperative', player: 'p1', operativeId: a.id, pos: { x: 3, y: 11 } }, ctx).state;
+    const b = placed.operatives['p1-1']!;
+    expect(canDeployAt(ctx, placed, b, { x: 3, y: 11 }).reason).toMatch(/cannot be placed on another/);
+  });
+
+  it('does not mutate the state it is asked about', () => {
+    const { ctx, s } = setUp();
+    const before = JSON.stringify(s.operatives);
+    canDeployAt(ctx, s, s.operatives['p1-0']!, { x: 3, y: 11 });
+    expect(JSON.stringify(s.operatives)).toBe(before);
+  });
+});
+
+describe('actionAvailability runs the checks availableActions skips', () => {
+  it('reports a move as needing a target rather than as simply legal', () => {
+    const ctx = testContext();
+    let s = createBattle(ctx, { map: ctx.maps.get('test-open')!, seed: 5 });
+    s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: [{ datacardId: 'test.trooper' }] }, ctx).state;
+    s = reduce(s, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: [{ datacardId: 'test.trooper' }] }, ctx).state;
+    s.setup.dropZone = { p1: 'p1', p2: 'p2' };
+    s = reduce(s, { t: 'DeployOperative', player: 'p1', operativeId: 'p1-0', pos: { x: 3, y: 11 } }, ctx).state;
+    s = reduce(s, { t: 'DeployOperative', player: 'p2', operativeId: 'p2-0', pos: { x: 27, y: 11 } }, ctx).state;
+    s = reduce(s, { t: 'FinishSetup' }, ctx).state;
+    s.phase = 'firefight';
+    s.activePlayer = 'p1';
+    const op = s.operatives['p1-0']!;
+    op.ready = true;
+
+    const rows = actionAvailability(ctx, s, op);
+    const reposition = rows.find((r) => r.def.id === 'Reposition')!;
+    // `availableActions` says "ok" because it never runs `check`; a UI that rendered that as
+    // an enabled button would dispatch an intent the reducer rejects for "no path supplied".
+    expect(reposition.needsTarget).toBe('point');
+    // …and an unparameterised action is genuinely checked.
+    const pass = rows.find((r) => r.def.id === 'Pass');
+    if (pass) expect(typeof pass.ok).toBe('boolean');
   });
 });

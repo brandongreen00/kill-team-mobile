@@ -31,10 +31,10 @@ import {
 } from './phases.ts';
 import { advanceShoot, startShoot } from './sequences/shoot.ts';
 import { advanceFight, startFight } from './sequences/fight.ts';
-import { baseWhollyWithin, baseGap } from './geometry.ts';
+import { baseWhollyWithin, baseGap, basesOverlap } from './geometry.ts';
 import { baseTouchesHazardous } from './terrain.ts';
 import type { Intent } from './intents.ts';
-import type { GameState, KillzoneMap, OperativeState, PlayerId } from './types.ts';
+import type { GameState, KillzoneMap, OperativeState, PlayerId, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
 
 export interface ReduceOutcome {
@@ -178,21 +178,9 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       const op = next.operatives[intent.operativeId];
       if (!op) return fail('no such operative');
       if (op.player !== intent.player) return fail('not your operative');
-      const zoneKey = next.setup.dropZone[intent.player] ?? intent.player;
-      const zone = next.map.dropZones[zoneKey];
-      const dc = card(ctx, op);
       const rot = intent.rotDeg ?? 0;
-      if (!baseWhollyWithin(intent.pos, dc.base, rot, zone))
-        return fail('operatives must be set up wholly within your drop zone');
-      const index = terrain(ctx, next);
-      if (baseTouchesHazardous(index, intent.pos, dc.base, rot))
-        return fail('a base cannot touch a hazardous area');
-      for (const other of aliveOperatives(next)) {
-        if (other.id === op.id || other.pos.x < -50) continue;
-        const oc = card(ctx, other);
-        if (baseGap(intent.pos, dc.base, rot, other.pos, oc.base, other.rot) < -1e-4)
-          return fail('a base cannot be placed on another');
-      }
+      const legal = canDeployAt(ctx, next, op, intent.pos, rot);
+      if (!legal.ok) return fail(legal.reason ?? 'that operative cannot be set up there');
       op.pos = { ...intent.pos };
       op.rot = rot;
       op.order = 'conceal'; // "must be given a Conceal order"
@@ -542,6 +530,44 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
     default:
       return fail(`unhandled intent '${(intent as { t: string }).t}'`);
   }
+}
+
+/**
+ * Is this a legal place to set up that operative? Core Rules › SET UP OPERATIVES.
+ *
+ * Extracted from the `DeployOperative` case so that a UI drawing a placement ghost gets the
+ * SAME answer, in the SAME words, as the intent it is about to send — and gets it without
+ * cloning the whole GameState through `reduce` on every frame of a drag.
+ */
+export function canDeployAt(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  pos: Vec2,
+  rotDeg = 0,
+): { ok: boolean; reason?: string } {
+  const zoneKey = state.setup.dropZone[op.player] ?? op.player;
+  const zone = state.map.dropZones[zoneKey];
+  const dc = card(ctx, op);
+  if (!baseWhollyWithin(pos, dc.base, rotDeg, zone))
+    return { ok: false, reason: 'operatives must be set up wholly within your drop zone' };
+  const index = terrain(ctx, state);
+  if (baseTouchesHazardous(index, pos, dc.base, rotDeg))
+    return { ok: false, reason: 'a base cannot touch a hazardous area' };
+  for (const other of aliveOperatives(state)) {
+    if (other.id === op.id || other.pos.x < -50) continue;
+    const oc = card(ctx, other);
+    // `basesOverlap`, NOT `baseGap(...) < -1e-4`. `baseGap` clamps at zero
+    // (geometry.ts › baseGap), so that comparison can never be true and this guard has never
+    // fired — two operatives could be set up on the same square inch. Eight further copies of
+    // the same dead comparison remain in `movement.ts` and seven team modules; they are left
+    // alone deliberately, because switching them changes what is a legal END POSITION for a
+    // move and sixteen rules tests currently encode the permissive behaviour. See
+    // docs/DECISIONS.md.
+    if (basesOverlap(pos, dc.base, rotDeg, other.pos, oc.base, other.rot))
+      return { ok: false, reason: 'a base cannot be placed on another' };
+  }
+  return { ok: true };
 }
 
 // ---------------------------------------------------------------------------

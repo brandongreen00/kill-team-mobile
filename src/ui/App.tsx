@@ -321,6 +321,26 @@ export function App() {
     </header>
   );
 
+  /**
+   * Two live regions, mounted once at boot and never unmounted — a region that is added to
+   * the DOM at the same time as its text is not announced by any screen reader.
+   *
+   * `status` carries what just changed (the current prompt, a placement, a rejection);
+   * `log` carries the battle log so a blind player can follow dice they cannot see.
+   */
+  const announcer = (
+    <>
+      <div class="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {plan.armedNote ? `${plan.title}. ${plan.armedNote}` : plan.title}
+      </div>
+      <div class="sr-only" role="log" aria-live="polite">
+        {state.log.slice(-1).map((l) => (
+          <span key={l.seq}>{l.text}</span>
+        ))}
+      </div>
+    </>
+  );
+
   const toastLayer = toasts.length > 0 && (
     <div class="toasts" role="status" aria-live="polite">
       {toasts.map((t) => (
@@ -346,6 +366,7 @@ export function App() {
           <aside class="rail right">{logPane}</aside>
         </div>
         {toastLayer}
+        {announcer}
         {route}
       </>
     );
@@ -368,6 +389,7 @@ export function App() {
         </Sheet>
       </main>
       {toastLayer}
+      {announcer}
       {route}
     </>
   );

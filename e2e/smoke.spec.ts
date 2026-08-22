@@ -40,6 +40,19 @@ async function setUpToDeployment(page: Page): Promise<void> {
     await expect(lock).toBeEnabled();
     await lock.click();
   }
+
+  // Equipment and the tac op, one secret screen each. The tac op is not optional: it is the
+  // only thing that calls `ctx.initOps`, so a battle without one scores nothing.
+  for (const who of [/I am Player 1/, /I am Player 2/]) {
+    const handover = page.getByRole('button', { name: who });
+    if (await handover.count()) await handover.click();
+    await expect(promptTitle(page)).toContainText(/equipment and tac op/i);
+    await page.locator('.tac-ops button').first().click();
+    const confirm = page.getByRole('button', { name: /^Confirm$/ });
+    await expect(confirm).toBeEnabled();
+    await confirm.click();
+  }
+
   await page.getByRole('button', { name: /Reveal and deploy/ }).click();
   await expect(promptTitle(page)).toContainText(/^Place /);
 }

@@ -9,10 +9,18 @@
 import type { Store } from '../store.ts';
 import type { TeamData } from '../data.ts';
 import type { PendingDecision, PlayerId } from '../../core/types.ts';
-import { IconAlert, IconHandover } from '../icons.tsx';
+import { IconHandover } from '../icons.tsx';
 import type { CommandPlan, UiState } from './types.ts';
 import { deployPlan, dropZonePlan, rollOffPlan, selectOperativesPlan, unknownSetupPlan } from './setup.tsx';
-import { activateChoicePlan, activationPlan, battleEndPlan, endOfTpPlan, strategyPlan } from './play.tsx';
+import {
+  activateChoicePlan,
+  activationPlan,
+  battleEndPlan,
+  endOfTpPlan,
+  guardInterruptPlan,
+  guardOffer,
+  strategyPlan,
+} from './play.tsx';
 
 const LABEL: Record<PlayerId, string> = { p1: 'Player 1', p2: 'Player 2' };
 
@@ -30,6 +38,12 @@ export function commandPlan(args: CommandArgs): CommandPlan {
   // A reactive window outranks everything: the rules block on it, so the screen does too.
   const decision = state.pending[0];
   if (decision) return decisionPlan(args, decision);
+
+  // On Guard is second, and it is a special case worth stating: it is NOT a PendingDecision,
+  // the reducer does not block on it, so if this branch did not exist the active player would
+  // simply carry on and the opponent's interrupt would never happen.
+  const guard = guardOffer(store);
+  if (guard) return guardInterruptPlan(args, guard);
 
   if (state.phase === 'setup') {
     switch (state.setup.step) {
@@ -113,16 +127,16 @@ function decisionPlan({ store, ui, setUi }: CommandArgs, decision: PendingDecisi
           {options
             .filter((o) => o.id !== preferred?.id)
             .map((o) => (
-              <button key={o.id} disabled={o.disabled} title={o.reason ?? undefined} onClick={() => answer(o.id)}>
-                {o.label}
+              // The reason goes IN the row. `title` is invisible on a touch screen, and a
+              // greyed option with no explanation is the same dead end as a silent rejection.
+              <button key={o.id} class={o.disabled ? 'is-blocked' : undefined} disabled={o.disabled} onClick={() => answer(o.id)}>
+                <span style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+                  <span class="entry-name">{o.label}</span>
+                  {o.disabled && o.reason && <span class="entry-meta why">{o.reason}</span>}
+                </span>
               </button>
             ))}
         </div>
-        {options.some((o) => o.disabled) && (
-          <p class="dim">
-            <IconAlert size={14} /> Greyed-out options are not available — hold one to see why.
-          </p>
-        )}
         {decision.sourceText && (
           <details class="disclosure">
             <summary>Rule text</summary>

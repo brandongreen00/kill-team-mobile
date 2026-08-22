@@ -35,6 +35,10 @@ export interface UiState {
   inspect?: { from?: string; to?: string } | undefined;
   /** Pass-and-play: which player has confirmed they are holding the device. */
   handedOverTo?: PlayerId | undefined;
+  /** Equipment ticked on the loadout screen, before it is committed. */
+  equipment?: string[] | undefined;
+  /** The tac op picked on the loadout screen, before it is committed. */
+  tacOpId?: string | undefined;
   /** A full-screen route over the battle. */
   route?: 'rosters' | 'log' | 'killzones' | 'menu' | undefined;
 }

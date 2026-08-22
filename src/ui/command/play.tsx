@@ -15,7 +15,7 @@
  * Nothing here decides a rule. Legality comes from `availableActions`, `validTargets`,
  * `reachableCells` and `validateMove`; the answers are only ever *rendered* here.
  */
-import { availableActions } from '../../core/actions.ts';
+import { actionAvailability } from '../../core/actions.ts';
 import { moveBudget, moveOptionsFor, reachableCells, validateMove, type MoveAction } from '../../core/movement.ts';
 import { validTargets } from '../../core/sequences/shoot.ts';
 import { aplOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../../core/state.ts';
@@ -126,7 +126,15 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
       targetIds: candidates.map((o) => o.id),
       armed: { onOperative: (op) => store.dispatch({ t: 'Counteract', player: turn.player, operativeId: op.id }) },
       actions: [
-        { id: 'decline', label: 'Decline', tone: candidates.length > 0 ? 'default' : 'primary', onClick: () => store.dispatch({ t: 'DeclineCounteract', player: turn.player }) },
+        {
+          id: 'decline',
+          // Not "not now": the reducer marks every one of that player's operatives as having
+          // counteracted, so declining forfeits the rest of the turning point. The label has
+          // to say so, and it is not the primary.
+          label: 'Decline — no more counteracts this turning point',
+          tone: candidates.length > 0 ? 'quiet' : 'primary',
+          onClick: () => store.dispatch({ t: 'DeclineCounteract', player: turn.player }),
+        },
       ],
       body: <OperativeList store={store} ops={candidates} onPick={(op) => store.dispatch({ t: 'Counteract', player: turn.player, operativeId: op.id })} verb="Counteract" />,
     };
@@ -183,6 +191,130 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
   };
 }
 
+/* ------------------------------------------------------- On Guard window */
+
+/**
+ * On Guard is NOT a `PendingDecision`: `offerGuardInterrupt` writes
+ * `state.opState.guardOffer` and the reducer does not block on it. So the UI is the only
+ * thing that enforces the window — which means it has to render it, and render nothing else
+ * while it is open, or the active player simply walks past their opponent's interrupt.
+ *
+ * It is only ever raised on a Close Quarters killzone (Gallowdark / Tomb World, D-002).
+ */
+export interface GuardOffer {
+  player: PlayerId;
+  operativeIds: string[];
+}
+
+export function guardOffer(store: Store): GuardOffer | null {
+  const raw = store.state.opState['guardOffer'] as GuardOffer | undefined;
+  return raw && Array.isArray(raw.operativeIds) && raw.operativeIds.length > 0 ? raw : null;
+}
+
+export function guardInterruptPlan({ store, ui, setUi }: PlayArgs, offer: GuardOffer): CommandPlan {
+  const { state, ctx } = store;
+  const candidates = offer.operativeIds.map((id) => state.operatives[id]).filter((o): o is OperativeState => Boolean(o));
+  const chosen = ui.selectedId ? candidates.find((o) => o.id === ui.selectedId) : undefined;
+  const decline = () => {
+    store.dispatch({ t: 'DeclineInterrupt', player: offer.player });
+    setUi({ selectedId: undefined, weaponName: undefined });
+  };
+
+  if (chosen) {
+    const ranged = weaponsOf(ctx, state, chosen, 'ranged');
+    const melee = weaponsOf(ctx, state, chosen, 'melee');
+    const engaged = enemiesInControlRange(ctx, state, chosen);
+    const weapon = ui.weaponName ?? ranged[0]?.name;
+    const targets = weapon ? validTargets(ctx, state, chosen, weapon) : [];
+    return {
+      id: 'firefight.guardInterrupt.target',
+      step: `Turning point ${state.turningPoint} · On Guard`,
+      title: `${chosen.letter} interrupts`,
+      help: 'Select one friendly operative on guard to perform the Fight or Shoot action for free.',
+      frame: rectAround(chosen, 12),
+      detent: 'half',
+      modal: true,
+      turnOf: offer.player,
+      selectedId: chosen.id,
+      targetIds: [...targets.map((t) => t.target.id), ...engaged.map((e) => e.id)],
+      actions: [
+        { id: 'back', label: 'Choose a different operative', tone: 'quiet', onClick: () => setUi({ selectedId: undefined }) },
+      ],
+      body: (
+        <>
+          {weapon && targets.length > 0 && (
+            <div class="actions">
+              <p class="section-title">Shoot · {weapon}</p>
+              {targets.map(({ target, check }) => (
+                <button
+                  key={target.id}
+                  onClick={() =>
+                    store.dispatch({
+                      t: 'OnGuardInterrupt',
+                      player: offer.player,
+                      operativeId: chosen.id,
+                      action: 'Shoot',
+                      params: { weaponName: weapon, targetId: target.id },
+                    })
+                  }
+                >
+                  <IconTarget size={20} />
+                  <span style={{ flex: 1, textAlign: 'left' }}>
+                    {target.letter} — {card(ctx, target).name}
+                  </span>
+                  <span class="tag">{check.distance.toFixed(1)}"</span>
+                </button>
+              ))}
+            </div>
+          )}
+          {melee.length > 0 && engaged.length > 0 && (
+            <div class="actions">
+              <p class="section-title">Fight</p>
+              {engaged.map((e) => (
+                <button
+                  key={e.id}
+                  onClick={() =>
+                    store.dispatch({
+                      t: 'OnGuardInterrupt',
+                      player: offer.player,
+                      operativeId: chosen.id,
+                      action: 'Fight',
+                      params: { meleeWeaponName: melee[0]!.name, targetId: e.id },
+                    })
+                  }
+                >
+                  <IconMelee size={20} />
+                  <span style={{ flex: 1, textAlign: 'left' }}>
+                    {e.letter} — {card(ctx, e).name}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+          {targets.length === 0 && engaged.length === 0 && (
+            <p class="dim">{chosen.letter} has nothing it can shoot or fight from here.</p>
+          )}
+        </>
+      ),
+    };
+  }
+
+  return {
+    id: 'firefight.guardInterrupt',
+    step: `Turning point ${state.turningPoint} · On Guard`,
+    title: `${LABEL[offer.player]} may interrupt`,
+    help: 'Once during each enemy operative\u2019s activation, after that enemy performs an action, you can interrupt and select one friendly operative on guard to Shoot or Fight for free.',
+    frame: null,
+    detent: 'half',
+    modal: true,
+    turnOf: offer.player,
+    targetIds: candidates.map((o) => o.id),
+    armed: { onOperative: (op) => (candidates.some((c) => c.id === op.id) ? setUi({ selectedId: op.id }) : undefined) },
+    actions: [{ id: 'decline-interrupt', label: 'Do not interrupt', tone: 'quiet', onClick: decline }],
+    body: <OperativeList store={store} ops={candidates} onPick={(op) => setUi({ selectedId: op.id })} verb="Interrupt with" />,
+  };
+}
+
 /* -------------------------------------------------- the active operative */
 
 export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
@@ -191,6 +323,12 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
   const dc = card(ctx, op);
   const apl = aplOf(ctx, state, op);
   const left = apl - op.apSpent;
+  /**
+   * A counteract is not an activation: the operative gets ONE free 1AP action other than
+   * Guard, may move no more than 2", and action restrictions do not apply. Rendering the
+   * normal activation sheet here lies about all three.
+   */
+  const counteracting = (state.opState['counteract'] as { operativeId?: string } | undefined)?.operativeId === op.id;
 
   // --- a move being aimed -------------------------------------------------
   if (ui.move) return movePlan({ store, ui, setUi }, op, ui.move.action);
@@ -199,7 +337,7 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
   const ranged = weaponsOf(ctx, state, op, 'ranged');
   const melee = weaponsOf(ctx, state, op, 'melee');
   const engaged = enemiesInControlRange(ctx, state, op);
-  const actions = availableActions(ctx, state, op);
+  const actions = actionAvailability(ctx, state, op);
 
   if (ui.weaponName) return shootPlan({ store, ui, setUi }, op, ui.weaponName);
 
@@ -207,25 +345,21 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
     store.dispatch({ t: 'PerformAction', operativeId: op.id, action, params: params as never });
   };
 
-  const rows: CommandAction[] = actions
+  const rows = actions
     .filter((a) => a.def.id !== 'Shoot' && a.def.id !== 'Fight')
-    .map(({ def, ap, ok, reason }) => ({
-      id: def.id,
-      label: `${def.name} · ${ap}AP`,
-      disabled: !ok,
-      hint: reason ?? def.sourceText,
-      icon: isMoveAction(def.id) ? <IconMove size={20} /> : undefined,
-      onClick: () => (isMoveAction(def.id) ? setUi({ move: { action: def.id } }) : perform(def.id)),
-    }));
+    // "One free 1AP action, excluding Guard" — offering the rest would be offering rejections.
+    .filter((a) => !counteracting || (a.ap === 1 && a.def.id !== 'Guard'));
 
   const shootRow = actions.find((a) => a.def.id === 'Shoot');
   const fightRow = actions.find((a) => a.def.id === 'Fight');
 
   return {
-    id: 'firefight.act',
-    step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}`,
+    id: counteracting ? 'firefight.counteracting' : 'firefight.act',
+    step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}${counteracting ? ' · Counteract' : ''}`,
     title: `${op.letter} — ${dc.name}`,
-    help: `${left} of ${apl} AP left. Choose an action; a move or a shot is then aimed on the killzone.`,
+    help: counteracting
+      ? 'Counteracting: one free 1AP action other than Guard, moving no more than 2". It is not an activation, so action restrictions do not apply.'
+      : `${left} of ${apl} AP left. Choose an action; a move or a shot is then aimed on the killzone.`,
     frame: rectAround(op, 10),
     detent: 'half',
     turnOf: op.player,
@@ -233,7 +367,7 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
     actions: [
       {
         id: 'end',
-        label: left > 0 ? `End activation (${left}AP unspent)` : 'End activation',
+        label: counteracting ? 'End counteract' : left > 0 ? `End activation (${left}AP unspent)` : 'End activation',
         tone: 'primary',
         icon: <IconCheck size={20} />,
         onClick: () => {
@@ -245,7 +379,7 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
     body: (
       <>
         <div class="row" style={{ marginBottom: 12 }}>
-          <ApPips spent={op.apSpent} total={apl} />
+          {counteracting ? <span class="tag is-warn">free action</span> : <ApPips spent={op.apSpent} total={apl} />}
           <span class="tag">
             {op.wounds}/{dc.wounds} wounds
           </span>
@@ -298,10 +432,22 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
 
         <div class="actions">
           <p class="section-title">Actions</p>
-          {rows.map((a) => (
-            <button key={a.id} disabled={a.disabled} title={a.hint} onClick={a.onClick}>
-              {a.icon}
-              <span style={{ flex: 1, textAlign: 'left' }}>{a.label}</span>
+          {rows.map(({ def, ap, ok, reason }) => (
+            // An illegal action is NOT `disabled` + `title`: `title` does not exist on a
+            // touch screen, so the reason is rendered in the row where a thumb can read it.
+            <button
+              key={def.id}
+              class={ok ? undefined : 'is-blocked'}
+              disabled={!ok}
+              onClick={() => (isMoveAction(def.id) ? setUi({ move: { action: def.id } }) : perform(def.id))}
+            >
+              {isMoveAction(def.id) ? <IconMove size={20} /> : null}
+              <span style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+                <span class="entry-name">
+                  {def.name} · {ap}AP
+                </span>
+                {!ok && reason && <span class="entry-meta why">{reason}</span>}
+              </span>
             </button>
           ))}
         </div>
@@ -331,9 +477,12 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
     step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}`,
     title: `${action} ${op.letter}`,
     help: `Up to ${budget.toFixed(0)}". Tap where ${op.letter} should end up; drag to adjust, two fingers to pan. The shaded area is everywhere it can legally reach.`,
+    // `validateMove.total` is the CHARGED distance: every leg is rounded up to the inch, so it
+    // is always a whole number. Showing only that reads as a bug ("I moved 4.2 and it says
+    // 5"), so both numbers are shown and labelled.
     armedNote: check
       ? check.ok
-        ? `${check.total.toFixed(1)}" of ${budget.toFixed(0)}"`
+        ? `${rawInches(check).toFixed(1)}" — costs ${check.total} of ${budget.toFixed(0)}"`
         : (check.reason ?? 'that move is not legal')
       : 'Tap the killzone to choose a destination',
     frame: rectAround(op, Math.max(8, budget + 3)),
@@ -375,7 +524,7 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
     actions: [
       {
         id: 'confirm-move',
-        label: check?.ok ? `${action} ${check.total.toFixed(1)}"` : action,
+        label: check?.ok ? `${action} — costs ${check.total}"` : action,
         tone: 'primary',
         disabled: !check?.ok,
         hint: check && !check.ok ? check.reason : 'Choose a destination first',
@@ -395,14 +544,17 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
         {check && !check.ok && <p class="err">{check.reason}</p>}
         {check?.ok && (
           <p class="ok-line">
-            <IconCheck size={16} /> {check.total.toFixed(1)}" of {budget.toFixed(0)}" — {check.legs.length} leg
-            {check.legs.length === 1 ? '' : 's'}
+            <IconCheck size={16} /> {rawInches(check).toFixed(1)}" travelled — charged {check.total} of{' '}
+            {budget.toFixed(0)}" (each leg rounds up to the inch)
           </p>
         )}
       </div>
     ),
   };
 }
+
+/** The geometric distance, as opposed to what the rules charge for it. */
+const rawInches = (v: { legs: { raw: number }[] }): number => v.legs.reduce((sum, leg) => sum + leg.raw, 0);
 
 function ruleTextFor(action: MoveAction): string {
   switch (action) {

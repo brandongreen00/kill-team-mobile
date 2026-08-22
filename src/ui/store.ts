@@ -28,8 +28,16 @@ export interface Rejection {
   seq: number;
 }
 
-/** Intents a player may take back: none of them consume RNG, so undo is exact. */
-const UNDOABLE = new Set<Intent['t']>(['DeployOperative', 'PlaceEquipment', 'SkipEquipmentPlacement']);
+/**
+ * Undo is decided EMPIRICALLY, not by intent type.
+ *
+ * A declared list is wrong here: `Reposition` looks like a pure move and rolls a D3 when it
+ * walks onto a mine, and `Breach` rolls a D6 per adjacent operative. Anything that consumed a
+ * die cannot be taken back without handing the player a re-roll, so the test is simply "did
+ * this intent touch the dice?" — the RNG cursor and the roll journal both have to be
+ * unchanged for the step to be undoable.
+ */
+const NEVER_UNDOABLE = new Set<Intent['t']>(['ResolveDecision', 'PassDecision', 'Concede', 'NewBattle']);
 
 /** Deep-copies GameState. It is required to be JSON-serialisable, so this is total. */
 const snapshot = (s: GameState): GameState =>
@@ -55,15 +63,22 @@ export class Store {
   }
 
   dispatch(intent: Intent): boolean {
-    const before = UNDOABLE.has(intent.t) ? snapshot(this.state) : null;
+    const before = NEVER_UNDOABLE.has(intent.t) ? null : snapshot(this.state);
+    const rngBefore = this.ctx.rng.cursor();
+    const rollsBefore = this.state.rolls.length;
     const out = reduce(this.state, intent, this.ctx);
     this.state = out.state;
     if (out.ok) {
       this.history.push(intent);
-      if (before) {
+      const rolled = this.ctx.rng.cursor() !== rngBefore || this.state.rolls.length !== rollsBefore;
+      if (before && !rolled) {
         this.undoStack.push({ state: before, historyLength: this.history.length - 1, label: intent.t });
         // Deployment is at most ~24 placements; the cap is a memory guard, not a rule.
         if (this.undoStack.length > 32) this.undoStack.shift();
+      } else if (rolled) {
+        // Dice have been seen. Everything before them is now committed too: allowing an undo
+        // past a roll would let the player re-roll it.
+        this.undoStack = [];
       }
     } else {
       this.rejectionSeq += 1;

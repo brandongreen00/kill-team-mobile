@@ -13,6 +13,9 @@
 import type { Store } from '../store.ts';
 import type { TeamData } from '../data.ts';
 import { card } from '../../core/state.ts';
+import { canDeployAt } from '../../core/reducer.ts';
+import { deployBatchRemaining, deployToAct } from '../../core/phases.ts';
+import { availableOps } from '../../core/game.ts';
 import { otherPlayer, type PlayerId, type Poly, type Vec2 } from '../../core/types.ts';
 import { IconCheck, IconDice, IconHandover, IconMap, IconTarget, IconUndo } from '../icons.tsx';
 import type { CommandAction, CommandPlan, UiState, WorldRect } from './types.ts';
@@ -159,6 +162,14 @@ export function selectOperativesPlan(args: PanelArgs): CommandPlan {
   const { state } = store;
   const next = (['p1', 'p2'] as PlayerId[]).find((p) => state.teams[p].operativeIds.length === 0);
 
+  // Both kill teams chosen: equipment and the tac op come next. This is not decoration —
+  // `SelectTacOp` is the ONLY caller of `ctx.initOps`, so a battle that skips it initialises
+  // no op at all and scores nothing for the whole four turning points.
+  if (!next) {
+    const owing = (['p1', 'p2'] as PlayerId[]).find((p) => !state.teams[p].tacOpId);
+    if (owing) return loadoutPlan(args, owing);
+  }
+
   if (!next) {
     return {
       id: 'setup.reveal',
@@ -236,6 +247,121 @@ export function selectOperativesPlan(args: PanelArgs): CommandPlan {
   };
 }
 
+/* --------------------------------------------------- equipment + tac op */
+
+/**
+ * One secret screen per player: up to four equipment options and one tac op, confirmed
+ * together. They are one screen rather than two because `tacOpId` is then the single
+ * derivable marker for "this player has finished choosing" — the UI holds no step of its own,
+ * and a reload or a re-render lands back on exactly the same question.
+ */
+function loadoutPlan({ store, teams, ui, setUi }: PanelArgs, player: PlayerId): CommandPlan {
+  const { state, ctx } = store;
+
+  if (ui.handedOverTo !== player) {
+    return {
+      id: 'setup.loadoutHandover',
+      step: 'Setup · 3 of 3',
+      title: `Hand the device to ${LABEL[player]}`,
+      help: 'Equipment and tac ops are chosen secretly.',
+      frame: null,
+      detent: 'rest',
+      modal: true,
+      turnOf: player,
+      actions: [
+        {
+          id: 'handover',
+          label: `I am ${LABEL[player]}`,
+          tone: 'primary',
+          icon: <IconHandover size={20} />,
+          onClick: () => setUi({ handedOverTo: player }),
+        },
+      ],
+    };
+  }
+
+  const teamData = teams.find((t) => t.id === state.teams[player].teamId);
+  const universal = [...ctx.equipment.values()].filter((e) => e.scope === 'universal');
+  const faction = [...ctx.equipment.values()].filter((e) => e.teamId === state.teams[player].teamId);
+  const equipment = [...faction, ...universal];
+  const chosen = ui.equipment ?? [];
+  const archetypes = state.teams[player].archetypes;
+  const tacOps = availableOps().filter(
+    (o) => o.kind === 'tac' && (!o.archetype || archetypes.length === 0 || archetypes.includes(o.archetype)),
+  );
+  const tacOpId = ui.tacOpId;
+
+  const toggle = (id: string) =>
+    setUi({ equipment: chosen.includes(id) ? chosen.filter((e) => e !== id) : chosen.length >= 4 ? chosen : [...chosen, id] });
+
+  return {
+    id: 'setup.loadout',
+    step: 'Setup · 3 of 3',
+    title: `${LABEL[player]} — equipment and tac op`,
+    help: `Choose up to four equipment options and exactly one tac op for ${teamData?.name ?? 'your kill team'}. Both are secret until the battle ends.`,
+    frame: null,
+    detent: 'half',
+    modal: true,
+    turnOf: player,
+    actions: [
+      {
+        id: 'confirm-loadout',
+        label: tacOpId ? 'Confirm' : 'Choose a tac op',
+        tone: 'primary',
+        disabled: !tacOpId,
+        hint: tacOpId ? undefined : 'A tac op is required — it is how your kill team scores.',
+        icon: <IconCheck size={20} />,
+        onClick: () => {
+          if (!tacOpId) return;
+          if (chosen.length > 0) store.dispatch({ t: 'SelectEquipment', player, equipment: chosen });
+          store.dispatch({ t: 'SelectTacOp', player, tacOpId });
+          setUi({ handedOverTo: undefined, equipment: undefined, tacOpId: undefined });
+        },
+      },
+    ],
+    body: (
+      <>
+        <p class="section-title">Tac op — pick one</p>
+        <div class="actions tac-ops">
+          {tacOps.length === 0 && <p class="dim">No tac op is available to this kill team.</p>}
+          {tacOps.map((o) => (
+            <button key={o.id} aria-pressed={tacOpId === o.id} onClick={() => setUi({ tacOpId: o.id })}>
+              <span style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+                <span class="entry-name">{o.name}</span>
+                <span class="entry-meta" title={o.text}>
+                  {o.text}
+                </span>
+              </span>
+              {tacOpId === o.id && <IconCheck size={20} />}
+            </button>
+          ))}
+        </div>
+        <p class="section-title" style={{ marginTop: 16 }}>
+          Equipment — up to four ({chosen.length}/4)
+        </p>
+        <div class="actions equipment-options">
+          {equipment.map((e) => (
+            <button
+              key={e.id}
+              aria-pressed={chosen.includes(e.id)}
+              disabled={!chosen.includes(e.id) && chosen.length >= 4}
+              onClick={() => toggle(e.id)}
+            >
+              <span style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+                <span class="entry-name">{e.name}</span>
+                <span class="entry-meta" title={e.text}>
+                  {e.text}
+                </span>
+              </span>
+              {chosen.includes(e.id) && <IconCheck size={20} />}
+            </button>
+          ))}
+        </div>
+      </>
+    ),
+  };
+}
+
 /* ------------------------------------------------------------- deployment */
 
 export interface DeployBatch {
@@ -248,35 +374,26 @@ export interface DeployBatch {
   total: number;
 }
 
-/** Alternating deployment in thirds, rounding up — the same arithmetic `deployTurn` uses. */
+/**
+ * Who deploys next, and how many they place before the turn passes.
+ *
+ * The alternating-thirds rule lives in `core/phases.ts` (`deployToAct`), quoting its printed
+ * text, because it IS a rule: the reducer does not enforce turn order on `DeployOperative`,
+ * so if the UI derived it privately the app would be the only thing that knew it, and no test
+ * would cover it.
+ */
 export function deployBatch(store: Store): DeployBatch {
   const { state } = store;
-  const init = state.initiative ?? 'p1';
-  const other = otherPlayer(init);
-  const done = (p: PlayerId) => state.setup.deployedCount[p] ?? 0;
-  const size = (p: PlayerId) => state.teams[p].operativeIds.length;
-  const third = (p: PlayerId) => Math.max(1, Math.ceil(size(p) / 3));
-
-  const pick = (): PlayerId => {
-    if (size(init) === 0) return init;
-    if (done(init) >= size(init)) return other;
-    if (done(other) >= size(other)) return init;
-    return Math.floor(done(init) / third(init)) <= Math.floor(done(other) / third(other)) ? init : other;
-  };
-
-  const player = pick();
-  const total = size(player);
-  const deployed = done(player);
-  const batchEnd = Math.min(total, (Math.floor(deployed / third(player)) + 1) * third(player));
+  const player = deployToAct(state) ?? state.initiative ?? 'p1';
   return {
     player,
     undeployed: Object.values(state.operatives)
       .filter((o) => o.player === player && o.pos.x < -50)
       .sort((a, b) => a.letter.localeCompare(b.letter))
       .map((o) => ({ id: o.id, letter: o.letter })),
-    remainingInBatch: Math.max(0, batchEnd - deployed),
-    deployed,
-    total,
+    remainingInBatch: deployBatchRemaining(state, player),
+    deployed: state.setup.deployedCount[player] ?? 0,
+    total: state.teams[player].operativeIds.length,
   };
 }
 
@@ -323,10 +440,10 @@ export function deployPlan({ store, ui, setUi }: PanelArgs): CommandPlan {
     ? {
         base: placingCard?.base,
         rotDeg: placing.rot,
-        legal: (world: Vec2) => {
-          const probe = store.probe({ t: 'DeployOperative', player, operativeId: placing.id, pos: world });
-          return probe.ok ? { ok: true } : { ok: false, ...(probe.reason ? { reason: probe.reason } : {}) };
-        },
+        // `canDeployAt` is the reducer's own legality body, exported: the ghost gets the same
+        // answer in the same words as the intent it is about to send, and gets it without
+        // cloning the whole GameState through `reduce` on every frame of a drag.
+        legal: (world: Vec2) => canDeployAt(ctx, state, placing, world, placing.rot),
         commit: (world: Vec2) => {
           const ok = store.dispatch({ t: 'DeployOperative', player, operativeId: placing.id, pos: world });
           if (ok) {

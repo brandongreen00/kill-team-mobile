@@ -68,19 +68,28 @@ const LETTER_PX = 13;
 /** World (y-up) → SVG (y-down) for a given board height. */
 export const worldTransform = (boardH: number): string => `translate(0 ${boardH}) scale(1 -1)`;
 
+/**
+ * Terrain fills, every one of them >= 3:1 against the board floor (#12151b).
+ *
+ * The previous set was a full stop darker — Wall came out at **1.17:1** and Heavy at 1.87:1 —
+ * and was then multiplied by an opacity ramp of `0.55 + z1 * 0.08`, so on a phone in daylight
+ * a wall was a slightly different black. You cannot plan a shot through terrain you cannot
+ * see. Height is now carried by the stroke weight rather than by fading the fill.
+ */
+const BOARD_FLOOR = '#12151b';
 const TYPE_FILL: Record<string, string> = {
-  Wall: '#20242b',
-  Heavy: '#2f4a35',
-  Light: '#4d6b3f',
-  Vantage: '#5b7f96',
+  Wall: '#5e6774',
+  Heavy: '#42704e',
+  Light: '#4e7a46',
+  Vantage: '#5b8fa8',
   Accessible: '#8a7a3d',
-  Blocking: '#3a3f47',
-  Exposed: '#6b6f76',
-  Insignificant: '#6b6f76',
-  Hazardous: '#243a4d',
-  Barred: '#3d5744',
-  Obstructing: '#7a5a2a',
-  Protective: '#7a5a2a',
+  Blocking: '#68717f',
+  Exposed: '#7a808a',
+  Insignificant: '#7a808a',
+  Hazardous: '#41678a',
+  Barred: '#3d7550',
+  Obstructing: '#9c7534',
+  Protective: '#9c7534',
 };
 
 function fillFor(part: TerrainPart): string {
@@ -94,6 +103,17 @@ const pts = (poly: readonly Vec2[]): string => poly.map((p) => `${p.x.toFixed(3)
 
 /** A 32 mm round base is the fallback when no context is available to look one up. */
 const DEFAULT_BASE: BaseShape = { shape: 'round', mm: 32 };
+
+/**
+ * The two sides, separated by VALUE and by SHAPE.
+ *
+ * The old pair (#ff9a4d / #8fb8d8) had a luminance ratio of 1.00:1 — identical brightness,
+ * different hue — so in a greyscale copy of the screen, and to a red-green colour-blind
+ * player, friend and enemy were the same token. These are 2.26:1 apart, and p2 additionally
+ * carries an inner ring so the difference survives even a monochrome print-out.
+ */
+const P1_COLOUR = '#f2751f';
+const P2_COLOUR = '#cfe8fa';
 
 /**
  * What the board is currently waiting for a tap on. Two flavours, and an arm may be both:
@@ -494,7 +514,7 @@ export function Board({
       style={interactive ? { userSelect: 'none', WebkitUserSelect: 'none' } : undefined}
     >
       <g transform={worldTransform(map.board.h)}>
-        <rect x={0} y={0} width={map.board.w} height={map.board.h} fill="#15181d" />
+        <rect x={0} y={0} width={map.board.w} height={map.board.h} fill={BOARD_FLOOR} />
 
         {showZones && (
           <g class="zones" opacity={0.35}>
@@ -505,10 +525,10 @@ export function Board({
               <polygon key={`t2-${i}`} points={pts(poly)} fill="#c1c0c5" opacity={0.18} />
             ))}
             {map.dropZones.p1.map((poly, i) => (
-              <polygon key={`d1-${i}`} points={pts(poly)} fill="#f65a29" opacity={0.22} />
+              <polygon key={`d1-${i}`} points={pts(poly)} fill="#f2703a" opacity={0.28} />
             ))}
             {map.dropZones.p2.map((poly, i) => (
-              <polygon key={`d2-${i}`} points={pts(poly)} fill="#7b7b7e" opacity={0.3} />
+              <polygon key={`d2-${i}`} points={pts(poly)} fill="#9fb6cc" opacity={0.26} />
             ))}
           </g>
         )}
@@ -535,9 +555,10 @@ export function Board({
               points={pts(part.poly)}
               fill={fillFor(part)}
               stroke="#0b0d10"
-              stroke-width={0.03}
-              // Shade by elevation so height reads at a glance.
-              opacity={0.55 + Math.min(0.4, part.z1 * 0.08)}
+              // Height reads from the outline weight, not from fading the fill into the
+              // floor: a taller piece is more strongly drawn, and stays legible either way.
+              stroke-width={0.03 + Math.min(0.06, part.z1 * 0.012)}
+              opacity={0.92}
             >
               <title>{`${part.feature.label ?? part.feature.kind} — ${part.types.join(', ')} (z ${part.z0}–${part.z1}")`}</title>
             </polygon>
@@ -569,7 +590,7 @@ export function Board({
             .map((op) => {
               const base = baseOf(op);
               const r = baseRadius(base);
-              const colour = op.player === 'p1' ? '#ff9a4d' : '#8fb8d8';
+              const colour = op.player === 'p1' ? P1_COLOUR : P2_COLOUR;
               const hitR = Math.max(r, (MIN_TAP_PX / 2) * inPerPx);
               const isTarget = targets.has(op.id);
               return (
@@ -599,15 +620,47 @@ export function Board({
                   <polygon
                     points={pts(basePerimeter(op.pos, base, op.rot))}
                     fill={colour}
-                    fill-opacity={op.order === 'conceal' ? 0.42 : 0.9}
+                    fill-opacity={op.order === 'conceal' ? 0.34 : 0.95}
                     stroke={selectedId === op.id ? '#ffffff' : '#0b0d10'}
                     stroke-width={selectedId === op.id ? 0.1 : 0.045}
                   />
-                  {isTarget && (
-                    <circle cx={op.pos.x} cy={op.pos.y} r={r + 0.22} fill="none" stroke="#ffc94a" stroke-width={0.07} opacity={0.9} />
+                  {/* Player 2 carries a second ring: the sides differ in shape as well as
+                      in value, so the board is readable in greyscale. */}
+                  {op.player === 'p2' && (
+                    <circle cx={op.pos.x} cy={op.pos.y} r={r * 0.6} fill="none" stroke="#0b0d10" stroke-width={0.05} />
                   )}
+                  {/* Conceal is a dashed outline, not just a lower alpha. */}
+                  {op.order === 'conceal' && (
+                    <polygon
+                      points={pts(basePerimeter(op.pos, base, op.rot))}
+                      fill="none"
+                      stroke={colour}
+                      stroke-width={0.07}
+                      stroke-dasharray="0.22 0.16"
+                    />
+                  )}
+                  {isTarget && (
+                    <circle
+                      class="target-ring"
+                      cx={op.pos.x}
+                      cy={op.pos.y}
+                      r={r + 0.22}
+                      fill="none"
+                      stroke="#ffc94a"
+                      stroke-width={0.08}
+                    />
+                  )}
+                  {/* Expended: struck through, so it is not merely "a bit dimmer". */}
                   {op.expended && (
-                    <circle cx={op.pos.x} cy={op.pos.y} r={r * 0.55} fill="none" stroke="#0b0d10" stroke-width={0.06} opacity={0.6} />
+                    <line
+                      x1={op.pos.x - r * 0.8}
+                      y1={op.pos.y - r * 0.8}
+                      x2={op.pos.x + r * 0.8}
+                      y2={op.pos.y + r * 0.8}
+                      stroke="#0b0d10"
+                      stroke-width={0.09}
+                      opacity={0.85}
+                    />
                   )}
                   {/* Constant on-screen letter: legible whether you are at fit or at 5x. */}
                   <g transform={`translate(${op.pos.x} ${op.pos.y}) scale(${inPerPx} ${-inPerPx})`}>
