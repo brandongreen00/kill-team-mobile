@@ -394,17 +394,21 @@ test('a screen that arms the board still shows the list it tells you to pick fro
       for (const poly of document.querySelectorAll('.legal-zone')) {
         const b = poly.getBoundingClientRect();
         if (b.width < 4 || b.height < 4) continue;
-        for (let i = 1; i <= 4; i++) for (let j = 1; j <= 6; j++)
-          pts.push({ x: b.left + (b.width * i) / 5, y: b.top + (b.height * j) / 7 });
+        // A fine grid: 18 operatives need 18 spots that do not overlap each other, and on a
+        // desktop-width board the drop zone is a narrow strip where a coarse grid runs out.
+        for (let i = 1; i <= 7; i++) for (let j = 1; j <= 11; j++)
+          pts.push({ x: b.left + (b.width * i) / 8, y: b.top + (b.height * j) / 12 });
       }
       const ok = pts.filter((s) =>
         s.x > r.left + 8 && s.x < r.right - 8 && s.y > r.top + 8 && s.y < r.bottom - 8 &&
+        // The floating zoom cluster is a real button and would eat the tap.
         !(ctrl && s.x > ctrl.left - 12 && s.x < ctrl.right + 12 && s.y > ctrl.top - 12 && s.y < ctrl.bottom + 12));
-      return ok.length ? ok[(k * 7) % ok.length]! : null;
+      return ok.length ? ok[(k * 13) % ok.length]! : null;
     }, i);
     if (!p) break;
     await page.mouse.click(p.x, p.y);
   }
+  expect(await screenId(page), 'every operative should be deployed by now').toBe('setup.deployDone');
   await page.getByRole('button', { name: /Begin the battle/ }).click();
 
   // Walk the strategy phase to the first activation.
