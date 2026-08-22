@@ -14,8 +14,8 @@ import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { aliveOperatives, inflictDamage, markerController, statMods } from '../../src/core/state.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import rawJson from '../../data/teams/wyrmblade.json';
-import { teamData } from '../../src/teams/data.ts';
-import { defaultRoster, validateRosterFor } from '../../src/teams/selection.ts';
+import { selectionEntries, teamData } from '../../src/teams/data.ts';
+import { defaultRoster, entryId, validateRosterFor } from '../../src/teams/selection.ts';
 import { FREE_ACTION_RULE } from '../../src/teams/helpers.ts';
 import {
   ACT_ASSASSINATE,
@@ -376,19 +376,57 @@ describe('WYRMBLADE data (pinned against data/teams/wyrmblade.json)', () => {
     expect(CULT_KNIFE.profiles[0]!.rules).toEqual([]);
   });
 
-  it('DATA PROBLEM: the printed HEAVY GUNNER and CULT AGENT caps are mis-parsed into one dead maxCount role', () => {
+  it('the printed HEAVY GUNNER and CULT AGENT caps are live maxCount constraints, and both are enforced', () => {
     const printed = DATA.selection.rawText;
     expect(printed).toContain(
       'up to two GUNNER operatives, up to two HEAVY GUNNER operatives and up to two CULT AGENT operatives',
     );
+    // That compound sentence used to collapse its last two caps into ONE constraint whose role was
+    // the leftover string 'HEAVY GUNNER operatives and up to two CULT AGENT' — a role no selection
+    // row and no datacard keyword carries, so it counted 0 and both printed caps went unenforced.
+    // The scraper now emits one live row per printed cap.
     const caps = RAW.selection.constraints.filter((c) => c.kind === 'maxCount');
-    expect(caps.map((c) => c.role)).toEqual(['GUNNER', 'HEAVY GUNNER operatives and up to two CULT AGENT']);
-    // No selection row and no datacard keyword matches that role, so the constraint counts 0 and
-    // can never fail: BOTH printed caps are silently unenforced.
-    expect(DATA.selection.list.some((e) => e.role === 'HEAVY GUNNER operatives and up to two CULT AGENT')).toBe(false);
-    expect(
-      DATA.datacards.some((c) => c.keywords.includes('HEAVY GUNNER operatives and up to two CULT AGENT')),
-    ).toBe(false);
+    expect(caps).toEqual([
+      { kind: 'maxCount', role: 'GUNNER', max: 2 },
+      { kind: 'maxCount', role: 'HEAVY GUNNER', max: 2 },
+      { kind: 'maxCount', role: 'CULT AGENT', max: 2 },
+    ]);
+    // HEAVY GUNNER names three printed rows; CULT AGENT names none, so that cap counts through the
+    // datacard KEYWORD its four starred operatives share.
+    expect(DATA.selection.list.filter((e) => e.role === 'HEAVY GUNNER')).toHaveLength(3);
+    expect(DATA.selection.list.some((e) => e.role === 'CULT AGENT')).toBe(false);
+    expect(DATA.datacards.filter((c) => c.keywords.includes('CULT AGENT')).map((c) => c.id)).toEqual([
+      KELERMORPH,
+      LOCUS,
+      SANCTUS_SNIPER,
+      SANCTUS_TALON,
+    ]);
+
+    // Both caps now fire, and each counts ACROSS the different printed rows of its role rather than
+    // per row: the default roster sits exactly on both, and one more of either is refused.
+    const rowId = (needle: string): string => {
+      const index = selectionEntries(DATA).findIndex((e) => e.rawText.includes(needle));
+      expect(index).toBeGreaterThan(-1);
+      return entryId(DATA, index);
+    };
+    const base = defaultRoster(DATA);
+    expect(validateRosterFor(DATA, base).ok).toBe(true);
+    const warriors = base.flatMap((p, i) => (p.datacardId === WARRIOR ? [i] : []));
+    // A third HEAVY GUNNER, taken on the mining-laser row, so no single row is repeated three times.
+    const threeHeavy = base.map((p, i) =>
+      i === warriors[0]! ? { datacardId: HEAVY_GUNNER, entryId: rowId('mining laser') } : p,
+    );
+    expect(validateRosterFor(DATA, threeHeavy).errors).toEqual([
+      'you cannot select more than 2 HEAVY GUNNER operatives (3 selected)',
+    ]);
+    // A third CULT AGENT: the SANCTUS SNIPER counts as two selections, so two WARRIORs make room.
+    const threeAgents = [
+      ...base.filter((_, i) => i !== warriors[0]! && i !== warriors[1]!),
+      { datacardId: SANCTUS_SNIPER, entryId: rowId('SANCTUS SNIPER') },
+    ];
+    expect(validateRosterFor(DATA, threeAgents).errors).toEqual([
+      'you cannot select more than 2 CULT AGENT operatives (3 selected)',
+    ]);
   });
 
   it('DATA PROBLEM: markerGuide is empty and uniqueActions[].keywords is not emitted at all', () => {
@@ -433,16 +471,24 @@ describe('WYRMBLADE data (pinned against data/teams/wyrmblade.json)', () => {
     for (const e of DATA.selection.list.filter((x) => x.footnoteGroup !== '*')) expect(e.selectionCost).toBe(1);
   });
 
-  it('defaultRoster is legal for the validator, fields 8 of 9 datacards and never fields the SANCTUS TALON', () => {
+  it('defaultRoster is legal for the validator, fields 7 of 9 datacards and obeys every printed cap', () => {
     const picks = defaultRoster(DATA);
     expect(validateRosterFor(DATA, picks).ok).toBe(true);
-    expect(picks).toHaveLength(11);
+    expect(picks).toHaveLength(12);
     const fielded = new Set(picks.map((p) => p.datacardId));
-    expect([...DATA.datacards.map((c) => c.id)].filter((id) => !fielded.has(id))).toEqual([SANCTUS_TALON]);
-    // …and because both printed caps above are dead, that "legal" roster breaks two of them.
-    expect(picks.filter((p) => p.datacardId === HEAVY_GUNNER)).toHaveLength(3); // printed cap: two
+    expect([...DATA.datacards.map((c) => c.id)].filter((id) => !fielded.has(id))).toEqual([
+      SANCTUS_SNIPER,
+      SANCTUS_TALON,
+    ]);
+    // With the HEAVY GUNNER and CULT AGENT caps live, the roster that used to break both now sits
+    // exactly on each: "up to two GUNNER operatives, up to two HEAVY GUNNER operatives and up to
+    // two CULT AGENT operatives". The freed selections go to WARRIORs — the one role the printed
+    // uniqueness exemption lets repeat — which is why the pick count rose from 11 to 12.
+    expect(picks.filter((p) => p.datacardId === GUNNER)).toHaveLength(2); // printed cap: two
+    expect(picks.filter((p) => p.datacardId === HEAVY_GUNNER)).toHaveLength(2); // printed cap: two
     const agents = new Set([KELERMORPH, LOCUS, SANCTUS_SNIPER, SANCTUS_TALON]);
-    expect(picks.filter((p) => agents.has(p.datacardId))).toHaveLength(3); // printed cap: two
+    expect(picks.filter((p) => agents.has(p.datacardId))).toHaveLength(2); // printed cap: two
+    expect(picks.filter((p) => p.datacardId === WARRIOR)).toHaveLength(4);
   });
 
   it('the enforced selection constraints do fire: uniqueExcept WARRIOR and maxCount GUNNER 2', () => {

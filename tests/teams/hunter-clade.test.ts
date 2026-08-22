@@ -178,6 +178,24 @@ const VANGUARD_LED: RosterPickIn[] = [
   pick('WARRIOR SICARIAN', 0),
 ];
 
+/**
+ * Both GUNNER rows at once — legal only because each takes a different one of the three guns
+ * "Your kill team can only include up to one arc rifle, up to one plasma caliver and up to one
+ * transuranic arquebus" caps.
+ */
+const BOTH_GUNNERS: RosterPickIn[] = [
+  pick('SICARIAN INFILTRATOR PRINCEPS'),
+  pick('SKITARII RANGER GUNNER'),
+  { ...pick('SKITARII VANGUARD GUNNER'), weapons: ['Plasma caliver'] },
+  pick('SKITARII RANGER DIKTAT'),
+  pick('SKITARII RANGER SURVEYOR'),
+  pick('RANGER WARRIOR'),
+  pick('RANGER WARRIOR'),
+  pick('VANGUARD WARRIOR'),
+  pick('VANGUARD WARRIOR'),
+  pick('WARRIOR SICARIAN'),
+];
+
 interface SetupOpts {
   picks?: RosterPickIn[];
   foePicks?: RosterPickIn[];
@@ -439,28 +457,32 @@ describe('HUNTER CLADE data (pinned against data/teams/hunter-clade.json)', () =
     expect(NOTES[0]).toContain("selection entry 'WARRIOR SICARIAN' has no datacard link");
   });
 
-  // ---- DATA BUGS ---------------------------------------------------------
-  it('DATA BUG: both GUNNER rows print "Arc rifle, plasma caliver or transuranic arquebus" as ONE loadout', () => {
+  // ---- printed choices ---------------------------------------------------
+  it('both GUNNER rows print "Arc rifle, plasma caliver or transuranic arquebus" as ONE three-way choice', () => {
     for (const role of ['SKITARII RANGER GUNNER', 'SKITARII VANGUARD GUNNER']) {
+      expect(DATA.selection.rawText).toContain(`${role}* with gun butt and one of the following options:`);
       const row = RAW.selection.list.find((r) => r.role === role)!;
       expect(row.loadouts).toHaveLength(1);
-      // The label carries all three alternatives, the `weapons` array is EMPTY, and the split
-      // survives only in an unread `choiceGroups`.
+      // The label carries all three alternatives, the option's own `weapons` array is EMPTY, and
+      // the split lives in `choiceGroups` — which is now read.
       expect(row.loadouts[0]!.label).toBe('Arc rifle, plasma caliver or transuranic arquebus');
       expect(row.loadouts[0]!.weapons).toEqual([]);
       expect(row.loadouts[0]!.choiceGroups).toEqual([['Arc rifle', 'Plasma caliver', 'Transuranic arquebus']]);
-      // …and all three land in `alwaysWeapons`, which `weaponsForPick` reads unconditionally.
+      // The scraper ALSO copies all three into `alwaysWeapons`; a weapon a choice group offers is
+      // no longer "always available", so the GUNNER no longer arrives holding all three at once.
       expect(row.alwaysWeapons).toEqual(['Arc rifle', 'Plasma caliver', 'Transuranic arquebus']);
     }
-    const index = ENTRIES.findIndex((e) => e.role === 'SKITARII RANGER GUNNER');
-    expect(weaponsForPick(DATA, ENTRIES[index]!, pick('SKITARII RANGER GUNNER'))).toEqual([
-      'Arc rifle',
-      'Plasma caliver',
-      'Transuranic arquebus',
-      'Gun butt',
-    ]);
+    // "…with gun butt and one of the following options": exactly one chosen gun, plus the fixed
+    // gun butt. Unnamed, the pick takes the first alternative — which is what `defaultRoster` means.
+    for (const role of ['SKITARII RANGER GUNNER', 'SKITARII VANGUARD GUNNER']) {
+      const entry = ENTRIES.find((e) => e.role === role)!;
+      expect(weaponsForPick(DATA, entry, pick(role))).toEqual(['Arc rifle', 'Gun butt']);
+      for (const gun of ['Plasma caliver', 'Transuranic arquebus'])
+        expect(weaponsForPick(DATA, entry, { ...pick(role), weapons: [gun] })).toEqual([gun, 'Gun butt']);
+    }
   });
 
+  // ---- DATA BUGS ---------------------------------------------------------
   it('DATA BUG: SPOT is truncated to its lead-in on BOTH SURVEYOR datacards', () => {
     for (const [cardId, actionId] of [
       [CARD.rangerSurveyor, ACT.rangerSpot],
@@ -577,7 +599,7 @@ describe('selection requirements', () => {
     expect(validateRosterFor(DATA, sixSicarians).errors.join(' ')).toContain('more than 5 SICARIAN');
   });
 
-  it('the weapon caps fire — and the GUNNER data bug makes TWO GUNNERs illegal, which the card allows', () => {
+  it('the weapon caps fire — but TWO GUNNERs carrying different guns are legal, as the card allows', () => {
     const two = [
       pick('SICARIAN INFILTRATOR PRINCEPS'),
       pick('SKITARII RANGER GUNNER'),
@@ -592,10 +614,19 @@ describe('selection requirements', () => {
     ];
     const v = validateRosterFor(DATA, two);
     expect(v.ok).toBe(false);
-    // All THREE caps break at once, because each GUNNER resolves with all three weapons.
-    expect(v.errors.filter((e) => e.includes('can only include up to 1'))).toHaveLength(3);
-    // The printed footnote cap of 7 starred operatives is exactly 5 SICARIAN + 2 GUNNER, which is
-    // why the loadout bug matters: with one GUNNER the cap can never be reached.
+    // Each GUNNER resolves to ONE gun, so only the cap on the gun they share breaks:
+    // "Your kill team can only include up to one arc rifle…" — both defaulted to the arc rifle.
+    expect(DATA.selection.rawText).toContain(
+      'Your kill team can only include up to one arc rifle, up to one plasma caliver and up to one transuranic arquebus.',
+    );
+    expect(v.errors.filter((e) => e.includes('can only include up to 1'))).toEqual([
+      'your kill team can only include up to 1 arc rifle (2 selected)',
+    ]);
+    // Name a different gun on the second GUNNER and the same ten operatives are legal.
+    const mixed = two.map((p, i) => (i === 2 ? { ...p, weapons: ['Plasma caliver'] } : p));
+    expect(validateRosterFor(DATA, mixed).errors).toEqual([]);
+    // The printed footnote cap of 7 starred operatives is exactly 5 SICARIAN + 2 GUNNER, so it is
+    // reachable only because both GUNNER rows can be fielded at once.
     expect(DATA.selection.footnotes['*']).toBe('You cannot select more than seven of these operatives combined.');
     expect(ENTRIES.filter((e) => e.footnoteGroup === '*').map((e) => e.role)).toEqual([
       'WARRIOR INFILTRATOR',
@@ -605,7 +636,7 @@ describe('selection requirements', () => {
     ]);
   });
 
-  it('the GUNNER exemption itself fires: two RANGER GUNNERs break only the weapon caps', () => {
+  it('the GUNNER exemption itself fires: two RANGER GUNNERs break only the gun they share', () => {
     const two = [
       pick('SICARIAN INFILTRATOR PRINCEPS'),
       pick('SKITARII RANGER GUNNER'),
@@ -620,7 +651,12 @@ describe('selection requirements', () => {
     ];
     const codes = validateRosterFor(DATA, two).codes;
     expect(codes).not.toContain('unique'); // "Other than GUNNER and WARRIOR operatives…"
-    expect(codes.filter((c) => c === 'maxItem')).toHaveLength(3);
+    // Both default to the arc rifle, so exactly one of the three printed weapon caps breaks.
+    expect(codes.filter((c) => c === 'maxItem')).toHaveLength(1);
+    // Arm the second with the transuranic arquebus and the pair is legal: the row is exempt from
+    // "…your kill team can only include each operative on this list once" and no gun is doubled.
+    const mixed = two.map((p, i) => (i === 2 ? { ...p, weapons: ['Transuranic arquebus'] } : p));
+    expect(validateRosterFor(DATA, mixed).errors).toEqual([]);
   });
 
   it('the groupCap is checked (8 starred operatives is refused)', () => {
@@ -641,15 +677,15 @@ describe('selection requirements', () => {
 
   it('every coverage roster used by these tests is legal, and together they field all 14 datacards', () => {
     const fielded = new Set<string>();
-    for (const roster of [COVERAGE, RUSTSTALKER_LED, RANGER_LED, INFILTRATOR_LED, VANGUARD_LED, defaultRoster(DATA)]) {
+    for (const roster of [COVERAGE, RUSTSTALKER_LED, RANGER_LED, INFILTRATOR_LED, VANGUARD_LED, BOTH_GUNNERS, defaultRoster(DATA)]) {
       const v = validateRosterFor(DATA, roster);
       expect(v.errors).toEqual([]);
       for (const p of roster) fielded.add(p.datacardId);
     }
-    // 13 of the 14: the SKITARII VANGUARD GUNNER can never join a roster that already has the
-    // RANGER GUNNER, because the loadout bug gives every GUNNER all three capped weapons.
-    expect(fielded.size).toBe(13);
-    expect(fielded.has(CARD.vanguardGunner)).toBe(false);
+    // All 14: the SKITARII VANGUARD GUNNER can join a roster that already has the RANGER GUNNER,
+    // because each GUNNER now resolves to exactly the one gun its pick names.
+    expect(fielded.size).toBe(14);
+    expect(fielded.has(CARD.vanguardGunner)).toBe(true);
   });
 
   it("`loadoutMode: 'either'` is not honoured by the shared validator — an ALPHA must take BOTH branches", () => {

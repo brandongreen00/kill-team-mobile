@@ -84,11 +84,20 @@ interface SetupOpts {
   script?: number[];
   seed?: number;
   map?: KillzoneMap;
+  /**
+   * Resolve a printed either/or option explicitly: datacard id → the weapon names the pick asks
+   * for. A `choiceGroups` option ("Autopistol **or** laspistol; chainsword **or** power weapon")
+   * gives an operative exactly one weapon per group, and `defaultRoster` takes the first of each —
+   * so a rule test that needs the other alternative has to name it.
+   */
+  weapons?: Record<string, string[]>;
 }
 
 function setup(opts: SetupOpts = {}): { ctx: GameContext; state: GameState } {
   const ctx = teamContext([blooded], opts.script ? { script: opts.script } : { seed: opts.seed ?? 7 });
-  const picks = opts.roles ? rosterIncluding(blooded, opts.roles) : defaultRoster(DATA);
+  const base = opts.roles ? rosterIncluding(blooded, opts.roles) : defaultRoster(DATA);
+  const want = opts.weapons;
+  const picks = want ? base.map((p) => (want[p.datacardId] ? { ...p, weapons: want[p.datacardId]! } : p)) : base;
   const state = battle({
     ctx,
     ...(opts.map ? { map: opts.map } : {}),
@@ -148,6 +157,13 @@ function attackCtx(
 
 /** A low Heavy block that puts an operative standing at (12,11) in cover from (20,11). */
 const coverMap = (): KillzoneMap => testMap({ features: [heavyBlock('cov', 12.8, 10.2, 0.5, 1.6, 0.6)] });
+
+/**
+ * The CHIEFTAIN is the first operative of both kill teams, and its printed first option is
+ * "Autopistol or laspistol; chainsword or power weapon" — one weapon per choice group, of which
+ * `defaultRoster` takes the first. A rule test that fights with the power weapon asks for it.
+ */
+const CHIEFTAIN_POWER: Record<string, string[]> = { [CARD.chieftain]: ['Power weapon'] };
 
 // ---------------------------------------------------------------------------
 describe('BLOODED data', () => {
@@ -565,7 +581,7 @@ describe('BLOODED firefight ploys', () => {
 
   it('REWARD EARNED: "Use this firefight ploy when an enemy operative is incapacitated by a friendly BLOODED operative within 2" of it that has one of your Blooded tokens. You gain one Blooded token."', () => {
     expect(ruleText(FP.rewardEarned)).toContain('You gain one Blooded token.');
-    const { ctx, state } = setup();
+    const { ctx, state } = setup({ weapons: CHIEFTAIN_POWER });
     const killer = state.operatives[state.teams.p1.operativeIds[0]!]!;
     const foe = state.operatives[state.teams.p2.operativeIds[0]!]!;
     isolate(state, [killer.id, foe.id]);
@@ -639,7 +655,7 @@ describe('BLOODED firefight ploys', () => {
 describe('BLOODED faction equipment', () => {
   it('CHAOS SIGIL: "The Reward Earned firefight ploy costs you 0CP."', () => {
     expect(ruleText(EQ.chaosSigil)).toContain('costs you 0CP');
-    const { ctx, state } = setup({ equipment: [EQ.chaosSigil] });
+    const { ctx, state } = setup({ equipment: [EQ.chaosSigil], weapons: CHIEFTAIN_POWER });
     const killer = state.operatives[state.teams.p1.operativeIds[0]!]!;
     const foe = state.operatives[state.teams.p2.operativeIds[0]!]!;
     isolate(state, [killer.id, foe.id]);
@@ -656,7 +672,7 @@ describe('BLOODED faction equipment', () => {
 
   it('SYMBOLS OF BLOODY WORSHIP: "it regains 1 lost wound" after an activation in which it dealt damage', () => {
     expect(ruleText(EQ.symbolsOfBloodyWorship)).toContain('it regains 1 lost wound');
-    const { ctx, state } = setup({ equipment: [EQ.symbolsOfBloodyWorship] });
+    const { ctx, state } = setup({ equipment: [EQ.symbolsOfBloodyWorship], weapons: CHIEFTAIN_POWER });
     const me = state.operatives[state.teams.p1.operativeIds[0]!]!;
     const foe = state.operatives[state.teams.p2.operativeIds[0]!]!;
     isolate(state, [me.id, foe.id]);
@@ -684,7 +700,9 @@ describe('BLOODED faction equipment', () => {
     expect(ruleText(EQ.wickedBlades)).toContain('bayonet, bayonet & shield and improvised blade');
     // Applied where the damage is inflicted, never by rewriting the shared profile (D-019).
     const bump = (weapon: string, equipment: string[], datacardId: string = CARD.trooper): number => {
-      const { ctx, state } = setup({ equipment, roles: [CARD.trooper] });
+      // The CHIEFTAIN's "chainsword or power weapon" group is asked for by name, so the power
+      // weapon it fights with below is really on its card.
+      const { ctx, state } = setup({ equipment, roles: [CARD.trooper], weapons: CHIEFTAIN_POWER });
       const me = state.operatives[opWith(state, 'p1', datacardId)]!;
       const foe = state.operatives[state.teams.p2.operativeIds[0]!]!;
       isolate(state, [me.id, foe.id]);
@@ -1053,7 +1071,9 @@ describe('FLENSER', () => {
 
   it('Wretched: "you can strike the enemy operative in that sequence with one of your unresolved successes"', () => {
     expect(abilityText(CARD.flenser, AB.wretched)).toContain('with one of your unresolved successes before this operative is removed from the killzone');
-    const { ctx, state } = setup({ roles: [CARD.flenser] });
+    // The enemy CHIEFTAIN does the fighting, so its "chainsword or power weapon" group is asked
+    // for by name.
+    const { ctx, state } = setup({ roles: [CARD.flenser], weapons: CHIEFTAIN_POWER });
     const f = state.operatives[opWith(state, 'p1', CARD.flenser)]!;
     const foe = state.operatives[state.teams.p2.operativeIds[0]!]!;
     isolate(state, [f.id, foe.id]);
@@ -1423,14 +1443,17 @@ describe('BLOODED selection', () => {
     expect(picks).toHaveLength(12);
   });
 
-  it('`defaultRoster` never fields the SHARPSHOOTER, THUG, TRENCH SWEEPER or TROOPER (D-042)', () => {
+  it('`defaultRoster` never fields the SHARPSHOOTER, TRENCH SWEEPER or TROOPER (D-042)', () => {
+    // First-legal-row-wins in printed order. The ^1 cap fills on the flamer, grenade-launcher and
+    // meltagun GUNNER rows, so the plasma GUNNER (^1,2) and the SHARPSHOOTER (^1) are both skipped
+    // and the THUG takes the last slot of the second group — the GUNNER datacard is still fielded.
     const fielded = new Set(defaultRoster(DATA).map((p) => p.datacardId));
     expect([...DATA.datacards.map((c) => c.id)].filter((id) => !fielded.has(id)).sort()).toEqual([
       CARD.sharpshooter,
-      CARD.thug,
       CARD.trenchSweeper,
       CARD.trooper,
     ].sort());
+    expect(fielded.has(CARD.thug)).toBe(true);
   });
 
   it('"Other than TROOPER operatives, your kill team can only include each operative on this list once"', () => {
@@ -1458,21 +1481,30 @@ describe('BLOODED selection', () => {
     expect(entries.find((e) => e.role === 'OGRYN')!.selectionCost).toBe(2);
   });
 
-  it('DATA PROBLEM: the ^1 group cap misses the plasma-gun GUNNER, and `defaultRoster` breaks the printed footnote', () => {
+  it('"^1 You cannot select more than three of these operatives combined" — counted by footnote membership, so the plasma-gun GUNNER is in it', () => {
     expect(DATA.selection.footnotes['^1']).toBe('You cannot select more than three of these operatives combined.');
     const entries = [...DATA.selection.leaderList, ...DATA.selection.list];
-    // The plasma-gun row carries a COMMA-JOINED footnote group, so `groupCap {group:'^1'}` cannot
-    // see it — the only team in the game with this shape.
+    // The plasma-gun row belongs to TWO printed footnotes and the scraper joins the markers into
+    // one literal — the only row in all 48 teams with this shape. A `groupCap` matches MEMBERSHIP
+    // of that list, not the whole string, so this row can no longer escape its own cap.
     expect(entries.find((e) => e.rawText.includes('plasma gun'))!.footnoteGroup).toBe('^1,2');
     expect(DATA.selection.constraints).toContainEqual({ kind: 'groupCap', group: '^1', max: 3 });
     const picks = defaultRoster(DATA);
-    const inGroup1 = picks.filter((p) => {
-      const e = entries.find((x, i) => `blooded.sel${i}.${x.role.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` === p.entryId);
-      return e?.footnoteGroup?.startsWith('^1');
-    });
-    expect(inGroup1.length).toBe(4); // four "of these operatives combined", where three is the cap
-    expect(validateRosterFor(DATA, picks).ok).toBe(true); // …and the validator accepts it
-    expect(REMINDER_ONLY['blooded.selection.groupCap']).toBeDefined();
+    const inGroup1 = (ps: typeof picks): typeof picks =>
+      ps.filter((p) => {
+        const e = entries.find((x, i) => `blooded.sel${i}.${x.role.toLowerCase().replace(/[^a-z0-9]+/g, '-')}` === p.entryId);
+        return e?.footnoteGroup?.startsWith('^1');
+      });
+    expect(inGroup1(picks).length).toBe(3); // "not more than three … combined", and three it is
+    expect(validateRosterFor(DATA, picks).ok).toBe(true);
+    // …and a fourth — the plasma-gun GUNNER itself, in place of the THUG — is now refused.
+    const four = picks.map((p) =>
+      p.entryId === 'blooded.sel11.thug' ? { datacardId: CARD.gunner, entryId: 'blooded.sel9.gunner' } : p,
+    );
+    expect(inGroup1(four).length).toBe(4);
+    const v = validateRosterFor(DATA, four);
+    expect(v.codes).toContain('groupCap');
+    expect(v.errors.join(' ')).toContain('You cannot select more than three of these operatives combined.');
   });
 
   it('DATA PROBLEM: the `custom` and `exclusive` constraints are both unenforced', () => {
@@ -1509,13 +1541,22 @@ describe('BLOODED selection', () => {
     expect(REMINDER_ONLY['blooded.selection.exclusive']).toBeDefined();
   });
 
-  it('DATA PROBLEM: the CHIEFTAIN’s first option is a `choiceGroups` shape `LoadoutOption` does not model', () => {
+  it('the CHIEFTAIN’s first option is ONE option with two choice groups: "Autopistol or laspistol; chainsword or power weapon"', () => {
     const opt = DATA.selection.leaderList[0]!.loadouts[0]!;
     expect(opt.label).toBe('Autopistol or laspistol; chainsword or power weapon');
-    expect(opt.weapons).toEqual([]); // the "or" choices live in a field the type drops
+    expect(opt.weapons).toEqual([]); // the "or" alternatives are the choice groups, not weapons
+    expect(opt.choiceGroups).toEqual([
+      ['Autopistol', 'Laspistol'],
+      ['Chainsword', 'Power weapon'],
+    ]);
+    // One weapon per group, never every alternative at once: the default takes the first of each…
     const v = validateRosterFor(DATA, defaultRoster(DATA));
-    // …so the CHIEFTAIN ends up with BOTH the autopistol and the laspistol.
-    expect(v.weapons[0]).toEqual(['Autopistol', 'Laspistol', 'Power weapon']);
+    expect(v.weapons[0]).toEqual(['Autopistol', 'Chainsword']);
+    // …and naming the other alternative on the pick takes that one instead.
+    const other = defaultRoster(DATA).map((p, i) => (i === 0 ? { ...p, weapons: ['Laspistol', 'Power weapon'] } : p));
+    const w = validateRosterFor(DATA, other);
+    expect(w.errors).toEqual([]);
+    expect(w.weapons[0]).toEqual(['Laspistol', 'Power weapon']);
   });
 
   it('`notes[]` is empty, so the scraper flagged none of the above', () => {

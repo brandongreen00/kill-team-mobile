@@ -1679,8 +1679,6 @@ export const REMINDER_ONLY: Record<string, string> = {
     'selection.constraints carries {kind:"custom"} — "In other words, you can only have one operative with a plasma weapon" — and `custom` is the one constraint kind validateRosterFor has no branch for (D-036). It cannot be re-expressed as a maxItem either: "plasma weapon" is a weapon CLASS (Plasma pistol on the CHIEFTAIN, Plasma gun on the GUNNER), not a weapon NAME, and maxItem matches by name with only a plural tolerance (D-040)',
   'blooded.selection.exclusive':
     'selection.constraints also carries {kind:"exclusive", group:"^2"} — "You cannot select this option and this operative" — and `exclusive` has NO branch in validateRosterFor at all (the enforced kinds are uniqueExcept, maxCount, requires, groupCap, halfSelection, distinctOptions, sameAsAbove, every, maxItem and exclusiveItems). It is the same printed footnote as the custom constraint above',
-  'blooded.selection.groupCap':
-    'the printed footnote "^1 You cannot select more than three of these operatives combined" is under-enforced by one row: the plasma-gun GUNNER carries footnoteGroup "^1,2" (a comma-joined literal) while the groupCap constraint names "^1", so that row escapes the cap and defaultRoster fields FOUR ^1 operatives — an illegal kill team the shared validator accepts',
 };
 
 // ---------------------------------------------------------------------------
