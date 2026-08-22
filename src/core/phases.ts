@@ -124,6 +124,57 @@ export function whoActivates(
  * those clauses unreachable, because `onCounteract` could then only ever narrow the list the
  * core had already computed (docs/TEAM-STATUS.md § Engine seams added for team rules).
  */
+/**
+ * Whose turn is it to set up an operative?
+ *
+ * Core Rules › SET UP OPERATIVES: "Starting with the player that has initiative, players
+ * alternate setting up one third of their kill team (rounding up), until all operatives from
+ * both kill teams have been set up."
+ *
+ * The reducer does not enforce this — `DeployOperative` checks ownership, drop zone, hazardous
+ * terrain and base overlap and nothing about turn order — so this is the one place the order
+ * is written down, and both the UI and any driver read it from here rather than reinventing it.
+ * Returns null once every operative is on the killzone.
+ */
+export function deployToAct(state: GameState): PlayerId | null {
+  const init = state.initiative ?? 'p1';
+  const other = otherPlayer(init);
+  const done = (p: PlayerId) => state.setup.deployedCount[p] ?? 0;
+  const size = (p: PlayerId) => state.teams[p].operativeIds.length;
+  const third = (p: PlayerId) => Math.max(1, Math.ceil(size(p) / 3));
+  if (done(init) >= size(init) && done(other) >= size(other)) return null;
+  if (size(init) === 0) return init;
+  if (done(init) >= size(init)) return other;
+  if (done(other) >= size(other)) return init;
+  return Math.floor(done(init) / third(init)) <= Math.floor(done(other) / third(other)) ? init : other;
+}
+
+/** How many more that player sets up before the turn passes. */
+export function deployBatchRemaining(state: GameState, player: PlayerId): number {
+  const size = state.teams[player].operativeIds.length;
+  const done = state.setup.deployedCount[player] ?? 0;
+  const third = Math.max(1, Math.ceil(size / 3));
+  return Math.max(0, Math.min(size, (Math.floor(done / third) + 1) * third) - done);
+}
+
+/**
+ * Whose turn is it to use a STRATEGIC GAMBIT or pass?
+ *
+ * Core Rules › STRATEGIC GAMBIT: "Starting with the player who has initiative, each player
+ * alternates either using a STRATEGIC GAMBIT or passing... until they have both passed in
+ * succession." The reducer enforces no alternation, so — as with deployment — the order lives
+ * here. Returns null once both have passed.
+ */
+export function gambitToAct(state: GameState): PlayerId | null {
+  if (bothPassedGambit(state)) return null;
+  const init = state.initiative ?? 'p1';
+  const other = otherPlayer(init);
+  if (state.teams[init].passedGambit) return other;
+  if (state.teams[other].passedGambit) return init;
+  // Neither has passed: the initiative player leads, then they alternate by gambits used.
+  return state.teams[init].gambitsUsedTP.length <= state.teams[other].gambitsUsedTP.length ? init : other;
+}
+
 export function counteractCandidates(ctx: GameContext, state: GameState, player: PlayerId) {
   return aliveOperatives(state, player)
     .filter((o) => o.expended && !o.counteractedThisTP)

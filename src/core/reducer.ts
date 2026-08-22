@@ -31,10 +31,10 @@ import {
 } from './phases.ts';
 import { advanceShoot, startShoot } from './sequences/shoot.ts';
 import { advanceFight, startFight } from './sequences/fight.ts';
-import { baseWhollyWithin, baseGap } from './geometry.ts';
+import { baseWhollyWithin, baseGap, basesOverlap } from './geometry.ts';
 import { baseTouchesHazardous } from './terrain.ts';
 import type { Intent } from './intents.ts';
-import type { GameState, KillzoneMap, OperativeState, PlayerId } from './types.ts';
+import type { GameState, KillzoneMap, OperativeState, PlayerId, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
 
 export interface ReduceOutcome {
@@ -161,25 +161,32 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       return ok(next);
     }
 
+    case 'BeginDeployment': {
+      // The reveal. Until this existed the UI reached in and assigned `setup.step` itself,
+      // which meant the transition was invisible to the log, to a replay and to any other
+      // view of the same state.
+      if (next.setup.step !== 'selectOperatives') return fail('kill teams are not being selected');
+      const empty = (['p1', 'p2'] as PlayerId[]).filter((p) => next.teams[p].operativeIds.length === 0);
+      if (empty.length > 0) return fail(`${empty.join(' and ')} has not selected a kill team`);
+      next.setup.revealed = { p1: true, p2: true };
+      log(next, { kind: 'system', text: 'Both kill teams are revealed' });
+      // Equipment that occupies space on the killzone — barricades, ladders, portable
+      // cover — is set up BEFORE operatives are, and until now nothing ever set this step,
+      // so a player who bought a barricade simply never got to place it and the item stayed
+      // in limbo for the whole battle.
+      const setter = ctx.equipmentToAct?.(next) ?? null;
+      next.setup.step = setter ? 'placeEquipment' : 'deploy';
+      if (setter) next.setup.toAct = setter;
+      return ok(next);
+    }
+
     case 'DeployOperative': {
       const op = next.operatives[intent.operativeId];
       if (!op) return fail('no such operative');
       if (op.player !== intent.player) return fail('not your operative');
-      const zoneKey = next.setup.dropZone[intent.player] ?? intent.player;
-      const zone = next.map.dropZones[zoneKey];
-      const dc = card(ctx, op);
       const rot = intent.rotDeg ?? 0;
-      if (!baseWhollyWithin(intent.pos, dc.base, rot, zone))
-        return fail('operatives must be set up wholly within your drop zone');
-      const index = terrain(ctx, next);
-      if (baseTouchesHazardous(index, intent.pos, dc.base, rot))
-        return fail('a base cannot touch a hazardous area');
-      for (const other of aliveOperatives(next)) {
-        if (other.id === op.id || other.pos.x < -50) continue;
-        const oc = card(ctx, other);
-        if (baseGap(intent.pos, dc.base, rot, other.pos, oc.base, other.rot) < -1e-4)
-          return fail('a base cannot be placed on another');
-      }
+      const legal = canDeployAt(ctx, next, op, intent.pos, rot);
+      if (!legal.ok) return fail(legal.reason ?? 'that operative cannot be set up there');
       op.pos = { ...intent.pos };
       op.rot = rot;
       op.order = 'conceal'; // "must be given a Conceal order"
@@ -195,13 +202,15 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       if (!ctx.placeEquipment) return fail('equipment placement is not available in this build');
       const res = ctx.placeEquipment(ctx, next, intent);
       if (!res.ok) return fail(res.reason ?? 'that equipment cannot be set up there');
-      next.setup.equipmentPlaced[intent.player] = (next.setup.equipmentPlaced[intent.player] ?? 0) + 1;
-      next.setup.toAct = otherPlayer(intent.player);
+      // `placeEquipment` already counted it. Counting again here doubled the tally the setup
+      // screen shows, so "1 of 2 set up" jumped straight past the second item.
+      advanceEquipmentStep(ctx, next);
       return ok(next);
     }
 
     case 'SkipEquipmentPlacement': {
-      next.setup.toAct = otherPlayer(intent.player);
+      next.setup.equipmentDone = { ...(next.setup.equipmentDone ?? {}), [intent.player]: true };
+      advanceEquipmentStep(ctx, next);
       log(next, { kind: 'system', player: intent.player, text: 'no more equipment to set up' });
       return ok(next);
     }
@@ -531,6 +540,44 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
   }
 }
 
+/**
+ * Is this a legal place to set up that operative? Core Rules › SET UP OPERATIVES.
+ *
+ * Extracted from the `DeployOperative` case so that a UI drawing a placement ghost gets the
+ * SAME answer, in the SAME words, as the intent it is about to send — and gets it without
+ * cloning the whole GameState through `reduce` on every frame of a drag.
+ */
+export function canDeployAt(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  pos: Vec2,
+  rotDeg = 0,
+): { ok: boolean; reason?: string } {
+  const zoneKey = state.setup.dropZone[op.player] ?? op.player;
+  const zone = state.map.dropZones[zoneKey];
+  const dc = card(ctx, op);
+  if (!baseWhollyWithin(pos, dc.base, rotDeg, zone))
+    return { ok: false, reason: 'operatives must be set up wholly within your drop zone' };
+  const index = terrain(ctx, state);
+  if (baseTouchesHazardous(index, pos, dc.base, rotDeg))
+    return { ok: false, reason: 'a base cannot touch a hazardous area' };
+  for (const other of aliveOperatives(state)) {
+    if (other.id === op.id || other.pos.x < -50) continue;
+    const oc = card(ctx, other);
+    // `basesOverlap`, NOT `baseGap(...) < -1e-4`. `baseGap` clamps at zero
+    // (geometry.ts › baseGap), so that comparison can never be true and this guard has never
+    // fired — two operatives could be set up on the same square inch. Eight further copies of
+    // the same dead comparison remain in `movement.ts` and seven team modules; they are left
+    // alone deliberately, because switching them changes what is a legal END POSITION for a
+    // move and sixteen rules tests currently encode the permissive behaviour. See
+    // docs/DECISIONS.md.
+    if (basesOverlap(pos, dc.base, rotDeg, other.pos, oc.base, other.rot))
+      return { ok: false, reason: 'a base cannot be placed on another' };
+  }
+  return { ok: true };
+}
+
 // ---------------------------------------------------------------------------
 
 function ok(state: GameState): ReduceOutcome {
@@ -606,8 +653,13 @@ function advancePhase(ctx: GameContext, state: GameState): void {
       return;
     }
     case 'endOfTP': {
+      // The turning point rolls over HERE, not when the firefight phase ended. See
+      // `advanceTurningPoint`.
+      state.turningPoint += 1;
       state.phase = 'strategy';
       state.strategyStep = 'initiative';
+      state.activeOperativeId = undefined as unknown as string | undefined;
+      log(state, { kind: 'system', text: `Turning point ${state.turningPoint}` });
       return;
     }
     case 'battleEnd':
@@ -615,10 +667,22 @@ function advancePhase(ctx: GameContext, state: GameState): void {
   }
 }
 
+/**
+ * End of the firefight phase: score the turning point, then STOP on `endOfTP`.
+ *
+ * This used to set `state.phase = 'endOfTP'` and then overwrite it with `'strategy'` a few
+ * lines later, in the same call. The phase therefore never existed for a single moment that
+ * anything could observe, so the end-of-turning-point screen was unreachable and the only
+ * scoring the game does — up to 6VP a side, per turning point — landed silently: the score
+ * in the top bar simply changed while the player was looking at the next initiative roll.
+ *
+ * `AdvancePhase` out of `endOfTP` is what now rolls the turning point over, and
+ * `src/ai/runner` already dispatches exactly that, so bot-driven games walk through the new
+ * stop unchanged.
+ */
 function advanceTurningPoint(ctx: GameContext, state: GameState): void {
   endTurningPoint(ctx, state);
   ctx.scoreEndOfTurningPoint?.(ctx, state);
-  state.phase = 'endOfTP';
   if (state.turningPoint >= (state.maxTurningPoints || MAX_TURNING_POINTS)) {
     state.phase = 'battleEnd';
     ctx.scoreEndOfBattle?.(ctx, state);
@@ -629,11 +693,28 @@ function advanceTurningPoint(ctx: GameContext, state: GameState): void {
     });
     return;
   }
-  state.turningPoint += 1;
-  state.phase = 'strategy';
-  state.strategyStep = 'initiative';
+  state.phase = 'endOfTP';
   state.activeOperativeId = undefined as unknown as string | undefined;
-  log(state, { kind: 'system', text: `Turning point ${state.turningPoint}` });
+}
+
+/**
+ * Pass the equipment turn on, and leave the step once neither player has anything left.
+ *
+ * Deployment can only start after this: an operative set up first would be standing where a
+ * barricade is about to go.
+ */
+function advanceEquipmentStep(ctx: GameContext, state: GameState): void {
+  if (state.setup.step !== 'placeEquipment') return;
+  const next = ctx.equipmentToAct?.(state) ?? null;
+  if (!next) {
+    state.setup.step = 'deploy';
+    // Deployment starts with the player who has initiative, whoever placed the last item.
+    state.setup.toAct = state.initiative ?? 'p1';
+    return;
+  }
+  // `equipmentToAct` alternates on the placed counts, so it hands the turn back to the same
+  // player when the other has nothing left — which is the rule, not a stuck turn.
+  state.setup.toAct = next;
 }
 
 /** Everything a player could legally do right now — the AI's action surface and the UI's menu. */

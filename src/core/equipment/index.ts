@@ -13,6 +13,7 @@ import { basePerimeter, baseGap } from '../geometry.ts';
 import { surfaceAt } from '../terrain.ts';
 import { log } from '../state.ts';
 import type { Intent } from '../intents.ts';
+import { otherPlayer } from '../types.ts';
 import type { GameState, MarkerState, OperativeState, PlayerId, Poly, Vec2 } from '../types.ts';
 
 import {
@@ -92,6 +93,30 @@ export function pendingEquipmentItems(
     });
   }
   return out;
+}
+
+/**
+ * Whose turn is it to set up a piece of equipment?
+ *
+ * Approved Ops › SET UP EQUIPMENT: "Starting with the player that has initiative, players
+ * alternate setting up their equipment, one piece at a time, until both players have set up
+ * all of their equipment." Returns null once neither player has anything left — which is the
+ * signal the reducer uses to move on to deployment.
+ *
+ * `setup.equipmentDone` is how a player says "I have nothing I can or want to set up": some
+ * items (a ladder that needs a wall to lean on) can have no legal position on some killzones,
+ * and without an out the setup step would be unleaveable.
+ */
+export function equipmentToAct(state: GameState): PlayerId | null {
+  const init = state.initiative ?? 'p1';
+  const other = otherPlayer(init);
+  const left = (p: PlayerId): number =>
+    state.setup.equipmentDone?.[p] ? 0 : pendingEquipmentItems(state, p).length;
+  if (left(init) === 0 && left(other) === 0) return null;
+  if (left(init) === 0) return other;
+  if (left(other) === 0) return init;
+  const done = (p: PlayerId): number => state.setup.equipmentPlaced[p] ?? 0;
+  return done(init) <= done(other) ? init : other;
 }
 
 export const equipmentEntityId = (player: PlayerId, equipmentId: string, itemIndex: number): string =>

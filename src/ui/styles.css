@@ -1,136 +1,1522 @@
-/* Design tokens — grimdark palette carried over from the previous app. */
+/* =========================================================================
+   Kill Team — phone-first design system.
+
+   The shell is a STAGE with the killzone in it and a COMMAND SHEET over the
+   bottom of it. There is no tab bar during a battle: the game always knows
+   what you have to do next, so the sheet shows that, and the board is always
+   underneath it — which is what stops "arm a placement here, go and find the
+   board over there".
+
+   Layout contract, and every rule below serves it:
+     #app      100dvh, never scrolls, never grows
+     .topbar   fixed height, the battle's vital signs
+     .stage    everything else; position:relative, the sheet's containing block
+     .board-pane  inset from the bottom by --sheet-rest so the resting sheet
+                  never covers board the player needs; it does NOT reflow when
+                  the sheet expands, so the viewport aspect stays stable
+     .sheet    absolutely positioned over the stage at one of three detents
+   ========================================================================= */
+
 :root {
-  --bg: #0d0f12;
-  --panel: #171a20;
-  --panel-2: #1f242c;
-  --line: #2b313b;
-  --ink: #e7e9ec;
-  --muted: #9aa3af;
-  --p1: #f6a35a;
-  --p2: #9fb2c9;
-  --accent: #f6c445;
-  --danger: #e0574a;
-  --ok: #5fbf7a;
-  --dock-h: 42vh;
-  --tap: 44px;
+  /* --- surfaces, darkest to lightest ----------------------------------- */
+  --bg: #0b0d11;
+  --surface: #14181f;
+  --surface-2: #1c222b;
+  --surface-3: #262d38;
+  --board: #12151b;
+
+  /* Borders identify a control, so WCAG 1.4.11 wants 3:1 against what is
+     behind them. The old --line (#2f3743) was 1.33:1 on --surface-2 — i.e.
+     invisible — on every tag, button, input, card and list separator in the
+     app. These clear 3:1 on all four surfaces (3.90 / 3.50 / 3.04 / 4.01). */
+  --line: #6a7787;
+  --line-strong: #8a96a6;
+
+  /* --- ink. Every pair below is >= 4.6:1 on every surface above -------- */
+  --ink: #eef1f5;
+  --ink-2: #bac4d2;
+  --ink-3: #98a3b3;
+
+  /* --- meaning --------------------------------------------------------- */
+  /* The two sides are separated by VALUE, not hue: the old pair (#ff9a4d /
+     #8fb8d8) had a luminance ratio of 1.00:1, so friend and enemy were the
+     same shade of grey to a protanope, to a deuteranope, and in any greyscale
+     screenshot. 2.26:1 apart, plus a shape difference on the token, is the fix. */
+  --p1: #f2751f;
+  --p2: #cfe8fa;
+  --accent: #ffc94a;
+  --on-accent: #17110a;
+  --ok: #5fd08a;
+  --danger: #ff7a6b;
+  --warn: #ffc94a;
+  --focus: #8fd3f5;
+
+  /* Board tints. Deliberately more saturated than the ink palette: they are
+     large flat areas seen through 35% opacity, not text. */
+  --zone-p1: #f2703a;
+  --zone-p2: #9fb6cc;
+
+  /* --- type. 16px base: below that iOS zooms the page on input focus --- */
+  /* 13px is the floor. The old 10px stat keys and 11px tags were unreadable
+     at arm's length on a table. */
+  --t-xs: 13px;
+  --t-sm: 14px;
+  --t-base: 16px;
+  --t-lg: 18px;
+  --t-xl: 22px;
+  --t-2xl: 28px;
+  --lh-tight: 1.25;
+  --lh: 1.45;
+
+  /* --- space ----------------------------------------------------------- */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s8: 32px;
+
+  --r-sm: 8px;
+  --r: 12px;
+  --r-lg: 18px;
+  --r-full: 999px;
+
+  /* --- controls -------------------------------------------------------- */
+  --tap: 44px; /* the floor, per Apple HIG / Material */
+  --tap-lg: 52px; /* primary actions: comfortable for a thumb in motion */
+
+  /* --- chrome geometry. The sheet's resting height is a real number the
+         board maths reads, not a guess. ---------------------------------- */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --topbar-h: 52px;
+  --sheet-rest: calc(140px + var(--safe-bottom));
+  --sheet-h: var(--sheet-rest);
+  --sheet-max: 92%;
+
+  --shadow: 0 -8px 28px rgb(0 0 0 / 0.45);
+  --ease: cubic-bezier(0.22, 0.8, 0.3, 1);
+
   color-scheme: dark;
 }
-* { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-body { overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
-#app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
 
-.topbar { display: flex; align-items: center; gap: 8px; padding: max(6px, env(safe-area-inset-top)) 10px 6px;
-  background: var(--panel); border-bottom: 1px solid var(--line); flex: 0 0 auto; }
-.topbar h1 { font-size: 15px; margin: 0; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
-.spacer { flex: 1; }
-
-.page { flex: 1 1 auto; overflow-y: auto; overflow-x: clip; padding: 10px; }
-.board-wrap { flex: 1 1 auto; min-height: 0; display: grid; place-items: center; background: #0a0c0f; }
-.board { width: 100%; height: 100%; max-height: 100%; display: block; touch-action: none; }
-
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px; margin-bottom: 10px; }
-.card h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 8px; }
-button { min-height: var(--tap); padding: 0 14px; font-size: 15px; border-radius: 8px; border: 1px solid var(--line);
-  background: var(--panel-2); color: var(--ink); cursor: pointer; }
-button:disabled { opacity: .45; cursor: not-allowed; }
-button.primary { background: var(--accent); color: #17110a; border-color: transparent; font-weight: 600; }
-select, input { min-height: var(--tap); font-size: 15px; background: var(--panel-2); color: var(--ink);
-  border: 1px solid var(--line); border-radius: 8px; padding: 0 8px; max-width: 100%; }
-.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.muted { color: var(--muted); font-size: 13px; }
-.tag { font-size: 11px; padding: 2px 6px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
-
-.log { font-size: 12px; line-height: 1.45; max-height: 30vh; overflow-y: auto; word-break: break-word; }
-.log .dice { color: var(--accent); }
-.log .reject { color: var(--danger); }
-
-.m-tabs { display: flex; border-top: 1px solid var(--line); background: var(--panel);
-  padding-bottom: env(safe-area-inset-bottom); flex: 0 0 auto; }
-.m-tabs button { flex: 1; border: 0; border-radius: 0; background: transparent; font-size: 12px;
-  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; }
-.m-tabs button[aria-selected="true"] { color: var(--accent); }
-
-@media (min-width: 900px) {
-  .layout { display: grid; grid-template-columns: 280px 1fr 320px; gap: 10px; flex: 1; min-height: 0; }
-  .m-tabs { display: none; }
-}
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
-
-/* --- responsive shell ---------------------------------------------------- */
-.dock { flex: 0 0 auto; max-height: var(--dock-h); overflow-y: auto; border-top: 1px solid var(--line); }
-.decision { border-color: var(--accent); }
-.decision h2 { color: var(--accent); }
-
-@media (min-width: 900px) {
-  .layout > .page { overflow-y: auto; }
+* {
+  box-sizing: border-box;
 }
 
-/* --- dice ---------------------------------------------------------------- */
-.die-rolling { animation: die-roll .42s ease-out; transform-origin: center; }
+html {
+  /* The DOCUMENT never scrolls: the board and the sheet own every gesture. With the
+     document locked, iOS never collapses its URL bar, so `svh` and `dvh` agree and the
+     mid-gesture relayout `dvh` normally causes cannot happen. */
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: var(--t-base);
+  line-height: var(--lh);
+}
+
+body {
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  /* The page itself never scrolls; the board and the sheet own their gestures. */
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+#app {
+  height: 100dvh;
+  /* 100dvh is well supported now, but a browser that does not know it would
+     otherwise get `auto`; svh is the conservative fallback and never overflows. */
+  height: 100svh;
+  height: 100dvh;
+  display: grid;
+  /* The COLUMN must be explicit. A grid with only `grid-template-rows` gets one
+     implicit `auto` column, which sizes to the widest child's max-content — the
+     top bar's — and silently makes the whole app wider than the phone. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+/* =========================================================================
+   Top bar — the battle's vital signs, readable at a glance and never more
+   than a line and a half tall.
+   ========================================================================= */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  /* Landscape on a notched phone puts the cutout on the SIDE. Chrome takes the inset;
+     the board does not — running full-bleed under it is the point of viewport-fit=cover. */
+  padding: calc(var(--safe-top) + var(--s2)) max(var(--s2), env(safe-area-inset-right)) var(--s2)
+    max(var(--s3), env(safe-area-inset-left));
+  min-height: calc(var(--topbar-h) + var(--safe-top));
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.topbar h1 {
+  font-size: var(--t-sm);
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* The wordmark yields first: the score and the menu are what the bar is for. */
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar .turn-of {
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+}
+
+.spacer {
+  flex: 1;
+}
+
+/* The two teams' score, always on screen: the thing a player checks most. */
+.scoreline {
+  display: flex;
+  gap: var(--s1);
+  align-items: center;
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+}
+
+.team-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  padding: 3px var(--s2);
+  border-radius: var(--r-full);
+  border: 1px solid var(--line);
+  font-size: var(--t-xs);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+.team-chip .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.team-chip.is-p1 .dot {
+  background: var(--p1);
+}
+.team-chip.is-p2 .dot {
+  background: var(--p2);
+}
+.team-chip.is-active {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+/* =========================================================================
+   Stage: the board, and the sheet over it.
+   ========================================================================= */
+
+.stage {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.board-pane {
+  position: absolute;
+  inset: 0 0 var(--sheet-rest) 0;
+  display: flex;
+  min-height: 0;
+}
+
+.board {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+/* Board overlay controls: floated bottom-right of the visible board area, out
+   of the drop zones that run up the left and right EDGES of every killzone. */
+/* A ROW, not a column. Three 44px buttons stacked is 150px of board covered; laid along the
+   bottom they fit in the letterbox bar the fit framing leaves, and on a short pane they no
+   longer overflow past the top of the board. Desktop has room to stack them. */
+.board-controls {
+  position: absolute;
+  bottom: var(--s3);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--s2);
+  z-index: 2;
+  max-width: calc(100% - var(--s6));
+}
+.board-controls.side-right {
+  right: max(var(--s3), env(safe-area-inset-right));
+}
+.board-controls.side-left {
+  left: max(var(--s3), env(safe-area-inset-left));
+}
+
+.board-controls button {
+  width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border-radius: var(--r-full);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+}
+.board-controls button:disabled {
+  color: var(--ink-3);
+  border-color: var(--line);
+}
+
+.zoom-readout {
+  text-align: center;
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================================
+   Command sheet.
+   ========================================================================= */
+
+.sheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--sheet-h);
+  max-height: var(--sheet-max);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  box-shadow: var(--shadow);
+  transition: height 0.24s var(--ease);
+  z-index: 3;
+}
+.sheet.is-dragging {
+  transition: none;
+}
+
+/* A pending decision must be answered: dim the board behind it so the eye
+   goes to the one thing that can be interacted with. */
+.sheet-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.45);
+  z-index: 2;
+}
+
+.sheet-grab {
+  display: grid;
+  place-items: center;
+  padding: var(--s2) var(--s2) var(--s1);
+  cursor: grab;
+  touch-action: none;
+}
+.sheet-grab::before {
+  content: '';
+  width: 44px;
+  height: 4px;
+  border-radius: var(--r-full);
+  background: var(--line-strong);
+}
+
+.sheet-peek {
+  /* top | right | bottom | left — the insets were the wrong way round here and in the body. */
+  padding: 0 max(var(--s4), env(safe-area-inset-right)) var(--s3) max(var(--s4), env(safe-area-inset-left));
+}
+/* Zero-height at the resting detent — the grid gives it what is left, and at rest there is
+   nothing left. No half-clipped sentence under the primary button. */
+.sheet-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  /* A little top padding, and a hairline under the peek. With neither, the first row sat
+     flush against an opaque header and the moment the body scrolled its top line was sliced
+     in half with nothing to say why — it read as a clipped layout rather than a scroller. */
+  padding: var(--s2) max(var(--s4), env(safe-area-inset-right)) calc(var(--s4) + var(--safe-bottom))
+    max(var(--s4), env(safe-area-inset-left));
+  border-top: 1px solid var(--line);
+  min-height: 0;
+}
+.sheet.detent-rest .sheet-body {
+  border-top: 0;
+}
+.sheet.detent-rest .sheet-body {
+  visibility: hidden;
+}
+
+/* The one line that says what the game wants, and the button that does it. */
+.prompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+}
+.prompt-step {
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 700;
+}
+.prompt-title {
+  font-size: var(--t-xl);
+  line-height: var(--lh-tight);
+  font-weight: 650;
+  margin: 0;
+}
+.prompt-help {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  margin: 0;
+}
+
+/* --- side sheet: a phone held sideways ----------------------------------- */
+
+.stage.has-side-sheet {
+  --sheet-side: min(46%, 400px);
+}
+.stage.has-side-sheet .board-pane {
+  inset: 0 var(--sheet-side) 0 0;
+}
+.sheet.is-side {
+  top: 0;
+  left: auto;
+  width: var(--sheet-side, min(46%, 400px));
+  height: auto;
+  max-height: none;
+  border-radius: var(--r-lg) 0 0 var(--r-lg);
+  border-top: 0;
+  border-left: 1px solid var(--line);
+  box-shadow: -8px 0 28px rgb(0 0 0 / 0.45);
+  grid-template-rows: auto minmax(0, 1fr);
+  padding-top: var(--s3);
+}
+/* No detents to drag between, so the body always scrolls. */
+.sheet.is-side .sheet-body {
+  visibility: visible;
+}
+.stage.has-side-sheet .board-controls {
+  bottom: var(--s2);
+  left: var(--s2);
+  right: auto;
+}
+.stage.has-side-sheet .zoom-readout {
+  align-self: center;
+}
+
+/* =========================================================================
+   Controls.
+   ========================================================================= */
+
+button {
+  min-height: var(--tap);
+  padding: 0 var(--s4);
+  font-size: var(--t-base);
+  font-family: inherit;
+  font-weight: 550;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.08s var(--ease), background-color 0.15s var(--ease);
+}
+button:active:not(:disabled) {
+  transform: scale(0.975);
+}
+/* `opacity` on a disabled control drops its border to ~1:1 against its own fill
+   and makes a bordered icon button literally invisible. Disabled is a colour. */
+button:disabled {
+  color: var(--ink-3);
+  background: var(--surface);
+  border-color: var(--line);
+  cursor: not-allowed;
+}
+button:disabled .icon {
+  opacity: 0.75;
+}
+/* An action the rules forbid: legible, with its reason in the row, not a ghost
+   with the explanation hidden in a `title` no touch screen will ever show. */
+button.is-blocked {
+  align-items: flex-start;
+  text-align: left;
+}
+button.is-blocked .entry-name {
+  color: var(--ink-3);
+}
+.entry-meta.why {
+  color: var(--danger);
+  white-space: normal;
+  overflow: visible;
+}
+button:focus-visible,
+[tabindex]:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-color: transparent;
+  font-weight: 700;
+  min-height: var(--tap-lg);
+}
+button.primary:disabled {
+  background: var(--surface-2);
+  color: var(--ink-3);
+  border-color: var(--line);
+}
+button.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-2);
+}
+button.quiet {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink-2);
+}
+button.danger {
+  color: var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+}
+button.icon-only {
+  width: var(--tap);
+  min-width: var(--tap);
+  padding: 0;
+}
+
+/* Full-width stacked actions — the phone default, so nothing lands ragged. */
+.actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s2);
+  padding-bottom: var(--s2);
+}
+.actions > * {
+  min-width: 0;
+}
+.actions.two-up {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.actions button {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  gap: var(--s2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+select,
+input,
+textarea {
+  min-height: var(--tap);
+  font-size: var(--t-base);
+  font-family: inherit;
+  background: var(--surface-2);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: var(--s2) var(--s3);
+  max-width: 100%;
+  width: 100%;
+}
+
+.muted {
+  color: var(--ink-2);
+  font-size: var(--t-sm);
+}
+.dim {
+  color: var(--ink-3);
+  font-size: var(--t-sm);
+}
+
+.tag {
+  font-size: var(--t-xs);
+  padding: 3px var(--s2);
+  border-radius: var(--r-full);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.tag.is-ok {
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 50%, transparent);
+}
+.tag.is-warn {
+  color: var(--warn);
+  border-color: color-mix(in srgb, var(--warn) 50%, transparent);
+}
+.tag.is-danger {
+  color: var(--danger);
+  border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+}
+
+.icon {
+  flex: 0 0 auto;
+  display: block;
+}
+
+/* =========================================================================
+   Cards / sections inside the sheet and full-screen pages.
+   ========================================================================= */
+
+.card {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: var(--s3);
+  margin-bottom: var(--s3);
+}
+.card > h2,
+.section-title {
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  margin: 0 0 var(--s2);
+  font-weight: 700;
+}
+
+/* A full-screen page (roster builder, log, killzones) that slides over
+   everything. It is a route, not a tab: it has a title bar and one way back. */
+.overlay-page {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: var(--bg);
+  animation: page-in 0.22s var(--ease);
+}
+@keyframes page-in {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+}
+.overlay-head {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: calc(var(--safe-top) + var(--s2)) max(var(--s3), env(safe-area-inset-right)) var(--s2)
+    max(var(--s3), env(safe-area-inset-left));
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.overlay-head h2 {
+  font-size: var(--t-lg);
+  margin: 0;
+  font-weight: 650;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.overlay-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--s4);
+}
+/* A pinned action bar. Nothing above it ever changes height, which is the
+   whole reason the roster builder stopped moving under the thumb. */
+.overlay-foot {
+  padding: var(--s3) var(--s4) calc(var(--s3) + var(--safe-bottom));
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: var(--s2);
+}
+
+.team-card {
+  border-left: 4px solid var(--line);
+}
+.team-card.is-p1 {
+  border-left-color: var(--p1);
+}
+.team-card.is-p2 {
+  border-left-color: var(--p2);
+}
+
+/* =========================================================================
+   Toasts — the reducer's rejection reason, which the old UI discarded.
+   ========================================================================= */
+
+/* Under the top bar, not above the sheet: a toast must never cover the control the player
+   is being told about. */
+.toasts {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(var(--safe-top) + var(--topbar-h) + var(--s2));
+  z-index: 40;
+  display: grid;
+  gap: var(--s2);
+  width: min(560px, calc(100% - var(--s6)));
+  pointer-events: none;
+}
+.toast {
+  /* Tappable: a message the player has read should go away when they say so. */
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  gap: var(--s2);
+  padding: var(--s3);
+  border-radius: var(--r);
+  background: var(--surface-3);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.5);
+  font-size: var(--t-sm);
+  font-weight: 400;
+  color: var(--ink);
+  min-height: 0;
+  animation: toast-in 0.18s var(--ease);
+}
+.toast.is-danger {
+  border-color: color-mix(in srgb, var(--danger) 55%, transparent);
+}
+.toast.is-danger .icon {
+  color: var(--danger);
+}
+@keyframes toast-in {
+  from {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+}
+.toast-count {
+  color: var(--ink-3);
+}
+/* The printed rule, shown rather than hidden behind a disclosure. */
+.rule-text.printed {
+  border-left: 2px solid var(--line);
+  padding-left: var(--s3);
+  margin-top: var(--s3);
+}
+
+/* =========================================================================
+   Operative strip / chips — the roster tray and the activation picker.
+   ========================================================================= */
+
+.op-strip {
+  display: flex;
+  gap: var(--s2);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  padding-bottom: var(--s2);
+  margin: 0 calc(var(--s4) * -1);
+  padding-inline: var(--s4);
+}
+.op-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.op-chip {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--s2);
+  min-height: var(--tap);
+  padding: var(--s2) var(--s3);
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  text-align: left;
+  max-width: 168px;
+  min-width: 0;
+}
+.op-chip > span:last-child {
+  min-width: 0;
+}
+.op-chip .letter {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: var(--t-sm);
+  color: var(--on-accent);
+  background: var(--p1);
+}
+.op-chip.is-p2 .letter {
+  background: var(--p2);
+}
+.op-chip .op-name {
+  display: block;
+  font-size: var(--t-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.op-chip .op-sub {
+  display: block;
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.op-chip[aria-pressed='true'],
+.op-chip.is-selected {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface-2));
+}
+.op-chip.is-done {
+  opacity: 0.45;
+}
+
+/* AP pips — spend is read at a glance, not counted. */
+.ap-pips {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+}
+.ap-pips i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink-3);
+  display: block;
+}
+.ap-pips i.spent {
+  background: var(--ink-3);
+}
+
+/* =========================================================================
+   Roster builder. The catalogue is the ONLY thing that scrolls and its rows
+   never change height, so the "+" a thumb is over does not move when it is
+   tapped — the defect that made planning a roster feel broken.
+   ========================================================================= */
+
+/* status (pinned) · catalogue (the only scroller) · tray + confirm (pinned). */
+.builder {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: 0;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+.builder > .overlay-body {
+  min-height: 0;
+}
+
+/* PINNED, and actually fixed. The chip row wraps to two lines on teams with several groups,
+   and a chip gains a digit at 10 operatives — so without a reserved height the bar grows
+   mid-build and takes the catalogue with it, which is the movement this screen exists to
+   remove. Sized for the worst shipped case (eight chips). */
+.builder-status {
+  display: flex;
+  gap: var(--s2);
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  padding: var(--s3) var(--s4);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  min-height: 132px;
+  overflow: hidden;
+}
+.builder-status .chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-height: 56px;
+  overflow: hidden;
+}
+/* Its own clamping span: an icon sibling defeats `text-overflow` on the paragraph.
+   Two lines rather than one, because the reserved 132px has the room and the sentence being
+   cut — "This kill team meets its printed selection req…" — is the screen's one piece of good
+   news. Clamped, so it still cannot grow the bar and move the catalogue. */
+.builder-status .summary-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.catalogue {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.catalogue > li + li {
+  border-top: 1px solid var(--line);
+}
+
+/* Fixed geometry: an icon button, the text, a right-hand affordance. Nothing
+   in here wraps to a new line as state changes. */
+.entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s3) 0;
+  min-height: 84px;
+}
+.entry-stats {
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+  min-height: calc(var(--t-xs) * 1.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+.entry-main {
+  min-width: 0;
+}
+.entry-name {
+  font-size: var(--t-base);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  overflow-wrap: anywhere;
+}
+/* ONE line, always present, never wrapping. The reason a row is unavailable can be a
+   sentence; letting it wrap grew the row and slid the next `+` out from under the thumb,
+   which is the movement the owner reported. `min-height` keeps an empty meta the same
+   height as a full one. */
+/* TWO lines, always exactly two — the row's height must not change when a row goes from
+   available to blocked, which is what made the list crawl under the thumb. One line was not
+   enough: on a 390px phone "no selections left — 8 operatives besides the leader" clipped to
+   "no selections left — 8 operatives besid…", and on a row you cannot tap the reason is the
+   only guidance there is. `title` is not an answer on a touch screen. */
+.entry-meta {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  margin-top: 3px;
+  font-size: var(--t-xs);
+  font-weight: 400;
+  line-height: 1.3;
+  min-height: calc(var(--t-xs) * 2.6);
+  color: var(--ink-3);
+  overflow: hidden;
+}
+.entry-add {
+  width: var(--tap);
+  min-width: var(--tap);
+  height: var(--tap);
+  padding: 0;
+  border-radius: var(--r-full);
+}
+.entry.is-blocked .entry-name {
+  color: var(--ink-3);
+}
+/* The count of this entry already taken, so the list itself shows the roster. */
+.entry-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: var(--t-xs);
+  font-weight: 700;
+}
+
+.team-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s2);
+}
+.team-list button {
+  width: 100%;
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--s2);
+  text-align: left;
+  padding: var(--s3);
+}
+.team-list .team-name {
+  font-weight: 650;
+  font-size: var(--t-base);
+}
+.team-list .team-sub {
+  font-size: var(--t-sm);
+  color: var(--ink-3);
+}
+
+/* An option row whose TEXT is the choice — tac ops, equipment, gambits, ploys. One
+   truncated line is not enough to choose between them; three is, and it is still a
+   fixed height, so nothing moves. */
+.tac-ops .entry-meta,
+.equipment-options .entry-meta {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  white-space: normal;
+  min-height: calc(var(--t-xs) * 1.3 * 3);
+  max-height: calc(var(--t-xs) * 1.3 * 3);
+}
+.tac-ops button,
+.equipment-options button {
+  align-items: flex-start;
+  padding-top: var(--s3);
+  padding-bottom: var(--s3);
+}
+
+/* =========================================================================
+   Killzone contact sheet.
+   ========================================================================= */
+
+.contact-sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--s2);
+}
+.thumb {
+  padding: var(--s1);
+  height: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.thumb .board-thumb {
+  height: auto;
+  aspect-ratio: 30 / 22;
+  pointer-events: none;
+  width: 100%;
+}
+.thumb-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+.thumb-label {
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+}
+
+/* =========================================================================
+   Log.
+   ========================================================================= */
+
+.log {
+  font-size: var(--t-sm);
+  line-height: var(--lh);
+  display: grid;
+  gap: var(--s2);
+}
+.log > div {
+  display: grid;
+  /* turning point · whose · what. The middle column collapses on entries with no owner. */
+  grid-template-columns: auto auto 1fr;
+  gap: var(--s2);
+  padding-bottom: var(--s2);
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.log > div:not(.is-p1):not(.is-p2) {
+  grid-template-columns: auto 1fr;
+}
+/* A tinted rail as well as the P1/P2 tag: two signals, since scanning a log is done by eye. */
+.log > div.is-p1 {
+  box-shadow: inset 3px 0 0 var(--p1);
+  padding-left: var(--s2);
+}
+.log > div.is-p2 {
+  box-shadow: inset 3px 0 0 var(--p2);
+  padding-left: var(--s2);
+}
+.log .who {
+  font-size: var(--t-xs);
+  font-weight: 700;
+  padding-top: 2px;
+  letter-spacing: 0.04em;
+}
+.log .who.is-p1 {
+  color: var(--p1);
+}
+.log .who.is-p2 {
+  color: var(--p2);
+}
+.log .tp {
+  color: var(--ink-3);
+  font-size: var(--t-xs);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+.log .dice {
+  color: var(--accent);
+}
+.log .reject {
+  color: var(--danger);
+}
+
+/* =========================================================================
+   Board decoration — targeting state, ghosts, legality.
+   ========================================================================= */
+
+.armed-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: var(--s2) var(--s3);
+  margin-bottom: var(--s3);
+  /* TWO LINES, always. The strip's text changes constantly while a move is being aimed
+     ("tap to choose" → "4.2" — costs 5 of 6"" → a rejection reason). If its height changed
+     with it, the sheet's resting height would change, `.board-pane` would re-inset, the
+     viewport aspect would change and the whole board would rescale under the finger that is
+     mid-drag. Fixed height, clamped text. */
+  min-height: 52px;
+  max-height: 52px;
+  overflow: hidden;
+  border-radius: var(--r);
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  font-size: var(--t-sm);
+}
+.armed-banner .icon {
+  color: var(--accent);
+}
+/* A refusal, not an instruction. They shared one style, so "tap to choose a destination" and
+   "a base cannot touch a hazardous area" arrived in the same yellow pill. */
+.armed-banner.is-blocked {
+  background: color-mix(in srgb, var(--danger) 14%, var(--surface-2));
+  border-color: color-mix(in srgb, var(--danger) 55%, transparent);
+}
+.armed-banner.is-blocked .icon {
+  color: var(--danger);
+}
+.armed-banner span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+/* No ambient animation. A killzone that breathes at 2.6s for a whole battle is
+   noise and a vestibular trigger; the drop zone is loud enough standing still.
+   Pulsing is reserved for a target the player is being asked to tap. */
+.legal-zone {
+  opacity: 1;
+}
+.op.is-target .target-ring {
+  animation: target-pulse 1.6s ease-in-out infinite;
+}
+@keyframes target-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Where the active operative can get to. Drawn as one merged shape rather than a grid of
+   cells so it reads as an area at a glance. */
+/* Opacity on the GROUP, not on each cell: the cells overlap by design so they merge into
+   one shape, and per-cell alpha turns those overlaps into a lattice. */
+.reach {
+  opacity: 0.22;
+}
+.reach rect {
+  fill: #62d08a;
+  stroke: none;
+}
+
+
+/* =========================================================================
+   Dice.
+   ========================================================================= */
+
+.die-rolling {
+  animation: die-roll 0.42s ease-out;
+  transform-origin: center;
+}
 @keyframes die-roll {
-  0%   { opacity: .2; }
-  40%  { opacity: 1; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0.2;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
-.dmg-float { animation: dmg-rise 1.1s ease-out forwards; }
+.dmg-float {
+  animation: dmg-rise 1.1s ease-out forwards;
+}
 @keyframes dmg-rise {
-  0%   { opacity: 0; }
-  20%  { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
-.firing-line line { animation: tracer .6s ease-out; }
-@keyframes tracer { from { stroke-dashoffset: 4; } to { stroke-dashoffset: 0; } }
+.firing-line line {
+  animation: tracer 0.6s ease-out;
+}
+@keyframes tracer {
+  from {
+    stroke-dashoffset: 4;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
 
-/* --- roster builder ------------------------------------------------------ */
-.roster { max-width: 900px; margin-inline: auto; }
-.roster h2 { margin-top: 0; }
-.roster input, .roster select, .roster textarea { max-width: 100%; }
-.roster ul { list-style: none; margin: 6px 0; padding: 0; }
-.roster li { margin-bottom: 6px; min-width: 0; overflow-wrap: anywhere; }
+/* =========================================================================
+   Datacard / rules text.
+   ========================================================================= */
 
-.team-list button { width: 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
-  padding: 8px 10px; text-align: left; }
-.team-list .team-name { font-weight: 600; }
+.statline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s2);
+  margin: var(--s2) 0;
+}
+.stat {
+  background: var(--surface-3);
+  border-radius: var(--r-sm);
+  padding: var(--s2);
+  text-align: center;
+}
+.stat .k {
+  display: block;
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  text-transform: uppercase;
+}
+.stat .v {
+  display: block;
+  font-size: var(--t-lg);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
 
-.roster-status { position: sticky; top: 0; z-index: 2; gap: 6px; padding: 6px 0; margin: 8px 0;
-  background: var(--panel); border-bottom: 1px solid var(--line); }
-.roster-status.is-ok .tag { color: var(--ok); border-color: var(--ok); }
+details.disclosure {
+  border-top: 1px solid var(--line);
+  padding-top: var(--s2);
+}
+details.disclosure > summary {
+  min-height: var(--tap);
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  color: var(--ink-2);
+  font-size: var(--t-sm);
+  cursor: pointer;
+  list-style: none;
+}
+details.disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+details.disclosure pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  margin: 0;
+  font-family: inherit;
+}
 
-.legality { font-size: 13px; }
-.legality .err { color: var(--danger); }
-.legality .todo { color: var(--muted); }
-.ok-line { color: var(--ok); font-size: 13px; margin: 6px 0; }
-p.err { color: var(--danger); font-size: 13px; }
-.warn-tag { color: var(--accent); border-color: var(--accent); }
-.warn-block summary { color: var(--accent); font-size: 13px; min-height: var(--tap); display: flex; align-items: center; }
-.rules-block summary, .roster-library summary { color: var(--muted); font-size: 13px;
-  min-height: var(--tap); display: flex; align-items: center; }
-.rules-block pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; color: var(--muted); }
+.rule-text {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  margin: 0 0 var(--s2);
+}
 
-.op-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px; margin-bottom: 8px; }
-.op-card .op-head { gap: 6px; }
-.op-card .op-stats { gap: 4px; margin: 6px 0; }
-.op-remove { min-height: var(--tap); min-width: var(--tap); }
-.op-choice { display: flex; flex-direction: column; gap: 2px; margin: 6px 0; }
-.op-choice select { width: 100%; }
-.op-weapons { font-size: 13px; }
-.op-weapons li { border-top: 1px solid var(--line); padding-top: 4px; }
-.op-weapons .tag { margin-left: 6px; }
+.err {
+  color: var(--danger);
+  font-size: var(--t-sm);
+}
+.ok-line {
+  color: var(--ok);
+  font-size: var(--t-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
 
-.entry-list li { border-top: 1px solid var(--line); padding-top: 6px; }
-.entry-list .row { align-items: flex-start; flex-wrap: nowrap; }
-.entry-list .entry-text { min-width: 0; }
-.entry-list .why { color: var(--danger); }
-.add { min-width: var(--tap); font-size: 20px; line-height: 1; }
-.roster-io { width: 100%; font-size: 15px; font-family: ui-monospace, monospace; background: var(--panel-2);
-  color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 6px; }
+/* =========================================================================
+   Desktop (>= 900px). The same components, laid out side by side: the sheet
+   becomes a left rail and the log a right one, so nothing overlays the board.
+   ========================================================================= */
 
-/* --- map browser --------------------------------------------------------- */
-.contact-sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
-.thumb { padding: 4px; height: auto; min-height: 0; display: flex; flex-direction: column; gap: 4px;
-  background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; }
-.thumb .board-thumb { height: auto; aspect-ratio: 30 / 22; pointer-events: none; }
-.thumb-selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
-.thumb-label { font-size: 11px; color: var(--muted); }
+@media (min-width: 1200px) {
+  :root {
+    --sheet-rest: 0px;
+  }
+
+  .desktop-layout {
+    display: grid;
+    grid-template-columns: 380px minmax(0, 1fr) 340px;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .desktop-layout > .rail {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--s4);
+    background: var(--surface);
+    border-right: 1px solid var(--line);
+  }
+  .desktop-layout > .rail.right {
+    border-right: 0;
+    border-left: 1px solid var(--line);
+  }
+  .desktop-layout .stage {
+    position: relative;
+  }
+  .desktop-layout .board-pane {
+    inset: 0;
+  }
+  .desktop-layout .board-controls {
+    bottom: var(--s3);
+    flex-direction: column;
+  }
+  .topbar h1 {
+    font-size: var(--t-base);
+  }
+  .toasts {
+    top: calc(var(--topbar-h) + var(--s4));
+  }
+  .overlay-page {
+    /* On desktop a route is a centred panel, not a full takeover. */
+    inset: 5% max(5%, calc(50% - 520px));
+    border-radius: var(--r-lg);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .statline {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+/* =========================================================================
+   Motion, forced-colours, and the rest of the accessibility floor.
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------- allocator */
+/* The incoming hits, one chip each. A hit is a small target by nature, so the chips are the
+   full 44px touch minimum and wrap rather than shrink — an attack can throw a lot of dice. */
+.allocator .hit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s2);
+}
+.hit-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--s2);
+  border-radius: var(--r);
+  /* 3:1 against the card behind it — an unsaved hit is the thing you are being asked to look
+     at, so it may not rely on a hairline the way a quiet control can. */
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 700;
+  font-size: var(--t-sm);
+}
+/* A critical hit is bordered AND heavier, so the difference survives greyscale. */
+.hit-chip.is-crit {
+  border-color: var(--danger);
+  border-width: 2px;
+  color: var(--danger);
+}
+.hit-chip.is-blocked-hit {
+  background: color-mix(in srgb, var(--ok) 22%, var(--surface-2));
+  border-color: var(--ok);
+  color: var(--text);
+  /* Shape as well as colour: a saved hit carries the shield glyph. */
+  text-decoration: line-through;
+}
+.hit-chip:disabled {
+  opacity: 0.4;
+}
+.hit-chip .icon {
+  color: var(--ok);
+}
+
+/* Score lines from the log, one per op that paid out. Sentences, not a table: the ops name
+   themselves ("Secure: P1 controls 2 objectives — 2VP"), so a table of numbers would strip
+   the only part that says WHY the score moved. */
+.score-list {
+  margin: var(--s2) 0 0;
+  padding-left: 1.1em;
+  font-size: var(--t-sm);
+  color: var(--text);
+}
+.score-list li {
+  margin-bottom: 0.25em;
+}
+
+/* A note drawn IN world space on the board. Sized in inches, so it scales with the zoom —
+   it only ever says one thing ("nowhere legal"), and it has to sit where the thing that is
+   not there would have been. */
+.board-note {
+  font-size: 1.1px;
+  font-weight: 700;
+  letter-spacing: 0.02px;
+  fill: var(--danger);
+  paint-order: stroke;
+  stroke: #05070a;
+  stroke-width: 0.16px;
+  stroke-linejoin: round;
+}
+
+/* ------------------------------------------------- roster builder, landscape */
+/* A phone held sideways is ~390px tall. Stacked — status bar, catalogue, tray, confirm —
+   the catalogue got about 70px, less than one row, so the rows underneath the pinned tray
+   were literally unreachable: you could see an operative and never tap it. The battle screen
+   already solves this shape by moving its sheet to a side rail; the builder does the same,
+   so the catalogue keeps the full height and the status and tray move beside it. */
+@media (max-height: 560px) and (min-width: 640px) {
+  .builder {
+    grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+    /* `auto` and not `1fr`: given a share of the leftover space the status box ended exactly
+       part-way through its summary line, so the screen's one piece of good news read as a
+       rendering fault. Sized to its content it either fits or scrolls, never half-shows. */
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .builder-status {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 0;
+    max-height: 55%;
+    overflow-y: auto;
+    align-content: start;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+  }
+  .builder > .overlay-body {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .builder > .overlay-foot {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 0;
+    align-content: end;
+    border-right: 1px solid var(--line);
+  }
+  /* Side by side in a 340px rail, "Lock in Player 1's kill team" wrapped onto three lines and
+     grew a 100px-tall button. Stacked, each label gets the full width. */
+  .builder > .overlay-foot .actions.two-up {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* Short AND narrow (a small phone on its side): no room for a rail, so the status bar gives
+   up its reserved height and the tray collapses to a single scrolling line. */
+@media (max-height: 560px) and (max-width: 639px) {
+  .builder-status {
+    min-height: 0;
+    padding: var(--s2) var(--s3);
+  }
+  .builder-status .chips {
+    max-height: 30px;
+  }
+  .overlay-foot .op-strip {
+    max-height: 52px;
+  }
+}

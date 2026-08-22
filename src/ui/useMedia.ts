@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'preact/hooks';
 
-/** Desktop layout breakpoint, kept in sync with the media query in styles.css. */
-export const DESKTOP_QUERY = '(min-width: 900px)';
+/**
+ * The three-column layout breakpoint, kept in sync with the media query in styles.css.
+ *
+ * 1200px, not 900px. At 900px a 360px rail and a 320px log leave the board **220px** — worse
+ * than the phone layout it was supposed to improve on. Between a phone and 1200px the stage +
+ * command sheet IS the right layout: a tablet gets a big board and a sheet, not three
+ * columns squeezed together.
+ */
+export const DESKTOP_QUERY = '(min-width: 1200px)';
 
 export function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(() =>
@@ -19,3 +26,18 @@ export function useMediaQuery(query: string): boolean {
 }
 
 export const useIsDesktop = (): boolean => useMediaQuery(DESKTOP_QUERY);
+
+/**
+ * A phone held sideways. A bottom sheet needs ~200px of a 390px-tall screen, which leaves the
+ * killzone a letterbox strip; the same content docked to the side leaves a board worth
+ * looking at. Below the desktop breakpoint and short: side sheet.
+ */
+export const SIDE_SHEET_QUERY = '(max-height: 560px) and (min-width: 640px)';
+
+export type WindowClass = 'compact' | 'side' | 'desktop';
+
+export function useWindowClass(): WindowClass {
+  const desktop = useMediaQuery(DESKTOP_QUERY);
+  const side = useMediaQuery(SIDE_SHEET_QUERY);
+  return desktop ? 'desktop' : side ? 'side' : 'compact';
+}

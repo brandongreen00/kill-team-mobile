@@ -538,6 +538,68 @@ export function actionCost(ctx: GameContext, state: GameState, op: OperativeStat
 }
 
 /** Every action this operative could legally perform right now, with reasons for those it can't. */
+/**
+ * Which actions need something pointed at before they can be checked at all.
+ *
+ * `availableActions` deliberately does not run `def.check`, because most checks need params
+ * the caller has not chosen yet. That leaves a trap for any UI that renders its result as a
+ * menu: `Reposition` while engaged, `Fall Back` while not engaged, `Operate Hatch` with no
+ * access point in range and `Breach` on an already-open point all come back `ok: true` and
+ * are then rejected on dispatch. `actionAvailability` closes it.
+ */
+export type ActionTargetKind = 'point' | 'operative' | 'part' | 'marker';
+
+const NEEDS_TARGET: Record<string, ActionTargetKind> = {
+  Reposition: 'point',
+  Dash: 'point',
+  'Fall Back': 'point',
+  Charge: 'point',
+  'Move With Barricade': 'point',
+  Shoot: 'operative',
+  Fight: 'operative',
+  'Hatchway Fight': 'operative',
+  'Operate Hatch': 'part',
+  Breach: 'part',
+  'Pick Up Marker': 'marker',
+  'Place Marker': 'point',
+};
+
+export interface ActionAvailability {
+  def: ActionDef;
+  ap: number;
+  /** False only when the action is impossible whatever it is pointed at. */
+  ok: boolean;
+  reason?: string;
+  /** Set when the action must be aimed before it can be dispatched. */
+  needsTarget?: ActionTargetKind;
+}
+
+/**
+ * Every action this operative could perform, with `def.check` actually run for the ones that
+ * take no parameters — so a menu built from this never offers a control that the reducer will
+ * reject for a reason the caller could have known.
+ */
+export function actionAvailability(ctx: GameContext, state: GameState, op: OperativeState): ActionAvailability[] {
+  return availableActions(ctx, state, op).map((row) => {
+    const needsTarget = NEEDS_TARGET[row.def.id];
+    // An action that must be AIMED cannot be judged before it has been: `check` with empty
+    // params always fails, and its reason is about the missing parameter, not about the
+    // operative. Report it as needing a target and let the caller judge the aimed version
+    // with `validateMove` / `validTargets`.
+    //
+    // Do NOT try to sort "it needs a target" from "it is genuinely impossible" by reading the
+    // reason string. That was tried, and it disabled every weapon in the game for a whole
+    // battle, because Shoot's reason is "weapon and target required" and the pattern did not
+    // include it.
+    if (needsTarget) return { ...row, needsTarget };
+    if (!row.ok) return row;
+    // A parameter-free action can be checked right now, and often fails: Guard while engaged,
+    // Pass in the wrong step. Without this the caller offers a control the reducer rejects.
+    const verdict = row.def.check(ctx, state, op, {});
+    return verdict.ok ? row : { ...row, ok: false, ...(verdict.reason ? { reason: verdict.reason } : {}) };
+  });
+}
+
 export function availableActions(
   ctx: GameContext,
   state: GameState,

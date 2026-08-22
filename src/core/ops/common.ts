@@ -23,6 +23,7 @@ import {
   markerController,
 } from '../state.ts';
 import { coverAndObscured, isVisible } from '../visibility.ts';
+import { KILL_OP_TEXT, printedOp } from './text.ts';
 import type {
   GameState,
   MarkerState,
@@ -38,6 +39,21 @@ export const PLAYERS: PlayerId[] = ['p1', 'p2'];
 
 /** The kill op is always in play — every player scores from crit, kill and tac ops. */
 export const KILL_OP_ID = 'kill.killOp';
+
+/**
+ * The printed name of an op, falling back to its id if it has no card text.
+ *
+ * The kill op is not in the crit/tac lists `printedOp` searches — it has its own card — so it
+ * is looked up separately rather than surfacing to a player as `kill.killOp`.
+ */
+export function opLabel(id: string): string {
+  if (id === KILL_OP_ID) return KILL_OP_TEXT.name;
+  try {
+    return printedOp(id).name;
+  } catch {
+    return id;
+  }
+}
 
 /** The three ops a player may nominate as their primary op in the first turning point. */
 export function primaryOpChoices(state: GameState, player: PlayerId): string[] {
@@ -490,7 +506,9 @@ export function registerSharedOpHooks(reg: HookRegistry, player: PlayerId): void
         prompt: 'Secretly select your primary op (crit, kill or tac)',
         sourceText:
           'At the end of the battle, the players reveal their primary ops simultaneously. They score additional VP equal to half of what they scored from that op (rounding up).',
-        options: options.map((id) => ({ id, label: id })),
+        // The printed name, not the internal id: `kill.killOp` is not a thing a player
+        // recognises, and this is the one decision where the option IS the whole choice.
+        options: options.map((id) => ({ id, label: opLabel(id) })),
       });
     },
   );

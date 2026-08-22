@@ -1,14 +1,67 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+/**
+ * Phone-first smoke tests.
+ *
+ * These pin the four things the owner reported as unusable, so a regression on any of them
+ * fails the build rather than the next play session:
+ *
+ *   1. the app never scrolls sideways and never logs an error;
+ *   2. the board FILLS its pane instead of letterboxing into a strip;
+ *   3. selecting operatives does not move the control under your thumb;
+ *   4. deployment happens on the board, with the drop zone shown, no tab to find, and a
+ *      rejected tap answered in words.
+ */
 
 /** Wait for the app to finish loading its bundled map/team data. */
-async function ready(page: import('@playwright/test').Page): Promise<void> {
+async function ready(page: Page): Promise<void> {
   await expect(page.locator('svg.board-main')).toBeVisible();
 }
 
-/** The tab bar only exists below the desktop breakpoint; on desktop every pane is on screen. */
-async function openTab(page: import('@playwright/test').Page, label: RegExp): Promise<void> {
-  const tab = page.getByRole('tab', { name: label });
-  if (await tab.count()) await tab.first().click();
+const promptTitle = (page: Page) => page.locator('.prompt-title').first();
+
+/** The plan id the shell is currently showing — the state, not the sentence. */
+const screenId = (page: Page) => page.locator('.topbar').getAttribute('data-screen');
+
+/** Drive setup as far as deployment: roll off, drop zone, two kill teams, reveal. */
+async function setUpToDeployment(page: Page, opts: { equipment?: boolean } = {}): Promise<void> {
+  await page.getByRole('button', { name: /Roll off/ }).click();
+  const take = page.getByRole('button', { name: /Take initiative/ });
+  if (await take.count()) await take.click();
+  await page.getByRole('button', { name: /Take the orange drop zone/ }).click();
+
+  for (const who of [/I am Player 1/, /I am Player 2/]) {
+    const handover = page.getByRole('button', { name: who });
+    if (await handover.count()) await handover.click();
+    await page.locator('.team-list button').first().click();
+    for (let i = 0; i < 20; i++) {
+      const add = page.locator('button.add:not([disabled])').first();
+      if (!(await add.count())) break;
+      await add.click();
+    }
+    const lock = page.getByRole('button', { name: /Lock in Player/ });
+    await expect(lock).toBeEnabled();
+    await lock.click();
+  }
+
+  // Equipment and the tac op, one secret screen each. The tac op is not optional: it is the
+  // only thing that calls `ctx.initOps`, so a battle without one scores nothing.
+  for (const who of [/I am Player 1/, /I am Player 2/]) {
+    const handover = page.getByRole('button', { name: who });
+    if (await handover.count()) await handover.click();
+    await expect(promptTitle(page)).toContainText(/equipment and tac op/i);
+    await page.locator('.tac-ops button').first().click();
+    if (opts.equipment) {
+      const pick = page.locator('.equipment-options button:not([disabled])').first();
+      if (await pick.count()) await pick.click();
+    }
+    const confirm = page.getByRole('button', { name: /^Confirm — / });
+    await expect(confirm).toBeEnabled();
+    await confirm.click();
+  }
+
+  await page.getByRole('button', { name: /Reveal and deploy/ }).click();
+  if (!opts.equipment) await expect(promptTitle(page)).toContainText(/^Place /);
 }
 
 test('app loads, renders the board, and never scrolls horizontally', async ({ page }) => {
@@ -21,62 +74,365 @@ test('app loads, renders the board, and never scrolls horizontally', async ({ pa
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Kill Team', level: 1 })).toBeVisible();
   await expect(page.locator('svg.board-main')).toHaveCount(1);
-  await expect(page.locator('svg.board-main')).toBeVisible();
+  await ready(page);
 
   // Nothing may hang off the left/right edge — the phone failure mode of the previous app.
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(1);
 
+  // …and no element is wider than the viewport either, which is how the overflow got in:
+  // a grid with an implicit `auto` column sized the whole app to the top bar's max-content.
+  const widest = await page.evaluate(() => {
+    let worst = 0;
+    for (const el of document.querySelectorAll('body *')) {
+      if (el.closest('svg')) continue;
+      worst = Math.max(worst, el.getBoundingClientRect().right);
+    }
+    return worst;
+  });
+  expect(widest).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + 1);
+
   expect(errors).toEqual([]);
 });
 
-test('the roll-off starts a battle and the log records the dice', async ({ page }) => {
+test('the board fills its pane instead of letterboxing into a strip', async ({ page }) => {
   await page.goto('/');
   await ready(page);
-  await openTab(page, /Play/);
-  await page.getByRole('button', { name: /Roll off/ }).click();
-  await openTab(page, /Log/);
-  await expect(page.getByText(/Initiative roll-off/)).toBeVisible();
+  const geometry = await page.evaluate(() => {
+    const svg = document.querySelector('svg.board-main')!;
+    const r = svg.getBoundingClientRect();
+    const [, , w, h] = (svg.getAttribute('viewBox') ?? '').split(' ').map(Number);
+    return { paneAspect: r.width / r.height, viewAspect: w! / h!, paneW: r.width, paneH: r.height };
+  });
+  // The window is aspect-locked to the PANE, so `preserveAspectRatio` has nothing to letterbox.
+  expect(Math.abs(geometry.paneAspect - geometry.viewAspect)).toBeLessThan(0.02);
+  expect(geometry.paneH).toBeGreaterThan(200);
 });
 
-test('the board zooms on the wheel and still fits its container', async ({ page }) => {
+test('the first screen says what to do, and there is no tab bar to find it in', async ({ page }) => {
+  await page.goto('/');
+  await ready(page);
+  await expect(promptTitle(page)).toContainText('Roll off for initiative');
+  await expect(page.getByRole('button', { name: /Roll off/ })).toBeVisible();
+  // The old shell's four tabs are gone: the sheet always shows the current step.
+  await expect(page.getByRole('tab')).toHaveCount(0);
+});
+
+test('the board zooms and can be put back to the whole killzone', async ({ page }) => {
   await page.goto('/');
   await ready(page);
   const board = page.locator('svg.board-main');
-  await expect(board).toHaveAttribute('viewBox', '0 0 30 22');
+  const before = Number(((await board.getAttribute('viewBox')) ?? '').split(' ')[2]);
 
   const box = await board.boundingBox();
   if (!box) throw new Error('the board has no layout box');
   await page.mouse.move(box.x + box.width * 0.35, box.y + box.height * 0.45);
   await page.mouse.wheel(0, -500);
 
-  // The window shrank, so the killzone is magnified…
-  await expect(board).not.toHaveAttribute('viewBox', '0 0 30 22');
-  const [, , w] = ((await board.getAttribute('viewBox')) ?? '').split(' ').map(Number);
-  expect(w).toBeLessThan(30);
+  const after = Number(((await board.getAttribute('viewBox')) ?? '').split(' ')[2]);
+  expect(after).toBeLessThan(before);
 
-  // …and the element itself is still inside the pane, i.e. zooming never grows the layout.
-  const fits = await page.evaluate(() => {
-    const svg = document.querySelector('svg.board-main')!.getBoundingClientRect();
-    const wrap = document.querySelector('.board-wrap')!.getBoundingClientRect();
-    return { ok: svg.width <= wrap.width + 1 && svg.height <= wrap.height + 1 && svg.height > 50, svg, wrap };
-  });
-  expect(fits.ok).toBe(true);
+  // Zooming never grows the layout.
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(overflow).toBeLessThanOrEqual(1);
 
-  // Fit puts the whole killzone back, and is a 44px target on every viewport.
+  // Fit shows the whole killzone, and every board control is a 44px target.
   const fit = page.getByRole('button', { name: 'Fit the killzone to the screen' });
   const fitBox = await fit.boundingBox();
   expect(fitBox?.width ?? 0).toBeGreaterThanOrEqual(44);
   expect(fitBox?.height ?? 0).toBeGreaterThanOrEqual(44);
   await fit.click();
-  await expect(board).toHaveAttribute('viewBox', '0 0 30 22');
+  const fitted = await page.evaluate(() => {
+    const svg = document.querySelector('svg.board-main')!;
+    const [x, y, w, h] = (svg.getAttribute('viewBox') ?? '').split(' ').map(Number);
+    return { x: x!, y: y!, w: w!, h: h! };
+  });
+  expect(fitted.x).toBeLessThanOrEqual(0.001);
+  expect(fitted.y).toBeLessThanOrEqual(0.001);
+  expect(fitted.x + fitted.w).toBeGreaterThanOrEqual(29.999);
+  expect(fitted.y + fitted.h).toBeGreaterThanOrEqual(21.999);
 });
 
-test('tapping two operatives opens the targeting-line inspector', async ({ page }) => {
+test('adding operatives never moves the control under your thumb', async ({ page }) => {
   await page.goto('/');
   await ready(page);
-  // No operatives are on the board before deployment, so the inspector must stay closed.
-  await expect(page.getByRole('heading', { name: /Targeting line/ })).toHaveCount(0);
+  await page.getByRole('button', { name: /Roll off/ }).click();
+  const take = page.getByRole('button', { name: /Take initiative/ });
+  if (await take.count()) await take.click();
+  await page.getByRole('button', { name: /Take the orange drop zone/ }).click();
+  await page.getByRole('button', { name: /I am Player 1/ }).click();
+  await page.locator('.team-list button').first().click();
+
+  await page.evaluate(() => {
+    document.querySelector('.overlay-body')!.scrollTop = 200;
+  });
+
+  // Tap whatever enabled "+" is nearest the middle of the scroller — what a thumb would
+  // actually hit — and assert the row it is on has not moved afterwards.
+  for (let i = 0; i < 4; i++) {
+    const target = await page.evaluate(() => {
+      const body = document.querySelector('.overlay-body')!;
+      const r = body.getBoundingClientRect();
+      const mid = r.top + r.height / 2;
+      const btn = [...document.querySelectorAll('button.add:not([disabled])')]
+        .filter((b) => {
+          const bb = b.getBoundingClientRect();
+          return bb.top > r.top + 20 && bb.bottom < r.bottom - 20;
+        })
+        .sort(
+          (a, b) =>
+            Math.abs(a.getBoundingClientRect().top - mid) - Math.abs(b.getBoundingClientRect().top - mid),
+        )[0];
+      if (!btn) return null;
+      btn.setAttribute('data-probe', '1');
+      const bb = btn.getBoundingClientRect();
+      return { top: bb.top, x: bb.x + bb.width / 2, y: bb.y + bb.height / 2 };
+    });
+    if (!target) break;
+
+    // A real tap at the button's own coordinates: no scrollIntoView, which would move it.
+    await page.mouse.click(target.x, target.y);
+    const moved = await page.evaluate(() => {
+      const btn = document.querySelector('button.add[data-probe="1"]');
+      const top = btn?.getBoundingClientRect().top ?? null;
+      btn?.removeAttribute('data-probe');
+      return top;
+    });
+    expect(moved).not.toBeNull();
+    expect(Math.abs(moved! - target.top)).toBeLessThanOrEqual(1);
+  }
+});
+
+test('deployment happens on the board, and a rejected placement says why', async ({ page }) => {
+  await page.goto('/');
+  await ready(page);
+  await setUpToDeployment(page);
+
+  // The board is already aimed at the deploying player's drop zone, and says whose it is.
+  await expect(page.locator('.zone-spotlight')).toHaveCount(1);
+  await expect(page.locator('.armed-banner')).toContainText(/0 of \d+ placed/);
+
+  // Tapping the middle of the killzone is illegal — no drop zone reaches the centre line —
+  // and the reducer's own sentence is shown rather than nothing happening.
+  const board = page.locator('svg.board-main');
+  const box = await board.boundingBox();
+  if (!box) throw new Error('the board has no layout box');
+  const outside = await page.evaluate(() => {
+    const svg = document.querySelector('svg.board-main')!;
+    const r = svg.getBoundingClientRect();
+    const [vx, vy, vw, vh] = (svg.getAttribute('viewBox') ?? '').split(' ').map(Number);
+    const poly = document.querySelector('.zone-spotlight polygon:last-of-type') as SVGGraphicsElement;
+    const b = poly.getBBox(); // world space, y-up
+    // A world point inside the current window but clear of the drop zone, high enough up the
+    // board to miss the zoom cluster in the bottom corner.
+    const wx =
+      b.x > vx! + vw! / 2
+        ? Math.max(vx! + 1, b.x - 3)
+        : Math.min(vx! + vw! - 1, b.x + b.width + 3);
+    const wy = 22 - (vy! + vh! * 0.25);
+    return { x: r.left + ((wx - vx!) / vw!) * r.width, y: r.top + ((22 - wy - vy!) / vh!) * r.height };
+  });
+  await page.mouse.click(outside.x, outside.y);
+  await expect(page.locator('.toast')).toContainText(/drop zone|hazardous|on another/);
+
+  // A legal tap INSIDE the highlighted drop zone places the operative and arms the next one.
+  // The point is derived from the spotlight polygon itself, so this does not depend on where
+  // the killzone happens to put its drop zones.
+  const firstTitle = await promptTitle(page).innerText();
+  const inZone = await page.evaluate(() => {
+    const svg = document.querySelector('svg.board-main')!;
+    const r = svg.getBoundingClientRect();
+    const [vx, vy, vw, vh] = (svg.getAttribute('viewBox') ?? '').split(' ').map(Number);
+    const poly = document.querySelector('.zone-spotlight polygon:last-of-type') as SVGGraphicsElement | null;
+    if (!poly) return [];
+    const b = poly.getBBox(); // world space, y-up
+    const toScreen = (wx: number, wy: number) => ({
+      x: r.left + ((wx - vx!) / vw!) * r.width,
+      y: r.top + ((22 - wy - vy!) / vh!) * r.height,
+    });
+    return [0.35, 0.5, 0.65].flatMap((fy) =>
+      [0.5, 0.35, 0.65].map((fx) => toScreen(b.x + b.width * fx, b.y + b.height * fy)),
+    );
+  });
+  for (const pt of inZone) {
+    await page.mouse.click(pt.x, pt.y);
+    if ((await promptTitle(page).innerText()) !== firstTitle) break;
+  }
+  await expect(promptTitle(page)).not.toHaveText(firstTitle);
+  await expect(page.locator('.armed-banner')).toContainText(/1 of \d+ placed/);
+  await expect(page.getByRole('button', { name: /Undo last placement/ })).toBeVisible();
+});
+
+test('a phone held sideways docks the command surface to the side, not the bottom', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'phone-landscape', 'this is the landscape layout');
+  await page.goto('/');
+  await ready(page);
+  const geometry = await page.evaluate(() => {
+    const sheet = document.querySelector('.sheet')!;
+    const s = sheet.getBoundingClientRect();
+    const board = document.querySelector('svg.board-main')!.getBoundingClientRect();
+    return { isSide: sheet.classList.contains('is-side'), sheetH: s.height, boardH: board.height, boardW: board.width, stageH: (document.querySelector('.stage') as HTMLElement).getBoundingClientRect().height };
+  });
+  expect(geometry.isSide).toBe(true);
+  // The board keeps the full height of the stage rather than a strip above a sheet.
+  expect(geometry.boardH).toBeGreaterThan(geometry.stageH * 0.9);
+  expect(geometry.boardW).toBeGreaterThan(300);
+  // …and the killzone is at least fully visible, not pushed out past the board's own width.
+  const w = await page.evaluate(() => Number((document.querySelector('svg.board-main')!.getAttribute('viewBox') ?? '').split(' ')[2]));
+  expect(w).toBeLessThanOrEqual(30.001);
+});
+
+test('the command sheet expands and collapses, and never hides the board while aiming', async ({ page }, testInfo) => {
+  // The sheet is the phone-portrait layout: desktop puts the same content in a left rail and
+  // landscape docks it to the side, and neither has detents.
+  test.skip(testInfo.project.name === 'desktop' || testInfo.project.name === 'phone-landscape', 'no detents in this layout');
+  await page.goto('/');
+  await ready(page);
+  const sheet = page.locator('.sheet');
+  await expect(sheet).toHaveAttribute('data-detent', 'rest');
+  const restHeight = (await sheet.boundingBox())?.height ?? 0;
+
+  await page.locator('.sheet-grab').click();
+  await expect(sheet).toHaveAttribute('data-detent', 'half');
+  const halfHeight = (await sheet.boundingBox())?.height ?? 0;
+  expect(halfHeight).toBeGreaterThan(restHeight);
+
+  await page.locator('.sheet-grab').click();
+  await expect(sheet).toHaveAttribute('data-detent', 'full');
+  await page.locator('.sheet-grab').click();
+  await expect(sheet).toHaveAttribute('data-detent', 'rest');
+
+  // The board pane is inset by the RESTING height only, so expanding never reflows it.
+  const paneBefore = await page.evaluate(() => document.querySelector('.board-pane')!.getBoundingClientRect().height);
+  await page.locator('.sheet-grab').click();
+  const paneAfter = await page.evaluate(() => document.querySelector('.board-pane')!.getBoundingClientRect().height);
+  expect(Math.abs(paneAfter - paneBefore)).toBeLessThanOrEqual(1);
+});
+
+test('the menu reaches the rosters, the log and the killzones', async ({ page }) => {
+  await page.goto('/');
+  await ready(page);
+  await page.getByRole('button', { name: 'Menu' }).click();
+  await expect(page.getByRole('dialog', { name: 'Menu' })).toBeVisible();
+  await page.getByRole('button', { name: /Battle log/ }).click();
+  await expect(page.getByRole('dialog', { name: 'Battle log' })).toBeVisible();
+  await page.getByRole('button', { name: 'Back' }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+});
+
+
+test('equipment chosen at the loadout is set up on the board before anyone deploys', async ({ page }) => {
+  // The `placeEquipment` setup step existed in the types and the intent worked, but nothing
+  // ever entered it, so a barricade or an Ammo Cache paid for at the loadout was simply never
+  // placed. Both halves are pinned here: that the step is reached, and that it can be left.
+  await page.goto('/');
+  await ready(page);
+  await setUpToDeployment(page, { equipment: true });
+
+  expect(await screenId(page)).toBe('setup.placeEquipment');
+  await expect(promptTitle(page)).toContainText(/^Set up |has no equipment to set up$/);
+
+  // The legality field is the engine's own answer, sampled cell by cell — not a drop-zone
+  // rectangle, because equipment constraints are per item and mostly are not the drop zone.
+  await expect(page.locator('.reach rect').first()).toBeVisible();
+
+  // Tapping a shaded cell sets the item up.
+  const cell = await page.evaluate(() => {
+    const cells = [...document.querySelectorAll('.reach rect')];
+    const mid = cells[Math.floor(cells.length / 2)];
+    if (!mid) return null;
+    const b = mid.getBoundingClientRect();
+    const ctrl = document.querySelector('.board-controls')?.getBoundingClientRect();
+    const p = { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+    if (ctrl && p.x > ctrl.left - 12 && p.x < ctrl.right + 12 && p.y > ctrl.top - 12 && p.y < ctrl.bottom + 12) return null;
+    return p;
+  });
+  if (cell) {
+    await page.mouse.click(cell.x, cell.y);
+    await expect(page.locator('.toast')).toHaveCount(0);
+  }
+
+  // And there is always a way out, so an item with nowhere legal cannot strand the battle.
+  for (let i = 0; i < 6; i++) {
+    if ((await screenId(page)) !== 'setup.placeEquipment') break;
+    await page.getByRole('button', { name: /Set up no more equipment|Nothing to set up/ }).first().click();
+  }
+  expect(await screenId(page)).toBe('setup.deploy');
+});
+
+test('the shell publishes which screen it is on', async ({ page }) => {
+  // One attribute derived from the single `CommandPlan`, so a test can assert on the state
+  // rather than on copy that keeps being edited.
+  await page.goto('/');
+  await ready(page);
+  expect(await screenId(page)).toBe('setup.rollOff');
+  await page.getByRole('button', { name: /Roll off/ }).click();
+  expect(await screenId(page)).toMatch(/^setup\.(initiative|dropZone)$/);
+});
+
+
+test('a screen that arms the board still shows the list it tells you to pick from', async ({ page }) => {
+  // The regression this pins cost the whole battle. Two effects set the sheet's detent — the
+  // plan's own, and "a screen that arms the board must not be covered by its own sheet" — and
+  // the second ran last, so it won. `firefight.activate` arms the board AND asks for `half`
+  // ("tap one of your ringed operatives, or pick it from the list below"): forced to `rest`,
+  // the list rendered ~75px below the bottom of the screen. For four turning points the only
+  // way to activate anyone was to hit a 44px token on the board.
+  await page.goto('/');
+  await ready(page);
+  await setUpToDeployment(page);
+
+  // Deploy everyone by tapping the highlighted drop zone.
+  for (let i = 0; i < 400; i++) {
+    if ((await screenId(page)) !== 'setup.deploy') break;
+    const p = await page.evaluate((k) => {
+      const svg = document.querySelector('svg.board-main');
+      if (!svg) return null;
+      const r = svg.getBoundingClientRect();
+      const ctrl = document.querySelector('.board-controls')?.getBoundingClientRect();
+      const pts: { x: number; y: number }[] = [];
+      for (const poly of document.querySelectorAll('.legal-zone')) {
+        const b = poly.getBoundingClientRect();
+        if (b.width < 4 || b.height < 4) continue;
+        // A fine grid: 18 operatives need 18 spots that do not overlap each other, and on a
+        // desktop-width board the drop zone is a narrow strip where a coarse grid runs out.
+        for (let i = 1; i <= 7; i++) for (let j = 1; j <= 11; j++)
+          pts.push({ x: b.left + (b.width * i) / 8, y: b.top + (b.height * j) / 12 });
+      }
+      const ok = pts.filter((s) =>
+        s.x > r.left + 8 && s.x < r.right - 8 && s.y > r.top + 8 && s.y < r.bottom - 8 &&
+        // The floating zoom cluster is a real button and would eat the tap.
+        !(ctrl && s.x > ctrl.left - 12 && s.x < ctrl.right + 12 && s.y > ctrl.top - 12 && s.y < ctrl.bottom + 12));
+      return ok.length ? ok[(k * 13) % ok.length]! : null;
+    }, i);
+    if (!p) break;
+    await page.mouse.click(p.x, p.y);
+  }
+  expect(await screenId(page), 'every operative should be deployed by now').toBe('setup.deployDone');
+  await page.getByRole('button', { name: /Begin the battle/ }).click();
+
+  // Walk the strategy phase to the first activation.
+  for (let i = 0; i < 40; i++) {
+    if ((await screenId(page)) === 'firefight.activate') break;
+    const next = page.locator('.prompt .actions button:not([disabled])').first();
+    if (!(await next.count())) break;
+    await next.click();
+  }
+  expect(await screenId(page)).toBe('firefight.activate');
+
+  // The list the prompt points at must be on screen and clickable, not below the fold — in
+  // whichever layout this viewport gets: a bottom sheet on a phone, a side sheet in landscape,
+  // a rail on the desktop. The bottom sheet is the one that has to open itself.
+  const sheet = page.locator('.sheet');
+  if (await sheet.count()) {
+    const detent = await sheet.getAttribute('data-detent');
+    // 'side' is a landscape sheet, which is a fixed column and always fully open.
+    expect(detent === 'half' || detent === 'full' || detent === 'side', `sheet is at '${detent}'`).toBe(true);
+  }
+  const pick = page.locator('.sheet-body .actions button, .rail .actions button').first();
+  await expect(pick).toBeVisible();
+  const box = (await pick.boundingBox())!;
+  expect(box.y + box.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  await pick.click({ timeout: 3000 });
+  expect(await screenId(page)).toBe('firefight.order');
 });

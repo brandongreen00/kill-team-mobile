@@ -97,7 +97,9 @@ export function resolveDecision(
           break;
         }
       }
-      if (!handled) handled = ctx.resolveOpDecision?.(ctx, state, decisionId, optionId, payload) ?? false;
+      // The DECISION, not its id: `takeDecision` above has already removed it from
+      // `state.pending`, so a handler that looks the id up again finds nothing.
+      if (!handled) handled = ctx.resolveOpDecision?.(ctx, state, decision, optionId, payload) ?? false;
       if (!handled) {
         log(state, { kind: 'system', text: `decision '${decision.kind}' had no handler — recorded only` });
       }

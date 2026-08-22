@@ -32,6 +32,8 @@ export type Intent =
   | { t: 'SelectRoster'; player: PlayerId; teamId: string; operatives: RosterPick[] }
   | { t: 'SelectEquipment'; player: PlayerId; equipment: string[] }
   | { t: 'SelectTacOp'; player: PlayerId; tacOpId: string }
+  /** Both kill teams are chosen: reveal them and move on to deployment. */
+  | { t: 'BeginDeployment' }
   | { t: 'PlaceEquipment'; player: PlayerId; equipmentId: string; itemIndex: number; pos: Vec2; rotDeg?: number; z?: number }
   | { t: 'SkipEquipmentPlacement'; player: PlayerId }
   | { t: 'DeployOperative'; player: PlayerId; operativeId: string; pos: Vec2; rotDeg?: number; z?: number }

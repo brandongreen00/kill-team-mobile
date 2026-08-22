@@ -2,8 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
-    <meta name="theme-color" content="#0d0f12" />
+    <!-- No `maximum-scale`/`user-scalable=no`: blocking pinch-zoom fails WCAG 1.4.4, and
+         Android browsers and every iOS in-app WKWebView still honour it. The double-tap
+         zoom it was there to stop is handled by `touch-action` instead. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#0b0d11" />
     <meta name="description" content="Kill Team (KT24) digital tabletop — phone and desktop." />
     <title>Kill Team Mobile</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>💀</text></svg>" />

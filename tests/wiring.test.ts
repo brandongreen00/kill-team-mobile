@@ -142,6 +142,69 @@ describe('assembled game context', () => {
     expect(Object.values(inside.state.markers).some((m) => m.kind === 'ammoCache')).toBe(true);
   });
 
+  it('routes through the equipment set-up step before deployment, and leaves it when both are done', () => {
+    // The step existed in the type and the intent worked, but nothing ever set
+    // `setup.step = 'placeEquipment'` — so equipment a player had paid for was never placed.
+    const ctx = ctxWithCards();
+    let s = createBattle(ctx, { map: testMap(), seed: 4, critOpId: 'crit.secure' });
+    const picks = Array.from({ length: 4 }, () => ({ datacardId: 'test.trooper' }));
+    s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: picks }, ctx).state;
+    s = reduce(s, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: picks }, ctx).state;
+    s = reduce(s, { t: 'SelectEquipment', player: 'p1', equipment: ['eq.ammoCache'] }, ctx).state;
+    s.setup.dropZone = { p1: 'p1', p2: 'p2' };
+    s.initiative = 'p1';
+    s.setup.step = 'selectOperatives';
+
+    const begun = reduce(s, { t: 'BeginDeployment' }, ctx);
+    expect(begun.ok, begun.reason).toBe(true);
+    s = begun.state;
+    expect(s.setup.step).toBe('placeEquipment');
+    expect(s.setup.toAct).toBe('p1');
+
+    // p2 bought nothing, so the turn stays with p1 rather than bouncing to a player with an
+    // empty kit — "players alternate ... until both players have set up all of their equipment".
+    const placed = reduce(
+      s,
+      { t: 'PlaceEquipment', player: 'p1', equipmentId: 'eq.ammoCache', itemIndex: 0, pos: { x: 6, y: 11 } },
+      ctx,
+    );
+    expect(placed.ok, placed.reason).toBe(true);
+    s = placed.state;
+    // One marker, counted once: the reducer used to increment the tally that
+    // `placeEquipment` had already incremented.
+    expect(s.setup.equipmentPlaced.p1).toBe(1);
+    expect(s.setup.step).toBe('deploy');
+  });
+
+  it('lets a player leave equipment set-up when an item has nowhere legal to go', () => {
+    const ctx = ctxWithCards();
+    let s = createBattle(ctx, { map: testMap(), seed: 4, critOpId: 'crit.secure' });
+    const picks = Array.from({ length: 4 }, () => ({ datacardId: 'test.trooper' }));
+    s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: picks }, ctx).state;
+    s = reduce(s, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: picks }, ctx).state;
+    s = reduce(s, { t: 'SelectEquipment', player: 'p1', equipment: ['eq.ammoCache'] }, ctx).state;
+    s.setup.dropZone = { p1: 'p1', p2: 'p2' };
+    s.initiative = 'p1';
+    s.setup.step = 'selectOperatives';
+    s = reduce(s, { t: 'BeginDeployment' }, ctx).state;
+    expect(s.setup.step).toBe('placeEquipment');
+    const skipped = reduce(s, { t: 'SkipEquipmentPlacement', player: 'p1' }, ctx);
+    expect(skipped.ok, skipped.reason).toBe(true);
+    expect(skipped.state.setup.equipmentDone?.p1).toBe(true);
+    expect(skipped.state.setup.step).toBe('deploy');
+  });
+
+  it('goes straight to deployment when neither player has equipment to set up', () => {
+    const ctx = ctxWithCards();
+    let s = createBattle(ctx, { map: testMap(), seed: 4, critOpId: 'crit.secure' });
+    const picks = Array.from({ length: 4 }, () => ({ datacardId: 'test.trooper' }));
+    s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: picks }, ctx).state;
+    s = reduce(s, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: picks }, ctx).state;
+    s.setup.step = 'selectOperatives';
+    s = reduce(s, { t: 'BeginDeployment' }, ctx).state;
+    expect(s.setup.step).toBe('deploy');
+  });
+
   it('scores a crit op at the end of a turning point through the wired seam', () => {
     const { state, ctx } = deployedBattle();
     let s: GameState = { ...state, phase: 'firefight', turningPoint: 1, initiative: 'p1' as PlayerId };
@@ -155,6 +218,12 @@ describe('assembled game context', () => {
     expect(s.rejected).toHaveLength(0);
     // Secure: "you control one or more objective markers" scores at the end of the turning point.
     expect(s.teams.p1.vp).toBeGreaterThanOrEqual(before);
+    // Scoring now STOPS on `endOfTP` instead of rolling straight into the next turning point
+    // in the same call, so the players can see what they scored before the board moves on.
+    expect(s.phase).toBe('endOfTP');
+    expect(s.turningPoint).toBe(1);
+    s = reduce(s, { t: 'AdvancePhase' }, ctx).state;
+    expect(s.phase).toBe('strategy');
     expect(s.turningPoint).toBe(2);
   });
 });

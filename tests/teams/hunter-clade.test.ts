@@ -311,6 +311,26 @@ function attackCtx(
   };
 }
 
+/**
+ * Advance to the READY step of the next turning point.
+ *
+ * Deliberately not a fixed number of `AdvancePhase` calls. The end of a turning point is now
+ * its own observable phase (D-052) — the players stop on it to read what they scored — so the
+ * number of steps between the firefight phase and the next Ready step is not something a test
+ * should hard-code. Ready is the step that matters to these tests: it is where `readyStep`
+ * clears `gambitsUsedTP`, which is what makes a STRATEGIC GAMBIT selectable again.
+ */
+function nextTurningPoint(ctx: GameContext, state: GameState): GameState {
+  const from = state.turningPoint;
+  let s = state;
+  for (let i = 0; i < 8 && !(s.turningPoint > from && s.strategyStep === 'ready'); i++) {
+    s = reduce(s, { t: 'AdvancePhase' }, ctx).state;
+  }
+  expect(s.turningPoint).toBe(from + 1);
+  expect(s.strategyStep).toBe('ready');
+  return s;
+}
+
 /** Use the STRATEGIC GAMBIT for real, so `gambitsUsedTP` and the effect are both exercised. */
 function useImperative(ctx: GameContext, state: GameState, player: PlayerId, imp: (typeof IMPERATIVES)[number]): GameState {
   state.phase = 'strategy';
@@ -882,7 +902,7 @@ describe('Doctrina Imperatives (faction rule)', () => {
     const s = useImperative(ctx, state, 'p1', 'aggressor');
     const op = s.operatives[opWith(s, 'p1', CARD.rangerWarrior)]!;
     expect(moveOf(ctx, s, op)).toBe(7);
-    const next = reduce(reduce(s, { t: 'AdvancePhase' }, ctx).state, { t: 'AdvancePhase' }, ctx).state;
+    const next = nextTurningPoint(ctx, s);
     expect(next.effects.some((e) => e.rule === 'hunter-clade.imperative')).toBe(false);
     expect(moveOf(ctx, next, next.operatives[op.id]!)).toBe(6);
   });
@@ -908,7 +928,7 @@ describe('Doctrina Imperatives (faction rule)', () => {
     setPrimaryMode(state, 'p1', 'aggressor');
     let s = useImperative(ctx, state, 'p1', 'aggressor');
     expect(saveOf(ctx, s, s.operatives[opWith(s, 'p1', CARD.rangerWarrior)]!)).toBe(4);
-    s = reduce(reduce(s, { t: 'AdvancePhase' }, ctx).state, { t: 'AdvancePhase' }, ctx).state;
+    s = nextTurningPoint(ctx, s);
     s = useImperative(ctx, s, 'p1', 'aggressor');
     expect(saveOf(ctx, s, s.operatives[opWith(s, 'p1', CARD.rangerWarrior)]!)).toBe(5);
   });

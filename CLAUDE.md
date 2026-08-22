@@ -87,6 +87,14 @@ must never hard-code a height.
 **Run an AI soak.** `pnpm soak` plays bot-vs-bot games across maps and asserts zero rejected intents
 and no exceptions.
 
+**Change the phone UI.** Read `docs/UI.md` first. The shell has no tab bar: `commandPlan(state)`
+in `src/ui/command/` derives exactly one screen from GameState, and a new screen is a branch
+there, never a new place to navigate to. The UI may read any non-mutating `(ctx, state, …)`
+selector from `src/core/**` and may never re-implement one — if the answer is not exported, add
+a named selector to the core in the same change (`canDeployAt`, `actionAvailability`,
+`deployToAct`, `gambitToAct` are the four that exist for this reason). Re-capture
+`docs/ui-review/` and look at it.
+
 ## Rules invariants worth remembering
 
 - 4 turning points; Strategy phase (Initiative → Ready → Gambit) then Firefight phase.

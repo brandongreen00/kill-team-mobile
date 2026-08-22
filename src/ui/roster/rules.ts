@@ -20,8 +20,25 @@ import type { Datacard } from '../../core/types.ts';
 
 export type { RosterPickIn, RosterValidation, SelectionEntry, TeamData };
 
-/** Constraint kinds the shared validator understands (`validateRosterFor`). */
-const ENFORCED_KINDS = new Set(['uniqueExcept', 'maxCount', 'requires', 'groupCap', 'halfSelection']);
+/**
+ * Constraint kinds the shared validator understands (`validateRosterFor`).
+ *
+ * This list has to match the validator's own switch exactly, and it did not: `maxItem` and
+ * `exclusiveItems` have been enforced there for some time, so any team carrying one was told
+ * the app does not check a rule that it does check — and then blocked on it. Battleclade made
+ * that visible, because D-043 regenerated its two printed caps from `maxCount` into
+ * role-scoped `maxItem`: the screen rendered "2 rules this app does not check" directly above
+ * a `+` button disabled by those exact rules.
+ */
+const ENFORCED_KINDS = new Set([
+  'uniqueExcept',
+  'maxCount',
+  'requires',
+  'groupCap',
+  'halfSelection',
+  'maxItem',
+  'exclusiveItems',
+]);
 /** Baked into each entry's `selectionCost` by the normaliser, so it needs no separate check. */
 const APPLIED_TO_ENTRIES = new Set(['selectionCost']);
 
@@ -61,6 +78,56 @@ export function choiceGroups(entry: SelectionEntry): { id: string; label: string
   if (entry.loadouts.length > 0)
     out.push({ id: `${entry.datacardId}.loadouts`, label: 'One of the following options', choices: entry.loadouts });
   for (const g of [...entry.optionGroups, ...entry.fixedChoiceGroups]) out.push(g);
+  return out;
+}
+
+/**
+ * The inline "A or B" alternatives inside a SELECTED option — one picker per group.
+ *
+ * These are a different shape from the option pickers above and need their own control. An
+ * option group is chosen by id and recorded in `pick.loadoutIds`; a choice group is a bare
+ * list of weapon names (`LoadoutOption.choiceGroups`) and is chosen by NAME, recorded in
+ * `pick.weapons`, which is what `weaponsForPick` reads.
+ *
+ * Without this the UI rendered the whole printed sentence — "Arc rifle, plasma caliver or
+ * transuranic arquebus" — as a single un-splittable option, and `weaponsForPick` fell through
+ * to its first-alternative default. Both Hunter Clade gunners therefore took an arc rifle, and
+ * because the team prints a cap of one arc rifle, a legal two-gunner roster could not be built
+ * in the app at all. The alternatives were not merely un-chosen: they were unreachable.
+ */
+export function weaponChoiceGroups(
+  entry: SelectionEntry,
+  chosenLoadoutIds: readonly string[],
+): { id: string; label: string; choices: string[] }[] {
+  const chosen = new Set(chosenLoadoutIds);
+  const out: { id: string; label: string; choices: string[] }[] = [];
+  for (const l of entry.loadouts) {
+    if (!chosen.has(l.id)) continue;
+    (l.choiceGroups ?? []).forEach((g, i) => {
+      if (g.length > 1) out.push({ id: `${l.id}.w${i}`, label: g.join(' or '), choices: [...g] });
+    });
+  }
+  return out;
+}
+
+/** Which weapon of `group` this pick currently resolves to — the same rule the validator uses. */
+export function chosenWeapon(pick: RosterPickIn, group: { choices: string[] }): string {
+  const lower = (w: string) => w.trim().toLowerCase();
+  const named = group.choices.find((w) => (pick.weapons ?? []).some((x) => lower(x) === lower(w)));
+  return named ?? group.choices[0]!;
+}
+
+/** Swap one weapon choice, leaving every other group's choice alone. */
+export function withWeaponChoice(pick: RosterPickIn, group: { choices: string[] }, weapon: string): RosterPickIn {
+  const lower = (w: string) => w.trim().toLowerCase();
+  const others = new Set(group.choices.map(lower));
+  return { ...pick, weapons: [...(pick.weapons ?? []).filter((w) => !others.has(lower(w))), weapon] };
+}
+
+/** Weapons an inline choice group merely OFFERS — never "always carried" (selection.ts). */
+export function offeredWeapons(entry: SelectionEntry): Set<string> {
+  const out = new Set<string>();
+  for (const l of entry.loadouts) for (const g of l.choiceGroups ?? []) for (const w of g) out.add(w.trim().toLowerCase());
   return out;
 }
 
@@ -175,8 +242,8 @@ export function unenforcedConstraints(data: TeamData): RosterWarning[] {
     const r = c as { text?: string; item?: string; max?: number; role?: string; items?: string[] };
     let text: string;
     if (r.text) text = r.text;
-    else if (c.kind === 'maxItem') text = `Your kill team can only include up to ${r.max} ${r.item}.`;
-    else if (c.kind === 'exclusiveItems') text = `Your kill team cannot include both a ${(r.items ?? []).join(' and a ')}.`;
+    // `maxItem` and `exclusiveItems` used to be described here; they are enforced, so they
+    // never reach this branch and a sentence for them would be dead code that lies.
     else if (c.kind === 'distinctOptions') text = `Each ${r.role} operative must have a different option.`;
     else text = JSON.stringify(c);
     out.push({ kind: 'constraint', text });

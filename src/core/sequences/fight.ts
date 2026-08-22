@@ -203,7 +203,16 @@ export function advanceFight(ctx: GameContext, state: GameState): void {
           break;
         }
         const player = side === 'attacker' ? seq.attacker : seq.defender;
-        const canBlock = successes(opponentPool).length > 0;
+        const blockable = successes(opponentPool);
+        const canBlock = blockable.length > 0;
+        // A block always takes the opponent's best remaining success it is ALLOWED to take —
+        // a critical first, and a normal success may only take a normal. That is optimal, but
+        // a label that does not say so reads as the engine quietly choosing for you.
+        const takesFor = (crit: boolean): string => {
+          const pool = crit ? blockable : blockable.filter((d) => d.state === 'normal');
+          const victim = pool.find((d) => d.state === 'crit') ?? pool[0];
+          return victim ? (victim.state === 'crit' ? 'critical success' : 'normal success') : 'nothing';
+        };
         push(state, {
           id: `strike-${state.seq++}`,
           who: player,
@@ -218,7 +227,7 @@ export function advanceFight(ctx: GameContext, state: GameState): void {
             ...(canBlock
               ? mine.map((d) => ({
                   id: `block:${d.id}`,
-                  label: `Block with the ${d.state === 'crit' ? 'critical' : 'normal'} success`,
+                  label: `Block with the ${d.state === 'crit' ? 'critical' : 'normal'} success — stops their ${takesFor(d.state === 'crit')}`,
                   data: { dieId: d.id, mode: 'block' },
                   ...(d.state === 'normal' && brutalAgainst(ctx, state, seq, side)
                     ? { disabled: true, reason: 'Brutal: only critical successes can block' }
