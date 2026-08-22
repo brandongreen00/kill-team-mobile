@@ -40,6 +40,14 @@ export interface UiState {
   equipment?: string[] | undefined;
   /** The tac op picked on the loadout screen, before it is committed. */
   tacOpId?: string | undefined;
+  /**
+   * Defence allocation in progress, keyed to the decision it belongs to.
+   *
+   * It lives here rather than in the allocator component because the peek — the part of the
+   * sheet that is always on screen — has to show the running damage total and carry the
+   * button that commits it. Inside the component, both sat below the fold on a phone.
+   */
+  allocate?: { decisionId: string; crits: number; normals: number } | undefined;
   /** A full-screen route over the battle. */
   route?: 'rosters' | 'log' | 'killzones' | 'menu' | undefined;
 }

@@ -46,6 +46,18 @@ export interface SheetProps {
 
 /** Fractions of the stage the expanded detents occupy. */
 const HALF = 0.52;
+/**
+ * …but on a short screen a fixed fraction is the wrong unit.
+ *
+ * `half` is meant to show "the option list for the current step". The peek above it does not
+ * scale with the screen — the prompt, and a 52px armed banner that is deliberately fixed —
+ * so on a 568px iPhone SE, 52% of the stage left 106px for a help paragraph, a section title
+ * and the first row, and the first row people are told to tap ended 3px below the fold.
+ * Below this height the sheet takes a larger share, because the peek is taking a larger share.
+ */
+const HALF_SHORT = 0.68;
+const SHORT_STAGE_PX = 560;
+const halfFraction = (stagePx: number): number => (stagePx < SHORT_STAGE_PX ? HALF_SHORT : HALF);
 const FULL = 0.92;
 /** A drag shorter than this is a tap on the handle, which cycles detents instead. */
 const DRAG_SLOP_PX = 6;
@@ -73,7 +85,7 @@ export function Sheet({ detent, onDetent, modal = false, onRestHeight, peek, chi
       const grab = root.querySelector('.sheet-grab')?.getBoundingClientRect().height ?? 20;
       const h = Math.ceil(el.getBoundingClientRect().height + grab);
       // Never taller than the `half` detent, or expanding the sheet would make it SMALLER.
-      const next = Math.max(96, Math.min(h, stage > 0 ? stage * HALF : h));
+      const next = Math.max(96, Math.min(h, stage > 0 ? stage * halfFraction(stage) : h));
       setRestPx((cur) => (Math.abs(cur - next) < 1 ? cur : next));
     };
     read();
@@ -95,7 +107,7 @@ export function Sheet({ detent, onDetent, modal = false, onRestHeight, peek, chi
   }, [restPx, onRestHeight, side]);
 
   const heightFor = useCallback(
-    (d: Detent): number => (d === 'rest' ? restPx : d === 'half' ? stagePx * HALF : stagePx * FULL),
+    (d: Detent): number => (d === 'rest' ? restPx : d === 'half' ? stagePx * halfFraction(stagePx) : stagePx * FULL),
     [restPx, stagePx],
   );
 

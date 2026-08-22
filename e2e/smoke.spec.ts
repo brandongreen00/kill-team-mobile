@@ -369,3 +369,66 @@ test('the shell publishes which screen it is on', async ({ page }) => {
   await page.getByRole('button', { name: /Roll off/ }).click();
   expect(await screenId(page)).toMatch(/^setup\.(initiative|dropZone)$/);
 });
+
+
+test('a screen that arms the board still shows the list it tells you to pick from', async ({ page }) => {
+  // The regression this pins cost the whole battle. Two effects set the sheet's detent — the
+  // plan's own, and "a screen that arms the board must not be covered by its own sheet" — and
+  // the second ran last, so it won. `firefight.activate` arms the board AND asks for `half`
+  // ("tap one of your ringed operatives, or pick it from the list below"): forced to `rest`,
+  // the list rendered ~75px below the bottom of the screen. For four turning points the only
+  // way to activate anyone was to hit a 44px token on the board.
+  await page.goto('/');
+  await ready(page);
+  await setUpToDeployment(page);
+
+  // Deploy everyone by tapping the highlighted drop zone.
+  for (let i = 0; i < 400; i++) {
+    if ((await screenId(page)) !== 'setup.deploy') break;
+    const p = await page.evaluate((k) => {
+      const svg = document.querySelector('svg.board-main');
+      if (!svg) return null;
+      const r = svg.getBoundingClientRect();
+      const ctrl = document.querySelector('.board-controls')?.getBoundingClientRect();
+      const pts: { x: number; y: number }[] = [];
+      for (const poly of document.querySelectorAll('.legal-zone')) {
+        const b = poly.getBoundingClientRect();
+        if (b.width < 4 || b.height < 4) continue;
+        for (let i = 1; i <= 4; i++) for (let j = 1; j <= 6; j++)
+          pts.push({ x: b.left + (b.width * i) / 5, y: b.top + (b.height * j) / 7 });
+      }
+      const ok = pts.filter((s) =>
+        s.x > r.left + 8 && s.x < r.right - 8 && s.y > r.top + 8 && s.y < r.bottom - 8 &&
+        !(ctrl && s.x > ctrl.left - 12 && s.x < ctrl.right + 12 && s.y > ctrl.top - 12 && s.y < ctrl.bottom + 12));
+      return ok.length ? ok[(k * 7) % ok.length]! : null;
+    }, i);
+    if (!p) break;
+    await page.mouse.click(p.x, p.y);
+  }
+  await page.getByRole('button', { name: /Begin the battle/ }).click();
+
+  // Walk the strategy phase to the first activation.
+  for (let i = 0; i < 40; i++) {
+    if ((await screenId(page)) === 'firefight.activate') break;
+    const next = page.locator('.prompt .actions button:not([disabled])').first();
+    if (!(await next.count())) break;
+    await next.click();
+  }
+  expect(await screenId(page)).toBe('firefight.activate');
+
+  // The list the prompt points at must be on screen and clickable, not below the fold — in
+  // whichever layout this viewport gets: a bottom sheet on a phone, a side sheet in landscape,
+  // a rail on the desktop. The bottom sheet is the one that has to open itself.
+  const sheet = page.locator('.sheet');
+  if (await sheet.count()) {
+    const detent = await sheet.getAttribute('data-detent');
+    // 'side' is a landscape sheet, which is a fixed column and always fully open.
+    expect(detent === 'half' || detent === 'full' || detent === 'side', `sheet is at '${detent}'`).toBe(true);
+  }
+  const pick = page.locator('.sheet-body .actions button, .rail .actions button').first();
+  await expect(pick).toBeVisible();
+  const box = (await pick.boundingBox())!;
+  expect(box.y + box.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  await pick.click({ timeout: 3000 });
+  expect(await screenId(page)).toBe('firefight.order');
+});

@@ -362,9 +362,16 @@ body {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
-  padding: 0 max(var(--s4), env(safe-area-inset-right)) calc(var(--s4) + var(--safe-bottom))
+  /* A little top padding, and a hairline under the peek. With neither, the first row sat
+     flush against an opaque header and the moment the body scrolled its top line was sliced
+     in half with nothing to say why — it read as a clipped layout rather than a scroller. */
+  padding: var(--s2) max(var(--s4), env(safe-area-inset-right)) calc(var(--s4) + var(--safe-bottom))
     max(var(--s4), env(safe-area-inset-left));
+  border-top: 1px solid var(--line);
   min-height: 0;
+}
+.sheet.detent-rest .sheet-body {
+  border-top: 0;
 }
 .sheet.detent-rest .sheet-body {
   visibility: hidden;
@@ -873,13 +880,17 @@ textarea {
   max-height: 56px;
   overflow: hidden;
 }
-/* Its own truncating span: an icon sibling defeats `text-overflow` on the paragraph. */
+/* Its own clamping span: an icon sibling defeats `text-overflow` on the paragraph.
+   Two lines rather than one, because the reserved 132px has the room and the sentence being
+   cut — "This kill team meets its printed selection req…" — is the screen's one piece of good
+   news. Clamped, so it still cannot grow the bar and move the catalogue. */
 .builder-status .summary-text {
-  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   min-width: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .catalogue {
@@ -925,17 +936,23 @@ textarea {
    sentence; letting it wrap grew the row and slid the next `+` out from under the thumb,
    which is the movement the owner reported. `min-height` keeps an empty meta the same
    height as a full one. */
+/* TWO lines, always exactly two — the row's height must not change when a row goes from
+   available to blocked, which is what made the list crawl under the thumb. One line was not
+   enough: on a 390px phone "no selections left — 8 operatives besides the leader" clipped to
+   "no selections left — 8 operatives besid…", and on a row you cannot tap the reason is the
+   only guidance there is. `title` is not an answer on a touch screen. */
 .entry-meta {
-  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   margin-top: 3px;
   font-size: var(--t-xs);
   font-weight: 400;
   line-height: 1.3;
-  min-height: calc(var(--t-xs) * 1.3);
+  min-height: calc(var(--t-xs) * 2.6);
   color: var(--ink-3);
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 .entry-add {
   width: var(--tap);
@@ -1054,11 +1071,36 @@ textarea {
 }
 .log > div {
   display: grid;
-  grid-template-columns: auto 1fr;
+  /* turning point · whose · what. The middle column collapses on entries with no owner. */
+  grid-template-columns: auto auto 1fr;
   gap: var(--s2);
   padding-bottom: var(--s2);
   border-bottom: 1px solid var(--line);
   overflow-wrap: anywhere;
+}
+.log > div:not(.is-p1):not(.is-p2) {
+  grid-template-columns: auto 1fr;
+}
+/* A tinted rail as well as the P1/P2 tag: two signals, since scanning a log is done by eye. */
+.log > div.is-p1 {
+  box-shadow: inset 3px 0 0 var(--p1);
+  padding-left: var(--s2);
+}
+.log > div.is-p2 {
+  box-shadow: inset 3px 0 0 var(--p2);
+  padding-left: var(--s2);
+}
+.log .who {
+  font-size: var(--t-xs);
+  font-weight: 700;
+  padding-top: 2px;
+  letter-spacing: 0.04em;
+}
+.log .who.is-p1 {
+  color: var(--p1);
+}
+.log .who.is-p2 {
+  color: var(--p2);
 }
 .log .tp {
   color: var(--ink-3);

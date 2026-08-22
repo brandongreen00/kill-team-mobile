@@ -691,8 +691,13 @@ function shootPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, weaponNam
     help: chosen
       ? `${chosen.check.distance.toFixed(1)}" · ${chosen.check.obscured ? 'obscured' : chosen.check.inCover ? 'in cover' : 'no cover'}`
       : 'Tap an outlined enemy on the killzone, or pick one from the list.',
-    frame: rectAround(op, 14),
-    detent: 'rest',
+    // The shooter AND everything it can shoot. A square around the shooter alone put every
+    // target off screen — a screen headed "Pick a target", showing no targets, over a board
+    // full of your own operatives.
+    frame: framing([op, ...targets.map((t) => t.target)]) ?? rectAround(op, 14),
+    // `half`, not `rest`. This screen's own help says "or pick one from the list", and at rest
+    // the list is not on screen at all — the same trap the activation screen fell into.
+    detent: 'half',
     turnOf: op.player,
     selectedId: op.id,
     targetIds: targets.map((t) => t.target.id),

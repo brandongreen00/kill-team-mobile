@@ -13,10 +13,9 @@
  * The allocator works out which defence dice pay for it, refuses what cannot be paid for and
  * says why, and the damage total updates under your thumb before you commit anything.
  */
-import { useState } from 'preact/hooks';
 import type { PendingDecision } from '../../core/types.ts';
-import { IconAlert, IconCheck, IconShield } from '../icons.tsx';
-import type { CommandAction, CommandPlan } from './types.ts';
+import { IconCheck, IconShield } from '../icons.tsx';
+import type { CommandAction, CommandPlan, UiState } from './types.ts';
 
 /** What `shoot.ts` puts on the decision. Defaults keep an older saved battle renderable. */
 interface AllocCtx {
@@ -143,6 +142,8 @@ export function allocatePlan(
   answer: (optionId: string, data?: Record<string, unknown>) => void,
   decision: PendingDecision,
   step: string,
+  ui: UiState,
+  setUi: (next: Partial<UiState>) => void,
 ): CommandPlan {
   const c = allocCtxOf(decision);
   const auto = (decision.options.find((o) => o.id === 'auto')?.data ?? {}) as Record<string, unknown>;
@@ -150,74 +151,56 @@ export function allocatePlan(
   const autoUnblockedNormals = num(auto['unblockedNormals'], c.atkNormals);
   const autoDamage = autoUnblockedCrits * c.dmgC + autoUnblockedNormals * c.dmgN;
 
-  return {
-    id: 'decision.allocateDefence',
-    step,
-    title: 'Allocate your defence dice',
-    frame: null,
-    modal: true,
-    detent: 'half',
-    turnOf: decision.who,
-    actions: [],
-    body: <AllocatorBody c={c} decision={decision} answer={answer} autoDamage={autoDamage} />,
-  };
-}
-
-/**
- * A component rather than inline JSX because the tapped-so-far allocation is real UI state
- * and has to survive re-renders of the plan.
- */
-function AllocatorBody({
-  c,
-  decision,
-  answer,
-  autoDamage,
-}: {
-  c: AllocCtx;
-  decision: PendingDecision;
-  answer: (optionId: string, data?: Record<string, unknown>) => void;
-  autoDamage: number;
-}) {
-  // Seeded with the engine's own optimal allocation, so the default tap is the safe one and
-  // manual is a change FROM it rather than a blank slate you have to rebuild.
+  // Seeded with the engine's own optimal allocation, so the default is the safe answer and
+  // manual is a change FROM it rather than a blank slate you have to rebuild. Keyed to the
+  // decision, so last attack's allocation can never leak into this one.
   const alloc = (decision.ctx?.['alloc'] ?? {}) as Record<string, unknown>;
-  const [blocked, setBlocked] = useState({
-    crits: c.atkCrits - num(alloc['unblockedCrits'], c.atkCrits),
-    normals: c.atkNormals - num(alloc['unblockedNormals'], c.atkNormals),
-  });
+  const blocked =
+    ui.allocate?.decisionId === decision.id
+      ? { crits: ui.allocate.crits, normals: ui.allocate.normals }
+      : {
+          crits: c.atkCrits - num(alloc['unblockedCrits'], c.atkCrits),
+          normals: c.atkNormals - num(alloc['unblockedNormals'], c.atkNormals),
+        };
+  const setBlocked = (next: { crits: number; normals: number }) =>
+    setUi({ allocate: { decisionId: decision.id, ...next } });
 
   const unblockedCrits = c.atkCrits - blocked.crits;
   const unblockedNormals = c.atkNormals - blocked.normals;
   const damage = unblockedCrits * c.dmgC + unblockedNormals * c.dmgN;
   const worse = damage > autoDamage;
+  const commit = (optionId: 'manual' | 'auto') => {
+    setUi({ allocate: undefined });
+    if (optionId === 'manual') answer('manual', { unblockedCrits, unblockedNormals });
+    else answer('auto');
+  };
 
-  return (
-    <>
-      <Allocator c={c} blocked={blocked} onChange={setBlocked} />
-      <div class={`armed-banner${worse ? ' is-blocked' : ''}`}>
-        {worse ? <IconAlert size={18} /> : <IconCheck size={18} />}
-        <span>
-          {damage} damage
-          {worse ? ` — auto-allocating would take ${autoDamage}` : ' — the best you can do'}
-        </span>
-      </div>
-      <div class="actions">
-        <button
-          class="primary"
-          onClick={() => answer('manual', { unblockedCrits, unblockedNormals })}
-        >
-          <span class="entry-name">Take {damage} damage</span>
-        </button>
-        {worse && (
-          <button onClick={() => answer('auto')}>
-            <span style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
-              <span class="entry-name">Auto-allocate instead</span>
-              <span class="entry-meta">Blocks as much as the rules allow — {autoDamage} damage</span>
-            </span>
-          </button>
-        )}
-      </div>
-      {decision.sourceText && <p class="rule-text printed">{decision.sourceText}</p>}
-    </>
-  );
+  return {
+    id: 'decision.allocateDefence',
+    step,
+    title: 'Allocate your defence dice',
+    // The running total belongs where it can always be seen: it is the answer to the only
+    // question this screen asks.
+    armedNote: worse ? `${damage} damage — auto-allocating would take ${autoDamage}` : `${damage} damage — the best you can do`,
+    armedTone: worse ? 'blocked' : 'info',
+    frame: null,
+    modal: true,
+    detent: 'half',
+    turnOf: decision.who,
+    // In the PEEK, not the body. Inside the scrolling body both the total and the button that
+    // commits it sat below the fold on a phone, on the screen that decides how much damage an
+    // operative takes.
+    actions: [
+      { id: 'take', label: `Take ${damage} damage`, tone: 'primary', icon: <IconCheck size={20} />, onClick: () => commit('manual') },
+      ...(worse
+        ? [{ id: 'auto', label: `Auto-allocate — ${autoDamage}`, hint: 'Blocks as much as the rules allow', onClick: () => commit('auto') } as CommandAction]
+        : []),
+    ],
+    body: (
+      <>
+        <Allocator c={c} blocked={blocked} onChange={setBlocked} />
+        {decision.sourceText && <p class="rule-text printed">{decision.sourceText}</p>}
+      </>
+    ),
+  };
 }

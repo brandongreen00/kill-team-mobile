@@ -118,17 +118,25 @@ export function App() {
     [store, teams, ui, setUi, store?.state],
   );
 
-  // A new screen picks its own detent; the player may then drag it wherever they like.
+  /**
+   * A new screen picks its own detent; the player may then drag it wherever they like.
+   *
+   * ONE effect, because this used to be two — "the plan's detent" and "a screen that arms the
+   * board must not be covered by its own sheet" — and the second ran after the first, so it
+   * won every time. `firefight.activate` arms the board (tap one of your operatives) AND asks
+   * for `half` (or pick it from the list), and was forced to `rest`: the list of operatives
+   * rendered 75px below the bottom of the screen, so for the whole battle the only way to
+   * activate anyone was to hit a 44px token on the board. Every activation, every turn.
+   *
+   * The plan's own detent is now authoritative. The no-cover rule survives as the DEFAULT for
+   * an arming screen that does not state one.
+   */
   const planId = plan?.id;
+  const wantedDetent: Detent | undefined = plan?.detent ?? (plan?.armed ? 'rest' : undefined);
+  const detentKey = `${planId}|${plan?.armed ? 'armed' : ''}`;
   useEffect(() => {
-    if (plan?.detent) setDetent(plan.detent);
-  }, [planId]);
-
-  // A screen that arms the board must not be covered by its own sheet.
-  const armedKey = plan?.armed ? `${plan.id}:armed` : null;
-  useEffect(() => {
-    if (armedKey) setDetent('rest');
-  }, [armedKey]);
+    if (wantedDetent) setDetent(wantedDetent);
+  }, [detentKey]);
 
   if (!store || !plan) {
     return (
@@ -246,8 +254,14 @@ export function App() {
           .slice(-250)
           .reverse()
           .map((l) => (
-            <div key={l.seq} class={l.kind}>
-              <span class="tp">TP{l.tp}</span>
+            /* WHOSE. Both kill teams letter their operatives A..I, so "H activates (engage)"
+               twice in a row is two different operatives and the log had no way to say so —
+               it read as a rules bug. Marked in text as well as colour, because colour alone
+               is never the only signal here. */
+            <div key={l.seq} class={l.player ? `${l.kind} is-${l.player}` : l.kind}>
+              {/* Turning point 0 is setup, which is not a turning point. */}
+              <span class="tp">{l.tp > 0 ? `TP${l.tp}` : 'SET'}</span>
+              {l.player && <span class={`who is-${l.player}`}>{PLAYER_LABEL[l.player].replace('Player ', 'P')}</span>}
               <span>{l.text}</span>
             </div>
           ))}

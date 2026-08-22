@@ -183,7 +183,7 @@ function decisionPlan(args: CommandArgs, decision: PendingDecision): CommandPlan
   // Defence allocation is the one window with a real, non-listable choice behind it, so it
   // gets a screen of its own instead of two buttons where the second one did nothing.
   if (decision.kind === 'allocateDefence')
-    return allocatePlan(answer, decision, `${LABEL[decision.who]} decides · ${decisionLabel(decision.kind)}`);
+    return allocatePlan(answer, decision, `${LABEL[decision.who]} decides · ${decisionLabel(decision.kind)}`, ui, setUi);
 
   const options = decision.options;
   // One obvious default: the engine marks it `auto`/`keep` where the rules have one.

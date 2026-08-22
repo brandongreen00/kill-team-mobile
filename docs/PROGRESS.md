@@ -2,6 +2,59 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-22 — Phase 4 UI, second pass: the screens the game needed but could not reach (D-049…D-055)
+
+Adversarial review of the first pass, driving the built app rather than reading it. Seven
+screens or controls turned out to be dead code, unreachable state, or silently wrong. The
+worst of them made the battle unplayable and had survived the first pass because the
+screenshot script happened to expand the sheet by hand before every activation.
+
+**Landed**
+
+- **You can activate an operative again.** Two effects set the sheet's detent — the plan's own,
+  and "a screen that arms the board must not be covered by its own sheet" — and the second ran
+  last, so it won. `firefight.activate` arms the board AND asks for `half` ("tap one of your
+  ringed operatives, **or pick it from the list below**"): forced to `rest`, that list rendered
+  ~75px below the bottom of the screen. For four turning points the only way to activate
+  anyone was to hit a 44px token on the board. One effect now, and the plan's detent wins.
+- **The end of a turning point is a screen.** `advanceTurningPoint` set `phase = 'endOfTP'` and
+  overwrote it with `'strategy'` a few lines later, so the phase never existed for a moment
+  anything could observe and up to 6VP a side appeared in the top bar with no summary (D-049).
+- **Equipment is set up on the killzone.** The step was in the types, the intent worked and the
+  per-item constraints were complete — but nothing ever entered the step (D-050). Where an item
+  may go is now sampled from `validateEquipmentPlacement` cell by cell, because the constraints
+  are per item and mostly are not the drop zone (D-051).
+- **"Allocate manually" does something.** Only the `auto` option carried data, so the manual
+  button ran the automatic allocation on the screen that decides how much damage an operative
+  takes (D-053). It is a screen now: incoming hits as chips, tap one to save against it.
+- **Shooting is usable.** The target list was hidden at `rest` and the board was framed on the
+  shooter alone, so "Pick a target" appeared over a board with no targets on it (D-056).
+- **Pass-and-play secrecy works during the battle**, not just during setup (D-054).
+- **One finger aims, one mouse pans** (D-052); the zoom cluster stops hopping corners (D-055).
+- **The roster builder works on a phone held sideways.** At 390px of height the catalogue got
+  ~70px — less than one row — so rows under the pinned tray were literally untappable. Status
+  and tray move to a rail, as the battle screen already does.
+- Smaller, all found in screenshots: the `half` detent clipped the first row on a 568px iPhone
+  SE; the blocked-row reason and the roster's one piece of good news were both truncated
+  mid-sentence; the log could not tell P1's "H" from P2's "H" (both teams letter A–I); setup
+  entries were labelled "TP0".
+- Tests: 2617 unit (9 for the allocator, including two exhaustive cross-checks against
+  `allocateSavesOptimally` and three that render the screen; 3 for the equipment step) and 43
+  Playwright across four viewports, one of which pins the detent rule that caused the worst
+  of these. `docs/ui-review/` recaptured, now including the equipment,
+  end-of-turning-point, mid-battle handover and battle-end screens.
+
+**Next**
+
+1. **Decide D-047** — eight dead `baseGap(...) < -1e-4` overlap guards remain.
+2. A pre-battle screen: the app boots straight into a battle on the first killzone, and
+   `state.critOpId` is unset, so no crit op scores.
+3. Autosave/restore by replaying `Store.exportReplay()`'s intent log.
+4. Move waypoints, and a screen-space dice dock.
+5. A `frame: 'fit'` screen at the `half` detent shows its top letterbox bar and hides the
+   bottom one behind the sheet; fixing it means telling the Board the sheet's *current* height,
+   which is the coupling `--sheet-rest` exists to avoid.
+
 ## 2026-08-22 — Phase 4 UI: the phone experience, rebuilt (D-043…D-048)
 
 The owner's verdict on the previous shell was "basically unusable", with three specific
@@ -47,8 +100,6 @@ with no shared idea of what the player was in the middle of.
    sixteen rules tests whose fixtures place models at overlapping centres.
 2. A pre-battle screen: the app boots straight into a battle on the first killzone, and
    `state.critOpId` is unset, so no crit op scores.
-3. Equipment **placement** — `setup.step = 'placeEquipment'` has no screen and the reducer has
-   no transition into it.
 4. Autosave/restore by replaying `Store.exportReplay()`'s intent log (serialising GameState
    alone would rewind the RNG).
 5. Move waypoints (a path around a corner currently costs two actions) and a screen-space dice
