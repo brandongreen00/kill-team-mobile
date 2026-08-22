@@ -22,9 +22,13 @@ describe('selection rules (shared, driven by data/teams/<slug>.json)', () => {
       const result = mod.validateRoster(picks);
       expect(result.errors).toEqual([]);
       expect(result.ok).toBe(true);
-      // "N <TEAM> operatives selected from the following list" — leader + slots.
+      // "N <TEAM> operatives selected from the following list" — leader + slots, counted in
+      // SELECTIONS, not in picks. An entry can cost 2 ("these operatives count as two selections
+      // each" — Wyrmblade) or 0.5 (the Breachers' C.A.T. UNIT and GHEISTSKULL), so a pick count
+      // is not the printed quantity. Wyrmblade fills 13 slots with 11 operatives.
       const sel = mod.data.selection;
-      expect(picks.length).toBeGreaterThanOrEqual(sel.slots);
+      const cost = picks.reduce((n, p) => n + (resolveEntry(mod.data, p)?.entry.selectionCost ?? 1), 0);
+      expect(cost).toBeGreaterThanOrEqual(sel.slots);
     });
 
     it(`${mod.id}: an empty roster is rejected with a helpful message`, () => {
@@ -222,6 +226,61 @@ describe('selection rules (shared, driven by data/teams/<slug>.json)', () => {
       items: ['blaster', 'wraithcannon'],
     });
     expect(validateRosterFor(data, defaultRoster(data)).errors).toEqual([]);
+  });
+
+  it('XV26: "up to two fusion blasters" — a cap printed in the plural still matches the weapon', () => {
+    const data = teamData('xv26-stealth-battlesuits');
+    expect(data.selection.constraints).toContainEqual({ kind: 'maxItem', item: 'fusion blasters', max: 2 });
+    // The weapon is printed singular on the datacard, so an exact match dropped the cap entirely.
+    const names = data.datacards.flatMap((c) => c.weapons.map((w) => w.name));
+    expect(names).toContain('Fusion blaster');
+    expect(names).not.toContain('Fusion blasters');
+    expect(validateRosterFor(data, defaultRoster(data)).errors).toEqual([]);
+
+    const offset = data.selection.leaderList.length;
+    const idx = data.selection.list.findIndex((e) =>
+      [...e.fixedWeapons, ...e.alwaysWeapons, ...e.loadouts.flatMap((l) => l.weapons)].some(
+        (w) => w.toLowerCase() === 'fusion blaster',
+      ),
+    );
+    if (idx >= 0) {
+      const e = data.selection.list[idx]!;
+      const withFusion = {
+        datacardId: e.datacardId,
+        entryId: entryId(data, offset + idx),
+        weapons: ['Fusion blaster'],
+      };
+      const v = validateRosterFor(data, [defaultRoster(data)[0]!, withFusion, { ...withFusion }, { ...withFusion }]);
+      expect(v.errors.join(' ')).toContain('up to 2 fusion blasters');
+    }
+  });
+
+  it('WRECKA KREW: an exemption NAME longer than the printed row still exempts it', () => {
+    // "Other than BOMB SQUIG, BREAKA BOY FIGHTER and TANKBUSTA GUNNER operatives…" — the rows are
+    // printed as plain FIGHTER and GUNNER inside their sub-group, so the exemption is the reverse
+    // shape of Hunter Clade's (where the exempt word was SHORTER than the row).
+    const data = teamData('wrecka-krew');
+    expect(data.selection.constraints).toContainEqual({
+      kind: 'uniqueExcept',
+      roles: ['BOMB SQUIG', 'BREAKA BOY FIGHTER', 'TANKBUSTA GUNNER'],
+    });
+    const roles = data.selection.list.map((e) => e.role);
+    expect(roles).toContain('FIGHTER');
+    expect(roles).toContain('GUNNER');
+    expect(roles).not.toContain('BREAKA BOY FIGHTER');
+
+    const offset = data.selection.leaderList.length;
+    const idx = roles.indexOf('FIGHTER');
+    const fighter = { datacardId: data.selection.list[idx]!.datacardId, entryId: entryId(data, offset + idx) };
+    const picks = defaultRoster(data);
+    const twice = validateRosterFor(data, [...picks, { ...fighter }]);
+    expect(twice.errors.join(' ')).not.toContain('only include each operative on this list once');
+
+    // A row the exemption does NOT name is still unique.
+    const rIdx = roles.indexOf('ROKKITEER');
+    const rok = { datacardId: data.selection.list[rIdx]!.datacardId, entryId: entryId(data, offset + rIdx) };
+    const dupe = validateRosterFor(data, [...picks, { ...rok }, { ...rok }]);
+    expect(dupe.errors.join(' ')).toContain('only include each operative on this list once');
   });
 
   it('a weapon no selection option names is always available, including Limited x weapons', () => {

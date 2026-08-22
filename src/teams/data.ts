@@ -41,6 +41,15 @@ import handOfTheArchonJson from '../../data/teams/hand-of-the-archon.json';
 import mandrakesJson from '../../data/teams/mandrakes.json';
 import hearthkynSalvagerJson from '../../data/teams/hearthkyn-salvager.json';
 import hernkynYaegirJson from '../../data/teams/hernkyn-yaegir.json';
+// Batch 5 — Necron, Tyranid, T'au, Ork.
+import canoptekCircleJson from '../../data/teams/canoptek-circle.json';
+import ravenersJson from '../../data/teams/raveners.json';
+import wyrmbladeJson from '../../data/teams/wyrmblade.json';
+import broodBrotherJson from '../../data/teams/brood-brother.json';
+import vespidStingwingsJson from '../../data/teams/vespid-stingwings.json';
+import xv26StealthBattlesuitsJson from '../../data/teams/xv26-stealth-battlesuits.json';
+import wreckaKrewJson from '../../data/teams/wrecka-krew.json';
+import farstalkerKinbandJson from '../../data/teams/farstalker-kinband.json';
 import type { Datacard } from '../core/types.ts';
 
 export interface LoadoutOption {
@@ -203,6 +212,14 @@ export const TEAM_DATA: Record<string, TeamData> = {
   mandrakes: normalise(mandrakesJson),
   'hearthkyn-salvager': normalise(hearthkynSalvagerJson),
   'hernkyn-yaegir': normalise(hernkynYaegirJson),
+  'canoptek-circle': normalise(canoptekCircleJson),
+  raveners: normalise(ravenersJson),
+  wyrmblade: normalise(wyrmbladeJson),
+  'brood-brother': normalise(broodBrotherJson),
+  'vespid-stingwings': normalise(vespidStingwingsJson),
+  'xv26-stealth-battlesuits': normalise(xv26StealthBattlesuitsJson),
+  'wrecka-krew': normalise(wreckaKrewJson),
+  'farstalker-kinband': normalise(farstalkerKinbandJson),
 };
 
 export function teamData(id: string): TeamData {
