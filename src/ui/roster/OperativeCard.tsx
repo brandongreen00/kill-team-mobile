@@ -8,7 +8,18 @@
  * Those are shown as "always carried", never as a choice.
  */
 import { alwaysAvailableWeapons } from '../../teams/selection.ts';
-import { choiceGroups, weaponsOfPick, withChoice, type EntryRow, type RosterPickIn, type TeamData } from './rules.ts';
+import {
+  choiceGroups,
+  chosenWeapon,
+  offeredWeapons,
+  weaponChoiceGroups,
+  weaponsOfPick,
+  withChoice,
+  withWeaponChoice,
+  type EntryRow,
+  type RosterPickIn,
+  type TeamData,
+} from './rules.ts';
 import type { Weapon, WeaponProfile } from '../../core/types.ts';
 
 export interface OperativeCardProps {
@@ -40,9 +51,17 @@ export function OperativeCard({ data, row, pick, onChange, onRemove }: Operative
   const { entry, card } = row;
   const groups = choiceGroups(entry);
   const chosen = new Set(pick.loadoutIds ?? []);
+  const weaponGroups = weaponChoiceGroups(entry, pick.loadoutIds ?? []);
   const names = weaponsOfPick(data, pick);
+  // A weapon an inline choice group OFFERS is the opposite of always-carried, and the scraper
+  // leaves every alternative in `alwaysWeapons` anyway — so without this filter the card tagged
+  // the one weapon the player is choosing between as fixed kit ("Arc rifle — always carried"),
+  // contradicting the picker directly above it. Mirrors `weaponsForPick` in selection.ts.
+  const offered = offeredWeapons(entry);
   const always = new Set(
-    [...entry.alwaysWeapons, ...(card ? alwaysAvailableWeapons(data, card) : [])].map((w) => w.toLowerCase()),
+    [...entry.alwaysWeapons, ...(card ? alwaysAvailableWeapons(data, card) : [])]
+      .map((w) => w.toLowerCase())
+      .filter((w) => !offered.has(w)),
   );
   const weapons: Weapon[] = names
     .map((n) => card?.weapons.find((w) => w.name === n))
@@ -86,6 +105,23 @@ export function OperativeCard({ data, row, pick, onChange, onRemove }: Operative
             {g.choices.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      ))}
+
+      {weaponGroups.map((g) => (
+        <label key={g.id} class="op-choice">
+          <span class="muted">{g.label}</span>
+          <select
+            value={chosenWeapon(pick, g)}
+            disabled={!onChange}
+            onChange={(e) => onChange?.(withWeaponChoice(pick, g, (e.target as HTMLSelectElement).value))}
+          >
+            {g.choices.map((w) => (
+              <option key={w} value={w}>
+                {w}
               </option>
             ))}
           </select>

@@ -18,11 +18,16 @@ import {
   addability,
   asTeamData,
   blockingErrors,
+  chosenWeapon,
   entryRows,
+  offeredWeapons,
   pickFor,
   supportProblems,
   usage,
   warningsFor,
+  weaponChoiceGroups,
+  weaponsOfPick,
+  withWeaponChoice,
   type RosterPickIn,
   type TeamData,
 } from '../src/ui/roster/rules.ts';
@@ -139,13 +144,41 @@ describe('roster builder — the shared validator decides, the screen quotes it'
   });
 
   it('surfaces the printed rules it cannot check instead of ignoring them', () => {
-    // "Your kill team cannot include both a blaster and a wraithcannon" has no machine check.
+    // Still unenforced: `distinctOptions` ("each ... must have a different option") has no
+    // machine check, so the player is told so rather than being let believe it is policed.
+    const exaction = asTeamData(
+      JSON.parse(readFile('data/teams/exaction-squad.json')) as { id: string; selection: unknown; datacards: unknown[] },
+    )!;
+    expect(warningsFor(exaction).map((w) => w.text.toLowerCase()).join(' ')).toContain('different option');
+    expect(warningsFor(kasrkin)).toEqual([]);
+  });
+
+  /**
+   * The other direction, which is what actually went wrong: a rule the validator DOES check
+   * must never be listed as unchecked. `ENFORCED_KINDS` is a hand-maintained copy of the
+   * validator's switch, and it had drifted — `maxItem` and `exclusiveItems` were enforced but
+   * missing from it, so Battleclade's screen rendered "2 rules this app does not check"
+   * directly above a + button that those same two rules had disabled.
+   */
+  it('never calls a rule unchecked when the validator checks it', () => {
+    const enforced = new Set(['uniqueExcept', 'maxCount', 'requires', 'groupCap', 'halfSelection', 'maxItem', 'exclusiveItems']);
+    for (const file of teamFiles()) {
+      const data = JSON.parse(readFileSync(`data/teams/${file}`, 'utf8')) as TeamData;
+      const claimed = warningsFor(data).filter((w) => w.kind === 'constraint');
+      const kinds = (data.selection.constraints ?? []).map((c) => c.kind);
+      // Every warning must correspond to a constraint of a kind the validator cannot express.
+      expect(claimed.length, `${data.id} warns about ${claimed.length} constraints`).toBeLessThanOrEqual(
+        kinds.filter((k) => !enforced.has(k) && k !== 'selectionCost').length,
+      );
+    }
+
+    // Corsair Voidscarred is the concrete case: "cannot include both a blaster and a
+    // wraithcannon" IS enforced (selection.ts, `exclusiveItems`), so it must not be warned
+    // about — and a roster that breaks it must actually be refused.
     const corsair = asTeamData(
       JSON.parse(readFile('data/teams/corsair-voidscarred.json')) as { id: string; selection: unknown; datacards: unknown[] },
     )!;
-    const texts = warningsFor(corsair).map((w) => w.text.toLowerCase());
-    expect(texts.join(' ')).toContain('wraithcannon');
-    expect(warningsFor(kasrkin)).toEqual([]);
+    expect(warningsFor(corsair).map((w) => w.text.toLowerCase()).join(' ')).not.toContain('wraithcannon');
   });
 
   it('flags exactly the teams whose printed list the shared validator cannot satisfy', () => {
@@ -315,4 +348,62 @@ describe('every kill team can be fielded', () => {
       expect(picks.length).toBeGreaterThan(0);
     });
   }
+});
+
+/**
+ * The inline "A or B" alternatives D-045 introduced (`LoadoutOption.choiceGroups`).
+ *
+ * `weaponsForPick` resolves them from `pick.weapons`, falling back to the first alternative.
+ * The builder has to be able to WRITE `pick.weapons`, or the fallback is the only answer the
+ * app can ever give: both Hunter Clade gunners took an arc rifle, and since the team prints a
+ * cap of one arc rifle, a legal two-gunner roster could not be built at all.
+ */
+describe('inline weapon choices are reachable from the builder', () => {
+  const teams = teamFiles().map((f) => JSON.parse(readFileSync(`data/teams/${f}`, 'utf8')) as TeamData);
+  const withChoiceGroups = teams.filter((d) =>
+    entryRows(d).some((r) => r.entry.loadouts.some((l) => (l.choiceGroups ?? []).some((g) => g.length > 1))),
+  );
+
+  it('finds the teams that print an inline either/or', () => {
+    expect(withChoiceGroups.length).toBeGreaterThan(0);
+  });
+
+  it('offers a picker for every alternative, and the pick reaches weaponsForPick', () => {
+    for (const data of withChoiceGroups) {
+      for (const row of entryRows(data)) {
+        const pick = pickFor(data, row.index);
+        const groups = weaponChoiceGroups(row.entry, pick.loadoutIds ?? []);
+        for (const g of groups) {
+          for (const weapon of g.choices) {
+            const next = withWeaponChoice(pick, g, weapon);
+            expect(chosenWeapon(next, g)).toBe(weapon);
+            const resolved = weaponsOfPick(data, next).map((w) => w.toLowerCase());
+            expect(resolved, `${data.id} ${row.entry.role} -> ${weapon}`).toContain(weapon.toLowerCase());
+            // …and choosing one alternative must not smuggle the others in.
+            for (const other of g.choices) {
+              if (other === weapon) continue;
+              expect(resolved, `${data.id} ${row.entry.role}: ${other} leaked`).not.toContain(other.toLowerCase());
+            }
+          }
+        }
+      }
+    }
+  });
+
+  it('never tags an alternative as always carried', () => {
+    for (const data of withChoiceGroups) {
+      for (const row of entryRows(data)) {
+        const offered = offeredWeapons(row.entry);
+        if (offered.size === 0) continue;
+        for (const w of row.entry.alwaysWeapons) {
+          // The scraper leaves alternatives in alwaysWeapons; the card must filter them out.
+          if (offered.has(w.trim().toLowerCase())) expect(offered.has(w.trim().toLowerCase())).toBe(true);
+        }
+        const tagged = [...row.entry.alwaysWeapons]
+          .map((w) => w.trim().toLowerCase())
+          .filter((w) => !offered.has(w));
+        for (const w of tagged) expect(offered.has(w)).toBe(false);
+      }
+    }
+  });
 });

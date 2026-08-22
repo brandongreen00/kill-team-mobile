@@ -2,6 +2,33 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-22 — Merging batch 6: three regressions a clean merge hid (D-061…D-063)
+
+main's batch-6 work and this branch's UI overhaul merged with conflicts in two append-only docs
+and a green test suite — and still shipped a kill team you could not field. The conflicts and
+what they hid:
+
+- **A decision-number collision.** Both sides had numbered from D-043 while the branch was open.
+  Ours were renumbered to D-046…D-060 *before* the merge, so main's three rows dropped into the
+  gap instead of six decisions sharing three ids.
+- **One test that only fails merged.** `tests/teams/hunter-clade.test.ts` passes on main alone.
+  D-052 made the end of a turning point an observable phase, so its two hard-coded
+  `AdvancePhase` calls now stop one step short of Ready — where `readyStep` clears
+  `gambitsUsedTP`. Both call sites now advance until the turning point has actually incremented
+  rather than counting phase transitions.
+- **Three regressions no test caught**, found by auditing the intersection of main's validator
+  rewrite with this branch's roster UI (D-061…D-063). The worst: D-045 stopped handing an
+  operative every alternative of a printed either/or, and the builder had no picker to replace
+  it, so both Hunter Clade gunners resolved to an arc rifle — against a printed cap of one arc
+  rifle. **A legal two-gunner Hunter Clade roster was unbuildable in the app.**
+
+**Still open, and not caused by the merge** — `src/ui/App.tsx` registers only `BATCH_1`, so 40 of
+48 teams play a whole battle with no faction rules, ploys or unique actions, silently
+(`rebuildHooks` optional-chains a missing module). main's eight new modules are dead code in the
+shipped app. Also unreached: per-team faction equipment (`ctx.equipment` holds only the 11
+universal options) and tac-op archetype filtering (`state.teams[p].archetypes` is never
+populated).
+
 ## 2026-08-22 — Phase 4 UI, second pass: the screens the game needed but could not reach (D-052…D-058)
 
 Adversarial review of the first pass, driving the built app rather than reading it. Seven
