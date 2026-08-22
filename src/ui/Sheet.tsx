@@ -31,6 +31,12 @@ export interface SheetProps {
   modal?: boolean;
   /** Measured height of the resting sheet, so the board pane can inset by exactly that. */
   onRestHeight?: (px: number) => void;
+  /**
+   * Docked to the side instead of the bottom. A phone in landscape has ~390px of height; a
+   * bottom sheet takes half of it and leaves the killzone a strip. Sideways, the same content
+   * is a column and the board keeps the rest.
+   */
+  side?: boolean;
   /** Always visible: the prompt and its primary action. */
   peek: preact.ComponentChildren;
   /** Revealed at `half` and `full`. Scrolls. */
@@ -44,7 +50,7 @@ const FULL = 0.92;
 /** A drag shorter than this is a tap on the handle, which cycles detents instead. */
 const DRAG_SLOP_PX = 6;
 
-export function Sheet({ detent, onDetent, modal = false, onRestHeight, peek, children, label }: SheetProps) {
+export function Sheet({ detent, onDetent, modal = false, onRestHeight, peek, children, label, side = false }: SheetProps) {
   const rootRef = useRef<HTMLElement | null>(null);
   const peekRef = useRef<HTMLDivElement | null>(null);
   const [restPx, setRestPx] = useState(140);
@@ -79,16 +85,21 @@ export function Sheet({ detent, onDetent, modal = false, onRestHeight, peek, chi
   });
 
   useEffect(() => {
-    onRestHeight?.(restPx);
-  }, [restPx, onRestHeight]);
+    // A side sheet insets the board horizontally, never vertically.
+    onRestHeight?.(side ? 0 : restPx);
+  }, [restPx, onRestHeight, side]);
 
   const heightFor = useCallback(
     (d: Detent): number => (d === 'rest' ? restPx : d === 'half' ? stagePx * HALF : stagePx * FULL),
     [restPx, stagePx],
   );
 
-  /** Modal sheets never rest: there is a question on screen that must be answered. */
-  const effective: Detent = modal && detent === 'rest' ? 'half' : detent;
+  /**
+   * Modal sheets never rest: there is a question on screen that must be answered. A SIDE
+   * sheet has no detents at all — it is a fixed column, always fully open — so the drag
+   * handle and the height maths are simply not in play.
+   */
+  const effective: Detent = side ? 'full' : modal && detent === 'rest' ? 'half' : detent;
   const height = dragPx ?? heightFor(effective);
 
   // --- drag the handle ---------------------------------------------------
@@ -142,11 +153,12 @@ export function Sheet({ detent, onDetent, modal = false, onRestHeight, peek, chi
       {modal && <div class="sheet-scrim" aria-hidden="true" />}
       <section
         ref={rootRef}
-        class={`sheet${dragPx !== null ? ' is-dragging' : ''} detent-${effective}`}
-        style={{ height: `${Math.round(height)}px` }}
+        class={`sheet${side ? ' is-side' : ''}${dragPx !== null ? ' is-dragging' : ''} detent-${effective}`}
+        style={side ? undefined : { height: `${Math.round(height)}px` }}
         aria-label={label ?? 'Command'}
-        data-detent={effective}
+        data-detent={side ? 'side' : effective}
       >
+        {!side && (
         <div
           class="sheet-grab"
           role="button"
@@ -167,6 +179,7 @@ export function Sheet({ detent, onDetent, modal = false, onRestHeight, peek, chi
             }
           }}
         />
+        )}
         {/* The peek is its OWN grid row, not the first thing in the scroller: at `rest` the
             scroller is then exactly zero tall, so the body is hidden cleanly instead of
             showing a half-clipped line of text under the primary button. */}

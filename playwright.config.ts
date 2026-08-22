@@ -26,6 +26,9 @@ export default defineConfig({
   projects: [
     { name: 'iphone-se', use: { ...devices['iPhone SE'], browserName: 'chromium' } },
     { name: 'pixel-7', use: { ...devices['Pixel 7'], browserName: 'chromium' } },
+    // A phone held sideways is a different layout, not a narrower one: the command sheet
+    // docks to the side, because a bottom sheet on a 390px-tall screen leaves no killzone.
+    { name: 'phone-landscape', use: { ...devices['iPhone 13 landscape'], browserName: 'chromium' } },
     { name: 'desktop', use: { browserName: 'chromium', viewport: { width: 1440, height: 900 } } },
   ],
 });

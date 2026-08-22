@@ -131,14 +131,23 @@ export function maxViewportWidth(board: BoardSize, limits: ViewLimits = {}): num
   return Math.max(board.w, snapToBoard(board.h * aspectOf(board, limits), board.w));
 }
 
-/** Narrowest legal window width for this board (the most-zoomed-in state). */
+/**
+ * Narrowest legal window width for this board (the most-zoomed-in state).
+ *
+ * The floor is "do not zoom in past `minSpanIn` inches on the window's short side" — but it
+ * must never come out WIDER than the fill window, or the clamp starts pushing the window
+ * bigger than the board. That is not hypothetical: a phone in landscape with the sheet up
+ * leaves a pane about 10:1, where `minSpanIn * aspect` is 86" of a 30" board, and the board
+ * was forced out to 50% zoom with the killzone a strip in the middle.
+ */
 export function minViewportWidth(board: BoardSize, limits: ViewLimits | number = {}): number {
   const opts: ViewLimits = typeof limits === 'number' ? { minSpanIn: limits } : limits;
   const aspect = aspectOf(board, opts);
   const minSpanIn = opts.minSpanIn ?? MIN_SPAN_IN;
   // The short side of the WINDOW is the one that must not fall below `minSpanIn`.
   const byShortSide = minSpanIn * Math.max(1, aspect);
-  return Math.min(maxViewportWidth(board, opts), byShortSide);
+  const cover = Math.min(board.w, snapToBoard(board.h * aspect, board.w));
+  return Math.min(maxViewportWidth(board, opts), cover, byShortSide);
 }
 
 /**

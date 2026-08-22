@@ -265,6 +265,16 @@ body {
   flex-direction: column;
   gap: var(--s2);
   z-index: 2;
+  /* A short pane (a phone in landscape) cannot hold a 150px column of buttons: it would
+     overflow past the top of the board. Lay them out along the bottom instead. */
+  max-height: 100%;
+}
+@media (max-height: 560px) {
+  .board-controls {
+    flex-direction: row;
+    align-items: center;
+    bottom: var(--s2);
+  }
 }
 .board-controls.side-right {
   right: var(--s3);
@@ -387,6 +397,41 @@ body {
   font-size: var(--t-sm);
   color: var(--ink-2);
   margin: 0;
+}
+
+/* --- side sheet: a phone held sideways ----------------------------------- */
+
+.stage.has-side-sheet {
+  --sheet-side: min(46%, 400px);
+}
+.stage.has-side-sheet .board-pane {
+  inset: 0 var(--sheet-side) 0 0;
+}
+.sheet.is-side {
+  top: 0;
+  left: auto;
+  width: var(--sheet-side, min(46%, 400px));
+  height: auto;
+  max-height: none;
+  border-radius: var(--r-lg) 0 0 var(--r-lg);
+  border-top: 0;
+  border-left: 1px solid var(--line);
+  box-shadow: -8px 0 28px rgb(0 0 0 / 0.45);
+  grid-template-rows: auto minmax(0, 1fr);
+  padding-top: var(--s3);
+}
+/* No detents to drag between, so the body always scrolls. */
+.sheet.is-side .sheet-body {
+  visibility: visible;
+}
+.stage.has-side-sheet .board-controls {
+  flex-direction: row;
+  bottom: var(--s2);
+  left: var(--s2);
+  right: auto;
+}
+.stage.has-side-sheet .zoom-readout {
+  align-self: center;
 }
 
 /* =========================================================================

@@ -26,3 +26,18 @@ export function useMediaQuery(query: string): boolean {
 }
 
 export const useIsDesktop = (): boolean => useMediaQuery(DESKTOP_QUERY);
+
+/**
+ * A phone held sideways. A bottom sheet needs ~200px of a 390px-tall screen, which leaves the
+ * killzone a letterbox strip; the same content docked to the side leaves a board worth
+ * looking at. Below the desktop breakpoint and short: side sheet.
+ */
+export const SIDE_SHEET_QUERY = '(max-height: 560px) and (min-width: 640px)';
+
+export type WindowClass = 'compact' | 'side' | 'desktop';
+
+export function useWindowClass(): WindowClass {
+  const desktop = useMediaQuery(DESKTOP_QUERY);
+  const side = useMediaQuery(SIDE_SHEET_QUERY);
+  return desktop ? 'desktop' : side ? 'side' : 'compact';
+}

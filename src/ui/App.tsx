@@ -18,7 +18,7 @@
  * becomes a left rail, the log a right one, and nothing overlays the board.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { useIsDesktop } from './useMedia.ts';
+import { useWindowClass } from './useMedia.ts';
 import { Board } from './Board.tsx';
 import { Sheet, type Detent } from './Sheet.tsx';
 import { SequenceOverlay } from './SequenceOverlay.tsx';
@@ -49,7 +49,9 @@ export function App() {
   const [detent, setDetent] = useState<Detent>('rest');
   const [sheetRest, setSheetRest] = useState(140);
   const [toasts, setToasts] = useState<{ id: number; text: string; count: number }[]>([]);
-  const isDesktop = useIsDesktop();
+  const windowClass = useWindowClass();
+  const isDesktop = windowClass === 'desktop';
+  const sideSheet = windowClass === 'side';
 
   const setUi = useCallback((patch: Partial<UiState>) => setUiState((s) => ({ ...s, ...patch })), []);
 
@@ -375,7 +377,10 @@ export function App() {
   return (
     <>
       {topbar}
-      <main class="stage" style={{ '--sheet-rest': `${sheetRest}px` } as unknown as string}>
+      <main
+        class={`stage${sideSheet ? ' has-side-sheet' : ''}`}
+        style={{ '--sheet-rest': `${sheetRest}px` } as unknown as string}
+      >
         {board}
         <Sheet
           detent={detent}
@@ -384,6 +389,7 @@ export function App() {
           onRestHeight={setSheetRest}
           peek={peek}
           label={plan.title}
+          side={sideSheet}
         >
           {sheetBody}
         </Sheet>

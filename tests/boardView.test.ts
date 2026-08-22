@@ -314,6 +314,18 @@ describe('the window is aspect-locked to its container', () => {
     close(maxViewportWidth(BOARD), BOARD.w, 1e-9);
   });
 
+  it('never forces the window WIDER than the board on a short, wide pane', () => {
+    // A phone in landscape with the command sheet up leaves a pane about 10:1. The
+    // minimum-span floor is `minSpanIn * aspect` = 86" of a 30" board there, and if that were
+    // allowed to win the clamp the board would be pushed out to half zoom with the killzone a
+    // strip in the middle of the screen — which is exactly what happened.
+    const SLIVER = { aspect: 844 / 88 };
+    expect(minViewportWidth(BOARD, SLIVER)).toBeLessThanOrEqual(BOARD.w + 1e-9);
+    const vp = fillViewport(BOARD, SLIVER);
+    close(vp.w, BOARD.w, 1e-9);
+    expect(zoomOf(vp, BOARD)).toBeGreaterThanOrEqual(1 - 1e-9);
+  });
+
   it('keeps a 25mm base tappable at the tightest zoom on a portrait pane', () => {
     const pane: ScreenRect = { left: 0, top: 0, width: 390, height: 620 };
     const tightest = clampViewport({ x: 0, y: 0, w: 0, h: 0 }, BOARD, { aspect: 390 / 620 });

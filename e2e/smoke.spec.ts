@@ -256,9 +256,29 @@ test('deployment happens on the board, and a rejected placement says why', async
   await expect(page.getByRole('button', { name: /Undo last placement/ })).toBeVisible();
 });
 
+test('a phone held sideways docks the command surface to the side, not the bottom', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'phone-landscape', 'this is the landscape layout');
+  await page.goto('/');
+  await ready(page);
+  const geometry = await page.evaluate(() => {
+    const sheet = document.querySelector('.sheet')!;
+    const s = sheet.getBoundingClientRect();
+    const board = document.querySelector('svg.board-main')!.getBoundingClientRect();
+    return { isSide: sheet.classList.contains('is-side'), sheetH: s.height, boardH: board.height, boardW: board.width, stageH: (document.querySelector('.stage') as HTMLElement).getBoundingClientRect().height };
+  });
+  expect(geometry.isSide).toBe(true);
+  // The board keeps the full height of the stage rather than a strip above a sheet.
+  expect(geometry.boardH).toBeGreaterThan(geometry.stageH * 0.9);
+  expect(geometry.boardW).toBeGreaterThan(300);
+  // …and the killzone is at least fully visible, not pushed out past the board's own width.
+  const w = await page.evaluate(() => Number((document.querySelector('svg.board-main')!.getAttribute('viewBox') ?? '').split(' ')[2]));
+  expect(w).toBeLessThanOrEqual(30.001);
+});
+
 test('the command sheet expands and collapses, and never hides the board while aiming', async ({ page }, testInfo) => {
-  // The sheet is the phone layout; desktop puts the same content in a left rail instead.
-  test.skip(testInfo.project.name === 'desktop', 'desktop uses rails, not a sheet');
+  // The sheet is the phone-portrait layout: desktop puts the same content in a left rail and
+  // landscape docks it to the side, and neither has detents.
+  test.skip(testInfo.project.name === 'desktop' || testInfo.project.name === 'phone-landscape', 'no detents in this layout');
   await page.goto('/');
   await ready(page);
   const sheet = page.locator('.sheet');
