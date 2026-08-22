@@ -14,6 +14,7 @@
  *   no dice have been rolled — undoing a roll would be cheating, not undo.
  */
 import { reduce } from '../core/reducer.ts';
+import { rebuildHooks } from '../core/context.ts';
 import type { GameContext } from '../core/context.ts';
 import type { Intent } from '../core/intents.ts';
 import type { GameState } from '../core/types.ts';
@@ -69,6 +70,9 @@ export class Store {
     const out = reduce(this.state, intent, this.ctx);
     this.state = out.state;
     if (out.ok) {
+      // Whatever was refused a moment ago is no longer news: something worked. Leaving the
+      // toast up pins an error over the board for the rest of the phase.
+      this.lastRejection = null;
       this.history.push(intent);
       const rolled = this.ctx.rng.cursor() !== rngBefore || this.state.rolls.length !== rollsBefore;
       if (before && !rolled) {
@@ -99,9 +103,22 @@ export class Store {
     if (!top) return false;
     this.state = top.state;
     this.history.length = top.historyLength;
+    // The hook registry is built FROM the state (team rules, equipment, ops). Restoring a
+    // snapshot without rebuilding leaves hooks registered for a roster, an equipment list or
+    // a tac op the restored state no longer has.
+    rebuildHooks(this.ctx, this.state);
     this.clearRejection();
     this.emit();
     return true;
+  }
+
+  /**
+   * Forget everything before this point. Called at a step boundary the player cannot go back
+   * across — undoing a roster selection from the deployment screen is not "undo", it is a
+   * different game.
+   */
+  commitHistory(): void {
+    this.undoStack = [];
   }
 
   /**

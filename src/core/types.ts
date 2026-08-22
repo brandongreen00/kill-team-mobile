@@ -419,6 +419,8 @@ export interface SetupState {
   revealed: Partial<Record<PlayerId, boolean>>;
   deployedCount: Partial<Record<PlayerId, number>>;
   equipmentPlaced: Partial<Record<PlayerId, number>>;
+  /** Set by `SkipEquipmentPlacement`: that player is finished setting equipment up. */
+  equipmentDone?: Partial<Record<PlayerId, boolean>>;
   /** Whose turn it is to act during an alternating setup step. */
   toAct?: PlayerId;
 }

@@ -57,14 +57,21 @@ export interface GameContext {
    * entry point; these keep it from importing every rule module directly.
    */
   placeEquipment?: (ctx: GameContext, state: GameState, intent: PlaceEquipmentIntent) => { ok: boolean; reason?: string };
+  /** Who sets equipment up next, or null when the step is finished. */
+  equipmentToAct?: (state: GameState) => PlayerId | null;
   playInitiativeCard?: (ctx: GameContext, state: GameState, player: PlayerId, cardId: string) => { ok: boolean; reason?: string };
   scoreEndOfTurningPoint?: (ctx: GameContext, state: GameState) => void;
   scoreEndOfBattle?: (ctx: GameContext, state: GameState) => void;
   /** Ops own several decision kinds (primary op, Stake Claim, Reboot, Envoy, Flank…). */
+  /**
+   * `decisionOrId` is the decision itself when the caller has already removed it from
+   * `state.pending` — which `resolveDecision` does before it dispatches. Passing the id in
+   * that case made every op-owned decision unresolvable.
+   */
   resolveOpDecision?: (
     ctx: GameContext,
     state: GameState,
-    decisionId: string,
+    decisionOrId: import('./types.ts').PendingDecision | string,
     optionId: string,
     data?: Record<string, unknown>,
   ) => boolean;

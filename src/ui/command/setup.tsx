@@ -10,13 +10,25 @@
  * placing is auto-armed and named in the sheet, the ghost shows legality before you commit,
  * and a rejection arrives as the reducer's own sentence instead of silence.
  */
+import { useMemo } from 'preact/hooks';
 import type { Store } from '../store.ts';
 import type { TeamData } from '../data.ts';
 import { card } from '../../core/state.ts';
 import { canDeployAt } from '../../core/reducer.ts';
+import { pointInPoly } from '../../core/geometry.ts';
 import { deployBatchRemaining, deployToAct } from '../../core/phases.ts';
 import { availableOps } from '../../core/game.ts';
-import { otherPlayer, type PlayerId, type Poly, type Vec2 } from '../../core/types.ts';
+import { opLabel } from '../../core/ops/common.ts';
+import { otherPlayer, type BaseShape, type PlayerId, type Poly, type Vec2 } from '../../core/types.ts';
+import {
+  MARKER_MM,
+  equipmentById,
+  equipmentItems,
+  equipmentToAct,
+  pendingEquipmentItems,
+  validateEquipmentPlacement,
+  type EquipmentItem,
+} from '../../core/equipment/index.ts';
 import { IconCheck, IconDice, IconHandover, IconMap, IconTarget, IconUndo } from '../icons.tsx';
 import type { CommandAction, CommandPlan, UiState, WorldRect } from './types.ts';
 import { rectOfPolys } from './types.ts';
@@ -96,7 +108,6 @@ export function dropZonePlan({ store }: PanelArgs): CommandPlan {
   const { state } = store;
   const chooser = state.setup.toAct ?? 'p1';
   const initiativeChosen = state.initiative !== undefined;
-  const board = state.map.board;
 
   if (!initiativeChosen) {
     return {
@@ -131,12 +142,22 @@ export function dropZonePlan({ store }: PanelArgs): CommandPlan {
     step: 'Setup · 2 of 3',
     title: `${LABEL[picker]} picks a drop zone`,
     help: 'Tap a drop zone on the killzone, or use the buttons. Your opponent takes the other one.',
-    frame: null,
+    // The whole killzone: the two zones run up the LEFT and RIGHT edges, so any framing that
+    // does not letterbox crops them both off the screen and asks the player to choose between
+    // two things they cannot see.
+    frame: 'fit',
     detent: 'rest',
     turnOf: picker,
-    // Tapping the zone itself is the obvious thing to try on a map, so it works.
+    // Tapping the zone itself is the obvious thing to try on a map, so it works — and it asks
+    // the MAP which zone was tapped. Splitting the board down the middle assumed p1's zone is
+    // always on the left; on bheta-decima (the killzone the app boots into) it is on the
+    // right, and on gallowdark the zones are top and bottom bands, so the test was
+    // meaningless. Tapping then silently deployed you on the wrong side.
     armed: {
-      commit: (world: Vec2) => choose(world.x < board.w / 2 ? 'p1' : 'p2'),
+      commit: (world: Vec2) => {
+        const zone = (['p1', 'p2'] as const).find((k) => state.map.dropZones[k].some((poly) => pointInPoly(world, poly)));
+        if (zone) choose(zone);
+      },
     },
     highlights: (
       <g style={{ pointerEvents: 'none' }}>
@@ -184,16 +205,28 @@ export function selectOperativesPlan(args: PanelArgs): CommandPlan {
           label: 'Reveal and deploy',
           tone: 'primary',
           icon: <IconCheck size={20} />,
-          onClick: () => store.dispatch({ t: 'BeginDeployment' }),
+          onClick: () => {
+            store.dispatch({ t: 'BeginDeployment' });
+            // Nothing before deployment is undoable from the deployment screen: taking back a
+            // roster or a tac op there is not "undo", it is a different battle — and the
+            // button said "Undo last placement" before a single one had been made.
+            store.commitHistory();
+          },
         },
       ],
       body: (
         <div>
           {(['p1', 'p2'] as PlayerId[]).map((p) => (
-            <div key={p} class="card">
-              <h2>{LABEL[p]}</h2>
+            // Player-coloured, because a mirror match otherwise shows two identical cards
+            // with the same team name and the same count, and neither says which is yours.
+            <div key={p} class={`card team-card is-${p}`}>
+              <h2>
+                {LABEL[p]} · {state.setup.dropZone[p] === 'p1' ? 'orange drop zone' : 'grey drop zone'}
+              </h2>
               <div class="entry-name">{teams.find((t) => t.id === state.teams[p].teamId)?.name ?? state.teams[p].teamId}</div>
-              <div class="entry-meta">{state.teams[p].operativeIds.length} operatives</div>
+              <div class="entry-meta">
+                {state.teams[p].operativeIds.length} operatives · tac op secret until the battle ends
+              </div>
             </div>
           ))}
         </div>
@@ -306,11 +339,14 @@ function loadoutPlan({ store, teams, ui, setUi }: PanelArgs, player: PlayerId): 
     actions: [
       {
         id: 'confirm-loadout',
-        label: tacOpId ? 'Confirm' : 'Choose a tac op',
+        label: tacOpId
+          ? `Confirm — ${opLabel(tacOpId)}${chosen.length > 0 ? ` + ${chosen.length} equipment` : ''}`
+          : 'Pick a tac op to continue',
         tone: 'primary',
         disabled: !tacOpId,
         hint: tacOpId ? undefined : 'A tac op is required — it is how your kill team scores.',
-        icon: <IconCheck size={20} />,
+        // No tick on a control that has not been satisfied: it reads as already done.
+        ...(tacOpId ? { icon: <IconCheck size={20} /> } : {}),
         onClick: () => {
           if (!tacOpId) return;
           if (chosen.length > 0) store.dispatch({ t: 'SelectEquipment', player, equipment: chosen });
@@ -397,6 +433,199 @@ export function deployBatch(store: Store): DeployBatch {
   };
 }
 
+/* ------------------------------------------------------- set up equipment */
+
+/**
+ * Equipment that occupies space on the killzone — barricades, a ladder, portable cover — is
+ * set up before any operative is, alternating from the player with initiative.
+ *
+ * This screen did not exist. `setup.step` could hold `'placeEquipment'`, the `PlaceEquipment`
+ * intent worked, `validateEquipmentPlacement` was complete with per-item constraints — and
+ * nothing ever set the step, so a player who spent one of their four equipment picks on a
+ * barricade watched it never appear. It is built exactly like the deployment screen, because
+ * it is the same job: aim a footprint at the board and be told before you commit whether it
+ * may go there.
+ */
+export function placeEquipmentPlan({ store, ui, setUi }: PanelArgs): CommandPlan {
+  const { state, ctx } = store;
+  const player = equipmentToAct(state) ?? state.setup.toAct ?? state.initiative ?? 'p1';
+  const pending = pendingEquipmentItems(state, player);
+  const zoneKey = state.setup.dropZone[player] ?? player;
+  const zones = state.map.dropZones[zoneKey];
+  const colour = player === 'p1' ? '#ff9a4d' : '#8fb8d8';
+
+  // `ui.placingId` doubles as the equipment cursor here: `equipmentId#itemIndex`.
+  const chosen = pending.find((e) => `${e.equipmentId}#${e.itemIndex}` === ui.placingId) ?? pending[0];
+  const def = chosen ? equipmentById(chosen.equipmentId) : undefined;
+  const rotDeg = 0;
+
+  const skip: CommandAction = {
+    id: 'skip-equipment',
+    label: pending.length === 0 ? 'Nothing to set up — continue' : 'Set up no more equipment',
+    tone: pending.length === 0 ? 'primary' : 'quiet',
+    // An item can have no legal spot (a ladder with no wall to lean on), and without a way
+    // out the whole battle would be stuck on this screen.
+    hint: 'Anything not set up now stays in your kit and is never placed.',
+    onClick: () => {
+      store.dispatch({ t: 'SkipEquipmentPlacement', player });
+      setUi({ placingId: undefined });
+    },
+  };
+
+  const armed = chosen
+    ? {
+        // The footprint is drawn from the item's own polygon rather than a base, so the ghost
+        // shows the actual barricade, not a disc standing in for one.
+        base: footprintBase(chosen.item),
+        rotDeg,
+        legal: (world: Vec2) => {
+          const v = validateEquipmentPlacement(ctx, state, player, chosen.equipmentId, chosen.itemIndex, world, rotDeg);
+          return v.ok ? { ok: true } : { ok: false, ...(v.reason ? { reason: v.reason } : {}) };
+        },
+        commit: (world: Vec2) => {
+          const ok = store.dispatch({
+            t: 'PlaceEquipment',
+            player,
+            equipmentId: chosen.equipmentId,
+            itemIndex: chosen.itemIndex,
+            pos: world,
+            rotDeg,
+          });
+          if (ok) setUi({ placingId: undefined });
+        },
+      }
+    : null;
+
+  return {
+    id: 'setup.placeEquipment',
+    step: `Setup · equipment · ${LABEL[player]}`,
+    title: chosen ? `Set up ${def?.name ?? chosen.equipmentId}` : `${LABEL[player]} has no equipment to set up`,
+    help: 'Equipment is set up before any operative is, alternating from the player with initiative. Tap the board to place it; drag to aim, two fingers to pan.',
+    armedNote: chosen
+      ? `Tap the board to set up ${def?.name ?? 'it'} · ${pending.length} left`
+      : 'Nothing left to set up',
+    // The WHOLE killzone, bars and all. Equipment legality is not the drop zone — the Ammo
+    // Cache goes anywhere in your territory, a ladder anywhere it has something to lean on —
+    // so framing the drop zone would crop off most of where the thing may actually go.
+    frame: 'fit',
+    detent: 'rest',
+    turnOf: player,
+    armed,
+    highlights: chosen ? (
+      <EquipmentLegality
+        store={store}
+        player={player}
+        equipmentId={chosen.equipmentId}
+        itemIndex={chosen.itemIndex}
+      />
+    ) : (
+      <ZoneSpotlight zones={zones} board={state.map.board} colour={colour} />
+    ),
+    actions: [skip, ...undoAction(store)],
+    body: (
+      <div>
+        <p class="section-title">Still to set up</p>
+        <div class="op-strip">
+          {pending.map((e) => {
+            const key = `${e.equipmentId}#${e.itemIndex}`;
+            const name = equipmentById(e.equipmentId)?.name ?? e.equipmentId;
+            const items = equipmentItems(e.equipmentId).length;
+            return (
+              <button
+                key={key}
+                class={`op-chip${player === 'p2' ? ' is-p2' : ''}`}
+                aria-pressed={key === (chosen ? `${chosen.equipmentId}#${chosen.itemIndex}` : '')}
+                onClick={() => setUi({ placingId: key })}
+              >
+                <span class="letter">{e.item.kind === 'marker' ? '◆' : '▮'}</span>
+                <span>
+                  <span class="op-name">{name}</span>
+                  <span class="op-sub">
+                    {items > 1 ? `item ${e.itemIndex + 1} of ${items}` : e.item.kind === 'marker' ? 'marker' : 'terrain'}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+          {pending.length === 0 && <p class="dim">Nothing selected needs setting up on the killzone.</p>}
+        </div>
+        <p class="rule-text" style={{ marginTop: 12 }}>
+          Starting with the player that has initiative, players alternate setting up their equipment, one
+          piece at a time, until both players have set up all of their equipment.
+        </p>
+      </div>
+    ),
+  };
+}
+
+const LEGALITY_STEP = 0.75;
+
+/**
+ * Where this item may actually go, asked of the engine cell by cell.
+ *
+ * A drop-zone spotlight would be a lie here: every piece of equipment carries its OWN
+ * constraints — the Ammo Cache goes anywhere in your territory, a barricade needs to clear
+ * other terrain, a ladder needs something to lean on, and Bheta-Decima adds an exception of
+ * its own. Rather than approximate any of that, this samples `validateEquipmentPlacement`
+ * across the board, which is the same function the ghost and the reducer use, so the shaded
+ * area and the answer you get on tap can never disagree.
+ */
+function EquipmentLegality({
+  store,
+  player,
+  equipmentId,
+  itemIndex,
+}: {
+  store: Store;
+  player: PlayerId;
+  equipmentId: string;
+  itemIndex: number;
+}) {
+  const { state, ctx } = store;
+  // Keyed on the battle's sequence number as well as the item: setting one barricade down
+  // changes where the next one may go.
+  const cells = useMemo(() => {
+    const out: Vec2[] = [];
+    const { w, h } = state.map.board;
+    for (let x = LEGALITY_STEP / 2; x < w; x += LEGALITY_STEP)
+      for (let y = LEGALITY_STEP / 2; y < h; y += LEGALITY_STEP)
+        if (validateEquipmentPlacement(ctx, state, player, equipmentId, itemIndex, { x, y }, 0).ok)
+          out.push({ x, y });
+    return out;
+  }, [state.seq, player, equipmentId, itemIndex]);
+
+  return (
+    <g style={{ pointerEvents: 'none' }}>
+      <g class="reach">
+        {cells.map((c, i) => (
+          <rect
+            key={i}
+            x={c.x - LEGALITY_STEP / 2 - 0.02}
+            y={c.y - LEGALITY_STEP / 2 - 0.02}
+            width={LEGALITY_STEP + 0.04}
+            height={LEGALITY_STEP + 0.04}
+          />
+        ))}
+      </g>
+      {cells.length === 0 && (
+        <text x={state.map.board.w / 2} y={state.map.board.h / 2} class="board-note" text-anchor="middle">
+          nowhere legal
+        </text>
+      )}
+    </g>
+  );
+}
+
+/**
+ * The ghost wants a base to draw. An item's footprint is a rectangle in mm, so hand it over
+ * as an oval of the same extents — near enough to aim with, and it rotates with the item.
+ */
+function footprintBase(item: EquipmentItem): BaseShape {
+  const fp = item.footprintMm;
+  if (!fp) return { shape: 'round', mm: MARKER_MM };
+  return fp.w === fp.d ? { shape: 'round', mm: fp.w } : { shape: 'oval', mm: [fp.w, fp.d] };
+}
+
 export function deployPlan({ store, ui, setUi }: PanelArgs): CommandPlan {
   const { state, ctx } = store;
   const batch = deployBatch(store);
@@ -413,7 +642,11 @@ export function deployPlan({ store, ui, setUi }: PanelArgs): CommandPlan {
       step: 'Setup · 3 of 3',
       title: 'Both kill teams are on the killzone',
       help: 'Every operative starts with a Conceal order.',
-      frame: null,
+      // The whole killzone, bars and all. Both kill teams span both drop zones, i.e. the
+      // board's full width, which a portrait phone cannot show without letterboxing — and
+      // without this the default framing centres on the middle and the screen announces that
+      // both kill teams are deployed over a picture of an empty table.
+      frame: 'fit',
       detent: 'rest',
       actions: [
         {
@@ -459,7 +692,7 @@ export function deployPlan({ store, ui, setUi }: PanelArgs): CommandPlan {
     step: `Setup · 3 of 3 · ${LABEL[player]}`,
     title: placing ? `Place ${placing.letter} — ${placingCard?.name ?? ''}` : 'Deploy your kill team',
     help: 'Set up wholly within your drop zone, on a Conceal order. Tap the board to place; drag to aim, two fingers to pan.',
-    armedNote: `${batch.deployed} of ${batch.total} placed · ${batch.remainingInBatch} more before ${LABEL[otherPlayer(player)]} deploys`,
+    armedNote: `Tap inside your drop zone to place ${placing?.letter ?? ''} · ${batch.deployed} of ${batch.total} placed, ${batch.remainingInBatch} more before ${LABEL[otherPlayer(player)]}`,
     frame,
     detent: 'rest',
     turnOf: player,
@@ -495,7 +728,8 @@ export function deployPlan({ store, ui, setUi }: PanelArgs): CommandPlan {
 }
 
 function undoAction(store: Store): CommandAction[] {
-  if (!store.canUndo()) return [];
+  if (!store.canUndo() || (store.state.setup.deployedCount.p1 ?? 0) + (store.state.setup.deployedCount.p2 ?? 0) === 0)
+    return [];
   return [
     {
       id: 'undo',

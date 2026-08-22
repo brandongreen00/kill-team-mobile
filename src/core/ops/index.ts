@@ -10,7 +10,7 @@
 import { takeDecision } from '../decisions.ts';
 import { log } from '../state.ts';
 import type { GameContext, OpDef } from '../context.ts';
-import type { GameState, PlayerId } from '../types.ts';
+import type { GameState, PendingDecision, PlayerId } from '../types.ts';
 
 import { KILL_OP_ID, PLAYERS, opScratch, syncKillRecords, type OpModule } from './common.ts';
 import { resolveInitiativeDecision } from './initiativeCards.ts';
@@ -145,24 +145,30 @@ export function scoreEndOfBattle(ctx: GameContext, state: GameState): void {
 }
 
 /**
- * Resolve a PendingDecision raised by an op (primary op, Stake Claim, Reboot, initiative
- * cards). `src/core/decisions.ts` should call this from its default branch; until it does,
- * drivers can call it directly.
+ * Resolve a decision an op raised (primary op, Stake Claim, Reboot, Envoy, Flank, initiative
+ * cards).
+ *
+ * Takes the decision ITSELF or its id. That distinction is load-bearing: `resolveDecision`
+ * removes the decision from `state.pending` before it dispatches, so a handler that looked the
+ * id up again found nothing, returned "no pending decision", and every op-owned decision —
+ * the secret primary op, Stake Claim, Reboot, Envoy, Flank — was silently logged as "had no
+ * handler" and thrown away. The primary op is worth up to 3VP a side.
  */
 export function resolveOpDecision(
   ctx: GameContext,
   state: GameState,
-  decisionId: string,
+  decisionOrId: PendingDecision | string,
   optionId: string,
   data?: Record<string, unknown>,
 ): { ok: boolean; reason?: string } {
-  const decision = state.pending.find((d) => d.id === decisionId);
-  if (!decision) return { ok: false, reason: `no pending decision '${decisionId}'` };
+  const alreadyTaken = typeof decisionOrId !== 'string';
+  const decision = alreadyTaken ? decisionOrId : state.pending.find((d) => d.id === decisionOrId);
+  if (!decision) return { ok: false, reason: `no pending decision '${String(decisionOrId)}'` };
   const option = decision.options.find((o) => o.id === optionId);
   if (!option && optionId !== 'pass' && optionId !== 'keep')
     return { ok: false, reason: `option '${optionId}' is not available` };
   if (option?.disabled) return { ok: false, reason: option.reason ?? 'option not available' };
-  takeDecision(state, decisionId);
+  if (!alreadyTaken) takeDecision(state, decision.id);
   const payload = { ...(option?.data ?? {}), ...(data ?? {}) };
 
   if (decision.kind === 'initiativeCard' || decision.kind === 'chooseInitiative') {

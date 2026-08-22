@@ -29,6 +29,16 @@ export interface TeamData {
   equipment?: { id: string; name: string; text: string }[];
 }
 
+/**
+ * The crit op a new battle starts with.
+ *
+ * Approved Ops picks one per mission; there is no mission-select screen yet, and with
+ * `state.critOpId` unset every crit-op action is gated off and a THIRD of the game's scoring
+ * is dead — so a battle starts with one rather than with none. `docs/PROGRESS.md` tracks the
+ * picker as the fix.
+ */
+export const defaultCritOpId = (): string => 'crit.secure';
+
 export async function loadTeams(): Promise<TeamData[]> {
   const out: TeamData[] = [];
   for (const path of Object.keys(teamModules).sort()) {

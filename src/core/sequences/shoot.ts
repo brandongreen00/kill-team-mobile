@@ -655,7 +655,18 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
               { id: 'auto', label: `Auto-allocate (take ${alloc.damage} damage)`, data: { ...alloc } },
               { id: 'manual', label: 'Allocate manually' },
             ],
-            ctx: { alloc: { ...alloc }, brutal },
+            // Everything a manual allocator needs, so the UI never has to reach into
+            // `state.sequence` and re-derive the profile to draw the choice.
+            ctx: {
+              alloc: { ...alloc },
+              brutal,
+              atkCrits: countCrits(seq.attack),
+              atkNormals: countNormals(seq.attack),
+              defCrits: countCrits(seq.defence),
+              defNormals: countNormals(seq.defence),
+              dmgN: profile.dmgN,
+              dmgC: profile.dmgC,
+            },
             sourceText:
               'The defender allocates all their successful defence dice to block successful attack dice. A normal success can block a normal success. Two normal successes can block a critical success. A critical success can block a normal success or a critical success.',
           });

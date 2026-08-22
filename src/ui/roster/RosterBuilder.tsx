@@ -163,7 +163,7 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
             Change
           </button>
         </div>
-        <div class="row" style={{ gap: 6 }}>
+        <div class="chips">
           <span class={`tag${u.leader.used === u.leader.need ? ' is-ok' : ''}`}>
             {u.leader.used}/{u.leader.need} leader
           </span>
@@ -181,13 +181,11 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
             </span>
           ))}
         </div>
-        <p
-          class={validation.ok ? 'ok-line' : 'muted'}
-          aria-live="polite"
-          style={{ margin: 0, width: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-        >
+        <p class={validation.ok ? 'ok-line' : 'muted'} aria-live="polite" style={{ margin: 0, width: '100%', minWidth: 0 }}>
           {validation.ok ? <IconCheck size={16} /> : null}
-          {summary}
+          {/* The text truncates on its own: an icon sibling defeats `text-overflow` on the
+              paragraph, which is why the legality line ran off the edge mid-word. */}
+          <span class="summary-text">{summary}</span>
         </p>
       </div>
 
@@ -213,6 +211,10 @@ export function RosterBuilder({ teams, title = 'Select operatives', confirmLabel
                 <div class={`entry${can.ok ? '' : ' is-blocked'}`}>
                   <div class="entry-main">
                     <div class="entry-name">{titleCase(row.entry.role)}</div>
+                    {/* The stat line, always rendered, always one line. Choosing nine models
+                        from a list of names alone is choosing blind — and the app has the
+                        numbers, it was just not showing them. */}
+                    <div class="entry-stats">{statLine(row)}</div>
                     <div class="entry-meta" title={meta || undefined}>
                       {meta || ' '}
                     </div>
@@ -393,6 +395,12 @@ function countByRow(data: TeamData, picks: RosterPickIn[]): Map<number, number> 
     if (row) counts.set(row.index, (counts.get(row.index) ?? 0) + 1);
   }
   return counts;
+}
+
+/** APL / Move / Save / Wounds for a catalogue row, or a blank line to keep the height. */
+function statLine(row: { card?: { apl: number; move: number; save: number; wounds: number } | undefined }): string {
+  const c = row.card;
+  return c ? `APL ${c.apl} \u00b7 M ${c.move}" \u00b7 Sv ${c.save}+ \u00b7 W ${c.wounds}` : '\u00a0';
 }
 
 /** ALL-CAPS role names are how the cards print them; on a phone they are a wall. */

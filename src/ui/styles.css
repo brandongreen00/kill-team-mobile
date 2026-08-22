@@ -258,29 +258,24 @@ body {
 
 /* Board overlay controls: floated bottom-right of the visible board area, out
    of the drop zones that run up the left and right EDGES of every killzone. */
+/* A ROW, not a column. Three 44px buttons stacked is 150px of board covered; laid along the
+   bottom they fit in the letterbox bar the fit framing leaves, and on a short pane they no
+   longer overflow past the top of the board. Desktop has room to stack them. */
 .board-controls {
   position: absolute;
   bottom: var(--s3);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: var(--s2);
   z-index: 2;
-  /* A short pane (a phone in landscape) cannot hold a 150px column of buttons: it would
-     overflow past the top of the board. Lay them out along the bottom instead. */
-  max-height: 100%;
-}
-@media (max-height: 560px) {
-  .board-controls {
-    flex-direction: row;
-    align-items: center;
-    bottom: var(--s2);
-  }
+  max-width: calc(100% - var(--s6));
 }
 .board-controls.side-right {
-  right: var(--s3);
+  right: max(var(--s3), env(safe-area-inset-right));
 }
 .board-controls.side-left {
-  left: var(--s3);
+  left: max(var(--s3), env(safe-area-inset-left));
 }
 
 .board-controls button {
@@ -357,7 +352,8 @@ body {
 }
 
 .sheet-peek {
-  padding: 0 max(var(--s4), env(safe-area-inset-left)) var(--s3) max(var(--s4), env(safe-area-inset-right));
+  /* top | right | bottom | left — the insets were the wrong way round here and in the body. */
+  padding: 0 max(var(--s4), env(safe-area-inset-right)) var(--s3) max(var(--s4), env(safe-area-inset-left));
 }
 /* Zero-height at the resting detent — the grid gives it what is left, and at rest there is
    nothing left. No half-clipped sentence under the primary button. */
@@ -366,8 +362,8 @@ body {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
-  padding: 0 max(var(--s4), env(safe-area-inset-left)) calc(var(--s4) + var(--safe-bottom))
-    max(var(--s4), env(safe-area-inset-right));
+  padding: 0 max(var(--s4), env(safe-area-inset-right)) calc(var(--s4) + var(--safe-bottom))
+    max(var(--s4), env(safe-area-inset-left));
   min-height: 0;
 }
 .sheet.detent-rest .sheet-body {
@@ -425,7 +421,6 @@ body {
   visibility: visible;
 }
 .stage.has-side-sheet .board-controls {
-  flex-direction: row;
   bottom: var(--s2);
   left: var(--s2);
   right: auto;
@@ -673,6 +668,16 @@ textarea {
   gap: var(--s2);
 }
 
+.team-card {
+  border-left: 4px solid var(--line);
+}
+.team-card.is-p1 {
+  border-left-color: var(--p1);
+}
+.team-card.is-p2 {
+  border-left-color: var(--p2);
+}
+
 /* =========================================================================
    Toasts — the reducer's rejection reason, which the old UI discarded.
    ========================================================================= */
@@ -691,10 +696,12 @@ textarea {
   pointer-events: none;
 }
 .toast {
-  /* A toast must be tappable: it is where Undo lives. */
+  /* Tappable: a message the player has read should go away when they say so. */
   pointer-events: auto;
   display: flex;
   align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
   gap: var(--s2);
   padding: var(--s3);
   border-radius: var(--r);
@@ -702,6 +709,9 @@ textarea {
   border: 1px solid var(--line-strong);
   box-shadow: 0 8px 24px rgb(0 0 0 / 0.5);
   font-size: var(--t-sm);
+  font-weight: 400;
+  color: var(--ink);
+  min-height: 0;
   animation: toast-in 0.18s var(--ease);
 }
 .toast.is-danger {
@@ -717,10 +727,13 @@ textarea {
   }
 }
 .toast-count {
-  margin-left: auto;
-  flex: 0 0 auto;
-  font-variant-numeric: tabular-nums;
   color: var(--ink-3);
+}
+/* The printed rule, shown rather than hidden behind a disclosure. */
+.rule-text.printed {
+  border-left: 2px solid var(--line);
+  padding-left: var(--s3);
+  margin-top: var(--s3);
 }
 
 /* =========================================================================
@@ -836,14 +849,37 @@ textarea {
   min-height: 0;
 }
 
+/* PINNED, and actually fixed. The chip row wraps to two lines on teams with several groups,
+   and a chip gains a digit at 10 operatives — so without a reserved height the bar grows
+   mid-build and takes the catalogue with it, which is the movement this screen exists to
+   remove. Sized for the worst shipped case (eight chips). */
 .builder-status {
   display: flex;
   gap: var(--s2);
-  align-items: center;
+  align-items: flex-start;
+  align-content: flex-start;
   flex-wrap: wrap;
   padding: var(--s3) var(--s4);
   background: var(--surface);
   border-bottom: 1px solid var(--line);
+  min-height: 132px;
+  overflow: hidden;
+}
+.builder-status .chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  width: 100%;
+  max-height: 56px;
+  overflow: hidden;
+}
+/* Its own truncating span: an icon sibling defeats `text-overflow` on the paragraph. */
+.builder-status .summary-text {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .catalogue {
@@ -859,11 +895,22 @@ textarea {
    in here wraps to a new line as state changes. */
 .entry {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--s3);
   padding: var(--s3) 0;
-  min-height: 64px;
+  min-height: 84px;
+}
+.entry-stats {
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+  min-height: calc(var(--t-xs) * 1.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
 }
 .entry-main {
   min-width: 0;
@@ -938,6 +985,26 @@ textarea {
 .team-list .team-sub {
   font-size: var(--t-sm);
   color: var(--ink-3);
+}
+
+/* An option row whose TEXT is the choice — tac ops, equipment, gambits, ploys. One
+   truncated line is not enough to choose between them; three is, and it is still a
+   fixed height, so nothing moves. */
+.tac-ops .entry-meta,
+.equipment-options .entry-meta {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  white-space: normal;
+  min-height: calc(var(--t-xs) * 1.3 * 3);
+  max-height: calc(var(--t-xs) * 1.3 * 3);
+}
+.tac-ops button,
+.equipment-options button {
+  align-items: flex-start;
+  padding-top: var(--s3);
+  padding-bottom: var(--s3);
 }
 
 /* =========================================================================
@@ -1031,6 +1098,15 @@ textarea {
 }
 .armed-banner .icon {
   color: var(--accent);
+}
+/* A refusal, not an instruction. They shared one style, so "tap to choose a destination" and
+   "a base cannot touch a hazardous area" arrived in the same yellow pill. */
+.armed-banner.is-blocked {
+  background: color-mix(in srgb, var(--danger) 14%, var(--surface-2));
+  border-color: color-mix(in srgb, var(--danger) 55%, transparent);
+}
+.armed-banner.is-blocked .icon {
+  color: var(--danger);
 }
 .armed-banner span {
   display: -webkit-box;
@@ -1227,6 +1303,7 @@ details.disclosure pre {
   }
   .desktop-layout .board-controls {
     bottom: var(--s3);
+    flex-direction: column;
   }
   .topbar h1 {
     font-size: var(--t-base);
@@ -1271,4 +1348,133 @@ details.disclosure pre {
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* ---------------------------------------------------------------- allocator */
+/* The incoming hits, one chip each. A hit is a small target by nature, so the chips are the
+   full 44px touch minimum and wrap rather than shrink — an attack can throw a lot of dice. */
+.allocator .hit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s2);
+}
+.hit-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--s2);
+  border-radius: var(--r);
+  /* 3:1 against the card behind it — an unsaved hit is the thing you are being asked to look
+     at, so it may not rely on a hairline the way a quiet control can. */
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 700;
+  font-size: var(--t-sm);
+}
+/* A critical hit is bordered AND heavier, so the difference survives greyscale. */
+.hit-chip.is-crit {
+  border-color: var(--danger);
+  border-width: 2px;
+  color: var(--danger);
+}
+.hit-chip.is-blocked-hit {
+  background: color-mix(in srgb, var(--ok) 22%, var(--surface-2));
+  border-color: var(--ok);
+  color: var(--text);
+  /* Shape as well as colour: a saved hit carries the shield glyph. */
+  text-decoration: line-through;
+}
+.hit-chip:disabled {
+  opacity: 0.4;
+}
+.hit-chip .icon {
+  color: var(--ok);
+}
+
+/* Score lines from the log, one per op that paid out. Sentences, not a table: the ops name
+   themselves ("Secure: P1 controls 2 objectives — 2VP"), so a table of numbers would strip
+   the only part that says WHY the score moved. */
+.score-list {
+  margin: var(--s2) 0 0;
+  padding-left: 1.1em;
+  font-size: var(--t-sm);
+  color: var(--text);
+}
+.score-list li {
+  margin-bottom: 0.25em;
+}
+
+/* A note drawn IN world space on the board. Sized in inches, so it scales with the zoom —
+   it only ever says one thing ("nowhere legal"), and it has to sit where the thing that is
+   not there would have been. */
+.board-note {
+  font-size: 1.1px;
+  font-weight: 700;
+  letter-spacing: 0.02px;
+  fill: var(--danger);
+  paint-order: stroke;
+  stroke: #05070a;
+  stroke-width: 0.16px;
+  stroke-linejoin: round;
+}
+
+/* ------------------------------------------------- roster builder, landscape */
+/* A phone held sideways is ~390px tall. Stacked — status bar, catalogue, tray, confirm —
+   the catalogue got about 70px, less than one row, so the rows underneath the pinned tray
+   were literally unreachable: you could see an operative and never tap it. The battle screen
+   already solves this shape by moving its sheet to a side rail; the builder does the same,
+   so the catalogue keeps the full height and the status and tray move beside it. */
+@media (max-height: 560px) and (min-width: 640px) {
+  .builder {
+    grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+    /* `auto` and not `1fr`: given a share of the leftover space the status box ended exactly
+       part-way through its summary line, so the screen's one piece of good news read as a
+       rendering fault. Sized to its content it either fits or scrolls, never half-shows. */
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .builder-status {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 0;
+    max-height: 55%;
+    overflow-y: auto;
+    align-content: start;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
+  }
+  .builder > .overlay-body {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .builder > .overlay-foot {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 0;
+    align-content: end;
+    border-right: 1px solid var(--line);
+  }
+  /* Side by side in a 340px rail, "Lock in Player 1's kill team" wrapped onto three lines and
+     grew a 100px-tall button. Stacked, each label gets the full width. */
+  .builder > .overlay-foot .actions.two-up {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* Short AND narrow (a small phone on its side): no room for a rail, so the status bar gives
+   up its reserved height and the tray collapses to a single scrolling line. */
+@media (max-height: 560px) and (max-width: 639px) {
+  .builder-status {
+    min-height: 0;
+    padding: var(--s2) var(--s3);
+  }
+  .builder-status .chips {
+    max-height: 30px;
+  }
+  .overlay-foot .op-strip {
+    max-height: 52px;
+  }
 }

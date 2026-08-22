@@ -16,13 +16,17 @@
  * `reachableCells` and `validateMove`; the answers are only ever *rendered* here.
  */
 import { actionAvailability } from '../../core/actions.ts';
+import type { ActionParams } from '../../core/intents.ts';
 import { moveBudget, moveOptionsFor, reachableCells, validateMove, type MoveAction } from '../../core/movement.ts';
 import { validTargets } from '../../core/sequences/shoot.ts';
-import { aplOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../../core/state.ts';
-import { counteractCandidates, gambitOptions, whoActivates } from '../../core/phases.ts';
+import { basePerimeter } from '../../core/geometry.ts';
+import { aliveOperatives, aplOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../../core/state.ts';
+import { counteractCandidates, gambitOptions, gambitToAct, whoActivates } from '../../core/phases.ts';
 import { otherPlayer, type OperativeState, type PlayerId, type Vec2 } from '../../core/types.ts';
+import { createBattle } from '../../core/init.ts';
+import { defaultCritOpId } from '../data.ts';
 import type { Store } from '../store.ts';
-import { IconCheck, IconConceal, IconEngage, IconMelee, IconMove, IconTarget, IconUndo } from '../icons.tsx';
+import { IconCheck, IconConceal, IconDice, IconEngage, IconMelee, IconMove, IconTarget, IconUndo } from '../icons.tsx';
 import type { CommandPlan, UiState, WorldRect } from './types.ts';
 import { rectAround, rectOfPolys } from './types.ts';
 
@@ -52,10 +56,30 @@ export function strategyPlan({ store }: PlayArgs): CommandPlan {
   });
 
   if (step === 'initiative') {
-    return advance(
-      'Initiative step',
-      'Roll off for initiative, then play or pass initiative cards until both players have passed.',
-    );
+    // Roll off, for real. `AdvancePhase` just steps to `ready`: it never calls `RollOff`, so
+    // initiative never changed hands after setup and `ctx.beginInitiative` — the whole
+    // initiative-card window, including the Re-roll card granted during setup — never opened.
+    const rolled = state.rolls.some((r) => r.kind === 'initiative' && r.note === `TP${state.turningPoint}`);
+    return {
+      id: 'strategy.initiative',
+      step: `Turning point ${state.turningPoint} · Strategy`,
+      title: rolled ? `${LABEL[state.initiative ?? 'p1']} has initiative` : 'Roll off for initiative',
+      help: 'Roll off for initiative, then play or pass initiative cards until both players have passed.',
+      frame: null,
+      detent: 'rest',
+      turnOf: state.initiative,
+      actions: [
+        rolled
+          ? { id: 'advance', label: 'Continue', tone: 'primary', onClick: () => store.dispatch({ t: 'AdvancePhase' }) }
+          : {
+              id: 'roll',
+              label: 'Roll off',
+              tone: 'primary',
+              icon: <IconDice size={20} />,
+              onClick: () => store.dispatch({ t: 'RollOff', kind: 'initiative' }),
+            },
+      ],
+    };
   }
   if (step === 'ready') {
     return advance(
@@ -64,8 +88,10 @@ export function strategyPlan({ store }: PlayArgs): CommandPlan {
     );
   }
 
-  // Gambit: alternating, so only the player to act is offered anything.
-  const toAct: PlayerId = state.teams.p1.passedGambit ? 'p2' : (state.initiative ?? 'p1');
+  // Gambit: alternating, so only the player to act is offered anything. `gambitToAct` is the
+  // core selector that quotes the printed rule — deriving it here got it wrong whenever
+  // Player 2 held initiative, and the strategy phase then never ended.
+  const toAct: PlayerId = gambitToAct(state) ?? state.initiative ?? 'p1';
   const options = gambitOptions(ctx, state, toAct);
   return {
     id: 'strategy.gambit',
@@ -107,7 +133,7 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
       step: `Turning point ${state.turningPoint} · Firefight`,
       title: 'Every operative is expended',
       help: 'The turning point ends: score, then ready up for the next one.',
-      frame: null,
+      frame: 'fit',
       detent: 'rest',
       actions: [{ id: 'advance', label: 'End the turning point', tone: 'primary', onClick: () => store.dispatch({ t: 'AdvancePhase' }) }],
     };
@@ -124,7 +150,14 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
       turnOf: turn.player,
       frame: framing(candidates),
       targetIds: candidates.map((o) => o.id),
-      armed: { onOperative: (op) => store.dispatch({ t: 'Counteract', player: turn.player, operativeId: op.id }) },
+      armed: {
+        // Filter to the eligible list. Without it, tapping an enemy dispatched a Counteract
+        // for it and produced a toast for a tap that should simply be inert.
+        onOperative: (op) =>
+          candidates.some((c) => c.id === op.id)
+            ? store.dispatch({ t: 'Counteract', player: turn.player, operativeId: op.id })
+            : undefined,
+      },
       actions: [
         {
           id: 'decline',
@@ -181,11 +214,13 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
     step: `Turning point ${state.turningPoint} · Firefight`,
     title: `${LABEL[turn.player]} activates`,
     help: 'Tap one of your ringed operatives on the killzone, or pick it from the list below.',
-    // Point the board at the operatives being chosen between. Without this the killzone sits
-    // wherever the last screen left it, and the player is asked to pick from a list of things
-    // that are not on screen.
-    frame: framing(ready),
-    detent: 'rest',
+    armedNote: `${ready.length} ready · tap one on the killzone or pick it below`,
+    // Both teams. You choose who to activate by looking at what the enemy is doing, and
+    // framing only your own models put the opponent off screen for the whole battle.
+    frame: framing(Object.values(state.operatives).filter((o) => !o.removed && o.pos.x > -50)),
+    // `half`, not `rest`: at rest the sheet body is hidden, so this screen showed a single
+    // line — "Player 1 activates" — and nothing to act on, every activation, all game.
+    detent: 'half',
     turnOf: turn.player,
     targetIds: ready.map((o) => o.id),
     armed: { onOperative: (op) => (op.player === turn.player && op.ready ? setUi({ selectedId: op.id }) : undefined) },
@@ -218,9 +253,16 @@ export function guardInterruptPlan({ store, ui, setUi }: PlayArgs, offer: GuardO
   const { state, ctx } = store;
   const candidates = offer.operativeIds.map((id) => state.operatives[id]).filter((o): o is OperativeState => Boolean(o));
   const chosen = ui.selectedId ? candidates.find((o) => o.id === ui.selectedId) : undefined;
+  // Closing the window hands the phone back: `handedOverTo` is the interrupting player only
+  // for as long as the interrupt is open.
+  const closeWindow = () => setUi({ selectedId: undefined, weaponName: undefined, handedOverTo: undefined });
   const decline = () => {
     store.dispatch({ t: 'DeclineInterrupt', player: offer.player });
-    setUi({ selectedId: undefined, weaponName: undefined });
+    closeWindow();
+  };
+  const interrupt = (params: ActionParams, action: 'Shoot' | 'Fight') => {
+    store.dispatch({ t: 'OnGuardInterrupt', player: offer.player, operativeId: chosen!.id, action, params });
+    closeWindow();
   };
 
   if (chosen) {
@@ -251,15 +293,7 @@ export function guardInterruptPlan({ store, ui, setUi }: PlayArgs, offer: GuardO
               {targets.map(({ target, check }) => (
                 <button
                   key={target.id}
-                  onClick={() =>
-                    store.dispatch({
-                      t: 'OnGuardInterrupt',
-                      player: offer.player,
-                      operativeId: chosen.id,
-                      action: 'Shoot',
-                      params: { weaponName: weapon, targetId: target.id },
-                    })
-                  }
+                  onClick={() => interrupt({ weaponName: weapon, targetId: target.id }, 'Shoot')}
                 >
                   <IconTarget size={20} />
                   <span style={{ flex: 1, textAlign: 'left' }}>
@@ -276,15 +310,7 @@ export function guardInterruptPlan({ store, ui, setUi }: PlayArgs, offer: GuardO
               {engaged.map((e) => (
                 <button
                   key={e.id}
-                  onClick={() =>
-                    store.dispatch({
-                      t: 'OnGuardInterrupt',
-                      player: offer.player,
-                      operativeId: chosen.id,
-                      action: 'Fight',
-                      params: { meleeWeaponName: melee[0]!.name, targetId: e.id },
-                    })
-                  }
+                  onClick={() => interrupt({ meleeWeaponName: melee[0]!.name, targetId: e.id }, 'Fight')}
                 >
                   <IconMelee size={20} />
                   <span style={{ flex: 1, textAlign: 'left' }}>
@@ -459,10 +485,54 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
           ))}
         </div>
 
+        <PloyList store={store} player={op.player} />
+
         <Datacard store={store} op={op} />
       </>
     ),
   };
+}
+
+/**
+ * Firefight ploys. `UsePloy` is fully implemented in the reducer and every team module
+ * registers four of them, and nothing in the UI offered a single one — so command points had
+ * almost nothing to spend on for a whole battle.
+ */
+function PloyList({ store, player }: { store: Store; player: PlayerId }) {
+  const { state, ctx } = store;
+  const team = state.teams[player];
+  const ploys = (ctx.teams.get(team.teamId)?.ploys ?? []).filter((p) => p.kind === 'firefight');
+  if (ploys.length === 0) return null;
+  return (
+    <div class="actions">
+      <p class="section-title">Firefight ploys · {team.cp} CP</p>
+      {ploys.map((ply) => {
+        const used = team.ploysUsedTP.includes(ply.id);
+        const usable = ply.usable?.(state, player);
+        const ok = !used && team.cp >= ply.cp && (usable?.ok ?? true);
+        const why = used
+          ? 'already used this turning point'
+          : team.cp < ply.cp
+            ? `needs ${ply.cp}CP, you have ${team.cp}`
+            : (usable?.reason ?? '');
+        return (
+          <button
+            key={ply.id}
+            class={ok ? undefined : 'is-blocked'}
+            disabled={!ok}
+            onClick={() => store.dispatch({ t: 'UsePloy', player, ployId: ply.id })}
+          >
+            <span style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
+              <span class="entry-name">
+                {ply.name} · {ply.cp}CP
+              </span>
+              <span class={`entry-meta${ok ? '' : ' why'}`}>{ok ? ply.text : why}</span>
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 /* ------------------------------------------------------------ aiming a move */
@@ -470,7 +540,11 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
 function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: MoveAction): CommandPlan {
   const { state, ctx } = store;
   const dc = card(ctx, op);
-  const opts = moveOptionsFor(action);
+  // "Counteracting: ... it cannot move more than 2\"." The reducer applies that cap via
+  // `withCounteractCap`; without it here the preview shaded a full 6" of reachable board,
+  // drew the ghost green at 5", and the dispatch was then refused.
+  const counteracting = (state.opState['counteract'] as { operativeId?: string } | undefined)?.operativeId === op.id;
+  const opts = moveOptionsFor(action, counteracting ? 2 : undefined);
   const budget = moveBudget(ctx, state, op, opts);
   const points = ui.move?.dest ? [ui.move.dest] : [];
   const path = { points };
@@ -483,7 +557,7 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
     id: 'firefight.move',
     step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}`,
     title: `${action} ${op.letter}`,
-    help: `Up to ${budget.toFixed(0)}". Tap where ${op.letter} should end up; drag to adjust, two fingers to pan. The shaded area is everywhere it can legally reach.`,
+    help: `Up to ${budget.toFixed(0)}". Tap where ${op.letter} should end up; drag to adjust, two fingers to pan. The shading is roughly what is in range — the ghost turns red wherever it cannot actually finish.`,
     // `validateMove.total` is the CHARGED distance: every leg is rounded up to the inch, so it
     // is always a whole number. Showing only that reads as a bug ("I moved 4.2 and it says
     // 5"), so both numbers are shown and labelled.
@@ -492,6 +566,7 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
         ? `${rawInches(check).toFixed(1)}" — costs ${check.total} of ${budget.toFixed(0)}"`
         : (check.reason ?? 'that move is not legal')
       : 'Tap the killzone to choose a destination',
+    ...(check && !check.ok ? { armedTone: 'blocked' as const } : {}),
     frame: rectAround(op, Math.max(8, budget + 3)),
     detent: 'rest',
     turnOf: op.player,
@@ -516,15 +591,28 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
           ))}
         </g>
         {ui.move?.dest && (
-          <line
-            x1={op.pos.x}
-            y1={op.pos.y}
-            x2={ui.move.dest.x}
-            y2={ui.move.dest.y}
-            stroke={check?.ok ? '#62d08a' : '#ff6b5c'}
-            stroke-width={0.08}
-            stroke-dasharray="0.3 0.2"
-          />
+          <>
+            <line
+              x1={op.pos.x}
+              y1={op.pos.y}
+              x2={ui.move.dest.x}
+              y2={ui.move.dest.y}
+              stroke={check?.ok ? '#5fd08a' : '#ff7a6b'}
+              stroke-width={0.08}
+              stroke-dasharray="0.3 0.2"
+            />
+            {/* The operative's real base where it would end up. A dashed line ending in mid
+                air answers neither "where do I end up" nor "how far is that". */}
+            <polygon
+              points={basePerimeter(ui.move.dest, dc.base, op.rot)
+                .map((pt) => `${pt.x.toFixed(3)},${pt.y.toFixed(3)}`)
+                .join(' ')}
+              fill={check?.ok ? '#5fd08a' : '#ff7a6b'}
+              fill-opacity={0.34}
+              stroke={check?.ok ? '#5fd08a' : '#ff7a6b'}
+              stroke-width={0.07}
+            />
+          </>
         )}
       </g>
     ),
@@ -592,7 +680,9 @@ function ruleTextFor(action: MoveAction): string {
 function shootPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, weaponName: string): CommandPlan {
   const { state, ctx } = store;
   const targets = validTargets(ctx, state, op, weaponName);
-  const chosen = targets.find((t) => t.target.id === ui.inspect?.to);
+  // Its OWN field. Reading the line-of-sight inspector's target here meant a model picked to
+  // answer "can I see him?" arrived pre-armed as the thing about to be shot.
+  const chosen = targets.find((t) => t.target.id === ui.shootTargetId);
 
   return {
     id: 'firefight.shoot',
@@ -607,7 +697,10 @@ function shootPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, weaponNam
     selectedId: op.id,
     targetIds: targets.map((t) => t.target.id),
     armed: {
-      onOperative: (t) => (targets.some((v) => v.target.id === t.id) ? setUi({ inspect: { from: op.id, to: t.id } }) : undefined),
+      onOperative: (t) => (targets.some((v) => v.target.id === t.id) ? setUi({ shootTargetId: t.id }) : undefined),
+      // A no-op point handler, so a tap on empty board is swallowed by the arm instead of
+      // falling through to `onBoardClick` and clearing what the player has already picked.
+      commit: () => undefined,
     },
     highlights: chosen ? (
       <line x1={op.pos.x} y1={op.pos.y} x2={chosen.target.pos.x} y2={chosen.target.pos.y} stroke="#ffc94a" stroke-width={0.07} stroke-dasharray="0.4 0.25" style={{ pointerEvents: 'none' }} />
@@ -622,10 +715,10 @@ function shootPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, weaponNam
         onClick: () => {
           if (!chosen) return;
           store.dispatch({ t: 'PerformAction', operativeId: op.id, action: 'Shoot', params: { weaponName, targetId: chosen.target.id } });
-          setUi({ weaponName: undefined, inspect: undefined });
+          setUi({ weaponName: undefined, shootTargetId: undefined });
         },
       },
-      { id: 'cancel-shoot', label: 'Cancel', tone: 'quiet', onClick: () => setUi({ weaponName: undefined, inspect: undefined }) },
+      { id: 'cancel-shoot', label: 'Cancel', tone: 'quiet', onClick: () => setUi({ weaponName: undefined, shootTargetId: undefined }) },
     ],
     body: (
       <div class="actions">
@@ -635,7 +728,7 @@ function shootPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, weaponNam
           <button
             key={target.id}
             aria-pressed={target.id === chosen?.target.id}
-            onClick={() => setUi({ inspect: { from: op.id, to: target.id } })}
+            onClick={() => setUi({ shootTargetId: target.id })}
           >
             <span style={{ flex: 1, textAlign: 'left' }}>
               {target.letter} — {card(ctx, target).name}
@@ -652,21 +745,78 @@ function shootPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, weaponNam
 
 /* -------------------------------------------------------------- end states */
 
+/**
+ * The scoreboard between turning points.
+ *
+ * Scoring is the entire point of the game and it is the one thing that happens with nobody
+ * touching the screen — every op resolves inside `endTurningPoint`. So this screen exists to
+ * say what just happened, in the ops' own words, before the board moves on. It reads the
+ * log rather than a diff of VP totals so that a 0VP turning point still gets an honest
+ * answer ("nothing scored") instead of a blank panel.
+ */
 export function endOfTpPlan({ store }: PlayArgs): CommandPlan {
   const { state } = store;
+  const last = state.turningPoint;
+  const scored = state.log.filter((e) => e.kind === 'score' && e.tp === last);
+  const forPlayer = (p: PlayerId) => scored.filter((e) => e.player === p);
+  const shared = scored.filter((e) => !e.player);
+
   return {
     id: 'endOfTP',
-    step: `Turning point ${state.turningPoint}`,
-    title: 'End of the turning point',
-    help: 'Victory points are scored, then the next turning point begins.',
-    frame: null,
-    detent: 'rest',
-    actions: [{ id: 'advance', label: 'Next turning point', tone: 'primary', onClick: () => store.dispatch({ t: 'AdvancePhase' }) }],
+    step: `Turning point ${last} of ${state.maxTurningPoints || 4}`,
+    title:
+      scored.length === 0
+        ? 'Turning point over — nothing scored'
+        : `Turning point over — P1 ${state.teams.p1.vp}VP · P2 ${state.teams.p2.vp}VP`,
+    help: 'Victory points are scored at the end of every turning point. Check them, then begin the next one.',
+    frame: 'fit',
+    detent: 'half',
+    actions: [{ id: 'advance', label: `Begin turning point ${last + 1}`, tone: 'primary', onClick: () => store.dispatch({ t: 'AdvancePhase' }) }],
+    body: (
+      <div>
+        {(['p1', 'p2'] as PlayerId[]).map((p) => {
+          const mine = forPlayer(p);
+          return (
+            <div key={p} class="card">
+              <h2>{LABEL[p]}</h2>
+              <div class="row">
+                <span class="tag">{state.teams[p].vp} VP</span>
+                <span class="tag">{state.teams[p].cp} CP</span>
+                <span class="tag">
+                  {aliveOperatives(state, p).length} of {state.teams[p].operativeIds.length} standing
+                </span>
+              </div>
+              {mine.length > 0 ? (
+                <ul class="score-list">
+                  {mine.map((e) => (
+                    <li key={e.seq}>{e.text}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="dim" style={{ margin: 'var(--s2) 0 0' }}>
+                  Nothing scored this turning point.
+                </p>
+              )}
+            </div>
+          );
+        })}
+        {shared.length > 0 && (
+          <div class="card">
+            <h2>Also this turning point</h2>
+            <ul class="score-list">
+              {shared.map((e) => (
+                <li key={e.seq}>{e.text}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    ),
   };
 }
 
-export function battleEndPlan({ store }: PlayArgs): CommandPlan {
-  const { state } = store;
+export function battleEndPlan({ store, setUi }: PlayArgs): CommandPlan {
+  const { state, ctx } = store;
   const winner = state.winner;
   return {
     id: 'battleEnd',
@@ -674,9 +824,21 @@ export function battleEndPlan({ store }: PlayArgs): CommandPlan {
     title:
       winner === 'draw' ? 'A draw' : winner ? `${LABEL[winner]} wins` : 'The battle has ended',
     help: `P1 ${state.teams.p1.vp}VP · P2 ${state.teams.p2.vp}VP`,
-    frame: null,
+    frame: 'fit',
     detent: 'half',
-    actions: [],
+    // Without this the battle's end was terminal: no action, and the only route that starts a
+    // battle is disabled once setup is over.
+    actions: [
+      {
+        id: 'new-battle',
+        label: 'New battle',
+        tone: 'primary',
+        onClick: () => {
+          store.reset(createBattle(ctx, { map: state.map, seed: state.seed + 1, mode: state.mode, critOpId: defaultCritOpId() }));
+          setUi({ selectedId: undefined, placingId: undefined, move: undefined, weaponName: undefined, handedOverTo: undefined });
+        },
+      },
+    ],
     body: (
       <div>
         {(['p1', 'p2'] as PlayerId[]).map((p) => (

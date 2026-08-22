@@ -582,18 +582,19 @@ export interface ActionAvailability {
 export function actionAvailability(ctx: GameContext, state: GameState, op: OperativeState): ActionAvailability[] {
   return availableActions(ctx, state, op).map((row) => {
     const needsTarget = NEEDS_TARGET[row.def.id];
-    if (!row.ok) return needsTarget ? { ...row, needsTarget } : row;
-    // A parameterised action can only be checked once it has been aimed; an unparameterised
-    // one can be checked right now, and often fails.
-    if (needsTarget) {
-      // These still have parameter-free preconditions worth reporting early: `check` is run
-      // with empty params and only a reason that is NOT about the missing parameter is kept.
-      const probe = row.def.check(ctx, state, op, {});
-      const aboutParams = probe.reason ? /no path supplied|no target|no marker|no part|select a/i.test(probe.reason) : true;
-      return probe.ok || aboutParams
-        ? { ...row, needsTarget }
-        : { ...row, ok: false, reason: probe.reason, needsTarget };
-    }
+    // An action that must be AIMED cannot be judged before it has been: `check` with empty
+    // params always fails, and its reason is about the missing parameter, not about the
+    // operative. Report it as needing a target and let the caller judge the aimed version
+    // with `validateMove` / `validTargets`.
+    //
+    // Do NOT try to sort "it needs a target" from "it is genuinely impossible" by reading the
+    // reason string. That was tried, and it disabled every weapon in the game for a whole
+    // battle, because Shoot's reason is "weapon and target required" and the pattern did not
+    // include it.
+    if (needsTarget) return { ...row, needsTarget };
+    if (!row.ok) return row;
+    // A parameter-free action can be checked right now, and often fails: Guard while engaged,
+    // Pass in the wrong step. Without this the caller offers a control the reducer rejects.
     const verdict = row.def.check(ctx, state, op, {});
     return verdict.ok ? row : { ...row, ok: false, ...(verdict.reason ? { reason: verdict.reason } : {}) };
   });

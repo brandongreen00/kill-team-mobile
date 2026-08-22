@@ -65,12 +65,15 @@ export function Sheet({ detent, onDetent, modal = false, onRestHeight, peek, chi
     if (!el || !root) return;
     const read = () => {
       const stage = root.parentElement?.getBoundingClientRect().height ?? 0;
-      if (stage > 0) setStagePx(stage);
+      // Same 1px slop as the rest height: a raw sub-pixel rect re-renders on every frame of a
+      // resize, and this effect rebuilds the observer each render.
+      if (stage > 0) setStagePx((cur) => (Math.abs(cur - stage) < 1 ? cur : stage));
       // grab handle + peek row. Measured, so the resting sheet is exactly as tall as the
       // current prompt needs and never a pixel more of the board than it has to take.
       const grab = root.querySelector('.sheet-grab')?.getBoundingClientRect().height ?? 20;
       const h = Math.ceil(el.getBoundingClientRect().height + grab);
-      const next = Math.max(96, Math.min(h, stage > 0 ? stage * 0.6 : h));
+      // Never taller than the `half` detent, or expanding the sheet would make it SMALLER.
+      const next = Math.max(96, Math.min(h, stage > 0 ? stage * HALF : h));
       setRestPx((cur) => (Math.abs(cur - next) < 1 ? cur : next));
     };
     read();
@@ -82,7 +85,9 @@ export function Sheet({ detent, onDetent, modal = false, onRestHeight, peek, chi
     ro.observe(el);
     if (root.parentElement) ro.observe(root.parentElement);
     return () => ro.disconnect();
-  });
+    // `side` only: with no dependency array this tore down and rebuilt the observer on every
+    // render. The observer itself is what keeps the measurement current.
+  }, [side]);
 
   useEffect(() => {
     // A side sheet insets the board horizontally, never vertically.

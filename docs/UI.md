@@ -127,9 +127,15 @@ Rules the gesture layer keeps:
 - A base is drawn **true to scale** (control range is measured off it) but hit at **thumb
   size**: an invisible disc gives every operative at least a 44px target, and the letter is
   drawn at a constant 13px however far you zoom.
-- The zoom cluster floats on the side **away from whatever is armed** — every killzone's drop
-  zones run up the left and right edges, which is exactly where a fixed corner would steal the
-  taps that place operatives.
+- The zoom cluster floats on one side for the whole battle, chosen from the KILLZONE's drop
+  zones (whose edge they crowd less), never from the current screen's framing. It used to be
+  derived per screen and hopped corners between deploy and activate — a control that moves is
+  a control you re-find every time (D-055).
+- **One finger aims, one mouse pans.** A finger drags a ghost whenever a base is armed; a
+  mouse gets the desktop idiom instead — hover previews the ghost, drag pans, click commits —
+  because a mouse has exactly one pointer and would otherwise be unable to pan at all on the
+  deploy and move screens (D-052). An arm with a `commit` but no `base` (the drop-zone picker,
+  the shooting screen's tap-swallower) draws no ghost and keeps its pan.
 - `variant="thumb"` boards (the 24 killzone-browser previews) stay inert.
 
 ### Deployment
@@ -149,6 +155,25 @@ The complaint this exists to answer. The board *is* the screen:
 5. **Undo** takes back a placement. Undo is empirical, not declarative: the store snapshots
    before every intent and offers the undo only if the RNG cursor and the roll journal are
    unchanged across it, because `Reposition` rolls a D3 on a mine and `Breach` rolls a D6.
+
+### Equipment set-up
+
+Between the reveal and deployment, if either player bought equipment that occupies space on the
+killzone. Same shape as deployment — the board is the screen, the item is auto-armed, the ghost
+is its real footprint — with one difference that matters:
+
+**Where an item may go is asked of the engine, cell by cell, not approximated by the drop
+zone.** Every option carries its own constraints, so the screen samples
+`validateEquipmentPlacement` on a 0.75" grid and shades the cells that pass (D-051). There is
+always a way out (*"Set up no more equipment"*), because an item can legitimately have nowhere
+legal to go and the battle must not be strandable on this screen.
+
+### End of a turning point
+
+Scoring is the one thing that happens with nobody touching the screen, so the game now stops on
+it (D-049) and shows what each side scored, in the ops' own words, read out of the log. Before
+this the phase was overwritten inside the same reducer call and the screen was unreachable: up
+to 6VP a side simply appeared in the top bar during the next initiative roll.
 
 ### Movement
 
@@ -273,6 +298,22 @@ above its operative and follows pan and zoom. Each `Die` keeps its `id` for the 
 so a re-roll animates only the dice that were re-rolled and shows `↻4`; retained / discarded /
 blocked / struck are visually distinct; Accurate's auto-successes render as unrolled ✓ dice.
 
+## Reactive windows
+
+`decisionPlan` renders the generic case — the prompt, the printed rule text, and one obvious
+default the engine marks `auto`/`keep`. Two things are not generic:
+
+- **Defence allocation** gets a screen of its own (`command/allocate.tsx`). The rules give the
+  defender a real choice here and the first build shipped an "Allocate manually" button that
+  ran the automatic allocation, because only the `auto` option carried any data (D-053). It now
+  shows the incoming hits as chips: tap one to save against it, the allocator spends the
+  cheapest legal defence dice and refuses what cannot be paid for, and the damage total updates
+  before anything is committed.
+- **The handover.** In a match the phone is assumed to be with whoever is acting
+  (`deviceHolder`), so a reactive window belonging to the other player asks for it by name
+  first, and hands it back on resolve (D-054). Sandbox mode skips this entirely — one person
+  driving both sides does not want to confirm a handover every time a save is rolled.
+
 ## Screenshots
 
 `docs/ui-review/` holds a captured pass over the whole flow at three viewports (phone portrait,
@@ -284,8 +325,6 @@ a visual review, not fixtures.
 - No pre-battle screen: the app boots straight into a battle on the first killzone. Choosing a
   killzone and a crit op is behind the menu, and `state.critOpId` is unset by default, so no
   crit op scores.
-- Equipment **placement** (`setup.step = 'placeEquipment'`) has no screen, and the reducer has
-  no transition into that step.
 - Waypoints: a move is a single straight leg to the ghost. A path around a corner has to be
   taken in two actions.
 - Dice are sized in world inches, so they shrink with the zoom instead of staying a constant

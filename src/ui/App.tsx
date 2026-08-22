@@ -32,7 +32,7 @@ import { applyLoadouts } from '../teams/selection.ts';
 import { createGameContext } from '../core/game.ts';
 import { SeededRng } from '../core/rng.ts';
 import { createBattle } from '../core/init.ts';
-import { loadMaps, loadTeams, type TeamData } from './data.ts';
+import { defaultCritOpId, loadMaps, loadTeams, type TeamData } from './data.ts';
 import { IconAlert, IconBack, IconLog, IconMap, IconMenu, IconRoster, IconTarget } from './icons.tsx';
 import type { GameState, KillzoneMap, PlayerId } from '../core/types.ts';
 
@@ -70,7 +70,7 @@ export function App() {
         teams: BATCH_1,
       });
       const map = m[0] ?? fallbackMap();
-      const s = new Store(createBattle(ctx, { map, seed: 1, mode: 'match' }), ctx);
+      const s = new Store(createBattle(ctx, { map, seed: 1, mode: 'match', critOpId: defaultCritOpId() }), ctx);
       setStore(s);
       setLocalStore(s);
       s.subscribe(() => force((n) => n + 1));
@@ -88,7 +88,14 @@ export function App() {
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     const rejection = store?.lastRejection;
-    if (!rejection || rejection.seq === lastToastSeq.current) return;
+    // The store clears `lastRejection` the moment anything succeeds; the toast has to go with
+    // it, or a refusal from the start of deployment is still pinned over the board a phase later.
+    if (!rejection) {
+      if (toastTimer.current) clearTimeout(toastTimer.current);
+      setToasts((t) => (t.length === 0 ? t : []));
+      return;
+    }
+    if (rejection.seq === lastToastSeq.current) return;
     lastToastSeq.current = rejection.seq;
     setToasts((t) => {
       const cur = t[0];
@@ -144,9 +151,30 @@ export function App() {
   const pickMap = (id: string) => {
     const map = maps.find((m) => m.id === id);
     if (!map) return;
-    store.reset(createBattle(store.ctx, { map, seed: state.seed, mode: state.mode }));
+    store.reset(createBattle(store.ctx, { map, seed: state.seed, mode: state.mode, critOpId: defaultCritOpId() }));
     setUiState(emptyUi);
   };
+
+  /**
+   * Which side the zoom cluster floats on — decided by the KILLZONE, once, and then never
+   * again for the rest of the battle.
+   *
+   * It used to be derived from the screen's framing, so it hopped corners between deploy and
+   * activate and back again. Dodging the armed area is worth something, but not this: a
+   * control that moves is a control you have to re-find every single time, which is exactly
+   * the "where did that go?" feeling the overhaul exists to remove. So it still dodges — it
+   * just dodges the drop zones, which are a property of the map and do not move.
+   */
+  const controlsSide: 'left' | 'right' = (() => {
+    const mid = state.map.board.w / 2;
+    let left = 0;
+    let right = 0;
+    for (const poly of [...state.map.dropZones.p1, ...state.map.dropZones.p2])
+      for (const p of poly) (p.x < mid ? (left += 1) : (right += 1));
+    // A tie means both edges are equally spoken for (zones up the left and right, or bands
+    // across the top and bottom): fall back to the thumb side.
+    return right > left ? 'left' : 'right';
+  })();
 
   const board = (
     <div class="board-pane">
@@ -154,8 +182,7 @@ export function App() {
         state={state}
         ctx={store.ctx}
         frame={plan.frame ?? null}
-        // Flip the zoom cluster away from whatever the board is currently aimed at.
-        controlsSide={plan.frame && plan.frame.x + plan.frame.w / 2 > state.map.board.w / 2 ? 'left' : 'right'}
+        controlsSide={controlsSide}
         armed={plan.armed ?? null}
         highlights={plan.highlights}
         overlays={<SequenceOverlay state={state} decision={decision} />}
@@ -179,8 +206,8 @@ export function App() {
       <span class="prompt-step">{plan.step}</span>
       <h2 class="prompt-title">{plan.title}</h2>
       {plan.armedNote && (
-        <div class="armed-banner">
-          <IconTarget size={18} />
+        <div class={`armed-banner${plan.armedTone === 'blocked' ? ' is-blocked' : ''}`}>
+          {plan.armedTone === 'blocked' ? <IconAlert size={18} /> : <IconTarget size={18} />}
           <span>{plan.armedNote}</span>
         </div>
       )}
@@ -256,7 +283,8 @@ export function App() {
           });
           // The reducer keeps no loadout of its own, so the resolved weapons are recorded in
           // the op-state scratch space the team modules read (`selection.applyLoadouts`).
-          if (ok) applyLoadouts(store.state, store.state.teams[selectingFor].operativeIds, weapons);
+          if (!ok) return; // The reducer refused it: stay on the builder with the picks intact.
+          applyLoadouts(store.state, store.state.teams[selectingFor].operativeIds, weapons);
           setUi({ route: undefined, handedOverTo: undefined });
         }}
       />
@@ -301,8 +329,15 @@ export function App() {
     </div>
   );
 
+  /**
+   * The plan's stable id, published on the topbar.
+   *
+   * The whole shell is derived from one `CommandPlan`, so this single attribute says exactly
+   * which screen is up — which is what the e2e suite and the screenshot capture need in order
+   * to assert on a state rather than on a sentence that copy edits keep breaking.
+   */
   const topbar = (
-    <header class="topbar">
+    <header class="topbar" data-screen={plan.id}>
       <h1>Kill Team</h1>
       <div class="spacer" />
       <div class="scoreline">
@@ -346,11 +381,13 @@ export function App() {
   const toastLayer = toasts.length > 0 && (
     <div class="toasts" role="status" aria-live="polite">
       {toasts.map((t) => (
-        <div key={t.id} class="toast is-danger">
+        <button key={t.id} class="toast is-danger" onClick={() => setToasts([])} aria-label={`Dismiss: ${t.text}`}>
           <IconAlert size={20} />
-          <span>{t.text}</span>
-          {t.count > 1 && <span class="toast-count">×{t.count}</span>}
-        </div>
+          <span>
+            {t.text}
+            {t.count > 1 && <span class="toast-count"> — {t.count} times</span>}
+          </span>
+        </button>
       ))}
     </div>
   );

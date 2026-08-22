@@ -29,8 +29,9 @@ export interface UiState {
   placingId?: string;
   /** A move being aimed: the action, and the destination under the finger. */
   move?: { action: MoveAction; dest?: Vec2; destZ?: number } | undefined;
-  /** Shooting: which weapon the target list is for. */
+  /** Shooting: which weapon the target list is for, and which enemy is picked. */
   weaponName?: string;
+  shootTargetId?: string | undefined;
   /** Targeting-line inspector: tap a shooter, then a target. */
   inspect?: { from?: string; to?: string } | undefined;
   /** Pass-and-play: which player has confirmed they are holding the device. */
@@ -69,12 +70,17 @@ export interface CommandPlan {
   help?: string;
   /** Shown as a highlighted strip in the peek while the board is armed. */
   armedNote?: string;
+  /** 'blocked' paints the strip as a refusal; a refusal must not look like an instruction. */
+  armedTone?: 'info' | 'blocked';
   /** Up to two actions in the peek; the rest belong in `body`. */
   actions: CommandAction[];
   /** Everything revealed when the sheet is expanded. */
   body?: preact.ComponentChildren;
-  /** Where to point the board. Null leaves the player's own framing alone. */
-  frame?: WorldRect | null;
+  /**
+   * Where to point the board. A rect frames that region without ever letterboxing; `'fit'`
+   * asks for the whole killzone and accepts the bars; null leaves the player's framing alone.
+   */
+  frame?: WorldRect | 'fit' | null;
   /** What the next board tap means. */
   armed?: ArmedState | null;
   /** Drawn under the operatives: drop zones, reachability, the planned path. */

@@ -20,8 +20,11 @@ async function ready(page: Page): Promise<void> {
 
 const promptTitle = (page: Page) => page.locator('.prompt-title').first();
 
+/** The plan id the shell is currently showing — the state, not the sentence. */
+const screenId = (page: Page) => page.locator('.topbar').getAttribute('data-screen');
+
 /** Drive setup as far as deployment: roll off, drop zone, two kill teams, reveal. */
-async function setUpToDeployment(page: Page): Promise<void> {
+async function setUpToDeployment(page: Page, opts: { equipment?: boolean } = {}): Promise<void> {
   await page.getByRole('button', { name: /Roll off/ }).click();
   const take = page.getByRole('button', { name: /Take initiative/ });
   if (await take.count()) await take.click();
@@ -48,13 +51,17 @@ async function setUpToDeployment(page: Page): Promise<void> {
     if (await handover.count()) await handover.click();
     await expect(promptTitle(page)).toContainText(/equipment and tac op/i);
     await page.locator('.tac-ops button').first().click();
-    const confirm = page.getByRole('button', { name: /^Confirm$/ });
+    if (opts.equipment) {
+      const pick = page.locator('.equipment-options button:not([disabled])').first();
+      if (await pick.count()) await pick.click();
+    }
+    const confirm = page.getByRole('button', { name: /^Confirm — / });
     await expect(confirm).toBeEnabled();
     await confirm.click();
   }
 
   await page.getByRole('button', { name: /Reveal and deploy/ }).click();
-  await expect(promptTitle(page)).toContainText(/^Place /);
+  if (!opts.equipment) await expect(promptTitle(page)).toContainText(/^Place /);
 }
 
 test('app loads, renders the board, and never scrolls horizontally', async ({ page }) => {
@@ -311,4 +318,54 @@ test('the menu reaches the rosters, the log and the killzones', async ({ page })
   await expect(page.getByRole('dialog', { name: 'Battle log' })).toBeVisible();
   await page.getByRole('button', { name: 'Back' }).click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
+});
+
+
+test('equipment chosen at the loadout is set up on the board before anyone deploys', async ({ page }) => {
+  // The `placeEquipment` setup step existed in the types and the intent worked, but nothing
+  // ever entered it, so a barricade or an Ammo Cache paid for at the loadout was simply never
+  // placed. Both halves are pinned here: that the step is reached, and that it can be left.
+  await page.goto('/');
+  await ready(page);
+  await setUpToDeployment(page, { equipment: true });
+
+  expect(await screenId(page)).toBe('setup.placeEquipment');
+  await expect(promptTitle(page)).toContainText(/^Set up |has no equipment to set up$/);
+
+  // The legality field is the engine's own answer, sampled cell by cell — not a drop-zone
+  // rectangle, because equipment constraints are per item and mostly are not the drop zone.
+  await expect(page.locator('.reach rect').first()).toBeVisible();
+
+  // Tapping a shaded cell sets the item up.
+  const cell = await page.evaluate(() => {
+    const cells = [...document.querySelectorAll('.reach rect')];
+    const mid = cells[Math.floor(cells.length / 2)];
+    if (!mid) return null;
+    const b = mid.getBoundingClientRect();
+    const ctrl = document.querySelector('.board-controls')?.getBoundingClientRect();
+    const p = { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+    if (ctrl && p.x > ctrl.left - 12 && p.x < ctrl.right + 12 && p.y > ctrl.top - 12 && p.y < ctrl.bottom + 12) return null;
+    return p;
+  });
+  if (cell) {
+    await page.mouse.click(cell.x, cell.y);
+    await expect(page.locator('.toast')).toHaveCount(0);
+  }
+
+  // And there is always a way out, so an item with nowhere legal cannot strand the battle.
+  for (let i = 0; i < 6; i++) {
+    if ((await screenId(page)) !== 'setup.placeEquipment') break;
+    await page.getByRole('button', { name: /Set up no more equipment|Nothing to set up/ }).first().click();
+  }
+  expect(await screenId(page)).toBe('setup.deploy');
+});
+
+test('the shell publishes which screen it is on', async ({ page }) => {
+  // One attribute derived from the single `CommandPlan`, so a test can assert on the state
+  // rather than on copy that keeps being edited.
+  await page.goto('/');
+  await ready(page);
+  expect(await screenId(page)).toBe('setup.rollOff');
+  await page.getByRole('button', { name: /Roll off/ }).click();
+  expect(await screenId(page)).toMatch(/^setup\.(initiative|dropZone)$/);
 });

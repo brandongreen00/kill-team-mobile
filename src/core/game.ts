@@ -9,7 +9,7 @@
 import { makeContext, type GameContext, type PlaceEquipmentIntent } from './context.ts';
 import { ALL_OPS, opsMap, initOps, resolveOpDecision, scoreEndOfBattle, scoreEndOfTurningPoint } from './ops/index.ts';
 import { beginInitiative, grantSetupRerollCard } from './ops/initiativeCards.ts';
-import { equipmentMap, placeEquipment } from './equipment/index.ts';
+import { equipmentMap, equipmentToAct, placeEquipment } from './equipment/index.ts';
 import type { TeamModule } from './hooks.ts';
 import type { Rng } from './rng.ts';
 import type { Datacard, GameState, KillzoneMap, PlayerId } from './types.ts';
@@ -33,7 +33,7 @@ export function createGameContext(setup: GameSetup): GameContext {
   // --- seams the reducer and the decision layer call through ---------------
   ctx.scoreEndOfTurningPoint = (c, s) => scoreEndOfTurningPoint(c, s);
   ctx.scoreEndOfBattle = (c, s) => scoreEndOfBattle(c, s);
-  ctx.resolveOpDecision = (c, s, id, optionId, data) => resolveOpDecision(c, s, id, optionId, data).ok;
+  ctx.resolveOpDecision = (c, s, d, optionId, data) => resolveOpDecision(c, s, d, optionId, data).ok;
   ctx.beginInitiative = (c, s) => beginInitiative(c, s);
   ctx.grantSetupRerollCard = (s: GameState, player: PlayerId) => grantSetupRerollCard(s, player);
   ctx.initOps = (c, s) => initOps(c, s);
@@ -50,6 +50,7 @@ export function createGameContext(setup: GameSetup): GameContext {
   };
   ctx.placeEquipment = (c, s, intent: PlaceEquipmentIntent) =>
     placeEquipment(c, s, { t: 'PlaceEquipment', ...intent });
+  ctx.equipmentToAct = (s) => equipmentToAct(s);
 
   return ctx;
 }

@@ -21,6 +21,7 @@ import {
   killGradeFor,
   killGradeThresholds,
   opsMap,
+  primaryOpChoices,
   resolveOpDecision,
   scoreEndOfBattle,
   scoreEndOfTurningPoint,
@@ -28,6 +29,8 @@ import {
 } from '../src/core/ops/index.ts';
 import { equipmentMap } from '../src/core/equipment/index.ts';
 import { heavyBlock, testContext, testMap } from './fixtures.ts';
+import { createGameContext } from '../src/core/game.ts';
+import { SeededRng } from '../src/core/rng.ts';
 import type { GameContext } from '../src/core/context.ts';
 import type { ActionParams } from '../src/core/intents.ts';
 import type { GameState, PlayerId, Vec2 } from '../src/core/types.ts';
@@ -632,5 +635,34 @@ describe('scripted four-turning-point games', () => {
     expect(vpFromOp(game.state, 'p1', 'tac.plantDevices')).toBe(3); // 1VP a turning point from TP2
     expect(vpFromOp(game.state, 'p1', 'primary')).toBe(2); // half of 3, rounding up
     expect(game.state.teams.p1.vp).toBe(11);
+  });
+});
+
+// ---------------------------------------------------------------------------
+describe('op-owned decisions actually resolve', () => {
+  /**
+   * `resolveDecision` removes the decision from `state.pending` before it dispatches. While
+   * the op seam took the decision's ID, every op-owned decision — the secret primary op,
+   * Stake Claim, Reboot, Envoy, Flank — looked itself up, found nothing, and was logged as
+   * "had no handler — recorded only". The primary op alone is worth up to 3VP a side.
+   */
+  it('records the primary op chosen through the ordinary decision channel', () => {
+    // A context with the ops layer actually wired in — the seam this test is about.
+    const ctx = createGameContext({ rng: new SeededRng(4), maps: [testMap()] });
+    const s = createBattle(ctx, { map: testMap(), seed: 4, critOpId: 'crit.secure' });
+    s.teams.p1.tacOpId = 'tac.plantDevices';
+    s.teams.p2.tacOpId = 'tac.plantDevices';
+    s.pending.push({
+      id: 'primaryOp-p1',
+      who: 'p1',
+      kind: 'primaryOp',
+      prompt: 'Secretly select your primary op',
+      options: primaryOpChoices(s, 'p1').map((id) => ({ id, label: id })),
+    });
+    const chosen = primaryOpChoices(s, 'p1')[0]!;
+    const out = reduce(s, { t: 'ResolveDecision', decisionId: 'primaryOp-p1', optionId: chosen }, ctx);
+    expect(out.ok).toBe(true);
+    expect(out.state.teams.p1.primaryOpId).toBe(chosen);
+    expect(out.state.log.some((l) => /had no handler/.test(l.text))).toBe(false);
   });
 });

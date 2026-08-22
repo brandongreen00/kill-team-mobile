@@ -86,7 +86,7 @@ const TYPE_FILL: Record<string, string> = {
   Blocking: '#68717f',
   Exposed: '#7a808a',
   Insignificant: '#7a808a',
-  Hazardous: '#41678a',
+  Hazardous: '#215d7a',
   Barred: '#3d7550',
   Obstructing: '#9c7534',
   Protective: '#9c7534',
@@ -142,10 +142,12 @@ export interface BoardProps {
    */
   viewport?: Viewport;
   /**
-   * A WORLD-space rectangle to aim the board at. Changing it re-frames — this is how
-   * deployment shows your drop zone and an activation shows where an operative can go.
+   * Where to aim the board. A WORLD-space rectangle frames that region and never zooms out
+   * past fill, so aiming at something can never letterbox; `'fit'` is the explicit opposite —
+   * show the WHOLE killzone and accept the bars — which is what a summary screen ("both kill
+   * teams are on the killzone", the end of a turning point, the result) actually wants.
    */
-  frame?: { x: number; y: number; w: number; h: number } | null;
+  frame?: { x: number; y: number; w: number; h: number } | 'fit' | null;
   /** Drawn under the operatives, inside the world transform: zones, reachability, paths. */
   highlights?: preact.ComponentChildren;
   /** Drawn over everything: dice pools, firing lines. */
@@ -187,13 +189,19 @@ export function Board({
   targetIds,
   controlsSide = 'right',
   showGrid = true,
-  showZones = true,
+  showZones,
   variant = 'main',
 }: BoardProps) {
   const map = state.map;
   const board = map.board;
   /** Thumbnails are previews: no gestures, no controls, always the whole killzone. */
   const interactive = variant === 'main';
+  /**
+   * Drop zones and territories are a SETUP construct. Left on for the whole battle they put an
+   * orange wash under player 1's orange operatives, which is the one distinction that has to
+   * stay readable.
+   */
+  const zones = showZones ?? state.phase === 'setup';
 
   const svgRef = useRef<SVGSVGElement | null>(null);
   /**
@@ -253,7 +261,12 @@ export function Board({
   // Re-seed only when the caller actually changes something: a new killzone, a new explicit
   // `viewport`, a new `frame`, or a pane that changed shape. Anything else would fight the
   // user's own pan mid-gesture.
-  const frameKey = frame ? `${frame.x.toFixed(2)},${frame.y.toFixed(2)},${frame.w.toFixed(2)},${frame.h.toFixed(2)}` : '-';
+  const frameKey =
+    frame === 'fit'
+      ? 'fit'
+      : frame
+        ? `${frame.x.toFixed(2)},${frame.y.toFixed(2)},${frame.w.toFixed(2)},${frame.h.toFixed(2)}`
+        : '-';
   const vpKey = viewport ? `${viewport.x},${viewport.y},${viewport.w},${viewport.h}` : '-';
   const seedKey = `${map.id}|${vpKey}|${frameKey}`;
   const seedRef = useRef<string | null>(null);
@@ -274,6 +287,7 @@ export function Board({
     seedRef.current = seedKey;
     aspectRef.current = aspect;
     if (viewport) return setOwnVp(viewport);
+    if (frame === 'fit') return setOwnVp(fitViewport(board, { aspect }));
     if (frame) return setOwnVp(frameRect(frame, board, { aspect }, 1.5));
     // A pane reshape (sheet moved, device rotated) must not throw away where the player is
     // looking: re-clamp what they had rather than jumping back to the default framing.
@@ -295,12 +309,33 @@ export function Board({
   /** A ghost drag in progress — one finger, while the board is armed. */
   const ghostDrag = useRef<{ id: number; rect: ScreenRect } | null>(null);
 
+  /**
+   * Does the current arm actually aim a THING at a point? Only then is a ghost meaningful.
+   *
+   * Two arms take a `commit` without a base: the drop-zone picker (a tap chooses a zone) and
+   * the shooting screen (`commit` is a no-op that swallows taps on empty board). Both drew a
+   * phantom 32mm disc under the finger for an operative that does not exist, and — worse —
+   * both stole the one-finger pan, because any `commit` used to start a ghost drag. Gating on
+   * `base` fixes the phantom and gives those screens their pan back.
+   */
+  const aimsABase = (): boolean => Boolean(armedRef.current?.commit && armedRef.current.base);
+
   /** True once, then rearmed — a pinch or a pan must never place an operative. */
   const gestureConsumedClick = (): boolean => {
     if (!suppressClick.current) return false;
     suppressClick.current = false;
     return true;
   };
+
+  /**
+   * A ghost belongs to the arm that produced it. Without this, walking off the move screen
+   * with the cursor still over the board left the previous screen's green disc sitting there
+   * as if something were still being aimed.
+   */
+  const armKey = armed?.commit && armed.base ? `${armed.base.shape}:${armed.base.mm}:${armed.rotDeg ?? 0}` : '';
+  useEffect(() => {
+    setGhost(null);
+  }, [armKey]);
 
   const judge = (world: Vec2): { pos: Vec2; ok: boolean; reason?: string } => {
     const verdict = armedRef.current?.legal?.(world);
@@ -327,8 +362,13 @@ export function Board({
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.current.size === 1) {
       suppressClick.current = false;
-      // Armed: one finger aims the ghost. Two fingers still pan and zoom.
-      if (armedRef.current?.commit) {
+      // Armed: one FINGER aims the ghost. Two fingers still pan and zoom.
+      //
+      // A mouse is deliberately excluded. It has exactly one pointer, so routing it into the
+      // ghost drag left desktop with no way to pan at all on the deploy and move screens —
+      // the two screens that most need it. A mouse gets the desktop idiom instead: hover
+      // previews the ghost (see `hoverGhost`), drag pans, click commits.
+      if (e.pointerType !== 'mouse' && aimsABase()) {
         ghostDrag.current = { id: e.pointerId, rect };
         drag.current = null;
       } else {
@@ -354,8 +394,35 @@ export function Board({
   useEffect(() => {
     if (!interactive) return;
 
+    /**
+     * Desktop: the ghost follows the cursor with no button held, so legality is visible
+     * BEFORE the click that commits it — the same guarantee the finger gets from the drag,
+     * minus the lift (a mouse cursor is exact, so lifting the ghost would place it somewhere
+     * other than where you clicked).
+     */
+    const hoverGhost = (e: PointerEvent) => {
+      const rect = rectOf();
+      if (!aimsABase() || !rect) {
+        if (ghostRef.current) setGhost(null);
+        return;
+      }
+      const over =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.left + rect.width &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.top + rect.height;
+      if (!over) {
+        if (ghostRef.current) setGhost(null);
+        return;
+      }
+      setGhost(judge(screenToWorld({ x: e.clientX, y: e.clientY }, rect, vpRef.current, board.h)));
+    };
+
     const onMove = (e: PointerEvent) => {
-      if (!pointers.current.has(e.pointerId)) return;
+      if (!pointers.current.has(e.pointerId)) {
+        if (e.pointerType === 'mouse' && pointers.current.size === 0) hoverGhost(e);
+        return;
+      }
       pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
       const two = twoFinger.current;
@@ -516,7 +583,7 @@ export function Board({
       <g transform={worldTransform(map.board.h)}>
         <rect x={0} y={0} width={map.board.w} height={map.board.h} fill={BOARD_FLOOR} />
 
-        {showZones && (
+        {zones && (
           <g class="zones" opacity={0.35}>
             {map.territories.p1.map((poly, i) => (
               <polygon key={`t1-${i}`} points={pts(poly)} fill="#e39d79" opacity={0.22} />
@@ -544,8 +611,23 @@ export function Board({
           </g>
         )}
 
+        {/* Hazardous. On Bheta-Decima this is the OCEAN — most of the killzone, not an
+            exception to it — so it is drawn as deep water rather than as a warning stripe:
+            loud enough to be unmistakably not-floor (2.53:1 against it), quiet enough that
+            it does not shout over the whole board. The wave hatch carries it in greyscale;
+            the boundary stroke is what a player traces with a finger. */}
+        {(map.hazardous ?? []).length > 0 && (
+          <defs>
+            <pattern id="hazard-water" width="1.2" height="1.2" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+              <rect width="1.2" height="1.2" fill={TYPE_FILL['Hazardous']} />
+              <rect y="0.55" width="1.2" height="0.14" fill="#2f6f8f" opacity={0.55} />
+            </pattern>
+          </defs>
+        )}
         {(map.hazardous ?? []).map((poly, i) => (
-          <polygon key={`hz${i}`} points={pts(poly)} fill={TYPE_FILL['Hazardous']} opacity={0.85} />
+          <polygon key={`hz${i}`} points={pts(poly)} fill="url(#hazard-water)" stroke="#2f6f8f" stroke-width={0.07}>
+            <title>Hazardous — no operative&apos;s base may touch this</title>
+          </polygon>
         ))}
 
         <g class="terrain">
@@ -684,10 +766,10 @@ export function Board({
         </g>
 
         {/* The ghost: where the thing being placed would go, and whether it may. */}
-        {ghost && armed?.commit && (
+        {ghost && armed?.commit && armed.base && (
           <g class="ghost" style={{ pointerEvents: 'none' }}>
             <polygon
-              points={pts(basePerimeter(ghost.pos, armed.base ?? DEFAULT_BASE, armed.rotDeg ?? 0))}
+              points={pts(basePerimeter(ghost.pos, armed.base, armed.rotDeg ?? 0))}
               fill={ghost.ok ? '#62d08a' : '#ff6b5c'}
               fill-opacity={0.35}
               stroke={ghost.ok ? '#62d08a' : '#ff6b5c'}
@@ -695,9 +777,9 @@ export function Board({
             />
             <line
               x1={ghost.pos.x}
-              y1={ghost.pos.y - baseRadius(armed.base ?? DEFAULT_BASE) - 0.6}
+              y1={ghost.pos.y - baseRadius(armed.base) - 0.6}
               x2={ghost.pos.x}
-              y2={ghost.pos.y - baseRadius(armed.base ?? DEFAULT_BASE) - 0.15}
+              y2={ghost.pos.y - baseRadius(armed.base) - 0.15}
               stroke={ghost.ok ? '#62d08a' : '#ff6b5c'}
               stroke-width={0.05}
             />
