@@ -71,6 +71,26 @@ export interface MoveOptions {
   hardCap?: number;
 }
 
+/** The move actions that take a MovePath. */
+export type MoveAction = 'Reposition' | 'Dash' | 'Fall Back' | 'Charge';
+
+/**
+ * The exact `MoveOptions` the reducer will use for a move action — never looser. Both the AI
+ * and the board's move preview build candidate paths against this, so what the preview draws
+ * as reachable is what `PerformAction` will accept.
+ */
+export function moveOptionsFor(action: MoveAction, hardCap?: number): MoveOptions {
+  const base: MoveOptions =
+    action === 'Reposition'
+      ? { action: 'Reposition', mustNotFinishEngaged: true }
+      : action === 'Dash'
+        ? { action: 'Dash', noClimb: true, mustNotFinishEngaged: true }
+        : action === 'Fall Back'
+          ? { action: 'Fall Back', mayEnterEnemyControlRange: true, mustNotFinishEngaged: true }
+          : { action: 'Charge', bonusInches: 2, mayEnterEnemyControlRange: true, mustFinishEngaged: true };
+  return hardCap === undefined ? base : { ...base, hardCap };
+}
+
 const ceil1 = (v: number): number => Math.ceil(v - 1e-9);
 
 /**

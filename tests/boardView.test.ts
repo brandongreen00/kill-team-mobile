@@ -6,8 +6,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   MIN_SPAN_IN,
+  boundsOf,
   clampViewport,
+  fillViewport,
   fitViewport,
+  frameRect,
+  maxViewportWidth,
   isFitViewport,
   maxZoom,
   minViewportWidth,
@@ -67,7 +71,7 @@ describe('clampViewport keeps the board on screen', () => {
   });
 
   it('honours an overscan allowance when one is asked for', () => {
-    const vp = clampViewport({ x: -99, y: -99, w: 12, h: 1 }, BOARD, MIN_SPAN_IN, 2);
+    const vp = clampViewport({ x: -99, y: -99, w: 12, h: 1 }, BOARD, { maxOverscanIn: 2 });
     expect(vp.x).toBe(-2);
     expect(vp.y).toBe(-2);
   });
@@ -247,5 +251,131 @@ describe('zoom range is usable on a phone', () => {
     expect(px).toBeGreaterThanOrEqual(24); // ≥ 24px across — tappable with a finger
     expect(Math.min(tightest.w, tightest.h)).toBeGreaterThanOrEqual(8);
     expect(Math.min(tightest.w, tightest.h)).toBeLessThanOrEqual(10);
+  });
+});
+
+
+/**
+ * The pane-aspect lock. A 30x22 killzone rendered at its own aspect into a portrait phone
+ * pane letterboxes to a third of the screen — the defect that made the board unusable on a
+ * phone. Locking the window to the pane instead is what these pin.
+ */
+describe('the window is aspect-locked to its container', () => {
+  /** A phone pane with the command sheet at its resting detent: tall and narrow. */
+  const PORTRAIT = { aspect: 390 / 620 };
+  const LANDSCAPE = { aspect: 844 / 390 };
+
+  it('fills a portrait pane with board, edge to edge, with nothing left over', () => {
+    const vp = fillViewport(BOARD, PORTRAIT);
+    close(vp.w / vp.h, PORTRAIT.aspect, 1e-9);
+    // The short side of the board (22") is what a portrait pane can show in full.
+    close(vp.h, BOARD.h, 1e-9);
+    expect(vp.w).toBeLessThan(BOARD.w);
+    // …and it is centred, so the same amount of board is cropped off either end.
+    close(vp.x, (BOARD.w - vp.w) / 2, 1e-9);
+  });
+
+  it('fills a landscape pane the other way round', () => {
+    const vp = fillViewport(BOARD, LANDSCAPE);
+    close(vp.w / vp.h, LANDSCAPE.aspect, 1e-9);
+    close(vp.w, BOARD.w, 1e-9);
+    expect(vp.h).toBeLessThanOrEqual(BOARD.h + 1e-9);
+  });
+
+  it('still fits the WHOLE board when asked, letterboxing rather than cropping', () => {
+    const vp = fitViewport(BOARD, PORTRAIT);
+    close(vp.w / vp.h, PORTRAIT.aspect, 1e-9);
+    // Everything is inside the window…
+    expect(vp.x).toBeLessThanOrEqual(0 + 1e-9);
+    expect(vp.y).toBeLessThanOrEqual(0 + 1e-9);
+    expect(vp.x + vp.w).toBeGreaterThanOrEqual(BOARD.w - 1e-9);
+    expect(vp.y + vp.h).toBeGreaterThanOrEqual(BOARD.h - 1e-9);
+    // …and that is the most zoomed-out the clamp allows.
+    expect(isFitViewport(vp, BOARD, PORTRAIT)).toBe(true);
+    close(clampViewport({ x: 0, y: 0, w: 999, h: 999 }, BOARD, PORTRAIT).w, vp.w, 1e-9);
+  });
+
+  it('centres the axis that has nowhere to pan instead of pinning it to an edge', () => {
+    const vp = clampViewport({ x: -500, y: -500, w: maxViewportWidth(BOARD, PORTRAIT), h: 1 }, BOARD, PORTRAIT);
+    close(vp.x + vp.w / 2, BOARD.w / 2, 1e-9);
+    close(vp.y + vp.h / 2, BOARD.h / 2, 1e-9);
+  });
+
+  it('pans along the cropped axis and refuses to pan along the filled one', () => {
+    const vp = fillViewport(BOARD, PORTRAIT);
+    const right = panBy(vp, BOARD, 99, 99, PORTRAIT);
+    close(right.x, BOARD.w - vp.w, 1e-9); // panned to the right-hand edge…
+    close(right.y, vp.y, 1e-9); //            …and not a hair vertically.
+  });
+
+  it('defaults to the board\'s own aspect, so every old call means what it always did', () => {
+    expect(fitViewport(BOARD)).toEqual({ x: 0, y: 0, w: 30, h: 22 });
+    expect(fillViewport(BOARD)).toEqual({ x: 0, y: 0, w: 30, h: 22 });
+    close(maxViewportWidth(BOARD), BOARD.w, 1e-9);
+  });
+
+  it('keeps a 25mm base tappable at the tightest zoom on a portrait pane', () => {
+    const pane: ScreenRect = { left: 0, top: 0, width: 390, height: 620 };
+    const tightest = clampViewport({ x: 0, y: 0, w: 0, h: 0 }, BOARD, { aspect: 390 / 620 });
+    const px = (25 / 25.4) * pixelsPerInch(pane, tightest);
+    expect(px).toBeGreaterThanOrEqual(24);
+  });
+});
+
+describe('frameRect points the board at what matters', () => {
+  const PORTRAIT = { aspect: 390 / 620 };
+  /** A drop zone: a 6"-wide strip up the left-hand edge, in WORLD coords (y-up). */
+  const DROP_ZONE = { x: 0, y: 0, w: 6, h: 22 };
+
+  const containsWorld = (vp: Viewport, x: number, y: number) => {
+    const vy = BOARD.h - y;
+    return x >= vp.x - 1e-6 && x <= vp.x + vp.w + 1e-6 && vy >= vp.y - 1e-6 && vy <= vp.y + vp.h + 1e-6;
+  };
+
+  it('puts the whole rect on screen', () => {
+    const vp = frameRect(DROP_ZONE, BOARD, PORTRAIT, 1);
+    for (const [x, y] of [[0, 0], [6, 0], [0, 22], [6, 22]] as const) {
+      expect(containsWorld(vp, x, y)).toBe(true);
+    }
+  });
+
+  it('zooms in on a small rect instead of showing the whole board', () => {
+    const vp = frameRect({ x: 14, y: 10, w: 2, h: 2 }, BOARD, PORTRAIT, 1);
+    expect(vp.w).toBeLessThan(fillViewport(BOARD, PORTRAIT).w);
+    close(vp.x + vp.w / 2, 15, 1e-6);
+    close(BOARD.h - (vp.y + vp.h / 2), 11, 1e-6);
+  });
+
+  it('returns a legal window for a rect bigger than the board, or a degenerate one', () => {
+    const huge = frameRect({ x: -50, y: -50, w: 500, h: 500 }, BOARD, PORTRAIT, 1);
+    expect(isFitViewport(huge, BOARD, PORTRAIT)).toBe(true);
+    const empty = frameRect({ x: 15, y: 11, w: 0, h: 0 }, BOARD, PORTRAIT, 0);
+    expect(Number.isFinite(empty.x) && Number.isFinite(empty.w)).toBe(true);
+    expect(empty.w).toBeGreaterThan(0);
+  });
+
+  it('survives NaN without producing a NaN window', () => {
+    const vp = frameRect({ x: NaN, y: NaN, w: NaN, h: NaN }, BOARD, PORTRAIT, NaN);
+    for (const v of [vp.x, vp.y, vp.w, vp.h]) expect(Number.isFinite(v)).toBe(true);
+  });
+});
+
+describe('boundsOf', () => {
+  it('boxes a set of polygons', () => {
+    expect(
+      boundsOf([
+        [
+          { x: 1, y: 2 },
+          { x: 5, y: 2 },
+        ],
+        [{ x: 3, y: 9 }],
+      ]),
+    ).toEqual({ x: 1, y: 2, w: 4, h: 7 });
+  });
+
+  it('is null for nothing, and ignores non-finite points', () => {
+    expect(boundsOf([])).toBeNull();
+    expect(boundsOf([[]])).toBeNull();
+    expect(boundsOf([[{ x: NaN, y: 1 }, { x: 2, y: 3 }]])).toEqual({ x: 2, y: 3, w: 0, h: 0 });
   });
 });
