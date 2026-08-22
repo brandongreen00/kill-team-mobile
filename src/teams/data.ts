@@ -65,6 +65,13 @@ export interface LoadoutOption {
   id: string;
   label: string;
   weapons: string[];
+  /**
+   * Inline "A or B" alternatives inside one printed option: "Autopistol **or** laspistol;
+   * chainsword **or** power weapon" is one option with two choice groups, pick one from each.
+   * The scraper records them here and leaves `weapons` empty, so a reader that ignores this
+   * field gives the operative every weapon the card does not name elsewhere instead.
+   */
+  choiceGroups?: string[][];
 }
 
 export interface OptionGroup {
