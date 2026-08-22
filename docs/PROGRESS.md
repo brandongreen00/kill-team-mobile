@@ -2,7 +2,7 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
-## 2026-08-22 — Phase 4 UI, second pass: the screens the game needed but could not reach (D-049…D-055)
+## 2026-08-22 — Phase 4 UI, second pass: the screens the game needed but could not reach (D-052…D-058)
 
 Adversarial review of the first pass, driving the built app rather than reading it. Seven
 screens or controls turned out to be dead code, unreachable state, or silently wrong. The
@@ -19,18 +19,18 @@ screenshot script happened to expand the sheet by hand before every activation.
   anyone was to hit a 44px token on the board. One effect now, and the plan's detent wins.
 - **The end of a turning point is a screen.** `advanceTurningPoint` set `phase = 'endOfTP'` and
   overwrote it with `'strategy'` a few lines later, so the phase never existed for a moment
-  anything could observe and up to 6VP a side appeared in the top bar with no summary (D-049).
+  anything could observe and up to 6VP a side appeared in the top bar with no summary (D-052).
 - **Equipment is set up on the killzone.** The step was in the types, the intent worked and the
-  per-item constraints were complete — but nothing ever entered the step (D-050). Where an item
+  per-item constraints were complete — but nothing ever entered the step (D-053). Where an item
   may go is now sampled from `validateEquipmentPlacement` cell by cell, because the constraints
-  are per item and mostly are not the drop zone (D-051).
+  are per item and mostly are not the drop zone (D-054).
 - **"Allocate manually" does something.** Only the `auto` option carried data, so the manual
   button ran the automatic allocation on the screen that decides how much damage an operative
-  takes (D-053). It is a screen now: incoming hits as chips, tap one to save against it.
+  takes (D-056). It is a screen now: incoming hits as chips, tap one to save against it.
 - **Shooting is usable.** The target list was hidden at `rest` and the board was framed on the
-  shooter alone, so "Pick a target" appeared over a board with no targets on it (D-056).
-- **Pass-and-play secrecy works during the battle**, not just during setup (D-054).
-- **One finger aims, one mouse pans** (D-052); the zoom cluster stops hopping corners (D-055).
+  shooter alone, so "Pick a target" appeared over a board with no targets on it (D-059).
+- **Pass-and-play secrecy works during the battle**, not just during setup (D-057).
+- **One finger aims, one mouse pans** (D-055); the zoom cluster stops hopping corners (D-058).
 - **The roster builder works on a phone held sideways.** At 390px of height the catalogue got
   ~70px — less than one row — so rows under the pinned tray were literally untappable. Status
   and tray move to a rail, as the battle screen already does.
@@ -46,7 +46,7 @@ screenshot script happened to expand the sheet by hand before every activation.
 
 **Next**
 
-1. **Decide D-047** — eight dead `baseGap(...) < -1e-4` overlap guards remain.
+1. **Decide D-050** — eight dead `baseGap(...) < -1e-4` overlap guards remain.
 2. A pre-battle screen: the app boots straight into a battle on the first killzone, and
    `state.critOpId` is unset, so no crit op scores.
 3. Autosave/restore by replaying `Store.exportReplay()`'s intent log.
@@ -55,7 +55,7 @@ screenshot script happened to expand the sheet by hand before every activation.
    bottom one behind the sheet; fixing it means telling the Board the sheet's *current* height,
    which is the coupling `--sheet-rest` exists to avoid.
 
-## 2026-08-22 — Phase 4 UI: the phone experience, rebuilt (D-043…D-048)
+## 2026-08-22 — Phase 4 UI: the phone experience, rebuilt (D-046…D-051)
 
 The owner's verdict on the previous shell was "basically unusable", with three specific
 complaints: selecting operatives moved things around under the thumb, placing an operative
@@ -83,19 +83,19 @@ with no shared idea of what the player was in the middle of.
 - **Equipment and tac ops have a screen.** `SelectTacOp` is the only caller of `ctx.initOps`,
   so before this no op initialised and a whole battle scored nothing.
 - **Four new core selectors** — `canDeployAt`, `actionAvailability`, `deployToAct`,
-  `gambitToAct` — so the UI reads rules instead of deriving them (D-046).
+  `gambitToAct` — so the UI reads rules instead of deriving them (D-049).
 - **Contrast**: `--line` was 1.33:1 on `--surface-2` (every control border invisible), the two
   players' colours were 1.00:1 in luminance (identical in greyscale and to a red-green
   colour-blind player), and terrain was 1.17:1 on the board. All three fixed and verified.
 - **One core bug**, surfaced by the placement work: `baseGap` clamps at zero, so the
   `baseGap(...) < -1e-4` overlap guard has never fired. Fixed in `DeployOperative`; eight
-  further copies are documented, not changed (D-047).
+  further copies are documented, not changed (D-050).
 - Tests: 2603 unit + 31 Playwright across four viewports (iPhone SE, Pixel 7, iPhone 13
   landscape, desktop). Screenshots of the whole flow in `docs/ui-review/`.
 
 **Next**
 
-1. **Decide D-047** — eight dead `baseGap(...) < -1e-4` overlap guards remain in `movement.ts`
+1. **Decide D-050** — eight dead `baseGap(...) < -1e-4` overlap guards remain in `movement.ts`
    and seven team modules. Fixing them changes what is a legal move end position and fails
    sixteen rules tests whose fixtures place models at overlapping centres.
 2. A pre-battle screen: the app boots straight into a battle on the first killzone, and

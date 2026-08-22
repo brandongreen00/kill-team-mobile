@@ -130,11 +130,11 @@ Rules the gesture layer keeps:
 - The zoom cluster floats on one side for the whole battle, chosen from the KILLZONE's drop
   zones (whose edge they crowd less), never from the current screen's framing. It used to be
   derived per screen and hopped corners between deploy and activate — a control that moves is
-  a control you re-find every time (D-055).
+  a control you re-find every time (D-058).
 - **One finger aims, one mouse pans.** A finger drags a ghost whenever a base is armed; a
   mouse gets the desktop idiom instead — hover previews the ghost, drag pans, click commits —
   because a mouse has exactly one pointer and would otherwise be unable to pan at all on the
-  deploy and move screens (D-052). An arm with a `commit` but no `base` (the drop-zone picker,
+  deploy and move screens (D-055). An arm with a `commit` but no `base` (the drop-zone picker,
   the shooting screen's tap-swallower) draws no ghost and keeps its pan.
 - `variant="thumb"` boards (the 24 killzone-browser previews) stay inert.
 
@@ -164,14 +164,14 @@ is its real footprint — with one difference that matters:
 
 **Where an item may go is asked of the engine, cell by cell, not approximated by the drop
 zone.** Every option carries its own constraints, so the screen samples
-`validateEquipmentPlacement` on a 0.75" grid and shades the cells that pass (D-051). There is
+`validateEquipmentPlacement` on a 0.75" grid and shades the cells that pass (D-054). There is
 always a way out (*"Set up no more equipment"*), because an item can legitimately have nowhere
 legal to go and the battle must not be strandable on this screen.
 
 ### End of a turning point
 
 Scoring is the one thing that happens with nobody touching the screen, so the game now stops on
-it (D-049) and shows what each side scored, in the ops' own words, read out of the log. Before
+it (D-052) and shows what each side scored, in the ops' own words, read out of the log. Before
 this the phase was overwritten inside the same reducer call and the screen was unreachable: up
 to 6VP a side simply appeared in the top bar during the next initiative roll.
 
@@ -316,13 +316,13 @@ default the engine marks `auto`/`keep`. Two things are not generic:
   fold of the sheet's scrolling body — on the screen that decides how much damage an operative
   takes. The rules give the
   defender a real choice here and the first build shipped an "Allocate manually" button that
-  ran the automatic allocation, because only the `auto` option carried any data (D-053). It now
+  ran the automatic allocation, because only the `auto` option carried any data (D-056). It now
   shows the incoming hits as chips: tap one to save against it, the allocator spends the
   cheapest legal defence dice and refuses what cannot be paid for, and the damage total updates
   before anything is committed.
 - **The handover.** In a match the phone is assumed to be with whoever is acting
   (`deviceHolder`), so a reactive window belonging to the other player asks for it by name
-  first, and hands it back on resolve (D-054). Sandbox mode skips this entirely — one person
+  first, and hands it back on resolve (D-057). Sandbox mode skips this entirely — one person
   driving both sides does not want to confirm a handover every time a save is rolled.
 
 ## Screenshots
@@ -362,7 +362,7 @@ of stage the sheet takes 68% instead.
   part of the pane would need the Board to know the sheet's *current* height rather than its
   resting one, which is exactly the coupling `--sheet-rest` exists to avoid.
 - The floating zoom cluster sits over one drop zone on maps whose zones run up both edges. It
-  is stable per killzone (D-055) rather than dodging per screen, and a mis-tap only changes the
+  is stable per killzone (D-058) rather than dodging per screen, and a mis-tap only changes the
   view — but on those maps it does overlap inches you may want to place in.
 - No autosave: a reload loses the battle. `Store.exportReplay()` already emits
   `{ seed, mapId, critOpId, intents[] }`, which is what a restore would replay.

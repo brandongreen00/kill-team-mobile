@@ -3,7 +3,7 @@
  *
  * The manual defence allocator's legality model, and the screen built on it.
  *
- * The screen exists because "Allocate manually" used to run the automatic allocation (D-053),
+ * The screen exists because "Allocate manually" used to run the automatic allocation (D-056),
  * so the thing worth pinning is that its idea of what may be blocked agrees with the engine's:
  * anything `allocateSavesOptimally` chooses must be reachable by hand, and nothing the rules
  * forbid may be.
