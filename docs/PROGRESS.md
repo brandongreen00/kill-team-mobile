@@ -2,6 +2,58 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-22 — Phase 4 UI: the phone experience, rebuilt (D-043…D-048)
+
+The owner's verdict on the previous shell was "basically unusable", with three specific
+complaints: selecting operatives moved things around under the thumb, placing an operative
+meant switching from the Play tab to the Board tab by hand, and it generally did not feel like
+a phone app. All three were real, and two of them were symptoms of the same thing: four tabs
+with no shared idea of what the player was in the middle of.
+
+**Landed**
+
+- **No tab bar.** One stage with the killzone mounted once, and a command sheet over it.
+  `commandPlan(state)` (`src/ui/command/`) derives exactly one screen from GameState, so there
+  is no navigation state that can disagree with the game. Rosters, log and killzones are routes
+  behind the menu. Three window classes: bottom sheet, side sheet (phone landscape), three
+  columns (≥1200px). See `docs/UI.md`.
+- **Deployment happens on the board.** It is already framed on the deploying player's drop
+  zone, everything else masked out; the next operative is auto-armed; a drag shows a ghost of
+  its real base tinted by `canDeployAt`; a refused tap surfaces the reducer's own sentence;
+  Undo takes it back.
+- **You can move.** `PerformAction` needs a `MovePath` and the old action sheet sent none, so
+  every move was rejected — the app could not play a game. Moves are now aimed on the board
+  against `reachableCells` / `moveBudget` / `validateMove`.
+- **The roster builder does not move under the thumb.** Catalogue first and the only scroller,
+  fixed chrome above and below it, fixed row geometry. Measured at 0px across five consecutive
+  adds; `e2e/smoke.spec.ts` asserts |Δy| ≤ 1.
+- **Equipment and tac ops have a screen.** `SelectTacOp` is the only caller of `ctx.initOps`,
+  so before this no op initialised and a whole battle scored nothing.
+- **Four new core selectors** — `canDeployAt`, `actionAvailability`, `deployToAct`,
+  `gambitToAct` — so the UI reads rules instead of deriving them (D-046).
+- **Contrast**: `--line` was 1.33:1 on `--surface-2` (every control border invisible), the two
+  players' colours were 1.00:1 in luminance (identical in greyscale and to a red-green
+  colour-blind player), and terrain was 1.17:1 on the board. All three fixed and verified.
+- **One core bug**, surfaced by the placement work: `baseGap` clamps at zero, so the
+  `baseGap(...) < -1e-4` overlap guard has never fired. Fixed in `DeployOperative`; eight
+  further copies are documented, not changed (D-047).
+- Tests: 2603 unit + 31 Playwright across four viewports (iPhone SE, Pixel 7, iPhone 13
+  landscape, desktop). Screenshots of the whole flow in `docs/ui-review/`.
+
+**Next**
+
+1. **Decide D-047** — eight dead `baseGap(...) < -1e-4` overlap guards remain in `movement.ts`
+   and seven team modules. Fixing them changes what is a legal move end position and fails
+   sixteen rules tests whose fixtures place models at overlapping centres.
+2. A pre-battle screen: the app boots straight into a battle on the first killzone, and
+   `state.critOpId` is unset, so no crit op scores.
+3. Equipment **placement** — `setup.step = 'placeEquipment'` has no screen and the reducer has
+   no transition into it.
+4. Autosave/restore by replaying `Store.exportReplay()`'s intent log (serialising GameState
+   alone would rewind the RNG).
+5. Move waypoints (a path around a corner currently costs two actions) and a screen-space dice
+   dock (dice are sized in world inches, so they shrink with the zoom).
+
 ## 2026-08-20 — Phase 1 maps: D-014 dashed-rectangle recall (D-039)
 
 **Landed**
