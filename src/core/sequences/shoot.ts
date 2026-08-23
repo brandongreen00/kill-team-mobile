@@ -100,6 +100,29 @@ export function smokeAreas(state: GameState): SmokeArea[] {
 }
 
 /**
+ * Is this target wholly within an area of smoke, and far enough away for it to matter?
+ *
+ * Every defence roll in the game asks this, and almost every board has no smoke on it at
+ * all, so the marker scan is a plain loop that bails before `smokeAreas` allocates.
+ */
+export function smokeSoftensPiercing(
+  ctx: GameContext,
+  state: GameState,
+  target: OperativeState,
+  distance: number,
+): boolean {
+  if (distance <= 2 + 1e-6) return false; // "unless they're within 2" of each other"
+  let any = false;
+  for (const m of Object.values(state.markers)) {
+    if (m.kind === 'smoke') {
+      any = true;
+      break;
+    }
+  }
+  return any && whollyWithinSmoke(body(ctx, target), smokeAreas(state));
+}
+
+/**
  * Core rules › Select Valid Target: "an enemy operative that's a valid target and has no
  * friendly operatives within its control range. If the intended target has an Engage order,
  * it's a valid target if it's visible... If Conceal, visible and not in cover."
@@ -592,7 +615,16 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
 
       case 'rollDefence': {
         const retainedCrits = countCrits(seq.attack);
-        const piercing = piercingValue(rules, retainedCrits);
+        // "...whenever an operative is shooting an enemy operative wholly within an area of
+        // smoke, weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the
+        // Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead, unless they're
+        // within 2" of each other."  It downgrades the RULE, so it can never hand back a die
+        // Piercing did not take: a Piercing Crits 2 shot with no retained critical pierces 0
+        // in smoke exactly as it does out of it.  Modelled here rather than in the equipment
+        // module because it is a property of the smoke, not of who bought the grenade — an
+        // operative standing in the enemy's smoke gets it too.
+        const softened = smokeSoftensPiercing(ctx, state, target, actx.distance);
+        const piercing = piercingValue(rules, retainedCrits, softened ? 1 : Infinity);
         const ev = ctx.hooks.emit('onDefenceDice', state, {
           state,
           ctx: actx,

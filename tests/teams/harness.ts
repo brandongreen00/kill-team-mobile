@@ -9,6 +9,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { makeContext, type GameContext } from '../../src/core/context.ts';
 import { createBattle } from '../../src/core/init.ts';
+import { gambitToAct } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { ScriptedRng, SeededRng } from '../../src/core/rng.ts';
 import type { GameState, KillzoneMap, PlayerId, Vec2 } from '../../src/core/types.ts';
@@ -168,6 +169,20 @@ export function activate(ctx: GameContext, state: GameState, operativeId: string
   const op = state.operatives[operativeId]!;
   state.activePlayer = op.player; // it is this player's activation
   return reduce(state, { t: 'ActivateOperative', player: op.player, operativeId, order }, ctx).state;
+}
+
+/**
+ * Hand the opponent their alternating STRATEGIC GAMBIT turn, by passing on their behalf.
+ *
+ * Core rules › STRATEGIC GAMBIT: "Starting with the player who has initiative, each player
+ * alternates either using a STRATEGIC GAMBIT or passing." A test that only cares about one
+ * player's gambit still has to let the other player take their turn between two of them.
+ * Returns the state unchanged when it is already `player`'s turn.
+ */
+export function yieldGambitTurn(ctx: GameContext, state: GameState, player: PlayerId): GameState {
+  if (gambitToAct(state) === player) return state;
+  const other: PlayerId = player === 'p1' ? 'p2' : 'p1';
+  return reduce(state, { t: 'PassGambit', player: other }, ctx).state;
 }
 
 /**

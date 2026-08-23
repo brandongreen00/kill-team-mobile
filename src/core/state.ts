@@ -16,6 +16,7 @@ import type {
   MarkerState,
   OperativeState,
   PlayerId,
+  Vec2,
   Weapon,
   WeaponProfile,
 } from './types.ts';
@@ -263,15 +264,24 @@ export function markerContestedBy(
   const gap = baseGap(op.pos, c.base, op.rot, marker.pos, { shape: 'round', mm: marker.diameterMm }, 0);
   if (gap > 1 + 1e-6) return false;
   const idx = terrain(ctx, state);
-  const markerBody: Body = {
-    id: marker.id,
-    pos: marker.pos,
-    z: marker.z,
+  return withinControlRange(idx, body(ctx, op), markerBody(marker));
+}
+
+/**
+ * A marker as a `Body`, so the visibility selectors can take one.
+ *
+ * Markers are flat tokens; 0.2" of height is enough that a sampled silhouette line starts
+ * just above the surface the marker rests on rather than inside it.
+ */
+export function markerBody(m: { id: string; pos: Vec2; z: number; diameterMm: number }): Body {
+  return {
+    id: m.id,
+    pos: m.pos,
+    z: m.z,
     rot: 0,
-    base: { shape: 'round', mm: marker.diameterMm },
+    base: { shape: 'round', mm: m.diameterMm },
     height: 0.2,
   };
-  return withinControlRange(idx, body(ctx, op), markerBody);
 }
 
 /**

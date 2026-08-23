@@ -12,7 +12,7 @@ import { actionCost, getAction } from '../src/core/actions.ts';
 import { validateMove } from '../src/core/movement.ts';
 import { terrain } from '../src/core/context.ts';
 import { hasEffect, zeroStatMods } from '../src/core/hooks.ts';
-import { aplOf, weaponsOf } from '../src/core/state.ts';
+import { aplOf, body, weaponsOf } from '../src/core/state.ts';
 import { hasType } from '../src/core/terrain.ts';
 import {
   ALL_EQUIPMENT,
@@ -28,7 +28,9 @@ import {
   validateEquipmentPlacement,
 } from '../src/core/equipment/index.ts';
 import { opsMap } from '../src/core/ops/index.ts';
-import { rect, testContext, testMap } from './fixtures.ts';
+import { smokeAreas } from '../src/core/sequences/shoot.ts';
+import { whollyWithinSmoke } from '../src/core/visibility.ts';
+import { heavyBlock, rect, testContext, testMap } from './fixtures.ts';
 import type { GameContext } from '../src/core/context.ts';
 import type { ActionParams } from '../src/core/intents.ts';
 import type { AttackContext } from '../src/core/hooks.ts';
@@ -323,6 +325,50 @@ describe('Utility Grenades', () => {
     expect(game.state.markers[smoke.id]!.flags['activationsLeft']).toBe(1); // scripted d3 of 2 -> 1
     endTurningPoint(game.ctx, game.state);
     expect(game.state.markers[smoke.id]).toBeUndefined();
+  });
+
+  it('"It must be visible to this operative, or on Vantage terrain of a terrain feature that\'s visible"', () => {
+    // A 10"-tall Heavy wall between the thrower and the point. It is inside 6", and the old
+    // check tested nothing but that range, so the grenade sailed straight through the wall.
+    const game = makeGame(['eq.utilityGrenades'], { script: [2], features: [heavyBlock('wall', 5, 8, 1, 6, 10)] });
+    const a = game.state.teams.p1.operativeIds[0]!;
+    const behind = act(game, a, 'Smoke Grenade', { targetPos: { x: 8, y: 11 } }, { x: 3, y: 11 });
+    expect(behind.ok).toBe(false);
+    expect(behind.reason).toContain('visible');
+    // Round the end of the wall and the same throw is legal.
+    expect(act(game, a, 'Smoke Grenade', { targetPos: { x: 8, y: 4 } }, { x: 3, y: 4 }).ok).toBe(true);
+  });
+
+  it('"...an area of smoke 1" horizontally and unlimited height vertically from (but not below) it"', () => {
+    // Smoke thrown from a 3" Vantage top onto the floor is measured from the FLOOR. The old
+    // perform() stamped the thrower\'s own height on the marker, so smoke dropped off a gantry
+    // started 3" up and did nothing at all to anyone standing in it.
+    const game = makeGame(['eq.utilityGrenades'], { script: [2], features: [tower()] });
+    const a = game.state.teams.p1.operativeIds[0]!;
+    const thrower = game.state.operatives[a]!;
+    thrower.z = 3;
+    // At the east edge of the 3" tower (x 10-13), so the throw clears its own roofline.
+    expect(act(game, a, 'Smoke Grenade', { targetPos: { x: 17.8, y: 11 } }, { x: 12.8, y: 11 }).ok).toBe(true);
+    const smoke = Object.values(game.state.markers).find((m) => m.kind === 'smoke')!;
+    expect(smoke.z).toBe(0);
+    const victim = game.state.operatives[game.state.teams.p2.operativeIds[0]!]!;
+    victim.pos = { x: 17.8, y: 11 };
+    victim.z = 0;
+    expect(whollyWithinSmoke(body(game.ctx, victim), smokeAreas(game.state))).toBe(true);
+  });
+
+  it('the Vantage clause: the rooftop is behind its own parapet, but the terrain feature is visible', () => {
+    // The tower body is solid to 3", so a floor-level operative cannot see the marker resting
+    // on its Vantage top — only the feature itself. `targetZ` names the level.
+    const game = makeGame(['eq.utilityGrenades'], { script: [2], features: [tower()] });
+    const a = game.state.teams.p1.operativeIds[0]!;
+    const onTop = { targetPos: { x: 11, y: 11 }, targetZ: 3 };
+    expect(act(game, a, 'Smoke Grenade', onTop, { x: 7, y: 11 }).ok).toBe(true);
+    expect(Object.values(game.state.markers).find((m) => m.kind === 'smoke')!.z).toBe(3);
+    // But `targetZ` still has to name a real surface at that point.
+    const game2 = makeGame(['eq.utilityGrenades'], { script: [2], features: [tower()] });
+    const b = game2.state.teams.p1.operativeIds[0]!;
+    expect(act(game2, b, 'Smoke Grenade', { targetPos: { x: 11, y: 11 }, targetZ: 5 }, { x: 7, y: 11 }).ok).toBe(false);
   });
 
   it('"STUN GRENADE 1AP: ...on a 3+, subtract 1 from its APL stat", limited by the kill team\'s total uses', () => {

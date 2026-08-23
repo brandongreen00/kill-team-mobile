@@ -18,13 +18,16 @@ import {
   gapBetween,
   inflictDamage,
   log,
+  markerBody,
   recordRoll,
 } from '../state.ts';
+import { hasType, partsSupporting, surfaceAt, surfacesAt } from '../terrain.ts';
 import { isVisible } from '../visibility.ts';
 import { parseWeaponRules } from '../weaponRules.ts';
 import { equipmentText, grenadeProfile } from './text.ts';
+import type { GameContext } from '../context.ts';
 import type { EquipmentModule } from './kit.ts';
-import type { GameState, PlayerId, Weapon } from '../types.ts';
+import type { GameState, OperativeState, PlayerId, Vec2, Weapon } from '../types.ts';
 
 export const UTILITY_ID = 'eq.utilityGrenades';
 export const EXPLOSIVE_ID = 'eq.explosiveGrenades';
@@ -80,6 +83,50 @@ function defaultSelection(state: GameState, player: PlayerId, equipmentId: strin
 // Utility grenades
 // ---------------------------------------------------------------------------
 
+/** The 20mm token the Smoke Grenade rules place; `z` is worked out by `smokePlacement`. */
+const SMOKE_MARKER_MM = 20;
+
+/**
+ * Where a Smoke Grenade marker would land, and whether this operative may put it there.
+ *
+ * "Place one of your Smoke Grenade markers within 6" of this operative. It must be visible to
+ * this operative, or on Vantage terrain of a terrain feature that's visible to this operative."
+ *
+ * A grenade is thrown ACROSS, so by default the marker settles on the highest surface at or
+ * below the thrower — which is what makes smoke lobbed off a gantry land on the floor rather
+ * than hang at the thrower's own height. `params.targetZ` names a level explicitly, which is
+ * how the Vantage clause is used; it must be a real surface at that point.
+ */
+function smokePlacement(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  pos: Vec2,
+  targetZ: number | undefined,
+): { z: number; ok: boolean; reason?: string } {
+  const index = terrain(ctx, state);
+  const z = targetZ ?? surfaceAt(index, pos, op.z + 0.05);
+  if (targetZ !== undefined && !surfacesAt(index, pos).some((s) => Math.abs(s - targetZ) < 0.05))
+    return { z, ok: false, reason: 'there is no surface to place the marker on at that height' };
+  const marker = markerBody({ id: `${op.id}:smoke`, pos, z, diameterMm: SMOKE_MARKER_MM });
+  // The surface the marker rests on is not a thing standing between the two of them.
+  const underfoot = new Set(partsSupporting(index, pos, z).map((p) => p.id));
+  const from = body(ctx, op);
+  if (isVisible(index, from, marker, { ignore: (p) => underfoot.has(p.id) }).visible) return { z, ok: true };
+  // "...or on Vantage terrain of a terrain feature that's visible to this operative." The
+  // rooftop itself is behind its own parapet; what has to be visible is the FEATURE, so its
+  // own parts do not block the line.
+  const vantage = partsSupporting(index, pos, z).find((p) => hasType(p, 'Vantage'));
+  if (vantage && isVisible(index, from, marker, { ignore: (p) => p.feature.id === vantage.feature.id }).visible)
+    return { z, ok: true };
+  return {
+    z,
+    ok: false,
+    reason: 'the marker must be visible to this operative, or on Vantage terrain of a terrain feature '
+      + 'that is visible to this operative',
+  };
+}
+
 registerAction({
   id: 'Smoke Grenade',
   name: 'Smoke Grenade',
@@ -96,6 +143,8 @@ registerAction({
     const pos = params.targetPos ?? params.markerPos;
     if (!pos) return { ok: false, reason: 'select where to place the Smoke Grenade marker' };
     if (dist(op.pos, pos) > 6 + 1e-6) return { ok: false, reason: 'the marker must be within 6" of this operative' };
+    const placed = smokePlacement(ctx, state, op, pos, params.targetZ);
+    if (!placed.ok) return { ok: false, reason: placed.reason! };
     return { ok: true };
   },
   perform(ctx, state, op, params) {
@@ -108,9 +157,11 @@ registerAction({
     state.markers[id] = {
       id,
       kind: 'smoke',
-      diameterMm: 20,
+      diameterMm: SMOKE_MARKER_MM,
       pos: { ...pos },
-      z: op.z,
+      // "...an area of smoke 1" horizontally and unlimited height vertically from (but not
+      // below) it" — measured from where the marker LANDS, not from the thrower's elevation.
+      z: smokePlacement(ctx, state, op, pos, params.targetZ).z,
       owner: op.player,
       flags: { activationsLeft: 999, d3, armed: false },
     };
@@ -211,25 +262,11 @@ export const utilityGrenadesEquipment: EquipmentModule = {
         }
       },
     );
-    // Smoke softens Piercing 2 / Piercing Crits 2 into Piercing 1 / Piercing Crits 1, which is
-    // exactly one more defence die for the target.
-    reg.on(
-      'onDefenceDice',
-      { id: `${UTILITY_ID}.piercing`, sourceText: equipmentText(UTILITY_ID), player, priority: 30 },
-      (ev, b) => {
-        const target = ev.ctx?.defender;
-        if (!target || target.player !== b.player) return;
-        if (ev.count <= 0) return;
-        const piercing = ev.ctx.rules.find((r) => r.id === 'Piercing' || r.id === 'PiercingCrits');
-        if (!piercing || (piercing.x ?? 0) < 2) return;
-        if (ev.ctx.distance <= 2 + 1e-6) return; // "unless they're within 2" of each other"
-        const inSmoke = Object.values(ev.state.markers).some(
-          (m) => m.kind === 'smoke' && dist(m.pos, target.pos) <= 1 + 1e-6,
-        );
-        if (!inSmoke) return;
-        ev.count += 1;
-      },
-    );
+    // Smoke softening Piercing 2 / Piercing Crits 2 is NOT registered here. It is a property
+    // of the smoke rather than of the equipment — an operative caught in the enemy's smoke
+    // gets it, and a smoke marker from a team rule (MANDRAKES) gives it without anyone having
+    // bought this equipment. It lives in `smokeSoftensPiercing` in src/core/sequences/shoot.ts,
+    // which also stops it from being applied twice when both players hold this equipment.
   },
 };
 

@@ -107,13 +107,13 @@ export function accurateValue(rules: WeaponRule[]): number {
 }
 
 /** Piercing x / Piercing Crits x: how many defence dice the defender loses. */
-export function piercingValue(rules: WeaponRule[], retainedCrits: number): number {
+export function piercingValue(rules: WeaponRule[], retainedCrits: number, cap = Infinity): number {
   let p = 0;
   const flat = ruleOf(rules, 'Piercing');
-  if (flat) p = Math.max(p, flat.x ?? 1);
+  if (flat) p = Math.max(p, Math.min(flat.x ?? 1, cap));
   if (retainedCrits > 0) {
     const pc = ruleOf(rules, 'PiercingCrits');
-    if (pc) p = Math.max(p, pc.x ?? 1);
+    if (pc) p = Math.max(p, Math.min(pc.x ?? 1, cap));
   }
   return p;
 }

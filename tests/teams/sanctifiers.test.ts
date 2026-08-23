@@ -42,7 +42,7 @@ import {
   isOrator,
   sanctifiers,
 } from '../../src/teams/sanctifiers/index.ts';
-import { activate, battle, opWith, settle, teamContext } from './harness.ts';
+import { activate, battle, opWith, settle, teamContext, yieldGambitTurn } from './harness.ts';
 import { rect, testMap } from '../fixtures.ts';
 
 const DATA = teamData('sanctifiers');
@@ -214,7 +214,7 @@ function fakeFight(
 /** Make `operativeId` the ORATOR, through the printed STRATEGIC GAMBIT. */
 function preach(ctx: ReturnType<typeof teamContext>, state: GameState, player: PlayerId, operativeId?: string): GameState {
   const out = reduce(
-    state,
+    yieldGambitTurn(ctx, state, player),
     { t: 'UseGambit', player, gambitId: SERMON_GAMBIT, ...(operativeId ? { data: { operativeId } } : {}) },
     ctx,
   );
@@ -223,7 +223,7 @@ function preach(ctx: ReturnType<typeof teamContext>, state: GameState, player: P
 }
 
 function useGambit(ctx: ReturnType<typeof teamContext>, state: GameState, player: PlayerId, gambitId: string): GameState {
-  const out = reduce(state, { t: 'UseGambit', player, gambitId }, ctx);
+  const out = reduce(yieldGambitTurn(ctx, state, player), { t: 'UseGambit', player, gambitId }, ctx);
   expect(out.reason).toBeUndefined();
   return out.state;
 }

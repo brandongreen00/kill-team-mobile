@@ -23,6 +23,7 @@ import {
   endTurningPoint,
   expireActivationEffects,
   gambitOptions,
+  gambitToAct,
   guardInterruptCandidates,
   readyStep,
   rollInitiative,
@@ -256,6 +257,11 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
 
     // ---- strategy phase --------------------------------------------------
     case 'UseGambit': {
+      // "Starting with the player who has initiative, each player alternates either using a
+      // STRATEGIC GAMBIT or passing. The players repeat this process until they have both
+      // passed in succession." The order lived only in `gambitToAct`, which the UI consulted
+      // and nothing else did, so an out-of-turn gambit was simply applied.
+      if (gambitToAct(next) !== intent.player) return fail('it is not your turn to use a STRATEGIC GAMBIT');
       const opts = gambitOptions(ctx, next, intent.player);
       if (!opts.some((o) => o.id === intent.gambitId))
         return fail(`'${intent.gambitId}' is not an available STRATEGIC GAMBIT right now`);
@@ -280,6 +286,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
     }
 
     case 'PassGambit': {
+      if (gambitToAct(next) !== intent.player) return fail('it is not your turn to use a STRATEGIC GAMBIT');
       next.teams[intent.player].passedGambit = true;
       if (bothPassedGambit(next)) {
         next.phase = 'firefight';

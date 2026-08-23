@@ -12,7 +12,8 @@ import { reduce } from '../src/core/reducer.ts';
 import { reachableCells, validateMove } from '../src/core/movement.ts';
 import { gapBetween, inControlRange, weaponsOf } from '../src/core/state.ts';
 import { getAction } from '../src/core/actions.ts';
-import { endTurningPoint, whoActivates } from '../src/core/phases.ts';
+import { endTurningPoint, gambitToAct, whoActivates } from '../src/core/phases.ts';
+import { actorFor } from '../src/ai/runner.ts';
 import { ScriptedRng } from '../src/core/rng.ts';
 import { parseWeaponRules } from '../src/core/weaponRules.ts';
 import { addRolled, retentionOptions, type DicePool } from '../src/core/dice.ts';
@@ -22,6 +23,7 @@ import { makeCard, rect, testContext, testMap } from './fixtures.ts';
 import { buildTerrainIndex, wallCornerZones } from '../src/core/terrain.ts';
 import { coverAndObscured, withinControlRange } from '../src/core/visibility.ts';
 import { checkTarget } from '../src/core/sequences/shoot.ts';
+import { rebuildHooks } from '../src/core/context.ts';
 import type { GameContext } from '../src/core/context.ts';
 import type { Datacard, GameState, KillzoneMap, PendingDecision, TerrainFeature } from '../src/core/types.ts';
 
@@ -1140,4 +1142,183 @@ describe('a Close Quarters killzone is one connected board once its hatchways op
       expect(spanY, `${id} vertical reach`).toBeGreaterThan(map.board.h * 0.7);
     }
   }, 120_000);
+});
+
+describe('smoke softens Piercing by downgrading the rule, not by handing back a die', () => {
+  /** A shooter whose only weapon carries the named rules, and a target that just stands there. */
+  function piercingBattle(rules: string, script: number[]) {
+    const shooter = makeCard({
+      id: 'test.pierce',
+      name: 'PIERCER',
+      weapons: [
+        {
+          name: 'spike',
+          profiles: [{ type: 'ranged', atk: 2, hit: 2, dmgN: 1, dmgC: 1, rules: parseWeaponRules(rules) }],
+        },
+      ],
+    });
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([shooter, dummy], script, 'test.pierce', 'test.dummy');
+    // No CP, so the Command Re-roll window never opens and the script stays predictable.
+    s.teams.p1.cp = 0;
+    s.teams.p2.cp = 0;
+    // BOTH teams hold Utility Grenades. That is what the softening used to be registered
+    // against, once per player — so these tests see the old per-player hook if it comes back,
+    // including the second copy of it that would hand the defender a fifth die.
+    s.teams.p1.equipment.push('eq.utilityGrenades');
+    s.teams.p2.equipment.push('eq.utilityGrenades');
+    rebuildHooks(ctx, s);
+    return { s, ctx };
+  }
+
+  /** Smoke centred on the target, owned by `owner`. 6" apart: outside the 2" exception. */
+  function smokeOn(s: GameState, targetId: string, owner: 'p1' | 'p2') {
+    const t = s.operatives[targetId]!;
+    s.markers['smoke-1'] = {
+      id: 'smoke-1',
+      kind: 'smoke',
+      diameterMm: 20,
+      pos: { ...t.pos },
+      z: t.z,
+      owner,
+      flags: { activationsLeft: 999, d3: 1, armed: false },
+    };
+  }
+
+  /** Fire `spike` at `b` and report the defence roll the sequence actually collected. */
+  function shootAndReadDefence(s0: GameState, ctx: GameContext, a: string, b: string) {
+    let st = reduce(s0, { t: 'ActivateOperative', player: 'p1', operativeId: a, order: 'engage' }, ctx).state;
+    st = reduce(
+      st,
+      { t: 'PerformAction', operativeId: a, action: 'Shoot', params: { weaponName: 'spike', targetId: b } },
+      ctx,
+    ).state;
+    st = drain(st, ctx, () => undefined);
+    const entry = st.log.find((e) => e.kind === 'dice' && (e.data as { pool?: string } | undefined)?.pool === 'defence');
+    const data = entry?.data as { results: number[]; piercing: number } | undefined;
+    return { st, dice: data?.results.length ?? -1, piercing: data?.piercing ?? -1 };
+  }
+
+  it('Universal Equipment: a Piercing Crits 2 shot into smoke with no retained critical pierces nothing', () => {
+    // Two normal successes on 2+, no 6s: `retainedCrits` is 0, so Piercing Crits contributes
+    // nothing whether or not the target is in smoke. The old hook added a fourth defence die
+    // anyway, which is the whole bug — and because obscured downgrades every critical to a
+    // normal before the defence is rolled, "no retained critical" is the NORMAL case in smoke.
+    const { s, ctx } = piercingBattle('Piercing Crits 2', [2, 3, 1, 1, 1, 1, 1, 1]);
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    s.operatives[b]!.pos = { x: 16, y: 5 };
+    s.operatives[a]!.pos = { x: 10, y: 5 };
+    smokeOn(s, b, 'p2');
+    const { dice, piercing } = shootAndReadDefence(s, ctx, a, b);
+    expect(piercing).toBe(0);
+    expect(dice).toBe(3);
+  });
+
+  it('Universal Equipment: "weapons with the Piercing 2 ... rule have the Piercing 1 ... rule instead"', () => {
+    const { s, ctx } = piercingBattle('Piercing 2', [2, 3, 1, 1, 1, 1, 1, 1]);
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    s.operatives[b]!.pos = { x: 16, y: 5 };
+    s.operatives[a]!.pos = { x: 10, y: 5 };
+    smokeOn(s, b, 'p2');
+    const { dice, piercing } = shootAndReadDefence(s, ctx, a, b);
+    expect(piercing).toBe(1);
+    expect(dice).toBe(2);
+  });
+
+  it('the softening belongs to the smoke, so it applies when the SHOOTER owns the marker', () => {
+    // The old hook was registered per player and guarded on `target.player !== b.player`, so
+    // an operative standing in the enemy's own smoke got no softening at all.
+    const { s, ctx } = piercingBattle('Piercing 2', [2, 3, 1, 1, 1, 1, 1, 1]);
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    s.operatives[b]!.pos = { x: 16, y: 5 };
+    s.operatives[a]!.pos = { x: 10, y: 5 };
+    smokeOn(s, b, 'p1');
+    const { dice, piercing } = shootAndReadDefence(s, ctx, a, b);
+    expect(piercing).toBe(1);
+    expect(dice).toBe(2);
+  });
+
+  it('Universal Equipment: "...unless they’re within 2" of each other"', () => {
+    const { s, ctx } = piercingBattle('Piercing 2', [2, 3, 1, 1, 1, 1, 1, 1]);
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    s.operatives[b]!.pos = { x: 16, y: 5 };
+    // 2.5" centre to centre on 32mm bases is a 1.24" gap — inside the exception, and still
+    // far enough apart that neither is within the other's control range.
+    s.operatives[a]!.pos = { x: 18.5, y: 5 };
+    smokeOn(s, b, 'p2');
+    const { dice, piercing } = shootAndReadDefence(s, ctx, a, b);
+    expect(piercing).toBe(2);
+    expect(dice).toBe(1);
+  });
+});
+
+describe('STRATEGIC GAMBITs alternate', () => {
+  /** A battle parked in the Strategy phase's gambit step, with a gambit each player can use. */
+  function gambitBattle() {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], [1, 1, 1, 1], 'test.dummy', 'test.dummy');
+    s.phase = 'strategy';
+    s.strategyStep = 'gambit';
+    s.initiative = 'p1';
+    s.teams.p1.passedGambit = false;
+    s.teams.p2.passedGambit = false;
+    // Two gambits with no cost and no effect, so the test is about the ORDER and nothing else.
+    for (const player of ['p1', 'p2'] as const) {
+      ctx.hooks.on(
+        'gambitOptions',
+        { id: `test.gambit.${player}`, sourceText: 'test', player, priority: 10 },
+        (ev, b) => {
+          if (ev.player !== b.player) return;
+          ev.options.push(
+            { id: `test.gambit.${b.player}.a`, label: 'A' },
+            { id: `test.gambit.${b.player}.b`, label: 'B' },
+          );
+        },
+      );
+    }
+    return { s, ctx };
+  }
+
+  it('"Starting with the player who has initiative, each player alternates either using a STRATEGIC GAMBIT or passing"', () => {
+    const { s, ctx } = gambitBattle();
+    // p2 cannot open: the initiative player leads.
+    expect(reduce(s, { t: 'UseGambit', player: 'p2', gambitId: 'test.gambit.p2.a' }, ctx).ok).toBe(false);
+    const first = reduce(s, { t: 'UseGambit', player: 'p1', gambitId: 'test.gambit.p1.a' }, ctx);
+    expect(first.ok).toBe(true);
+    // ...and having used one, p1 cannot immediately use their second.
+    const twice = reduce(first.state, { t: 'UseGambit', player: 'p1', gambitId: 'test.gambit.p1.b' }, ctx);
+    expect(twice.ok).toBe(false);
+    expect(twice.reason).toContain('not your turn');
+    const second = reduce(first.state, { t: 'UseGambit', player: 'p2', gambitId: 'test.gambit.p2.a' }, ctx);
+    expect(second.ok).toBe(true);
+    expect(reduce(second.state, { t: 'UseGambit', player: 'p1', gambitId: 'test.gambit.p1.b' }, ctx).ok).toBe(true);
+  });
+
+  it('"The players repeat this process until they have both passed in succession"', () => {
+    const { s, ctx } = gambitBattle();
+    // A pass out of turn is rejected too — passing IS the alternating turn.
+    expect(reduce(s, { t: 'PassGambit', player: 'p2' }, ctx).ok).toBe(false);
+    let st = reduce(s, { t: 'PassGambit', player: 'p1' }, ctx).state;
+    expect(st.phase).toBe('strategy');
+    // p2 uses one instead of passing, which un-passes p1: not "in succession".
+    st = reduce(st, { t: 'UseGambit', player: 'p2', gambitId: 'test.gambit.p2.a' }, ctx).state;
+    expect(st.teams.p1.passedGambit).toBe(false);
+    expect(gambitToAct(st)).toBe('p1');
+    st = reduce(st, { t: 'PassGambit', player: 'p1' }, ctx).state;
+    st = reduce(st, { t: 'PassGambit', player: 'p2' }, ctx).state;
+    expect(st.phase).toBe('firefight');
+  });
+
+  it('the AI driver asks the same selector the UI and the reducer do', () => {
+    const { s, ctx } = gambitBattle();
+    const after = reduce(s, { t: 'UseGambit', player: 'p1', gambitId: 'test.gambit.p1.a' }, ctx).state;
+    // `actorFor` used to return the initiative player until they passed, so every soak game
+    // let one player resolve all of their gambits before the opponent could respond.
+    expect(gambitToAct(after)).toBe('p2');
+    expect(actorFor(after)).toBe('p2');
+  });
 });

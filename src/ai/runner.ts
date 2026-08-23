@@ -10,7 +10,7 @@
 import type { GameContext } from '../core/context.ts';
 import { createBattle } from '../core/init.ts';
 import type { Intent, RosterPick } from '../core/intents.ts';
-import { whoActivates } from '../core/phases.ts';
+import { gambitToAct, whoActivates } from '../core/phases.ts';
 import { reduce } from '../core/reducer.ts';
 import { SeededRng } from '../core/rng.ts';
 import { aliveOperatives } from '../core/state.ts';
@@ -170,11 +170,11 @@ export function actorFor(state: GameState): PlayerId | null {
   if (offer?.player && state.activeOperativeId) return offer.player;
   if (state.phase === 'strategy') {
     if (state.strategyStep !== 'gambit') return null;
-    const init = state.initiative ?? 'p1';
-    if (!state.teams[init].passedGambit) return init;
-    const other = otherPlayer(init);
-    if (!state.teams[other].passedGambit) return other;
-    return null;
+    // Core rules › STRATEGIC GAMBIT: "Starting with the player who has initiative, each player
+    // alternates either using a STRATEGIC GAMBIT or passing." The driver used to hand the
+    // initiative player every turn until they passed, so one player resolved all their
+    // gambits consecutively; `gambitToAct` is the selector the UI and the reducer both use.
+    return gambitToAct(state);
   }
   if (state.phase === 'firefight') {
     const active = state.activeOperativeId ? state.operatives[state.activeOperativeId] : undefined;

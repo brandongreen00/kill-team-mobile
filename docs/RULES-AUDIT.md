@@ -34,7 +34,7 @@ Ranked by how much each defect distorts a real game.
 | W-07 | FIXED `1978520` | engine | critical | Heavy only blocks shooting after moving, never moving after shooting |
 | W-08 | FIXED `1978520` | engine | critical | Pick Up Marker only checks that the TEAM controls the marker, so any operative lifts it from anywhere on the board |
 | W-09 | FIXED `1978520` | engine | critical | Mines only detonate where a move ends — an operative walks straight over the marker with impunity |
-| W-10 | open | engine | critical | Smoke Grenade markers can be placed where the thrower cannot see, and take the thrower's height instead of the ground's |
+| W-10 | FIXED | engine | critical | Smoke Grenade markers can be placed where the thrower cannot see, and take the thrower's height instead of the ground's |
 | W-11 | FIXED `1978520` | engine | critical | The initiative roll-off is rolled twice every turning point, and the discarded first roll decides the real roll-off's tie |
 | W-12 | FIXED | engine | critical | An On Guard point-blank shot is decided on raw base distance and then bypasses the visibility gate, so an on-guard operative shoots through a Gallowdark wall |
 | W-13 | FIXED | engine | major | On Guard is not limited to once per enemy activation — every on-guard operative can interrupt the same activation |
@@ -48,9 +48,9 @@ Ranked by how much each defect distorts a real game.
 | W-21 | open | engine | major | The retaliating operative still cannot choose among its melee weapons — 64 of 454 datacards are locked to card order |
 | W-22 | open | engine | major | Razor wire is built as solid terrain, so the Obstructing +1" is computed and then thrown away and the wire cannot be crossed at all |
 | W-23 | open | engine | major | The portable barricade gives cover to anyone behind it — the "only while an operative is connected to it" gate is never implemented |
-| W-24 | open | engine | major | Smoke's Piercing softening adds a defence die unconditionally, so Piercing Crits 2 into smoke always faces 4 dice |
-| W-25 | open | engine | major | Kill grade is a one-way ratchet — a REANIMATED operative never lowers the opponent's grade or takes back the VP |
-| W-26 | open | engine | major | The kill grade row is recomputed from the live roster, so operatives added mid-battle push the enemy onto a harder row |
+| W-24 | FIXED | engine | major | Smoke's Piercing softening adds a defence die unconditionally, so Piercing Crits 2 into smoke always faces 4 dice |
+| W-25 | FIXED | engine | major | Kill grade is a one-way ratchet — a REANIMATED operative never lowers the opponent's grade or takes back the VP |
+| W-26 | FIXED | engine | major | The kill grade row is recomputed from the live roster, so operatives added mid-battle push the enemy onto a harder row |
 | W-27 | FIXED | engine | major | Reboot can be performed while within control range of an enemy operative |
 | W-28 | open | engine | major | Breach performs no control-range check and its concussion roll hits operatives on the breacher's own side of the wall |
 | W-29 | open | engine | major | Volkus has no killzone module: Garrisoned Stronghold and Condensed Stronghold are entirely unimplemented |
@@ -61,7 +61,7 @@ Ranked by how much each defect distorts a real game.
 | W-34 | open | engine | major | A move may finish with two bases fully overlapping — the end-of-move overlap guard is a dead comparison |
 | W-35 | FIXED | engine | major | Operative-to-operative distance is horizontal only, so an operative on 3" Vantage terrain is in control range of one on the floor below |
 | W-36 | open | engine | major | An incapacitated operative gets no pre-removal step: granted free actions are dropped and only one carried marker is placed |
-| W-37 | open | engine | minor | Gambit alternation is not enforced by the reducer, and the AI driver lets the initiative player use every gambit first |
+| W-37 | FIXED | engine | minor | Gambit alternation is not enforced by the reducer, and the AI driver lets the initiative player use every gambit first |
 | W-38 | open | engine | minor | A granted free action is modelled as +1 APL, so the ±1 clamp cancels it against any other APL change |
 | W-39 | FIXED `10509af` | engine | minor | The Ceiling "regardless of the operative's height" exemption is still dead at the final-placement check |
 
@@ -213,7 +213,7 @@ Test: tests/rules-review.test.ts quoting universal-equipment.txt:112: a mine at 
 
 ### W-10 · Smoke Grenade markers can be placed where the thrower cannot see, and take the thrower's height instead of the ground's
 
-**OPEN** · engine · critical
+**FIXED** · engine · critical
 
 Rules pinned: `universal-equipment.txt:156 ("Place one of your Smoke Grenade markers within 6\" of this operative. It must be visible to this operative, or on Vantage terrain of a terrain feature that's visible to this operative")`
 
@@ -437,7 +437,7 @@ Test: tests/equipment.test.ts quoting universal-equipment.txt:142: an operative 
 
 ### W-24 · Smoke's Piercing softening adds a defence die unconditionally, so Piercing Crits 2 into smoke always faces 4 dice
 
-**OPEN** · engine · major
+**FIXED** · engine · major
 
 Rules pinned: `universal-equipment.txt:158 ("weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead")`; `appendix.txt:212 ("If the rule is Piercing Crits x, this only comes into effect if you retain any critical successes")`
 
@@ -453,7 +453,7 @@ Test: tests/equipment.test.ts quoting universal-equipment.txt:158: a Piercing Cr
 
 ### W-25 · Kill grade is a one-way ratchet — a REANIMATED operative never lowers the opponent's grade or takes back the VP
 
-**OPEN** · engine · major
+**FIXED** · engine · major
 
 Rules pinned: `approved-ops-2025.txt:419 ("As REANIMATED operatives are no longer incapacitated… your opponent's kill grade can go down during the battle (they lose VP accordingly)")`
 
@@ -469,7 +469,7 @@ Test: tests/ops.test.ts quoting approved-ops-2025.txt:419: two kills give grade 
 
 ### W-26 · The kill grade row is recomputed from the live roster, so operatives added mid-battle push the enemy onto a harder row
 
-**OPEN** · engine · major
+**FIXED** · engine · major
 
 Rules pinned: `approved-ops-2025.txt:267 ("The row you use is determined by the starting number of enemy operatives")`
 
@@ -645,7 +645,7 @@ Test: Two tests in tests/rules-review.test.ts. Quoting core-rules.txt:301: an op
 
 ### W-37 · Gambit alternation is not enforced by the reducer, and the AI driver lets the initiative player use every gambit first
 
-**OPEN** · engine · minor
+**FIXED** · engine · minor
 
 Rules pinned: `core-rules.txt:183 ("Starting with the player who has initiative, each player alternates either using a STRATEGIC GAMBIT or passing. The players repeat this process until they have both passed in succession")`
 

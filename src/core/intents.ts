@@ -89,6 +89,8 @@ export interface ActionParams {
   /** Unique/mission actions. */
   targetOperativeId?: string;
   targetPos?: Vec2;
+  /** The level `targetPos` names, when the point has more than one (Smoke Grenade on Vantage). */
+  targetZ?: number;
   choice?: string;
   data?: Record<string, unknown>;
 }

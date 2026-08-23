@@ -11,7 +11,7 @@ import { availableActions } from '../../src/core/actions.ts';
 import { aplOf, inflictDamage, markerController } from '../../src/core/state.ts';
 import { kasrkin, SKILLS, skillGambitId } from '../../src/teams/kasrkin/index.ts';
 import { teamData } from '../../src/teams/data.ts';
-import { activate, battle, opWith, rosterIncluding, teamContext } from './harness.ts';
+import { activate, battle, opWith, rosterIncluding, teamContext, yieldGambitTurn } from './harness.ts';
 import type { GameState } from '../../src/core/types.ts';
 
 const DATA = teamData('kasrkin');
@@ -104,7 +104,9 @@ describe('Skill at Arms — "STRATEGIC GAMBIT. Select a SKILL AT ARMS for friend
     expect(second.map((o) => o.id)).not.toContain(skillGambitId('light-em-up'));
     expect(second.length).toBe(3);
 
-    s = reduce(s, { t: 'UseGambit', player: 'p1', gambitId: skillGambitId('strike-fast') }, ctx).state;
+    // "each player alternates either using a STRATEGIC GAMBIT or passing": the second SKILL AT
+    // ARMS is a second gambit, so p2 takes their turn in between.
+    s = reduce(yieldGambitTurn(ctx, s, 'p1'), { t: 'UseGambit', player: 'p1', gambitId: skillGambitId('strike-fast') }, ctx).state;
     const third = ctx.hooks.emit('gambitOptions', s, { state: s, player: 'p1', options: [] }).options;
     expect(third.filter((o) => o.id.startsWith('kasrkin.rule.skill-at-arms:'))).toHaveLength(0);
   });
