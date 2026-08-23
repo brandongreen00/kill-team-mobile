@@ -9,7 +9,7 @@
  */
 import { registerAction } from '../../actions.ts';
 import { log } from '../../state.ts';
-import {
+import { missionActionCheck,
   activeControls,
   awardVP,
   binding,
@@ -90,6 +90,11 @@ registerAction({
   sourceText: printedAction(ID, 'Reboot').text,
   available: (_ctx, state) => state.critOpId === ID,
   check(ctx, state, op, params) {
+    // Every other crit-op mission action calls this; Reboot hand-rolled only the
+    // turning-point half, so it was the one that could be performed while within control range
+    // of an enemy operative — removing the whole counterplay of charging the marker.
+    const guard = missionActionCheck(ctx, state, op);
+    if (!guard.ok) return guard;
     if (state.turningPoint < 2) return { ok: false, reason: 'cannot be performed during the first turning point' };
     const marker = targetObjective(state, params.markerId);
     if (!marker) return { ok: false, reason: 'select an objective marker' };

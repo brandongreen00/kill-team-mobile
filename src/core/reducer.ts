@@ -704,8 +704,8 @@ function advancePhase(ctx: GameContext, state: GameState): void {
  * stop unchanged.
  */
 function advanceTurningPoint(ctx: GameContext, state: GameState): void {
-  endTurningPoint(ctx, state);
-  ctx.scoreEndOfTurningPoint?.(ctx, state);
+  // The score is read while the turning point's effects are still live — see `endTurningPoint`.
+  endTurningPoint(ctx, state, ctx.scoreEndOfTurningPoint);
   if (state.turningPoint >= (state.maxTurningPoints || MAX_TURNING_POINTS)) {
     state.phase = 'battleEnd';
     ctx.scoreEndOfBattle?.(ctx, state);

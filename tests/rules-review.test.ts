@@ -12,7 +12,7 @@ import { reduce } from '../src/core/reducer.ts';
 import { validateMove } from '../src/core/movement.ts';
 import { gapBetween, inControlRange, weaponsOf } from '../src/core/state.ts';
 import { getAction } from '../src/core/actions.ts';
-import { whoActivates } from '../src/core/phases.ts';
+import { endTurningPoint, whoActivates } from '../src/core/phases.ts';
 import { ScriptedRng } from '../src/core/rng.ts';
 import { parseWeaponRules } from '../src/core/weaponRules.ts';
 import { addRolled, retentionOptions, type DicePool } from '../src/core/dice.ts';
@@ -1042,5 +1042,35 @@ describe('operative-to-operative distance is three-dimensional', () => {
     // vertically, and the rule measures "from the closest part" of a base in three dimensions.
     expect(gapBetween(ctx, a, b)).toBeGreaterThan(2.9);
     expect(inControlRange(ctx, s, a, b)).toBe(false);
+  });
+});
+
+describe('the turning point is scored before its effects expire', () => {
+  it('an "until the end of the turning point" effect is still live when the crit op reads marker control', () => {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const seen: string[] = [];
+    const ctx = createGameContext({
+      rng: new ScriptedRng(Array.from({ length: 20 }, () => 4)),
+      maps: [testMap()],
+      datacards: [dummy],
+    });
+    // Stand in for the crit op: record whether the turning point's effects survive to scoring.
+    const scored = (_c: typeof ctx, st: GameState) => {
+      seen.push(st.effects.some((e) => e.rule === 'probe') ? 'effect live' : 'effect gone');
+    };
+    let st = createBattle(ctx, { map: testMap(), seed: 3, critOpId: undefined });
+    st = reduce(st, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: [{ datacardId: 'test.dummy' }] }, ctx).state;
+    st = reduce(st, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: [{ datacardId: 'test.dummy' }] }, ctx).state;
+    st.effects.push({
+      id: 'probe1',
+      rule: 'probe',
+      source: { kind: 'core', id: 'test' },
+      player: 'p1',
+      expiry: { kind: 'endOfTurningPoint' },
+    } as never);
+    endTurningPoint(ctx, st, scored as never);
+    expect(seen).toEqual(['effect live']);
+    // …and it is gone afterwards.
+    expect(st.effects.some((e) => e.rule === 'probe')).toBe(false);
   });
 });

@@ -214,9 +214,26 @@ export function guardInterruptCandidates(state: GameState, defender: PlayerId) {
 // End of turning point
 // ---------------------------------------------------------------------------
 
-export function endTurningPoint(ctx: GameContext, state: GameState): void {
+/**
+ * End of the turning point, in the order the rules resolve it.
+ *
+ * `scoreEndOfTurningPoint` is passed in and called BETWEEN the `onEndOfTP` emit and the expiry
+ * sweep. It used to run after `endTurningPoint` had already returned, so every effect with
+ * `expiry.kind === 'endOfTurningPoint'` — 119 of them across `src/` — was gone before the crit
+ * op read marker control. Marker control is decided by total contesting APL, and APL modifiers
+ * reach `aplOf` through `onStatMod` hooks that read `state.effects`, so a ploy bought precisely
+ * to win the end-of-turning-point control check expired a few lines before the check ran.
+ * Tempestus Aquilons' DROP AND SECURE had already been given `endOfBattle` expiry to work
+ * around this, with a comment naming the ordering.
+ */
+export function endTurningPoint(
+  ctx: GameContext,
+  state: GameState,
+  score?: (ctx: GameContext, state: GameState) => void,
+): void {
   removeIncapacitated(ctx, state);
   ctx.hooks.emit('onEndOfTP', state, { state });
+  score?.(ctx, state);
   expireEffects(state);
   log(state, { kind: 'system', text: `End of turning point ${state.turningPoint}` });
 }

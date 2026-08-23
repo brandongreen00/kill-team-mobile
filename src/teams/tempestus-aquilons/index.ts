@@ -1370,9 +1370,11 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       sourceText: shortQuote(printed(SP.dropAndSecure)),
       player: T.player,
       data: { markerId: chosen.id },
-      // "Until the Ready step of the NEXT Strategy phase" — deliberately not
-      // `endOfTurningPoint`, which `expireEffects` drops BEFORE `scoreEndOfTurningPoint` reads
-      // marker control, i.e. exactly when this ploy is meant to be deciding it.
+      // "Until the Ready step of the NEXT Strategy phase" — which is LATER than the end of
+      // the turning point, so `endOfTurningPoint` would drop it too early on its own terms.
+      // The `onReadyStep` handler below is what actually ends it.
+      // (It was also written this way because `expireEffects` used to run before
+      // `scoreEndOfTurningPoint`; that ordering is fixed in the core now — D-091.)
       expiry: { kind: 'endOfBattle' },
     });
     log(ev.state, { kind: 'ploy', player: T.player, text: `DROP AND SECURE: ${chosen.id}` });
