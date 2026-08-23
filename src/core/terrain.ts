@@ -206,12 +206,13 @@ export function baseBlockedByTerrain(
   const pts = [centre, ...basePerimeter(centre, base, rotDeg, 16)];
   for (const part of index.solid) {
     if (part.z1 <= z + 1e-6) continue; // we're standing on or above it
-    if (part.z0 >= z + height - 1e-6) {
-      // Part is entirely above the model — Ceiling terrain explicitly allows this for
-      // bases <= 50mm round / 60x35 oval, and physically anything shorter passes too.
-      if (hasType(part, 'Ceiling') && baseFitsUnderCeiling(base)) continue;
-      continue;
-    }
+    if (part.z0 >= z + height - 1e-6) continue; // entirely above the model: we pass underneath
+    // "Operatives with a round base of 50mm or less, or an oval base of 60x35mm, can move
+    // underneath Ceiling terrain REGARDLESS OF THE OPERATIVE'S HEIGHT (this takes precedence
+    // over Terrain and Movement)." This test used to sit inside the branch above, where both
+    // arms continued — so it never changed an answer, and an operative taller than the
+    // clearance was refused a position the rule explicitly allows.
+    if (part.z0 >= z + 1e-6 && hasType(part, 'Ceiling') && baseFitsUnderCeiling(base)) continue;
     for (const p of pts) {
       if (withinBounds(part, p) && pointInPoly(p, part.poly)) return part;
     }

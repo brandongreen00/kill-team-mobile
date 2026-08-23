@@ -667,3 +667,95 @@ describe('Torrent secondaries are each "a valid target as normal"', () => {
     throw new Error('the sequence never reached the secondary target');
   });
 });
+
+describe('vertical movement is charged and restricted', () => {
+  const platform = (id: string, x: number, y: number, w: number, h: number, z: number): TerrainFeature => ({
+    id,
+    kind: 'test.vantage',
+    label: id.toUpperCase(),
+    placement: { x, y, rotDeg: 0, flip: false },
+    parts: [
+      {
+        id: `${id}.floor`,
+        featureId: id,
+        poly: rect(x, y, w, h),
+        z0: z,
+        z1: z,
+        types: ['Vantage', 'Light'],
+        role: 'floor',
+        standable: true,
+        solid: false,
+      },
+    ],
+  });
+
+  const one = (features: TerrainFeature[]) => {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], [4, 4, 4, 4], 'test.dummy', 'test.dummy');
+    s.map = testMap({ features });
+    s.operatives[s.teams.p2.operativeIds[0]!]!.pos = { x: 28, y: 20 }; // well out of the way
+    return { s, ctx, op: s.operatives[s.teams.p1.operativeIds[0]!]! };
+  };
+
+  it('path.endZ is the last waypoint\'s elevation, not a free ride: "each climb is treated as a minimum of 2\" vertically"', () => {
+    const { s, ctx, op } = one([platform('v', 10, 9, 6, 6, 3)]);
+    op.pos = { x: 9.4, y: 11 };
+    op.z = 0;
+    // A 0.6" step onto a 3"-high platform, declared through endZ. It is a climb, and a climb
+    // is charged: 0.6" rounds to 1", the climb to 3". Free, it cost 1".
+    const v = validateMove(ctx, s, op, { points: [{ x: 10.4, y: 11 }], endZ: 3 }, { action: 'Reposition' });
+    expect(v.ok).toBe(true);
+    expect(v.legs.some((l) => l.kind === 'climb')).toBe(true);
+    expect(v.total).toBeGreaterThan(1);
+    // …and a Dash "cannot climb during this move", however the climb is declared.
+    const dash = validateMove(ctx, s, op, { points: [{ x: 10.4, y: 11 }], endZ: 3 }, { action: 'Dash', noClimb: true });
+    expect(dash.ok).toBe(false);
+    expect(dash.reason).toContain('cannot climb');
+  });
+
+  it('"when jumping to a terrain feature, you can ignore its height difference of 1\" or less"', () => {
+    // Two platforms 2" apart, one 4" up and one 5" up: a jump across, rising 1".
+    const { s, ctx, op } = one([platform('a', 4, 9, 5, 5, 4), platform('b', 11, 9, 5, 5, 5)]);
+    op.pos = { x: 8.5, y: 11 };
+    op.z = 4;
+    const v = validateMove(ctx, s, op, { points: [{ x: 11.5, y: 11 }], zs: [5] }, { action: 'Reposition' });
+    expect(v.ok).toBe(true);
+    // The 1" rise is ignored, so only the 3" of horizontal travel is charged — not 2" of
+    // climb on top of it.
+    expect(v.total).toBe(3);
+    expect(v.legs.find((l) => l.kind === 'jump')?.charged).toBe(0);
+    // A Dash may jump even though "it cannot climb during this move".
+    op.pos = { x: 8.5, y: 11 };
+    const dash = validateMove(ctx, s, op, { points: [{ x: 11.5, y: 11 }], zs: [5] }, { action: 'Dash', noClimb: true });
+    expect(dash.ok).toBe(true);
+  });
+
+  it('Accessible: the surface an operative is standing on is not terrain it moves THROUGH', () => {
+    const gantry: TerrainFeature = {
+      id: 'g',
+      kind: 'test.gantry',
+      label: 'G',
+      placement: { x: 12, y: 11, rotDeg: 0, flip: false },
+      parts: [
+        {
+          id: 'g.floor',
+          featureId: 'g',
+          poly: rect(9, 6, 6, 10),
+          z0: 3,
+          z1: 3,
+          types: ['Accessible', 'Vantage', 'Light'],
+          role: 'floor',
+          standable: true,
+          solid: false,
+        },
+      ],
+    };
+    const { s, ctx, op } = one([gantry]);
+    op.pos = { x: 12, y: 8 };
+    op.z = 3;
+    // 5" along the gantry, both ends on it. Charged as 6" it consumed a Move 6 entirely.
+    const v = validateMove(ctx, s, op, { points: [{ x: 12, y: 13 }], zs: [3] }, { action: 'Reposition' });
+    expect(v.ok).toBe(true);
+    expect(v.total).toBe(5);
+  });
+});

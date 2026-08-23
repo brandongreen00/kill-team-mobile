@@ -143,7 +143,7 @@ const WINGS_PATH = {
   points: [
     { x: 13, y: 8.5 },
     { x: 13, y: 9.2 },
-    { x: 13, y: 10.2 },
+    { x: 13, y: 12.2 },
   ],
   zs: [undefined, 3, 3],
 } as unknown as never;
@@ -651,14 +651,14 @@ describe('Accursed Gifts (faction rule)', () => {
     place(state, id, 13, 8.5);
     mutateOperative(ctx, state, state.operatives[id]!, 'mutant');
     const s = activate(ctx, state, id, 'engage');
-    // The path costs 7" (a 3" climb, then two Accessible-terrain legs); the MUTANT's Move stat
-    // is 6", so the universal Reposition cannot afford it and treating the climb as 2" can.
+    // The path costs 7" (a 3" climb, then 1" and 3" along the platform); the MUTANT's Move
+    // stat is 6", so the universal Reposition cannot afford it and treating the climb as 2" can.
     expect(getAction('Reposition')!.check(ctx, s, s.operatives[id]!, { path: WINGS_PATH }).ok).toBe(false);
     expect(getAction(WINGS_REPOSITION)!.check(ctx, s, s.operatives[id]!, { path: WINGS_PATH }).ok).toBe(true);
     const out = act(ctx, s, id, WINGS_REPOSITION, { path: WINGS_PATH });
     expect(out.ok).toBe(true);
     expect(out.state.operatives[id]!.z).toBe(3);
-    expect(out.state.operatives[id]!.pos).toEqual({ x: 13, y: 10.2 });
+    expect(out.state.operatives[id]!.pos).toEqual({ x: 13, y: 12.2 });
     expect(out.state.operatives[id]!.actionsThisActivation).toContain('Reposition');
   });
 

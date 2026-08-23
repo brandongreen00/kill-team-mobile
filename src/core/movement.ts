@@ -21,6 +21,7 @@ import {
   baseTouchesHazardous,
   featureIdsSupporting,
   obstructingCrossings,
+  partsSupporting,
   pathBlockedByTerrain,
   surfaceAt,
   surfacesAt,
@@ -131,21 +132,42 @@ export function validateMove(
 
   if (path.points.length === 0) return fail('no movement declared');
 
+  const lastIndex = path.points.length - 1;
   for (let i = 0; i < path.points.length; i++) {
     const next = path.points[i]!;
     const horizontal = dist(cur, next);
     const startZ = curZ;
-    const declaredZ = path.zs?.[i];
+    // `path.endZ` is the elevation the operative finishes at, so it is the declared z of the
+    // LAST waypoint. Applied after the loop instead, as it used to be, the climb or drop it
+    // asks for cost nothing and skipped every restriction: a Reposition with
+    // `{ points: [1" away], endZ: 3 }` was a free 3" ascent onto a rooftop, and a Dash could
+    // do it too, despite "it cannot climb during this move".
+    const declaredZ = path.zs?.[i] ?? (i === lastIndex ? path.endZ : undefined);
     const targetZ = declaredZ !== undefined ? declaredZ : closestSurface(index, next, curZ);
     const dz = targetZ - curZ;
 
     // --- vertical handling ------------------------------------------------
-    if (dz > 1e-6) {
+    if (dz > 1e-6 && isJumpLanding(index, cur, curZ, next, targetZ)) {
+      // "When jumping to a terrain feature, you can ignore its height difference of 1" or
+      // less." Ignored means ignored: no 2" minimum, and no climb — so a Dash, which "cannot
+      // climb during this move, but it can drop and jump", may do it.
+      legs.push({
+        from: cur,
+        to: next,
+        fromZ: curZ,
+        toZ: targetZ,
+        kind: 'jump',
+        raw: dz,
+        charged: 0,
+        note: 'height difference ignored',
+      });
+      curZ = targetZ;
+    } else if (dz > 1e-6) {
       // Climb. "An operative must be within 1" horizontally and 3" vertically of terrain
       // that's visible to them to climb it."
       if (opts.noClimb) return fail(`${opts.action} cannot climb`);
       if (dz > 3 + 1e-6) return fail(`cannot climb ${dz.toFixed(1)}" (more than 3" vertically)`);
-      if (horizontal > 1 + 1e-6 && !isJumpLanding(index, cur, curZ, next, targetZ))
+      if (horizontal > 1 + 1e-6)
         return fail('must be within 1" horizontally of the terrain to climb it');
       const vertical = ladderAvailable(index, ctx, state, op, cur, next) && !ladderUsed ? 1 : Math.max(2, dz);
       if (vertical === 1) ladderUsed = true;
@@ -188,7 +210,16 @@ export function validateMove(
     if (horizontal > 1e-6) {
       // Accessible terrain: "counts as an additional 1"... Only the centre of an operative's
       // base needs to move through Accessible terrain."
-      const access = accessibleCrossings(index, cur, next, curZ);
+      // "Operatives can move THROUGH Accessible terrain … but it counts as an additional 1" to
+      // do so." The floor an operative is standing on is not terrain it moves through, and
+      // `segmentCrossesPoly` answers true whenever an endpoint is inside the polygon — so
+      // every increment along a Bheta-Decima gantry (whose floors are Accessible) was charged
+      // the extra inch, and a 3" Dash along one cost 4".
+      const standingOn = new Set<string>([
+        ...partsSupporting(index, cur, startZ).map((p) => p.id),
+        ...partsSupporting(index, next, curZ).map((p) => p.id),
+      ]);
+      const access = accessibleCrossings(index, cur, next, curZ).filter((p) => !standingOn.has(p.id));
       const obstructing = obstructingCrossings(index, cur, next);
       const extra = (access.length > 0 ? 1 : 0) + (obstructing.length > 0 ? 1 : 0);
       const charged = ceil1(horizontal + extra);
@@ -246,7 +277,7 @@ export function validateMove(
   }
 
   // --- final position legality -------------------------------------------
-  const finalZ = path.endZ ?? curZ;
+  const finalZ = curZ;
   const rot = path.endRot ?? op.rot;
   const blocked = baseBlockedByTerrain(index, cur, c.base, rot, finalZ, heightOf(ctx, op));
   if (blocked) return fail(`cannot finish on ${blocked.role ?? 'terrain'} (${blocked.types.join('+')})`);
