@@ -1010,7 +1010,7 @@ describe('EXACTION SQUAD strategy ploys', () => {
     expect(ruleText('exaction-squad.sp.guilt-reveals-itself')).toContain('doesn’t remove their cover save');
   });
 
-  it('GUILT REVEALS ITSELF: "it doesn’t remove their cover save (if any)" — the save is put back', () => {
+  it('GUILT REVEALS ITSELF: "it doesn’t remove their cover save (if any)"', () => {
     const lightWall: TerrainFeature = {
       id: 'light-wall',
       kind: 'test.light',
@@ -1052,58 +1052,8 @@ describe('EXACTION SQUAD strategy ploys', () => {
     const s = useGambit(ctx, state, 'exaction-squad.sp.guilt-reveals-itself');
     const withPloy = checkTarget(ctx, s, s.operatives[shooter.id]!, s.operatives[foe.id]!, shotgun, rules);
     expect(withPloy.valid).toBe(true); // "this can allow such operatives to be targeted"
-    expect(withPloy.inCover).toBe(false);
-    // …and the cover save is handed back at the Roll Defence Dice step.
-    s.sequence = {
-      kind: 'shoot',
-      step: 'rollDefence',
-      attackerId: shooter.id,
-      targetId: foe.id,
-      queue: [],
-      resolvedTargets: [],
-      weaponName: 'Combat shotgun',
-      profileName: 'close range',
-      secondary: false,
-      pointBlank: false,
-      inCover: false,
-      obscured: false,
-      coverChoiceMade: true,
-      vantageAccurate: 0,
-      vantageImprovedCover: false,
-      attack: { dice: [], nextId: 1 },
-      defence: { dice: [], nextId: 1 },
-      usedRerolls: [],
-      usedRetention: [],
-      damage: 0,
-      useCounted: false,
-      attacker: 'p1',
-      defender: 'p2',
-      free: false,
-    };
-    const ev = ctx.hooks.emit('onDefenceDice', s, {
-      state: s,
-      ctx: {
-        attacker: s.operatives[shooter.id]!,
-        defender: s.operatives[foe.id]!,
-        weaponName: 'Combat shotgun',
-        profile: shotgun,
-        rules,
-        type: 'ranged',
-        secondary: false,
-        pointBlank: false,
-        inCover: false,
-        obscured: false,
-        vantageAccurate: 0,
-        distance: 2.4,
-      },
-      count: 3,
-      coverSave: false,
-      coverSaveAsCrit: false,
-      extraCoverSaves: 0,
-      mods: { hit: 0, save: 0, apl: 0, move: 0, atk: 0 },
-      rerolls: [],
-    });
-    expect(ev.coverSave).toBe(true);
+    expect(withPloy.inCoverForTargeting).toBe(false); // "…cannot be in cover (instead of 2")"
+    expect(withPloy.inCover).toBe(true); // "…it doesn’t remove their cover save (if any)"
   });
 
   it('INVIOLATE JURISDICTION: a defence re-roll while within 2" of an objective marker', () => {

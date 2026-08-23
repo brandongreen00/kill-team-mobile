@@ -32,6 +32,7 @@ import {
   wallCornerZones,
   type IndexedPart,
   type TerrainIndex,
+  partsSupporting,
 } from './terrain.ts';
 import type { BaseShape, Poly, Vec2, Vec3 } from './types.ts';
 
@@ -129,12 +130,7 @@ export function isVisible(index: TerrainIndex, from: Body, to: Body, opts: Visib
   const candidates = index.parts.filter((p) => {
     if (!p.blocksVisibility) return false;
     if (opts.ignore?.(p)) return false;
-    if (opts.forControlRange) {
-      // Volkus: "For the purposes of control range, ignore the door and parts of this
-      // terrain feature less than 2" high when determining visibility."
-      if (p.role === 'door') return false;
-      if (p.z1 - p.z0 < 2 && !hasType(p, 'Wall')) return false;
-    }
+    if (opts.forControlRange && controlRangeIgnores(p)) return false;
     return segmentMayHitPart(p, from.pos, to.pos);
   });
   let clear = 0;
@@ -161,6 +157,27 @@ export function isVisible(index: TerrainIndex, from: Body, to: Body, opts: Visib
  * Control range: "visible to and within 1"". Mutual.
  * Distances between operatives are base-to-base.
  */
+/**
+ * Terrain the Volkus killzone tells you to look past when working out control range.
+ *
+ * Killzones § Stronghold: "For the purposes of control range, ignore the door and parts of
+ * this terrain feature less than 2" high when determining visibility."
+ * Killzones § Large Ruin: "The door is Accessible and Heavy terrain. For the purposes of
+ * control range, ignore the door when determining visibility."
+ *
+ * Two things were wrong with the old test, `p.z1 - p.z0 < 2 && !hasType(p, 'Wall')`. It read
+ * `z1 - z0` — the part's THICKNESS — where the rule says "high", and every extracted upper
+ * level is a zero-thickness plane, so every floor in the game was ignored. And it was applied
+ * on every killzone, not the one that prints it, so an operative on a stronghold roof was in
+ * control range of the enemy standing underneath it.
+ */
+function controlRangeIgnores(p: IndexedPart): boolean {
+  const kind = p.feature.kind;
+  const isStronghold = kind === 'volkus.strongholdA' || kind === 'volkus.strongholdB';
+  if (p.role === 'door' && (isStronghold || kind === 'volkus.largeRuin')) return true;
+  return isStronghold && p.z1 < 2;
+}
+
 export function withinControlRange(index: TerrainIndex, a: Body, b: Body): boolean {
   if (a.id === b.id) return true;
   if (baseGap(a.pos, a.base, a.rot, b.pos, b.base, b.rot) > 1 + 1e-6) return false;
@@ -227,8 +244,19 @@ export function interveningParts(
   const lines = targetingLines(a, b, opts.samples ?? 10);
   const any: IndexedPart[] = [];
   const wholly: IndexedPart[] = [];
+  // "Anything at least one of these lines cross is intervening." A line drawn between two
+  // operatives standing on the same surface runs ALONG that surface; it does not cross it.
+  // `segmentCrossesPoly` answers true whenever an endpoint is inside the polygon, so without
+  // this the floor under both of them counted as intervening — and, being within 1" of the
+  // target, as cover. Everyone on an upper level was permanently in cover from everyone else
+  // on it.
+  const underfoot = new Set<string>([
+    ...partsSupporting(index, a.pos, a.z).map((p) => p.id),
+    ...partsSupporting(index, b.pos, b.z).map((p) => p.id),
+  ]);
   for (const part of index.parts) {
     if (hasType(part, 'Exposed')) continue;
+    if (underfoot.has(part.id)) continue;
     if (opts.ignore?.(part)) continue;
     if (!segmentMayHitPart(part, a.pos, b.pos)) continue;
 
@@ -273,9 +301,22 @@ function polyCentroid2(poly: Poly): Vec2 {
 // ---------------------------------------------------------------------------
 
 export interface CoverResult {
+  /**
+   * The TRUE cover state, which decides the cover save.
+   *
+   * Seek / Seek Light and the Vantage Light denial both stop a Conceal operative hiding
+   * behind terrain when you pick a target, and both say the same thing about the save:
+   * "Whilst this can allow such operatives to be targeted (assuming they're visible), it
+   * doesn't remove their cover save (if any)." So they narrow `inCoverForTargeting` and
+   * leave this alone.
+   */
   inCover: boolean;
+  /** Cover as the VALID TARGET test sees it, with Seek / Vantage denials applied. */
+  inCoverForTargeting: boolean;
   obscured: boolean;
   coverParts: IndexedPart[];
+  /** The parts left after the targeting denials — what made `inCoverForTargeting`. */
+  targetingCoverParts: IndexedPart[];
   obscuringParts: IndexedPart[];
   /** Set when a single feature would give both, forcing the defender to choose. */
   mustChoose: boolean;
@@ -284,12 +325,20 @@ export interface CoverResult {
 }
 
 export interface CoverOpts {
-  /** Seek / Seek Light: which terrain cannot be used for cover. */
+  /** Seek / Seek Light: which terrain cannot be USED for cover when picking a target. */
   ignoreCoverTerrain?: 'none' | 'light' | 'all';
+  /** A rule that says the operative "cannot be in cover" — the save goes with it. */
+  denyCover?: boolean;
   /** Vantage: the shooter is >=2" above a Conceal target, so Light cover is denied. */
   vantageDeniesLightCover?: boolean;
-  /** Extra parts to ignore (e.g. Vantage-connected Heavy terrain, smoke handled separately). */
+  /** Extra parts that are not intervening at all (smoke is handled separately). */
   ignore?: (part: IndexedPart) => boolean;
+  /**
+   * Vantage: "for the purposes of OBSCURED, ignore Heavy terrain connected to Vantage
+   * terrain the active operative or the intended target is on." Obscured only — passing this
+   * as `ignore` also deleted the cover the same Heavy part was giving.
+   */
+  ignoreForObscured?: (part: IndexedPart) => boolean;
 }
 
 /**
@@ -310,13 +359,17 @@ export function coverAndObscured(
 
   // --- cover -------------------------------------------------------------
   const coverParts: IndexedPart[] = [];
-  if (gap > 2 + 1e-6) {
+  const targetingCoverParts: IndexedPart[] = [];
+  if (gap > 2 + 1e-6 && !opts.denyCover) {
     for (const part of inter.any) {
-      if (opts.ignoreCoverTerrain === 'all') continue;
-      if (opts.ignoreCoverTerrain === 'light' && hasType(part, 'Light') && !hasType(part, 'Heavy')) continue;
-      if (opts.vantageDeniesLightCover && hasType(part, 'Light') && !hasType(part, 'Heavy')) continue;
       // "within its control range": visible to and within 1" of the TARGET.
-      if (baseDistanceToPart(target.pos, target.base, target.rot, part) <= 1 + 1e-6) coverParts.push(part);
+      if (baseDistanceToPart(target.pos, target.base, target.rot, part) > 1 + 1e-6) continue;
+      coverParts.push(part);
+      const lightOnly = hasType(part, 'Light') && !hasType(part, 'Heavy');
+      if (opts.ignoreCoverTerrain === 'all') continue;
+      if (opts.ignoreCoverTerrain === 'light' && lightOnly) continue;
+      if (opts.vantageDeniesLightCover && lightOnly) continue;
+      targetingCoverParts.push(part);
     }
   }
 
@@ -324,6 +377,7 @@ export function coverAndObscured(
   const obscuringParts: IndexedPart[] = [];
   for (const part of inter.any) {
     if (!hasType(part, 'Heavy')) continue;
+    if (opts.ignoreForObscured?.(part)) continue;
     const dS = baseDistanceToPart(shooter.pos, shooter.base, shooter.rot, part);
     const dT = baseDistanceToPart(target.pos, target.base, target.rot, part);
     if (dS <= 1 + 1e-6 || dT <= 1 + 1e-6) continue; // ignored, per the 1" rule
@@ -339,8 +393,10 @@ export function coverAndObscured(
 
   const result: CoverResult = {
     inCover: coverParts.length > 0,
+    inCoverForTargeting: targetingCoverParts.length > 0,
     obscured: obscuringParts.length > 0,
     coverParts,
+    targetingCoverParts,
     obscuringParts,
     mustChoose: shared && coverParts.length > 0 && obscuringParts.length > 0,
   };

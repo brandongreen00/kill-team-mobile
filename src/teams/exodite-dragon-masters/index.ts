@@ -1255,7 +1255,10 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   reg.on('onValidTarget', T.bind(RULE.cavalry, 8), (ev) => {
     if (!mounted(ev.target) || !T.ctx) return;
     const from = ev.viewFrom ?? ev.attacker;
-    if (!mountedCoverAndObscured(T.ctx, ev.state, from, ev.target).inCover) ev.ignoreCoverTerrain = 'all';
+    // "…cannot be in cover from or obscured by Light terrain, terrain parts less than 2"
+    // tall or terrain that's not wholly intervening." That is the strong form: it takes the
+    // cover save with it, unlike Seek's "it doesn't remove their cover save (if any)".
+    if (!mountedCoverAndObscured(T.ctx, ev.state, from, ev.target).inCover) ev.denyCover = true;
   });
   reg.on('onCollectAttackDice', T.bind(RULE.cavalry, 8), (ev) => {
     if (ev.ctx.type !== 'ranged' || !T.ctx) return;

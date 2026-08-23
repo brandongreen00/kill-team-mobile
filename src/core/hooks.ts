@@ -222,8 +222,17 @@ export interface HookEvents {
     target: OperativeState;
     valid: boolean;
     reason?: string;
-    /** Overrides discovered by rules (Seek, smoke, Bheta restrictions). */
+    /**
+     * Seek / Seek Light and friends: terrain that cannot be USED for cover when selecting a
+     * valid target. "Whilst this can allow such operatives to be targeted…, it doesn't
+     * remove their cover save (if any)" — so this narrows the targeting view only.
+     */
     ignoreCoverTerrain: 'none' | 'light' | 'all';
+    /**
+     * The stronger form: a rule that says the operative "cannot be in cover" at all, which
+     * takes the cover save with it (e.g. Exodite Dragon Masters' DRACONIC CAVALRY TACTICS).
+     */
+    denyCover?: boolean;
     forceVisible: boolean;
     /**
      * "Having other friendly operatives within an enemy operative's control range doesn't

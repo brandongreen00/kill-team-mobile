@@ -154,7 +154,11 @@ function applyReroll(
     const team = state.teams[decision.who];
     if (team.cp < cp) return;
     team.cp -= cp;
-    team.ploysUsedTP.push(String(decision.ctx?.['grantId'] ?? 'commandReroll'));
+    const grantId = String(decision.ctx?.['grantId'] ?? 'commandReroll');
+    // "Other than Command Re-roll, each player cannot use each ploy more than once per
+    // turning point." A team's own CP-priced re-roll grant IS capped; Command Re-roll is
+    // not, so recording it here locked it out for the rest of the turning point.
+    if (!grantId.startsWith('commandReroll')) team.ploysUsedTP.push(grantId);
     log(state, { kind: 'ploy', player: decision.who, text: `Command Re-roll (${cp}CP)` });
   }
 

@@ -78,7 +78,14 @@ export const COMMAND_REROLL: Omit<RerollGrant, 'player'> = {
 export interface TargetCheck {
   valid: boolean;
   reason?: string;
+  /** The cover state that decides the cover SAVE. */
   inCover: boolean;
+  /**
+   * Cover as the VALID TARGET test sees it. Seek / Seek Light and the Vantage Light denial
+   * narrow this and leave `inCover` alone: "Whilst this can allow such operatives to be
+   * targeted (assuming they're visible), it doesn't remove their cover save (if any)."
+   */
+  inCoverForTargeting: boolean;
   obscured: boolean;
   mustChoose: boolean;
   vantageAccurate: number;
@@ -113,6 +120,7 @@ export function checkTarget(
   const base: TargetCheck = {
     valid: false,
     inCover: false,
+    inCoverForTargeting: false,
     obscured: false,
     mustChoose: false,
     vantageAccurate: 0,
@@ -157,8 +165,12 @@ export function checkTarget(
 
   const cover = coverAndObscured(index, view, t, {
     ignoreCoverTerrain: hookEv.ignoreCoverTerrain,
+    ...(hookEv.denyCover ? { denyCover: true } : {}),
     vantageDeniesLightCover: vantageDeniesLight,
-    ignore: vantageIgnoreFilter(index, view, t),
+    // "Thirdly, for the purposes of OBSCURED, ignore Heavy terrain connected to Vantage
+    // terrain…" — obscured only. Passed as `ignore` it also deleted the cover that same
+    // Heavy part was giving.
+    ignoreForObscured: vantageIgnoreFilter(index, view, t),
   });
 
   // Smoke grenades create a dynamic obscuring area.
@@ -168,17 +180,20 @@ export function checkTarget(
   const result: TargetCheck = {
     valid: true,
     inCover: cover.inCover,
+    inCoverForTargeting: cover.inCoverForTargeting,
     obscured: cover.obscured || smokeObscure,
     mustChoose: cover.mustChoose,
     vantageAccurate: vAcc,
-    vantageImprovedCover: vantageDeniesLight && cover.inCover,
+    // "…it doesn't remove their cover save, and the defender can retain it as a critical
+    // success instead, or retain one additional cover save."
+    vantageImprovedCover: vantageDeniesLight && cover.inCover && !cover.inCoverForTargeting,
     distance,
   };
 
   if (!hookEv.valid) return { ...result, valid: false, reason: hookEv.reason ?? 'not a valid target' };
 
   // Conceal: valid only if visible AND not in cover.
-  if (target.order === 'conceal' && result.inCover && !opts.pointBlank)
+  if (target.order === 'conceal' && result.inCoverForTargeting && !opts.pointBlank)
     return { ...result, valid: false, reason: 'target has a Conceal order and is in cover' };
 
   // Shoot while engaged is illegal unless this is a point-blank shot (On Guard).
@@ -613,7 +628,9 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
       case 'defenceRerolls': {
         const grants: RerollGrant[] = [];
         const defTeam = state.teams[seq.defender];
-        if (defTeam.cp >= 1 && !defTeam.ploysUsedTP.includes('commandReroll:defence'))
+        // Command Re-roll is the one ploy with no once-per-turning-point cap; `usedRerolls`
+        // still stops it being offered twice against the same roll.
+        if (defTeam.cp >= 1)
           grants.push({ ...COMMAND_REROLL, id: 'commandReroll:defence', player: seq.defender });
         const ev = ctx.hooks.emit('onDefenceDice', state, {
           state,
@@ -757,8 +774,7 @@ function attackRerollGrants(
   if (hasRule(rules, 'Relentless'))
     grants.push({ id: 'relentless', label: 'Relentless: re-roll any of your attack dice', mode: 'any' });
   const team = state.teams[seq.attacker];
-  if (team.cp >= 1 && !team.ploysUsedTP.includes('commandReroll:attack'))
-    grants.push({ ...COMMAND_REROLL, id: 'commandReroll:attack', player: seq.attacker });
+  if (team.cp >= 1) grants.push({ ...COMMAND_REROLL, id: 'commandReroll:attack', player: seq.attacker });
   const ev = ctx.hooks.emit('onRollAttack', state, { state, ctx: actx, dice: [], rerolls: grants });
   return ev.rerolls;
 }

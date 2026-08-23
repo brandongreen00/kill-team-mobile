@@ -364,8 +364,9 @@ function offerRerolls(
   if (hasRule(rules, 'Relentless'))
     grants.push({ id: `${side}:relentless`, label: 'Relentless: re-roll any attack dice', mode: 'any', player });
   const team = state.teams[player];
-  if (team.cp >= 1 && !team.ploysUsedTP.includes(`commandReroll:${side}`))
-    grants.push({ ...COMMAND_REROLL, id: `commandReroll:${side}`, player });
+  // No once-per-turning-point cap on Command Re-roll; `usedRerolls` keeps it to one offer
+  // per side per fight.
+  if (team.cp >= 1) grants.push({ ...COMMAND_REROLL, id: `commandReroll:${side}`, player });
 
   const next = grants.find((g) => !seq.usedRerolls.includes(g.id));
   if (!next) return false;
