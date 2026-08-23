@@ -10,7 +10,7 @@ import { createGameContext } from '../src/core/game.ts';
 import { createBattle } from '../src/core/init.ts';
 import { reduce } from '../src/core/reducer.ts';
 import { validateMove } from '../src/core/movement.ts';
-import { inControlRange, weaponsOf } from '../src/core/state.ts';
+import { gapBetween, inControlRange, weaponsOf } from '../src/core/state.ts';
 import { getAction } from '../src/core/actions.ts';
 import { whoActivates } from '../src/core/phases.ts';
 import { ScriptedRng } from '../src/core/rng.ts';
@@ -1004,5 +1004,43 @@ describe('counteract and On Guard windows', () => {
     );
     expect(second.ok).toBe(false);
     expect(second.reason).toContain('already been used');
+  });
+});
+
+describe('operative-to-operative distance is three-dimensional', () => {
+  it('Distances: horizontal-only is for "an area of the killzone", not for operatives', () => {
+    // An operative on a 3" Vantage platform, all but directly above one on the floor.
+    const tower: TerrainFeature = {
+      id: 'v',
+      kind: 'test.vantage',
+      label: 'V',
+      placement: { x: 12, y: 11, rotDeg: 0, flip: false },
+      parts: [
+        {
+          id: 'v.floor',
+          featureId: 'v',
+          poly: rect(10, 9, 4, 4),
+          z0: 3,
+          z1: 3,
+          types: ['Vantage', 'Light'],
+          role: 'floor',
+          standable: true,
+          solid: false,
+        },
+      ],
+    };
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], Array.from({ length: 20 }, () => 4), 'test.dummy', 'test.dummy');
+    s.map = testMap({ features: [tower] });
+    const a = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    const b = s.operatives[s.teams.p2.operativeIds[0]!]!;
+    a.pos = { x: 11, y: 11 };
+    a.z = 3;
+    b.pos = { x: 12.4, y: 11 };
+    b.z = 0;
+    // 1.4" apart horizontally, minus two 32mm radii, is 0.14" — but they are 3" apart
+    // vertically, and the rule measures "from the closest part" of a base in three dimensions.
+    expect(gapBetween(ctx, a, b)).toBeGreaterThan(2.9);
+    expect(inControlRange(ctx, s, a, b)).toBe(false);
   });
 });

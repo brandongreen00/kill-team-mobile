@@ -12,7 +12,7 @@
  * Core rules › Obscured: "obscured if there's intervening Heavy terrain. However, it cannot
  * be obscured by intervening Heavy terrain that's within 1" of either operative."
  */
-import {
+import { bodyGap,
   baseGap,
   basePerimeter,
   dist,
@@ -180,7 +180,7 @@ function controlRangeIgnores(p: IndexedPart): boolean {
 
 export function withinControlRange(index: TerrainIndex, a: Body, b: Body): boolean {
   if (a.id === b.id) return true;
-  if (baseGap(a.pos, a.base, a.rot, b.pos, b.base, b.rot) > 1 + 1e-6) return false;
+  if (bodyGap(a.pos, a.base, a.rot, a.z, b.pos, b.base, b.rot, b.z) > 1 + 1e-6) return false;
   return (
     isVisible(index, a, b, { forControlRange: true }).visible ||
     isVisible(index, b, a, { forControlRange: true }).visible

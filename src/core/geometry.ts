@@ -98,6 +98,36 @@ export function baseGap(
   return Math.max(0, best);
 }
 
+/**
+ * The gap between two OPERATIVES, which is a three-dimensional measurement.
+ *
+ * Core rules › Distances: "When measuring to and from something, do so from the closest part
+ * of it. For an operative, do so from its base… **When measuring to and from an AREA OF THE
+ * KILLZONE, measure the horizontal distance only** (in other words, look from above to ignore
+ * the vertical distance)." The horizontal-only clause is for areas — drop zones, territories,
+ * the centre of the killzone — not for operatives.
+ *
+ * `baseGap` takes no elevation, and every operative-to-operative measurement in the kernel
+ * went through it, so two operatives 3" apart vertically and 0.14" apart horizontally measured
+ * as 0.14" apart: an operative on a Vantage platform was in control range of one on the floor
+ * below it, could not Shoot because it was "within control range of an enemy", and could Fight
+ * a model standing three inches beneath it.
+ */
+export function bodyGap(
+  aPos: Vec2,
+  aBase: BaseShape,
+  aRot: number,
+  aZ: number,
+  bPos: Vec2,
+  bBase: BaseShape,
+  bRot: number,
+  bZ: number,
+): number {
+  const flat = baseGap(aPos, aBase, aRot, bPos, bBase, bRot);
+  const dz = Math.abs(aZ - bZ);
+  return dz <= 1e-9 ? flat : Math.hypot(flat, dz);
+}
+
 export function pointInEllipse(p: Vec2, centre: Vec2, base: BaseShape, rotDeg: number): boolean {
   const { a, b } = baseSemiAxes(base);
   const d = sub(p, centre);

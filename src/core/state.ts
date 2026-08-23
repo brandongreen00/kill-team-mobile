@@ -3,7 +3,7 @@
  * Everything here is pure w.r.t. the outside world; it may mutate the GameState passed in
  * (the reducer clones before calling).
  */
-import { baseGap } from './geometry.ts';
+import { bodyGap, baseGap } from './geometry.ts';
 import { zeroStatMods, type StatMods } from './hooks.ts';
 import { terrain, type GameContext } from './context.ts';
 import { surfaceAt } from './terrain.ts';
@@ -139,7 +139,8 @@ export const isInjured = (ctx: GameContext, op: OperativeState): boolean =>
 export function gapBetween(ctx: GameContext, a: OperativeState, b: OperativeState): number {
   const ca = card(ctx, a);
   const cb = card(ctx, b);
-  return baseGap(a.pos, ca.base, a.rot, b.pos, cb.base, b.rot);
+  // Operative to operative is a 3D measurement — see `bodyGap`.
+  return bodyGap(a.pos, ca.base, a.rot, a.z, b.pos, cb.base, b.rot, b.z);
 }
 
 export function inControlRange(ctx: GameContext, state: GameState, a: OperativeState, b: OperativeState): boolean {
