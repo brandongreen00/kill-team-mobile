@@ -10,7 +10,8 @@ import { createGameContext } from '../src/core/game.ts';
 import { createBattle } from '../src/core/init.ts';
 import { reduce } from '../src/core/reducer.ts';
 import { validateMove } from '../src/core/movement.ts';
-import { inControlRange } from '../src/core/state.ts';
+import { inControlRange, weaponsOf } from '../src/core/state.ts';
+import { getAction } from '../src/core/actions.ts';
 import { ScriptedRng } from '../src/core/rng.ts';
 import { parseWeaponRules } from '../src/core/weaponRules.ts';
 import { addRolled, retentionOptions, type DicePool } from '../src/core/dice.ts';
@@ -757,5 +758,142 @@ describe('vertical movement is charged and restricted', () => {
     const v = validateMove(ctx, s, op, { points: [{ x: 12, y: 13 }], zs: [3] }, { action: 'Reposition' });
     expect(v.ok).toBe(true);
     expect(v.total).toBe(5);
+  });
+});
+
+describe('the initiative roll-off is rolled once', () => {
+  it('Approved Ops: one roll-off per turning point, and the winner DECIDES who has initiative', () => {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const ctx = createGameContext({
+      rng: new ScriptedRng([5, 2, 5, 2, 4, 4, 4, 4, 4, 4]),
+      maps: [testMap()],
+      datacards: [dummy],
+    });
+    let st = createBattle(ctx, { map: testMap(), seed: 3, critOpId: 'crit.secure' });
+    st = reduce(st, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: [{ datacardId: 'test.dummy' }] }, ctx).state;
+    st = reduce(st, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: [{ datacardId: 'test.dummy' }] }, ctx).state;
+    st.setup.dropZone = { p1: 'p1', p2: 'p2' };
+    st = reduce(st, { t: 'DeployOperative', player: 'p1', operativeId: st.teams.p1.operativeIds[0]!, pos: { x: 3, y: 11 } }, ctx).state;
+    st = reduce(st, { t: 'DeployOperative', player: 'p2', operativeId: st.teams.p2.operativeIds[0]!, pos: { x: 27, y: 11 } }, ctx).state;
+    st = reduce(st, { t: 'FinishSetup' }, ctx).state;
+    st.phase = 'strategy';
+    st.turningPoint = 2;
+    st.initiative = 'p2';
+    const before = st.rolls.filter((r) => r.kind === 'initiative').length;
+    st = reduce(st, { t: 'RollOff', kind: 'initiative' }, ctx).state;
+    const rolled = st.rolls.filter((r) => r.kind === 'initiative').length - before;
+    // One roll-off, not two: the second used to be thrown away after deciding the first.
+    expect(rolled).toBe(1);
+    // And initiative does not change hands on the roll alone — the winner is asked.
+    expect(st.initiative).toBe('p2');
+  });
+});
+
+describe('Limited x actually runs out', () => {
+  it('"after an operative uses this weapon x times in the battle, they no longer have it"', () => {
+    const bomber = makeCard({
+      id: 'test.bomber',
+      name: 'BOMBER',
+      weapons: [
+        { name: 'lasgun', profiles: [{ type: 'ranged', atk: 4, hit: 4, dmgN: 2, dmgC: 3, rules: [] }] },
+        {
+          name: 'melta bomb',
+          profiles: [{ type: 'ranged', atk: 5, hit: 2, dmgN: 6, dmgC: 7, rules: parseWeaponRules('Limited 1') }],
+        },
+      ],
+    });
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([bomber, dummy], Array.from({ length: 40 }, () => 4), 'test.bomber', 'test.dummy');
+    const a = s.teams.p1.operativeIds[0]!;
+    const op = s.operatives[a]!;
+    expect(weaponsOf(ctx, s, op).map((w) => w.name)).toContain('melta bomb');
+    // One use, and it is gone — `weaponExhausted` had no call site anywhere, so `weaponUses`
+    // was counted up and never read.
+    op.weaponUses['melta bomb'] = 1;
+    expect(weaponsOf(ctx, s, op).map((w) => w.name)).not.toContain('melta bomb');
+    expect(weaponsOf(ctx, s, op).map((w) => w.name)).toContain('lasgun');
+  });
+});
+
+describe('Pick Up Marker is performed by an operative that controls the marker', () => {
+  it('"remove a marker the ACTIVE OPERATIVE controls" — not one a distant team-mate is standing on', () => {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], Array.from({ length: 20 }, () => 4), ['test.dummy', 'test.dummy'], 'test.dummy');
+    const [near, far] = s.teams.p1.operativeIds as [string, string];
+    s.operatives[far]!.pos = { x: 4, y: 4 };
+    s.operatives[near]!.pos = { x: 20, y: 11 };
+    s.operatives[s.teams.p2.operativeIds[0]!]!.pos = { x: 28, y: 20 };
+    s.markers['loot'] = {
+      id: 'loot',
+      kind: 'objective',
+      pos: { x: 20.4, y: 11 },
+      z: 0,
+      diameterMm: 40, // objective markers are 40mm
+      flags: { pickUpAllowed: true },
+    } as never;
+    const pickUp = getAction('Pick Up Marker')!;
+    // The operative standing on it may lift it…
+    expect(pickUp.check(ctx, s, s.operatives[near]!, { markerId: 'loot' }).ok).toBe(true);
+    // …the one 16" away may not, though its team controls the marker.
+    const remote = pickUp.check(ctx, s, s.operatives[far]!, { markerId: 'loot' });
+    expect(remote.ok).toBe(false);
+    expect(remote.reason).toContain('control range');
+  });
+});
+
+describe('Mines are triggered by moving over them', () => {
+  it('a move that crosses a mine sets it off, not only a move that stops beside it', () => {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], [3, 3, 3, 3, 3, 3], 'test.dummy', 'test.dummy');
+    const a = s.teams.p1.operativeIds[0]!;
+    s.operatives[a]!.pos = { x: 6, y: 11 };
+    s.operatives[s.teams.p2.operativeIds[0]!]!.pos = { x: 28, y: 20 };
+    s.markers['mine1'] = { id: 'mine1', kind: 'mine', pos: { x: 9, y: 11 }, z: 0, diameterMm: 20, flags: {} } as never;
+    let st = reduce(s, { t: 'ActivateOperative', player: 'p1', operativeId: a, order: 'engage' }, ctx).state;
+    // Straight past the mine and out the other side — it used to be walked over untouched.
+    st = reduce(
+      st,
+      { t: 'PerformAction', operativeId: a, action: 'Reposition', params: { path: { points: [{ x: 12, y: 11 }] } } },
+      ctx,
+    ).state;
+    expect(st.markers['mine1']).toBeUndefined();
+    expect(st.operatives[a]!.wounds).toBeLessThan(10);
+  });
+});
+
+describe('Heavy forbids the move as well as the shot', () => {
+  it('"…and it cannot move in an activation or counteraction in which it used this weapon"', () => {
+    const gunner = makeCard({
+      id: 'test.gunner',
+      name: 'GUNNER',
+      weapons: [
+        {
+          name: 'heavy stubber',
+          profiles: [{ type: 'ranged', atk: 5, hit: 3, dmgN: 3, dmgC: 4, rules: parseWeaponRules('Heavy') }],
+        },
+        { name: 'fists', profiles: [{ type: 'melee', atk: 3, hit: 4, dmgN: 2, dmgC: 3, rules: [] }] },
+      ],
+    });
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([gunner, dummy], Array.from({ length: 40 }, () => 4), 'test.gunner', 'test.dummy');
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    s.operatives[a]!.pos = { x: 10, y: 11 };
+    s.operatives[b]!.pos = { x: 18, y: 11 };
+    let st = reduce(s, { t: 'ActivateOperative', player: 'p1', operativeId: a, order: 'engage' }, ctx).state;
+    // Before shooting, a move is fine.
+    expect(
+      getAction('Reposition')!.check(ctx, st, st.operatives[a]!, { path: { points: [{ x: 12, y: 11 }] } }).ok,
+    ).toBe(true);
+    st = reduce(
+      st,
+      { t: 'PerformAction', operativeId: a, action: 'Shoot', params: { weaponName: 'heavy stubber', targetId: b } },
+      ctx,
+    ).state;
+    st = drain(st, ctx, () => undefined, 60);
+    // Shoot-and-scoot is exactly what the rule exists to forbid.
+    const after = getAction('Reposition')!.check(ctx, st, st.operatives[a]!, { path: { points: [{ x: 8, y: 11 }] } });
+    expect(after.ok).toBe(false);
+    expect(after.reason).toContain('Heavy');
   });
 });

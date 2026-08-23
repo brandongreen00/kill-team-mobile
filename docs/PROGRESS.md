@@ -2,6 +2,33 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-23 — Rules audit: 62 verified findings, and the AI loses its exploits
+
+A 15-domain line-by-line audit against the verbatim Wahapedia text (`docs/rules-source/`,
+gitignored) produced 62 findings that survived verification. Everything below is fixed with a
+test that fails against the code before it; the remaining work items are listed at the end.
+
+**Open, and worth reading first** — the audit's three worst findings are not in this batch:
+1. `wallCornerZones` discards every corner whose adjacent edge is under 0.6", and every
+   extracted Gallowdark / Tomb World wall is **0.365" thick** — so it returns `[]` for all 94
+   wall parts and **nobody is ever in cover or obscured on those killzones**.
+2. `Operate Hatch` gates on `p.feature.kind.includes('hatch') !== false` (kinds are
+   `gallowdark.wallA3`, so this is `false !== false`) and `Breach` gates on a `breachWall` role
+   no map file contains. **Neither action can be performed on any map**, and all six Tomb World
+   maps ship zero access points, so the board is sealed into disconnected rooms.
+3. Volkus stronghold walls are extruded to the building's maximum height, so both Vantage
+   levels are blind — the modelling flaw D-065 had to work around.
+
+**AI strength moved, and the reason matters.** Tactical vs Greedy was 70% wins / VP 7.6:3.8 and
+is now 58% / VP 8.0:6.0. That is the AI losing exploits, not the AI getting worse: its
+heuristics were tuned against an engine that let it shoot with a Heavy weapon and then
+Reposition out of sight, throw a Limited 1 weapon four times, walk over mines without setting
+them off, and lift a marker a team-mate was standing on from across the board. Only Heavy is
+asymmetric — Greedy never planned a shoot-and-scoot, and the Tactical agent's greedy
+in-activation search does not price the move a Heavy shot forfeits. **Re-tuning the evaluation
+against the corrected rules is the next AI task**, and the regression floors in
+`tests/ai.test.ts` are re-baselined with that written down rather than quietly lowered.
+
 ## 2026-08-23 — Rules review: you could walk through walls, and 18 doors were missing (D-064…D-066)
 
 Owner report, with a screenshot: a Dash moved an operative straight through a Volkus stronghold

@@ -403,6 +403,12 @@ export function startShoot(
     free: opts.free ?? false,
   };
   state.sequence = seq;
+  // Heavy reads this: "it cannot move in an activation or counteraction in which it used this
+  // weapon".
+  (attacker.weaponsUsedThisActivation ??= []).push({
+    weapon: weaponName,
+    ...(profileName ? { profile: profileName } : {}),
+  });
   log(state, {
     kind: 'action',
     player: attacker.player,

@@ -55,6 +55,7 @@ export function readyStep(ctx: GameContext, state: GameState): void {
     op.counteractedThisTP = false;
     op.apSpent = 0;
     op.actionsThisActivation = [];
+    op.weaponsUsedThisActivation = [];
     // "It's the start of the next turning point" ends Guard.
     op.onGuard = false;
     op.guardSpentTP = null;

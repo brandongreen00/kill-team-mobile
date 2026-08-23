@@ -19,6 +19,7 @@ import {
   card,
   enemiesInControlRange,
   gapBetween,
+  markerContestedBy,
   markerController,
   markersNear,
 } from '../core/state.ts';
@@ -180,6 +181,9 @@ export function actionCandidates(
       case 'Pick Up Marker':
         for (const marker of Object.values(state.markers)) {
           if (!marker.flags['pickUpAllowed']) continue;
+          // Same rule as the action's own check: the ACTIVE operative must control it, so
+          // it must be contesting it, not merely on the controlling team.
+          if (!markerContestedBy(ctx, state, marker, op)) continue;
           if (markerController(ctx, state, marker) !== op.player) continue;
           push(out, ctx, state, op, def, { markerId: marker.id }, 'action', 14, `pick up ${marker.kind}`);
         }

@@ -9,8 +9,8 @@
  */
 import { baseGap, dist } from './geometry.ts';
 import { terrain, type GameContext } from './context.ts';
-import { validateMove, type MoveOptions } from './movement.ts';
-import {
+import { validateMove, type MoveLeg, type MoveOptions } from './movement.ts';
+import { findProfile,
   aliveOperatives,
   aplOf,
   card,
@@ -23,11 +23,11 @@ import {
   settleZ,
   weaponsOf,
 } from './state.ts';
-import { startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
+import { effectiveRules, startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
 import { startFight, advanceFight } from './sequences/fight.ts';
 import { hasType } from './terrain.ts';
 import type { ActionParams } from './intents.ts';
-import type { GameState, OperativeState, PlayerId } from './types.ts';
+import type { GameState, OperativeState, PlayerId, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
 
 export interface ActionDef {
@@ -86,6 +86,41 @@ function withCounteractCap(state: GameState, op: OperativeState, opts: MoveOptio
   return counteracting ? { ...opts, hardCap: 2 } : opts;
 }
 
+/**
+ * Heavy, the half that was missing.
+ *
+ * Appendix › Heavy: "An operative cannot use this weapon in an activation or counteraction in
+ * which it moved, AND IT CANNOT MOVE IN AN ACTIVATION OR COUNTERACTION IN WHICH IT USED THIS
+ * WEAPON. If the rule is Heavy (x only), where x is a move action, only that move is allowed,
+ * e.g. Heavy (Dash only)."
+ *
+ * Only the first clause existed, so shoot-and-scoot — fire from a vantage point for 1AP, then
+ * Reposition back out of sight — was legal with all 127 Heavy profiles in the game.
+ */
+function heavyForbidsMove(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  action: MoveOptions['action'],
+): string | undefined {
+  const used = op.weaponsUsedThisActivation ?? [];
+  if (used.length === 0) return undefined;
+  for (const { weapon, profile: profileName } of used) {
+    const w = weaponsOf(ctx, state, op, 'ranged').find((x) => x.name === weapon);
+    // The PROFILE that was fired, not every profile the weapon has: a weapon whose second
+    // profile is Heavy must not forbid a move because its first one was used.
+    const profile = w ? findProfile(w, profileName) : undefined;
+    if (!profile) continue;
+    const heavy = effectiveRules(ctx, state, profile, { operative: op, weaponName: weapon }).find(
+      (r) => r.id === 'Heavy',
+    );
+    if (!heavy) continue;
+    if (heavy.only && heavy.only === action) continue; // "only that move is allowed"
+    return `${weapon} is Heavy — it cannot move in an activation in which it used this weapon`;
+  }
+  return undefined;
+}
+
 function moveCheck(
   ctx: GameContext,
   state: GameState,
@@ -94,6 +129,8 @@ function moveCheck(
   opts: MoveOptions,
 ): { ok: boolean; reason?: string } {
   if (!params.path) return { ok: false, reason: 'no path supplied' };
+  const heavy = heavyForbidsMove(ctx, state, op, opts.action);
+  if (heavy) return { ok: false, reason: heavy };
   const v = validateMove(ctx, state, op, params.path, withCounteractCap(state, op, opts));
   return v.ok ? { ok: true } : { ok: false, reason: v.reason ?? 'illegal move' };
 }
@@ -107,6 +144,8 @@ function applyMove(
   label: string,
 ): { ok: boolean; reason?: string } {
   if (!params.path) return { ok: false, reason: 'no path supplied' };
+  const heavy = heavyForbidsMove(ctx, state, op, opts.action);
+  if (heavy) return { ok: false, reason: heavy };
   const v = validateMove(ctx, state, op, params.path, withCounteractCap(state, op, opts));
   if (!v.ok) return { ok: false, reason: v.reason ?? 'illegal move' };
   op.pos = { ...v.endPos };
@@ -121,7 +160,7 @@ function applyMove(
       m.z = op.z;
     }
   }
-  checkMines(ctx, state, op);
+  checkMines(ctx, state, op, v.legs);
   log(state, {
     kind: 'action',
     player: op.player,
@@ -133,11 +172,31 @@ function applyMove(
 
 /** Mines: "The first time that marker is within an operative's control range, remove that
  *  marker and inflict D3+3 damage on that operative." */
-function checkMines(ctx: GameContext, state: GameState, op: OperativeState): void {
+/**
+ * Mines, along the whole move rather than only where it stopped.
+ *
+ * `checkMines` was called once, after `op.pos` had been set to the end of the path, so a
+ * Reposition straight over a mine did not fire it: the marker stayed on the board and could be
+ * walked across again, all battle. The legs of the validated move are sampled at 0.2" — under
+ * half the smallest base radius — so a base cannot step over one between two samples.
+ */
+function checkMines(ctx: GameContext, state: GameState, op: OperativeState, legs?: MoveLeg[]): void {
+  const probes: { pos: Vec2; z: number }[] = [{ pos: op.pos, z: op.z }];
+  for (const leg of legs ?? []) {
+    const span = Math.hypot(leg.to.x - leg.from.x, leg.to.y - leg.from.y);
+    const steps = Math.max(1, Math.ceil(span / 0.2));
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      probes.push({
+        pos: { x: leg.from.x + (leg.to.x - leg.from.x) * t, y: leg.from.y + (leg.to.y - leg.from.y) * t },
+        z: t < 1 ? leg.fromZ : leg.toZ,
+      });
+    }
+  }
   for (const marker of Object.values(state.markers)) {
     if (marker.kind !== 'mine') continue;
     if (marker.flags['triggered']) continue;
-    if (!markerContestedBy(ctx, state, marker, op)) continue;
+    if (!probes.some((p) => markerContestedBy(ctx, state, marker, { ...op, pos: p.pos, z: p.z }))) continue;
     marker.flags['triggered'] = true;
     const d3 = ctx.rng.d3();
     recordRoll(state, 'mine', [d3], op.player, 'Mines D3+3');
@@ -267,6 +326,12 @@ registerAction({
     const marker = params.markerId ? state.markers[params.markerId] : undefined;
     if (!marker) return { ok: false, reason: 'no such marker' };
     if (!marker.flags['pickUpAllowed']) return { ok: false, reason: 'this marker cannot be picked up' };
+    // "Remove a marker THE ACTIVE OPERATIVE CONTROLS." Asking only whether the TEAM controls
+    // it — a question answered by the total APL of everyone contesting it — let any operative
+    // anywhere on the board lift a marker a team-mate was standing on, and `perform` then
+    // teleported the marker to it.
+    if (!markerContestedBy(ctx, state, marker, op))
+      return { ok: false, reason: 'that marker is not within this operative\'s control range' };
     if (markerController(ctx, state, marker) !== op.player)
       return { ok: false, reason: 'your operatives do not control that marker' };
     return { ok: true };
@@ -331,7 +396,12 @@ registerAction({
     // Heavy: "cannot use this weapon in an activation in which it moved".
     const w = weaponsOf(ctx, state, op, 'ranged').find((x) => x.name === params.weaponName);
     const profile = w?.profiles.find((p) => (p.name ?? '') === (params.profileName ?? '')) ?? w?.profiles[0];
-    const heavy = profile?.rules.find((r) => r.id === 'Heavy');
+    // Off `effectiveRules`, not the printed profile: a hook that grants or removes Heavy was
+    // invisible to this test.
+    const heavyRules = profile
+      ? effectiveRules(ctx, state, profile, { operative: op, weaponName: params.weaponName! })
+      : [];
+    const heavy = heavyRules.find((r) => r.id === 'Heavy');
     if (heavy) {
       const moved = op.actionsThisActivation.some((a) =>
         ['Reposition', 'Dash', 'Charge', 'Fall Back', 'Move With Barricade'].includes(a),

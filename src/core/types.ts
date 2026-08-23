@@ -305,6 +305,14 @@ export interface OperativeState {
   apSpent: number;
   /** Actions performed this activation, for action restrictions. */
   actionsThisActivation: string[];
+  /**
+   * Weapon names used this activation or counteraction. Heavy needs it: "An operative cannot
+   * use this weapon in an activation or counteraction in which it moved, AND IT CANNOT MOVE IN
+   * AN ACTIVATION OR COUNTERACTION IN WHICH IT USED THIS WEAPON." Only the first half was
+   * implemented, so shoot-and-scoot — the thing the rule exists to forbid — was legal with all
+   * 127 Heavy profiles.
+   */
+  weaponsUsedThisActivation?: { weapon: string; profile?: string }[];
   onGuard: boolean;
   /** Set when a Guard interrupt is used; blocks counteract for the TP. */
   guardSpentTP: number | null;

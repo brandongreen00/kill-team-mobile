@@ -199,7 +199,22 @@ export function weaponsOf(ctx: GameContext, state: GameState, op: OperativeState
     // save, renamed weapon), fall back to the full card rather than sending it in unarmed.
     carried = picked.length > 0 ? picked : fromCard;
   }
-  const all = [...carried, ...extra];
+  // Limited x: "After an operative uses this weapon x times in the battle, they no longer
+  // have it." `weaponExhausted` existed and had no call site anywhere, so `weaponUses` was
+  // counted up and never read: the highest-damage profiles in the game — melta bombs,
+  // demolition charges, fusion grenades — could be thrown in all four turning points. Six
+  // team modules re-implemented the check in their own `availableWeapons` hooks, which hid
+  // the hole for those teams only. Filtering here routes it through Shoot's check, Fight's
+  // check, the AI's legal-intent enumeration and the UI at once.
+  //
+  // The weapon of a sequence that is still resolving is exempt: `finishShoot` counts the use
+  // while the sequence is live, and every later step looks the weapon up again to read its
+  // profile and rules. Dropping it mid-sequence is what "used it once, so you no longer have
+  // it" must NOT mean while the shot is still being resolved.
+  const inUse = weaponsInUse(state);
+  const all = [...carried, ...extra].filter(
+    (w) => inUse.has(w.name) || !w.profiles.every((p) => weaponExhausted(op, w, p)),
+  );
   if (!type) return all;
   return all.filter((w) => w.profiles.some((p) => p.type === type));
 }
@@ -208,6 +223,16 @@ export function findProfile(w: Weapon, profileName?: string): WeaponProfile | un
   if (!profileName) return w.profiles[0];
   return w.profiles.find((p) => (p.name ?? '') === profileName) ?? w.profiles[0];
 }
+
+/** The weapons of a sequence that is still resolving, which must stay resolvable. */
+function weaponsInUse(state: GameState): ReadonlySet<string> {
+  const seq = state.sequence;
+  if (!seq) return EMPTY_NAMES;
+  if (seq.kind === 'shoot') return new Set([seq.weaponName]);
+  return new Set([seq.attackerWeapon, ...(seq.defenderWeapon ? [seq.defenderWeapon] : [])]);
+}
+
+const EMPTY_NAMES: ReadonlySet<string> = new Set<string>();
 
 /** Limited x: "After an operative uses this weapon x times in the battle, they no longer have it." */
 export function weaponExhausted(op: OperativeState, w: Weapon, profile: WeaponProfile): boolean {

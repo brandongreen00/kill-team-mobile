@@ -64,6 +64,17 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
   switch (intent.t) {
     // ---- setup -----------------------------------------------------------
     case 'RollOff': {
+      // Approved Ops owns the per-turning-point roll-off: `beginInitiative` rolls, opens the
+      // initiative-card window and ends with the WINNER deciding who has initiative. Rolling
+      // here as well meant one RollOff intent consumed four dice, recorded two initiative
+      // rolls, and spent the once-per-battle roll-off modifiers (Rune of Prophecy, Mastermind)
+      // on the throw that was then discarded — and because the phantom roll overwrote
+      // `state.initiative`, the real roll-off's tie-break read the phantom's winner instead of
+      // whoever held initiative last turning point.
+      if (next.phase !== 'setup' && ctx.beginInitiative) {
+        ctx.beginInitiative(ctx, next);
+        return ok(next);
+      }
       const r = rollInitiative(ctx, next);
       if (r.winner === null) {
         // Setup roll-off re-rolls ties; the per-TP roll-off does not (Approved Ops).
@@ -76,9 +87,6 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
         if (next.phase !== 'setup') next.initiative = r.winner;
         log(next, { kind: 'system', text: `${r.winner} wins the roll-off` });
       }
-      // Approved Ops: starting with the roll-off LOSER, players alternate playing an
-      // initiative card or passing until both pass.
-      if (next.phase !== 'setup') ctx.beginInitiative?.(ctx, next);
       if (next.phase === 'setup') next.setup.step = 'chooseDropZone';
       return ok(next);
     }
@@ -300,6 +308,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       op.onGuard = false;
       op.apSpent = 0;
       op.actionsThisActivation = [];
+      op.weaponsUsedThisActivation = [];
       next.activeOperativeId = op.id;
       next.activePlayer = intent.player;
       next.firefightStep = 'performActions';
@@ -319,6 +328,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       op.apSpent = 0;
       // "Counteracting isn't an activation... action restrictions won't apply."
       op.actionsThisActivation = [];
+      op.weaponsUsedThisActivation = [];
       next.activeOperativeId = op.id;
       next.activePlayer = intent.player;
       next.opState['counteract'] = { operativeId: op.id, actionsUsed: 0 };
