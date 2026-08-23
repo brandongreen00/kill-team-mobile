@@ -123,9 +123,11 @@ export function bodyGap(
   bRot: number,
   bZ: number,
 ): number {
+  const dz = aZ > bZ ? aZ - bZ : bZ - aZ;
   const flat = baseGap(aPos, aBase, aRot, bPos, bBase, bRot);
-  const dz = Math.abs(aZ - bZ);
-  return dz <= 1e-9 ? flat : Math.hypot(flat, dz);
+  // `Math.hypot` is variadic and markedly slower than the two-argument form in V8; this sits
+  // under every control-range and Range x test the engine makes.
+  return dz <= 1e-9 ? flat : Math.sqrt(flat * flat + dz * dz);
 }
 
 export function pointInEllipse(p: Vec2, centre: Vec2, base: BaseShape, rotDeg: number): boolean {

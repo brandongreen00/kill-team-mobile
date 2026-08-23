@@ -113,6 +113,7 @@ export function validateMove(
   const c = card(ctx, op);
   const budget = moveBudget(ctx, state, op, opts);
   opts = movePermissions(ctx, state, op, opts);
+  const probes = enemyProbes(ctx, state, op, opts);
   const legs: MoveLeg[] = [];
   let cur: Vec2 = { ...op.pos };
   let curZ = op.z;
@@ -269,7 +270,7 @@ export function validateMove(
       // operative but cannot finish the move there."
       // Both were checked only where the move ENDED, so an operative walked over an enemy's
       // base and through its control range and the reducer raised no objection.
-      const blockedBy = enemyOnTheWay(ctx, state, op, cur, next, Math.max(startZ, curZ), opts);
+      const blockedBy = enemyOnTheWay(ctx, state, op, cur, next, Math.max(startZ, curZ), opts, probes);
       if (blockedBy) return fail(blockedBy);
     }
 
@@ -353,19 +354,16 @@ function enemyOnTheWay(
   to: Vec2,
   z: number,
   opts: MoveOptions,
+  probes: EnemyProbe[],
 ): string | undefined {
-  if (opts.mayMoveThroughEnemies && opts.mayEnterEnemyControlRange) return undefined;
-  const enemies = aliveOperatives(state, otherPlayer(op.player)).filter((e) => e.id !== op.id);
-  if (enemies.length === 0) return undefined;
+  if (probes.length === 0) return undefined;
   const c = card(ctx, op);
   const rOp = baseRadius(c.base);
 
   let index: TerrainIndex | undefined;
-  let screenedBy: Map<string, boolean> | undefined;
 
-  for (const enemy of enemies) {
-    const ec = card(ctx, enemy);
-    const rEnemy = baseRadius(ec.base);
+  for (const { operative: enemy, base: eBase, radius: rEnemy } of probes) {
+    const ec = { base: eBase };
     // Cheap rejection first: how close does this increment ever get to the enemy? Almost
     // every enemy is nowhere near almost every increment, and the control-range test below
     // costs two visibility sweeps.
@@ -402,19 +400,38 @@ function enemyOnTheWay(
       // that enemy operative" — measured before this move, which is the state we are in.
       // Worked out only once an increment actually enters the control range, because it is
       // another visibility sweep per friendly operative.
-      screenedBy ??= new Map<string, boolean>();
-      let screened = screenedBy.get(enemy.id);
-      if (screened === undefined) {
-        screened = aliveOperatives(state, op.player).some(
-          (f) => f.id !== op.id && inControlRange(ctx, state, f, enemy),
-        );
-        screenedBy.set(enemy.id, screened);
-      }
+      const screened = aliveOperatives(state, op.player).some(
+        (f) => f.id !== op.id && inControlRange(ctx, state, f, enemy),
+      );
       if (screened) break; // this enemy may be moved past for the whole increment
       return `cannot move within control range of ${enemy.letter}`;
     }
   }
   return undefined;
+}
+
+/**
+ * Everything about one enemy that does not change during a move, worked out once.
+ *
+ * `validateMove` runs thousands of times per AI decision and `enemyOnTheWay` once per
+ * increment inside it, so rebuilding the enemy list and looking up every datacard per
+ * increment showed up in the 300ms decision budget.
+ */
+interface EnemyProbe {
+  operative: OperativeState;
+  base: ReturnType<typeof card>['base'];
+  radius: number;
+}
+
+function enemyProbes(ctx: GameContext, state: GameState, op: OperativeState, opts: MoveOptions): EnemyProbe[] {
+  if (opts.mayMoveThroughEnemies && opts.mayEnterEnemyControlRange) return [];
+  const out: EnemyProbe[] = [];
+  for (const e of aliveOperatives(state, otherPlayer(op.player))) {
+    if (e.id === op.id) continue;
+    const base = card(ctx, e).base;
+    out.push({ operative: e, base, radius: baseRadius(base) });
+  }
+  return out;
 }
 
 /** Shortest distance from a point to a line segment. */
@@ -424,7 +441,9 @@ function distancePointToSegment(p: Vec2, a: Vec2, b: Vec2): number {
   const len2 = dx * dx + dy * dy;
   if (len2 < 1e-12) return dist(p, a);
   const t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2));
-  return dist(p, { x: a.x + t * dx, y: a.y + t * dy });
+  const qx = p.x - (a.x + t * dx);
+  const qy = p.y - (a.y + t * dy);
+  return Math.sqrt(qx * qx + qy * qy);
 }
 
 export function moveBudget(ctx: GameContext, state: GameState, op: OperativeState, opts: MoveOptions): number {

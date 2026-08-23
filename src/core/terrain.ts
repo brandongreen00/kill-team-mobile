@@ -292,6 +292,9 @@ export function pathBlockedByTerrain(
   for (const part of index.solid) {
     if (part.z1 <= z + 1e-6) continue; // level with or below our feet — we walk on or over it
     if (part.z0 >= z + height - 1e-6) continue; // entirely above our head — we walk under it
+    // Bounding-box reject first: this runs per increment, and `validateMove` runs thousands of
+    // times per AI decision.
+    if (!segmentMayHitPart(part, a, b)) continue;
     if (hasType(part, 'Accessible')) continue;
     if (hasType(part, 'Insignificant')) continue;
     if (hasType(part, 'Ceiling') && part.z0 >= z + 1e-6 && baseFitsUnderCeiling(base)) continue;
