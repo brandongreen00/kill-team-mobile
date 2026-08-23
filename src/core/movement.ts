@@ -13,7 +13,7 @@
  * Core rules › Reposition: "This must be done in one or more straight-line increments, and
  * increments are always rounded up to the nearest inch."
  */
-import { dist, baseGap } from './geometry.ts';
+import { dist, baseGap, baseRadius } from './geometry.ts';
 import { terrain, type GameContext } from './context.ts';
 import {
   accessibleCrossings,
@@ -28,7 +28,7 @@ import {
   type TerrainIndex,
 } from './terrain.ts';
 import { aliveOperatives, card, inControlRange, moveOf, body } from './state.ts';
-import { isVisible } from './visibility.ts';
+import { isVisible, withinControlRange } from './visibility.ts';
 import type { MovePath } from './intents.ts';
 import type { GameState, OperativeState, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
@@ -62,6 +62,8 @@ export interface MoveOptions {
   noClimb?: boolean;
   /** Charge / Fall Back may move within enemy control range. */
   mayEnterEnemyControlRange?: boolean;
+  /** "It can move through enemy operatives" — a printed permission, never the default. */
+  mayMoveThroughEnemies?: boolean;
   /** Charge must finish within control range; Reposition/Dash must not. */
   mustFinishEngaged?: boolean;
   mustNotFinishEngaged?: boolean;
@@ -109,6 +111,7 @@ export function validateMove(
   const index = terrain(ctx, state);
   const c = card(ctx, op);
   const budget = moveBudget(ctx, state, op, opts);
+  opts = movePermissions(ctx, state, op, opts);
   const legs: MoveLeg[] = [];
   let cur: Vec2 = { ...op.pos };
   let curZ = op.z;
@@ -226,6 +229,17 @@ export function validateMove(
       );
       if (through)
         return fail(`cannot move through ${through.role ?? 'terrain'} (${through.types.join('+')})`);
+
+      // Core rules › Bases: "Friendly operatives can move through other friendly operatives
+      // (the base and the miniature), but not through enemy operatives."
+      // Core rules › Reposition: "It cannot move within control range of an enemy operative,
+      // unless one or more other friendly operatives are already within control range of that
+      // enemy operative, in which case it can move within control range of that enemy
+      // operative but cannot finish the move there."
+      // Both were checked only where the move ENDED, so an operative walked over an enemy's
+      // base and through its control range and the reducer raised no objection.
+      const blockedBy = enemyOnTheWay(ctx, state, op, cur, next, Math.max(startZ, curZ), opts);
+      if (blockedBy) return fail(blockedBy);
     }
 
     cur = { ...next };
@@ -266,6 +280,120 @@ export function validateMove(
     return fail(`cannot move more than ${opts.hardCap}" while counteracting`);
 
   return { ok: true, legs, total, budget, endPos: cur, endZ: finalZ };
+}
+
+/**
+ * Walk one increment past every living enemy. Returns a reason, or undefined.
+ *
+ * The base test is absolute — no move may pass through an enemy's base. The control-range
+ * test is waived for a Charge and a Fall Back ("it may move within control range of an enemy
+ * operative but cannot finish there"), and for the printed exception: an enemy some other
+ * friendly operative is already engaged with may be moved past.
+ */
+/** Fold in any printed permission a rule grants this move (`onMovePermissions`). */
+function movePermissions(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  opts: MoveOptions,
+): MoveOptions {
+  const ev = ctx.hooks.emit('onMovePermissions', state, {
+    state,
+    operative: op,
+    action: opts.action,
+    mayEnterEnemyControlRange: opts.mayEnterEnemyControlRange ?? false,
+    mayMoveThroughEnemies: opts.mayMoveThroughEnemies ?? false,
+  });
+  if (ev.mayEnterEnemyControlRange === (opts.mayEnterEnemyControlRange ?? false) &&
+      ev.mayMoveThroughEnemies === (opts.mayMoveThroughEnemies ?? false))
+    return opts;
+  return {
+    ...opts,
+    mayEnterEnemyControlRange: ev.mayEnterEnemyControlRange,
+    mayMoveThroughEnemies: ev.mayMoveThroughEnemies,
+  };
+}
+
+function enemyOnTheWay(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  from: Vec2,
+  to: Vec2,
+  z: number,
+  opts: MoveOptions,
+): string | undefined {
+  if (opts.mayMoveThroughEnemies && opts.mayEnterEnemyControlRange) return undefined;
+  const enemies = aliveOperatives(state, otherPlayer(op.player)).filter((e) => e.id !== op.id);
+  if (enemies.length === 0) return undefined;
+  const c = card(ctx, op);
+  const rOp = baseRadius(c.base);
+
+  let index: TerrainIndex | undefined;
+  let screenedBy: Map<string, boolean> | undefined;
+
+  for (const enemy of enemies) {
+    const ec = card(ctx, enemy);
+    const rEnemy = baseRadius(ec.base);
+    // Cheap rejection first: how close does this increment ever get to the enemy? Almost
+    // every enemy is nowhere near almost every increment, and the control-range test below
+    // costs two visibility sweeps.
+    const near = distancePointToSegment(enemy.pos, from, to);
+    const reach = rOp + rEnemy + 1 + 0.05;
+    if (near > reach) continue;
+
+    const span = dist(from, to);
+    // 0.2" is under half the smallest base radius in the game, so a base cannot slip past an
+    // enemy between two samples.
+    const steps = Math.max(1, Math.ceil(span / 0.2));
+    const eBody = body(ctx, enemy);
+    let startedEngagedWith: boolean | undefined;
+    const startedEngaged = (e: OperativeState): boolean =>
+      (startedEngagedWith ??= inControlRange(ctx, state, op, e));
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const p = { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t };
+      if (dist(p, enemy.pos) > reach) continue;
+      if (!opts.mayMoveThroughEnemies && baseGap(p, c.base, op.rot, enemy.pos, ec.base, enemy.rot) < -1e-4)
+        return `cannot move through ${enemy.letter}'s base`;
+      if (opts.mayEnterEnemyControlRange) continue;
+      // "It cannot MOVE WITHIN control range" — an enemy it is already within control range
+      // of when the move starts is not one it moves within control range of. Without this an
+      // operative that is legitimately engaged (Fall Back, or a rule that lets it Dash out of
+      // combat) could not move at all, because the start of its own path failed the test.
+      // Worked out only once an increment actually enters a control range: it is another
+      // visibility sweep, and almost no increment ever gets here.
+      if (startedEngaged(enemy)) break;
+      index ??= terrain(ctx, state);
+      const here = { id: op.id, pos: p, z, rot: op.rot, base: c.base, height: body(ctx, op).height };
+      if (!withinControlRange(index, here, eBody)) continue;
+      // "…unless one or more other friendly operatives are ALREADY within control range of
+      // that enemy operative" — measured before this move, which is the state we are in.
+      // Worked out only once an increment actually enters the control range, because it is
+      // another visibility sweep per friendly operative.
+      screenedBy ??= new Map<string, boolean>();
+      let screened = screenedBy.get(enemy.id);
+      if (screened === undefined) {
+        screened = aliveOperatives(state, op.player).some(
+          (f) => f.id !== op.id && inControlRange(ctx, state, f, enemy),
+        );
+        screenedBy.set(enemy.id, screened);
+      }
+      if (screened) break; // this enemy may be moved past for the whole increment
+      return `cannot move within control range of ${enemy.letter}`;
+    }
+  }
+  return undefined;
+}
+
+/** Shortest distance from a point to a line segment. */
+function distancePointToSegment(p: Vec2, a: Vec2, b: Vec2): number {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len2 = dx * dx + dy * dy;
+  if (len2 < 1e-12) return dist(p, a);
+  const t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2));
+  return dist(p, { x: a.x + t * dx, y: a.y + t * dy });
 }
 
 export function moveBudget(ctx: GameContext, state: GameState, op: OperativeState, opts: MoveOptions): number {

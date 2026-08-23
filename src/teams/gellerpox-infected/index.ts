@@ -1545,10 +1545,12 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
    *    operative, and can leave that operative's control range to do so (but then normal
    *    requirements for that move apply)."
    *
-   * The first bullet is a no-op by construction: `validateMove` only tests the END of a path for
-   * base overlap and control range, so every operative in the game may already move through and
-   * within enemy control range (the Void Dancer Harlequin's Panoply reading). The second is two
-   * `treatedAs` ActionDefs (D-021), because `canPerformAction` can only forbid.
+   * The first bullet used to be a no-op by construction, because `validateMove` tested only the
+   * END of a path for base overlap and control range — so every operative in the game could
+   * already move through and within enemy control range. Since the rules review a path is
+   * checked along its length, so the permission is granted through `onMovePermissions`. The
+   * second bullet is two `treatedAs` ActionDefs (D-021), because `canPerformAction` can only
+   * forbid.
    */
   reg.on('onPloyUsed', T.bind(FP.barge, 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== FP.barge) return;
@@ -1563,6 +1565,16 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       expiry: { kind: 'endOfActivation', operativeId: active.id },
     });
     log(ev.state, { kind: 'ploy', player: T.player, text: `BARGE: ${active.letter} can shoulder its way clear` });
+  });
+
+  // "It can move through enemy operatives and within control range of them." Until the rules
+  // review `validateMove` checked neither along a path, so this permission cost nothing to
+  // grant; now it is the difference between BARGE working and not.
+  reg.on('onMovePermissions', T.bind(FP.barge, 20), (ev) => {
+    if (ev.operative.player !== T.player) return;
+    if (!effectOn(ev.state, ev.operative.id, BARGE_EFFECT)) return;
+    ev.mayEnterEnemyControlRange = true;
+    ev.mayMoveThroughEnemies = true;
   });
 
   // =========================================================================

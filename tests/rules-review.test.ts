@@ -9,6 +9,8 @@ import { describe, expect, it } from 'vitest';
 import { createGameContext } from '../src/core/game.ts';
 import { createBattle } from '../src/core/init.ts';
 import { reduce } from '../src/core/reducer.ts';
+import { validateMove } from '../src/core/movement.ts';
+import { inControlRange } from '../src/core/state.ts';
 import { ScriptedRng } from '../src/core/rng.ts';
 import { parseWeaponRules } from '../src/core/weaponRules.ts';
 import { makeCard, rect, testMap } from './fixtures.ts';
@@ -447,3 +449,64 @@ describe('denying cover for TARGETING does not delete the cover save', () => {
   });
 });
 
+
+describe('a move is checked against enemy operatives along its whole length', () => {
+  const scene = () => {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], [4, 4, 4, 4], ['test.dummy', 'test.dummy'], 'test.dummy');
+    const [a, mate] = s.teams.p1.operativeIds as [string, string];
+    const foe = s.teams.p2.operativeIds[0]!;
+    s.operatives[a]!.pos = { x: 10, y: 11 };
+    s.operatives[foe]!.pos = { x: 13, y: 11 };
+    s.operatives[mate]!.pos = { x: 3, y: 3 }; // out of the way until a test moves it
+    return { s, ctx, a, mate, foe };
+  };
+
+  it('Bases: "friendly operatives can move through other friendly operatives … but not through enemy operatives"', () => {
+    const { s, ctx, a } = scene();
+    const v = validateMove(ctx, s, s.operatives[a]!, { points: [{ x: 16, y: 11 }] }, { action: 'Reposition' });
+    expect(v.ok).toBe(false);
+    expect(v.reason).toMatch(/base|control range/);
+  });
+
+  it('Reposition: "it cannot move within control range of an enemy operative"', () => {
+    const { s, ctx, a } = scene();
+    // Round the enemy but still inside its 1" control range at the closest point.
+    const v = validateMove(
+      ctx,
+      s,
+      s.operatives[a]!,
+      { points: [{ x: 13, y: 12.6 }, { x: 16, y: 12.6 }] },
+      { action: 'Reposition' },
+    );
+    expect(v.ok).toBe(false);
+    expect(v.reason).toContain('control range');
+  });
+
+  it('Reposition: "…unless one or more other friendly operatives are already within control range of that enemy operative"', () => {
+    const { s, ctx, a, mate, foe } = scene();
+    s.operatives[mate]!.pos = { x: 14.3, y: 11 }; // already engaged with the enemy
+    expect(inControlRange(ctx, s, s.operatives[mate]!, s.operatives[foe]!)).toBe(true);
+    const v = validateMove(
+      ctx,
+      s,
+      s.operatives[a]!,
+      { points: [{ x: 13, y: 12.6 }, { x: 16, y: 13.5 }] },
+      { action: 'Reposition' },
+    );
+    // Allowed to pass through now — and it does not finish in control range.
+    expect(v.reason ?? '').not.toContain('control range');
+  });
+
+  it('Charge "may move within control range of an enemy operative"', () => {
+    const { s, ctx, a } = scene();
+    const v = validateMove(
+      ctx,
+      s,
+      s.operatives[a]!,
+      { points: [{ x: 13, y: 12.4 }] },
+      { action: 'Charge', bonusInches: 2, mayEnterEnemyControlRange: true, mustFinishEngaged: true },
+    );
+    expect(v.ok).toBe(true);
+  });
+});

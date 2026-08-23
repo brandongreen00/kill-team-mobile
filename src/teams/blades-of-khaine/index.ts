@@ -357,6 +357,7 @@ export const techniqueUses = (state: GameState, player: PlayerId, techniqueId: s
 
 /** Effect rule names — never module-level mutable state (architecture rule 7). */
 const EFF = {
+  patientStalk: 'blades-of-khaine.at.patientStalk',
   slicingHurricane: 'blades-of-khaine.at.slicingHurricane',
   thousandBlades: 'blades-of-khaine.at.thousandBlades',
   vigilance: 'blades-of-khaine.at.vigilance',
@@ -781,6 +782,16 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (ev.action !== 'Fall Back' || !T.mineKw(ev.operative, HOWLING_BANSHEE)) return;
     if (!effectOn(ev.state, ev.operative.id, EFF.rainArmed)) return;
     ev.inches = Math.min(ev.inches, 3); // "a free Fall Back action up to 3""
+  });
+
+  // "During that action, that operative can move within control range of enemy operatives
+  // (it cannot end the move there)." The action declares EFF.patientStalk before it validates
+  // its path; the "cannot end the move there" half is the universal Reposition's own
+  // `mustNotFinishEngaged`, which stays on.
+  reg.on('onMovePermissions', bindAT(AT.patientStalk, 11), (ev) => {
+    if (ev.operative.player !== T.player) return;
+    if (!effectOn(ev.state, ev.operative.id, EFF.patientStalk)) return;
+    ev.mayEnterEnemyControlRange = true;
   });
 
   // ---- SHRIEK-THAT-KILLS: the granted weapon is gated to its own action ----
@@ -1370,9 +1381,11 @@ function actions(): ActionDef[] {
   });
 
   // PATIENT STALK, SUDDEN BLOW — a Conceal-order Reposition that ends with D3+2 damage on one
-  // enemy operative the move passed within control range of. `validateMove` already permits a
-  // Reposition to pass THROUGH an enemy's control range (only the end position is tested), so
-  // the printed permission needs nothing; the damage is the part that does.
+  // enemy operative the move passed within control range of. "During that action, that
+  // operative can move within control range of enemy operatives (it cannot end the move
+  // there)": that permission used to need no code, because `validateMove` tested only the end
+  // of a path. It is now granted through `onMovePermissions`, keyed on an effect the action
+  // declares before it delegates.
   const stalk = aspectTechnique(AT.patientStalk);
   defs.push({
     id: REPOSITION_PATIENT_STALK,
@@ -1386,13 +1399,27 @@ function actions(): ActionDef[] {
       const usable = techniqueUsable(state, op, AT.patientStalk);
       if (!usable.ok) return usable;
       if (op.order !== 'conceal') return { ok: false, reason: 'this operative must have a Conceal order' };
-      return getAction('Reposition')!.check(ctx, state, op, params);
+      if (!params.path) return { ok: false, reason: 'no path supplied' };
+      const v = validateMove(ctx, state, op, params.path, {
+        action: 'Reposition',
+        mustNotFinishEngaged: true,
+        mayEnterEnemyControlRange: true,
+      });
+      return v.ok ? { ok: true } : { ok: false, reason: v.reason ?? 'illegal move' };
     },
     perform(ctx, state, op, params) {
+      // Declared BEFORE the move is validated: `onMovePermissions` reads this effect to grant
+      // "that operative can move within control range of enemy operatives".
+      declare(state, op, AT.patientStalk, EFF.patientStalk);
       const path = params.path;
-      const validated = path ? validateMove(ctx, state, op, path, { action: 'Reposition', mustNotFinishEngaged: true }) : undefined;
+      const validated = path
+        ? validateMove(ctx, state, op, path, {
+            action: 'Reposition',
+            mustNotFinishEngaged: true,
+            mayEnterEnemyControlRange: true,
+          })
+        : undefined;
       const legs = validated?.ok ? validated.legs : [];
-      claimTechnique(state, op, AT.patientStalk);
       const moved = getAction('Reposition')!.perform(ctx, state, op, params);
       if (!moved.ok) return moved;
       const passed = enemiesPassed(ctx, state, op, legs);

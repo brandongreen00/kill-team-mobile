@@ -41,6 +41,7 @@ export const HOOK_NAMES = [
   'onActionCost',
   'canPerformAction',
   'onMoveDistance',
+  'onMovePermissions',
   'onMoveRules',
   'onSetUpAgain',
   'availableWeapons',
@@ -155,6 +156,20 @@ export interface HookEvents {
   onActionCost: { state: GameState; operative: OperativeState; action: string; ap: number };
   canPerformAction: { state: GameState; operative: OperativeState; action: string; allowed: boolean; reason?: string };
   onMoveDistance: { state: GameState; operative: OperativeState; action: string; inches: number };
+  /**
+   * Where a move is allowed to GO, as opposed to how far. Rules that print a permission the
+   * universal actions do not have register here — Gellerpox BARGE ("it can move through enemy
+   * operatives and within control range of them"), Striking Scorpions' PATIENT STALK, SUDDEN
+   * BLOW ("that operative can move within control range of enemy operatives"). Both were
+   * silently satisfied while `validateMove` checked only where a move ENDED.
+   */
+  onMovePermissions: {
+    state: GameState;
+    operative: OperativeState;
+    action: string;
+    mayEnterEnemyControlRange: boolean;
+    mayMoveThroughEnemies: boolean;
+  };
   onMoveRules: {
     state: GameState;
     operative: OperativeState;

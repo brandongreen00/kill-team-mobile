@@ -44,6 +44,12 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 | Accessible: move through, +1", centre of base only — "takes precedence over Bases, and Terrain and Movement" | ✔ | `terrain.ts::accessibleCrossings` + the `Accessible` exemption in `pathBlockedByTerrain` | `Accessible terrain can still be moved through` |
 | Insignificant: "can move over and across ... without going up and down" | ✔ | `pathBlockedByTerrain` exemption | `Insignificant terrain does not block a move` |
 | Control range = visible to and within 1", mutual | ✔ | `visibility.ts::withinControlRange` | core suite |
+| Bases: "not through enemy operatives"; "cannot move within control range of an enemy operative, unless…" | ✔ | `movement.ts::enemyOnTheWay`, per increment; relaxed through `onMovePermissions` (D-072) | `friendly operatives can move through other friendly operatives … but not through enemy operatives`, `it cannot move within control range of an enemy operative` |
+| Seek / Vantage deny cover for TARGETING only — "it doesn't remove their cover save (if any)" | ✔ | `visibility.ts::coverAndObscured` returns `inCover` (the save) and `inCoverForTargeting` (D-068) | `Seek: "it doesn't remove their cover save (if any)"` |
+| Lethal x+ survives a re-roll | ✔ | `dice.ts::lethalOpts` carried in the reroll decision's `ctx` | `a RE-ROLLED result is graded the same way` |
+| Devastating x / Stun fire on RETAINED critical successes | ✔ | `Die.blockedFrom` distinguishes a blocked crit from a blocked normal | `a blocked NORMAL success is not a critical success` |
+| Command Re-roll is exempt from the once-per-TP ploy cap | ✔ | `decisions.ts::applyReroll`, `shoot.ts`, `fight.ts` | `other than Command Re-roll, each player cannot use each ploy more than once per turning point` |
+| Fight: "both players select one melee weapon to use that their operative has" | ✔ | `fight.ts::meleeProfileOf` | `not the first profile on the card` |
 | Damage / wounded / injured (−2" Move floor 4", Hit −1) / incapacitated | ✔ | `state.ts::inflictDamage`, `isInjured`, `moveOf` | `injured: -2" Move (floor 4") and Hit worsened by 1` |
 | Cover: intervening terrain within the target's control range, denied within 2" | ✔ | `visibility.ts::coverAndObscured` | `cover is denied within 2" of the active operative` |
 | Obscured: intervening Heavy terrain, ignoring Heavy within 1" of either operative | ✔ | `visibility.ts::coverAndObscured` | `obscured ignores Heavy terrain within 1" of either operative` |
