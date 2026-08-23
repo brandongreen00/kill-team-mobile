@@ -62,12 +62,16 @@ export function App() {
       setTeams(t);
       // A fully wired context: ops, equipment, the initiative-card flow and — so a roster's
       // kill team actually plays by its own rules — every implemented team module.
-      const { BATCH_1 } = await import('../teams/index.ts');
+      // This registered only BATCH_1 for six batches, so 40 of the 48 selectable teams
+      // fought whole battles with no faction rules, ploys, equipment or unique actions, and
+      // said nothing about it: `rebuildHooks` optional-chains a module it cannot find.
+      // `tests/wiring.test.ts` now pins that every selectable team has a module.
+      const { ALL_TEAM_MODULES } = await import('../teams/index.ts');
       const ctx = createGameContext({
         rng: new SeededRng(1),
         maps: m,
         datacards: t.flatMap((team) => team.datacards ?? []),
-        teams: BATCH_1,
+        teams: ALL_TEAM_MODULES,
       });
       const map = m[0] ?? fallbackMap();
       const s = new Store(createBattle(ctx, { map, seed: 1, mode: 'match', critOpId: defaultCritOpId() }), ctx);

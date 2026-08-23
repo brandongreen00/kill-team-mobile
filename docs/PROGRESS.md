@@ -32,6 +32,15 @@ the same bug seen from two sides.
 `tests/maps-volkus-doors.test.ts` walks the real shipped maps: through every one of the 24
 doors, and into every wall.
 
+**Also closed: 40 of 48 kill teams had no rules at all.** `src/ui/App.tsx` had registered
+`BATCH_1` since phase 5 — carried forward through five more batches — so a battle with any of
+the other 40 teams ran with no faction rules, no ploys, no faction equipment and no unique
+actions, and said nothing, because `rebuildHooks` optional-chains a module it cannot find. The
+modules were all written, imported and tested; the shell just never handed them to the context.
+It now registers `ALL_TEAM_MODULES`, which costs **30 bytes** in the bundle: `src/teams/index.ts`
+imports all 48 at the top, so the barrel was already shipping. `tests/wiring.test.ts` pins that
+every team `data/teams/_index.json` offers has a module behind it.
+
 ## 2026-08-22 — Merging batch 6: three regressions a clean merge hid (D-061…D-063)
 
 main's batch-6 work and this branch's UI overhaul merged with conflicts in two append-only docs
