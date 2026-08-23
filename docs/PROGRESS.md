@@ -8,6 +8,9 @@ A 15-domain line-by-line audit against the verbatim Wahapedia text (`docs/rules-
 gitignored) produced 62 findings that survived verification. Everything below is fixed with a
 test that fails against the code before it; the remaining work items are listed at the end.
 
+The full list of 39 work items, with what each one breaks and how to fix it, is
+`docs/RULES-AUDIT.md`.
+
 **Open, and worth reading first** — the audit's three worst findings are not in this batch:
 1. `wallCornerZones` discards every corner whose adjacent edge is under 0.6", and every
    extracted Gallowdark / Tomb World wall is **0.365" thick** — so it returns `[]` for all 94
