@@ -15,6 +15,12 @@ export interface Die {
   state: DieState;
   rolled: boolean;
   rerolledFrom?: number;
+  /**
+   * What this die was retained as before the defender blocked it. A blocked die keeps no
+   * trace of that in `state`, and Devastating x fires on RETAINED critical successes — so
+   * without this a blocked NORMAL success read as a retained crit.
+   */
+  blockedFrom?: 'crit' | 'normal';
   /** Which rule produced or changed this die, for the log. */
   note?: string;
 }
@@ -116,6 +122,16 @@ export function piercingValue(rules: WeaponRule[], retainedCrits: number): numbe
 export function lethalThreshold(rules: WeaponRule[]): number | undefined {
   const r = ruleOf(rules, 'Lethal');
   return r?.x;
+}
+
+/**
+ * The classification a weapon's dice are graded with. Both the first roll and every re-roll
+ * must use it: "your successes equal to or greater than x are critical successes" does not
+ * stop applying because the dice was re-rolled.
+ */
+export function lethalOpts(rules: WeaponRule[]): ClassifyOpts {
+  const l = lethalThreshold(rules);
+  return l !== undefined ? { lethal: l } : {};
 }
 
 /** Retention transforms the player may choose to apply, in an order of their choice. */

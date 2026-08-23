@@ -15,6 +15,7 @@ import {
   countNormals,
   devastatingDamage,
   hasRule,
+  lethalOpts,
   lethalThreshold,
   newPool,
   retentionOptions,
@@ -37,7 +38,7 @@ import {
   weaponsOf,
 } from '../state.ts';
 import { effectiveRules, COMMAND_REROLL } from './shoot.ts';
-import type { GameState, OperativeState, PendingDecision, WeaponProfile, WeaponRule } from '../types.ts';
+import type { GameState, OperativeState, PendingDecision, Weapon, WeaponProfile, WeaponRule } from '../types.ts';
 import { otherPlayer } from '../types.ts';
 import type { FightSequence } from './types.ts';
 
@@ -60,6 +61,7 @@ export function startFight(
   // The defender retaliates with its own melee weapon; the AI/UI may override the choice via
   // a decision, but the default is the first melee weapon on its card.
   const dw = weaponsOf(ctx, state, defender, 'melee')[0];
+  const dwProfile = dw ? meleeProfileOf(dw) : undefined;
   const seq: FightSequence = {
     kind: 'fight',
     step: 'start',
@@ -68,6 +70,7 @@ export function startFight(
     attackerWeapon: weaponName,
     ...(profileName ? { attackerProfile: profileName } : {}),
     ...(dw ? { defenderWeapon: dw.name } : {}),
+    ...(dwProfile?.name ? { defenderProfile: dwProfile.name } : {}),
     defenderCanRetaliate: Boolean(dw) && !cannotRetaliate(state, defender),
     attackerPool: newPool(),
     defenderPool: newPool(),
@@ -270,7 +273,7 @@ export function sideWeapon(
   const name = side === 'attacker' ? seq.attackerWeapon : (seq.defenderWeapon ?? '');
   const profileName = side === 'attacker' ? seq.attackerProfile : seq.defenderProfile;
   const w = weaponsOf(ctx, state, op, 'melee').find((x) => x.name === name) ?? weaponsOf(ctx, state, op, 'melee')[0];
-  const profile = w ? (findProfile(w, profileName) ?? w.profiles[0]!) : fallbackProfile();
+  const profile = w ? meleeProfileOf(w, profileName) : fallbackProfile();
   const foe = side === 'attacker' ? state.operatives[seq.defenderId] : state.operatives[seq.attackerId];
   return {
     profile,
@@ -282,6 +285,21 @@ export function sideWeapon(
     }),
     name: w?.name ?? name,
   };
+}
+
+/**
+ * The melee profile of a weapon being used in a Fight.
+ *
+ * Core rules: "Both players select one melee weapon () to use that their operative has."
+ * `weaponsOf(..., 'melee')` selects the WEAPON; it does not select the profile, and 15
+ * weapons across 12 kill teams (the Aeonstave, the Triskele, the Brazier of holy fire, …)
+ * list their ranged profile first. Falling through to `profiles[0]` therefore fought with a
+ * ranged stat line and ranged weapon rules — Blast, Range x and all.
+ */
+function meleeProfileOf(w: Weapon, profileName?: string): WeaponProfile {
+  const named = profileName ? w.profiles.find((p) => (p.name ?? '') === profileName) : undefined;
+  if (named?.type === 'melee') return named;
+  return w.profiles.find((p) => p.type === 'melee') ?? w.profiles[0]!;
 }
 
 function fallbackProfile(): WeaponProfile {
@@ -375,7 +393,8 @@ function offerRerolls(
     prompt: next.label,
     optional: true,
     options: [...options, { id: 'keep', label: 'Keep the dice as rolled' }],
-    ctx: { grantId: next.id, mode: next.mode, hit, cp: next.cp ?? 0, side },
+    // As in shoot.ts: a re-rolled dice keeps the weapon's critical threshold.
+    ctx: { grantId: next.id, mode: next.mode, hit, cp: next.cp ?? 0, side, ...lethalOpts(rules) },
     ...(next.sourceText ? { sourceText: next.sourceText } : {}),
   });
   return true;

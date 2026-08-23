@@ -19,13 +19,14 @@ import {
   countNormals,
   devastatingDamage,
   hasRule,
-  lethalThreshold,
+  lethalOpts,
   newPool,
   piercingValue,
   rerollDie,
   retentionOptions,
   ruleOf,
   successes,
+  type ClassifyOpts,
   type Die,
   type DicePool,
 } from '../dice.ts';
@@ -504,7 +505,13 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
         const next = grants.find((g) => !seq.usedRerolls.includes(g.id));
         if (next) {
           seq.usedRerolls.push(next.id);
-          const opts = rerollDecision(state, next, seq.attack, hitStat(ctx, state, attacker, profile, seq));
+          const opts = rerollDecision(
+            state,
+            next,
+            seq.attack,
+            hitStat(ctx, state, attacker, profile, seq),
+            lethalOpts(rules),
+          );
           if (opts) return;
           break;
         }
@@ -706,11 +713,6 @@ function hitStat(
   return hitOf(ctx, state, attacker, profile, (seq.pointBlank ? -1 : 0) + extra);
 }
 
-function lethalOpts(rules: WeaponRule[]) {
-  const l = lethalThreshold(rules);
-  return l !== undefined ? { lethal: l } : {};
-}
-
 function attackContext(
   ctx: GameContext,
   state: GameState,
@@ -762,7 +764,13 @@ function attackRerollGrants(
 }
 
 /** Push a reroll decision; returns true when a decision was raised. */
-function rerollDecision(state: GameState, grant: RerollGrant, pool: DicePool, hit: number): boolean {
+function rerollDecision(
+  state: GameState,
+  grant: RerollGrant,
+  pool: DicePool,
+  hit: number,
+  classify: ClassifyOpts = {},
+): boolean {
   const candidates = pool.dice.filter((d) => d.rolled && d.state !== 'discarded');
   if (candidates.length === 0) return false;
   let options: { id: string; label: string; data?: Record<string, unknown> }[];
@@ -792,7 +800,9 @@ function rerollDecision(state: GameState, grant: RerollGrant, pool: DicePool, hi
     prompt: grant.label,
     optional: true,
     options: [...options, { id: 'keep', label: 'Keep the dice as rolled' }],
-    ctx: { grantId: grant.id, mode: grant.mode, hit, cp: grant.cp ?? 0, pool: pool === undefined ? '' : '' },
+    // The classification travels with the decision: a re-rolled dice belongs to the same
+    // weapon, so it is graded against the same critical threshold (Lethal x+ / a rare rule).
+    ctx: { grantId: grant.id, mode: grant.mode, hit, cp: grant.cp ?? 0, ...classify },
     ...(grant.sourceText ? { sourceText: grant.sourceText } : {}),
   });
   return true;
@@ -806,8 +816,16 @@ function push(state: GameState, d: PendingDecision): void {
 export function applyAllocation(seq: ShootSequence, unblockedCrits: number, unblockedNormals: number): void {
   const critDice = seq.attack.dice.filter((d) => d.state === 'crit');
   const normalDice = seq.attack.dice.filter((d) => d.state === 'normal');
-  for (let i = unblockedCrits; i < critDice.length; i++) critDice[i]!.state = 'blocked';
-  for (let i = unblockedNormals; i < normalDice.length; i++) normalDice[i]!.state = 'blocked';
+  // Remember what each blocked die was retained as: Devastating x and Stun both key off
+  // RETAINED critical successes, and 'blocked' alone cannot tell a crit from a normal.
+  for (let i = unblockedCrits; i < critDice.length; i++) {
+    critDice[i]!.state = 'blocked';
+    critDice[i]!.blockedFrom = 'crit';
+  }
+  for (let i = unblockedNormals; i < normalDice.length; i++) {
+    normalDice[i]!.state = 'blocked';
+    normalDice[i]!.blockedFrom = 'normal';
+  }
 }
 
 function resolveAttackDice(
@@ -824,7 +842,9 @@ function resolveAttackDice(
 
   // Devastating x fires on RETAINED crits, before blocking is considered, and the success is
   // not discarded ("it can still be resolved later in the sequence").
-  const retainedCrits = seq.attack.dice.filter((d) => d.state === 'crit' || d.state === 'blocked').length;
+  const retainedCrits = seq.attack.dice.filter(
+    (d) => d.state === 'crit' || (d.state === 'blocked' && d.blockedFrom === 'crit'),
+  ).length;
   const dev = devastatingDamage(rules, retainedCrits);
   if (dev.perCrit > 0) {
     const totalDev = dev.perCrit * retainedCrits;

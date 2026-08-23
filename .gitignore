@@ -15,3 +15,6 @@ __pycache__/
 *.pyc
 test-results/
 playwright-report/
+
+# Audit repros written by the rules-review workflow; promoted into the real suites or deleted.
+tests/_audit/
