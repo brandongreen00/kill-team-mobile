@@ -380,7 +380,15 @@ export function wallCornerZones(part: IndexedPart, minEdge = 0.6, radius = 0.35)
     const prev = poly[(i - 1 + n) % n]!;
     const cur = poly[i]!;
     const next = poly[(i + 1) % n]!;
-    if (dist(prev, cur) < minEdge || dist(cur, next) < minEdge) continue;
+    // "…minor parts of the wall that protrude do not make a corner or end alone; it must be
+    // the MAIN STRUCTURE of the wall that turns a corner or ends." A vertex belongs to the
+    // main structure when at least one of its edges is a substantial run — not when BOTH are.
+    // Requiring both discarded every vertex of every extracted wall, because each is a
+    // rectangle 0.365" thick and every vertex has one 0.365" edge: `wallCornerZones` returned
+    // [] for all 94 wall parts across the Gallowdark maps, `interveningParts` then skipped the
+    // wall entirely, and on the killzones where walls are essentially the only terrain nobody
+    // was ever in cover and nobody was ever obscured.
+    if (Math.max(dist(prev, cur), dist(cur, next)) < minEdge) continue;
     const ax = cur.x - prev.x;
     const ay = cur.y - prev.y;
     const bx = next.x - cur.x;

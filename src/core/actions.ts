@@ -519,7 +519,8 @@ registerAction({
   type: 'mission',
   sourceText:
     'OPERATE HATCH 1AP: Open or close a hatchway that\'s access point is within the operative\'s control range... An operative cannot perform this action while within control range of an enemy operative, or if that hatchway is open and its access point is within an enemy operative\'s control range.',
-  available: (ctx, state) => terrain(ctx, state).parts.some((p) => p.role === 'accessPoint' && p.feature.kind.includes('hatch') !== false),
+  available: (ctx, state) =>
+    terrain(ctx, state).parts.some((p) => p.role === 'accessPoint' && p.opensAs !== 'breachWall'),
   check(ctx, state, op, params) {
     if (engaged(ctx, state, op)) return { ok: false, reason: 'within control range of an enemy operative' };
     const index = terrain(ctx, state);
@@ -559,13 +560,22 @@ registerAction({
   type: 'mission',
   sourceText:
     'BREACH 2AP: Open a closed breach point thats access point is within the operative\'s control range... Roll one D6 separately for each operative that\'s on the other side of the access point and has that access point within its control range: on a 4+, subtract 1 from that operative\'s APL stat until the end of its next activation and inflict damage on it equal to the dice result halved (rounding up).',
-  available: (ctx, state) => terrain(ctx, state).parts.some((p) => p.role === 'breachWall'),
+  available: (ctx, state) =>
+    terrain(ctx, state).parts.some(
+      (p) => p.role === 'accessPoint' && p.opensAs === 'breachWall' && p.state !== 'open',
+    ),
   check(ctx, state, op, params) {
     if (engaged(ctx, state, op)) return { ok: false, reason: 'within control range of an enemy operative' };
     const index = terrain(ctx, state);
     const part = params.partId ? index.byId.get(params.partId) : undefined;
     if (!part || part.role !== 'accessPoint') return { ok: false, reason: 'no breach point selected' };
+    if (part.opensAs !== 'breachWall') return { ok: false, reason: 'that access point is a hatchway, not a breach point' };
     if (part.state === 'open') return { ok: false, reason: 'that breach point is already open' };
+    // "Open a closed breach point that's access point is WITHIN THE OPERATIVE'S CONTROL RANGE."
+    const bc = card(ctx, op);
+    const bCentre = { x: (part.bounds.min.x + part.bounds.max.x) / 2, y: (part.bounds.min.y + part.bounds.max.y) / 2 };
+    if (baseGap(op.pos, bc.base, op.rot, bCentre, { shape: 'round', mm: 20 }, 0) > 1 + 1e-6)
+      return { ok: false, reason: 'the breach point is not within control range' };
     // "It cannot perform this action for less than 2AP during an activation/counteraction in
     // which it performed the Charge or Shoot action (or vice versa)."
     return { ok: true };
@@ -574,12 +584,15 @@ registerAction({
     const index = terrain(ctx, state);
     const part = index.byId.get(params.partId!)!;
     state.terrainState[part.id] = { state: 'open' };
-    for (const sibling of part.feature.parts) {
-      if (sibling.role === 'breachWall') state.terrainState[sibling.id] = { state: 'open' };
-    }
     const centre = { x: (part.bounds.min.x + part.bounds.max.x) / 2, y: (part.bounds.min.y + part.bounds.max.y) / 2 };
+    // "Roll one D6 separately for each operative that's ON THE OTHER SIDE of the access point
+    // and has that access point within its control range." The side test was missing, so the
+    // blast caught the breacher's own team standing behind it.
+    const side = acrossFrom(part, centre);
+    const mySide = side(op.pos);
     for (const other of aliveOperatives(state)) {
       if (other.id === op.id) continue;
+      if (side(other.pos) === mySide) continue;
       const oc = card(ctx, other);
       if (baseGap(other.pos, oc.base, other.rot, centre, { shape: 'round', mm: 20 }, 0) > 1 + 1e-6) continue;
       const roll = ctx.rng.d6();
@@ -600,6 +613,20 @@ registerAction({
     return { ok: true };
   },
 });
+
+/**
+ * Which side of a wall a point is on.
+ *
+ * An access point is a rectangle set into a wall; its LONG axis runs along the wall, so the
+ * short axis is the direction that crosses it. Returns a sign, or 0 for a point on the line.
+ */
+function acrossFrom(part: { bounds: { min: Vec2; max: Vec2 } }, centre: Vec2): (p: Vec2) => number {
+  const w = part.bounds.max.x - part.bounds.min.x;
+  const h = part.bounds.max.y - part.bounds.min.y;
+  return w >= h
+    ? (p: Vec2) => Math.sign(p.y - centre.y) // wall runs along x, so crossing is in y
+    : (p: Vec2) => Math.sign(p.x - centre.x);
+}
 
 /** AP cost after hook modifiers; "the minimum is always 0AP". */
 export function actionCost(ctx: GameContext, state: GameState, op: OperativeState, action: ActionDef): number {

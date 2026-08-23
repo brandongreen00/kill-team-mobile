@@ -92,6 +92,13 @@ export interface TerrainPart {
   z1: number;
   types: TerrainType[];
   role?: PartRole;
+  /**
+   * For a `accessPoint` part: which action opens it. The extractor has always written this and
+   * the core never declared it, so `Operate Hatch` gated on `feature.kind.includes('hatch')`
+   * (kinds are `gallowdark.wallA3`) and `Breach` gated on a `breachWall` role that appears in
+   * no map file — neither action could be performed on any map.
+   */
+  opensAs?: 'hatch' | 'breachWall';
   /** Doors, hatches and breach points toggle at runtime. */
   state?: 'open' | 'closed';
   /**

@@ -15,12 +15,14 @@ import { getAction } from '../src/core/actions.ts';
 import { ScriptedRng } from '../src/core/rng.ts';
 import { parseWeaponRules } from '../src/core/weaponRules.ts';
 import { addRolled, retentionOptions, type DicePool } from '../src/core/dice.ts';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { makeCard, rect, testMap } from './fixtures.ts';
-import { buildTerrainIndex } from '../src/core/terrain.ts';
+import { buildTerrainIndex, wallCornerZones } from '../src/core/terrain.ts';
 import { coverAndObscured, withinControlRange } from '../src/core/visibility.ts';
 import { checkTarget } from '../src/core/sequences/shoot.ts';
 import type { GameContext } from '../src/core/context.ts';
-import type { Datacard, GameState, PendingDecision, TerrainFeature } from '../src/core/types.ts';
+import type { Datacard, GameState, KillzoneMap, PendingDecision, TerrainFeature } from '../src/core/types.ts';
 
 /** A battle on the open test killzone, with the cards and rosters the test needs. */
 function battle(
@@ -895,5 +897,54 @@ describe('Heavy forbids the move as well as the shot', () => {
     const after = getAction('Reposition')!.check(ctx, st, st.operatives[a]!, { path: { points: [{ x: 8, y: 11 }] } });
     expect(after.ok).toBe(false);
     expect(after.reason).toContain('Heavy');
+  });
+});
+
+describe('hatchways can actually be operated', () => {
+  it('Killzones § Hatchway: "open or close a hatchway that\'s access point is within the operative\'s control range"', () => {
+    const map = JSON.parse(
+      readFileSync(join(process.cwd(), 'data', 'maps', 'gallowdark', 'gallowdark-1.json'), 'utf8'),
+    ) as KillzoneMap;
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const ctx = createGameContext({ rng: new ScriptedRng([4, 4, 4, 4]), maps: [map], datacards: [dummy] });
+    let s = createBattle(ctx, { map, seed: 5 });
+    s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: [{ datacardId: 'test.dummy' }] }, ctx).state;
+    s = reduce(s, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: [{ datacardId: 'test.dummy' }] }, ctx).state;
+    const index = buildTerrainIndex(map, s);
+    const hatch = index.parts.find((p) => p.role === 'accessPoint' && p.opensAs === 'hatch');
+    expect(hatch, 'gallowdark-1 has a hatchway access point').toBeDefined();
+
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    op.pos = {
+      x: (hatch!.bounds.min.x + hatch!.bounds.max.x) / 2,
+      y: (hatch!.bounds.min.y + hatch!.bounds.max.y) / 2 + 0.7,
+    };
+    // The predicate used to be `feature.kind.includes('hatch') !== false` — kinds are
+    // `gallowdark.wallA3`, so it was `false !== false`, and the action could never appear.
+    const def = getAction('Operate Hatch')!;
+    expect(def.available!(ctx, s, op)).toBe(true);
+    expect(def.check(ctx, s, op, { partId: hatch!.id }).ok).toBe(true);
+    const after = def.perform(ctx, s, op, { partId: hatch!.id });
+    expect(after.ok).toBe(true);
+    expect(s.terrainState[hatch!.id]?.state).toBe('open');
+    // An open hatchway is Accessible, Insignificant and Exposed — not Wall.
+    const reopened = buildTerrainIndex(map, s).byId.get(hatch!.id)!;
+    expect(reopened.types).toContain('Accessible');
+    expect(reopened.types).not.toContain('Wall');
+  });
+});
+
+describe('Wall terrain has corners and ends', () => {
+  it('Killzones: "only the corners and ends of Wall terrain can intervene" — a thin wall still has two ends', () => {
+    const map = JSON.parse(
+      readFileSync(join(process.cwd(), 'data', 'maps', 'gallowdark', 'gallowdark-1.json'), 'utf8'),
+    ) as KillzoneMap;
+    const index = buildTerrainIndex(map);
+    const walls = index.parts.filter((p) => p.role === 'wall');
+    expect(walls.length).toBeGreaterThan(10);
+    // Every extracted wall is a rectangle ~0.365" thick, so requiring BOTH adjacent edges to
+    // be 0.6"+ discarded every vertex of every one of them.
+    const withZones = walls.filter((w) => wallCornerZones(w).length > 0);
+    expect(withZones.length).toBe(walls.length);
   });
 });
