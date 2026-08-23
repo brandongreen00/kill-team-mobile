@@ -40,7 +40,7 @@ Ranked by how much each defect distorts a real game.
 | W-13 | FIXED | engine | major | On Guard is not limited to once per enemy activation — every on-guard operative can interrupt the same activation |
 | W-14 | FIXED | engine | major | Hatchway Fight never checks the target is within 2" of, or on the other side of, the access point — it is a 1AP melee attack on anyone on the board |
 | W-15 | FIXED | engine | major | Declining one counteract window burns every counteract for the rest of the turning point |
-| W-16 | open | engine | major | "Until the end of the turning point" effects are deleted before the crit op reads marker control at the end of that turning point |
+| W-16 | FIXED | engine | major | "Until the end of the turning point" effects are deleted before the crit op reads marker control at the end of that turning point |
 | W-17 | FIXED | engine | major | Melee Devastating fires only for criticals actually used to strike, and ignores the distance-prefixed form entirely |
 | W-18 | open | engine | major | A Charge may clip a lone enemy's control range and finish on a different enemy — `stickyEngagedWith` is written and read nowhere |
 | W-19 | FIXED `10509af` | engine | major | The Accessible +1" is charged for every increment that merely starts or ends on Accessible terrain, and only once when two parts are crossed |
@@ -51,7 +51,7 @@ Ranked by how much each defect distorts a real game.
 | W-24 | open | engine | major | Smoke's Piercing softening adds a defence die unconditionally, so Piercing Crits 2 into smoke always faces 4 dice |
 | W-25 | open | engine | major | Kill grade is a one-way ratchet — a REANIMATED operative never lowers the opponent's grade or takes back the VP |
 | W-26 | open | engine | major | The kill grade row is recomputed from the live roster, so operatives added mid-battle push the enemy onto a harder row |
-| W-27 | open | engine | major | Reboot can be performed while within control range of an enemy operative |
+| W-27 | FIXED | engine | major | Reboot can be performed while within control range of an enemy operative |
 | W-28 | open | engine | major | Breach performs no control-range check and its concussion roll hits operatives on the breacher's own side of the wall |
 | W-29 | open | engine | major | Volkus has no killzone module: Garrisoned Stronghold and Condensed Stronghold are entirely unimplemented |
 | W-30 | open | engine | major | The DOOR FIGHT universal action does not exist, so one operative in a doorway seals every building on Volkus |
@@ -59,7 +59,7 @@ Ranked by how much each defect distorts a real game.
 | W-32 | open | mixed | major | Bheta-Decima Restricted Targeting is unimplemented, and with no gantry pillars in the data the killzone has one Heavy part in total |
 | W-33 | open | engine | major | Tomb World teleport pads are inert scenery, and the mutual-control-range clause is dead code written backwards |
 | W-34 | open | engine | major | A move may finish with two bases fully overlapping — the end-of-move overlap guard is a dead comparison |
-| W-35 | open | engine | major | Operative-to-operative distance is horizontal only, so an operative on 3" Vantage terrain is in control range of one on the floor below |
+| W-35 | FIXED | engine | major | Operative-to-operative distance is horizontal only, so an operative on 3" Vantage terrain is in control range of one on the floor below |
 | W-36 | open | engine | major | An incapacitated operative gets no pre-removal step: granted free actions are dropped and only one carried marker is placed |
 | W-37 | open | engine | minor | Gambit alternation is not enforced by the reducer, and the AI driver lets the initiative player use every gambit first |
 | W-38 | open | engine | minor | A granted free action is modelled as +1 APL, so the ±1 clamp cancels it against any other APL change |
@@ -309,7 +309,7 @@ Test: tests/rules-review.test.ts quoting core-rules.txt:232: three expended Enga
 
 ### W-16 · "Until the end of the turning point" effects are deleted before the crit op reads marker control at the end of that turning point
 
-**OPEN** · engine · major
+**FIXED** · engine · major
 
 Rules pinned: `the-missions.txt:184 ("If friendly operatives control any transmitting objective markers, you score 1VP")`; `core-rules.txt:540 (marker control by total contesting APL)`
 
@@ -485,7 +485,7 @@ Test: tests/ops.test.ts quoting approved-ops-2025.txt:267: a 6-operative team gr
 
 ### W-27 · Reboot can be performed while within control range of an enemy operative
 
-**OPEN** · engine · major
+**FIXED** · engine · major
 
 Rules pinned: `the-missions.txt:154 ("An operative cannot perform this action during the first turning point, or while within control range of an enemy operative")`
 
@@ -613,7 +613,7 @@ Test: tests/rules-review.test.ts quoting core-rules.txt:407: a Reposition finish
 
 ### W-35 · Operative-to-operative distance is horizontal only, so an operative on 3" Vantage terrain is in control range of one on the floor below
 
-**OPEN** · engine · major · **needs an owner decision**
+**FIXED** · engine · major · **needs an owner decision**
 
 Rules pinned: `core-rules.txt:505 ("When measuring to and from something, do so from the closest part of it. For an operative, do so from its base… When measuring to and from an AREA of the killzone, measure the horizontal distance only")`; `core-rules.txt:410 (control range = "visible to and within 1\"")`
 
