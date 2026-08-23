@@ -247,6 +247,59 @@ export function accessibleCrossings(index: TerrainIndex, a: Vec2, b: Vec2, z: nu
   );
 }
 
+/**
+ * The terrain feature ids whose standable surface holds an operative at (p, z). Ground level
+ * belongs to no feature, so it returns an empty set.
+ */
+export function featureIdsSupporting(index: TerrainIndex, p: Vec2, z: number): Set<string> {
+  const out = new Set<string>();
+  for (const part of partsSupporting(index, p, z)) out.add(part.feature.id);
+  return out;
+}
+
+/**
+ * Killzones › Terrain and Movement: "Operatives cannot move through terrain — they must move
+ * around, climb over or drop/jump off it."
+ *
+ * The part of a straight-line increment that travels HORIZONTALLY at level `z` may not pass
+ * through solid terrain standing at that level. Three types are exempt, each by its own rule:
+ *
+ *  - Accessible — "Operatives can move through Accessible terrain (this takes precedence over
+ *    Bases, and Terrain and Movement)". `accessibleCrossings` charges the extra 1".
+ *  - Insignificant — "An operative can move over and across Insignificant terrain without
+ *    going up and down."
+ *  - Ceiling — "Operatives with a round base of 50mm or less, or an oval base of 60x35mm, can
+ *    move underneath Ceiling terrain regardless of the operative's height (this takes
+ *    precedence over Terrain and Movement)."
+ *
+ * `exemptFeatureIds` carries the "climb over / drop off IT" half of the rule: the feature an
+ * operative is climbing onto or dropping from does not block the increment that does so.
+ *
+ * The test is against the centre line, matching `accessibleCrossings` and `obstructingCrossings`;
+ * the full base is still checked where the operative finishes (`baseBlockedByTerrain`).
+ * See docs/DECISIONS.md D-064.
+ */
+export function pathBlockedByTerrain(
+  index: TerrainIndex,
+  a: Vec2,
+  b: Vec2,
+  z: number,
+  base: BaseShape,
+  height: number,
+  exemptFeatureIds?: ReadonlySet<string>,
+): IndexedPart | null {
+  for (const part of index.solid) {
+    if (part.z1 <= z + 1e-6) continue; // level with or below our feet — we walk on or over it
+    if (part.z0 >= z + height - 1e-6) continue; // entirely above our head — we walk under it
+    if (hasType(part, 'Accessible')) continue;
+    if (hasType(part, 'Insignificant')) continue;
+    if (hasType(part, 'Ceiling') && part.z0 >= z + 1e-6 && baseFitsUnderCeiling(base)) continue;
+    if (exemptFeatureIds?.has(part.feature.id)) continue;
+    if (segmentCrossesPoly(a, b, part.poly)) return part;
+  }
+  return null;
+}
+
 /** Obstructing equipment (razor wire): +1" when crossing within 1" of it. */
 export function obstructingCrossings(index: TerrainIndex, a: Vec2, b: Vec2): IndexedPart[] {
   return index.parts.filter((p) => hasType(p, 'Obstructing') && segmentCrossesPoly(a, b, p.poly));

@@ -40,6 +40,9 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 | Rule | Status | Implementation | Test |
 | --- | --- | --- | --- |
 | Bases: may touch, never stack; friendly pass-through; not through terrain; not off-board | ✔ | `geometry.ts::basesOverlap`, `movement.ts` | `a base cannot be over the edge of the killzone` |
+| "Operatives cannot move through terrain — they must move around, climb over or drop/jump off it" | ✔ | `terrain.ts::pathBlockedByTerrain`, checked per increment in `movement.ts::validateMove` and `reachableCells`; `movement.ts::routePath` builds the way round (D-064, D-065) | `cannot move through terrain`, `a route around the terrain is legal even though the straight line through it is not`, `an operative cannot walk through a wall` |
+| Accessible: move through, +1", centre of base only — "takes precedence over Bases, and Terrain and Movement" | ✔ | `terrain.ts::accessibleCrossings` + the `Accessible` exemption in `pathBlockedByTerrain` | `Accessible terrain can still be moved through` |
+| Insignificant: "can move over and across ... without going up and down" | ✔ | `pathBlockedByTerrain` exemption | `Insignificant terrain does not block a move` |
 | Control range = visible to and within 1", mutual | ✔ | `visibility.ts::withinControlRange` | core suite |
 | Damage / wounded / injured (−2" Move floor 4", Hit −1) / incapacitated | ✔ | `state.ts::inflictDamage`, `isInjured`, `moveOf` | `injured: -2" Move (floor 4") and Hit worsened by 1` |
 | Cover: intervening terrain within the target's control range, denied within 2" | ✔ | `visibility.ts::coverAndObscured` | `cover is denied within 2" of the active operative` |

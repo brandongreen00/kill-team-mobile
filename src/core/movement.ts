@@ -19,7 +19,9 @@ import {
   accessibleCrossings,
   baseBlockedByTerrain,
   baseTouchesHazardous,
+  featureIdsSupporting,
   obstructingCrossings,
+  pathBlockedByTerrain,
   surfaceAt,
   surfacesAt,
   hasType,
@@ -129,6 +131,7 @@ export function validateMove(
   for (let i = 0; i < path.points.length; i++) {
     const next = path.points[i]!;
     const horizontal = dist(cur, next);
+    const startZ = curZ;
     const declaredZ = path.zs?.[i];
     const targetZ = declaredZ !== undefined ? declaredZ : closestSurface(index, next, curZ);
     const dz = targetZ - curZ;
@@ -201,6 +204,28 @@ export function validateMove(
       // Wall terrain: "Operatives cannot move over or through Wall terrain."
       const wall = index.walls.find((w) => w.solid !== false && crossesWall(w, cur, next) && !isOpenAccessPoint(w));
       if (wall) return fail('cannot move through Wall terrain');
+
+      // "Operatives cannot move through terrain — they must move around, climb over or
+      // drop/jump off it." An increment that also changes level IS the climb over / drop off,
+      // so the feature being climbed or dropped from does not block itself.
+      const changesLevel = Math.abs(curZ - startZ) > 1e-6;
+      const exempt = changesLevel
+        ? new Set([
+            ...featureIdsSupporting(index, cur, startZ),
+            ...featureIdsSupporting(index, next, curZ),
+          ])
+        : undefined;
+      const through = pathBlockedByTerrain(
+        index,
+        cur,
+        next,
+        Math.max(startZ, curZ),
+        c.base,
+        heightOf(ctx, op),
+        exempt,
+      );
+      if (through)
+        return fail(`cannot move through ${through.role ?? 'terrain'} (${through.types.join('+')})`);
     }
 
     cur = { ...next };
@@ -345,9 +370,22 @@ function outOfBoard(state: GameState, p: Vec2, op: OperativeState, ctx: GameCont
   return p.x - r < -1e-6 || p.y - r < -1e-6 || p.x + r > w + 1e-6 || p.y + r > h + 1e-6;
 }
 
+/** One cell of a reachability field. `from` is the key of the cell it was reached from. */
+export interface ReachCell {
+  pos: Vec2;
+  z: number;
+  cost: number;
+  from?: string;
+}
+
+const cellKey = (p: Vec2, z: number): string => `${p.x.toFixed(1)},${p.y.toFixed(1)},${z.toFixed(1)}`;
+
 /**
  * Reachability field for the AI and for "can this operative reach X?" previews.
- * 0.5" grid flood fill respecting climb/drop/jump/Wall/Accessible/hazardous.
+ * 0.5" grid flood fill respecting climb/drop/jump/Wall/Accessible/hazardous, and — like
+ * `validateMove` — the rule that operatives cannot move through terrain. Each cell records
+ * the cell it was reached from, so `routePath` can turn the field back into a legal path
+ * that goes AROUND terrain rather than through it.
  */
 export function reachableCells(
   ctx: GameContext,
@@ -355,14 +393,14 @@ export function reachableCells(
   op: OperativeState,
   budget: number,
   step = 0.5,
-): Map<string, { pos: Vec2; z: number; cost: number }> {
+): Map<string, ReachCell> {
   const index = terrain(ctx, state);
   const c = card(ctx, op);
   const h = heightOf(ctx, op);
-  const out = new Map<string, { pos: Vec2; z: number; cost: number }>();
-  const key = (p: Vec2, z: number) => `${p.x.toFixed(1)},${p.y.toFixed(1)},${z.toFixed(1)}`;
-  const start = { pos: { ...op.pos }, z: op.z, cost: 0 };
-  const queue: { pos: Vec2; z: number; cost: number }[] = [start];
+  const out = new Map<string, ReachCell>();
+  const key = cellKey;
+  const start: ReachCell = { pos: { ...op.pos }, z: op.z, cost: 0 };
+  const queue: ReachCell[] = [start];
   out.set(key(start.pos, start.z), start);
   const dirs = [
     [step, 0],
@@ -390,15 +428,117 @@ export function reachableCells(
       if (baseBlockedByTerrain(index, np, c.base, op.rot, nz, h)) continue;
       if (baseTouchesHazardous(index, np, c.base, op.rot)) continue;
       if (index.walls.some((w) => w.solid !== false && crossesWall(w, cur.pos, np) && !isOpenAccessPoint(w))) continue;
+      const exempt =
+        Math.abs(dz) > 1e-6
+          ? new Set([...featureIdsSupporting(index, cur.pos, cur.z), ...featureIdsSupporting(index, np, nz)])
+          : undefined;
+      if (pathBlockedByTerrain(index, cur.pos, np, Math.max(cur.z, nz), c.base, h, exempt)) continue;
       const k = key(np, nz);
       const prev = out.get(k);
       if (prev && prev.cost <= cost) continue;
-      const node = { pos: np, z: nz, cost };
+      const node: ReachCell = { pos: np, z: nz, cost, from: key(cur.pos, cur.z) };
       out.set(k, node);
       queue.push(node);
     }
   }
   return out;
+}
+
+/**
+ * Turn a reachability-field cell back into a `MovePath` that goes AROUND terrain.
+ *
+ * Both the AI and the board's move preview used to declare a single straight-line increment to
+ * the destination. That was only ever legal because nothing checked the increment against the
+ * terrain it crossed; now that it does, a destination the flood fill reached by walking round a
+ * wall needs the path that actually walks round it.
+ *
+ * The parent chain is followed back to the operative, then greedily simplified: consecutive
+ * steps at the same level are merged into one increment for as far as the straight line between
+ * them stays legal. Fewer increments matter — "increments are always rounded up to the nearest
+ * inch", so every extra corner can cost up to another inch.
+ *
+ * Returns null if the cell is the operative's own, or its chain is broken.
+ */
+export function routePath(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  field: Map<string, ReachCell>,
+  target: ReachCell,
+): MovePath | null {
+  const chain: ReachCell[] = [];
+  let node: ReachCell | undefined = target;
+  const seen = new Set<string>();
+  while (node) {
+    const k = cellKey(node.pos, node.z);
+    if (seen.has(k)) break; // defensive: a cycle would hang the reconstruction
+    seen.add(k);
+    chain.push(node);
+    node = node.from ? field.get(node.from) : undefined;
+  }
+  chain.reverse();
+  if (chain.length < 2) return null;
+
+  const index = terrain(ctx, state);
+  const c = card(ctx, op);
+  const h = heightOf(ctx, op);
+  const straight = (a: ReachCell, b: ReachCell): boolean => {
+    if (Math.abs(a.z - b.z) > 1e-6) return false; // a level change is its own increment
+    if (index.walls.some((w) => w.solid !== false && crossesWall(w, a.pos, b.pos) && !isOpenAccessPoint(w)))
+      return false;
+    return pathBlockedByTerrain(index, a.pos, b.pos, a.z, c.base, h) === null;
+  };
+
+  const points: Vec2[] = [];
+  const zs: number[] = [];
+  let i = 0;
+  while (i < chain.length - 1) {
+    let j = i + 1;
+    for (let k = chain.length - 1; k > i + 1; k--) {
+      if (straight(chain[i]!, chain[k]!)) {
+        j = k;
+        break;
+      }
+    }
+    points.push({ ...chain[j]!.pos });
+    zs.push(chain[j]!.z);
+    i = j;
+  }
+  if (points.length === 0) return null;
+  return { points, zs };
+}
+
+/**
+ * The cheapest legal path to a destination, or null. Convenience wrapper for callers that have
+ * a point rather than a field cell: the field is flooded once and the nearest reached cell to
+ * `dest` within half a step is routed to.
+ */
+export function routeTo(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  dest: Vec2,
+  budget: number,
+  step = 0.5,
+): MovePath | null {
+  const field = reachableCells(ctx, state, op, budget, step);
+  let best: ReachCell | undefined;
+  let bestD = Infinity;
+  for (const cell of field.values()) {
+    const d = dist(cell.pos, dest);
+    if (d < bestD) {
+      bestD = d;
+      best = cell;
+    }
+  }
+  if (!best || bestD > step) return null;
+  const routed = routePath(ctx, state, op, field, best);
+  if (!routed) return null;
+  // The caller asked for `dest`, not the cell centre the field happened to land on.
+  const points = [...routed.points];
+  const zs = [...(routed.zs ?? [])];
+  points[points.length - 1] = { ...dest };
+  return { points, ...(zs.length > 0 ? { zs } : {}) };
 }
 
 /** Human-readable diagnostics for the UI, naming the rule that blocked the move. */

@@ -23,6 +23,7 @@ from scipy import ndimage
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cardlib as C          # noqa: E402
+import doors as DOORS        # noqa: E402
 import geom as G             # noqa: E402
 import labels as L           # noqa: E402
 import terrain as T          # noqa: E402
@@ -1333,6 +1334,11 @@ def main(argv):
             feat['placement']['flip'] = bool(f['flip'])
             feat.setdefault('qa', {})['templateIoU'] = f['iou']
         write_terrain(kz, templates)
+    # Doors are read off the card as a white dashed segment across the wall, which in practice
+    # only ever resolves on Stronghold B. Recover the rest from the hole they leave in the wall
+    # ring, now that `placement.rotDeg` / `flip` are known. See tools/maps/doors.py.
+    fill_volkus_doors(maps)
+
     for mid, m in maps.items():
         ious = [f['qa']['templateIoU'] for f in m['features'] if 'qa' in f]
         if ious:
@@ -1341,6 +1347,59 @@ def main(argv):
         C.dump_json(os.path.join(OUT_MAPS, m['killzone'], '%s.json' % mid), m)
     C.dump_json(os.path.join(ROOT, 'docs', 'maps', 'fit-report.json'), qa_fits)
     print('wrote %d maps' % len(maps))
+
+
+def fill_volkus_doors(maps):
+    """Add the `door` part to every Volkus feature whose doorway was left as a bare hole.
+
+    Calibration is across every instance in this run, so a partial re-extraction of one map
+    has less to go on than a full one; `tools/maps/derive_doors.py --check` is the gate that
+    catches anything left unresolved.
+    """
+    instances = []
+    for m in maps.values():
+        if m['killzone'] != 'volkus':
+            continue
+        for feat in m['features']:
+            if feat['kind'] not in DOORS.DOOR_KINDS:
+                continue
+            if any(p.get('role') == 'door' for p in feat['parts']):
+                continue
+            walls = [p['poly'] for p in feat['parts'] if p.get('role') == 'wall']
+            if walls:
+                instances.append(dict(id=feat['id'], kind=feat['kind'],
+                                      placement=feat['placement'], walls=walls, feature=feat))
+    if not instances:
+        return
+    resolved, _how = DOORS.derive_doors(instances)
+    for inst in instances:
+        box = resolved.get(inst['id'])
+        if box is None:
+            continue
+        # A wall bar traced across the opening plugs the door; cut the doorway back out of it.
+        feat_walls = [p for p in inst['feature']['parts'] if p.get('role') == 'wall']
+        overlap = DOORS.clip_walls_out_of_doorway(box, [p['poly'] for p in feat_walls])
+        if overlap:
+            rebuilt = []
+            for p in inst['feature']['parts']:
+                pieces = overlap.get(feat_walls.index(p)) if p in feat_walls else None
+                if pieces is None:
+                    rebuilt.append(p)
+                    continue
+                rebuilt.extend(dict(p, poly=DOORS.rect_poly(r)) for r in pieces)
+            inst['feature']['parts'] = rebuilt
+        spec = next((p for p in T.PIECES[inst['kind']]['parts'] if p.get('role') == 'door'), None)
+        if spec is None:
+            continue
+        feat = inst['feature']
+        walls = [p for p in feat['parts'] if p.get('role') == 'wall']
+        feat['parts'].insert(len(walls), dict(
+            id='', featureId=feat['id'], poly=DOORS.rect_poly(box),
+            z0=float(spec['z0']), z1=float(spec['z1']), types=list(spec['types']),
+            role='door', blocksVisibility=bool(spec.get('blocksVisibility', True)),
+            standable=bool(spec.get('standable', False)), solid=bool(spec.get('solid', False))))
+        for i, p in enumerate(feat['parts']):
+            p['id'] = '%s.p%d' % (feat['id'], i)
 
 
 FOOTPRINT_ROLES = ('floor', 'rubble', 'crate', 'teleportPad', 'ledge')

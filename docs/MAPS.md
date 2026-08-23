@@ -197,6 +197,31 @@ genuinely printed 2.0" into P2 territory, so the check is a report, not a gate.
 Territory-seam check (`centreSeamErrIn`, the printed tint boundary against the
 derived centre line): **≤ 0.041" on all 24 maps**.
 
+### Doors (`pnpm maps:doors:check`)
+
+`_volkus_doors` reads a door off the card as a white dashed segment printed across the wall,
+and demands a blob 12–14 px on its short side. In practice that only ever fired on Stronghold
+B, so **18 of the 24 door-bearing features shipped with the doorway as an unmodelled hole** in
+the wall ring — not Accessible, not Heavy, not there. The gap cost nothing to cross, gave no
+cover and obscured nobody; and once a move increment is checked against terrain (D-064), a
+1.17" hole is narrower than a 32 mm base, so the buildings would have sealed shut instead.
+
+`tools/maps/doors.py` recovers the door from the hole itself and `pnpm maps:doors` writes it
+in (it also runs inside `pnpm maps:extract`, so a re-extraction produces the same data). Two
+doorways additionally had a wall bar traced across them; those are clipped back out.
+
+| Piece | Instances | Door width | Resolved from |
+| --- | --- | --- | --- |
+| Stronghold A | 6 | 1.17" | wall ring ×5, consensus ×1 (volkus-5, whose top wall traces as three sub-thickness slivers) |
+| Stronghold B | 6 | 1.92" | read off the card by `_volkus_doors`; reproduced exactly by the derivation as a check |
+| Large Ruin | 12 | 1.88" | wall ring ×12 |
+
+The derivation is validated rather than assumed: given nothing but wall geometry it lands on
+all six card-read Stronghold B doors to within the rounding of the stored polygons.
+`tools/maps/test_doors.py` pins that, plus one-door-per-feature and Accessible + Heavy typing;
+`tests/maps-volkus-doors.test.ts` walks an operative through every door and into every wall on
+the real shipped maps.
+
 ## 6. Known nits
 
 * **20 features below the 0.92 IoU gate** (out of 353), 13 of them below the

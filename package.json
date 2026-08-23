@@ -18,6 +18,8 @@
     "maps:overlay": "python3 tools/maps/render_overlay.py",
     "maps:validate": "python3 tools/maps/validate_maps.py",
     "maps:test": "python3 tools/maps/test_extract.py",
+    "maps:doors": "python3 tools/maps/derive_doors.py",
+    "maps:doors:check": "python3 tools/maps/derive_doors.py --check && python3 tools/maps/test_doors.py",
     "teams:scrape": "python3 tools/teams/scrape_wahapedia.py",
     "teams:normalise": "python3 tools/teams/normalise.py",
     "soak": "vitest run tests/soak --reporter=basic"

@@ -2,6 +2,36 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-23 — Rules review: you could walk through walls, and 18 doors were missing (D-064…D-066)
+
+Owner report, with a screenshot: a Dash moved an operative straight through a Volkus stronghold
+wall, and "the bottom layer of Volkus, particularly that stronghold, has a door that is
+accessible terrain" — which the app did not model. Both were real, and they turned out to be
+the same bug seen from two sides.
+
+- **`validateMove` never checked the path.** It checked climb/drop/jump legality, budget,
+  hazardous areas, control range and the FINAL base position — and, for a crossing, only parts
+  typed `Wall`. Volkus walls are `Heavy`, so nothing stopped a straight line through them.
+  Killzones: *"Operatives cannot move through terrain — they must move around, climb over or
+  drop/jump off it."* Now `terrain.ts::pathBlockedByTerrain` runs per increment, exempting
+  Accessible, Insignificant and Ceiling by their own printed precedence clauses, and exempting
+  the feature an increment is climbing onto or dropping from (D-064, D-065).
+- **Which meant path *generation* had to change too.** Both the AI and the board's move preview
+  declared a single straight increment to the destination — only ever legal because nothing
+  checked it. `reachableCells` now records each cell's parent, and `routePath` turns that back
+  into the fewest increments that actually walk round the terrain. The AI still beats
+  GreedyAgent 78% and RandomLegalAgent 96%, with zero rejected intents across the soak.
+- **18 of 24 Volkus doorways were unmodelled holes.** `_volkus_doors` only ever resolved
+  Stronghold B. Stronghold A (0/6) and both Large Ruins (0/12) shipped with the doorway as a
+  gap in the wall ring: free to cross, no cover, obscuring nobody. Fixing the movement bug alone
+  would have **sealed those buildings**, because Stronghold A's doorway is 1.17" and a 32mm base
+  is 1.26" — it only fits because the door is Accessible terrain. `tools/maps/doors.py` recovers
+  each door from the hole it leaves, validated by reproducing all six card-read Stronghold B
+  doors exactly (D-066).
+
+`tests/maps-volkus-doors.test.ts` walks the real shipped maps: through every one of the 24
+doors, and into every wall.
+
 ## 2026-08-22 — Merging batch 6: three regressions a clean merge hid (D-061…D-063)
 
 main's batch-6 work and this branch's UI overhaul merged with conflicts in two append-only docs
