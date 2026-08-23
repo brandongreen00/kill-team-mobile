@@ -28,6 +28,11 @@
    "confidence": "community",
    "provenance": "Tale of Painters, Hivestorm review: Stronghold B \"floors placed at 3\u2033 and 6\u2033 height\""
   },
+  "volkus.stronghold.parapet": {
+   "inches": 1.0,
+   "confidence": "assumed",
+   "provenance": "No published figure. The wall a stronghold level stands behind is modelled as 1\" of parapet above that level, the same convention already used for `volkus.largeRuin.top`. CONFIRMED BY OWNER 2026-08-23. Extruding the traced ink ring to the PIECE maximum instead (5.906\"/7.48\") walled every Vantage level in: measured on the shipped data, the best spot on volkus-1 Stronghold A's roof saw 31 of 568 killzone-floor positions (5%); with the parapet it sees 306 (54%)."
+  },
   "volkus.largeRuin.level1": {
    "inches": 3.5,
    "confidence": "community",
@@ -73,6 +78,7 @@
    ],
    "inventoryCount": 1,
    "notes": [
+    "The wall z1 in this catalogue is the LOWER band. `cap_stronghold_walls` in tools/maps/extract_cards.py raises each traced wall bar to 1\" above the highest floor of this feature that it actually borders, so the corner of the ring carrying a second level rises with it and the rest of the ring does not.",
     "Rules parts the map cards do not draw, so they are not in the extracted geometry: the broken vent (Blocking), the three barrel containers (Blocking + Heavy), the small broken ramparts on the Vantage edge (Insignificant + Exposed) and the fire steps (Vantage + Insignificant + Exposed).",
     "For control range, ignore the door and any part under 2\" high when determining visibility (Killzones \u00a7Stronghold)."
    ],
@@ -83,7 +89,7 @@
       "Heavy"
      ],
      "z0": 0.0,
-     "z1": 5.906,
+     "z1": 4.0,
      "blocksVisibility": true,
      "solid": true,
      "standable": false,
@@ -96,7 +102,7 @@
       "Heavy"
      ],
      "z0": 0.0,
-     "z1": 5.906,
+     "z1": 4.0,
      "blocksVisibility": true,
      "solid": false,
      "standable": false,
@@ -170,6 +176,7 @@
    ],
    "inventoryCount": 1,
    "notes": [
+    "The wall z1 in this catalogue is the LOWER band. `cap_stronghold_walls` in tools/maps/extract_cards.py raises each traced wall bar to 1\" above the highest floor of this feature that it actually borders, so the corner of the ring carrying a second level rises with it and the rest of the ring does not.",
     "The gap on the lower Vantage level is Accessible terrain; the cards do not mark where it is.",
     "At most one friendly operative may be on the highest upper level at a time, and it must be placed to one side, not in the middle (Killzones \u00a7Stronghold H) \u2014 carried as `maxOperatives: 1` on that part."
    ],
@@ -180,7 +187,7 @@
       "Heavy"
      ],
      "z0": 0.0,
-     "z1": 7.48,
+     "z1": 4.0,
      "blocksVisibility": true,
      "solid": true,
      "standable": false,
@@ -193,7 +200,7 @@
       "Heavy"
      ],
      "z0": 0.0,
-     "z1": 7.48,
+     "z1": 4.0,
      "blocksVisibility": true,
      "solid": false,
      "standable": false,

@@ -1369,6 +1369,9 @@ def main(argv):
     # only ever resolves on Stronghold B. Recover the rest from the hole they leave in the wall
     # ring, now that `placement.rotDeg` / `flip` are known. See tools/maps/doors.py.
     fill_volkus_doors(maps)
+    # ...and only once the doors exist, because a door is part of the ring and is capped with
+    # the wall band it sits in.
+    cap_stronghold_walls(maps)
 
     for mid, m in maps.items():
         ious = [f['qa']['templateIoU'] for f in m['features'] if 'qa' in f]
@@ -1378,6 +1381,130 @@ def main(argv):
         C.dump_json(os.path.join(OUT_MAPS, m['killzone'], '%s.json' % mid), m)
     C.dump_json(os.path.join(ROOT, 'docs', 'maps', 'fit-report.json'), qa_fits)
     print('wrote %d maps' % len(maps))
+
+
+def cap_stronghold_walls(maps):
+    """Stop a stronghold's wall ring 1" above the level it encloses, not at the piece maximum.
+
+    Killzones §Vantage is the rule this serves: an operative on Vantage terrain is meant to see
+    out. The traced ink ring carries no height of its own, so every wall part was extruded to
+    the PIECE's maximum height — 5.906" for Stronghold A, 7.48" for Stronghold B — while the
+    Vantage floors those rings enclose sit at 3.0" and 6.0". The edge of every upper level was
+    therefore a 2.9"/4.5" opaque Heavy parapet, and climbing the two biggest features on all six
+    maps was a pure downside. Measured on the shipped data, the best spot on volkus-1 Stronghold
+    A's roof saw 31 of 568 killzone-floor positions (5%).
+
+    A wall band rises `volkus.stronghold.parapet` above the highest floor of its own feature
+    that it BORDERS. Bordering matters: Stronghold B's ring encloses a small second level in one
+    corner, and capping the WHOLE ring at that level's parapet leaves its big lower level in a
+    4" well exactly as before (measured: 17% -> 17%). Per-band it reaches 36-56% on every one of
+    the eighteen stronghold levels across the six maps.
+
+    The `*.top` heights stay in the catalogue: they are the promethium tank and the tower, which
+    the cards do not draw and the extraction therefore never emits.
+    """
+    pad = 0.35  # a traced wall is ~0.21" thick; this reaches the floor it stands against
+    parapet = T.h('volkus.stronghold.parapet')
+    for m in maps.values():
+        if m['killzone'] != 'volkus':
+            continue
+        for feat in m['features']:
+            if not feat['kind'].startswith('volkus.stronghold'):
+                continue
+            floors = [p for p in feat['parts'] if p.get('role') == 'floor']
+            if not floors:
+                continue
+            base = min(p['z1'] for p in floors) + parapet
+            rebuilt = []
+            for part in feat['parts']:
+                if part.get('role') == 'wall':
+                    rebuilt.extend(_split_wall_band(part, floors, base, parapet, pad,
+                                                    ramparts=feat['kind'] == 'volkus.strongholdA'))
+                elif part.get('role') == 'door':
+                    # A door is one physical object and is never split; it takes the band of
+                    # the run it sits in, decided at its own midpoint.
+                    part['z1'] = round(_band_at(_rect_centre(part['poly']), floors, base, parapet, pad), 3)
+                    rebuilt.append(part)
+                else:
+                    rebuilt.append(part)
+            feat['parts'] = rebuilt
+            for i, p in enumerate(feat['parts']):
+                p['id'] = '%s.p%d' % (feat['id'], i)
+
+
+def _boxes_touch(a, b, pad):
+    return (a[0] - pad <= b[2] and a[2] + pad >= b[0]
+            and a[1] - pad <= b[3] and a[3] + pad >= b[1])
+
+
+def _rect_centre(poly):
+    """Centre of a board-space polygon given as [{x, y}, ...]."""
+    b = DOORS._bbox(poly)
+    return ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)
+
+
+def _band_at(pt, floors, base, parapet, pad):
+    """The parapet band at a point: 1" above the highest floor whose footprint reaches it."""
+    zs = [f['z1'] for f in floors
+          if _boxes_touch(DOORS._bbox(f['poly']), (pt[0], pt[1], pt[0], pt[1]), pad)]
+    return (max(zs) + parapet) if zs else base
+
+
+def _split_wall_band(part, floors, base, parapet, pad, ramparts=False):
+    """One wall bar, cut into the parapet bands its length passes through.
+
+    Bounding boxes alone are not enough. Stronghold B's second level is a small square in one
+    corner of the ring, and the ring's east bar runs the whole side of the building — its bbox
+    overlaps that square, so capping the WHOLE bar at the upper parapet leaves the big lower
+    level in a 4" well exactly as before (measured on volkus-1: 17% -> 19% of the killzone
+    floor visible). Cutting the bar where the upper floor's extent ends gives the corner its
+    parapet and the rest of the side its own: 19% -> 45%.
+    """
+    b = DOORS._bbox(part['poly'])
+    axis = 0 if (b[2] - b[0]) >= (b[3] - b[1]) else 1
+    lo, hi = b[axis], b[axis + 2]
+    # Intervals of this bar's length that a HIGHER floor stands against.
+    raised = []
+    for f in floors:
+        z = f['z1'] + parapet
+        if z <= base + 1e-6:
+            continue
+        fb = DOORS._bbox(f['poly'])
+        if not _boxes_touch(fb, b, pad):
+            continue
+        a0, a1 = max(lo, fb[axis] - pad), min(hi, fb[axis + 2] + pad)
+        if a1 - a0 > 0.05:
+            raised.append((a0, a1, z))
+    raised.sort()
+    out, cursor = [], lo
+    for a0, a1, z in raised:
+        if a0 - cursor > 0.05:
+            out.append((cursor, a0, base))
+        if a1 > cursor:
+            out.append((max(cursor, a0), a1, z))
+            cursor = a1
+    if hi - cursor > 0.05 or not out:
+        out.append((cursor, hi, base))
+    pieces = []
+    for a0, a1, z in out:
+        rect = list(b)
+        rect[axis], rect[axis + 2] = a0, a1
+        poly = DOORS.rect_poly(rect)
+        if not ramparts:
+            pieces.append({**part, 'poly': poly, 'z1': round(z, 3)})
+            continue
+        # Killzones §Stronghold F: "The small broken ramparts on the edge of the Vantage
+        # terrain of Stronghold A are Insignificant and Exposed terrain." So on Stronghold A
+        # the Heavy wall stops at the level it holds up, and the last inch is a rampart, which
+        # `defaultBlocksVisibility` correctly treats as too small and open to obstruct a line.
+        # Stronghold B gets no such clause — §Stronghold ends "All other parts of it are Heavy
+        # terrain" — so its parapet stays Heavy and its lower level stays partly enclosed.
+        pieces.append({**part, 'poly': poly, 'z1': round(z - parapet, 3)})
+        pieces.append({**part, 'poly': poly, 'role': 'rampart',
+                       'types': ['Insignificant', 'Exposed'],
+                       'z0': round(z - parapet, 3), 'z1': round(z, 3),
+                       'blocksVisibility': False, 'solid': False, 'standable': False})
+    return pieces or [part]
 
 
 def fill_volkus_doors(maps):

@@ -28,6 +28,8 @@ from __future__ import annotations
 # ---------------------------------------------------------------------------
 HEIGHTS: dict[str, tuple[float, str, str]] = {
     # --- Volkus -----------------------------------------------------------
+    # The piece MAXIMUM, which is the promethium tank / tower the cards do not draw. It is no
+    # longer what the traced wall ring is extruded to — see `volkus.stronghold.parapet`.
     'volkus.strongholdA.top': (
         5.906, 'community',
         'Tale of Painters, "Review: Kill Team: Hivestorm Pt.1" (2024-09): Stronghold A '
@@ -36,6 +38,7 @@ HEIGHTS: dict[str, tuple[float, str, str]] = {
     'volkus.strongholdA.level1': (
         3.0, 'community',
         'Tale of Painters, Hivestorm review: Stronghold A has "a floor at 3″ height"'),
+    # As Stronghold A: the piece maximum, not the height of the traced ring.
     'volkus.strongholdB.top': (
         7.480, 'community',
         'Tale of Painters, Hivestorm review: Stronghold B "footprint of approx. 19 x 19cm, '
@@ -46,6 +49,14 @@ HEIGHTS: dict[str, tuple[float, str, str]] = {
     'volkus.strongholdB.level2': (
         6.0, 'community',
         'Tale of Painters, Hivestorm review: Stronghold B "floors placed at 3″ and 6″ height"'),
+    'volkus.stronghold.parapet': (
+        1.0, 'assumed',
+        'No published figure. The wall a stronghold level stands behind is modelled as 1" of '
+        'parapet above that level, the same convention already used for '
+        '`volkus.largeRuin.top`. CONFIRMED BY OWNER 2026-08-23. Extruding the traced ink ring '
+        'to the PIECE maximum instead (5.906"/7.48") walled every Vantage level in: measured '
+        'on the shipped data, the best spot on volkus-1 Stronghold A\'s roof saw 31 of 568 '
+        'killzone-floor positions (5%); with the parapet it sees 306 (54%).'),
     'volkus.largeRuin.level1': (
         3.5, 'community',
         'Tale of Painters, Hivestorm review: Manufactorum Ruins have "a top floor (placed at '
@@ -116,6 +127,13 @@ HEIGHTS: dict[str, tuple[float, str, str]] = {
 }
 
 
+NOTE_STRONGHOLD_BANDS = (
+    'The wall z1 in this catalogue is the LOWER band. `cap_stronghold_walls` in '
+    'tools/maps/extract_cards.py raises each traced wall bar to 1" above the highest floor of '
+    'this feature that it actually borders, so the corner of the ring carrying a second level '
+    'rises with it and the rest of the ring does not.')
+
+
 def h(key: str) -> float:
     return HEIGHTS[key][0]
 
@@ -133,16 +151,18 @@ PIECES: dict[str, dict] = {
     'volkus.strongholdA': dict(
         killzone='volkus', labels=['A'], name='Stronghold A', count=1,
         parts=[
-            dict(role='wall', from_='ink', types=['Heavy'], z0=0.0, z1=h('volkus.strongholdA.top'),
+            dict(role='wall', from_='ink', types=['Heavy'], z0=0.0,
+                 z1=h('volkus.strongholdA.level1') + h('volkus.stronghold.parapet'),
                  blocksVisibility=True, solid=True, standable=False),
             dict(role='door', from_='door', types=['Accessible', 'Heavy'], z0=0.0,
-                 z1=h('volkus.strongholdA.top'), blocksVisibility=True, solid=False,
-                 standable=False),
+                 z1=h('volkus.strongholdA.level1') + h('volkus.stronghold.parapet'),
+                 blocksVisibility=True, solid=False, standable=False),
             dict(role='floor', from_='green', types=['Ceiling', 'Vantage', 'Light'],
                  z0=h('volkus.strongholdA.level1'), z1=h('volkus.strongholdA.level1'),
                  blocksVisibility=True, standable=True, solid=False),
         ],
         notes=[
+            '%s' % NOTE_STRONGHOLD_BANDS,
             'Rules parts the map cards do not draw, so they are not in the extracted geometry: '
             'the broken vent (Blocking), the three barrel containers (Blocking + Heavy), the '
             'small broken ramparts on the Vantage edge (Insignificant + Exposed) and the fire '
@@ -153,11 +173,12 @@ PIECES: dict[str, dict] = {
     'volkus.strongholdB': dict(
         killzone='volkus', labels=['B'], name='Stronghold B', count=1,
         parts=[
-            dict(role='wall', from_='ink', types=['Heavy'], z0=0.0, z1=h('volkus.strongholdB.top'),
+            dict(role='wall', from_='ink', types=['Heavy'], z0=0.0,
+                 z1=h('volkus.strongholdB.level1') + h('volkus.stronghold.parapet'),
                  blocksVisibility=True, solid=True, standable=False),
             dict(role='door', from_='door', types=['Accessible', 'Heavy'], z0=0.0,
-                 z1=h('volkus.strongholdB.top'), blocksVisibility=True, solid=False,
-                 standable=False),
+                 z1=h('volkus.strongholdB.level1') + h('volkus.stronghold.parapet'),
+                 blocksVisibility=True, solid=False, standable=False),
             dict(role='floor', from_='green', types=['Ceiling', 'Vantage', 'Light'],
                  z0=h('volkus.strongholdB.level1'), z1=h('volkus.strongholdB.level1'),
                  blocksVisibility=True, standable=True, solid=False),
@@ -166,6 +187,7 @@ PIECES: dict[str, dict] = {
                  blocksVisibility=True, standable=True, solid=False, maxOperatives=1),
         ],
         notes=[
+            '%s' % NOTE_STRONGHOLD_BANDS,
             'The gap on the lower Vantage level is Accessible terrain; the cards do not mark '
             'where it is.',
             'At most one friendly operative may be on the highest upper level at a time, and '
