@@ -171,10 +171,10 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
       actions: [
         {
           id: 'decline',
-          // Not "not now": the reducer marks every one of that player's operatives as having
-          // counteracted, so declining forfeits the rest of the turning point. The label has
-          // to say so, and it is not the primary.
-          label: 'Decline — no more counteracts this turning point',
+          // "Not now" is the truth again: declining used to mark every one of that player's
+          // operatives as having counteracted, forfeiting the rest of the turning point, and
+          // this label was written around that. It declines this window only.
+          label: 'Not now',
           tone: candidates.length > 0 ? 'quiet' : 'primary',
           onClick: () => store.dispatch({ t: 'DeclineCounteract', player: turn.player }),
         },

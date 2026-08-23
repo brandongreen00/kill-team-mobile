@@ -36,10 +36,10 @@ Ranked by how much each defect distorts a real game.
 | W-09 | FIXED `1978520` | engine | critical | Mines only detonate where a move ends — an operative walks straight over the marker with impunity |
 | W-10 | open | engine | critical | Smoke Grenade markers can be placed where the thrower cannot see, and take the thrower's height instead of the ground's |
 | W-11 | FIXED `1978520` | engine | critical | The initiative roll-off is rolled twice every turning point, and the discarded first roll decides the real roll-off's tie |
-| W-12 | open | engine | critical | An On Guard point-blank shot is decided on raw base distance and then bypasses the visibility gate, so an on-guard operative shoots through a Gallowdark wall |
-| W-13 | open | engine | major | On Guard is not limited to once per enemy activation — every on-guard operative can interrupt the same activation |
-| W-14 | open | engine | major | Hatchway Fight never checks the target is within 2" of, or on the other side of, the access point — it is a 1AP melee attack on anyone on the board |
-| W-15 | open | engine | major | Declining one counteract window burns every counteract for the rest of the turning point |
+| W-12 | FIXED | engine | critical | An On Guard point-blank shot is decided on raw base distance and then bypasses the visibility gate, so an on-guard operative shoots through a Gallowdark wall |
+| W-13 | FIXED | engine | major | On Guard is not limited to once per enemy activation — every on-guard operative can interrupt the same activation |
+| W-14 | FIXED | engine | major | Hatchway Fight never checks the target is within 2" of, or on the other side of, the access point — it is a 1AP melee attack on anyone on the board |
+| W-15 | FIXED | engine | major | Declining one counteract window burns every counteract for the rest of the turning point |
 | W-16 | open | engine | major | "Until the end of the turning point" effects are deleted before the crit op reads marker control at the end of that turning point |
 | W-17 | FIXED | engine | major | Melee Devastating fires only for criticals actually used to strike, and ignores the distance-prefixed form entirely |
 | W-18 | open | engine | major | A Charge may clip a lone enemy's control range and finish on a different enemy — `stickyEngagedWith` is written and read nowhere |
@@ -245,7 +245,7 @@ Test: tests/rules-review.test.ts quoting core-rules.txt:170: with ScriptedRng [1
 
 ### W-12 · An On Guard point-blank shot is decided on raw base distance and then bypasses the visibility gate, so an on-guard operative shoots through a Gallowdark wall
 
-**OPEN** · engine · critical
+**FIXED** · engine · critical
 
 Rules pinned: `killzones.txt:411 ("Visibility cannot be determined over or through Wall terrain")`; `killzones.txt:557-558 (point-blank shot: "Target the enemy operative within your operative's control range")`
 
@@ -261,7 +261,7 @@ Test: tests/rules-review.test.ts quoting killzones.txt:411: a 0.365" wall betwee
 
 ### W-13 · On Guard is not limited to once per enemy activation — every on-guard operative can interrupt the same activation
 
-**OPEN** · engine · major
+**FIXED** · engine · major
 
 Rules pinned: `killzones.txt:553 ("Once during each enemy operative's activation, after that enemy operative performs an action, you can interrupt that activation and select ONE friendly operative on guard…")`
 
@@ -277,7 +277,7 @@ Test: tests/rules-review.test.ts quoting killzones.txt:553: two on-guard operati
 
 ### W-14 · Hatchway Fight never checks the target is within 2" of, or on the other side of, the access point — it is a 1AP melee attack on anyone on the board
 
-**OPEN** · engine · major
+**FIXED** · engine · major
 
 Rules pinned: `killzones.txt:565 ("instead select an enemy operative within 2\" of, and on the other side of, an open hatchway's access point the active operative is touching")`; `killzones.txt:567 ("or if its base isn't touching an open hatchway's access point")`
 
@@ -293,7 +293,7 @@ Test: tests/rules-review.test.ts quoting killzones.txt:565: three cases against 
 
 ### W-15 · Declining one counteract window burns every counteract for the rest of the turning point
 
-**OPEN** · engine · major
+**FIXED** · engine · major
 
 Rules pinned: `core-rules.txt:232 ("Each operative can only counteract once per turning point… Counteracting is optional, so you can choose not to. In either case, activation alternates back to your opponent afterwards")`
 

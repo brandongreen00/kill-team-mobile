@@ -5,7 +5,7 @@
 import { actionCost, availableActions, getAction } from './actions.ts';
 import { resolveDecision } from './decisions.ts';
 import { rebuildHooks, terrain, type GameContext } from './context.ts';
-import {
+import { inControlRange,
   aliveOperatives,
   aplOf,
   card,
@@ -309,6 +309,8 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       op.apSpent = 0;
       op.actionsThisActivation = [];
       op.weaponsUsedThisActivation = [];
+      delete next.opState['guardInterruptUsedFor'];
+      delete next.opState['counteractDeclined'];
       next.activeOperativeId = op.id;
       next.activePlayer = intent.player;
       next.firefightStep = 'performActions';
@@ -329,6 +331,8 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       // "Counteracting isn't an activation... action restrictions won't apply."
       op.actionsThisActivation = [];
       op.weaponsUsedThisActivation = [];
+      delete next.opState['guardInterruptUsedFor'];
+      delete next.opState['counteractDeclined'];
       next.activeOperativeId = op.id;
       next.activePlayer = intent.player;
       next.opState['counteract'] = { operativeId: op.id, actionsUsed: 0 };
@@ -338,8 +342,11 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
 
     case 'DeclineCounteract': {
       next.activePlayer = otherPlayer(intent.player);
-      for (const o of aliveOperatives(next, intent.player)) o.counteractedThisTP = true;
-      log(next, { kind: 'action', player: intent.player, text: 'declines to counteract' });
+      // Only THIS window is declined. Marking every operative as having counteracted — which
+      // is what this did — gave up every counteract for the rest of the turning point, though
+      // the only budget the rule imposes is one per operative, spent by counteracting.
+      next.opState['counteractDeclined'] = { player: intent.player, at: next.activationsThisTP };
+      log(next, { kind: 'action', player: intent.player, text: 'declines to counteract this window' });
       return ok(next);
     }
 
@@ -444,20 +451,24 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       if (!op.onGuard) return fail('that operative is not on guard');
       const interrupted = next.activeOperativeId ? next.operatives[next.activeOperativeId] : undefined;
       if (!interrupted || interrupted.player === intent.player) return fail('nothing to interrupt');
+      // "ONCE DURING EACH ENEMY OPERATIVE'S ACTIVATION, after that enemy operative performs an
+      // action, you can interrupt that activation…" The only bookkeeping was per operative, so
+      // a three-strong overwatch net fired three free Shoots into one 2AP activation.
+      if (next.opState['guardInterruptUsedFor']?.['operativeId'] === interrupted.id)
+        return fail('the On Guard window for this activation has already been used');
+      next.opState['guardInterruptUsedFor'] = { operativeId: interrupted.id };
       op.onGuard = false;
       op.guardSpentTP = next.turningPoint; // "cannot counteract during the turning point"
       const params = intent.params ?? {};
       if (intent.action === 'Shoot') {
         const weapon = params.weaponName ?? '';
         const targetId = params.targetId ?? interrupted.id;
-        const pointBlank = baseGap(
-          op.pos,
-          card(ctx, op).base,
-          op.rot,
-          next.operatives[targetId]!.pos,
-          card(ctx, next.operatives[targetId]!).base,
-          next.operatives[targetId]!.rot,
-        ) <= 1;
+        // Point-blank is a CONTROL RANGE question, not a distance one: "visible to and within
+        // 1"". Measuring raw base-to-base let an on-guard operative shoot point-blank through
+        // a Gallowdark wall — they are 0.365" thick, so almost any pair hugging opposite faces
+        // is inside 1" — and a point-blank shot skips the Conceal-in-cover target check too.
+        const targetOp = next.operatives[targetId];
+        const pointBlank = Boolean(targetOp) && inControlRange(ctx, next, op, targetOp!);
         const r = startShoot(ctx, next, op, weapon, params.profileName, targetId, { pointBlank, free: true });
         if (!r.ok) return fail(r.reason ?? 'the interrupt shot is not possible');
         if (pointBlank) {
@@ -635,6 +646,8 @@ function finishSequenceIfDone(ctx: GameContext, state: GameState): void {
 function offerGuardInterrupt(ctx: GameContext, state: GameState, active: OperativeState): void {
   if (!state.map.closeQuarters) return;
   if (state.sequence && state.sequence.step !== 'done') return;
+  // "Once during each enemy operative's activation" — do not re-offer a window already spent.
+  if (state.opState['guardInterruptUsedFor']?.['operativeId'] === active.id) return;
   const defender = otherPlayer(active.player);
   const candidates = guardInterruptCandidates(state, defender);
   if (candidates.length === 0) return;

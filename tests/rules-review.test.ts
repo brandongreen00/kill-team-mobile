@@ -12,6 +12,7 @@ import { reduce } from '../src/core/reducer.ts';
 import { validateMove } from '../src/core/movement.ts';
 import { inControlRange, weaponsOf } from '../src/core/state.ts';
 import { getAction } from '../src/core/actions.ts';
+import { whoActivates } from '../src/core/phases.ts';
 import { ScriptedRng } from '../src/core/rng.ts';
 import { parseWeaponRules } from '../src/core/weaponRules.ts';
 import { addRolled, retentionOptions, type DicePool } from '../src/core/dice.ts';
@@ -946,5 +947,62 @@ describe('Wall terrain has corners and ends', () => {
     // be 0.6"+ discarded every vertex of every one of them.
     const withZones = walls.filter((w) => wallCornerZones(w).length > 0);
     expect(withZones.length).toBe(walls.length);
+  });
+});
+
+describe('counteract and On Guard windows', () => {
+  const cq = () => ({ ...testMap(), closeQuarters: true });
+
+  it('Counteract: declining ONE window does not give up the rest of the turning point', () => {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], Array.from({ length: 20 }, () => 4), ['test.dummy', 'test.dummy'], ['test.dummy', 'test.dummy']);
+    // p2 has an expended, Engage operative able to counteract; p1 still has ready operatives.
+    for (const id of s.teams.p2.operativeIds) {
+      const o = s.operatives[id]!;
+      o.expended = true;
+      o.ready = false;
+      o.order = 'engage';
+    }
+    s.activePlayer = 'p2';
+    expect(whoActivates(s, ctx)?.mode).toBe('counteract');
+    const declined = reduce(s, { t: 'DeclineCounteract', player: 'p2' }, ctx).state;
+    // The whole team used to be marked as having counteracted, which readyStep alone clears.
+    expect(declined.teams.p2.operativeIds.every((id) => !declined.operatives[id]!.counteractedThisTP)).toBe(true);
+    // The next window — after another activation — is open again.
+    declined.activationsThisTP += 1;
+    declined.activePlayer = 'p2';
+    expect(whoActivates(declined, ctx)?.mode).toBe('counteract');
+  });
+
+  it('On Guard: "once during each enemy operative\'s activation"', () => {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], Array.from({ length: 40 }, () => 4), 'test.dummy', ['test.dummy', 'test.dummy']);
+    s.map = cq();
+    const active = s.teams.p1.operativeIds[0]!;
+    const [g1, g2] = s.teams.p2.operativeIds as [string, string];
+    s.operatives[active]!.pos = { x: 12, y: 11 };
+    s.operatives[g1]!.pos = { x: 14, y: 11 };
+    s.operatives[g2]!.pos = { x: 12, y: 13 };
+    s.operatives[g1]!.onGuard = true;
+    s.operatives[g2]!.onGuard = true;
+    s.activeOperativeId = active;
+    s.activePlayer = 'p1';
+    const first = reduce(
+      s,
+      { t: 'OnGuardInterrupt', player: 'p2', operativeId: g1, action: 'Shoot', params: { weaponName: 'lasgun', targetId: active } },
+      ctx,
+    );
+    expect(first.ok).toBe(true);
+    // Let the interrupt's shot resolve, so the second intent is judged on its own merits and
+    // not simply refused for a pending decision.
+    const settled = drain(first.state, ctx, () => undefined, 60);
+    // A second on-guard operative used to be able to interrupt the SAME activation.
+    const second = reduce(
+      settled,
+      { t: 'OnGuardInterrupt', player: 'p2', operativeId: g2, action: 'Shoot', params: { weaponName: 'lasgun', targetId: active } },
+      ctx,
+    );
+    expect(second.ok).toBe(false);
+    expect(second.reason).toContain('already been used');
   });
 });

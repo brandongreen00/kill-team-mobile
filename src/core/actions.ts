@@ -489,6 +489,19 @@ registerAction({
     const ap = touchingOpenAccessPoint(ctx, state, op);
     if (!ap) return { ok: false, reason: 'base is not touching an open hatchway’s access point' };
     if (!params.targetId) return { ok: false, reason: 'select an enemy operative across the hatchway' };
+    // "…instead select an enemy operative WITHIN 2" OF, AND ON THE OTHER SIDE OF, an open
+    // hatchway's access point the active operative is touching." Neither half was checked, so
+    // this was a 1AP Fight against any enemy anywhere on the board.
+    const target = state.operatives[params.targetId];
+    if (!target || target.removed || target.player === op.player)
+      return { ok: false, reason: 'select an enemy operative across the hatchway' };
+    const centre = { x: (ap.bounds.min.x + ap.bounds.max.x) / 2, y: (ap.bounds.min.y + ap.bounds.max.y) / 2 };
+    const tc = card(ctx, target);
+    if (baseGap(target.pos, tc.base, target.rot, centre, { shape: 'round', mm: 20 }, 0) > 2 + 1e-6)
+      return { ok: false, reason: 'the enemy operative is more than 2" from the access point' };
+    const side = acrossFrom(ap, centre);
+    if (side(target.pos) === side(op.pos))
+      return { ok: false, reason: 'the enemy operative is on the same side of the hatchway' };
     return { ok: true };
   },
   perform(ctx, state, op, params) {

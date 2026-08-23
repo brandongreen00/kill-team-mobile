@@ -109,10 +109,25 @@ export function whoActivates(
     const canCounteract = ctx
       ? counteractCandidates(ctx, state, next).length > 0
       : aliveOperatives(state, next).some((o) => o.expended && o.order === 'engage' && !o.counteractedThisTP);
-    if (canCounteract) return { player: next, mode: 'counteract' };
+    if (canCounteract && !counteractDeclinedHere(state, next)) return { player: next, mode: 'counteract' };
     return { player: other, mode: 'activate' };
   }
   return null;
+}
+
+/**
+ * Has this player already passed on THIS counteract window?
+ *
+ * Declining used to mark every one of the player's operatives as having counteracted, which
+ * only `readyStep` clears — so passing on one window silently gave up every counteract for the
+ * rest of the turning point. The only per-turning-point budget the rule imposes is per
+ * operative, and it is spent by actually counteracting. A window is identified by the number
+ * of activations that have happened, which `EndActivation` increments, so the next window
+ * opens by itself.
+ */
+export function counteractDeclinedHere(state: GameState, player: PlayerId): boolean {
+  const d = state.opState['counteractDeclined'];
+  return d?.['player'] === player && d?.['at'] === state.activationsThisTP;
 }
 
 /**
