@@ -176,7 +176,7 @@ at most one friendly operative — carried as `maxOperatives: 1`.
 
 ## 5. QA gates
 
-`pnpm maps:validate` — **24 maps, 0 gate failures.**
+`pnpm maps:validate` — **24 maps, 0 gate failures** (re-run 2026-08-23 against the cards).
 
 | Gate | Check | Result |
 | --- | --- | --- |
@@ -196,6 +196,39 @@ genuinely printed 2.0" into P2 territory, so the check is a report, not a gate.
 
 Territory-seam check (`centreSeamErrIn`, the printed tint boundary against the
 derived centre line): **≤ 0.041" on all 24 maps**.
+
+### Access points (`pnpm maps:extract`)
+
+A Close Quarters hatchway or breach point is printed as a dark pill (RGB 63,57,52, 49×14px)
+drawn **alongside** the wall it belongs to, with its long axis running along that wall. Two
+things were wrong with how that was read.
+
+The **match** was `abs(offset) < wall_thickness * 2.2`, i.e. 19.8px. Measured across all twelve
+Close Quarters cards, the perpendicular offset of a pill from the wall it marks clusters at
+**18–22px** (118 pairs) and the nearest unrelated pairing is at **73px** — a 3.5× gap. The old
+threshold cut straight through the middle of the true cluster: 3 access points out of 10 pills
+on gallowdark-1, and **zero on every Tomb World card**. It is now `thickness * 4` = 36px, which
+sits in the gap.
+
+The **placement** put a small square at the pill's centre — which is beside the wall, not in
+it — so the wall ran unbroken behind the access point and opening a hatchway changed nothing:
+`wallRouteDistance` across one was Infinity open or closed. The access point now takes the
+wall's own thickness and the pill's long extent, and the wall is emitted as two bars either
+side of it. It is a gap in the wall, which is what a doorway is.
+
+| Killzone | hatchways | breach points | before |
+| --- | --- | --- | --- |
+| Gallowdark | 59 | 0 | 6 access points across all six maps |
+| Tomb World | 36 | 22 | **0** |
+
+`tests/rules-review.test.ts` pins both halves on the shipped data: no wall part may overlap an
+access point of its own feature, and with every hatchway open an operative must reach across
+more than 70% of the board in each axis. On the previous data gallowdark-1's vertical reach was
+10" on a 23.9" board — one compartment.
+
+Template fitting changed with it: a piece that is nothing but wall is now matched on the extent
+of the whole run rather than its largest bar, because which bar is larger is an accident of
+where the hatchway sits.
 
 ### Doors (`pnpm maps:doors:check`)
 
@@ -221,6 +254,14 @@ all six card-read Stronghold B doors to within the rounding of the stored polygo
 `tools/maps/test_doors.py` pins that, plus one-door-per-feature and Accessible + Heavy typing;
 `tests/maps-volkus-doors.test.ts` walks an operative through every door and into every wall on
 the real shipped maps.
+
+### D-014 is half closed
+
+Re-extracting from the cards with the fixed `dashed_rects()` recovered **volkus-6 K** and its
+host **A**: K is a clean rectangle again and Stronghold A's floor is whole (4.396–9.771 rather
+than 6.562–9.771). Their entries are deleted from `IOU_ALLOW` and from the `PENDING` list in
+`tests/maps-rubble.test.ts`, as both files' own honesty checks require. `volkus-3 K/D`,
+`volkus-5 J/C` and `volkus-6 C` are still carved out of their hosts.
 
 ## 6. Known nits
 

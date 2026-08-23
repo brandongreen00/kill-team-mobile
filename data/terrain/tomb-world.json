@@ -1,7 +1,7 @@
 {
  "killzone": "tomb-world",
  "generatedBy": "tools/maps/extract_cards.py",
- "generatedAt": "2026-08-17",
+ "generatedAt": "2026-08-23",
  "heights": {
   "cq.wall.top": {
    "inches": 2.362,

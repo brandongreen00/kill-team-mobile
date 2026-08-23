@@ -1,355 +1,355 @@
 {
-  "killzone": "bheta-decima",
-  "generatedBy": "tools/maps/extract_cards.py",
-  "generatedAt": "2026-08-17",
-  "heights": {
-    "bheta.gantry.deck": {
-      "inches": 3.0,
-      "confidence": "owner-confirmed",
-      "provenance": "No published measurement exists for the Bheta-Decima gantries (GW product pages, Tale of Painters and Goonhammer reviews and the Kerlin killzone PDF were all checked). 3.0\" matches the Volkus stronghold first floor, sits inside the 3\" climb reach from the killzone floor and above the 2\" free-drop threshold. CONFIRMED BY THE OWNER 2026-08-17."
-    },
-    "bheta.condenser.roof": {
-      "inches": 3.0,
-      "confidence": "derived",
-      "provenance": "No published measurement. Set equal to the owner-confirmed gantry deck (3.0\") so the roof and the adjoining gantries read as one level. Derived, not independently confirmed."
-    },
-    "bheta.condenser.ledge": {
-      "inches": 2.75,
-      "confidence": "assumed",
-      "provenance": "The inner ledge is Exposed + Insignificant, i.e. the rules explicitly say to ignore the slight height difference, so this value is cosmetic. Derived from the condenser roof; still an assumption."
-    },
-    "bheta.condenser.battlement": {
-      "inches": 3.75,
-      "confidence": "assumed",
-      "provenance": "Battlements modelled as 0.75\" of Light parapet above the roof. Derived from the condenser roof; still an assumption."
-    }
+ "killzone": "bheta-decima",
+ "generatedBy": "tools/maps/extract_cards.py",
+ "generatedAt": "2026-08-23",
+ "heights": {
+  "bheta.gantry.deck": {
+   "inches": 3.0,
+   "confidence": "assumed",
+   "provenance": "NO published measurement found for the Bheta-Decima gantries (checked GW product pages, Tale of Painters and Goonhammer reviews, and the Kerlin killzone PDF). 3.0\" is chosen because it matches the Volkus stronghold first floor, keeps the deck inside the 3\" climb reach from the killzone floor, and above the 2\" free-drop threshold. HIGHEST-PRIORITY VALUE TO CONFIRM WITH OWNER."
   },
-  "pieces": [
+  "bheta.condenser.roof": {
+   "inches": 3.0,
+   "confidence": "assumed",
+   "provenance": "No published measurement. Set equal to the gantry deck so the roof and adjoining gantries read as one level. CONFIRM WITH OWNER."
+  },
+  "bheta.condenser.ledge": {
+   "inches": 2.75,
+   "confidence": "assumed",
+   "provenance": "The inner ledge is Exposed + Insignificant, i.e. the rules explicitly say to ignore the slight height difference, so this value is cosmetic. CONFIRM WITH OWNER."
+  },
+  "bheta.condenser.battlement": {
+   "inches": 3.75,
+   "confidence": "assumed",
+   "provenance": "Battlements modelled as 0.75\" of Light parapet above the roof. CONFIRM WITH OWNER."
+  }
+ },
+ "pieces": [
+  {
+   "kind": "bheta.gantryShort",
+   "name": "Short Gantry",
+   "labels": [
+    "A"
+   ],
+   "inventoryCount": 2,
+   "notes": [
+    "Gantry floors are Accessible and Vantage terrain; gantry pillars are Heavy. The cards draw only the deck footprint, so pillars are not extracted.",
+    "Connected gantries (decks touching) are treated as the same terrain \u2014 carried as a shared `groupId`."
+   ],
+   "parts": [
     {
-      "kind": "bheta.gantryShort",
-      "name": "Short Gantry",
-      "labels": [
-        "A"
-      ],
-      "inventoryCount": 2,
-      "notes": [
-        "Gantry floors are Accessible and Vantage terrain; gantry pillars are Heavy. The cards draw only the deck footprint, so pillars are not extracted.",
-        "Connected gantries (decks touching) are treated as the same terrain \u2014 carried as a shared `groupId`."
-      ],
-      "parts": [
-        {
-          "role": "floor",
-          "types": [
-            "Accessible",
-            "Vantage",
-            "Light"
-          ],
-          "z0": 3.0,
-          "z1": 3.0,
-          "blocksVisibility": true,
-          "standable": true,
-          "solid": false,
-          "source": "green"
-        }
-      ],
-      "footprints": {
-        "A": [
-          {
-            "x": -1.192,
-            "y": -1.203
-          },
-          {
-            "x": 1.121,
-            "y": -1.182
-          },
-          {
-            "x": 1.225,
-            "y": 1.255
-          },
-          {
-            "x": 0.35,
-            "y": 1.255
-          },
-          {
-            "x": 0.308,
-            "y": 1.131
-          },
-          {
-            "x": -1.213,
-            "y": 1.11
-          }
-        ]
-      }
-    },
-    {
-      "kind": "bheta.gantryMedium",
-      "name": "Medium Gantry",
-      "labels": [
-        "B"
-      ],
-      "inventoryCount": 4,
-      "parts": [
-        {
-          "role": "floor",
-          "types": [
-            "Accessible",
-            "Vantage",
-            "Light"
-          ],
-          "z0": 3.0,
-          "z1": 3.0,
-          "blocksVisibility": true,
-          "standable": true,
-          "solid": false,
-          "source": "green"
-        }
-      ],
-      "footprints": {
-        "B": [
-          {
-            "x": -2.374,
-            "y": 0.456
-          },
-          {
-            "x": -2.25,
-            "y": 0.414
-          },
-          {
-            "x": -2.229,
-            "y": -1.19
-          },
-          {
-            "x": 2.334,
-            "y": -1.169
-          },
-          {
-            "x": 2.313,
-            "y": 1.144
-          },
-          {
-            "x": -1.52,
-            "y": 1.144
-          },
-          {
-            "x": -1.562,
-            "y": 1.268
-          },
-          {
-            "x": -2.374,
-            "y": 1.248
-          }
-        ]
-      }
-    },
-    {
-      "kind": "bheta.gantryLong",
-      "name": "Long Gantry",
-      "labels": [
-        "C"
-      ],
-      "inventoryCount": 2,
-      "parts": [
-        {
-          "role": "floor",
-          "types": [
-            "Accessible",
-            "Vantage",
-            "Light"
-          ],
-          "z0": 3.0,
-          "z1": 3.0,
-          "blocksVisibility": true,
-          "standable": true,
-          "solid": false,
-          "source": "green"
-        }
-      ],
-      "footprints": {
-        "C": [
-          {
-            "x": -1.276,
-            "y": 3.864
-          },
-          {
-            "x": -1.152,
-            "y": 3.822
-          },
-          {
-            "x": -1.152,
-            "y": -4.72
-          },
-          {
-            "x": 1.161,
-            "y": -4.741
-          },
-          {
-            "x": 1.182,
-            "y": 4.614
-          },
-          {
-            "x": -0.256,
-            "y": 4.635
-          },
-          {
-            "x": -0.297,
-            "y": 4.759
-          },
-          {
-            "x": -1.276,
-            "y": 4.739
-          }
-        ]
-      }
-    },
-    {
-      "kind": "bheta.condenser",
-      "name": "Thermometric Condenser",
-      "labels": [
-        "D"
-      ],
-      "inventoryCount": 1,
-      "notes": [
-        "Killzones \u00a7Thermometric Condenser: roof Accessible + Vantage, inner ledge Exposed + Insignificant, battlements Light, everything else Heavy."
-      ],
-      "parts": [
-        {
-          "role": "wall",
-          "types": [
-            "Heavy"
-          ],
-          "z0": 0.0,
-          "z1": 3.0,
-          "blocksVisibility": true,
-          "solid": true,
-          "standable": false,
-          "source": "green"
-        },
-        {
-          "role": "floor",
-          "types": [
-            "Accessible",
-            "Vantage",
-            "Light"
-          ],
-          "z0": 3.0,
-          "z1": 3.0,
-          "blocksVisibility": true,
-          "standable": true,
-          "solid": false,
-          "source": "green"
-        },
-        {
-          "role": "ledge",
-          "types": [
-            "Exposed",
-            "Insignificant"
-          ],
-          "z0": 2.75,
-          "z1": 3.0,
-          "blocksVisibility": false,
-          "standable": true,
-          "solid": false,
-          "optional": true,
-          "source": "green_inner"
-        },
-        {
-          "role": "rampart",
-          "types": [
-            "Light"
-          ],
-          "z0": 3.0,
-          "z1": 3.75,
-          "blocksVisibility": false,
-          "standable": false,
-          "solid": false,
-          "optional": true,
-          "source": "green_edge"
-        }
-      ],
-      "footprints": {
-        "D": [
-          {
-            "x": -3.2,
-            "y": 1.322
-          },
-          {
-            "x": -3.45,
-            "y": 0.239
-          },
-          {
-            "x": -3.283,
-            "y": -1.136
-          },
-          {
-            "x": -2.783,
-            "y": -2.094
-          },
-          {
-            "x": -1.221,
-            "y": -3.199
-          },
-          {
-            "x": -1.179,
-            "y": -3.449
-          },
-          {
-            "x": 1.112,
-            "y": -3.449
-          },
-          {
-            "x": 1.154,
-            "y": -3.24
-          },
-          {
-            "x": 2.758,
-            "y": -2.094
-          },
-          {
-            "x": 3.258,
-            "y": -1.219
-          },
-          {
-            "x": 3.467,
-            "y": -0.303
-          },
-          {
-            "x": 3.341,
-            "y": 0.947
-          },
-          {
-            "x": 2.717,
-            "y": 2.156
-          },
-          {
-            "x": 2.487,
-            "y": 2.218
-          },
-          {
-            "x": 1.196,
-            "y": 3.26
-          },
-          {
-            "x": 1.154,
-            "y": 3.468
-          },
-          {
-            "x": -1.138,
-            "y": 3.468
-          },
-          {
-            "x": -1.159,
-            "y": 3.281
-          },
-          {
-            "x": -1.346,
-            "y": 3.093
-          },
-          {
-            "x": -2.742,
-            "y": 2.114
-          }
-        ]
-      }
+     "role": "floor",
+     "types": [
+      "Accessible",
+      "Vantage",
+      "Light"
+     ],
+     "z0": 3.0,
+     "z1": 3.0,
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "source": "green"
     }
-  ]
+   ],
+   "footprints": {
+    "A": [
+     {
+      "x": -1.192,
+      "y": -1.203
+     },
+     {
+      "x": 1.121,
+      "y": -1.182
+     },
+     {
+      "x": 1.225,
+      "y": 1.255
+     },
+     {
+      "x": 0.35,
+      "y": 1.255
+     },
+     {
+      "x": 0.308,
+      "y": 1.131
+     },
+     {
+      "x": -1.213,
+      "y": 1.11
+     }
+    ]
+   }
+  },
+  {
+   "kind": "bheta.gantryMedium",
+   "name": "Medium Gantry",
+   "labels": [
+    "B"
+   ],
+   "inventoryCount": 4,
+   "parts": [
+    {
+     "role": "floor",
+     "types": [
+      "Accessible",
+      "Vantage",
+      "Light"
+     ],
+     "z0": 3.0,
+     "z1": 3.0,
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "source": "green"
+    }
+   ],
+   "footprints": {
+    "B": [
+     {
+      "x": -2.374,
+      "y": 0.456
+     },
+     {
+      "x": -2.25,
+      "y": 0.414
+     },
+     {
+      "x": -2.229,
+      "y": -1.19
+     },
+     {
+      "x": 2.334,
+      "y": -1.169
+     },
+     {
+      "x": 2.313,
+      "y": 1.144
+     },
+     {
+      "x": -1.52,
+      "y": 1.144
+     },
+     {
+      "x": -1.562,
+      "y": 1.268
+     },
+     {
+      "x": -2.374,
+      "y": 1.248
+     }
+    ]
+   }
+  },
+  {
+   "kind": "bheta.gantryLong",
+   "name": "Long Gantry",
+   "labels": [
+    "C"
+   ],
+   "inventoryCount": 2,
+   "parts": [
+    {
+     "role": "floor",
+     "types": [
+      "Accessible",
+      "Vantage",
+      "Light"
+     ],
+     "z0": 3.0,
+     "z1": 3.0,
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "source": "green"
+    }
+   ],
+   "footprints": {
+    "C": [
+     {
+      "x": -1.276,
+      "y": 3.864
+     },
+     {
+      "x": -1.152,
+      "y": 3.822
+     },
+     {
+      "x": -1.152,
+      "y": -4.72
+     },
+     {
+      "x": 1.161,
+      "y": -4.741
+     },
+     {
+      "x": 1.182,
+      "y": 4.614
+     },
+     {
+      "x": -0.256,
+      "y": 4.635
+     },
+     {
+      "x": -0.297,
+      "y": 4.759
+     },
+     {
+      "x": -1.276,
+      "y": 4.739
+     }
+    ]
+   }
+  },
+  {
+   "kind": "bheta.condenser",
+   "name": "Thermometric Condenser",
+   "labels": [
+    "D"
+   ],
+   "inventoryCount": 1,
+   "notes": [
+    "Killzones \u00a7Thermometric Condenser: roof Accessible + Vantage, inner ledge Exposed + Insignificant, battlements Light, everything else Heavy."
+   ],
+   "parts": [
+    {
+     "role": "wall",
+     "types": [
+      "Heavy"
+     ],
+     "z0": 0.0,
+     "z1": 3.0,
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "source": "green"
+    },
+    {
+     "role": "floor",
+     "types": [
+      "Accessible",
+      "Vantage",
+      "Light"
+     ],
+     "z0": 3.0,
+     "z1": 3.0,
+     "blocksVisibility": true,
+     "standable": true,
+     "solid": false,
+     "source": "green"
+    },
+    {
+     "role": "ledge",
+     "types": [
+      "Exposed",
+      "Insignificant"
+     ],
+     "z0": 2.75,
+     "z1": 3.0,
+     "blocksVisibility": false,
+     "standable": true,
+     "solid": false,
+     "optional": true,
+     "source": "green_inner"
+    },
+    {
+     "role": "rampart",
+     "types": [
+      "Light"
+     ],
+     "z0": 3.0,
+     "z1": 3.75,
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": false,
+     "optional": true,
+     "source": "green_edge"
+    }
+   ],
+   "footprints": {
+    "D": [
+     {
+      "x": -3.2,
+      "y": 1.322
+     },
+     {
+      "x": -3.45,
+      "y": 0.239
+     },
+     {
+      "x": -3.283,
+      "y": -1.136
+     },
+     {
+      "x": -2.783,
+      "y": -2.094
+     },
+     {
+      "x": -1.221,
+      "y": -3.199
+     },
+     {
+      "x": -1.179,
+      "y": -3.449
+     },
+     {
+      "x": 1.112,
+      "y": -3.449
+     },
+     {
+      "x": 1.154,
+      "y": -3.24
+     },
+     {
+      "x": 2.758,
+      "y": -2.094
+     },
+     {
+      "x": 3.258,
+      "y": -1.219
+     },
+     {
+      "x": 3.467,
+      "y": -0.303
+     },
+     {
+      "x": 3.341,
+      "y": 0.947
+     },
+     {
+      "x": 2.717,
+      "y": 2.156
+     },
+     {
+      "x": 2.487,
+      "y": 2.218
+     },
+     {
+      "x": 1.196,
+      "y": 3.26
+     },
+     {
+      "x": 1.154,
+      "y": 3.468
+     },
+     {
+      "x": -1.138,
+      "y": 3.468
+     },
+     {
+      "x": -1.159,
+      "y": 3.281
+     },
+     {
+      "x": -1.346,
+      "y": 3.093
+     },
+     {
+      "x": -2.742,
+      "y": 2.114
+     }
+    ]
+   }
+  }
+ ]
 }

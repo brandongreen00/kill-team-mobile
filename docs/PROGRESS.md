@@ -2,6 +2,40 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-23 — The Close Quarters killzones are no longer sealed (W-01)
+
+The owner pointed at <https://wahapedia.ru/kill-team3/the-rules/approved-ops-2025/>, which
+carries all 24 map cards at the resolution `tools/maps` was calibrated against. Re-extracting
+volkus-1 from them reproduced the committed data **byte for byte** — same 14 features, same 37
+parts, zero geometry drift — which is the proof that these are the source cards and that the
+pipeline is intact. Then the two real defects:
+
+- **The hatchway pill was matched to its wall with a threshold that cut through the middle of
+  the true distribution.** The pill is drawn alongside the wall; measured across all twelve CQ
+  cards, its perpendicular offset clusters at 18–22px (118 pairs) with the nearest unrelated
+  pairing at 73px. The test was `thickness * 2.2` = 19.8px, so it kept only the tightest few:
+  **6 access points across the six Gallowdark maps and zero on every Tomb World card**. At
+  `thickness * 4` it is 59 hatchways on Gallowdark, and 36 hatchways plus 22 breach points on
+  Tomb World.
+- **The access point was placed beside the wall rather than in it**, so the wall ran unbroken
+  behind it and opening a hatchway changed nothing. It now takes the wall's thickness and the
+  pill's length, and the wall is emitted as two bars either side.
+
+Measured before: an operative on gallowdark-1 could reach 10" vertically on a 23.9" board — one
+compartment. Both halves are pinned on the shipped data in `tests/rules-review.test.ts`.
+
+Two things fell out of the re-extraction. **D-014 is half closed** — volkus-6 K and its host A
+came good, and their allow-list and PENDING entries are deleted (both files fail if a listed
+entry starts passing). And CQ template fitting now matches a wall-only piece on the extent of
+its whole run rather than its largest bar, because which bar is larger is an accident of where
+the hatchway sits.
+
+`pnpm maps:validate`: **24 maps, 0 gate failures.**
+
+Still open on the killzone data: W-04, the Volkus stronghold walls extruded to the building's
+maximum height, which blinds both Vantage levels. That one needs a parapet height the cards do
+not print, so it is with the owner.
+
 ## 2026-08-23 — Rules audit: 62 verified findings, and the AI loses its exploits
 
 A 15-domain line-by-line audit against the verbatim Wahapedia text (`docs/rules-source/`,

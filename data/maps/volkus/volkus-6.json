@@ -177,7 +177,8 @@
     "x": 7.021,
     "y": 8.188
    },
-   "z": 0.0
+   "z": 0.0,
+   "onFeatureId": "volkus-6.A"
   },
   {
    "id": "obj.centre",
@@ -451,23 +452,7 @@
      "poly": [
       {
        "x": 7.479,
-       "y": 11.583
-      },
-      {
-       "x": 7.083,
-       "y": 11.562
-      },
-      {
-       "x": 7.042,
-       "y": 11.354
-      },
-      {
-       "x": 6.854,
-       "y": 11.333
-      },
-      {
-       "x": 6.833,
-       "y": 11.104
+       "y": 11.917
       },
       {
        "x": 6.562,
@@ -475,19 +460,47 @@
       },
       {
        "x": 6.562,
+       "y": 9.875
+      },
+      {
+       "x": 6.458,
+       "y": 9.771
+      },
+      {
+       "x": 4.542,
+       "y": 9.771
+      },
+      {
+       "x": 4.438,
+       "y": 9.625
+      },
+      {
+       "x": 4.521,
+       "y": 9.042
+      },
+      {
+       "x": 5.042,
+       "y": 9.021
+      },
+      {
+       "x": 5.062,
        "y": 8.833
       },
       {
-       "x": 7.479,
-       "y": 8.792
+       "x": 4.917,
+       "y": 8.812
       },
       {
-       "x": 7.5,
+       "x": 4.396,
+       "y": 8.333
+      },
+      {
+       "x": 4.417,
        "y": 7.229
       },
       {
-       "x": 9.75,
-       "y": 7.229
+       "x": 9.771,
+       "y": 7.25
       },
       {
        "x": 9.771,
@@ -512,13 +525,13 @@
     }
    ],
    "placement": {
-    "x": 7.385,
-    "y": 9.759,
-    "rotDeg": 0,
-    "flip": true
+    "x": 6.893,
+    "y": 9.554,
+    "rotDeg": 180,
+    "flip": false
    },
    "qa": {
-    "templateIoU": 0.5642
+    "templateIoU": 0.8767
    }
   },
   {
@@ -1559,109 +1572,6 @@
    }
   },
   {
-   "id": "volkus-6.K",
-   "kind": "volkus.lightRubble",
-   "label": "K",
-   "parts": [
-    {
-     "id": "volkus-6.K.p0",
-     "featureId": "volkus-6.K",
-     "poly": [
-      {
-       "x": 4.521,
-       "y": 9.125
-      },
-      {
-       "x": 5.042,
-       "y": 9.104
-      },
-      {
-       "x": 5.062,
-       "y": 8.833
-      },
-      {
-       "x": 4.896,
-       "y": 8.792
-      },
-      {
-       "x": 4.875,
-       "y": 8.521
-      },
-      {
-       "x": 4.583,
-       "y": 8.521
-      },
-      {
-       "x": 4.542,
-       "y": 8.354
-      },
-      {
-       "x": 4.396,
-       "y": 8.333
-      },
-      {
-       "x": 4.417,
-       "y": 7.229
-      },
-      {
-       "x": 7.479,
-       "y": 7.25
-      },
-      {
-       "x": 7.479,
-       "y": 8.792
-      },
-      {
-       "x": 6.562,
-       "y": 8.833
-      },
-      {
-       "x": 6.542,
-       "y": 9.771
-      },
-      {
-       "x": 5.833,
-       "y": 9.688
-      },
-      {
-       "x": 5.792,
-       "y": 9.812
-      },
-      {
-       "x": 5.083,
-       "y": 9.812
-      },
-      {
-       "x": 5.042,
-       "y": 9.688
-      },
-      {
-       "x": 4.521,
-       "y": 9.667
-      }
-     ],
-     "z0": 0.0,
-     "z1": 1.0,
-     "types": [
-      "Light"
-     ],
-     "role": "rubble",
-     "blocksVisibility": false,
-     "standable": false,
-     "solid": true
-    }
-   ],
-   "placement": {
-    "x": 5.37,
-    "y": 8.896,
-    "rotDeg": 0,
-    "flip": true
-   },
-   "qa": {
-    "templateIoU": 0.228
-   }
-  },
-  {
    "id": "volkus-6.L",
    "kind": "volkus.wreckage",
    "label": "L",
@@ -1849,12 +1759,60 @@
    "qa": {
     "templateIoU": 0.9333
    }
+  },
+  {
+   "id": "volkus-6.K",
+   "kind": "volkus.lightRubble",
+   "label": "K",
+   "parts": [
+    {
+     "id": "volkus-6.K.p0",
+     "featureId": "volkus-6.K",
+     "poly": [
+      {
+       "x": 4.458,
+       "y": 9.0
+      },
+      {
+       "x": 6.458,
+       "y": 9.0
+      },
+      {
+       "x": 6.458,
+       "y": 9.75
+      },
+      {
+       "x": 4.458,
+       "y": 9.75
+      }
+     ],
+     "z0": 0.0,
+     "z1": 1.0,
+     "types": [
+      "Light"
+     ],
+     "role": "rubble",
+     "blocksVisibility": false,
+     "standable": false,
+     "solid": true,
+     "underRaisedLevel": true
+    }
+   ],
+   "placement": {
+    "x": 5.458,
+    "y": 9.375,
+    "rotDeg": 90,
+    "flip": false
+   },
+   "qa": {
+    "templateIoU": 0.9717
+   }
   }
  ],
  "source": {
   "card": "docs/context-pack/research/approved-ops/maps/Volkus2025-6.png",
   "pxPerInch": 24.0,
-  "extractedAt": "2026-08-17",
+  "extractedAt": "2026-08-23",
   "tool": "tools/maps/extract_cards.py",
   "qa": {
    "pxPerInch": 24.0,
@@ -1864,7 +1822,7 @@
    "deployment": "long-edge",
    "p1Side": "top",
    "centreSeamErrIn": 0.0208,
-   "templateIoUMin": 0.228,
+   "templateIoUMin": 0.6931,
    "templateIoUMedian": 0.9886
   }
  }

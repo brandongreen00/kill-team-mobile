@@ -9,7 +9,7 @@ import { describe, expect, it } from 'vitest';
 import { createGameContext } from '../src/core/game.ts';
 import { createBattle } from '../src/core/init.ts';
 import { reduce } from '../src/core/reducer.ts';
-import { validateMove } from '../src/core/movement.ts';
+import { reachableCells, validateMove } from '../src/core/movement.ts';
 import { gapBetween, inControlRange, weaponsOf } from '../src/core/state.ts';
 import { getAction } from '../src/core/actions.ts';
 import { endTurningPoint, whoActivates } from '../src/core/phases.ts';
@@ -18,7 +18,7 @@ import { parseWeaponRules } from '../src/core/weaponRules.ts';
 import { addRolled, retentionOptions, type DicePool } from '../src/core/dice.ts';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { makeCard, rect, testMap } from './fixtures.ts';
+import { makeCard, rect, testContext, testMap } from './fixtures.ts';
 import { buildTerrainIndex, wallCornerZones } from '../src/core/terrain.ts';
 import { coverAndObscured, withinControlRange } from '../src/core/visibility.ts';
 import { checkTarget } from '../src/core/sequences/shoot.ts';
@@ -1073,4 +1073,71 @@ describe('the turning point is scored before its effects expire', () => {
     // …and it is gone afterwards.
     expect(st.effects.some((e) => e.rule === 'probe')).toBe(false);
   });
+});
+
+describe('a Close Quarters killzone is one connected board once its hatchways open', () => {
+  const cqMaps = () => [
+    ...['1', '2', '3', '4', '5', '6'].map((n) => ['gallowdark', `gallowdark-${n}`] as const),
+    ...['1', '2', '3', '4', '5', '6'].map((n) => ['tomb-world', `tomb-world-${n}`] as const),
+  ];
+
+  it('Killzones § Hatchway: every access point is a gap in its wall, not a marker beside it', () => {
+    for (const [dir, id] of cqMaps()) {
+      const map = JSON.parse(readFileSync(join(process.cwd(), 'data', 'maps', dir, `${id}.json`), 'utf8')) as KillzoneMap;
+      const bb = (p: { poly: { x: number; y: number }[] }) => {
+        const xs = p.poly.map((q) => q.x);
+        const ys = p.poly.map((q) => q.y);
+        return { x0: Math.min(...xs), y0: Math.min(...ys), x1: Math.max(...xs), y1: Math.max(...ys) };
+      };
+      let seen = 0;
+      for (const feat of map.features) {
+        for (const ap of feat.parts.filter((p) => p.role === 'accessPoint')) {
+          seen++;
+          const a = bb(ap);
+          // The access point takes the wall's own thickness and sits between its two halves,
+          // so no wall part of the same feature may overlap it.
+          for (const w of feat.parts.filter((p) => p.role === 'wall')) {
+            const b = bb(w);
+            const overlap = Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0) > 0.02 &&
+              Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0) > 0.02;
+            expect(`${id} ${ap.id} vs ${w.id}: ${overlap ? 'WALL COVERS THE ACCESS POINT' : 'ok'}`).not.toContain(
+              'WALL COVERS',
+            );
+          }
+        }
+      }
+      expect(`${id}: ${seen} access points`).not.toBe(`${id}: 0 access points`);
+    }
+  });
+
+  it('with every hatchway open, an operative can cross the whole killzone', () => {
+    const ctx0 = testContext();
+    for (const [dir, id] of cqMaps()) {
+      const map = JSON.parse(readFileSync(join(process.cwd(), 'data', 'maps', dir, `${id}.json`), 'utf8')) as KillzoneMap;
+      const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY', move: 200 });
+      const ctx = createGameContext({ rng: new ScriptedRng([4, 4, 4, 4]), maps: [map], datacards: [dummy] });
+      let s = createBattle(ctx, { map, seed: 5 });
+      s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: [{ datacardId: 'test.dummy' }] }, ctx).state;
+      s = reduce(s, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: [{ datacardId: 'test.dummy' }] }, ctx).state;
+      // Open every hatchway on the board.
+      for (const feat of map.features) {
+        for (const ap of feat.parts.filter((p) => p.role === 'accessPoint' && p.opensAs === 'hatch')) {
+          s.terrainState[ap.id] = { state: 'open' };
+        }
+      }
+      const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+      op.pos = { x: 2.5, y: 2.5 };
+      op.z = 0;
+      const field = reachableCells(ctx, s, op, 200, 1);
+      // A sealed board reaches only its own compartment. The whole killzone is 30x22 or so;
+      // with every hatchway open the operative should get most of the way across it.
+      const xs = [...field.values()].map((c) => c.pos.x);
+      const ys = [...field.values()].map((c) => c.pos.y);
+      const spanX = Math.max(...xs) - Math.min(...xs);
+      const spanY = Math.max(...ys) - Math.min(...ys);
+      expect(`${id} spanX ${spanX.toFixed(1)}`).toBe(`${id} spanX ${spanX.toFixed(1)}`);
+      expect(spanX, `${id} horizontal reach`).toBeGreaterThan(map.board.w * 0.7);
+      expect(spanY, `${id} vertical reach`).toBeGreaterThan(map.board.h * 0.7);
+    }
+  }, 120_000);
 });

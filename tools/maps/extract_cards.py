@@ -857,8 +857,9 @@ def cq_features(img, frame, killzone):
     pill = C.mask_exact(img, C.PALETTE['hatch_cq'], 8)
     for blob in G.component_masks(pill, 60):
         ys, xs = np.where(blob)
-        access.append(((xs.min() + xs.max() + 1) / 2, (ys.min() + ys.max() + 1) / 2,
-                       xs.max() - xs.min() > ys.max() - ys.min()))
+        access.append(dict(cx=(xs.min() + xs.max() + 1) / 2, cy=(ys.min() + ys.max() + 1) / 2,
+                           x0=xs.min(), y0=ys.min(), x1=xs.max() + 1, y1=ys.max() + 1,
+                           horiz=xs.max() - xs.min() > ys.max() - ys.min()))
 
     chips = [(t, cx, cy) for t, cx, cy, _ in L.chips(img, 'cq')]
     blackchips = [(t, cx, cy, b) for t, cx, cy, b in L.chips(img, 'black', **L.BLACK_CHIP)]
@@ -1033,15 +1034,22 @@ def _cq_wall_feature(seg, frame, lx, ly, thick, access, killzone):
     poly = G.px_rect_to_board(frame, *px_box)
     a = frame.to_board(*a_px)
     b = frame.to_board(*b_px)
-    # nearest access-point pill lying along this wall
+    # The access-point pill printed alongside this wall.
+    #
+    # The pill is drawn BESIDE the wall with its long axis running along it. Measured across
+    # all twelve Close Quarters cards, the perpendicular offset of a pill from the wall it
+    # marks clusters at 18-22px (118 pairs) and the nearest unrelated pairing is at 73px — a
+    # 3.5x gap. The old threshold was `thick * 2.2` = 19.8px, which cut through the middle of
+    # that cluster and kept only the tightest few: 3 access points out of 10 pills on
+    # gallowdark-1, and ZERO on every Tomb World card. `thick * 4` = 36px sits in the gap.
     ap = None
-    for cx, cy, horiz in access:
-        if orient == 'h' and horiz and abs(cy - a_px[1]) < thick * 2.2 \
-                and min(a_px[0], b_px[0]) - 4 <= cx <= max(a_px[0], b_px[0]) + 4:
-            ap = (cx, cy)
-        if orient == 'v' and not horiz and abs(cx - a_px[0]) < thick * 2.2 \
-                and min(a_px[1], b_px[1]) - 4 <= cy <= max(a_px[1], b_px[1]) + 4:
-            ap = (cx, cy)
+    for cand in access:
+        if orient == 'h' and cand['horiz'] and abs(cand['cy'] - a_px[1]) < thick * 4 \
+                and min(a_px[0], b_px[0]) - 4 <= cand['cx'] <= max(a_px[0], b_px[0]) + 4:
+            ap = cand
+        if orient == 'v' and not cand['horiz'] and abs(cand['cx'] - a_px[0]) < thick * 4 \
+                and min(a_px[1], b_px[1]) - 4 <= cand['cy'] <= max(a_px[1], b_px[1]) + 4:
+            ap = cand
     return dict(label=label, orient=orient, span=span, poly=poly, a=a, b=b, access=ap,
                 px=px_box)
 
@@ -1204,16 +1212,39 @@ def _finish_cq(walls, extras, mapId, killzone, frame):
         kind = T.LABEL_TO_KIND.get((killzone, label), '%s.wallUnknown' % killzone)
         counters[label] += 1
         fid = '%s.%s-%d' % (mapId, label, counters[label])
-        parts = [dict(id=fid + '.wall', featureId=fid, poly=G.round_poly(w['poly']),
-                      z0=0.0, z1=T.h('cq.wall.top'), types=list(T.CQ_WALL_TYPES),
-                      role='wall', blocksVisibility=True, solid=True, standable=False)]
         spec = T.PIECES.get(kind, {})
+        x0, y0, x1, y1 = w['px']
+        wall_boxes = [(x0, y0, x1, y1)]
+        access_box = None
         if w['access'] is not None and (spec.get('hatch') or spec.get('breach')):
-            cx, cy = w['access']
-            half = (frame.lattice_x[1] - frame.lattice_x[0]) * 0.14
-            box = G.px_rect_to_board(frame, cx - half, cy - half, cx + half, cy + half)
+            # The access point is a NOTCH IN THE WALL, not a marker beside it: it takes the
+            # wall's own thickness, and the pill's long extent gives the width of the opening.
+            # It used to be a square centred on the pill — which is drawn alongside the wall,
+            # not in it — so the wall ran unbroken behind it and opening a hatchway changed
+            # nothing: `wallRouteDistance` across one was Infinity open or closed.
+            ap = w['access']
+            if w['orient'] == 'h':
+                ax0, ax1 = ap['x0'], ap['x1']
+                ax0, ax1 = max(ax0, x0), min(ax1, x1)
+                access_box = (ax0, y0, ax1, y1)
+                wall_boxes = [b for b in ((x0, y0, ax0, y1), (ax1, y0, x1, y1)) if b[2] - b[0] > 1]
+            else:
+                ay0, ay1 = ap['y0'], ap['y1']
+                ay0, ay1 = max(ay0, y0), min(ay1, y1)
+                access_box = (x0, ay0, x1, ay1)
+                wall_boxes = [b for b in ((x0, y0, x1, ay0), (x0, ay1, x1, y1)) if b[3] - b[1] > 1]
+
+        parts = []
+        for n, box in enumerate(wall_boxes):
+            suffix = '.wall' if len(wall_boxes) == 1 else '.wall%d' % n
+            parts.append(dict(id=fid + suffix, featureId=fid,
+                              poly=G.round_poly(G.px_rect_to_board(frame, *box)),
+                              z0=0.0, z1=T.h('cq.wall.top'), types=list(T.CQ_WALL_TYPES),
+                              role='wall', blocksVisibility=True, solid=True, standable=False))
+        if access_box is not None:
             role = 'hatch' if spec.get('hatch') else 'breachWall'
-            parts.append(dict(id=fid + '.access', featureId=fid, poly=G.round_poly(box),
+            parts.append(dict(id=fid + '.access', featureId=fid,
+                              poly=G.round_poly(G.px_rect_to_board(frame, *access_box)),
                               z0=0.0, z1=T.h('cq.wall.top'),
                               types=list(T.CQ_ACCESS_CLOSED), role='accessPoint',
                               state='closed', blocksVisibility=True, solid=True,
@@ -1421,6 +1452,16 @@ def _footprint(feat):
         key = (pref, a)
         if best is None or key > best[0]:
             best = (key, poly)
+    if best is not None and best[0][0] == 0:
+        # A piece that is nothing but wall — every Close Quarters wall — is matched on the
+        # extent of the WHOLE run, not its largest bar. An access point notches the run into
+        # two bars, and which of them is larger is an accident of where the hatchway sits, so
+        # fitting on one of them made the same physical piece look like a different one.
+        bars = [p for p in feat['parts'] if p.get('role') in ('wall', 'accessPoint')]
+        if bars:
+            xs = [q['x'] for p in bars for q in p['poly']]
+            ys = [q['y'] for p in bars for q in p['poly']]
+            return [[min(xs), min(ys)], [max(xs), min(ys)], [max(xs), max(ys)], [min(xs), max(ys)]]
     return best[1] if best else None
 
 

@@ -54,11 +54,11 @@
    "label": "A",
    "mapId": "volkus-6",
    "featureIndex": 0,
-   "iou": 0.5642,
-   "rotDeg": 0,
-   "flip": true,
-   "x": 8.375,
-   "y": 10.031
+   "iou": 0.8767,
+   "rotDeg": 180,
+   "flip": false,
+   "x": 7.608,
+   "y": 9.539
   },
   {
    "label": "B",
@@ -247,7 +247,7 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 23.896,
+   "x": 22.563,
    "y": 7.229
   },
   {
@@ -257,7 +257,7 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 12.896,
+   "x": 11.562,
    "y": 5.771
   },
   {
@@ -267,7 +267,7 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 23.896,
+   "x": 22.563,
    "y": 7.229
   },
   {
@@ -278,7 +278,7 @@
    "rotDeg": 90,
    "flip": false,
    "x": 14.229,
-   "y": 18.896
+   "y": 17.562
   },
   {
    "label": "E",
@@ -288,7 +288,7 @@
    "rotDeg": 90,
    "flip": false,
    "x": 23.229,
-   "y": 18.896
+   "y": 17.562
   },
   {
    "label": "E",
@@ -298,7 +298,7 @@
    "rotDeg": 90,
    "flip": false,
    "x": 7.771,
-   "y": 18.896
+   "y": 17.562
   },
   {
    "label": "F",
@@ -307,7 +307,7 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 6.104,
+   "x": 5.458,
    "y": 17.334
   },
   {
@@ -317,7 +317,7 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 18.104,
+   "x": 18.75,
    "y": 16.334
   },
   {
@@ -327,7 +327,7 @@
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 6.104,
+   "x": 6.75,
    "y": 15.334
   },
   {
@@ -338,7 +338,7 @@
    "rotDeg": 90,
    "flip": false,
    "x": 24.666,
-   "y": 3.104
+   "y": 3.75
   },
   {
    "label": "F",
@@ -347,8 +347,8 @@
    "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 25.334,
-   "y": 3.104
+   "x": 25.333,
+   "y": 3.75
   },
   {
    "label": "F",
@@ -358,7 +358,7 @@
    "rotDeg": 90,
    "flip": false,
    "x": 11.667,
-   "y": 3.104
+   "y": 3.75
   },
   {
    "label": "H",
@@ -473,7 +473,7 @@
   {
    "label": "I",
    "mapId": "volkus-6",
-   "featureIndex": 13,
+   "featureIndex": 12,
    "iou": 0.9333,
    "rotDeg": 0,
    "flip": false,
@@ -593,12 +593,12 @@
   {
    "label": "K",
    "mapId": "volkus-6",
-   "featureIndex": 9,
-   "iou": 0.228,
-   "rotDeg": 0,
-   "flip": true,
-   "x": 5.886,
-   "y": 8.359
+   "featureIndex": 13,
+   "iou": 0.9717,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 5.458,
+   "y": 9.375
   },
   {
    "label": "L",
@@ -653,7 +653,7 @@
   {
    "label": "L",
    "mapId": "volkus-6",
-   "featureIndex": 10,
+   "featureIndex": 9,
    "iou": 0.9891,
    "rotDeg": 90,
    "flip": true,
@@ -713,7 +713,7 @@
   {
    "label": "M",
    "mapId": "volkus-6",
-   "featureIndex": 11,
+   "featureIndex": 10,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -773,7 +773,7 @@
   {
    "label": "N",
    "mapId": "volkus-6",
-   "featureIndex": 12,
+   "featureIndex": 11,
    "iou": 0.9881,
    "rotDeg": 90,
    "flip": true,

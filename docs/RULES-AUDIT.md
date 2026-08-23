@@ -25,7 +25,7 @@ Ranked by how much each defect distorts a real game.
 
 | # | Status | Layer | Severity | Item |
 | --- | --- | --- | --- | --- |
-| W-01 | open | data | critical | Gallowdark and Tomb World maps ship almost no hatchway/breach access points, and the ones that exist are not gaps in the wall |
+| W-01 | FIXED | data | critical | Gallowdark and Tomb World maps ship almost no hatchway/breach access points, and the ones that exist are not gaps in the wall |
 | W-02 | FIXED `3f93c80` | engine | critical | Operate Hatch and Breach can never be performed on any map — both `available` predicates test for things the data never contains |
 | W-03 | FIXED `3f93c80` | engine | critical | No Gallowdark or Tomb World wall can ever intervene — the 0.6" minimum-edge filter discards every 0.365"-thick wall's corners and ends |
 | W-04 | open | data | critical | Volkus stronghold walls are extruded to the building's maximum height, so both Vantage levels are blind on all six maps |
@@ -69,7 +69,7 @@ Ranked by how much each defect distorts a real game.
 
 ### W-01 · Gallowdark and Tomb World maps ship almost no hatchway/breach access points, and the ones that exist are not gaps in the wall
 
-**OPEN** · data · critical
+**FIXED** · data · critical
 
 Rules pinned: `killzones.txt:429-441 (Hatchway: access point + hatch, closed/open types)`; `killzones.txt:482,:503 (Tomb World hatchway / breach point)`; `killzones.txt:464 ("Operatives cannot move over or through Wall terrain")`
 
@@ -117,7 +117,7 @@ Test: tests/rules-review.test.ts quoting killzones.txt:424 and :426, built on a 
 
 ### W-04 · Volkus stronghold walls are extruded to the building's maximum height, so both Vantage levels are blind on all six maps
 
-**OPEN** · data · critical · **needs an owner decision**
+**OPEN** · **OWNER DECISION PENDING** — parapet height is not printed on the cards · data · critical · **needs an owner decision**
 
 Rules pinned: `killzones.txt:258 ("The small broken ramparts on the edge of the Vantage terrain of Stronghold A are Insignificant and Exposed terrain")`; `killzones.txt:232 (Exposed: "For the purposes of cover and obscured, it's never intervening")`; `killzones.txt:205-207 (Vantage)`
 
@@ -597,7 +597,7 @@ Test: tests/rules-review.test.ts quoting killzones.txt:528, on the real tomb-wor
 
 ### W-34 · A move may finish with two bases fully overlapping — the end-of-move overlap guard is a dead comparison
 
-**OPEN** · engine · major · **needs an owner decision**
+**OPEN** · **OWNER DECISION PENDING** — see D-050; fixing it moves 16 test fixtures · engine · major · **needs an owner decision**
 
 Rules pinned: `core-rules.txt:407 ("The sides of different bases can touch, but a base cannot be placed on another")`
 
