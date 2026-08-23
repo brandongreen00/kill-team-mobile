@@ -139,18 +139,32 @@ export function advanceFight(ctx: GameContext, state: GameState): void {
       case 'rollAttack': {
         rollSide(ctx, state, seq, 'attacker');
         if (seq.defenderCanRetaliate) rollSide(ctx, state, seq, 'defender');
-        seq.step = 'attackerRerolls';
+        // "If multiple players can re-roll dice at the same time (e.g. during a Fight action),
+        // they alternate either re-rolling a dice or passing until they both pass in
+        // succession, starting with the player with initiative."
+        seq.step = state.initiative === seq.attacker ? 'attackerRerolls' : 'defenderRerolls';
         break;
       }
 
-      case 'attackerRerolls': {
-        if (offerRerolls(ctx, state, seq, 'attacker')) return;
-        seq.step = 'defenderRerolls';
-        break;
-      }
-
+      // One alternating window, not two sequential ones. Running the attacker's grants to
+      // exhaustion first handed the defender the last word AND a fully finalised enemy pool
+      // to look at before spending anything.
+      case 'attackerRerolls':
       case 'defenderRerolls': {
-        if (seq.defenderCanRetaliate && offerRerolls(ctx, state, seq, 'defender')) return;
+        const side = seq.step === 'attackerRerolls' ? 'attacker' : 'defender';
+        const other = side === 'attacker' ? ('defender' as const) : ('attacker' as const);
+        const otherStep = side === 'attacker' ? 'defenderRerolls' : 'attackerRerolls';
+        const mayOffer = (s: 'attacker' | 'defender'): boolean => s === 'attacker' || seq.defenderCanRetaliate;
+        if (mayOffer(side) && offerRerolls(ctx, state, seq, side)) {
+          seq.step = otherStep; // hand the turn over before the decision is answered
+          return;
+        }
+        seq.rerollsDone ??= { attacker: false, defender: false };
+        seq.rerollsDone[side] = true;
+        if (!seq.rerollsDone[other] && mayOffer(other)) {
+          seq.step = otherStep;
+          break;
+        }
         seq.step = 'retention';
         break;
       }
@@ -181,6 +195,7 @@ export function advanceFight(ctx: GameContext, state: GameState): void {
             return;
           }
         }
+        applyStun(ctx, state, seq);
         seq.step = 'resolve';
         break;
       }
@@ -207,7 +222,6 @@ export function advanceFight(ctx: GameContext, state: GameState): void {
         }
         const player = side === 'attacker' ? seq.attacker : seq.defender;
         const blockable = successes(opponentPool);
-        const canBlock = blockable.length > 0;
         // A block always takes the opponent's best remaining success it is ALLOWED to take —
         // a critical first, and a normal success may only take a normal. That is optimal, but
         // a label that does not say so reads as the engine quietly choosing for you.
@@ -227,16 +241,21 @@ export function advanceFight(ctx: GameContext, state: GameState): void {
               label: `Strike with the ${d.state === 'crit' ? 'critical' : 'normal'} success${d.rolled ? ` (${d.value})` : ''}`,
               data: { dieId: d.id, mode: 'strike' },
             })),
-            ...(canBlock
-              ? mine.map((d) => ({
-                  id: `block:${d.id}`,
-                  label: `Block with the ${d.state === 'crit' ? 'critical' : 'normal'} success — stops their ${takesFor(d.state === 'crit')}`,
-                  data: { dieId: d.id, mode: 'block' },
-                  ...(d.state === 'normal' && brutalAgainst(ctx, state, seq, side)
-                    ? { disabled: true, reason: 'Brutal: only critical successes can block' }
-                    : {}),
-                }))
-              : []),
+            // "You can still block even if your opponent has no unresolved successes
+            // remaining. This is useful if you don't want to incapacitate the enemy operative
+            // yet." Gating this on `blockable.length > 0` forced a strike the rules let you
+            // decline.
+            ...mine.map((d) => ({
+              id: `block:${d.id}`,
+              label:
+                blockable.length > 0
+                  ? `Block with the ${d.state === 'crit' ? 'critical' : 'normal'} success — stops their ${takesFor(d.state === 'crit')}`
+                  : `Block with the ${d.state === 'crit' ? 'critical' : 'normal'} success — discard it without striking`,
+              data: { dieId: d.id, mode: 'block' },
+              ...(d.state === 'normal' && blockable.length > 0 && brutalAgainst(ctx, state, seq, side)
+                ? { disabled: true, reason: 'Brutal: only critical successes can block' }
+                : {}),
+            })),
           ],
           ctx: { side },
           sourceText:
@@ -399,6 +418,41 @@ function offerRerolls(
     ...(next.sourceText ? { sourceText: next.sourceText } : {}),
   });
   return true;
+}
+
+/**
+ * Stun, in a Fight.
+ *
+ * Appendix › Stun: "If you retain any critical successes, subtract 1 from the APL stat of the
+ * operative this weapon is being used against until the end of its next activation." `shoot.ts`
+ * has always done this; `fight.ts` contained no reference to the rule at all, so a thunder
+ * hammer stunned nobody it hit in melee.
+ *
+ * Applied once per side, after retention has settled which dice are critical successes.
+ */
+function applyStun(ctx: GameContext, state: GameState, seq: FightSequence): void {
+  for (const side of ['attacker', 'defender'] as const) {
+    if (side === 'defender' && !seq.defenderCanRetaliate) continue;
+    const { rules, name } = sideWeapon(ctx, state, seq, side);
+    if (!hasRule(rules, 'Stun')) continue;
+    const pool = side === 'attacker' ? seq.attackerPool : seq.defenderPool;
+    if (countCrits(pool) === 0) continue;
+    const victim = side === 'attacker' ? state.operatives[seq.defenderId] : state.operatives[seq.attackerId];
+    if (!victim || victim.removed) continue;
+    victim.aplMods.push(-1);
+    state.effects.push({
+      id: `stun${state.seq++}`,
+      rule: 'stun',
+      source: { kind: 'weapon', id: name },
+      operativeId: victim.id,
+      expiry: { kind: 'endOfNextActivation', operativeId: victim.id, armed: false },
+    });
+    log(state, {
+      kind: 'action',
+      player: side === 'attacker' ? seq.defender : seq.attacker,
+      text: `${victim.letter} is stunned (-1 APL)`,
+    });
+  }
 }
 
 /** Resolve one die as a strike or a block; called by the decision handler. */

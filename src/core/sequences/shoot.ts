@@ -381,6 +381,7 @@ export function startShoot(
     attackerId: attacker.id,
     targetId: target.id,
     queue: secondaryTargets(ctx, state, attacker, target, profile, rules).map((o) => o.id),
+    ...(ruleOf(rules, 'Blast') ? { spread: 'blast' as const } : ruleOf(rules, 'Torrent') ? { spread: 'torrent' as const } : {}),
     resolvedTargets: [],
     weaponName,
     ...(profileName ? { profileName } : {}),
@@ -928,7 +929,6 @@ function nextTarget(ctx: GameContext, state: GameState, seq: ShootSequence): voi
     nextTarget(ctx, state, seq);
     return;
   }
-  // Blast/Torrent secondaries inherit cover/obscured from the primary.
   seq.targetId = nextId;
   seq.secondary = true;
   seq.defender = next.player;
@@ -936,7 +936,20 @@ function nextTarget(ctx: GameContext, state: GameState, seq: ShootSequence): voi
   seq.defence = newPool();
   seq.usedRerolls = [];
   seq.usedRetention = [];
-  seq.coverChoiceMade = true;
+  if (seq.spread === 'torrent' && profile) {
+    // Torrent's secondaries are each "a valid target as normal" — the rule says nothing about
+    // inheriting the primary's cover, and inheriting it handed a secondary standing in the
+    // open a free retained success (or took one away from a secondary behind a barricade).
+    const check = checkTarget(ctx, state, attacker, next, profile, rules, { secondary: true });
+    seq.inCover = check.inCover;
+    seq.obscured = check.obscured;
+    seq.vantageAccurate = check.vantageAccurate;
+    seq.vantageImprovedCover = check.vantageImprovedCover;
+    seq.coverChoiceMade = !check.mustChoose;
+  } else {
+    // Blast: "Secondary targets are in cover and obscured if the primary target was."
+    seq.coverChoiceMade = true;
+  }
   seq.step = 'rollAttack';
   log(state, { kind: 'action', player: seq.attacker, text: `Secondary target: ${next.letter}` });
 }

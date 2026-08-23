@@ -174,7 +174,12 @@ export function retentionOptions(pool: DicePool, rules: WeaponRule[], obscured: 
         'Rending: If you retain any critical successes, you can retain one of your normal successes as a Critical success instead.',
     });
   }
-  if (hasRule(rules, 'Punishing') && c > 0 && f > 0) {
+  // Punishing keys off retained CRITICAL successes, and obscured leaves the attacker with
+  // none: "All the attacker's critical successes are retained as normal successes and cannot
+  // be changed to critical successes (this takes precedence over all other rules)." Severe and
+  // Rending were already guarded; Punishing was not, so it was offered — and taken — on a shot
+  // that could not have a critical success to trigger it.
+  if (hasRule(rules, 'Punishing') && critsAllowed && c > 0 && f > 0) {
     out.push({
       id: 'punishing',
       label: 'Punishing: retain a fail as a normal success',

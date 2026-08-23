@@ -13,6 +13,7 @@ import { validateMove } from '../src/core/movement.ts';
 import { inControlRange } from '../src/core/state.ts';
 import { ScriptedRng } from '../src/core/rng.ts';
 import { parseWeaponRules } from '../src/core/weaponRules.ts';
+import { addRolled, retentionOptions, type DicePool } from '../src/core/dice.ts';
 import { makeCard, rect, testMap } from './fixtures.ts';
 import { buildTerrainIndex } from '../src/core/terrain.ts';
 import { coverAndObscured, withinControlRange } from '../src/core/visibility.ts';
@@ -508,5 +509,161 @@ describe('a move is checked against enemy operatives along its whole length', ()
       { action: 'Charge', bonusInches: 2, mayEnterEnemyControlRange: true, mustFinishEngaged: true },
     );
     expect(v.ok).toBe(true);
+  });
+});
+
+describe('the Fight sequence', () => {
+  const fighters = (attackerRules: string, defenderRules = '') => {
+    const mk = (id: string, rules: string) =>
+      makeCard({
+        id,
+        name: id.toUpperCase(),
+        weapons: [
+          {
+            name: 'blade',
+            profiles: [{ type: 'melee', atk: 3, hit: 4, dmgN: 2, dmgC: 3, rules: parseWeaponRules(rules) }],
+          },
+        ],
+      });
+    return [mk('test.att', attackerRules), mk('test.def', defenderRules)];
+  };
+
+  const engage = (script: number[], attackerRules: string, defenderRules = '') => {
+    const { s, ctx } = battle(fighters(attackerRules, defenderRules), script, 'test.att', 'test.def');
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    s.operatives[a]!.pos = { x: 12, y: 11 };
+    s.operatives[b]!.pos = { x: 13.3, y: 11 };
+    let st = reduce(s, { t: 'ActivateOperative', player: 'p1', operativeId: a, order: 'engage' }, ctx).state;
+    st = reduce(
+      st,
+      { t: 'PerformAction', operativeId: a, action: 'Fight', params: { weaponName: 'blade', targetId: b } },
+      ctx,
+    ).state;
+    return { st, ctx, a, b };
+  };
+
+  it('Stun: "if you retain any critical successes, subtract 1 from the APL stat of the operative this weapon is being used against"', () => {
+    // Attacker rolls 6,6,6 — three critical successes with a Stun weapon. In a Fight, Stun
+    // was never implemented at all: fight.ts contained no reference to the rule.
+    let { st, ctx, b } = engage([6, 6, 6, 1, 1, 1], 'Stun');
+    st = drain(st, ctx, (d) => (d.kind === 'reroll' || d.kind === 'retention' ? 'keep' : undefined), 60);
+    expect(st.operatives[b]!.aplMods).toContain(-1);
+  });
+
+  it('"you can still block even if your opponent has no unresolved successes remaining"', () => {
+    // The defender rolls nothing; the attacker still gets the choice not to strike.
+    let { st, ctx } = engage([6, 6, 6, 1, 1, 1], '');
+    // Answer the re-roll / retention offers until the strike-or-block window opens.
+    let guard = 0;
+    while (st.pending.length > 0 && st.pending[0]!.kind !== 'strikeOrBlock' && guard++ < 20) {
+      const d = st.pending[0]!;
+      st = reduce(st, { t: 'ResolveDecision', decisionId: d.id, optionId: 'keep' }, ctx).state;
+      if (st.pending[0]?.id === d.id) {
+        st = reduce(st, { t: 'ResolveDecision', decisionId: d.id, optionId: 'skip' }, ctx).state;
+      }
+    }
+    const decision = st.pending.find((p) => p.kind === 'strikeOrBlock');
+    expect(decision).toBeDefined();
+    expect(decision!.options.some((o) => o.id.startsWith('block:'))).toBe(true);
+  });
+
+  it('re-rolls "alternate … starting with the player with initiative"', () => {
+    // p2 has initiative, and p1 is the one who declared the Fight. Both weapons have
+    // Balanced, so both players have a grant to spend.
+    const { s, ctx } = battle(fighters('Balanced', 'Balanced'), [4, 4, 4, 4, 4, 4, 4, 4, 4, 4], 'test.att', 'test.def');
+    s.initiative = 'p2';
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    s.operatives[a]!.pos = { x: 12, y: 11 };
+    s.operatives[b]!.pos = { x: 13.3, y: 11 };
+    let st = reduce(s, { t: 'ActivateOperative', player: 'p1', operativeId: a, order: 'engage' }, ctx).state;
+    st = reduce(
+      st,
+      { t: 'PerformAction', operativeId: a, action: 'Fight', params: { weaponName: 'blade', targetId: b } },
+      ctx,
+    ).state;
+    const first = st.pending.find((p) => p.kind === 'reroll');
+    expect(first).toBeDefined();
+    expect(first!.who).toBe('p2'); // the player with initiative, not the attacker
+  });
+});
+
+describe('obscured takes precedence over the retention rules', () => {
+  it('Punishing is not offered while obscured — "all the attacker\'s critical successes are retained as normal successes and cannot be changed to critical successes"', () => {
+    const pool: DicePool = { dice: [], nextId: 1 };
+    addRolled(pool, [6, 4, 1], 4);
+    const rules = parseWeaponRules('Punishing, Severe, Rending');
+    expect(retentionOptions(pool, rules, false).map((o) => o.id).sort()).toEqual(['punishing', 'rending']);
+    // Obscured leaves no retained critical success for any of the three to key off.
+    expect(retentionOptions(pool, rules, true)).toEqual([]);
+  });
+});
+
+describe('Torrent secondaries are each "a valid target as normal"', () => {
+  it('a secondary in the open does not inherit the primary\'s cover (that clause is Blast\'s)', () => {
+    const barricade: TerrainFeature = {
+      id: 'bar',
+      kind: 'test.light',
+      label: 'B',
+      placement: { x: 15, y: 11, rotDeg: 0, flip: false },
+      parts: [
+        {
+          id: 'bar.body',
+          featureId: 'bar',
+          poly: rect(14.8, 9.8, 0.4, 2.6),
+          z0: 0,
+          z1: 1.2,
+          types: ['Light'],
+          role: 'wall',
+        },
+      ],
+    };
+    const flamer = makeCard({
+      id: 'test.torrent',
+      name: 'TORRENT',
+      weapons: [
+        {
+          name: 'flamer',
+          profiles: [{ type: 'ranged', atk: 2, hit: 4, dmgN: 2, dmgC: 3, rules: parseWeaponRules('Torrent 3"') }],
+        },
+      ],
+    });
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([flamer, dummy], Array.from({ length: 60 }, () => 4), 'test.torrent', ['test.dummy', 'test.dummy']);
+    s.map = testMap({ features: [barricade] });
+    const a = s.teams.p1.operativeIds[0]!;
+    const [primary, secondary] = s.teams.p2.operativeIds as [string, string];
+    s.operatives[a]!.pos = { x: 6, y: 11 };
+    s.operatives[primary]!.pos = { x: 16, y: 11 }; // hugging the barricade: in cover
+    s.operatives[secondary]!.pos = { x: 16, y: 13.6 }; // clear of it, within 3" of the primary
+    // Engage orders, so being in cover does not make the primary an illegal target.
+    s.operatives[primary]!.order = 'engage';
+    s.operatives[secondary]!.order = 'engage';
+    let st = reduce(s, { t: 'ActivateOperative', player: 'p1', operativeId: a, order: 'engage' }, ctx).state;
+    st = reduce(
+      st,
+      { t: 'PerformAction', operativeId: a, action: 'Shoot', params: { weaponName: 'flamer', targetId: primary } },
+      ctx,
+    ).state;
+    expect(st.sequence?.kind).toBe('shoot');
+    const seq = st.sequence as { inCover: boolean; queue: string[]; spread?: string };
+    expect(seq.inCover).toBe(true); // the primary is behind the barricade
+    expect(seq.spread).toBe('torrent');
+    expect(seq.queue).toContain(secondary);
+
+    // Drive the sequence to the secondary and check it is judged on its own.
+    let guard = 0;
+    while (st.pending.length > 0 && guard++ < 60) {
+      const d = st.pending[0]!;
+      const opt = d.options.find((o) => !o.disabled)!;
+      st = reduce(st, { t: 'ResolveDecision', decisionId: d.id, optionId: opt.id, ...(opt.data ? { data: opt.data } : {}) }, ctx).state;
+      const cur = st.sequence;
+      if (cur?.kind === 'shoot' && cur.targetId === secondary) {
+        expect(cur.inCover).toBe(false);
+        return;
+      }
+    }
+    throw new Error('the sequence never reached the secondary target');
   });
 });
