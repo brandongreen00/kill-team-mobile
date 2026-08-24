@@ -33,7 +33,7 @@
 import { getAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { addAutoNormal } from '../../core/dice.ts';
-import { baseGapToPoly, baseRadius, dist } from '../../core/geometry.ts';
+import { baseGapToPoly, baseRadius, basesOverlap, dist } from '../../core/geometry.ts';
 import { HookRegistry, type RerollGrant } from '../../core/hooks.ts';
 import {
   aliveOperatives,
@@ -376,7 +376,7 @@ function canBePlacedAt(
     if (other.id === op.id) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    if (dist(pos, other.pos) - r - baseRadius(oc.base) < -1e-4)
+    if (basesOverlap(pos, c.base, op.rot, other.pos, oc.base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   return { ok: true, z };

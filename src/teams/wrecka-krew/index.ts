@@ -18,7 +18,7 @@
 import { getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { classify, type DicePool } from '../../core/dice.ts';
-import { EPS, baseRadius, dist, mmToInches } from '../../core/geometry.ts';
+import { EPS, baseRadius, basesOverlap, dist, mmToInches } from '../../core/geometry.ts';
 import { HookRegistry, type RerollGrant } from '../../core/hooks.ts';
 import { advanceShoot, checkTarget, startShoot, validTargets } from '../../core/sequences/shoot.ts';
 import { sideWeapon } from '../../core/sequences/fight.ts';
@@ -850,7 +850,7 @@ function placeable(
     if (other.id === op.id || ignoreIds.includes(other.id)) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    if (dist(pos, other.pos) - r - baseRadius(oc.base) < -1e-4)
+    if (basesOverlap(pos, card.base, op.rot, other.pos, oc.base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   return { ok: true, z };

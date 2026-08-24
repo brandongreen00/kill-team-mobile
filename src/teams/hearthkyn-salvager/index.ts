@@ -24,15 +24,7 @@ import {
   grenadeWeapon,
   withGrenadeBudgetIgnored,
 } from '../../core/equipment/grenades.ts';
-import {
-  baseRadius,
-  dist,
-  distancePointToSegment,
-  dot,
-  norm,
-  segmentCrossesPoly,
-  sub,
-} from '../../core/geometry.ts';
+import { baseRadius, basesOverlap, dist, distancePointToSegment, dot, norm, segmentCrossesPoly, sub } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import { sideWeapon } from '../../core/sequences/fight.ts';
 import { checkTarget, effectiveRules } from '../../core/sequences/shoot.ts';
@@ -1364,8 +1356,8 @@ function placeable(
     if (other.id === op.id) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    const gap = Math.hypot(pos.x - other.pos.x, pos.y - other.pos.y) - r - baseRadius(oc.base);
-    if (gap < -1e-4) return { ok: false, reason: 'a base cannot be placed on another' };
+    if (basesOverlap(pos, card.base, op.rot, other.pos, oc.base, other.rot))
+      return { ok: false, reason: 'a base cannot be placed on another' };
   }
   return { ok: true, z };
 }

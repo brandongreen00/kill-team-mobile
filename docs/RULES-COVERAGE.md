@@ -31,6 +31,7 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 | Fight 1AP — the 4-step sequence incl. assists | ✔ | `sequences/fight.ts::assistCount` | teams suite |
 | Guard 1AP + On Guard (Close Quarters only) | ✔ | `actions.ts`, `reducer.ts` `OnGuardInterrupt` | `Guard is not offered on an open killzone` / `Guard is available in a Close Quarters killzone` |
 | Hatchway Fight 1AP (Close Quarters) | ✔ | `actions.ts` | teams/ops suite |
+| Door Fight 1AP (Volkus Cityfight) | ✔ | `actions.ts` | `rules-review.test.ts` |
 | Operate Hatch 1AP (maps with hatchways) | ✔ | `actions.ts` | maps suite |
 | Breach 2AP + AP discounts + concussion roll (Tomb World) | ✔ | `actions.ts` | maps suite |
 | Move With Barricade 1AP (Portable Barricade) | ◐ | `src/core/equipment/` | equipment suite |
@@ -106,6 +107,9 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 | Breach point + Breach 2AP + concussion | — | — | — | ✔ | `actions.ts` |
 | Teleport pad (one operative, not on the floor, mutual control range, teleport from TP2) | — | — | — | ◐ | `types.ts::onTeleportPadId`, `state.ts::inControlRange` — the teleport move itself is pending |
 | Hazardous area (no base may touch; restricted targeting/movement) | — | ✔ | — | — | `terrain.ts::baseTouchesHazardous`; the 4"-of-hazardous targeting restriction is pending |
+| Cityfight: Door Fight 1AP | ✔ | — | — | — | `actions.ts` — gated on `killzone === 'volkus'` AND a `role: 'door'` part existing (D-104) |
+| Stronghold H: one friendly operative on the highest upper level | ◐ | — | — | — | `terrain.ts::occupancyCapExceeded`, called by `validateMove`, `canDeployAt` and the two team set-up-again paths (D-105). The cap is enforced; "placed to one side" and the oversized-base fallback are not |
+| Cityfight: Garrisoned Stronghold, Condensed Stronghold | — | — | — | — | **not implemented** — Volkus has no killzone module (audit W-29) |
 | Close Quarters: Condensed Environment, Guard/On Guard, Hatchway Fight | — | — | ✔ | ✔ | `weaponRules.ts::condensedEnvironmentRules`, `actions.ts`, `reducer.ts` — gated by `map.closeQuarters` (D-002) |
 
 ## Known gaps
@@ -115,5 +119,11 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 - Bheta-Decima restricted targeting (4" of hazardous between floor-level operatives; gantry
   footprints between Vantage and floor) is specified in `data/terrain/bheta-decima.json` but not
   yet enforced in `checkTarget`.
-- Volkus Stronghold B "only one friendly operative on the highest level, placed to one side" is
-  data-only.
+- Volkus Stronghold B: the one-friendly-operative cap is enforced (D-105). The rest of
+  § Stronghold H is not — "that operative must be placed on one side or the other of that level,
+  it cannot be placed in the middle", and the oversized-base fallback. The plate measures
+  2.04" × 2.15", so a 32mm base does not fit inside either ~1.02" half, which makes the
+  oversized-base case the normal one on this geometry rather than the exception. Splitting the
+  plate needs a division the cards do not print; see docs/RULES-AUDIT-PLANS.md W-31.
+- Volkus has no killzone module, so Garrisoned Stronghold and Condensed Stronghold are
+  unimplemented; see docs/RULES-AUDIT-PLANS.md W-29.

@@ -48,15 +48,7 @@ import {
   grenadeWeapon,
   withGrenadeBudgetIgnored,
 } from '../../core/equipment/grenades.ts';
-import {
-  baseGap,
-  baseRadius,
-  basePerimeter,
-  baseWhollyWithin,
-  dist,
-  distancePointToPoly,
-  pointInPoly,
-} from '../../core/geometry.ts';
+import { baseGap, basePerimeter, baseRadius, baseWhollyWithin, basesOverlap, dist, distancePointToPoly, pointInPoly } from '../../core/geometry.ts';
 import type { HookRegistry, RerollGrant } from '../../core/hooks.ts';
 import { validateMove } from '../../core/movement.ts';
 import { checkTarget, effectiveRules, validTargets } from '../../core/sequences/shoot.ts';
@@ -530,7 +522,7 @@ export function landingSpot(
       if (other.id === op.id || isAbove(state, other)) continue;
       const oc = ctx.datacards.get(other.datacardId);
       if (!oc) continue;
-      if (dist(pos, other.pos) - r - baseRadius(oc.base) < -1e-4)
+      if (basesOverlap(pos, c.base, op.rot, other.pos, oc.base, other.rot))
         return { ok: false, reason: 'a base cannot be placed on another' };
     }
     // "Not within control range of enemy operatives (unless you're setting up a PRECURSOR

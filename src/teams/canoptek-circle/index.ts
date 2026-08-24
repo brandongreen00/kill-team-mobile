@@ -12,17 +12,7 @@
 import { getAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { countCrits, piercingValue } from '../../core/dice.ts';
-import {
-  baseGap,
-  baseRadius,
-  baseWhollyWithin,
-  dist,
-  distancePointToSegment,
-  mmToInches,
-  pointInPoly,
-  segmentCrossesPoly,
-  segmentsIntersect,
-} from '../../core/geometry.ts';
+import { baseGap, baseRadius, baseWhollyWithin, basesOverlap, dist, distancePointToSegment, mmToInches, pointInPoly, segmentCrossesPoly, segmentsIntersect } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import { sideWeapon } from '../../core/sequences/fight.ts';
 import {
@@ -1748,7 +1738,7 @@ function breachDestination(
     if (other.id === op.id) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    if (dist(pos, other.pos) - r - baseRadius(oc.base) < -1e-4)
+    if (basesOverlap(pos, c.base, op.rot, other.pos, oc.base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   const landed: Body = { id: op.id, pos, z, rot: op.rot, base: c.base, height: modelHeight(c) };

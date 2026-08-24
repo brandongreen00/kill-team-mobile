@@ -28,7 +28,7 @@
 import { getAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { HookRegistry, type RerollGrant } from '../../core/hooks.ts';
-import { baseGap, baseRadius, dist } from '../../core/geometry.ts';
+import { baseGap, baseRadius, basesOverlap, dist } from '../../core/geometry.ts';
 import { validateMove } from '../../core/movement.ts';
 import { sideWeapon } from '../../core/sequences/fight.ts';
 import { checkTarget, effectiveRules } from '../../core/sequences/shoot.ts';
@@ -816,7 +816,7 @@ function placeableAt(
     if (other.id === op.id) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    if (Math.hypot(pos.x - other.pos.x, pos.y - other.pos.y) - r - baseRadius(oc.base) < -1e-4) return { ok: false };
+    if (basesOverlap(pos, card.base, op.rot, other.pos, oc.base, other.rot)) return { ok: false };
   }
   return { ok: true, z };
 }
