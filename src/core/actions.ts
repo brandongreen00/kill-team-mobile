@@ -26,7 +26,7 @@ import { findProfile,
 } from './state.ts';
 import { effectiveRules, startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
 import { startFight, advanceFight } from './sequences/fight.ts';
-import { hasType, pointDistanceToPart } from './terrain.ts';
+import { baseDistanceToPart, hasType, pointDistanceToPart } from './terrain.ts';
 import type { ActionParams } from './intents.ts';
 import type { GameState, MarkerState, OperativeState, PlayerId, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
@@ -508,6 +508,74 @@ registerAction({
   perform(ctx, state, op, params) {
     const weapon = params.meleeWeaponName ?? weaponsOf(ctx, state, op, 'melee')[0]?.name;
     if (!weapon) return { ok: false, reason: 'operative has no melee weapon' };
+    const r = startFight(ctx, state, op, weapon, params.meleeProfileName, params.targetId!, { hatchway: true });
+    if (!r.ok) return r;
+    advanceFight(ctx, state);
+    return { ok: true };
+  },
+});
+
+// ---------------------------------------------------------------------------
+// Killzone: Volkus (Cityfight)
+// ---------------------------------------------------------------------------
+
+/** The door part this operative's base is touching, if any. */
+function touchingDoor(ctx: GameContext, state: GameState, op: OperativeState) {
+  // "on the killzone floor" is a condition on the TARGET, but the extractor gives a door the
+  // whole wall band (z 0..4 on a stronghold), so without this an operative standing on the
+  // level-1 Vantage floor at z=3 registers as touching the doorway underneath it.
+  if (op.z > 1e-6) return undefined;
+  const index = terrain(ctx, state);
+  const c = card(ctx, op);
+  return index.parts.find((p) => p.role === 'door' && baseDistanceToPart(op.pos, c.base, op.rot, p) <= 1e-6);
+}
+
+registerAction({
+  id: 'Door Fight',
+  name: 'Door Fight',
+  ap: 1,
+  type: 'universal',
+  treatedAs: 'Fight',
+  sourceText:
+    'DOOR FIGHT 1AP: Fight with the active operative. In the Select Enemy Operative step, instead '
+    + 'select an enemy operative on the killzone floor and within 2" of, and on the other side of, a '
+    + 'door the active operative is touching. For the duration of that action, those operatives are '
+    + 'treated as being within each other\u2019s control range. This action is treated as a Fight '
+    + 'action. An operative cannot perform this action while within control range of an enemy '
+    + 'operative, or if its base isn\u2019t touching a door.',
+  // NOT `killzone === 'volkus'` alone: tests/fixtures.ts `testMap()` is killzone 'volkus' with no
+  // terrain at all, and that predicate would offer Door Fight in every synthetic fixture in the
+  // suite and hand the AI a candidate to probe on every board. Gate on the data actually holding
+  // a door, the way Operate Hatch gates on an access point existing.
+  available: (ctx, state) =>
+    state.map.killzone === 'volkus' && terrain(ctx, state).parts.some((p) => p.role === 'door'),
+  check(ctx, state, op, params) {
+    if (state.map.killzone !== 'volkus')
+      return { ok: false, reason: 'Door Fight is a Killzone: Volkus action' };
+    if (engaged(ctx, state, op)) return { ok: false, reason: 'within control range of an enemy operative' };
+    const door = touchingDoor(ctx, state, op);
+    if (!door) return { ok: false, reason: 'its base isn’t touching a door' };
+    if (!params.targetId) return { ok: false, reason: 'select an enemy operative through the door' };
+    const target = state.operatives[params.targetId];
+    if (!target || target.removed || target.player === op.player)
+      return { ok: false, reason: 'select an enemy operative through the door' };
+    if (target.z > 1e-6) return { ok: false, reason: 'the enemy operative is not on the killzone floor' };
+    const tc = card(ctx, target);
+    if (baseDistanceToPart(target.pos, tc.base, target.rot, door) > 2 + 1e-6)
+      return { ok: false, reason: 'the enemy operative is more than 2" from the door' };
+    const centre = { x: (door.bounds.min.x + door.bounds.max.x) / 2, y: (door.bounds.min.y + door.bounds.max.y) / 2 };
+    const side = acrossFrom(door, centre);
+    if (side(target.pos) === side(op.pos))
+      return { ok: false, reason: 'the enemy operative is on the same side of the door' };
+    if (weaponsOf(ctx, state, op, 'melee').length === 0)
+      return { ok: false, reason: 'operative has no melee weapon' };
+    return { ok: true };
+  },
+  perform(ctx, state, op, params) {
+    const weapon = params.meleeWeaponName ?? weaponsOf(ctx, state, op, 'melee')[0]?.name;
+    if (!weapon) return { ok: false, reason: 'operative has no melee weapon' };
+    // "For the duration of that action, those operatives are treated as being within each
+    // other's control range" — the same bypass Hatchway Fight uses.
     const r = startFight(ctx, state, op, weapon, params.meleeProfileName, params.targetId!, { hatchway: true });
     if (!r.ok) return r;
     advanceFight(ctx, state);

@@ -75,13 +75,7 @@ import {
   removeIncapacitated,
   weaponsOf,
 } from '../../core/state.ts';
-import {
-  baseBlockedByTerrain,
-  baseTouchesHazardous,
-  hasType,
-  surfaceAt,
-  type TerrainIndex,
-} from '../../core/terrain.ts';
+import { baseBlockedByTerrain, baseTouchesHazardous, hasType, occupancyCapExceeded, surfaceAt, type TerrainIndex } from '../../core/terrain.ts';
 import type {
   BaseShape,
   GameState,
@@ -528,6 +522,10 @@ export function landingSpot(
     // "With no part of its base underneath Vantage terrain."
     if (underVantage(index, pos, c.base, op.rot, z))
       return { ok: false, reason: 'no part of its base can be underneath Vantage terrain' };
+    // Killzones § Stronghold H caps the highest upper level "at once", and its parenthesis
+    // says "moving onto OR BEING SET UP ON" — so a drop honours it as a move would.
+    if (occupancyCapExceeded(index, aliveOperatives(state), op.id, op.player, pos, z))
+      return { ok: false, reason: 'only one friendly operative can be on that level at once' };
     for (const other of aliveOperatives(state)) {
       if (other.id === op.id || isAbove(state, other)) continue;
       const oc = ctx.datacards.get(other.datacardId);

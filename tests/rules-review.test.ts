@@ -10,7 +10,7 @@ import { createGameContext } from '../src/core/game.ts';
 import { createBattle } from '../src/core/init.ts';
 import { reduce } from '../src/core/reducer.ts';
 import { reachableCells, validateMove } from '../src/core/movement.ts';
-import { gapBetween, inControlRange, weaponsOf } from '../src/core/state.ts';
+import { aliveOperatives, gapBetween, inControlRange, weaponsOf } from '../src/core/state.ts';
 import { getAction } from '../src/core/actions.ts';
 import { endTurningPoint, gambitToAct, whoActivates } from '../src/core/phases.ts';
 import { actorFor } from '../src/ai/runner.ts';
@@ -20,7 +20,8 @@ import { addRolled, retentionOptions, type DicePool } from '../src/core/dice.ts'
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { makeCard, rect, testContext, testMap } from './fixtures.ts';
-import { buildTerrainIndex, wallCornerZones } from '../src/core/terrain.ts';
+import { buildTerrainIndex, occupancyCapExceeded, wallCornerZones } from '../src/core/terrain.ts';
+
 import { coverAndObscured, withinControlRange } from '../src/core/visibility.ts';
 import { checkTarget } from '../src/core/sequences/shoot.ts';
 import { rebuildHooks } from '../src/core/context.ts';
@@ -1320,5 +1321,202 @@ describe('STRATEGIC GAMBITs alternate', () => {
     // let one player resolve all of their gambits before the opponent could respond.
     expect(gambitToAct(after)).toBe('p2');
     expect(actorFor(after)).toBe('p2');
+  });
+});
+
+describe('DOOR FIGHT — the Volkus Cityfight action', () => {
+  /**
+   * Killzones § Cityfight › Action: "DOOR FIGHT 1AP. Fight with the active operative. In the
+   * Select Enemy Operative step, instead select an enemy operative on the killzone floor and
+   * within 2" of, and on the other side of, a door the active operative is touching... This
+   * action is treated as a Fight action. An operative cannot perform this action while within
+   * control range of an enemy operative, or if its base isn't touching a door."
+   *
+   * The audit filed this as "one operative in a doorway seals every building on Volkus". That
+   * stated cause is wrong and was disproved by running it: the door's control-range exemption
+   * (killzones.txt:266) IS implemented, so an enemy just inside the doorway is in control range
+   * and can be Fought normally. Stronghold A's doorway is 1.167" clear against a 1.26" 32mm
+   * base, so nothing can stand IN it at all. The real gap is the one the rule's own note
+   * describes: an enemy on the far side, beyond control range but within 2" of the door, could
+   * not be attacked by anything.
+   */
+  const volkus1 = JSON.parse(
+    readFileSync(join(process.cwd(), 'data/maps/volkus/volkus-1.json'), 'utf8'),
+  ) as KillzoneMap;
+  // volkus-1.A.p10 spans x 9.000..9.208, y 18.250..19.417. Outside is x < 9, inside is x > 9.208.
+  const DOOR_Y = 18.835;
+
+  function doorBattle(): { s: GameState; ctx: GameContext } {
+    const fighter = makeCard({ id: 'test.fighter', name: 'FIGHTER' });
+    const ctx = createGameContext({ rng: new ScriptedRng([4, 4, 4, 4, 4, 4, 4, 4]), maps: [volkus1], datacards: [fighter] });
+    let s = createBattle(ctx, { map: volkus1, seed: 7, critOpId: undefined });
+    const roster = [{ datacardId: 'test.fighter' }, { datacardId: 'test.fighter' }];
+    s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: roster }, ctx).state;
+    s = reduce(s, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: roster }, ctx).state;
+    s.setup.dropZone = { p1: 'p1', p2: 'p2' };
+    s.setup.step = 'done';
+    s.phase = 'firefight';
+    s.turningPoint = 1;
+    s.initiative = 'p1';
+    s.activePlayer = 'p1';
+    for (const op of Object.values(s.operatives)) {
+      op.ready = true;
+      op.order = 'engage';
+      op.pos = { x: 2, y: 2 };
+    }
+    return { s, ctx };
+  }
+
+  const place = (s: GameState, id: string, x: number, y: number, z = 0) => {
+    Object.assign(s.operatives[id]!, { pos: { x, y }, z });
+  };
+
+  it('"select an enemy operative on the killzone floor and within 2" of, and on the other side of, a door"', () => {
+    const { s, ctx } = doorBattle();
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    place(s, a, 8.39, DOOR_Y); // base touching the outside face of the door
+    place(s, b, 11.0, DOOR_Y); // inside the stronghold, 1.16" from the door, out of control range
+    const def = getAction('Door Fight')!;
+    expect(def.treatedAs).toBe('Fight');
+    expect(def.available!(ctx, s, s.operatives[a]!)).toBe(true);
+    // Nothing else can reach it: that is what the action is for (killzones.txt:395).
+    expect(inControlRange(ctx, s, s.operatives[a]!, s.operatives[b]!)).toBe(false);
+    expect(getAction('Fight')!.check(ctx, s, s.operatives[a]!, { targetId: b }).ok).toBe(false);
+    expect(def.check(ctx, s, s.operatives[a]!, { targetId: b }).ok).toBe(true);
+    let st = reduce(s, { t: 'ActivateOperative', player: 'p1', operativeId: a, order: 'engage' }, ctx).state;
+    const out = reduce(st, { t: 'PerformAction', operativeId: a, action: 'Door Fight', params: { targetId: b } }, ctx);
+    expect(out.ok, out.reason).toBe(true);
+    expect(out.state.sequence?.kind).toBe('fight');
+    expect(out.state.rejected).toEqual([]);
+  });
+
+  it('refuses a target on the same side, off the killzone floor, or more than 2" away', () => {
+    const { s, ctx } = doorBattle();
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    const def = getAction('Door Fight')!;
+    // The active operative is re-placed per case. On this door the "same side" band and the
+    // active operative's own control range overlap almost everywhere along y=18.835, so that
+    // case is set up along the door's length instead: both operatives outside at x=8.39, far
+    // enough apart in y not to be engaged, with the enemy still inside 2" of the doorway.
+    const why = (ax: number, ay: number, x: number, y: number, z = 0) => {
+      place(s, a, ax, ay);
+      place(s, b, x, y, z);
+      return def.check(ctx, s, s.operatives[a]!, { targetId: b }).reason ?? '';
+    };
+    expect(why(8.39, 18.3, 8.39, 21.0)).toMatch(/same side of the door/);
+    expect(why(8.39, DOOR_Y, 10.0, DOOR_Y, 3)).toMatch(/killzone floor/);
+    expect(why(8.39, DOOR_Y, 12.0, DOOR_Y)).toMatch(/more than 2"/);
+  });
+
+  it('"An operative cannot perform this action ... if its base isn’t touching a door"', () => {
+    const { s, ctx } = doorBattle();
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    place(s, a, 7.0, DOOR_Y); // 1.37" from the door
+    place(s, b, 11.0, DOOR_Y);
+    expect(getAction('Door Fight')!.check(ctx, s, s.operatives[a]!, { targetId: b }).reason)
+      .toMatch(/touching a door/);
+  });
+
+  it('"...while within control range of an enemy operative"', () => {
+    const { s, ctx } = doorBattle();
+    const a = s.teams.p1.operativeIds[0]!;
+    const b = s.teams.p2.operativeIds[0]!;
+    const c = s.teams.p2.operativeIds[1]!;
+    place(s, a, 8.39, DOOR_Y);
+    place(s, b, 11.0, DOOR_Y);
+    place(s, c, 8.39, DOOR_Y + 1.4); // engaged with the active operative outside the door
+    expect(getAction('Door Fight')!.check(ctx, s, s.operatives[a]!, { targetId: b }).reason)
+      .toMatch(/within control range/);
+  });
+
+  it('is offered only where the data actually holds a door', () => {
+    // The audit proposed `state.map.killzone === 'volkus'`, and tests/fixtures.ts `testMap()` is
+    // killzone 'volkus' with no terrain at all — that predicate would have added a Door Fight row
+    // to every synthetic fixture in the suite.
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], [1, 1], 'test.dummy', 'test.dummy');
+    expect(s.map.killzone).toBe('volkus');
+    expect(getAction('Door Fight')!.available!(ctx, s, s.operatives[s.teams.p1.operativeIds[0]!]!)).toBe(false);
+  });
+});
+
+describe('Stronghold H — one friendly operative on the highest upper level', () => {
+  /**
+   * Killzones § Stronghold H: "You cannot have more than one friendly operative on the highest
+   * upper level of Stronghold B at once… (this means an enemy operative cannot be prevented
+   * from moving onto or being set up on the other side)."
+   *
+   * `maxOperatives: 1` has been stamped on that level by the extractor since the maps were
+   * built and nothing in `src/` ever read it — `grep -rn maxOperatives src/` returned nothing.
+   * The cap is per PLAYER, which the rule's own parenthesis states outright.
+   *
+   * The two halves NOT implemented, deliberately and recorded in docs/RULES-COVERAGE.md: the
+   * operative "must be placed on one side or the other of that level, it cannot be placed in
+   * the middle", and the oversized-base fallback. Both need a division the cards do not print.
+   */
+  const volkus1B = JSON.parse(
+    readFileSync(join(process.cwd(), 'data/maps/volkus/volkus-1.json'), 'utf8'),
+  ) as KillzoneMap;
+  // volkus-1.B.p8 is the capped level: z 6.0, x 8.729..10.771, y 3.229..5.375.
+  // Two 32mm bases need 1.26" between centres (D-102), and the plate is only 2.04" x 2.15" —
+  // which is why the rule's "one side or the other" half matters and why these two points are
+  // as far apart as the plate allows.
+  const ON_PLATE = { x: 9.0, y: 4.0 };
+  const ALSO_ON_PLATE = { x: 9.8, y: 4.98 };
+
+  function plateBattle() {
+    const card = makeCard({ id: 'test.climber', name: 'CLIMBER' });
+    const ctx = createGameContext({ rng: new ScriptedRng([1, 1, 1, 1]), maps: [volkus1B], datacards: [card] });
+    let s = createBattle(ctx, { map: volkus1B, seed: 7, critOpId: undefined });
+    const roster = [{ datacardId: 'test.climber' }, { datacardId: 'test.climber' }];
+    s = reduce(s, { t: 'SelectRoster', player: 'p1', teamId: 'test', operatives: roster }, ctx).state;
+    s = reduce(s, { t: 'SelectRoster', player: 'p2', teamId: 'test', operatives: roster }, ctx).state;
+    s.setup.dropZone = { p1: 'p1', p2: 'p2' };
+    s.setup.step = 'done';
+    s.phase = 'firefight';
+    s.turningPoint = 1;
+    s.initiative = 'p1';
+    s.activePlayer = 'p1';
+    for (const op of Object.values(s.operatives)) {
+      op.ready = true;
+      op.order = 'engage';
+      op.pos = { x: 2, y: 20 };
+    }
+    return { s, ctx };
+  }
+
+  it('refuses a second FRIENDLY operative on the capped level', () => {
+    const { s, ctx } = plateBattle();
+    const [first, second] = s.teams.p1.operativeIds as [string, string];
+    Object.assign(s.operatives[first]!, { pos: { ...ON_PLATE }, z: 6 });
+    const mover = s.operatives[second]!;
+    mover.pos = { x: 9.8, y: 5.9 };
+    mover.z = 6;
+    const v = validateMove(ctx, s, mover, { points: [ALSO_ON_PLATE] }, { action: 'Reposition' });
+    expect(v.ok).toBe(false);
+    expect(v.reason).toMatch(/no more than 1 friendly operative/);
+  });
+
+  it('binds "or being set up on" too, which is why one helper serves all three placement paths', () => {
+    const { s, ctx } = plateBattle();
+    const [first, second] = s.teams.p1.operativeIds as [string, string];
+    Object.assign(s.operatives[first]!, { pos: { ...ON_PLATE }, z: 6 });
+    // `occupancyCapExceeded` is what `validateMove`, `canDeployAt` and the two team set-up-again
+    // paths (warpcoven Temporal Flux, Tempestus DROP INSERTION) all call. The plate is nobody's
+    // drop zone, so the deployment path cannot be driven end-to-end here; the seam itself is.
+    const index = buildTerrainIndex(s.map);
+    const mover = s.operatives[second]!;
+    expect(occupancyCapExceeded(index, aliveOperatives(s), mover.id, 'p1', ALSO_ON_PLATE, 6)?.id).toBe('volkus-1.B.p8');
+    // ...and an enemy arriving the same way is not capped by it.
+    expect(occupancyCapExceeded(index, aliveOperatives(s), mover.id, 'p2', ALSO_ON_PLATE, 6)).toBeNull();
+  });
+
+  it('costs nothing where no part carries a cap', () => {
+    const dummy = makeCard({ id: 'test.dummy', name: 'DUMMY' });
+    const { s, ctx } = battle([dummy], [1, 1], 'test.dummy', 'test.dummy');
+    expect(buildTerrainIndex(s.map).capped).toEqual([]);
   });
 });

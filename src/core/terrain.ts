@@ -45,6 +45,8 @@ export interface TerrainIndex {
   standable: IndexedPart[];
   /** Parts that physically stop a base at ground level. */
   solid: IndexedPart[];
+  /** Parts carrying a `maxOperatives` cap. Empty on every killzone but Volkus. */
+  capped: IndexedPart[];
   hazardous: Poly[];
 }
 
@@ -149,6 +151,7 @@ export function buildTerrainIndex(map: KillzoneMap, state?: GameState): TerrainI
     walls: parts.filter((p) => p.typeSet.has('Wall')),
     standable: parts.filter((p) => p.standable),
     solid: parts.filter((p) => p.solid),
+    capped: parts.filter((p) => p.maxOperatives !== undefined),
     hazardous: map.hazardous ?? [],
   };
 }
@@ -221,6 +224,43 @@ export function baseBlockedByTerrain(
 }
 
 /** Ceiling: "round base of 50mm or less, or an oval base of 60x35mm". */
+/**
+ * The capped part this placement would overfill, or null.
+ *
+ * Killzones § Stronghold H: "You cannot have more than one friendly operative on the highest
+ * upper level of Stronghold B at once, and that operative must be placed on one side or the
+ * other of that level… (this means an enemy operative cannot be prevented from moving onto **or
+ * being set up on** the other side)." The cap is per player — an enemy may share the level — and
+ * it binds every way an operative arrives, which is why this is one exported helper rather than
+ * a test repeated at each placement site. The side-placement and oversized-base halves of that
+ * paragraph are NOT implemented; see docs/RULES-COVERAGE.md.
+ *
+ * `index.capped` is empty on all eighteen non-Volkus maps and on every synthetic fixture, so
+ * this costs nothing where it does not apply — which matters, because `reachableCells` calls
+ * `validateMove` once per grid cell.
+ */
+export function occupancyCapExceeded(
+  index: TerrainIndex,
+  operatives: readonly { id: string; player: string; pos: Vec2; z: number }[],
+  moverId: string,
+  moverPlayer: string,
+  pos: Vec2,
+  z: number,
+): IndexedPart | null {
+  if (index.capped.length === 0) return null;
+  for (const part of partsSupporting(index, pos, z)) {
+    const cap = part.maxOperatives;
+    if (cap === undefined) continue;
+    let friends = 0;
+    for (const o of operatives) {
+      if (o.id === moverId || o.player !== moverPlayer) continue;
+      if (partsSupporting(index, o.pos, o.z).some((q) => q.id === part.id)) friends += 1;
+    }
+    if (friends >= cap) return part;
+  }
+  return null;
+}
+
 export function baseFitsUnderCeiling(base: BaseShape): boolean {
   if (base.shape === 'round') return base.mm <= 50;
   const [w, h] = base.mm;

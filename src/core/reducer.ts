@@ -34,7 +34,7 @@ import {
 import { advanceShoot, startShoot } from './sequences/shoot.ts';
 import { advanceFight, startFight } from './sequences/fight.ts';
 import { baseWhollyWithin, baseGap, basesOverlap } from './geometry.ts';
-import { baseTouchesHazardous } from './terrain.ts';
+import { baseTouchesHazardous, occupancyCapExceeded, surfaceAt } from './terrain.ts';
 import type { Intent } from './intents.ts';
 import type { GameState, KillzoneMap, OperativeState, PlayerId, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
@@ -195,7 +195,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       if (!op) return fail('no such operative');
       if (op.player !== intent.player) return fail('not your operative');
       const rot = intent.rotDeg ?? 0;
-      const legal = canDeployAt(ctx, next, op, intent.pos, rot);
+      const legal = canDeployAt(ctx, next, op, intent.pos, rot, intent.z);
       if (!legal.ok) return fail(legal.reason ?? 'that operative cannot be set up there');
       op.pos = { ...intent.pos };
       op.rot = rot;
@@ -584,6 +584,7 @@ export function canDeployAt(
   op: OperativeState,
   pos: Vec2,
   rotDeg = 0,
+  z?: number,
 ): { ok: boolean; reason?: string } {
   const zoneKey = state.setup.dropZone[op.player] ?? op.player;
   const zone = state.map.dropZones[zoneKey];
@@ -597,15 +598,21 @@ export function canDeployAt(
     if (other.id === op.id || other.pos.x < -50) continue;
     const oc = card(ctx, other);
     // `basesOverlap`, NOT `baseGap(...) < -1e-4`. `baseGap` clamps at zero
-    // (geometry.ts › baseGap), so that comparison can never be true and this guard has never
-    // fired — two operatives could be set up on the same square inch. Eight further copies of
-    // the same dead comparison remain in `movement.ts` and seven team modules; they are left
-    // alone deliberately, because switching them changes what is a legal END POSITION for a
-    // move and sixteen rules tests currently encode the permissive behaviour. See
-    // docs/DECISIONS.md.
+    // (geometry.ts › baseGap), so that comparison can never be true. Deployment was moved to
+    // this spelling first and movement followed in W-34 (docs/DECISIONS.md D-102), so the two
+    // finally agree about one rule.
     if (basesOverlap(pos, dc.base, rotDeg, other.pos, oc.base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
+  // "…an enemy operative cannot be prevented from moving onto OR BEING SET UP ON the other
+  // side": the Stronghold H cap binds every way an operative arrives, not just a move.
+  const at = z ?? surfaceAt(index, pos);
+  const overfull = occupancyCapExceeded(index, aliveOperatives(state), op.id, op.player, pos, at);
+  if (overfull)
+    return {
+      ok: false,
+      reason: `no more than ${overfull.maxOperatives} friendly operative can be on the highest upper level of that terrain feature at once`,
+    };
   return { ok: true };
 }
 

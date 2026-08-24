@@ -38,7 +38,7 @@ import {
   settleZ,
   weaponsOf,
 } from '../../core/state.ts';
-import { baseBlockedByTerrain, baseTouchesHazardous, surfaceAt } from '../../core/terrain.ts';
+import { baseBlockedByTerrain, baseTouchesHazardous, occupancyCapExceeded, surfaceAt } from '../../core/terrain.ts';
 import { isVisible } from '../../core/visibility.ts';
 import type { FightSequence, ShootSequence } from '../../core/sequences/types.ts';
 import type {
@@ -1431,6 +1431,9 @@ function canPlaceAt(ctx: GameContext, state: GameState, op: OperativeState, pos:
     if (Math.abs(other.z - z) > 1) continue;
     if (basesOverlap(pos, card.base, op.rot, other.pos, oc.base, other.rot)) return false;
   }
+  // Killzones § Stronghold H caps the highest upper level "at once" and its parenthesis says
+  // "moving onto OR BEING SET UP ON", so a set-up-again path has to honour it too.
+  if (occupancyCapExceeded(index, aliveOperatives(state), op.id, op.player, pos, z)) return false;
   return true;
 }
 

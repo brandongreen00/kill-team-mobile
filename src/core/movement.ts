@@ -20,12 +20,13 @@ import {
   baseBlockedByTerrain,
   baseTouchesHazardous,
   featureIdsSupporting,
+  hasType,
   obstructingCrossings,
+  occupancyCapExceeded,
   partsSupporting,
   pathBlockedByTerrain,
   surfaceAt,
   surfacesAt,
-  hasType,
   type TerrainIndex,
 } from './terrain.ts';
 import { aliveOperatives, card, inControlRange, moveOf, body } from './state.ts';
@@ -286,6 +287,11 @@ export function validateMove(
   if (finalZ > 1e-6 && !canStandAt(index, cur, finalZ))
     return fail('operatives can only finish a move on Vantage terrain');
   if (outOfBoard(state, cur, op, ctx, rot)) return fail('bases cannot be over the edge of the killzone');
+  const overfull = occupancyCapExceeded(index, aliveOperatives(state), op.id, op.player, cur, finalZ);
+  if (overfull)
+    return fail(
+      `no more than ${overfull.maxOperatives} friendly operative can be on the highest upper level of that terrain feature at once`,
+    );
 
   for (const other of aliveOperatives(state)) {
     if (other.id === op.id) continue;

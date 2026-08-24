@@ -111,6 +111,15 @@ export interface TerrainPart {
   standable?: boolean;
   /** Does a base moving at ground level collide with this part? */
   solid?: boolean;
+  /**
+   * Cap on FRIENDLY operatives standing on this part at once, per player.
+   *
+   * Killzones § Stronghold H: "You cannot have more than one friendly operative on the highest
+   * upper level of Stronghold B at once… (this means an enemy operative cannot be prevented
+   * from moving onto or being set up on the other side)." Written by `tools/maps/terrain.py`;
+   * the engine must never hard-code which level that is.
+   */
+  maxOperatives?: number;
 }
 
 export interface TerrainFeature {

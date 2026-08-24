@@ -54,8 +54,8 @@ Ranked by how much each defect distorts a real game.
 | W-27 | FIXED | engine | major | Reboot can be performed while within control range of an enemy operative |
 | W-28 | open | engine | major | Breach performs no control-range check and its concussion roll hits operatives on the breacher's own side of the wall |
 | W-29 | open | engine | major | Volkus has no killzone module: Garrisoned Stronghold and Condensed Stronghold are entirely unimplemented |
-| W-30 | open | engine | major | The DOOR FIGHT universal action does not exist, so one operative in a doorway seals every building on Volkus |
-| W-31 | open | engine | major | Stronghold B's highest level accepts any number of operatives — `maxOperatives` is data-only |
+| W-30 | FIXED | engine | major | The DOOR FIGHT universal action does not exist, so one operative in a doorway seals every building on Volkus |
+| W-31 | FIXED | engine | major | Stronghold B's highest level accepts any number of operatives — `maxOperatives` is data-only |
 | W-32 | open | mixed | major | Bheta-Decima Restricted Targeting is unimplemented, and with no gantry pillars in the data the killzone has one Heavy part in total |
 | W-33 | open | engine | major | Tomb World teleport pads are inert scenery, and the mutual-control-range clause is dead code written backwards |
 | W-34 | FIXED | engine | major | A move may finish with two bases fully overlapping — the end-of-move overlap guard is a dead comparison |
@@ -533,7 +533,7 @@ Test: tests/rules-review.test.ts quoting both rules, on the real volkus-1 map: a
 
 ### W-30 · The DOOR FIGHT universal action does not exist, so one operative in a doorway seals every building on Volkus
 
-**OPEN** · engine · major
+**FIXED** · note: the "seals every building" cause is DISPROVED — the door's control-range exemption is implemented and an enemy just inside a doorway can be Fought normally. The real gap was an enemy beyond control range but within the printed 2". · engine · major
 
 Rules pinned: `killzones.txt:388-391 ("DOOR FIGHT 1AP… instead select an enemy operative on the killzone floor and within 2\" of, and on the other side of, a door the active operative is touching. For the duration of that action, those operatives are treated as being within each other's control range")`
 
@@ -549,7 +549,7 @@ Test: tests/rules-review.test.ts quoting killzones.txt:388, on the real volkus-1
 
 ### W-31 · Stronghold B's highest level accepts any number of operatives — `maxOperatives` is data-only
 
-**OPEN** · engine · major
+**FIXED** (the cap only; the side-placement and oversized-base halves are deferred — see docs/RULES-AUDIT-PLANS.md W-31 OWNER) · engine · major
 
 Rules pinned: `killzones.txt:264 ("You cannot have more than one friendly operative on the highest upper level of Stronghold B at once, and that operative must be placed on one side or the other of that level… This takes precedence over the rules for bases and being in a location it can be placed")`
 
