@@ -691,6 +691,25 @@ Files: `src/core/terrain.ts`
 
 Test: tests/rules-review.test.ts quoting killzones.txt:235: a Ceiling part with z0 = 2.0 over a 32mm-based operative of model height 2.2" — the operative may both move under it and FINISH under it; a 60mm-based operative in the same spot is rejected.
 
+## Verification pass, 2026-08-24
+
+All twelve still-open items were re-verified against HEAD `a775289` by ten agents (five
+investigators, five adversarial verifiers). **All twelve are still live.** The per-item evidence,
+plans, verifier objections and owner questions are in **`docs/RULES-AUDIT-PLANS.md`** — read that
+before starting any of them, because eleven of the twelve entries below are wrong in some detail
+about their own cause, line numbers or blast radius, and eight of the twelve proposed plans were
+rejected by the verifier with a run-backed objection.
+
+The one substantive reversal: **W-22's reasoning is refuted.** The investigator argued that a rule
+which prices crossing presupposes crossing is legal; the verifier showed the corpus settles it the
+other way — Accessible says "Operatives can move through … (this takes precedence over Bases, and
+Terrain and Movement)" and Obstructing says only "treat the distance as an additional 1\"". The
+drafters knew how to grant the permission and did not. So razor wire being impassable may be
+correct, and only the surcharge is at issue.
+
+Nine of the twelve need an owner decision before they can land. Several are D-101-shaped: the
+cards do not print the number (Bheta-Decima pillar geometry, the Stronghold B side division).
+
 ## Gaps in the audit itself
 
 - ALREADY FIXED SINCE THE AUDIT SNAPSHOT — do not re-plan these. I verified each against the tree at HEAD 4e78620 plus the uncommitted diff. Committed: (1) `no-mid-move-control-range-or-enemy-bases` / `move-ignores-enemy-control-range` / `move-through-enemy-operatives` — three findings of one defect, fixed in 4e78620; movement.ts:317 `enemyOnTheWay` now samples every leg at 0.2" against enemy bases and control range, honours `mayEnterEnemyControlRange` and the already-engaged and friendly-screened exceptions. Only the Charge sticky half remains, as W-18. (2) `same-floor-gives-cover` — fixed in e6c3181 by an `underfoot` skip-set in interveningParts. (3) `control-range-through-solid-floors` — fixed in e6c3181; `controlRangeIgnores` is now scoped to volkus.strongholdA/B plus large-ruin doors and reads part HEIGHT (p.z1 < 2), not thickness. (4) `seek-removes-cover-save` / `seek-removes-the-cover-save` / `vantage-light-cover-removes-cover-save` — one defect found from three angles, fixed in e6c3181; CoverResult now carries both `inCover` (drives the save) and `inCoverForTargeting` (drives the Conceal gate), and `vantageImprovedCover` fires when the denial is what made the target valid, feeding the +1 cover save. (5) `vantage-heavy-filter-also-kills-cover` — fixed by the new `CoverOpts.ignoreForObscured`. (6) `blocked-normals-counted-as-retained-crits` — fixed in 76d4e74 via `DieState.blockedFrom`, so Devastating and Stun in shoot now count true retained crits. (7) `reroll-drops-lethal-and-hit-mods` / `lethal-lost-on-reroll` — fixed in 76d4e74; decisions.ts now carries the full ClassifyOpts into `rerollDie(die, v, hit, classify)`. (8) The ranged-profile half of `retaliation-uses-first-profile-not-a-melee-one` — fixed in 76d4e74 (`meleeProfileOf`, and sideWeapon falls back to `profiles.find(p => p.type === 'melee')`); the missing CHOICE is W-21. (9) `command-reroll-capped-once-per-tp` / `command-reroll-capped-once-per-turning-point` — fixed; decisions.ts:161 keeps `commandReroll*` out of ploysUsedTP and all three offer sites gate on CP alone. Uncommitted in the working tree right now (src/core/dice.ts, sequences/fight.ts, sequences/shoot.ts, sequences/types.ts, tests/rules-review.test.ts): (10) `punishing-usable-while-obscured` (critsAllowed guard added), (11) `fight-rerolls-not-alternating-and-wrong-starting-player` (single alternating step seeded from state.initiative, with rerollsDone pass tracking), (12) `melee-stun-never-applies` / `stun-inert-in-melee` (new applyStun at the end of retention), (13) `cannot-block-with-nothing-to-block` (canBlock gate dropped, label changed), (14) `torrent-secondaries-inherit-cover` (new seq.spread; Torrent secondaries re-run checkTarget). Finish and land that diff before starting W-17, which edits the same function.
