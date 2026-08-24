@@ -20,6 +20,7 @@ import {
   aplOf,
   enemiesInControlRange,
   log,
+  FREE_ACTION_RULE,
 } from '../core/state.ts';
 import { registerRareWeaponRule } from '../core/weaponRules.ts';
 import type {
@@ -284,7 +285,7 @@ export function removeToken(state: GameState, operativeId: string, token: string
 // "…can immediately perform a free action"
 // ---------------------------------------------------------------------------
 
-export const FREE_ACTION_RULE = 'teamFreeAction';
+export { FREE_ACTION_RULE } from '../core/state.ts';
 
 /**
  * "…can immediately perform a free 1AP action" is modelled as one extra AP for that
@@ -308,7 +309,9 @@ export function grantFreeAction(
     noMove?: boolean;
   },
 ): void {
-  op.aplMods.push(1);
+  // NOT `op.aplMods.push(1)`: free AP is not an APL stat change, so it must not go through
+  // the +-1 clamp that governs real ones (docs/DECISIONS.md D-100, superseding D-015).
+  // `freeApOf` reads this effect's `ap`, and `apBudgetOf` is what the AP gate checks.
   effect(state, {
     rule: FREE_ACTION_RULE,
     source: { kind: spec.kind ?? 'ploy', id: spec.sourceId },
@@ -316,6 +319,7 @@ export function grantFreeAction(
     operativeId: op.id,
     player: op.player,
     data: {
+      ap: 1,
       threshold: spec.threshold,
       ...(spec.only ? { only: spec.only } : {}),
       ...(spec.noMove ? { noMove: true } : {}),

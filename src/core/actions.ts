@@ -13,6 +13,7 @@ import { validateMove, type MoveLeg, type MoveOptions } from './movement.ts';
 import { findProfile,
   aliveOperatives,
   aplOf,
+  apBudgetOf,
   card,
   enemiesInControlRange,
   inflictDamage,
@@ -716,7 +717,8 @@ export function availableActions(
   op: OperativeState,
 ): { def: ActionDef; ap: number; ok: boolean; reason?: string }[] {
   const out: { def: ActionDef; ap: number; ok: boolean; reason?: string }[] = [];
-  const apl = aplOf(ctx, state, op);
+  // The AP an activation may spend: the APL stat plus any granted free AP (D-100).
+  const apl = apBudgetOf(ctx, state, op);
   for (const def of allActions()) {
     if (def.available && !def.available(ctx, state, op)) continue;
     const ap = actionCost(ctx, state, op, def);

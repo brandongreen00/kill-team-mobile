@@ -573,7 +573,10 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     }
     // "After that action, that friendly operative can immediately perform a free Dash action" and
     // "if this rule was used during that friendly operative's activation, that activation ends" —
-    // so from here the Dash is the only action it may still perform (D-015).
+    // so from here the Dash is the only action it may still perform. It rides free AP (D-100)
+    // rather than +1 APL, which matters here more than anywhere: the same rule has just
+    // subtracted 1 from that operative's APL stat, and an APL-based free action would have been
+    // spent undoing that debuff instead of making the Dash happen.
     // REMINDER ONLY: "must end that move within this operative's control range" has no seam.
     grantFreeAction(ev.state, victim, {
       sourceId: AB_MEDIC,
@@ -1060,14 +1063,16 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
 
   // ---- THE ANCESTORS ARE WATCHING (firefight) ----------------------------
   // "Until the end of that activation, that operative can perform either a free Shoot or a free
-  //  Fight action." — D-015: one extra AP restricted to the two named actions.
+  //  Fight action." — D-100: one free AP restricted to the two named actions, granted outside the
+  //  APL budget so the operative gets the extra action even when a rule has already moved its APL.
   reg.on('onPloyUsed', T.bind(FP_ANCESTORS, 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== FP_ANCESTORS) return;
     const active = ev.state.activeOperativeId ? ev.state.operatives[ev.state.activeOperativeId] : undefined;
     const op = active && T.mineKw(active, KW) ? active : chosenOperative(ev.state, ev.data, T.friendlies(ev.state, KW));
     if (!op) return;
-    // "Until the end of THAT ACTIVATION" — the bonus AP is the last one spent (D-015), so the
-    // operative keeps every AP of its own for whatever it likes.
+    // "Until the end of THAT ACTIVATION" — the free AP is the last one spent (its `threshold` is
+    // the operative's whole APL), so the operative keeps every AP of its own for whatever it
+    // likes, and the effect expires with the activation the ploy named.
     grantFreeAction(ev.state, op, {
       sourceId: FP_ANCESTORS,
       sourceText: shortQuote(text(FP_ANCESTORS)),
@@ -1443,8 +1448,9 @@ function actions(data: typeof DATA): ActionDef[] {
           player: op.player,
           expiry: { kind: 'endOfActivation', operativeId: op.id },
         });
-        // D-015: the bonus AP is the LAST one the operative spends, so its own AP stays its own.
-        // The printed "immediately" is therefore relaxed to "before this activation ends".
+        // D-100: the free AP is granted on top of the APL budget and is the LAST one the
+        // operative spends, so its own AP stays its own. The printed "immediately" is therefore
+        // relaxed to "before this activation ends".
         grantFreeAction(state, op, {
           sourceId: ACT_KNUX,
           sourceText: shortQuote(actionTextOf(DOZR, ACT_KNUX)),

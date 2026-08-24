@@ -6,7 +6,7 @@
 import { useState } from 'preact/hooks';
 import { availableActions } from '../core/actions.ts';
 import { validTargets } from '../core/sequences/shoot.ts';
-import { aplOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../core/state.ts';
+import { apBudgetOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../core/state.ts';
 import { whoActivates, counteractCandidates } from '../core/phases.ts';
 import type { Store } from './store.ts';
 
@@ -76,7 +76,8 @@ export function ActivationPanel({ store }: { store: Store }) {
   }
 
   const dc = card(ctx, active);
-  const apl = aplOf(ctx, state, active);
+  // What this activation may SPEND — the APL stat plus any granted free AP (D-100).
+  const apl = apBudgetOf(ctx, state, active);
   const actions = availableActions(ctx, state, active);
   const ranged = weaponsOf(ctx, state, active, 'ranged');
   const melee = weaponsOf(ctx, state, active, 'melee');

@@ -9,7 +9,17 @@ import { gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { advanceFight, startFight } from '../../src/core/sequences/fight.ts';
 import { checkTarget, effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, hitOf, inflictDamage, markerController, moveOf, saveOf } from '../../src/core/state.ts';
+import {
+  aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
+  hitOf,
+  inflictDamage,
+  markerController,
+  moveOf,
+  saveOf,
+} from '../../src/core/state.ts';
 import { teamData } from '../../src/teams/data.ts';
 import rawJson from '../../data/teams/exaction-squad.json';
 import { defaultRoster, validateRosterFor } from '../../src/teams/selection.ts';
@@ -584,6 +594,14 @@ describe('CHIRURGANT — Medic! and MEDIKIT', () => {
     expect(state.operatives[medic]!.aplMods).toContain(-1);
     // "After that action, that friendly operative can immediately perform a free Dash action."
     expect(state.effects.some((e) => e.rule === 'teamFreeAction' && e.operativeId === victim)).toBe(true);
+    // The two halves are independent. "Subtract 1 from … that operative's APL stats" really does
+    // lower the victim's APL stat, and the Dash is AP outside that budget (docs/DECISIONS.md
+    // D-100). Were the Dash an APL change the two would meet under "the total can never be more
+    // than -1 or +1 from its normal APL" and cancel, so the victim would keep its full APL and be
+    // promised a Dash that cost it the AP it was already owed.
+    expect(aplOf(ctx, state, v)).toBe(1);
+    expect(freeApOf(state, v)).toBe(1);
+    expect(apBudgetOf(ctx, state, v)).toBe(2);
   });
 
   it('"The first time during each turning point" — the second casualty is not saved', () => {
@@ -1196,6 +1214,9 @@ describe('EXACTION SQUAD firefight ploys', () => {
   });
 
   it('BRUTAL BACKUP: "One other friendly EXACTION SQUAD operative can immediately perform a free Fight action"', () => {
+    expect(ruleText('exaction-squad.fp.brutal-backup')).toContain(
+      'One other friendly EXACTION SQUAD operative can immediately perform a free Fight action',
+    );
     const { ctx, state } = setup();
     const active = opWith(state, 'p1', CASTIGATOR);
     const helper = opWith(state, 'p1', SUBDUCTOR);
@@ -1210,7 +1231,32 @@ describe('EXACTION SQUAD firefight ploys', () => {
     expect(out.ok).toBe(true);
     const grant = out.state.effects.find((e) => e.rule === 'teamFreeAction' && e.operativeId === helper);
     expect(grant?.data?.['only']).toEqual(['Fight']);
-    expect(out.state.operatives[helper]!.aplMods).toContain(1);
+    // The ploy grants an ACTION, not an APL stat change, so the helper's APL stat is untouched and
+    // it simply has one AP more than its APL (docs/DECISIONS.md D-100). This is the case the ±1
+    // clamp used to eat: a helper already carrying the VOX-SIGNIFIER's SIGNAL was at its +1 ceiling
+    // and was handed a Fight it had no AP to perform.
+    const helperOp = out.state.operatives[helper]!;
+    const apl = aplOf(ctx, out.state, helperOp);
+    expect(helperOp.aplMods).toEqual([]);
+    expect(freeApOf(out.state, helperOp)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, helperOp)).toBe(apl + 1);
+    helperOp.aplMods.push(1); // as if SIGNAL had already been used on it
+    expect(aplOf(ctx, out.state, helperOp)).toBe(apl + 1);
+    expect(apBudgetOf(ctx, out.state, helperOp)).toBe(apl + 2);
+    helperOp.aplMods.length = 0;
+    // And that AP is really spendable, on the Fight the ploy names and on nothing else — the free
+    // AP is the last one the activation spends, so the restriction bites once its own APL is gone.
+    out.state.activeOperativeId = undefined;
+    const s = activate(ctx, out.state, helper);
+    const acting = s.operatives[helper]!;
+    acting.apSpent = apl;
+    const rows = availableActions(ctx, s, acting);
+    expect(rows.find((r) => r.def.id === 'Fight')?.ok).toBe(true);
+    expect(rows.find((r) => r.def.id === 'Shoot')?.ok).toBe(false);
+    // The AP belongs to that one Fight, so it goes away with the activation it was spent in.
+    const ended = reduce(s, { t: 'EndActivation', operativeId: helper }, ctx).state;
+    expect(freeApOf(ended, ended.operatives[helper]!)).toBe(0);
+    expect(apBudgetOf(ctx, ended, ended.operatives[helper]!)).toBe(apl);
   });
 
   it('EXECUTION ORDER records the marked enemy (the interrupt itself is reminder-only)', () => {

@@ -11,7 +11,16 @@ import { gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { advanceFight, startFight } from '../../src/core/sequences/fight.ts';
 import { advanceShoot, effectiveRules, startShoot } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, aplOf, hitOf, inflictDamage, markerController, moveOf } from '../../src/core/state.ts';
+import {
+  aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
+  hitOf,
+  inflictDamage,
+  markerController,
+  moveOf,
+} from '../../src/core/state.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import rawJson from '../../data/teams/brood-brother.json';
 import { teamData } from '../../src/teams/data.ts';
@@ -687,6 +696,15 @@ describe('BROOD BROTHER datacard abilities', () => {
     expect(victim.incapacitated).toBeFalsy();
     expect(victim.wounds).toBe(1);
     expect(aplOf(ctx, state, medic)).toBe(1);
+    // "Subtract 1 from this and that operative's APL stats" and "that friendly operative can then
+    // immediately perform a free Dash action" are two independent halves. The subtraction is a
+    // real APL stat change and shows in the stat; the Dash is AP outside it (docs/DECISIONS.md
+    // D-100). Were the Dash an APL change the two would meet under "the total can never be more
+    // than -1 or +1 from its normal APL" and cancel, leaving the victim its full APL and a Dash
+    // it could never take.
+    expect(aplOf(ctx, state, victim)).toBe(1);
+    expect(freeApOf(state, victim)).toBe(1);
+    expect(apBudgetOf(ctx, state, victim)).toBe(2);
     const other = state.operatives[opWith(state, 'p1', ICONWARD)]!;
     place(state, other.id, 7, 6);
     inflictDamage(ctx, state, other, 99);
@@ -1427,8 +1445,9 @@ describe('BROOD BROTHER ploys', () => {
     expect(seq.attackerPool.dice.some((d) => d.note === 'Idolisation' && d.state === 'normal')).toBe(true);
   });
 
-  it('INSIDIOUS cannot be used in the first turning point and grants a free Dash (D-015 timing)', () => {
+  it('INSIDIOUS is barred in the first turning point, and its free Dash is AP outside the APL stat', () => {
     expect(ruleText(FP.insidious)).toContain('You cannot use this ploy during the first turning point');
+    expect(ruleText(FP.insidious)).toContain('one friendly BROOD BROTHER operative can perform a free Dash action');
     const { ctx, state } = setup();
     state.teams.p1.cp = 4;
     const tp1 = reduce(state, { t: 'UsePloy', player: 'p1', ployId: FP.insidious }, ctx);
@@ -1436,7 +1455,26 @@ describe('BROOD BROTHER ploys', () => {
     const later = { ...state, turningPoint: 2, activeOperativeId: undefined } as GameState;
     const out = reduce(later, { t: 'UsePloy', player: 'p1', ployId: FP.insidious }, ctx);
     expect(out.ok).toBe(true);
-    expect(out.state.effects.some((e) => e.rule === 'teamFreeAction')).toBe(true);
+    const grant = out.state.effects.find((e) => e.rule === 'teamFreeAction' && e.source.id === FP.insidious)!;
+    expect(grant).toBeDefined();
+    // "…can perform a free Dash action" grants an action, not a stat change, so the APL stat is
+    // untouched and the operative simply has one AP more than its APL (docs/DECISIONS.md D-100).
+    const holder = out.state.operatives[grant.operativeId!]!;
+    const apl = aplOf(ctx, out.state, holder);
+    expect(holder.aplMods).toEqual([]);
+    expect(freeApOf(out.state, holder)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, holder)).toBe(apl + 1);
+    // And that AP is really spendable, on the Dash the ploy names and on nothing else: it is the
+    // last AP of the activation, so the restriction bites once the operative's own APL is gone.
+    const s = activate(ctx, out.state, holder.id);
+    const acting = s.operatives[holder.id]!;
+    acting.apSpent = apl;
+    const rows = availableActions(ctx, s, acting);
+    expect(rows.find((r) => r.def.id === 'Dash')?.ok).toBe(true);
+    expect(rows.find((r) => r.def.id === 'Reposition')?.ok).toBe(false);
+    // And it goes away with that activation rather than becoming a spare AP later on.
+    const ended = reduce(s, { t: 'EndActivation', operativeId: holder.id }, ctx).state;
+    expect(freeApOf(ended, ended.operatives[holder.id]!)).toBe(0);
     expect(REMINDER_ONLY[`${FP.insidious}.timing`]).toContain('outside an activation');
   });
 

@@ -555,7 +555,9 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
         .filter((o) => T.gap(chosen, o) <= 2 + EPS && isVisible(index, body(T.ctx!, chosen), body(T.ctx!, o)).visible),
     ].sort((a, b) => (a.id < b.id ? -1 : 1));
     for (const op of group) {
-      if (effectOn(ev.state, op.id, FREE_ACTION_RULE)) continue; // APL changes clamp to ±1
+      // "…can immediately perform a free Dash action": one free Dash each, so an operative
+      // already holding this gambit's grant is skipped rather than handed a second AP.
+      if (effectsOn(ev.state, op.id, FREE_ACTION_RULE).some((e) => e.source.id === AB.callTheAttack)) continue;
       grantFreeAction(ev.state, op, {
         sourceId: AB.callTheAttack,
         sourceText: shortQuote(abilityText(CARD.ironhorn, AB.callTheAttack)),
@@ -571,23 +573,21 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     });
   });
 
-  // `grantFreeAction` pushes +1 into `aplMods` and the engine never pops it (D-015), so without
-  // this upkeep every operative Call the Attack touched would sit on APL 3 for the rest of the
-  // battle (the Ratlings Scarper / Death Korps REGROUP / Corsair Aeldari Raiders precedent).
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  // Call the Attack is a STRATEGIC GAMBIT, so its free Dash is handed to operatives that are not
+  // activating and is spent later in the same turning point. The grant's own `endOfActivation`
+  // expiry (D-100) therefore only fires for a herd-mate that goes on to activate: one that ends
+  // the turning point expended without ever taking the Dash would still be carrying the offer
+  // when the next one opens. "Immediately" belongs to the turning point the gambit was used in,
+  // so the Ready step drops whatever was never taken.
+  const dropUntakenDash = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (eff.source.id !== AB.callTheAttack) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bindText('fellgor.aplUpkeep', abilityText(CARD.ironhorn, AB.callTheAttack), 90), (ev) => {
-    if (ev.operative.player === T.player) upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('fellgor.aplUpkeep', abilityText(CARD.ironhorn, AB.callTheAttack), 90), (ev) => {
+  reg.on('onReadyStep', T.bindText('fellgor.freeActionUpkeep', abilityText(CARD.ironhorn, AB.callTheAttack), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) upkeep(ev.state, o);
+    for (const o of T.friendlies(ev.state)) dropUntakenDash(ev.state, o);
   });
 
   // =========================================================================

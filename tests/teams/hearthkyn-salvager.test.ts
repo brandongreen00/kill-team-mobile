@@ -13,6 +13,9 @@ import { advanceFight, startFight } from '../../src/core/sequences/fight.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import {
   aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
   hitOf,
   inflictDamage,
   markerController,
@@ -671,11 +674,22 @@ describe('Firefight ploys', () => {
     s.teams.p1.cp = 3;
     s = reduce(s, { t: 'UsePloy', player: 'p1', ployId: 'hearthkyn-salvager.fp.the-ancestors-are-watching' }, ctx).state;
     const me = s.operatives[op]!;
-    expect(me.aplMods).toContain(1);
+    // "a FREE Shoot or a free Fight action" — D-100: free AP, not an APL stat change, so the APL
+    // stat is untouched and the activation is one AP longer than the datacard.
+    expect(me.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, me)).toBe(2);
+    expect(freeApOf(s, me)).toBe(1);
+    expect(apBudgetOf(ctx, s, me)).toBe(3);
     // Once its own AP is spent, the bonus AP is restricted to the two named actions.
     me.apSpent = 2;
     const actions = availableActions(ctx, s, me);
     expect(actions.find((a) => a.def.id === 'Reposition')!.reason).toBe('the free action must be Shoot or Fight');
+    // And the third AP is genuinely there to spend: the reducer's AP gate reads `apBudgetOf`.
+    expect(actions.find((a) => a.def.id === 'Shoot')!.reason).not.toBe('not enough AP');
+    // "Until the end of THAT ACTIVATION" — and no further.
+    const ended = reduce(s, { t: 'EndActivation', operativeId: op }, ctx).state;
+    expect(freeApOf(ended, ended.operatives[op]!)).toBe(0);
+    expect(apBudgetOf(ctx, ended, ended.operatives[op]!)).toBe(2);
     expect(ruleText('hearthkyn-salvager.fp.the-ancestors-are-watching')).toContain('free Shoot or a free Fight action');
   });
 

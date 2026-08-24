@@ -8,7 +8,16 @@ import { moveBudget } from '../../src/core/movement.ts';
 import { gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { checkTarget, effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aplOf, hitOf, inflictDamage, markerController, moveOf, weaponsOf } from '../../src/core/state.ts';
+import {
+  apBudgetOf,
+  aplOf,
+  freeApOf,
+  hitOf,
+  inflictDamage,
+  markerController,
+  moveOf,
+  weaponsOf,
+} from '../../src/core/state.ts';
 import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
 import type { FightSequence } from '../../src/core/sequences/types.ts';
 import type { GameState, OperativeState, PlayerId, WeaponProfile, WeaponRule } from '../../src/core/types.ts';
@@ -541,7 +550,12 @@ describe('CONFESSOR', () => {
     const grant = effectOn(s, preacherId, FREE_ACTION_RULE);
     expect(grant?.source.id).toBe('sanctifiers.confessor.lead-the-procession');
     expect(grant?.data?.['only']).toEqual(['Charge', 'Fall Back', 'Reposition']);
-    expect(aplOf(ctx, s, s.operatives[preacherId]!)).toBe(3);
+    // "can immediately perform a free Charge, Fall Back or Reposition action" grants an action,
+    // not an APL stat change: the PREACHER's APL stat stays at its printed 2 and the free
+    // action is a third AP on top of it (docs/DECISIONS.md D-100).
+    expect(aplOf(ctx, s, s.operatives[preacherId]!)).toBe(2);
+    expect(freeApOf(s, s.operatives[preacherId]!)).toBe(1);
+    expect(apBudgetOf(ctx, s, s.operatives[preacherId]!)).toBe(3);
 
     // "…cannot move more than … 3"" once the free AP is the one being spent.
     const preacher = s.operatives[preacherId]!;
@@ -879,7 +893,16 @@ describe('PERSECUTOR', () => {
     ).state;
     s = settle(ctx, s);
     expect(effectOn(s, persId, FREE_ACTION_RULE)?.source.id).toBe('sanctifiers.persecutor.merciless-castigation');
-    expect(aplOf(ctx, s, s.operatives[persId]!)).toBe(3);
+    // "this operative can immediately perform a free Fight action afterwards" — an action, not
+    // an APL stat change, so the PERSECUTOR keeps its printed APL 2 and the second Fight is a
+    // third AP on top of it (docs/DECISIONS.md D-100).
+    expect(aplOf(ctx, s, s.operatives[persId]!)).toBe(2);
+    expect(freeApOf(s, s.operatives[persId]!)).toBe(1);
+    expect(apBudgetOf(ctx, s, s.operatives[persId]!)).toBe(3);
+    // Spend the PERSECUTOR's own two AP first, so the second Fight is paid for by the granted
+    // AP alone — "immediately perform a free Fight action afterwards" is an action the
+    // operative would otherwise have no AP left for.
+    s.operatives[persId]!.apSpent = 2;
     const second = reduce(
       s,
       { t: 'PerformAction', operativeId: persId, action: MERCILESS_FIGHT, params: { meleeWeaponName: 'Eviscerator' } },

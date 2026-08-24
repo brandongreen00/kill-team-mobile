@@ -87,6 +87,44 @@ export function aplOf(ctx: GameContext, state: GameState, op: OperativeState): n
 }
 
 /**
+ * The rule name an "immediately perform a free 1AP action" grant is recorded under.
+ *
+ * It lives in the core rather than in `src/teams/helpers.ts` because the AP budget is a core
+ * question — `helpers.ts` re-exports it so the 22 team modules that write the effect are
+ * unchanged.
+ */
+export const FREE_ACTION_RULE = 'teamFreeAction';
+
+/**
+ * AP granted OUTSIDE the APL budget: "One friendly operative can immediately perform a free
+ * 1AP action."
+ *
+ * Free AP is deliberately not an APL stat change. Modelled as `aplMods.push(1)` it went
+ * through the same clamp as real stat changes — "regardless of how many APL stat changes an
+ * operative is affected by, the total can never be more than -1 or +1 from its normal APL" —
+ * so an operative already at +1 from a ploy gained nothing at all from a free action, and one
+ * at -1 spent the free action undoing the debuff instead of performing it in addition
+ * (docs/DECISIONS.md D-015, superseded by D-100).
+ */
+export function freeApOf(state: GameState, op: OperativeState): number {
+  let ap = 0;
+  for (const e of state.effects) {
+    if (e.rule === FREE_ACTION_RULE && e.operativeId === op.id) ap += Number(e.data?.['ap'] ?? 1);
+  }
+  return ap;
+}
+
+/**
+ * The AP this operative may spend in its activation: its APL, plus any free AP.
+ *
+ * This is the one selector the AP gate, the AI and the UI all read. `aplOf` stays the STAT —
+ * it is what marker control totals, and free AP must never leak into that.
+ */
+export function apBudgetOf(ctx: GameContext, state: GameState, op: OperativeState): number {
+  return aplOf(ctx, state, op) + freeApOf(state, op);
+}
+
+/**
  * "Subtract 2" from the Move stat of injured operatives" and "An operative's Move stat can
  * never be changed to less than 4"."
  */

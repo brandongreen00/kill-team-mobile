@@ -8,7 +8,7 @@ import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { moveBudget } from '../../src/core/movement.ts';
 import { counteractCandidates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
-import { aplOf, hitOf, inflictDamage, markerController, moveOf } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage, markerController, moveOf } from '../../src/core/state.ts';
 import { zeroStatMods, type RerollGrant } from '../../src/core/hooks.ts';
 import {
   ASTARTES_FIGHT,
@@ -1104,13 +1104,24 @@ describe('Faction equipment', () => {
     s = act(ctx, s, foeId, 'Fall Back', { path: { points: [{ x: 11, y: 5 }] } }).state;
     expect(s.operatives[foeId]!.actionsThisActivation).toContain('Fall Back');
     s = reduce(s, { t: 'EndActivation', operativeId: foeId }, ctx).state;
-    // The grant is one extra AP restricted to Reposition/Charge (docs/DECISIONS.md D-015).
+    // The grant is one AP outside the APL budget, restricted to Reposition/Charge
+    // (docs/DECISIONS.md D-100). The RAPTOR's APL stat does not move — a warp-fuelled lunge is
+    // an action, not a stat change, and were it modelled as one the +-1 APL clamp would cancel
+    // it outright for a RAPTOR already carrying a +1.
     s = activate(ctx, s, mineId);
     const mine = s.operatives[mineId]!;
-    expect(aplOf(ctx, s, mine)).toBe(4);
+    expect(mine.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, mine)).toBe(3); // the printed APL, unmoved
+    expect(freeApOf(s, mine)).toBe(1);
+    expect(apBudgetOf(ctx, s, mine)).toBe(4);
     mine.apSpent = 3; // spending the bonus AP now
     expect(moveBudget(ctx, s, mine, { action: 'Reposition' })).toBe(3);
     expect(rule('murderwing.eq.warp-fuel')).toContain('cannot use more than 3" of move distance');
+    // "…can IMMEDIATELY perform a free Reposition or Charge action": one window. The AP is gone
+    // once that activation ends, so a WARP FUEL trigger every turning point never stockpiles.
+    const after = reduce(s, { t: 'EndActivation', operativeId: mineId }, ctx).state;
+    expect(freeApOf(after, after.operatives[mineId]!)).toBe(0);
+    expect(apBudgetOf(ctx, after, after.operatives[mineId]!)).toBe(3);
   });
 
   it('VOX-CASTERS: "Each enemy operative within 3" of this operative takes a stun test … on a 3+, subtract 1 from its APL stat"', () => {

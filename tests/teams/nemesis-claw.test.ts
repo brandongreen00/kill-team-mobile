@@ -10,7 +10,7 @@ import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { moveBudget } from '../../src/core/movement.ts';
 import { counteractCandidates, whoActivates } from '../../src/core/phases.ts';
-import { aplOf, inflictDamage, markerController } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, inflictDamage, markerController } from '../../src/core/state.ts';
 import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import type { GameState, OperativeState, WeaponProfile } from '../../src/core/types.ts';
@@ -768,7 +768,10 @@ describe('NEMESIS CLAW ploys', () => {
       ctx,
     ).state;
     const moved = s.operatives[op]!;
-    expect(aplOf(ctx, s, moved)).toBe(4); // APL 3 + the free action
+    // The free action is AP, not an APL stat change (docs/DECISIONS.md D-100): the SKINTHIEF's
+    // APL 3 is untouched and it has a fourth AP to spend on the action the ploy names.
+    expect(aplOf(ctx, s, moved)).toBe(3);
+    expect(apBudgetOf(ctx, s, moved)).toBe(4);
     expect(moveBudget(ctx, s, moved, { action: 'Reposition' })).toBeCloseTo(4);
     // Only Fall Back or Reposition may be paid for with the bonus AP.
     moved.apSpent = 3;
@@ -852,7 +855,8 @@ describe('NEMESIS CLAW ploys', () => {
 
     s = reduce(s, { t: 'UsePloy', player: 'p1', ployId: 'nemesis-claw.fp.proclivity-for-murder' }, ctx).state;
     const op = s.operatives[killer.id]!;
-    expect(aplOf(ctx, s, op)).toBe(4);
+    expect(aplOf(ctx, s, op)).toBe(3);
+    expect(apBudgetOf(ctx, s, op)).toBe(4); // the free Charge or Dash, on top of its APL (D-100)
     expect(moveBudget(ctx, s, op, { action: 'Charge', bonusInches: 2 })).toBeCloseTo(3);
     // "even if it's performed an action that prevents it from performing those actions"
     op.actionsThisActivation = ['Fight'];

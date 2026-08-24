@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { createGameContext } from '../../src/core/game.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { SeededRng } from '../../src/core/rng.ts';
-import { aplOf, hitOf, inflictDamage } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage } from '../../src/core/state.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { moveBudget } from '../../src/core/movement.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
@@ -253,7 +253,12 @@ describe('Art of War — "STRATEGIC GAMBIT if this operative is in the killzone"
     const s = reduce(state, { t: 'UseGambit', player: 'p1', gambitId: artOfWarId('kauyon') }, ctx).state;
     const id = opWith(s, 'p1', 'pathfinders.shas-la-pathfinder');
     const activated = activate(ctx, s, id, 'conceal');
-    expect(aplOf(ctx, activated, activated.operatives[id]!)).toBe(3);
+    // A free action is not an APL stat change (docs/DECISIONS.md D-100), so the APL stat is
+    // untouched and the operative simply has one AP more than its APL to spend.
+    const op = activated.operatives[id]!;
+    expect(aplOf(ctx, activated, op)).toBe(2);
+    expect(freeApOf(activated, op)).toBe(1);
+    expect(apBudgetOf(ctx, activated, op)).toBe(3);
     expect(
       activated.effects.some(
         (e) => e.rule === 'teamFreeAction' && e.operativeId === id && (e.data?.['only'] as string[]).includes('pathfinders.shas-la-pathfinder.act.markerlight'),
@@ -403,7 +408,11 @@ describe('PATHFINDERS ploys', () => {
     const op = s.operatives[opWith(s, 'p1', 'pathfinders.shas-la-pathfinder')]!;
     op.pos = { x: 15, y: 21 };
     const out = reduce(s, { t: 'UseGambit', player: 'p1', gambitId: 'pathfinders.sp.recon-sweep' }, ctx);
-    expect(out.state.operatives[op.id]!.aplMods).toContain(1);
+    // Free AP, not an APL stat change (D-100): the Dash rides on top of the operative's APL.
+    const swept = out.state.operatives[op.id]!;
+    expect(aplOf(ctx, out.state, swept)).toBe(2);
+    expect(freeApOf(out.state, swept)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, swept)).toBe(3);
   });
 
   it('POINT-BLANK FUSILLADE: "You can use one of its ranged weapons as a melee weapon"', () => {
@@ -443,7 +452,11 @@ describe('PATHFINDERS ploys', () => {
     const { ctx, state } = setup();
     const id = opWith(state, 'p1', 'pathfinders.shas-la-pathfinder');
     const out = reduce(state, { t: 'UsePloy', player: 'p1', ployId: 'pathfinders.fp.a-worthy-cause', data: { operativeId: id } }, ctx);
-    expect(out.state.operatives[id]!.aplMods).toContain(1);
+    // "...can immediately perform a free mission action" — free AP on top of its APL (D-100).
+    const chosen = out.state.operatives[id]!;
+    expect(aplOf(ctx, out.state, chosen)).toBe(2);
+    expect(freeApOf(out.state, chosen)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, chosen)).toBe(3);
   });
 });
 

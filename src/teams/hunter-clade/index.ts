@@ -289,7 +289,7 @@ const SIGNAL_EFFECT = 'hunter-clade.signal';
 const RAD_APL = 'hunter-clade.radBombardmentApl';
 const REFRACTOR_EFFECT = 'hunter-clade.refractorField';
 const ACCELERANT_EFFECT = 'hunter-clade.accelerantAgents';
-/** Sources whose `grantFreeAction` +1 APL this module has to pop again. */
+/** The grants this module makes, and so the only ones its Ready-step sweep may drop. */
 const FREE_ACTION_SOURCES: ReadonlySet<string> = new Set([SP.scoutingProtocol, SP.accelerantAgents]);
 
 export const imperativeGambitId = (imp: Imperative): string => `${RULE.doctrina}:${imp}`;
@@ -896,8 +896,9 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   //  from enemy operatives can immediately perform a free Dash action in an order of your choice.
   //  You cannot use this ploy during the first turning point."
   //
-  // D-015: the free Dash is one extra AP restricted to Dash, landing on that operative's next
-  // activation (the gambit is used in the Strategy phase, where nothing can act).
+  // D-100: the free Dash is one extra AP restricted to Dash, granted on top of the operative's
+  // APL and landing on its next activation (the ploy is used in the Strategy phase, where
+  // nothing can act).
   reg.on('onPloyUsed', T.bind(SP.scoutingProtocol, 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== SP.scoutingProtocol) return;
     const foes = T.enemies(ev.state);
@@ -912,7 +913,8 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       .sort(byId);
     for (const o of movers) {
       o.order = orderFromData(ev.data, o.order); // "in an order of your choice"
-      if (effectOn(ev.state, o.id, FREE_ACTION_RULE)) continue;
+      // One free Dash per operative from this ploy — a second use does not stack another AP.
+      if (effectsOn(ev.state, o.id, FREE_ACTION_RULE).some((e) => e.source.id === SP.scoutingProtocol)) continue;
       grantFreeAction(ev.state, o, {
         sourceId: SP.scoutingProtocol,
         sourceText: shortQuote(text(SP.scoutingProtocol)),
@@ -934,8 +936,10 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   //  Fight actions, and one of them can be free."
   //
   // The second Fight is `Fight (Accelerant Agents)` — its own `ActionDef` with its own
-  // restriction key (D-021) — and "one of them can be free" is D-015's extra AP restricted to a
-  // Fight, handed out at the start of each RUSTSTALKER's activation while the gambit stands.
+  // restriction key (D-021) — and "one of them can be free" is D-100's free AP restricted to a
+  // Fight, handed out at the start of each RUSTSTALKER's activation while the gambit stands. It
+  // is AP rather than APL, so a RUSTSTALKER already carrying an APL bonus still gets both Fights
+  // instead of losing one to the +-1 clamp.
   reg.on('onActivationStart', T.bind(SP.accelerantAgents, 20), (ev) => {
     const op = ev.operative;
     if (!T.mineKw(op, KW) || !T.kw(op, 'RUSTSTALKER')) return;
@@ -948,7 +952,8 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfActivation', operativeId: op.id },
     });
-    if (effectOn(ev.state, op.id, FREE_ACTION_RULE)) return;
+    // "ONE of them can be free" — never two, however many times this fires for the activation.
+    if (effectsOn(ev.state, op.id, FREE_ACTION_RULE).some((e) => e.source.id === SP.accelerantAgents)) return;
     grantFreeAction(ev.state, op, {
       sourceId: SP.accelerantAgents,
       sourceText: shortQuote(text(SP.accelerantAgents)),
@@ -1348,31 +1353,30 @@ function equipment(reg: HookRegistry, T: TeamHooks): void {
 }
 
 // ---------------------------------------------------------------------------
-// The `grantFreeAction` APL upkeep
+// Free Dashes nobody took
 // ---------------------------------------------------------------------------
 
 /*
- * `grantFreeAction` models a free action as one extra AP (D-015) by pushing +1 into `aplMods`,
- * which the engine never pops — `expireActivationEffects` drops the effect and leaves the
- * modifier behind. SCOUTING PROTOCOL hands one out per RANGER in the Strategy phase and
- * ACCELERANT AGENTS one per RUSTSTALKER activation, so without this upkeep those operatives
- * would sit on APL 3 for the rest of the battle (the Chaos Cult / Canoptek Circle precedent).
+ * Free AP expires on its own: `grantFreeAction` writes an effect that ends with the grantee's
+ * activation and `expireActivationEffects` drops it there (D-100). ACCELERANT AGENTS is granted
+ * at the start of the RUSTSTALKER's own activation, so that expiry always fires for it.
+ *
+ * SCOUTING PROTOCOL is the reason this sweep exists: it is used in the Strategy phase, where
+ * nothing can act, so every RANGER it touches carries its free Dash into the Firefight phase —
+ * and one that ends up expended without ever taking it is still holding the offer when the next
+ * turning point opens. "Can immediately perform a free Dash action" is not a credit to save, so
+ * the Ready step clears whatever was never spent. Both sources are named, so the sweep never has
+ * to reason about which grant it is looking at.
  */
-function upkeep(reg: HookRegistry, T: TeamHooks): void {
-  const sweep = (state: GameState, op: OperativeState): void => {
-    for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
-      if (!FREE_ACTION_SOURCES.has(eff.source.id)) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
-      dropEffects(state, (e) => e === eff);
-    }
-  };
-  reg.on('onActivationEnd', T.bindText('hunter-clade.aplUpkeep', text(SP.scoutingProtocol), 90), (ev) => {
-    if (ev.operative.player === T.player) sweep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('hunter-clade.aplUpkeep', text(SP.scoutingProtocol), 90), (ev) => {
+function freeActionUpkeep(reg: HookRegistry, T: TeamHooks): void {
+  reg.on('onReadyStep', T.bindText('hunter-clade.freeActionUpkeep', text(SP.scoutingProtocol), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) sweep(ev.state, o);
+    for (const op of T.friendlies(ev.state)) {
+      for (const eff of effectsOn(ev.state, op.id, FREE_ACTION_RULE)) {
+        if (!FREE_ACTION_SOURCES.has(eff.source.id)) continue;
+        dropEffects(ev.state, (e) => e === eff);
+      }
+    }
   });
 }
 
@@ -1498,7 +1502,7 @@ export const hunterClade = defineTeam({
   id: 'hunter-clade',
   rules: (reg, T) => {
     rules(reg, T);
-    upkeep(reg, T);
+    freeActionUpkeep(reg, T);
     // CONTROL EDICT raises its own decision kind; the handler is installed once per GameContext
     // (`decisionHandler` is a stable reference).
     if (T.ctx) {

@@ -14,7 +14,9 @@ import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import {
   aliveOperatives,
+  apBudgetOf,
   aplOf,
+  freeApOf,
   hitOf,
   inflictDamage,
   markerController,
@@ -602,10 +604,14 @@ describe('FELLGOR RAVAGER datacard abilities', () => {
     );
     expect(out.ok).toBe(true);
     for (const id of [near, alsoNear]) {
-      expect(out.state.operatives[id]!.aplMods).toContain(1);
+      // "can immediately perform a free Dash action" — free AP (D-100), not an APL stat change,
+      // so the operative keeps its printed APL and gains one AP on top of it.
+      expect(out.state.operatives[id]!.aplMods).toEqual([]);
+      expect(aplOf(ctx, out.state, out.state.operatives[id]!)).toBe(2);
+      expect(apBudgetOf(ctx, out.state, out.state.operatives[id]!)).toBe(3);
       expect(out.state.effects.some((e) => e.operativeId === id && e.data?.['only'])).toBe(true);
     }
-    expect(out.state.operatives[ironhorn]!.aplMods).toEqual([]);
+    expect(freeApOf(out.state, out.state.operatives[ironhorn]!)).toBe(0);
     // The free AP is restricted to the Dash action.
     const dashOnly = ctx.hooks.emit('canPerformAction', out.state, {
       state: out.state,
@@ -616,7 +622,8 @@ describe('FELLGOR RAVAGER datacard abilities', () => {
     expect(dashOnly.allowed).toBe(false);
   });
 
-  it('Call the Attack’s free AP is popped again, so nobody sits on APL 3 for the battle', () => {
+  it('Call the Attack’s free Dash is a third AP that expires when the activation does', () => {
+    expect(abilityText(CARD.ironhorn, AB.callTheAttack)).toContain('can immediately perform a free Dash action');
     const { ctx, state } = setup();
     const ironhorn = opWith(state, 'p1', CARD.ironhorn);
     const near = opWith(state, 'p1', CARD.vandal);
@@ -626,11 +633,22 @@ describe('FELLGOR RAVAGER datacard abilities', () => {
     state.phase = 'strategy';
     state.strategyStep = 'gambit';
     let s = reduce(state, { t: 'UseGambit', player: 'p1', gambitId: AB.callTheAttack, data: { operativeId: near } }, ctx).state;
-    expect(s.operatives[near]!.aplMods).toEqual([1]);
+    // "can immediately perform a free Dash action" leaves the APL stat alone and adds one AP.
+    expect(s.operatives[near]!.aplMods).toEqual([]);
+    expect(freeApOf(s, s.operatives[near]!)).toBe(1);
     s.phase = 'firefight';
     s = activate(ctx, s, near, 'engage');
+    expect(apBudgetOf(ctx, s, s.operatives[near]!)).toBe(3);
+    // With both of its own AP spent, the free Dash is still there to perform — that is what
+    // "free" means, and it is the last AP the operative spends.
+    s.operatives[near]!.apSpent = 2;
+    const dash = act(ctx, s, near, 'Dash', { path: { points: [{ x: 12, y: 11 }] } });
+    expect(dash.ok).toBe(true);
+    s = dash.state;
+    expect(s.operatives[near]!.apSpent).toBe(3);
     s = reduce(s, { t: 'EndActivation', operativeId: near }, ctx).state;
-    expect(s.operatives[near]!.aplMods).toEqual([]);
+    expect(freeApOf(s, s.operatives[near]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[near]!)).toBe(2);
   });
 
   it('DEATHKNELL › Icon Bearer: +1 APL for marker control, and it ignores the Frenzy marker bullet', () => {

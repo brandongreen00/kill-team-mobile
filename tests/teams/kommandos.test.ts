@@ -7,7 +7,7 @@ import { availableActions, getAction } from '../../src/core/actions.ts';
 import { createGameContext } from '../../src/core/game.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { SeededRng } from '../../src/core/rng.ts';
-import { aplOf, inflictDamage } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, inflictDamage } from '../../src/core/state.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
 import { celestianInsidiants } from '../../src/teams/celestian-insidiants/index.ts';
@@ -206,8 +206,33 @@ describe('KOMMANDOS strategy ploys', () => {
     for (const id of s.teams.p2.operativeIds) s.operatives[id]!.pos = { x: 27, y: 21 };
     const out = reduce(s, { t: 'UseGambit', player: 'p1', gambitId: 'kommandos.sp.sssshhhh' }, ctx);
     const boy = out.state.operatives[opWith(out.state, 'p1', 'kommandos.boy')]!;
-    expect(boy.aplMods).toContain(1);
-    expect(aplOf(ctx, out.state, boy)).toBe(3);
+    // "…can immediately perform a free Dash action." A granted action is AP outside the APL
+    // budget, not an APL stat change (docs/DECISIONS.md D-100), so the Boy's APL stat is
+    // untouched — it just has one AP more than its APL to spend — and the Dash is not something
+    // marker control can be totalled from.
+    expect(rule('kommandos.sp.sssshhhh')).toContain('can immediately perform a free Dash action');
+    expect(boy.aplMods).toEqual([]);
+    expect(aplOf(ctx, out.state, boy)).toBe(2);
+    expect(freeApOf(out.state, boy)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, boy)).toBe(3);
+  });
+
+  it('SSSSHHHH!: the free Dash expires with the activation it is spent in', () => {
+    // "…can IMMEDIATELY perform a free Dash action." Immediately is a window, not a standing
+    // bonus: a whole kill team is handed one of these at once, and none of them may still be
+    // holding an unspent AP after their activation has ended.
+    expect(rule('kommandos.sp.sssshhhh')).toContain('immediately perform a free Dash action');
+    const { ctx, state } = setup();
+    const s: GameState = { ...state, turningPoint: 2 };
+    for (const id of s.teams.p1.operativeIds) s.operatives[id]!.order = 'conceal';
+    for (const id of s.teams.p2.operativeIds) s.operatives[id]!.pos = { x: 27, y: 21 };
+    const boyId = opWith(s, 'p1', 'kommandos.boy');
+    let out = reduce(s, { t: 'UseGambit', player: 'p1', gambitId: 'kommandos.sp.sssshhhh' }, ctx).state;
+    expect(freeApOf(out, out.operatives[boyId]!)).toBe(1);
+    out = activate(ctx, out, boyId, 'conceal');
+    out = reduce(out, { t: 'EndActivation', operativeId: boyId }, ctx).state;
+    expect(freeApOf(out, out.operatives[boyId]!)).toBe(0);
+    expect(apBudgetOf(ctx, out, out.operatives[boyId]!)).toBe(aplOf(ctx, out, out.operatives[boyId]!));
   });
 });
 
@@ -232,7 +257,15 @@ describe('KOMMANDOS firefight ploys', () => {
     const boy = opWith(state, 'p1', 'kommandos.boy');
     const out = reduce(state, { t: 'UsePloy', player: 'p1', ployId: 'kommandos.fp.krump-em', data: { operativeId: boy } }, ctx);
     const op = out.state.operatives[boy]!;
-    expect(aplOf(ctx, out.state, op)).toBe(3);
+    // "It can immediately perform a free Fight action." The Fight is one AP outside the APL
+    // budget, never an APL stat change (docs/DECISIONS.md D-100): a Boy already carrying a +1
+    // from elsewhere would otherwise be handed nothing, since "the total can never be more than
+    // -1 or +1 from its normal APL" would swallow it.
+    expect(rule('kommandos.fp.krump-em')).toContain('It can immediately perform a free Fight action');
+    expect(op.aplMods).toEqual([]);
+    expect(aplOf(ctx, out.state, op)).toBe(2);
+    expect(freeApOf(out.state, op)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, op)).toBe(3);
     op.apSpent = 2;
     const dash = availableActions(ctx, out.state, op).find((a) => a.def.id === 'Dash');
     expect(dash?.reason ?? '').toMatch(/must be Fight/);

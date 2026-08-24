@@ -9,7 +9,7 @@ import { newPool } from '../../src/core/dice.ts';
 import { counteractCandidates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { hitOf, inflictDamage, moveOf } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage, moveOf } from '../../src/core/state.ts';
 import { rareWeaponRules } from '../../src/core/weaponRules.ts';
 import { teamData } from '../../src/teams/data.ts';
 import { defaultRoster, validateRosterFor } from '../../src/teams/selection.ts';
@@ -689,6 +689,14 @@ describe('WOLF SCOUTS datacard abilities', () => {
 
     const s = reduce(state, { t: 'UseGambit', player: 'p1', gambitId: POUNCE_GAMBIT }, ctx).state;
     const wolf = s.operatives[wolfId]!;
+    // "subtract 1 from its APL stat" is a real stat change and lands on the stat; the free action
+    // is AP outside that budget (D-100). The two do not meet in the ±1 clamp, so the FENRISIAN
+    // WOLF really is APL 1 — wherever the stat is read, marker control included — and still has
+    // two AP to spend in the activation.
+    expect(wolf.aplMods).toEqual([-1]);
+    expect(aplOf(ctx, s, wolf)).toBe(1);
+    expect(freeApOf(s, wolf)).toBe(1);
+    expect(apBudgetOf(ctx, s, wolf)).toBe(2);
     const gate = (action: string): boolean =>
       ctx.hooks.emit('canPerformAction', s, { state: s, operative: wolf, action, allowed: true }).allowed;
     // "until the end of its next activation, subtract 1 from its APL stat and it cannot perform
@@ -944,7 +952,12 @@ describe('WOLF SCOUTS firefight ploys', () => {
     state.activePlayer = 'p2';
     const s = reduce(state, { t: 'UsePloy', player: 'p1', ployId: 'wolf-scouts.fp.counterattack', data: { operativeId: mineId } }, ctx).state;
     expect(s.effects.some((e) => e.rule === 'wolf-scouts.counterattack' && e.operativeId === mineId)).toBe(true);
-    expect(s.operatives[mineId]!.aplMods).toContain(1);
+    // "…can immediately perform a free Fight action": AP outside the APL budget (D-100), so the
+    // HUNTER's printed APL 3 is untouched and only its activation's AP budget grows by one.
+    expect(s.operatives[mineId]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, s.operatives[mineId]!)).toBe(3);
+    expect(freeApOf(s, s.operatives[mineId]!)).toBe(1);
+    expect(apBudgetOf(ctx, s, s.operatives[mineId]!)).toBe(4);
 
     const me = s.operatives[mineId]!;
     expect(getAction(FIGHT_COUNTERATTACK)!.check(ctx, s, me, { targetId: otherFoeId }).reason).toMatch(

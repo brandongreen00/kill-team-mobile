@@ -1513,9 +1513,13 @@ registerAction({
  * isn't incapacitated, it can immediately perform a free Fight action afterwards … This takes
  * precedence over action restrictions."
  *
- * A free action is 0AP, so it needs no APL grant (`grantFreeAction` pushes a +1 `aplMods` the
- * engine never pops, which would leave the CHAMPION permanently on APL 3). Its own id carries
- * its own action restriction, so it can be performed once per activation and no more.
+ * A `grantFreeAction` grant would be the wrong shape twice over. It is the LAST AP the operative
+ * spends, where the rule says "afterwards" — immediately after the first Fight, with the rest of
+ * the activation still to come — and it reaches the universal Fight through the universal Fight's
+ * own restriction key, which is the very restriction this rule takes precedence over. So the free
+ * Fight is its own 0AP ActionDef (D-021) instead: at 0AP it never touches the APL stat or the free
+ * AP budget (D-100), and its own id carries its own action restriction, so it can be performed
+ * once per activation and no more.
  */
 registerAction({
   id: SAVAGE_BRUTALITY_FIGHT,

@@ -379,6 +379,11 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   });
 
   // SHAKE IT OFF (firefight)
+  // "Until the start of the next turning point, you can ignore any changes to its APL STAT."
+  // Emptying `aplMods` is the whole rule, and it reaches only APL stat changes. A free action
+  // granted by Krump 'Em! or Ssssshhhh! is AP outside the APL budget rather than a stat change
+  // (docs/DECISIONS.md D-100), so it survives this — which is right: a Boy shrugging off a
+  // debuff has not been talked out of the Fight it was promised.
   reg.on('onPloyUsed', T.bind('kommandos.fp.shake-it-off', 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== 'kommandos.fp.shake-it-off') return;
     const active = ev.state.activeOperativeId ? ev.state.operatives[ev.state.activeOperativeId] : undefined;

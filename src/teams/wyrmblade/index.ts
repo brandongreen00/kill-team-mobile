@@ -851,26 +851,24 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   });
 
   // =========================================================================
-  // aplMods upkeep for DIVERT AND DISAPPEAR's free actions (docs/DECISIONS.md D-015)
+  // DIVERT AND DISAPPEAR: an unspent grant does not carry into the next turning point
   // =========================================================================
-  // `grantFreeAction` pushes a +1 onto `op.aplMods` and an `endOfActivation` effect;
-  // `expireActivationEffects` drops the effect but never the `aplMods` entry, so without this
-  // upkeep every operative the ploy touched would sit one APL higher for the rest of the
-  // battle (the Ratlings Scarper / Death Korps REGROUP / Corsair Aeldari Raiders precedent).
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  // A grant spent inside its operative's own activation needs no undoing — the free AP lives on
+  // an `endOfActivation` effect and `expireActivationEffects` drops it at EndActivation (D-100).
+  // But the ploy is a STRATEGIC GAMBIT, handed out in the Strategy phase to operatives that have
+  // not activated yet, so an operative incapacitated (or otherwise never activated) before it
+  // spends the AP would still be holding the grant when the next turning point began.
+  // "…can IMMEDIATELY perform a free Dash or Charge action" is a window, not a bankable AP, so
+  // the Ready step closes whatever was never taken.
+  const dropUnspentGrant = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (eff.source.id !== SP_DIVERT) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bindText('wyrmblade.aplUpkeep', text(SP_DIVERT), 90), (ev) => {
-    if (ev.operative.player === T.player) upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('wyrmblade.aplUpkeep', text(SP_DIVERT), 90), (ev) => {
+  reg.on('onReadyStep', T.bindText('wyrmblade.divertUpkeep', text(SP_DIVERT), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) upkeep(ev.state, o);
+    for (const o of T.friendlies(ev.state)) dropUnspentGrant(ev.state, o);
   });
 }
 
@@ -1002,8 +1000,9 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   //  move more than 3"); if it does, subtract 1 from its APL stat until the end of its next
   //  activation."
   //
-  // D-015: a "free action" is one extra AP restricted to the named actions, landing on that
-  // operative's next activation because a STRATEGIC GAMBIT is used in the Strategy phase. The
+  // D-100: a "free action" is one AP granted outside the APL budget and restricted to the named
+  // actions, landing on that operative's next activation because a STRATEGIC GAMBIT is used in
+  // the Strategy phase (D-013) — the operative keeps its full APL on top of it. The
   // three selections are D-016's deterministic, logged default. A CULT AGENT is offered the
   // Fall Back branch only when the printed conditions leave it no alternative — Dash and Charge
   // both refuse an operative already within an enemy's control range, and Fall Back requires
@@ -1021,7 +1020,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       const agent = T.kw(op, 'CULT AGENT');
       const cost = agent ? 2 : 1; // "it counts as two operatives"
       if (cost > budget) continue;
-      if (effectOn(ev.state, op.id, FREE_ACTION_RULE)) continue; // APL changes clamp to ±1
+      if (effectOn(ev.state, op.id, FREE_ACTION_RULE)) continue; // one free action per operative
       const engaged = T.enemies(ev.state).some((e) => inCR(T, ev.state, op, e));
       const fallBack = agent && engaged;
       if (!agent && engaged) continue; // Dash and Charge both refuse an engaged operative
@@ -1056,11 +1055,13 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     if (op.apSpent < Number(grant.data?.['threshold'] ?? 0)) return;
     ev.inches = Math.min(ev.inches, 3);
   });
-  // "…if it does, subtract 1 from its APL stat until the end of its next activation." The free
-  // action is D-015's extra AP inside the operative's own activation, so the printed penalty —
-  // which the card lands on that same activation — would cancel the grant and the rule would do
-  // nothing at all. It is armed at the end of the activation the Fall Back was spent in and
-  // runs through the following one instead (reported as a partial).
+  // "…if it does, subtract 1 from its APL stat until the end of its next activation." Printed,
+  // the Fall Back happens in the Strategy phase and the debt is paid in the activation that
+  // follows; here the free AP is spent inside that activation instead (D-013), and an APL cut
+  // applied to an activation whose AP has already been spent cannot be honoured retroactively.
+  // So the penalty is armed at the end of the activation the Fall Back was spent in and runs
+  // through the following one (reported as a partial). Note it no longer erases the free action
+  // itself: free AP is not an APL stat change and does not meet the penalty in the clamp (D-100).
   reg.on('onActivationEnd', T.bind(SP_DIVERT, 30), (ev) => {
     const op = ev.operative;
     if (op.player !== T.player) return;

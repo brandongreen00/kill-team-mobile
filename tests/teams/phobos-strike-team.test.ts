@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { availableActions } from '../../src/core/actions.ts';
 import { counteractCandidates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
-import { hitOf, inflictDamage, moveOf } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage, moveOf } from '../../src/core/state.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import type { ShootSequence } from '../../src/core/sequences/types.ts';
 import { teamData } from '../../src/teams/data.ts';
@@ -467,10 +467,16 @@ describe('INFILTRATOR HELIX ADEPT', () => {
     inflictDamage(ctx, state, victim, 30, 'attack');
     expect(victim.incapacitated).toBeFalsy();
     expect(victim.wounds).toBe(3);
-    // "Subtract 1 from this … operative's APL stat"
+    // "Subtract 1 from this … operative's APL stat" — a real APL stat change, so it does ride
+    // in `aplMods` and does go through the +-1 clamp.
     expect(medic.aplMods).toContain(-1);
-    // "that friendly operative can immediately perform a free Dash action"
-    expect(victim.aplMods).toContain(1);
+    // "that friendly operative can immediately perform a free Dash action" — which is NOT an
+    // APL stat change, so it is free AP on top of the victim's own APL (D-100). This is the
+    // pairing the clamp used to eat: the medic's -1 and the victim's free Dash are different
+    // kinds of thing and must not cancel.
+    expect(victim.aplMods).toEqual([]);
+    expect(freeApOf(state, victim)).toBe(1);
+    expect(apBudgetOf(ctx, state, victim)).toBe(aplOf(ctx, state, victim) + 1);
     expect(state.effects.some((e) => e.rule === 'teamFreeAction' && e.operativeId === victim.id)).toBe(true);
   });
 
@@ -514,7 +520,11 @@ describe('INFILTRATOR SABOTEUR — Plant Explosives and Detonate', () => {
     expect(out.ok).toBe(true);
     s = out.state;
     expect(s.markers[EXPLOSIVES_MARKER('p1')]!.carriedBy).toBeUndefined();
-    expect(s.operatives[id]!.aplMods).toContain(1);
+    // The free Dash is AP, not APL (D-100).
+    const saboteur = s.operatives[id]!;
+    expect(saboteur.aplMods).toEqual([]);
+    expect(freeApOf(s, saboteur)).toBe(1);
+    expect(apBudgetOf(ctx, s, saboteur)).toBe(aplOf(ctx, s, saboteur) + 1);
     expect(
       s.effects.some((e) => e.rule === 'teamFreeAction' && e.operativeId === id && (e.data?.['only'] as string[]).includes('Dash')),
     ).toBe(true);

@@ -30,7 +30,7 @@ import {
 import type { MovePath } from '../../core/intents.ts';
 import { validTargets } from '../../core/sequences/shoot.ts';
 import { basePerimeter } from '../../core/geometry.ts';
-import { aliveOperatives, aplOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../../core/state.ts';
+import { aliveOperatives, apBudgetOf, aplOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../../core/state.ts';
 import { counteractCandidates, gambitOptions, gambitToAct, whoActivates } from '../../core/phases.ts';
 import { otherPlayer, type OperativeState, type PlayerId, type Vec2 } from '../../core/types.ts';
 import { createBattle } from '../../core/init.ts';
@@ -360,7 +360,9 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
   const { state, ctx } = store;
   const op = state.operatives[state.activeOperativeId!]!;
   const dc = card(ctx, op);
-  const apl = aplOf(ctx, state, op);
+  // The activation's AP budget, not the APL stat: a granted free action adds AP without
+  // being an APL stat change (D-100). `Datacard` below still shows the STAT.
+  const apl = apBudgetOf(ctx, state, op);
   const left = apl - op.apSpent;
   /**
    * A counteract is not an activation: the operative gets ONE free 1AP action other than

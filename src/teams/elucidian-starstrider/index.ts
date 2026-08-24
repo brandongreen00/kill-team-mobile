@@ -717,7 +717,8 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
 
   // Loyal Companion, second clause. Nothing runs at the end of an action, so the free Charge
   // is granted at the end of the enemy's ACTIVATION (the smallest window the engine closes),
-  // and lands on the CANID's next activation as one extra AP restricted to Charge (D-015).
+  // and lands on the CANID's next activation (D-013) as one AP outside its APL budget,
+  // restricted to Charge (D-100) — the CANID keeps its own APL on top of it.
   reg.on('onActivationEnd', T.bind(A.loyalCompanion, 12), (ev) => {
     const foe = ev.operative;
     if (foe.player === T.player || foe.removed) return;

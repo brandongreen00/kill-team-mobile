@@ -7,10 +7,10 @@ import { describe, expect, it } from 'vitest';
 import { actionCost, availableActions, getAction } from '../../src/core/actions.ts';
 import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
 import { moveBudget } from '../../src/core/movement.ts';
-import { gambitOptions } from '../../src/core/phases.ts';
+import { gambitOptions, readyStep } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aplOf, hitOf, inflictDamage } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage, markerController } from '../../src/core/state.ts';
 import type { GameState, OperativeState, PlayerId, WeaponProfile } from '../../src/core/types.ts';
 import { rareRuleTextFor, makeTeamHooks } from '../../src/teams/helpers.ts';
 import { teamData } from '../../src/teams/data.ts';
@@ -516,13 +516,17 @@ describe('Rifles — "…that weapon has the Accurate 1 weapon rule"', () => {
 
 // ---------------------------------------------------------------------------
 describe('Aeldari Raiders — "Each friendly CORSAIR VOIDSCARRED operative can perform a free Dash action during their activation"', () => {
-  it('hands every activating operative one extra AP restricted to Dash, and pops it again at the end', () => {
+  it('hands every activating operative one extra AP restricted to Dash, and takes it back at the end', () => {
     expect(rule(RULE.aeldariRaiders)).toContain('can perform a free Dash action during their activation');
     const { ctx, state } = setup({ p1: [C.felarch, C.kurnathi] });
     const id = opWith(state, 'p1', C.kurnathi);
     const s1 = activate(ctx, state, id);
     const op = s1.operatives[id]!;
-    expect(aplOf(ctx, s1, op)).toBe(3); // "…for free" is docs/DECISIONS.md D-015's extra AP
+    // "…for free" is AP on top of the APL budget, not an APL stat change (docs/DECISIONS.md
+    // D-100): the AP gate sees three, the APL stat is still two.
+    expect(aplOf(ctx, s1, op)).toBe(2);
+    expect(freeApOf(s1, op)).toBe(1);
+    expect(apBudgetOf(ctx, s1, op)).toBe(3);
     const grant = s1.effects.find((e) => e.rule === 'teamFreeAction' && e.operativeId === id)!;
     expect(grant.data?.['only']).toEqual(['Dash', DASH_BLADEMASTER]);
     expect(grant.data?.['threshold']).toBe(2);
@@ -535,8 +539,35 @@ describe('Aeldari Raiders — "Each friendly CORSAIR VOIDSCARRED operative can p
     expect(allowed.allowed).toBe(true);
 
     const s2 = reduce(s1, { t: 'EndActivation', operativeId: id }, ctx).state;
-    expect(s2.operatives[id]!.aplMods).toEqual([]); // the grant's +1 never leaks past the activation
+    // "…during their activation": the free AP is gone with the activation it belonged to.
+    expect(freeApOf(s2, s2.operatives[id]!)).toBe(0);
+    expect(apBudgetOf(ctx, s2, s2.operatives[id]!)).toBe(2);
+    expect(s2.operatives[id]!.aplMods).toEqual([]);
     expect(aplOf(ctx, s2, s2.operatives[id]!)).toBe(2);
+  });
+
+  it('the free Dash is AP, not APL: it does not help the operative control a marker', () => {
+    expect(rule(RULE.aeldariRaiders)).toContain('can perform a free Dash action during their activation');
+    // Core rules › Datacards: "Regardless of how many APL stat changes an operative is affected
+    // by, the total can never be more than -1 or +1 from its normal APL." A free action is not
+    // one of those changes, and marker control totals the APL STAT — so an operative holding a
+    // free Dash still only brings its printed APL 2 to a contested marker.
+    const { ctx, state } = setup({ p1: [C.felarch, C.kurnathi], p2: [C.kurnathi] });
+    const mine = opWith(state, 'p1', C.kurnathi);
+    const foe = opWith(state, 'p2', C.kurnathi);
+    state.operatives[mine]!.pos = { x: 10, y: 6 };
+    state.operatives[foe]!.pos = { x: 11, y: 6 };
+    state.markers['ar-obj'] = {
+      id: 'ar-obj',
+      kind: 'objective',
+      diameterMm: 40,
+      pos: { x: 10.5, y: 6 },
+      z: 0,
+      flags: {},
+    };
+    const s = activate(ctx, state, mine);
+    expect(freeApOf(s, s.operatives[mine]!)).toBe(1);
+    expect(markerController(ctx, s, s.markers['ar-obj']!)).toBeNull(); // APL 2 against APL 2
   });
 
   it('Veteran Raider: the FELARCH’s free action is any 1AP action "instead of the Dash action", and never a 2AP one', () => {
@@ -639,7 +670,7 @@ describe('FELARCH › One Step Ahead', () => {
     state.operatives[foe]!.pos = { x: 9, y: 4 };
     let s = activate(ctx, state, foe);
     s = reduce(s, { t: 'EndActivation', operativeId: foe }, ctx).state;
-    // The FELARCH spends the interrupt on a Shoot during its own next activation (D-015).
+    // The FELARCH spends the interrupt on a Shoot during its own next activation (D-013).
     s = activate(ctx, s, felarch);
     s.operatives[felarch]!.actionsThisActivation = ['Shoot'];
     s = reduce(s, { t: 'EndActivation', operativeId: felarch }, ctx).state;
@@ -1021,11 +1052,32 @@ describe('PLUNDERERS (strategy ploy)', () => {
     const op = s.operatives[plundered]!;
     // Its own AP cannot buy a Dash…
     expect(ctx.hooks.emit('canPerformAction', s, { state: s, operative: op, action: 'Dash', allowed: true }).allowed).toBe(false);
-    // …but the Dash the ploy paid for still lands (docs/DECISIONS.md D-015).
+    // …but the Dash the ploy paid for still lands, on the AP outside its APL budget
+    // (docs/DECISIONS.md D-100).
     op.apSpent = 2;
     expect(ctx.hooks.emit('canPerformAction', s, { state: s, operative: op, action: 'Dash', allowed: true }).allowed).toBe(true);
     // Aeldari Raiders does not hand it a second free Dash on top.
     expect(s.effects.filter((e) => e.rule === 'teamFreeAction' && e.operativeId === plundered)).toHaveLength(1);
+    expect(freeApOf(s, op)).toBe(1);
+  });
+
+  it('"can IMMEDIATELY perform a free Dash" — an unspent one does not survive the turning point', () => {
+    expect(rule(SP.plunderers)).toContain('can immediately perform a free Dash action');
+    const { ctx, state } = setup({ script: [1] }); // D6 1 -> D3 1
+    const s0 = strategyPhase(state);
+    s0.turningPoint = 2;
+    const s = useGambit(ctx, s0, SP.plunderers);
+    const plundered = s.effects.find((e) => e.rule === 'cv.plundered')!.operativeId!;
+    expect(freeApOf(s, s.operatives[plundered]!)).toBe(1);
+    // The operative never activates, so its activation never ends and nothing expires the grant
+    // on its own. It must not still be holding a free Dash next turning point — and a stale one
+    // would also suppress the Aeldari Raiders Dash it is owed then.
+    s.turningPoint = 3;
+    readyStep(ctx, s);
+    expect(freeApOf(s, s.operatives[plundered]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[plundered]!)).toBe(2);
+    const later = activate(ctx, s, plundered);
+    expect(freeApOf(later, later.operatives[plundered]!)).toBe(1); // Aeldari Raiders, as normal
   });
 });
 
@@ -1137,11 +1189,15 @@ describe('Firefight ploys', () => {
     const foe = opWith(state, 'p2', C.felarch);
     state.operatives[id]!.pos = { x: 10, y: 6 };
     state.operatives[foe]!.pos = { x: 11.2, y: 6 };
+    // The marker sits on the far side of the KURNATHI from the enemy: within its own control
+    // range, outside the enemy's, so "your operatives control that marker" is satisfied on the
+    // APL stat alone. Aeldari Raiders' free Dash is AP, not APL (docs/DECISIONS.md D-100), and
+    // contributes nothing to a marker-control total.
     state.markers['lf-obj'] = {
       id: 'lf-obj',
       kind: 'generic',
       diameterMm: 20,
-      pos: { x: 10.3, y: 6 },
+      pos: { x: 8.9, y: 6 },
       z: 0,
       owner: 'p1',
       flags: { pickUpAllowed: true },

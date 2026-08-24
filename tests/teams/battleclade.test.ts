@@ -10,7 +10,7 @@ import { zeroStatMods, HookRegistry, type AttackContext } from '../../src/core/h
 import { gambitOptions, counteractCandidates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, markerController } from '../../src/core/state.ts';
+import { aliveOperatives, apBudgetOf, aplOf, freeApOf, markerController } from '../../src/core/state.ts';
 import { terrain, type GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import type { GameState, KillzoneMap, OperativeState, PlayerId, WeaponProfile } from '../../src/core/types.ts';
@@ -596,7 +596,17 @@ describe('BATTLECLADE datacard abilities', () => {
     expect(out.ok).toBe(true);
     expect(out.state.operatives[arch]!.order).toBe('conceal');
     expect(out.state.effects.some((e) => e.rule === 'teamFreeAction' && e.operativeId === arch)).toBe(true);
-    expect(out.state.operatives[arch]!.aplMods).toContain(1);
+    // "it can immediately perform a free … action" is AP on top of the APL budget, not an APL
+    // stat change (docs/DECISIONS.md D-100): the AP gate sees one more, the APL stat — which is
+    // what marker control totals — does not move.
+    expect(out.state.operatives[arch]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, out.state, out.state.operatives[arch]!)).toBe(
+      aplOf(ctx, state, state.operatives[arch]!),
+    );
+    expect(freeApOf(out.state, out.state.operatives[arch]!)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, out.state.operatives[arch]!)).toBe(
+      aplOf(ctx, out.state, out.state.operatives[arch]!) + 1,
+    );
   });
 
   it('the Seeker free action is restricted to the named actions — and to mission actions', () => {

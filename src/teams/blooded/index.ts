@@ -831,13 +831,14 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // "You can ignore any changes to this operative's APL stat and it's not affected by enemy
   //  operatives' Shock and Stun weapon rules."
   // `aplOf` reads `op.aplMods` PLUS `onStatMod.apl`, so cancelling the running total at a late
-  // priority ignores every change — except the +1 that models a granted free action (D-015), which
-  // is not a printed APL change at all.
+  // priority ignores every change, whichever channel it arrived through. A granted free action is
+  // not one of those changes: it is AP outside the APL budget (`freeApOf`, docs/DECISIONS.md
+  // D-100), so it neither needs excusing here nor may be added back — doing so would put free AP
+  // into the APL STAT, which is what marker control totals.
   reg.on('onStatMod', T.bind(AB.chemEnhanced, 90), (ev) => {
     if (ev.operative.player !== T.player || ev.operative.datacardId !== CARD.ogryn) return;
-    const granted = effectsOn(ev.state, ev.operative.id, FREE_ACTION_RULE).length;
     const raw = ev.operative.aplMods.reduce((a, b) => a + b, 0);
-    ev.mods.apl = granted - raw;
+    ev.mods.apl = -raw;
   });
   reg.on('onWeaponRules', T.bind(AB.chemEnhanced, 13), (ev) => {
     if (ev.operative.player === T.player) return; // an ENEMY operative's weapon
@@ -1056,14 +1057,17 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // =========================================================================
   // Upkeep
   // =========================================================================
-  // `grantFreeAction` models a free action as one extra AP (D-015) by pushing a +1 into `aplMods`
-  // that the engine never pops. ENFORCE hands one to ANOTHER operative, so without this the
-  // recipient would sit on APL 3 for the rest of the battle (the Death Korps / Ratlings upkeep).
+  // A `grantFreeAction` effect expires at the end of the recipient's activation
+  // (docs/DECISIONS.md D-100), which is exactly right when the ENFORCER enforces an operative that
+  // still has an activation to come. ENFORCE hands the grant to ANOTHER operative, though, and
+  // that operative may already be expended: its activation never ends again this turning point, so
+  // nothing would clear the grant, and it would wake up next turning point still holding a free AP
+  // nobody gave it. The Ready-step sweep below is that missing bound. The activation-end sweep
+  // is what keeps the ENFORCED marker in step with the grant it belongs to — that marker lives for
+  // one further activation of its own accord, and it means nothing once the free AP is gone.
   const clearSpentGrants = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (eff.source.id !== ACT.enforce) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e.id === eff.id);
       dropEffects(state, (e) => e.rule === ENFORCED && e.operativeId === op.id);
     }
@@ -1598,7 +1602,8 @@ function actions(data: typeof DATA): ActionDef[] {
           sourceId: ACT.enforce,
           sourceText: shortQuote(actionTextOf(CARD.enforcer, ACT.enforce)),
           kind: 'ability',
-          // The bonus AP is always the LAST one the operative spends (D-015).
+          // The free AP is always the LAST one the operative spends (D-100), so the 2" cap and
+          // the COMMSMAN carve-out only bite once its own APL is used up.
           threshold: aplOf(ctx, state, target),
         });
         effect(state, {
@@ -1670,7 +1675,7 @@ export const REMINDER_ONLY: Record<string, string> = {
   [`${FP.callousDisregard}.window`]:
     '"until the end of that action" is bounded to the activation (endOfActivation), and the fail damage is applied at the Roll Defence Dice step — the first hook emitted after the attack pool\'s fails are final, because dice.ts has no discard seam',
   [`${ACT.enforce}.immediate`]:
-    'D-015: the engine has no intent for performing an action outside an activation, so "that operative can immediately perform a 1AP action for free" lands as one extra AP on the recipient\'s NEXT activation; the 2" movement cap and the COMMSMAN carve-out are both enforced on that AP',
+    'D-013: the engine has no intent for performing an action outside an activation, so "that operative can immediately perform a 1AP action for free" lands as one extra AP on the recipient\'s NEXT activation — free AP outside its APL budget (D-100), not an APL stat change; the 2" movement cap and the COMMSMAN carve-out are both enforced on that AP',
   [`${AB.groupActivation}.order`]:
     'the engine alternates activations strictly and there is no activation-order seam, so "you must then activate one other ready friendly BLOODED TROOPER operative before your opponent activates" is recorded as an effect for the UI/AI rather than enforced (the Death Korps TROOPER / Brood Brother precedent)',
   [`${AB.regularDosage}.choice`]:

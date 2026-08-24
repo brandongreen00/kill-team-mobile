@@ -11,7 +11,15 @@ import { gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { resolveFightDie } from '../../src/core/sequences/fight.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, inflictDamage, markerController, statMods } from '../../src/core/state.ts';
+import {
+  aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
+  inflictDamage,
+  markerController,
+  statMods,
+} from '../../src/core/state.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import rawJson from '../../data/teams/wyrmblade.json';
 import { selectionEntries, teamData } from '../../src/teams/data.ts';
@@ -839,10 +847,18 @@ describe('WYRMBLADE strategy ploys', () => {
     const two = opWith(state, 'p1', GUNNER);
     spread(state); // nobody engaged
     const s = useGambit(ctx, state, SP_DIVERT, { operativeIds: [agent, one, two] });
-    expect(s.operatives[agent]!.aplMods).toContain(1);
-    expect(s.operatives[one]!.aplMods).toContain(1);
+    // "…can immediately perform a free Dash or Charge action" is AP outside the APL budget
+    // (D-100), so the APL stat of every one of them is left exactly where the datacard prints it.
+    expect(freeApOf(s, s.operatives[agent]!)).toBe(1);
+    expect(freeApOf(s, s.operatives[one]!)).toBe(1);
+    expect(s.operatives[agent]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, s.operatives[agent]!)).toBe(3); // KELERMORPH, printed APL 3
+    expect(apBudgetOf(ctx, s, s.operatives[agent]!)).toBe(4);
+    expect(aplOf(ctx, s, s.operatives[one]!)).toBe(2); // NEOPHYTE WARRIOR, printed APL 2
+    expect(apBudgetOf(ctx, s, s.operatives[one]!)).toBe(3);
     // 2 + 1 = the whole budget; the third named operative gets nothing.
-    expect(s.operatives[two]!.aplMods).not.toContain(1);
+    expect(freeApOf(s, s.operatives[two]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[two]!)).toBe(aplOf(ctx, s, s.operatives[two]!));
     const grant = s.effects.find((e) => e.rule === FREE_ACTION_RULE && e.operativeId === one);
     expect(grant?.data?.['only']).toEqual(['Dash', 'Charge']);
   });
@@ -862,16 +878,26 @@ describe('WYRMBLADE strategy ploys', () => {
     expect(own.inches).toBe(6);
   });
 
-  it('DIVERT AND DISAPPEAR: the granted +1 APL is popped again, so nobody sits on APL 3 for the battle', () => {
+  it('DIVERT AND DISAPPEAR: the free action is a window, not a banked AP', () => {
+    expect(ruleText(SP_DIVERT)).toContain('can immediately perform a free Dash or Charge action');
     const { ctx, state } = setup();
     const id = opWith(state, 'p1', WARRIOR);
     spread(state);
     const s0 = useGambit(ctx, state, SP_DIVERT, { operativeIds: [id] });
-    expect(s0.operatives[id]!.aplMods).toContain(1);
+    // The grant is AP outside the APL budget, so the printed APL 2 stays 2 (D-100).
+    expect(s0.operatives[id]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s0, s0.operatives[id]!)).toBe(2);
+    expect(apBudgetOf(ctx, s0, s0.operatives[id]!)).toBe(3);
+    // "immediately": the grant expires with the activation it is spent in…
     let s = activate(ctx, s0, id, 'engage');
     s = reduce(s, { t: 'EndActivation', operativeId: id }, ctx).state;
-    expect(s.operatives[id]!.aplMods).not.toContain(1);
     expect(s.effects.some((e) => e.rule === FREE_ACTION_RULE && e.operativeId === id)).toBe(false);
+    expect(freeApOf(s, s.operatives[id]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[id]!)).toBe(2);
+    // …and an operative that never spends it does not carry it into the next turning point.
+    const stale = { ...s0, turningPoint: 2 };
+    ctx.hooks.emit('onReadyStep', stale, { state: stale, player: 'p1', cp: 1 });
+    expect(freeApOf(stale, stale.operatives[id]!)).toBe(0);
   });
 
   it('DIVERT AND DISAPPEAR: an engaged CULT AGENT is offered the free Fall Back and pays the −1 APL', () => {

@@ -62,7 +62,7 @@ Ranked by how much each defect distorts a real game.
 | W-35 | FIXED | engine | major | Operative-to-operative distance is horizontal only, so an operative on 3" Vantage terrain is in control range of one on the floor below |
 | W-36 | open | engine | major | An incapacitated operative gets no pre-removal step: granted free actions are dropped and only one carried marker is placed |
 | W-37 | FIXED | engine | minor | Gambit alternation is not enforced by the reducer, and the AI driver lets the initiative player use every gambit first |
-| W-38 | open | engine | minor | A granted free action is modelled as +1 APL, so the ±1 clamp cancels it against any other APL change |
+| W-38 | FIXED | engine | minor | A granted free action is modelled as +1 APL, so the ±1 clamp cancels it against any other APL change |
 | W-39 | FIXED `10509af` | engine | minor | The Ceiling "regardless of the operative's height" exemption is still dead at the final-placement check |
 
 ## Detail
@@ -661,7 +661,7 @@ Test: tests/rules-review.test.ts quoting core-rules.txt:183: with initiative p1,
 
 ### W-38 · A granted free action is modelled as +1 APL, so the ±1 clamp cancels it against any other APL change
 
-**OPEN** · engine · minor · **needs an owner decision**
+**FIXED** · engine · minor · owner confirmed 2026-08-23: a free action must not cost against APL (D-100)
 
 Rules pinned: `core-rules.txt:454 ("Regardless of how many APL STAT CHANGES an operative is affected by, the total can never be more than -1 or +1 from its normal APL. This takes precedence over all stat changes")`
 

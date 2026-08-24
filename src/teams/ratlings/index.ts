@@ -249,7 +249,7 @@ function blockedWithCrit(state: GameState): boolean {
 
 const scarperKey = (op: OperativeState): string => `ratlings.scarper:${op.id}`;
 
-/** Everything of ours that hands out `grantFreeAction`, for the AP book-keeping below. */
+/** Everything of ours that hands out `grantFreeAction`, for the stale-grant sweep below. */
 const FREE_ACTION_SOURCES: ReadonlySet<string> = new Set<string>([RULE.scarper, A.evade, A.earlyWarning]);
 
 /** Operatives eligible for Scarper right now, lowest id first (the deterministic default). */
@@ -266,9 +266,10 @@ function factionRule(reg: HookRegistry, T: TeamHooks): void {
    *  and SNEAK)… Each friendly operative can only do this once per turning point, and cannot do
    *  so after the final activation of the turning point."
    *
-   * The engine has no intent for acting outside an activation, so the free Dash is one extra AP
-   * restricted to Dash (docs/DECISIONS.md D-015) and lands on that operative's next activation.
-   * Which operative takes it is the deterministic lowest-id default (D-016).
+   * The engine has no intent for acting outside an activation, so the free Dash is one AP
+   * outside that operative's APL budget (docs/DECISIONS.md D-100), restricted to Dash, and it
+   * lands on that operative's next activation. Which operative takes it is the deterministic
+   * lowest-id default (D-016).
    *
    * REMINDER-ONLY: "but it cannot end that move within 3" of an enemy operative unless it's not
    * visible to every enemy operative when it ends that move" — no hook constrains where a move
@@ -667,8 +668,8 @@ function abilities(reg: HookRegistry, T: TeamHooks): void {
 
   // ---- SNEAK › Evade -----------------------------------------------------
   // "Once per turning point, after an enemy operative performs an action, you can interrupt and
-  //  perform a free Dash action with this operative." D-015 again; the SNEAK is printed out of
-  //  Scarper because it has this instead.
+  //  perform a free Dash action with this operative." One AP outside the SNEAK's APL budget
+  //  again; the SNEAK is printed out of Scarper because it has this instead.
   reg.on('onActivationEnd', T.bind(A.evade, 11), (ev) => {
     if (ev.operative.player === T.player) return;
     for (const sneak of T.friendlies(ev.state).filter((o) => o.datacardId === CARD.sneak)) {
@@ -762,11 +763,11 @@ function bookkeeping(reg: HookRegistry, T: TeamHooks): void {
   });
 
   /*
-   * `grantFreeAction` models a free action as one extra AP (D-015) by pushing a +1 into
-   * `aplMods`, which the engine never pops. Scarper hands one out after EVERY enemy activation,
-   * so without this the whole kill team would sit on APL 3 for the rest of the battle. The same
-   * clean-up removes the ±1 of our own "until the end of its next activation" APL effects once
-   * their window has closed. Reported as a seam.
+   * The ±1 of our own "until the end of its next activation" APL effects is a real APL stat
+   * change, and `op.aplMods` has no owner in the core: once the effect's window is armed and
+   * about to close, the modifier has to be taken back out by hand or it stands for the rest of
+   * the battle. The same pass clears PURLOINED RATIONS and LUCKY ROUND, whose "until the end of
+   * that sequence" the engine only sweeps at the end of the turning point. Reported as a seam.
    */
   const APL_EFFECTS: { rule: string; delta: number }[] = [
     { rule: EFF.tripwireApl, delta: -1 },
@@ -774,12 +775,6 @@ function bookkeeping(reg: HookRegistry, T: TeamHooks): void {
   ];
   const upkeep = (state: GameState, op: OperativeState): void => {
     dropEffects(state, (e) => (e.rule === EFF.rations || e.rule === EFF.luckyRound) && e.operativeId === op.id);
-    for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
-      if (!FREE_ACTION_SOURCES.has(eff.source.id)) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
-      dropEffects(state, (e) => e === eff);
-    }
     for (const { rule, delta } of APL_EFFECTS) {
       for (const eff of effectsOn(state, op.id, rule)) {
         if (eff.expiry.kind !== 'endOfNextActivation' || !eff.expiry.armed) continue;
@@ -788,12 +783,30 @@ function bookkeeping(reg: HookRegistry, T: TeamHooks): void {
       }
     }
   };
+  /*
+   * A free action is AP rather than a stat change, and it expires with the activation it was
+   * given for — the core does that itself. All three of ours are handed out between two
+   * activations, to an operative that is not the one on the clock, and an operative that is
+   * already expended never ends another activation for that expiry to fire on. Scarper says
+   * where the offer stops out loud — "cannot do so after the final activation of the turning
+   * point" — so an unspent grant dies with its turning point instead of waiting to hand
+   * somebody a spare AP in the next one.
+   */
+  const dropStaleGrants = (state: GameState, op: OperativeState): void => {
+    for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
+      if (!FREE_ACTION_SOURCES.has(eff.source.id)) continue;
+      dropEffects(state, (e) => e === eff);
+    }
+  };
   reg.on('onActivationEnd', T.bindText('ratlings.aplUpkeep', text(RULE.scarper), 90), (ev) => {
     upkeep(ev.state, ev.operative);
   });
   reg.on('onReadyStep', T.bindText('ratlings.aplUpkeep', text(RULE.scarper), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) upkeep(ev.state, o);
+    for (const o of T.friendlies(ev.state)) {
+      upkeep(ev.state, o);
+      dropStaleGrants(ev.state, o);
+    }
   });
 
   // OPTICS ends "until the start of this operative's next activation" — exactly, rather than

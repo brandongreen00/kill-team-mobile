@@ -11,7 +11,15 @@ import { gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { checkTarget, effectiveRules } from '../../src/core/sequences/shoot.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
-import { aliveOperatives, aplOf, moveOf, markerController, statMods } from '../../src/core/state.ts';
+import {
+  aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
+  moveOf,
+  markerController,
+  statMods,
+} from '../../src/core/state.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import { baseWhollyWithin } from '../../src/core/geometry.ts';
 import { markerWhollyWithin } from '../../src/core/ops/common.ts';
@@ -1002,8 +1010,29 @@ describe('Datacard abilities', () => {
     state.sequence = null;
     state.activeOperativeId = shooter.id;
     ctx.hooks.emit('onActivationEnd', state, { state, operative: shooter });
-    // D-015: the free Shoot is one extra AP restricted to `Shoot (Gunfight)`.
-    expect(me.aplMods).toContain(1);
+    // "…this operative can perform a free Shoot action." D-100: the free Shoot is AP granted
+    // outside the APL budget, so the APL stat — "the total can never be more than -1 or +1 from
+    // its normal APL" — is untouched and only the activation's AP budget grows.
+    expect(me.aplMods).toEqual([]);
+    expect(aplOf(ctx, state, me)).toBe(2);
+    expect(freeApOf(state, me)).toBe(1);
+    expect(apBudgetOf(ctx, state, me)).toBe(3);
+    // A second trigger before the GUNFIGHTER activates must not bank a second free AP: the free
+    // Shoot spends the one Gunfight debt, so the extra AP could never legally be used.
+    state.sequence = seq;
+    ctx.hooks.emit('onDefenceDice', state, {
+      state,
+      ctx: attackCtx(shooter, me, profile, 'Hot‑shot lascarbine'),
+      count: 3,
+      coverSave: false,
+      coverSaveAsCrit: false,
+      extraCoverSaves: 0,
+      mods: zeroStatMods(),
+      rerolls: [],
+    });
+    state.sequence = null;
+    ctx.hooks.emit('onActivationEnd', state, { state, operative: shooter });
+    expect(freeApOf(state, me)).toBe(1);
     const def = getAction(SHOOT_GUNFIGHT)!;
     expect(def.available!(ctx, state, me)).toBe(true);
     expect(def.treatedAs).toBe('Shoot');
@@ -1012,6 +1041,13 @@ describe('Datacard abilities', () => {
     expect(def.check(ctx, state, me, { targetId: other.id }).ok).toBe(false);
     me.order = 'conceal'; // "(you can change its order to Engage to do so)"
     expect(def.check(ctx, state, me, { targetId: shooter.id }).ok).toBe(true);
+    // The extra AP is really spendable: with its own 2AP gone the GUNFIGHTER can still take the
+    // free Shoot, and only that — "the free action must be Shoot (Gunfight)".
+    const spent = activate(ctx, state, id, 'conceal');
+    spent.operatives[id]!.apSpent = 2;
+    const legal = availableActions(ctx, spent, spent.operatives[id]!);
+    expect(legal.find((a) => a.def.id === SHOOT_GUNFIGHT)?.ok).toBe(true);
+    expect(legal.find((a) => a.def.id === 'Dash')?.reason).toContain(`must be ${SHOOT_GUNFIGHT}`);
     const s = act(ctx, activate(ctx, state, id, 'conceal'), id, SHOOT_GUNFIGHT, { targetId: shooter.id }).state;
     const rolled = s.rolls.filter((r) => r.kind === 'attack').at(-1)!;
     expect(rolled.results).toHaveLength(4); // 3 fails + 1, capped at 4
@@ -1144,8 +1180,13 @@ describe('Datacard abilities', () => {
     let s = activate(ctx, state, id);
     s = act(ctx, s, id, 'Shoot', { weaponName: 'Hot‑shot laspistol', targetId: foe.id }).state;
     const op = s.operatives[id]!;
-    expect(op.aplMods).toContain(1); // D-015: one extra AP restricted to Dash
-    expect(aplOf(ctx, s, op)).toBe(3);
+    // D-100: the free Dash is one AP outside the APL budget, so the APL stat is untouched —
+    // "regardless of how many APL stat changes an operative is affected by, the total can never
+    // be more than -1 or +1 from its normal APL" is about stat changes, and this is not one.
+    expect(op.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, op)).toBe(2);
+    expect(freeApOf(s, op)).toBe(1);
+    expect(apBudgetOf(ctx, s, op)).toBe(3);
     // "…but can only use any remaining move distance it had from that Charge action (max 3")."
     expect(dynamicDashCap(ctx, s, op)).toBe(3); // no Charge performed
     op.actionsThisActivation.push('Charge');
@@ -1162,6 +1203,12 @@ describe('Datacard abilities', () => {
     expect(def.treatedAs).toBe('Dash');
     expect(def.check(ctx, s, op, { path: { points: [{ x: op.pos.x + 1.5, y: op.pos.y }] } }).ok).toBe(true);
     expect(def.check(ctx, s, op, { path: { points: [{ x: op.pos.x + 3, y: op.pos.y }] } }).ok).toBe(false);
+    // "…it can immediately perform a free Dash action afterwards" is that activation's window and
+    // nothing more: the grant expires with the activation, so the PRECURSOR banks nothing.
+    const ended = reduce(settle(ctx, s), { t: 'EndActivation', operativeId: id }, ctx);
+    expect([ended.ok, ended.reason]).toEqual([true, undefined]);
+    expect(freeApOf(ended.state, ended.state.operatives[id]!)).toBe(0);
+    expect(apBudgetOf(ctx, ended.state, ended.state.operatives[id]!)).toBe(2);
   });
 
   it('SERVO-SENTRY › Machine: the action ban, no retaliating, no assisting, and no off-datacard weapons', () => {
@@ -1225,9 +1272,14 @@ describe('Datacard abilities', () => {
     state.turningPoint = 1;
     expect(gambitOptions(ctx, state, 'p1').map((o) => o.id)).toContain(RAPID_INSERTION_GAMBIT);
     const s = reduce(state, { t: 'UseGambit', player: 'p1', gambitId: RAPID_INSERTION_GAMBIT }, ctx).state;
+    // "Each friendly TEMPESTUS AQUILON TROOPER operative wholly within your drop zone can
+    //  immediately perform a free Reposition action" — free AP (D-100), never an APL stat change,
+    //  so only the TROOPERs' AP budget grows and no operative's APL stat moves at all.
     for (const op of aliveOperatives(s, 'p1')) {
       const expected = op.datacardId === CARD.trooper ? 1 : 0;
-      expect([op.id, op.aplMods.filter((m) => m === 1).length]).toEqual([op.id, expected]);
+      expect([op.id, freeApOf(s, op)]).toEqual([op.id, expected]);
+      expect([op.id, op.aplMods]).toEqual([op.id, []]);
+      expect([op.id, apBudgetOf(ctx, s, op)]).toEqual([op.id, aplOf(ctx, s, op) + expected]);
     }
     s.turningPoint = 2;
     expect(gambitOptions(ctx, s, 'p1').map((o) => o.id)).not.toContain(RAPID_INSERTION_GAMBIT);

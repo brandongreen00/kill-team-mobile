@@ -13,6 +13,9 @@ import { effectiveRules, checkTarget } from '../../src/core/sequences/shoot.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import {
   aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
   inflictDamage,
   markerController,
   moveOf,
@@ -1167,20 +1170,29 @@ describe('Strategy ploys', () => {
     expect(roll(s).map((g) => g.mode)).toEqual(['any']);
   });
 
-  it('WRITHE OUT OF SIGHT grants a free Burrow (and a free Reposition within 2" of your TUNNEL), then pops its own +1 APL', () => {
+  it('WRITHE OUT OF SIGHT grants a free Burrow (and a free Reposition within 2" of your TUNNEL)', () => {
+    expect(ruleText(SP.writheOutOfSight)).toContain('can immediately perform a free Burrow action');
     const { ctx, state } = setup();
     tunnelAt(state, 'p1', [{ x: 12, y: 11 }]);
     const op = place(state, opWith(state, 'p1', CARD.warrior), 13, 11);
     isolate(state, [op.id]);
     const s = useGambit(ctx, state, SP.writheOutOfSight, { operativeId: op.id });
     const me = s.operatives[op.id]!;
-    expect(me.aplMods).toContain(1);
+    // A free action is an action, not an APL stat change: the printed APL 3 is untouched and
+    // the operative has a fourth AP to spend on the named actions (docs/DECISIONS.md D-100).
+    expect(me.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, me)).toBe(3);
+    expect(freeApOf(s, me)).toBe(1);
+    expect(apBudgetOf(ctx, s, me)).toBe(4);
     const eff = s.effects.find((e) => e.rule === 'teamFreeAction' && e.operativeId === me.id)!;
     expect(eff.data?.['only']).toEqual([BURROW, 'Reposition', 'Fall Back']);
-    // The upkeep pops the +1 the engine never pops (the Corsair Aeldari Raiders precedent).
+    // The ploy is a STRATEGIC GAMBIT, so the AP waits for the operative's own activation and
+    // expires with it — this module does not have to take it back.
     const after = reduce(activate(ctx, s, me.id), { t: 'EndActivation', operativeId: me.id }, ctx).state;
-    expect(after.operatives[me.id]!.aplMods.filter((m) => m === 1)).toHaveLength(0);
-    expect(REMINDER_ONLY[`${SP.writheOutOfSight}.fallBack`]).toContain('ONE extra AP');
+    expect(freeApOf(after, after.operatives[me.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, after, after.operatives[me.id]!)).toBe(3);
+    // "it can immediately perform a free Fall Back" is one AP against a 2AP action.
+    expect(REMINDER_ONLY[`${SP.writheOutOfSight}.fallBack`]).toContain('Fall Back costs 2AP');
   });
 
   it('TUNNEL LURKERS: a Conceal-order operative on your TUNNEL stops being a valid target', () => {

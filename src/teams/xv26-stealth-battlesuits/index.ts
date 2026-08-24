@@ -209,7 +209,7 @@ export const REMINDER_ONLY: Record<string, string> = {
     '"…can immediately do one of the following: … Change its order." — only the free Dash branch is offered. ' +
     'There is no intent that changes an order outside an activation and `onOrderChange` is declared and never ' +
     'emitted, so the alternative has no channel; the Dash branch\'s own "(in an order of your choice)" is moot ' +
-    'because D-015 defers the free action to that operative\'s next activation, where the order is chosen anyway.',
+    'because D-013 defers the free action to that operative\'s next activation, where the order is chosen anyway.',
   [`${AB.multispectrum}.endOfMove`]:
     '"Each friendly operative that performs the Dash action cannot end that move within 3" of an enemy operative" — ' +
     'no hook constrains where a move ENDS; the predicate is exported as `multispectrumDashEndLegal` for the UI.',
@@ -635,9 +635,10 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
    * "Note that a Comms Device from universal equipment only affects the second distance of this
    *  rule" — so `supportDistance` widens the 3" and the 8" stays literal.
    *
-   * The free Dash is D-015's extra AP, which lands on each friendly operative's OWN next
-   * activation rather than during the enemy's; the alternative ("change its order") is taken for
-   * an operative that could not use a Dash at all, so the rule always does something.
+   * The free Dash is AP granted outside the APL budget (D-100), landing on each friendly
+   * operative's OWN next activation rather than during the enemy's (D-013); the alternative
+   * ("change its order") is taken for an operative that could not use a Dash at all, so the rule
+   * always does something.
    */
   reg.on('onActivationStart', T.bind(AB.multispectrum, 13), (ev) => {
     if (ev.operative.player === T.player) return;
@@ -697,27 +698,28 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   });
 
   // =========================================================================
-  // Free-action upkeep — `grantFreeAction` pushes a +1 into `aplMods` the engine never pops
-  // (docs/DECISIONS.md D-015; the Corsair Voidscarred / Ratlings precedent).
+  // An unspent free action does not survive the turning point
   // =========================================================================
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  // The free AP rides an `endOfActivation` effect, so a grant spent inside its own operative's
+  // activation is dropped by the engine at EndActivation (D-100) and needs no help here. Both of
+  // this team's grants can land on an operative that is NOT the one activating, though —
+  // Multispectrum fires on an ENEMY's activation and Vectored Retro-Thrusters interrupts one —
+  // and an operative already expended this turning point has no activation left to spend the AP
+  // in. "…can IMMEDIATELY perform a free action" is that moment only, so the Ready step of the
+  // next turning point clears whatever was never taken, on either side of the table.
+  const dropUnspentGrant = (state: GameState, op: OperativeState): void => {
     for (const eff of state.effects.filter((e) => e.rule === FREE_ACTION_RULE && e.operativeId === op.id)) {
       if (!FREE_ACTION_SOURCES.has(eff.source.id)) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bindText('xv26.aplUpkeep', text(RULE.stealthFields), 90), (ev) => {
-    upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('xv26.aplUpkeep', text(RULE.stealthFields), 90), (ev) => {
+  reg.on('onReadyStep', T.bindText('xv26.freeActionUpkeep', text(RULE.stealthFields), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of aliveOperatives(ev.state)) upkeep(ev.state, o);
+    for (const o of aliveOperatives(ev.state)) dropUnspentGrant(ev.state, o);
   });
 }
 
-/** Every rule of this team that hands out a `grantFreeAction`, for the `aplMods` upkeep. */
+/** Every rule of this team that hands out a `grantFreeAction`, for the Ready-step clean-up. */
 const FREE_ACTION_SOURCES: ReadonlySet<string> = new Set<string>([
   AB.multispectrum,
   FP.vectoredRetroThrusters,
@@ -1001,9 +1003,10 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
    *  that first Charge action…"
    *
    * Nothing runs after an action, so the interrupt is taken from the `UsePloy` intent instead;
-   * both free actions are D-015's extra AP. The friendly's lands on its own next activation
-   * (the standard D-015 consequence); the charging enemy is still mid-activation, so its
-   * `Reposition (Vectored Retro-Thrusters)` is genuinely immediate.
+   * both free actions are AP granted outside the APL budget (D-100), so neither operative's APL
+   * stat moves. The friendly's lands on its own next activation (the standard D-013 deferral);
+   * the charging enemy is still mid-activation, so its `Reposition (Vectored Retro-Thrusters)`
+   * is genuinely immediate.
    */
   reg.on('onPloyUsed', T.bind(FP.vectoredRetroThrusters, 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== FP.vectoredRetroThrusters) return;

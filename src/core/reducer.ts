@@ -8,6 +8,7 @@ import { rebuildHooks, terrain, type GameContext } from './context.ts';
 import { inControlRange,
   aliveOperatives,
   aplOf,
+  apBudgetOf,
   card,
   log,
   recordRoll,
@@ -377,7 +378,9 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       // 1AP action (excluding Guard) for free" — ONE action, not an unlimited free turn.
       if (counteracting && Number(counteract?.['actionsUsed'] ?? 0) > 0)
         return fail('a counteracting operative can only perform one action');
-      if (!counteracting && op.apSpent + ap > aplOf(ctx, next, op))
+      // `apBudgetOf`, not `aplOf`: a granted free action adds AP without being an APL stat
+      // change, so it is not subject to the +-1 clamp (D-100).
+      if (!counteracting && op.apSpent + ap > apBudgetOf(ctx, next, op))
         return fail(`not enough AP for ${def.name}`);
       const hookEv = ctx.hooks.emit('canPerformAction', next, { state: next, operative: op, action: def.id, allowed: true });
       if (!hookEv.allowed) return fail(hookEv.reason ?? `${def.name} is not allowed`);

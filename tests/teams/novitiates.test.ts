@@ -6,7 +6,7 @@
 import { describe, expect, it } from 'vitest';
 import { availableActions, actionCost, getAction } from '../../src/core/actions.ts';
 import { reduce } from '../../src/core/reducer.ts';
-import { aplOf, inflictDamage, markerController } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, inflictDamage, markerController } from '../../src/core/state.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { moveBudget } from '../../src/core/movement.ts';
 import type { AttackContext } from '../../src/core/hooks.ts';
@@ -657,7 +657,12 @@ describe('NOVITIATES strategy ploys', () => {
     const granted = s.effects.filter((e) => e.rule === 'teamFreeAction' && e.player === 'p1');
     expect(granted).toHaveLength(3); // 10 NOVITIATE operatives → floor(10/3)
     const op = s.operatives[granted[0]!.operativeId!]!;
-    expect(aplOf(ctx, s, op)).toBe((DATA.datacards.find((c) => c.id === op.datacardId)?.apl ?? 2) + 1);
+    // "…can immediately perform a free Dash action" grants AP, not APL: the stat is unchanged
+    // and the budget is one higher (docs/DECISIONS.md D-100).
+    const printedApl = DATA.datacards.find((c) => c.id === op.datacardId)?.apl ?? 2;
+    expect(aplOf(ctx, s, op)).toBe(printedApl);
+    expect(freeApOf(s, op)).toBe(1);
+    expect(apBudgetOf(ctx, s, op)).toBe(printedApl + 1);
   });
 });
 

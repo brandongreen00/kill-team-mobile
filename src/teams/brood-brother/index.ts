@@ -641,9 +641,11 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // ICONWARD › Broodmind Devotion — REMINDER ONLY (see REMINDER_ONLY)
   // =========================================================================
   // "…before that operative is removed from the killzone, it can perform a 1AP action for free."
-  // The operative is being removed, so D-015's "one extra AP on its next activation" can never be
-  // spent, and `onIncapacitated.freeActions` is declared but never consumed. No handler is
-  // registered, because one would be the silent no-op CLAUDE.md rule 5 forbids.
+  // A grant is free AP held on the operative until it next activates (docs/DECISIONS.md D-100),
+  // and this one is handed to an operative that is being removed from the killzone, so it never
+  // activates again and the AP can never be spent. `onIncapacitated.freeActions` is declared but
+  // never consumed. No handler is registered, because one would be the silent no-op CLAUDE.md
+  // rule 5 forbids.
 
   // =========================================================================
   // KNIFE FIGHTER › Assassin — its own ActionDef (D-021), registered below.
@@ -717,7 +719,11 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     }
     // "That friendly operative can then immediately perform a free Dash action" and "if this rule
     //  was used during that friendly operative's activation, that activation ends" — so from here
-    //  the Dash is the only action it may still perform (D-015).
+    //  the Dash is the only action it may still perform. The threshold is where that free AP
+    //  begins: the AP already spent when the victim is the operative on the clock, its APL
+    //  otherwise, which puts the Dash last in its next activation. Free AP sits outside the APL
+    //  budget (docs/DECISIONS.md D-100), so the -1 pushed just above shortens what the victim pays
+    //  for out of its own APL and never eats the Dash the rule just promised it.
     // REMINDER ONLY: "must end that move within this operative's control range" has no seam.
     grantFreeAction(ev.state, victim, {
       sourceId: AB.medic,
@@ -1528,8 +1534,9 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   // INSIDIOUS (firefight)
   // =========================================================================
   // "Before the next activation, one friendly BROOD BROTHER operative can perform a free Dash
-  //  action…"  There is no intent for performing an action outside an activation, so D-015 applies:
-  //  the Dash is one extra AP restricted to Dash, landing on that operative's next activation.
+  //  action…"  There is no intent for performing an action outside an activation, so the Dash is
+  //  one AP outside that operative's APL budget (docs/DECISIONS.md D-100), restricted to Dash, and
+  //  it lands on that operative's next activation.
   //  REMINDER ONLY: the printed timing, and "as long as it's not a valid target for enemy
   //  operatives when it starts and ends that action".
   reg.on('onPloyUsed', T.bind(FP.insidious, 20), (ev) => {
@@ -1696,7 +1703,7 @@ export const REMINDER_ONLY: Record<string, string> = {
   [AB.psirenCaster]:
     'fight.ts emits no onRollAttack (D-031), so the re-roll works only when shooting, not when fighting or retaliating',
   [AB.broodmindDevotion]:
-    'the operative is being removed from the killzone, so D-015’s extra AP can never be spent and onIncapacitated.freeActions is declared but never consumed — the free 1AP action (and its order change) has no seam at all',
+    'the operative is being removed from the killzone, so the free AP a grant holds for its next activation (D-100) can never be spent, and onIncapacitated.freeActions is declared but never consumed — the free 1AP action (and its order change) has no seam at all',
   [AB.trooperGroupActivation]:
     'the reducer sets activePlayer = otherPlayer(op.player) AFTER onActivationEnd is emitted, so "you must then activate one other ready friendly TROOPER operative before your opponent activates" cannot be enforced; the pairing is recorded as an effect for the UI/AI (the Death Korps / Pathfinders partial)',
   [AB.familiarGroupActivation]:
@@ -1716,7 +1723,7 @@ export const REMINDER_ONLY: Record<string, string> = {
   [`${FP.unquestioningLoyalty}.fight`]:
     'startFight emits no target-substitution hook, so the Fight half (and "treat that other operative as being within the fighting operative’s control range") is unreachable; the Shoot half is exact',
   [`${FP.insidious}.timing`]:
-    'no intent performs an action outside an activation, so the free Dash lands on that operative’s next activation (D-015) instead of "before the next activation", and "not a valid target when it starts and ends that action" cannot be checked',
+    'no intent performs an action outside an activation, so the free Dash is AP held for that operative’s next activation (D-100) instead of "before the next activation", and "not a valid target when it starts and ends that action" cannot be checked',
   [`${EQ.covertGuises}.dropZone`]:
     'validateMove has no end-region option, so "must end that move wholly within 3" of your drop zone" is not enforced; the D3 and the eligibility test are',
   [`${ACT.jam}.activation`]:
