@@ -61,7 +61,7 @@ import {
   tunnelStepLegal,
 } from '../../src/teams/raveners/index.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
-import { act, activate, battle, mapById, opWith, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, teamContext } from './harness.ts';
 
 const DATA = teamData('raveners');
 /** `TeamData` does not surface `notes[]`, so the committed bytes are read straight from the file. */
@@ -928,7 +928,7 @@ describe('TREMORSCYTHE', () => {
     const foe = place(state, opWith(state, 'p2', CARD.warrior), 15, 11);
     isolate(state, [id, foe.id]);
     const def = getAction(CHARGE_HYPERSENSORY)!;
-    const params = { path: { points: [{ x: 14.2, y: 11 }] } };
+    const params = { path: { points: [chargeTo(ctx, state, op.id, foe.id)] } };
     expect(def.check(ctx, state, op, params).ok).toBe(false);
     expect(def.check(ctx, state, op, params).reason).toContain('Burrow action');
     op.actionsThisActivation.push(BURROW);
@@ -980,7 +980,7 @@ describe('WARRIOR › Instinctive Behaviour', () => {
     const { ctx, state } = setup();
     const warrior = state.operatives[opWith(state, 'p1', CARD.warrior)]!;
     const me = place(state, warrior.id, 12, 11);
-    const foe = place(state, opWith(state, 'p2', CARD.warrior), 12.9, 11);
+    const foe = place(state, opWith(state, 'p2', CARD.warrior), 13.7, 11); // engaged: 40mm bases need 1.575" of centres
     isolate(state, [me.id, foe.id]);
     const profile = profileOf(CARD.warrior, 'Scything talons');
     const read = (): boolean =>
@@ -1273,10 +1273,13 @@ describe('Firefight ploys', () => {
   it('SLITHERING EVASION: "Perform the Charge action while within control range of an enemy operative"', () => {
     const { ctx, state } = setup();
     const me = place(state, opWith(state, 'p1', CARD.warrior), 12, 11);
-    const foe = place(state, opWith(state, 'p2', CARD.warrior), 12.9, 11);
+    // Engaged with `me` (40mm bases: 1.575" of centres to touch, 1" of control range on top),
+    // but off the line to `other` — the ploy permits Charging while ALREADY engaged, and that
+    // is not permission to walk over the model in the way.
+    const foe = place(state, opWith(state, 'p2', CARD.warrior), 12, 12.8);
     const other = place(state, opWith(state, 'p2', CARD.prime), 17, 11);
     isolate(state, [me.id, foe.id, other.id]);
-    const params = { path: { points: [{ x: 15.4, y: 11 }] } };
+    const params = { path: { points: [{ x: 15.3, y: 11 }] } };
     // The universal Charge refuses: "already within control range of an enemy operative".
     expect(getAction('Charge')!.check(ctx, state, me, params).ok).toBe(false);
     let s = activate(ctx, state, me.id);

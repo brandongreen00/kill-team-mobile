@@ -74,7 +74,7 @@ import {
   trapMarkers,
   wyrmblade,
 } from '../../src/teams/wyrmblade/index.ts';
-import { act, activate, battle, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
 import { heavyBlock, rect, testMap } from '../fixtures.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
@@ -907,7 +907,7 @@ describe('WYRMBLADE strategy ploys', () => {
     const foe = opWith(state, 'p2', WARRIOR);
     isolate(state, [agent, foe]);
     place(state, agent, 10, 10);
-    place(state, foe, 11.3, 10); // within control range
+    place(state, foe, 11.5, 10); // within control range, bases touching not overlapping
     const s0 = useGambit(ctx, state, SP_DIVERT, { operativeIds: [agent] });
     const grant = s0.effects.find((e) => e.rule === FREE_ACTION_RULE && e.operativeId === agent);
     expect(grant?.data?.['only']).toEqual(['Fall Back']);
@@ -1417,7 +1417,11 @@ describe('WYRMBLADE datacard abilities', () => {
     place(state, foe.id, 12.5, 10);
     locus.order = 'conceal';
     const charge = getAction(CHARGE_QUICKSILVER)!;
-    expect(charge.check(ctx, state, locus, { path: { points: [{ x: 11.4, y: 10 }] } }).reason).toContain(
+    // As close as the rules allow: "the sides of different bases can touch, but a base cannot
+    // be placed on another". Still inside the enemy's 1" control range, which is what the
+    // ability requires the move to finish within.
+    const into = { path: { points: [chargeTo(ctx, state, locus.id, foe.id)] } };
+    expect(charge.check(ctx, state, locus, into).reason).toContain(
       'has not been triggered',
     );
 
@@ -1429,11 +1433,11 @@ describe('WYRMBLADE datacard abilities', () => {
     expect(armed?.data?.['enemyId']).toBe(foe.id);
 
     s = activate(ctx, s, locus.id, 'conceal');
-    const ok = charge.check(ctx, s, s.operatives[locus.id]!, { path: { points: [{ x: 11.4, y: 10 }] } });
+    const ok = charge.check(ctx, s, s.operatives[locus.id]!, into);
     expect(ok.ok, ok.reason).toBe(true);
     // A move that does not end within control range of THAT enemy is refused.
     expect(charge.check(ctx, s, s.operatives[locus.id]!, { path: { points: [{ x: 10, y: 12 }] } }).ok).toBe(false);
-    const out = act(ctx, s, locus.id, CHARGE_QUICKSILVER, { path: { points: [{ x: 11.4, y: 10 }] } });
+    const out = act(ctx, s, locus.id, CHARGE_QUICKSILVER, into);
     expect(out.ok, out.reason).toBe(true);
     expect(out.state.operatives[locus.id]!.order).toBe('engage'); // "you can change its order to do so"
     expect(out.state.operatives[locus.id]!.apSpent).toBe(0); // free

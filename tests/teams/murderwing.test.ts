@@ -208,13 +208,15 @@ describe('Jump Pack — "it can do a BOOST for that increment … remove it from
     place(state, id, { x: 5, y: 5 });
     place(state, foeId, { x: 10.4, y: 5 });
     let s = activate(ctx, state, id);
-    const bad = act(ctx, s, id, BOOST_REPOSITION, { targetPos: { x: 9.2, y: 5 } });
+    // 9.1 is inside the enemy's control range with the bases touching; at 9.2 the two 32mm
+    // bases (1.26" of centres) overlap, and the refusal would be about that instead.
+    const bad = act(ctx, s, id, BOOST_REPOSITION, { targetPos: { x: 9.1, y: 5 } });
     expect(bad.ok).toBe(false);
     expect(bad.reason).toContain('control range');
     // The Charge variant must finish there instead.
-    const good = act(ctx, s, id, BOOST_CHARGE, { targetPos: { x: 9.2, y: 5 } });
+    const good = act(ctx, s, id, BOOST_CHARGE, { targetPos: { x: 9.1, y: 5 } });
     expect(good.ok).toBe(true);
-    expect(good.state.operatives[id]!.pos.x).toBeCloseTo(9.2, 5);
+    expect(good.state.operatives[id]!.pos.x).toBeCloseTo(9.1, 5);
   });
 
   it('"as long as no part of its base is underneath Vantage terrain" — and it cannot be set up underneath one either', () => {
@@ -1083,7 +1085,7 @@ describe('Faction equipment', () => {
     place(state, id, { x: 5, y: 5 });
     place(state, foeId, { x: 10.4, y: 5 });
     let s = activate(ctx, state, id);
-    s = act(ctx, s, id, BOOST_CHARGE, { targetPos: { x: 9.2, y: 5 } }).state;
+    s = act(ctx, s, id, BOOST_CHARGE, { targetPos: { x: 9.1, y: 5 } }).state; // 32mm bases: 1.26" of centres
     const before = s.operatives[foeId]!.wounds;
     const out = act(ctx, s, id, 'CLAWED CHARGE', { targetOperativeId: foeId });
     expect(out.ok).toBe(true);
@@ -1099,7 +1101,7 @@ describe('Faction equipment', () => {
     const mineId = opWith(state, 'p1', RAPTOR);
     const foeId = opWith(state, 'p2', SKYSEAR);
     place(state, mineId, { x: 5, y: 5 });
-    place(state, foeId, { x: 6.2, y: 5 });
+    place(state, foeId, { x: 6.3, y: 5 }); // engaged, bases touching rather than overlapping
     let s = activate(ctx, state, foeId);
     s = act(ctx, s, foeId, 'Fall Back', { path: { points: [{ x: 11, y: 5 }] } }).state;
     expect(s.operatives[foeId]!.actionsThisActivation).toContain('Fall Back');

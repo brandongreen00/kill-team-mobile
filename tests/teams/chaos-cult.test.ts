@@ -60,7 +60,7 @@ import {
   mutatedThisTP,
   setAccursedGift,
 } from '../../src/teams/chaos-cult/index.ts';
-import { act, activate, battle, mapById, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import type { GameState, KillzoneMap, OperativeState, WeaponProfile } from '../../src/core/types.ts';
@@ -586,7 +586,7 @@ describe('Accursed Gifts (faction rule)', () => {
     mutateOperative(ctx, state, state.operatives[id]!, 'mutant');
     let s = activate(ctx, state, id, 'engage');
     const before = s.operatives[foe]!.wounds;
-    const charged = act(ctx, s, id, 'Charge', { path: { points: [{ x: 10, y: 11 }, { x: 11.1, y: 11 }] } });
+    const charged = act(ctx, s, id, 'Charge', { path: { points: [chargeTo(ctx, s, id, foe)] } });
     expect(charged.ok).toBe(true);
     s = reduce(charged.state, { t: 'EndActivation', operativeId: id }, ctx).state;
     expect(s.operatives[foe]!.wounds).toBe(before - 1);
@@ -689,10 +689,10 @@ describe('Datacard abilities', () => {
     const foe = idsOf(state, 'p2', CARD.devotee)[0]!;
     isolate(state, [blade, foe]);
     place(state, blade, 10, 11);
-    place(state, foe, 10.6, 11);
+    place(state, foe, 11.4, 11); // engaged, but touching rather than standing in each other
     const before = state.operatives[foe]!.wounds;
     let s = activate(ctx, state, foe, 'engage');
-    const moved = act(ctx, s, foe, 'Fall Back', { path: { points: [{ x: 10.6, y: 11 }, { x: 15, y: 11 }] } });
+    const moved = act(ctx, s, foe, 'Fall Back', { path: { points: [{ x: 15, y: 11 }] } });
     expect(moved.ok).toBe(true);
     s = reduce(moved.state, { t: 'EndActivation', operativeId: foe }, ctx).state;
     expect(s.operatives[foe]!.wounds).toBe(before - 3);
@@ -705,7 +705,7 @@ describe('Datacard abilities', () => {
     const foe = idsOf(state, 'p2', CARD.devotee)[0]!;
     isolate(state, [blade, foe]);
     place(state, blade, 10, 11);
-    place(state, foe, 10.6, 11);
+    place(state, foe, 11.4, 11); // engaged, but touching rather than standing in each other
     const before = state.operatives[foe]!.wounds;
     let s = activate(ctx, state, foe, 'engage');
     s = reduce(s, { t: 'EndActivation', operativeId: foe }, ctx).state;

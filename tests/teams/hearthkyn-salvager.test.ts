@@ -59,7 +59,7 @@ import {
   placeTacticianMarker,
 } from '../../src/teams/hearthkyn-salvager/index.ts';
 import { makeTeamHooks } from '../../src/teams/helpers.ts';
-import { act, activate, battle, opWith, rosterIncluding, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, opWith, rosterIncluding, teamContext } from './harness.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import type { GameState, OperativeState, PlayerId, Vec2, WeaponProfile } from '../../src/core/types.ts';
@@ -1411,7 +1411,8 @@ describe('DÔZR › KNUX SMASH', () => {
     const foe = state.operatives[opWith(state, 'p2', LUGGER)]!;
     isolate(state, [dozr.id, foe.id]);
     place(state, dozr.id, 10, 10);
-    place(state, foe.id, 10.6, 10);
+    // Within control range but not inside the DÔZR's base — it is a big model.
+    place(state, foe.id, 11.5, 10);
     return { ctx, state, dozr, foe };
   }
 
@@ -1445,7 +1446,7 @@ describe('DÔZR › KNUX SMASH', () => {
     const s = activate(ctx, state, dozr.id);
     const out = act(ctx, s, dozr.id, 'hearthkyn-salvager.d-zr.act.knux-smash', { targetOperativeId: foe.id });
     expect(out.ok).toBe(true);
-    expect(out.state.operatives[foe.id]!.pos).toEqual({ x: 10.6, y: 10 });
+    expect(out.state.operatives[foe.id]!.pos).toEqual({ x: 11.5, y: 10 });
   });
 
   it('the free Charge is its own action, is capped at 3" and only exists after KNUX SMASH', () => {
@@ -1462,7 +1463,7 @@ describe('DÔZR › KNUX SMASH', () => {
     s = out.state;
     const me = s.operatives[dozr.id]!;
     expect(getAction(KNUX_CHARGE)!.available!(ctx, s, me)).toBe(true);
-    expect(getAction(KNUX_CHARGE)!.check(ctx, s, me, { path: { points: [{ x: 12.3, y: 10 }] } }).ok).toBe(true);
+    expect(getAction(KNUX_CHARGE)!.check(ctx, s, me, { path: { points: [chargeTo(ctx, s, me.id, foe.id)] } }).ok).toBe(true);
     expect(getAction(KNUX_CHARGE)!.check(ctx, s, me, { path: { points: [{ x: 14, y: 14 }] } }).ok).toBe(false);
     expect(actionOf(DOZR, 'hearthkyn-salvager.d-zr.act.knux-smash').text).toContain('cannot move more than 3"');
   });

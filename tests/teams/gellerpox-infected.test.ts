@@ -67,7 +67,7 @@ import {
   technoCurseOf,
 } from '../../src/teams/gellerpox-infected/index.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
-import { act, activate, battle, mapById, opWith, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, settle, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 
 const DATA = teamData('gellerpox-infected');
@@ -1672,12 +1672,13 @@ describe('action contract (D-026)', () => {
       ];
       // A destination that ends just inside an enemy's control range, so a Charge is reachable.
       for (const foe of aliveOperatives(s, op.player === 'p1' ? 'p2' : 'p1')) {
-        const dx = foe.pos.x - op.pos.x;
-        const dy = foe.pos.y - op.pos.y;
-        const d = Math.hypot(dx, dy);
-        if (d < 2.2 || d > 8) continue;
-        const t = (d - 1.9) / d;
-        attempts.push({ path: { points: [{ x: op.pos.x + dx * t, y: op.pos.y + dy * t }] } });
+        const d = Math.hypot(foe.pos.x - op.pos.x, foe.pos.y - op.pos.y);
+        if (d > 8) continue;
+        // As close as the rules allow: within the enemy's control range with the bases
+        // touching. A fixed 1.9" stand-off assumed 32mm bases and was inside a 40mm one, and
+        // skipping enemies nearer than 2.2" left the BARGE carve-out — whose whole point is
+        // Charging while ALREADY engaged — with no legal path to offer.
+        attempts.push({ path: { points: [chargeTo(ctx, s, op.id, foe.id)] } });
       }
       for (const params of attempts) {
         if (!def.check(ctx, s, op, params).ok) continue;

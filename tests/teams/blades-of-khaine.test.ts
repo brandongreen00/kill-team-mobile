@@ -518,7 +518,7 @@ describe('Howling Banshee Aspect Techniques', () => {
     const foe = state.teams.p2.operativeIds[0]!;
     isolate(state, [banshee, foe]);
     place(state, banshee, 10, 11);
-    place(state, foe, 10.9, 11);
+    place(state, foe, 11.2, 11); // touching, not overlapping: 28mm bases need 1.10" of centres
     state.operatives[foe]!.wounds = 40; // survives the crit, so the technique can trigger
     let s = activate(ctx, state, banshee);
     s = drive(ctx, act(ctx, s, banshee, 'Fight', { targetId: foe }).state, 'strikeOrBlock');
@@ -547,7 +547,7 @@ describe('Howling Banshee Aspect Techniques', () => {
     const other = state.teams.p2.operativeIds[1]!;
     isolate(state, [banshee, foe, other]);
     place(state, banshee, 6, 11);
-    place(state, foe, 9, 11);
+    place(state, foe, 9.2, 11); // so the 2" charge below finishes touching rather than inside it
     place(state, other, 13.5, 11);
     state.operatives[foe]!.wounds = 1;
     state.operatives[banshee]!.wounds = 40;
@@ -562,10 +562,12 @@ describe('Howling Banshee Aspect Techniques', () => {
     expect(op.actionsThisActivation).toEqual(['Charge', 'Fight']);
     // "using any remaining move distance it had from that first Charge action": 9" − 2" = 7".
     expect(moveBudget(ctx, s, op, { action: 'Charge', bonusInches: 2 })).toBe(7);
-    expect(woe.check(ctx, s, op, path({ x: 12.5, y: 11 })).ok).toBe(true);
-    const after = act(ctx, s, banshee, CHARGE_WOE, path({ x: 12.5, y: 11 }));
+    // 28mm bases need 1.10" between centres, so the second Charge finishes at 12.3, touching
+    // the operative at 13.5 rather than standing in it.
+    expect(woe.check(ctx, s, op, path({ x: 12.3, y: 11 })).ok).toBe(true);
+    const after = act(ctx, s, banshee, CHARGE_WOE, path({ x: 12.3, y: 11 }));
     expect(after.ok).toBe(true);
-    expect(after.state.operatives[banshee]!.pos).toEqual({ x: 12.5, y: 11 });
+    expect(after.state.operatives[banshee]!.pos).toEqual({ x: 12.3, y: 11 });
     expect(techniqueUses(after.state, 'p1', AT.theWoe)).toBe(1);
   });
 
@@ -575,7 +577,7 @@ describe('Howling Banshee Aspect Techniques', () => {
     const foe = state.teams.p2.operativeIds[0]!;
     isolate(state, [banshee, foe]);
     place(state, banshee, 10, 11);
-    place(state, foe, 10.9, 11);
+    place(state, foe, 11.2, 11); // touching, not overlapping: 28mm bases need 1.10" of centres
     // p2 fights p1's HOWLING BANSHEE, so the Banshee is the RETALIATING side.
     let s: GameState = { ...state, activePlayer: 'p2' };
     s = activate(ctx, s, foe);
@@ -597,7 +599,7 @@ describe('Howling Banshee Aspect Techniques', () => {
     const foe = state.teams.p2.operativeIds[0]!;
     isolate(state, [banshee, foe]);
     place(state, banshee, 10, 11);
-    place(state, foe, 10.9, 11);
+    place(state, foe, 11.2, 11); // touching, not overlapping: 28mm bases need 1.10" of centres
     let s: GameState = { ...state, activePlayer: 'p2' };
     s = activate(ctx, s, foe);
     s = act(ctx, s, foe, 'Fight', { targetId: banshee }).state;
@@ -712,8 +714,11 @@ describe('Striking Scorpion Aspect Techniques', () => {
     s.activePlayer = 'p1';
     s = activate(ctx, s, scorpion, 'conceal');
     const wounds = s.operatives[foe]!.wounds;
-    // The path runs straight through the enemy's control range and finishes clear of it.
-    s = act(ctx, s, scorpion, REPOSITION_PATIENT_STALK, path({ x: 12.5, y: 11 })).state;
+    // "…can move within control range of enemy operatives" is permission to enter the RANGE,
+    // not to walk over the model — "a base cannot be placed on another" still holds — so the
+    // path goes past the enemy at 1.5", inside its 1" control range and clear of its base.
+    s = act(ctx, s, scorpion, REPOSITION_PATIENT_STALK,
+      path({ x: 10, y: 12.35 }, { x: 12, y: 12.35 })).state;
     expect(s.rejected).toEqual([]);
     expect(s.operatives[foe]!.wounds).toBe(wounds - 3);
     expect(techniqueUses(s, 'p1', AT.patientStalk)).toBe(1);
@@ -855,7 +860,7 @@ describe('Datacard abilities', () => {
     const foe = state.teams.p2.operativeIds[0]!;
     isolate(state, [banshee, foe]);
     place(state, banshee, 10, 11);
-    place(state, foe, 10.9, 11);
+    place(state, foe, 11.2, 11); // touching, not overlapping: 28mm bases need 1.10" of centres
     const enemy = state.operatives[foe]!;
     const knife = weaponsOf(ctx, state, enemy, 'melee')[0]!;
     const base = hitOf(ctx, state, enemy, knife.profiles[0]!);
@@ -1020,7 +1025,7 @@ describe('Firefight ploys', () => {
     const foe = state.teams.p2.operativeIds[0]!;
     isolate(state, [banshee, foe]);
     place(state, banshee, 10, 11);
-    place(state, foe, 10.9, 11);
+    place(state, foe, 11.2, 11); // touching, not overlapping: 28mm bases need 1.10" of centres
     state.teams.p1.cp = 4;
     let s = activate(ctx, state, banshee);
     expect(actionCost(ctx, s, s.operatives[banshee]!, getAction('Fall Back')!)).toBe(2);

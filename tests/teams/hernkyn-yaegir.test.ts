@@ -32,7 +32,7 @@ import {
   resourcefulPoints,
 } from '../../src/teams/hernkyn-yaegir/index.ts';
 import { rareRuleTextFor } from '../../src/teams/helpers.ts';
-import { act, activate, battle, opWith, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, opWith, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 
 const DATA = teamData('hernkyn-yaegir');
@@ -561,7 +561,7 @@ describe('BLADEKYN', () => {
     op.pos = { x: 8, y: 11 };
     foe.pos = { x: 11, y: 11 };
     const s = activate(ctx, state, op.id, 'conceal');
-    const path = { points: [{ x: 10.1, y: 11 }] };
+    const path = { points: [chargeTo(ctx, s, op.id, foe.id)] };
     expect(getAction('Charge')!.check(ctx, s, s.operatives[op.id]!, { path }).reason).toContain('Conceal');
     expect(getAction(STALKER_CHARGE)!.check(ctx, s, s.operatives[op.id]!, { path }).ok).toBe(true);
     // Only a BLADEKYN has it, and it is treated as a Charge for action restrictions.

@@ -38,7 +38,7 @@ import {
 } from '../../core/state.ts';
 import { baseBlockedByTerrain, baseTouchesHazardous, hasType, surfaceAt } from '../../core/terrain.ts';
 import { isVisible } from '../../core/visibility.ts';
-import { baseGap, baseGapToPoly, baseRadius, dist, distancePointToSegment, segmentCrossesPoly } from '../../core/geometry.ts';
+import { baseGap, baseGapToPoly, baseRadius, basesOverlap, dist, distancePointToSegment, segmentCrossesPoly } from '../../core/geometry.ts';
 import type { ActionParams } from '../../core/intents.ts';
 import type { FightSequence } from '../../core/sequences/types.ts';
 import type { Datacard, GameState, OperativeState, PlayerId, Vec2, WeaponProfile } from '../../core/types.ts';
@@ -162,7 +162,7 @@ function canPlaceAt(
   for (const other of aliveOperatives(state)) {
     if (other.id === op.id) continue;
     if (Math.abs(other.z - z) > 1) continue;
-    if (baseGap(pos, c.base, op.rot, other.pos, card(ctx, other).base, other.rot) < -1e-4)
+    if (basesOverlap(pos, c.base, op.rot, other.pos, card(ctx, other).base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   return { ok: true };

@@ -24,7 +24,7 @@
 import { actionCost, getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { hasRule, ruleOf } from '../../core/dice.ts';
-import { baseGap, baseRadius, dist, distancePointToSegment } from '../../core/geometry.ts';
+import { baseGap, baseRadius, basesOverlap, dist, distancePointToSegment } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import { validateMove } from '../../core/movement.ts';
 import { advanceShoot, checkTarget, effectiveRules, startShoot } from '../../core/sequences/shoot.ts';
@@ -1475,7 +1475,7 @@ function blinkDestination(
     if (other.id === op.id) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    if (baseGap(pos, c.base, op.rot, other.pos, oc.base, other.rot) < -1e-4)
+    if (basesOverlap(pos, c.base, op.rot, other.pos, oc.base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   const landed: Body = { id: op.id, pos, z, rot: op.rot, base: c.base, height: body(ctx, op).height };

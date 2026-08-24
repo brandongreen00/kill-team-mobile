@@ -1290,7 +1290,7 @@ describe('ploys', () => {
     state.teams.p1.gambitsUsedTP.push(SP.rideThemDown);
     const before = state.operatives[foe]!.wounds;
     let s = activate(ctx, state, clan);
-    s = sprint(ctx, s, clan, { x: 10, y: 5 }).state;
+    s = sprint(ctx, s, clan, { x: 9.8, y: 5 }).state; // touching the foe's base, not inside it
     expect(before - s.operatives[foe]!.wounds).toBeGreaterThanOrEqual(1);
   });
 

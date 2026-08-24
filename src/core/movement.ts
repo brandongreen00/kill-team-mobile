@@ -13,7 +13,7 @@
  * Core rules › Reposition: "This must be done in one or more straight-line increments, and
  * increments are always rounded up to the nearest inch."
  */
-import { dist, baseGap, baseRadius } from './geometry.ts';
+import { dist, baseGap, baseRadius, basesOverlap } from './geometry.ts';
 import { terrain, type GameContext } from './context.ts';
 import {
   accessibleCrossings,
@@ -291,7 +291,11 @@ export function validateMove(
     if (other.id === op.id) continue;
     const oc = card(ctx, other);
     if (Math.abs(other.z - finalZ) > 1.0) continue;
-    if (baseGap(cur, c.base, rot, other.pos, oc.base, other.rot) < -1e-4)
+    // Core rules › Bases: "The sides of different bases can touch, but a base cannot be placed
+    // on another." `baseGap` clamps at zero on both of its branches, so the old
+    // `< -1e-4` spelling could never fire — `canDeployAt` was moved to `basesOverlap` and
+    // movement was not, so deployment and movement disagreed about one rule (D-050).
+    if (basesOverlap(cur, c.base, rot, other.pos, oc.base, other.rot))
       return fail('a base cannot be placed on another');
   }
 
@@ -383,7 +387,11 @@ function enemyOnTheWay(
       const t = i / steps;
       const p = { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t };
       if (dist(p, enemy.pos) > reach) continue;
-      if (!opts.mayMoveThroughEnemies && baseGap(p, c.base, op.rot, enemy.pos, ec.base, enemy.rot) < -1e-4)
+      // "Friendly operatives can move through other friendly operatives (the base and the
+      // miniature), but not through enemy operatives." Dead for the same reason, and D-050
+      // counted only the end-of-move site: this is the BASE half of D-072, which has never
+      // fired either, so `mayMoveThroughEnemies` has never had anything to permit.
+      if (!opts.mayMoveThroughEnemies && basesOverlap(p, c.base, op.rot, enemy.pos, ec.base, enemy.rot))
         return `cannot move through ${enemy.letter}'s base`;
       if (opts.mayEnterEnemyControlRange) continue;
       // "It cannot MOVE WITHIN control range" — an enemy it is already within control range

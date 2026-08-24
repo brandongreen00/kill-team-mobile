@@ -58,7 +58,7 @@ Ranked by how much each defect distorts a real game.
 | W-31 | open | engine | major | Stronghold B's highest level accepts any number of operatives — `maxOperatives` is data-only |
 | W-32 | open | mixed | major | Bheta-Decima Restricted Targeting is unimplemented, and with no gantry pillars in the data the killzone has one Heavy part in total |
 | W-33 | open | engine | major | Tomb World teleport pads are inert scenery, and the mutual-control-range clause is dead code written backwards |
-| W-34 | open | engine | major | A move may finish with two bases fully overlapping — the end-of-move overlap guard is a dead comparison |
+| W-34 | FIXED | engine | major | A move may finish with two bases fully overlapping — the end-of-move overlap guard is a dead comparison |
 | W-35 | FIXED | engine | major | Operative-to-operative distance is horizontal only, so an operative on 3" Vantage terrain is in control range of one on the floor below |
 | W-36 | open | engine | major | An incapacitated operative gets no pre-removal step: granted free actions are dropped and only one carried marker is placed |
 | W-37 | FIXED | engine | minor | Gambit alternation is not enforced by the reducer, and the AI driver lets the initiative player use every gambit first |
@@ -597,7 +597,7 @@ Test: tests/rules-review.test.ts quoting killzones.txt:528, on the real tomb-wor
 
 ### W-34 · A move may finish with two bases fully overlapping — the end-of-move overlap guard is a dead comparison
 
-**OPEN** · **OWNER DECISION PENDING** — see D-050; fixing it moves 16 test fixtures · engine · major · **needs an owner decision**
+**FIXED** · owner confirmed 2026-08-23 ("fix and nudge") · engine · major
 
 Rules pinned: `core-rules.txt:407 ("The sides of different bases can touch, but a base cannot be placed on another")`
 

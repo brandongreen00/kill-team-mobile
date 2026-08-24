@@ -1075,8 +1075,11 @@ describe('FELLGOR RAVAGER unique actions', () => {
     const b = state.teams.p2.operativeIds[1]!;
     isolate(state, [flux, a, b]);
     place(state, flux, 8, 11);
-    place(state, a, 10.5, 12.2);
-    place(state, b, 12.5, 12.2);
+    // 1.4" off the line of the move: inside the 1" control range it must pass through (32mm
+    // bases, so 1.26" of centres to touch and 2.26" to be within control range) and clear of
+    // the bases themselves — "moved within control range of" is not "moved over".
+    place(state, a, 10.5, 12.4);
+    place(state, b, 12.5, 12.4);
     state.operatives[a]!.wounds = 40;
     state.operatives[b]!.wounds = 40;
     let s = activate(ctx, state, flux, 'engage');
@@ -1479,9 +1482,10 @@ describe('FELLGOR RAVAGER firefight ploys', () => {
     const def = getAction(CHARGE_RAMPAGE)!;
     expect(def.ap).toBe(0);
     expect(def.treatedAs).toBeUndefined();
-    // 4" is refused by the printed 3" cap; 2.1" reaches the other enemy.
+    // 4.5" is refused by the printed 3" cap; 1.7" reaches the other enemy — 32mm bases need
+    // 1.26" between centres, so 13.1 would have finished inside it.
     expect(def.check(ctx, s, s.operatives[gore]!, { path: { points: [{ x: 15.5, y: 11 }] } }).ok).toBe(false);
-    const out = act(ctx, s, gore, CHARGE_RAMPAGE, { path: { points: [{ x: 13.1, y: 11 }] } });
+    const out = act(ctx, s, gore, CHARGE_RAMPAGE, { path: { points: [{ x: 12.7, y: 11 }] } });
     expect(out.ok, out.reason).toBe(true);
     expect(out.state.operatives[gore]!.apSpent).toBe(1); // the Charge was free
   });
@@ -1755,9 +1759,12 @@ describe('FELLGOR RAVAGER honesty', () => {
         let n = 0;
         for (const id of [...mates, ...foes]) base.state.operatives[id]!.pos = { x: 2 + (n++ % 12) * 1.6, y: 1 };
         place(base.state, opId, 8, 11);
-        place(base.state, mates[0]!, 8, 12.2); // a friendly within control range
-        place(base.state, mates[1]!, 9.6, 11.8); // a friendly within 3" (INCITE FURY)
-        place(base.state, foes[0]!, mode === 'free' ? 10.5 : 8.9, 11);
+        // 32mm bases: 1.26" between centres to touch, and 1" of control range on top of that.
+        // These were inside each other, which "a base cannot be placed on another" forbids and
+        // which left the probe with no legal Charge path to offer.
+        place(base.state, mates[0]!, 8, 12.4); // a friendly within control range
+        place(base.state, mates[1]!, 9.9, 12.3); // a friendly within 3" (INCITE FURY)
+        place(base.state, foes[0]!, mode === 'free' ? 10.5 : 9.3, 11);
         place(base.state, foes[1]!, 12, 14);
         for (const id of [...mates, ...foes]) base.state.operatives[id]!.wounds = 40;
         const op = base.state.operatives[opId]!;
@@ -1819,22 +1826,26 @@ describe('bot-vs-bot mirror soak', () => {
    * `volkus-1` and on `gallowdark-4`, which is the Close Quarters killzone where the two kill teams
    * do meet.
    */
-  for (const [mapId, expectContact] of [
-    ['volkus-1', true],
-    ['gallowdark-1', false],
-    ['gallowdark-4', true],
+  // The seed is per map because contact is a property of the seeded game, not of the rule under
+  // test: once `validateMove`'s base-overlap guards started firing (W-34), the volkus-1 battle on
+  // 4242 played out with one fewer Shoot and nobody died, which makes the Frenzy assertions below
+  // vacuous rather than wrong. 4245 is the nearest seed on which the two kill teams still meet.
+  for (const [mapId, expectContact, seed] of [
+    ['volkus-1', true, 4245],
+    ['gallowdark-1', false, 4242],
+    ['gallowdark-4', true, 4242],
   ] as const) {
     it(`plays a full battle on ${mapId} with no rejected intents`, () => {
       clearDeployCache();
       clearMoveCache();
-      const ctx = teamContext([fellgorRavager], { seed: 4242 });
+      const ctx = teamContext([fellgorRavager], { seed });
       const map = mapById(mapId);
       ctx.maps.set(map.id, map);
       const roster = () => defaultRoster(DATA).map((p) => ({ datacardId: p.datacardId }));
       const result = playGame({
         ctx,
         map,
-        seed: 4242,
+        seed,
         rosters: {
           p1: { teamId: 'fellgor-ravager', operatives: roster(), equipment: [EQ.brassAdornments, EQ.warPaint] },
           p2: { teamId: 'fellgor-ravager', operatives: roster(), equipment: [EQ.chaosSigil, EQ.goreMarks] },

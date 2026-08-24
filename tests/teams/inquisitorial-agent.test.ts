@@ -41,7 +41,7 @@ import {
   quarryOf,
   tomeOf,
 } from '../../src/teams/inquisitorial-agent/index.ts';
-import { activate, act, battle, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 
 const DATA = teamData('inquisitorial-agent');
@@ -637,12 +637,12 @@ describe('DEATH WORLD VETERAN', () => {
     vet.pos = { x: 12, y: 11 };
     foe.pos = { x: 15, y: 11 };
     const s = settle(ctx, activate(ctx, state, vet.id, 'conceal'));
-    expect(getAction('Charge')!.check(ctx, s, s.operatives[vet.id]!, { path: { points: [{ x: 14.2, y: 11 }] } }).ok).toBe(
+    expect(getAction('Charge')!.check(ctx, s, s.operatives[vet.id]!, { path: { points: [chargeTo(ctx, s, vet.id, foe.id)] } }).ok).toBe(
       false,
     );
     const hunter = getAction(HUNTER_CHARGE)!;
     expect(hunter.treatedAs).toBe('Charge');
-    expect(hunter.check(ctx, s, s.operatives[vet.id]!, { path: { points: [{ x: 14.2, y: 11 }] } }).ok).toBe(true);
+    expect(hunter.check(ctx, s, s.operatives[vet.id]!, { path: { points: [chargeTo(ctx, s, vet.id, foe.id)] } }).ok).toBe(true);
     // Only the DEATH WORLD VETERAN gets it.
     expect(hunter.available!(ctx, s, s.operatives[opWith(s, 'p1', CARD.questkeeper)]!)).toBe(false);
   });

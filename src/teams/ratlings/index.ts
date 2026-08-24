@@ -11,7 +11,7 @@
 import { allActions, getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { supportDistance } from '../../core/equipment/index.ts';
-import { baseGap, baseWhollyWithin, baseWithin, baseRadius, dist } from '../../core/geometry.ts';
+import { baseGap, baseRadius, baseWhollyWithin, baseWithin, basesOverlap, dist } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import {
   aliveOperatives,
@@ -1365,7 +1365,7 @@ function canPlaceAt(ctx: GameContext, state: GameState, op: OperativeState, pos:
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
     if (Math.abs(other.z - z) > 1) continue;
-    if (baseGap(pos, card.base, op.rot, other.pos, oc.base, other.rot) < -1e-4) return false;
+    if (basesOverlap(pos, card.base, op.rot, other.pos, oc.base, other.rot)) return false;
   }
   return true;
 }

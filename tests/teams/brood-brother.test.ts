@@ -67,7 +67,7 @@ import {
   removeCrossfire,
   spiritualGambitId,
 } from '../../src/teams/brood-brother/index.ts';
-import { act, activate, battle, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import type { GameState, KillzoneMap, OperativeState, PlayerId, WeaponProfile } from '../../src/core/types.ts';
@@ -653,7 +653,7 @@ describe('BROOD BROTHER datacard abilities', () => {
     place(state, kf.id, 6, 6);
     place(state, foe.id, 9, 6);
     kf.order = 'conceal';
-    const path = { points: [{ x: 8.2, y: 6 }] };
+    const path = { points: [chargeTo(ctx, state, kf.id, foe.id)] };
     expect(getAction('Charge')!.check(ctx, state, kf, { path }).ok).toBe(false);
     expect(getAction(ASSASSIN_CHARGE)!.check(ctx, state, kf, { path }).ok).toBe(true);
     expect(getAction(ASSASSIN_CHARGE)!.treatedAs).toBe('Charge');

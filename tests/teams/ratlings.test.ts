@@ -36,7 +36,7 @@ import { teamData } from '../../src/teams/data.ts';
 import { makeTeamHooks } from '../../src/teams/helpers.ts';
 import { defaultRoster, validateRosterFor } from '../../src/teams/selection.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
-import { act, activate, battle, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { GameState, KillzoneMap, WeaponProfile } from '../../src/core/types.ts';
 
@@ -555,7 +555,7 @@ describe('BULLGRYN and OGRYN', () => {
     foe.pos = { x: 15, y: 11 };
     const before = foe.wounds;
     let s = activate(ctx, state, ogryn.id);
-    const charged = act(ctx, s, ogryn.id, 'Charge', { path: { points: [{ x: 13.6, y: 11 }] } });
+    const charged = act(ctx, s, ogryn.id, 'Charge', { path: { points: [chargeTo(ctx, s, ogryn.id, foe.id)] } });
     expect(charged.ok).toBe(true);
     s = reduce(charged.state, { t: 'EndActivation', operativeId: ogryn.id }, ctx).state;
     expect(s.operatives[foe.id]!.wounds).toBeLessThan(before);

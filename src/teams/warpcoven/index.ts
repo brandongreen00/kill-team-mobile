@@ -18,13 +18,7 @@
 import { getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext, type DecisionHandler } from '../../core/context.ts';
 import { classify, rerollDie } from '../../core/dice.ts';
-import {
-  baseGap,
-  baseRadius,
-  baseWithin,
-  dist,
-  segmentCrossesPoly,
-} from '../../core/geometry.ts';
+import { baseGap, baseRadius, baseWithin, basesOverlap, dist, segmentCrossesPoly } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import type { ActionParams } from '../../core/intents.ts';
 import {
@@ -1435,7 +1429,7 @@ function canPlaceAt(ctx: GameContext, state: GameState, op: OperativeState, pos:
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
     if (Math.abs(other.z - z) > 1) continue;
-    if (baseGap(pos, card.base, op.rot, other.pos, oc.base, other.rot) < -1e-4) return false;
+    if (basesOverlap(pos, card.base, op.rot, other.pos, oc.base, other.rot)) return false;
   }
   return true;
 }

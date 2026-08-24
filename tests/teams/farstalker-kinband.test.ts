@@ -43,7 +43,7 @@ import {
   markOf,
   pechraMarker,
 } from '../../src/teams/farstalker-kinband/index.ts';
-import { act, activate, battle, opWith, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, opWith, settle, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
@@ -1324,7 +1324,7 @@ describe('STALKER — Stalker and STEALTH ATTACK', () => {
     place(state, stalker.id, 10, 10);
     place(state, foe.id, 13, 10);
     stalker.order = 'conceal';
-    const path = { points: [{ x: 12.4, y: 10 }] };
+    const path = { points: [chargeTo(ctx, state, stalker.id, foe.id)] };
     expect(getAction('Charge')!.check(ctx, state, stalker, { path })).toMatchObject({
       ok: false,
       reason: 'cannot Charge with a Conceal order',
@@ -1368,7 +1368,7 @@ describe('STALKER — Stalker and STEALTH ATTACK', () => {
     isolate(state, [stalker.id, foe.id]);
     state.map = HEAVY_MAP();
     place(state, stalker.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y);
-    place(state, foe.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y + 4);
+    place(state, foe.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y + 4.4); // the 3.1" move ends touching it
     stalker.order = 'conceal';
     const s = activate(ctx, state, stalker.id, 'conceal');
     const before = s.operatives[foe.id]!.wounds;
@@ -1394,7 +1394,7 @@ describe('STALKER — Stalker and STEALTH ATTACK', () => {
     const foe = state.operatives[opWith(state, 'p2', C.warrior)]!;
     isolate(state, [stalker.id, foe.id]);
     place(state, stalker.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y);
-    place(state, foe.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y + 7.5);
+    place(state, foe.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y + 8); // so the 6.6" move below ends touching, not inside
     stalker.order = 'conceal';
     const def = getAction(ACT.stealthAttack)!;
     // Move 6": a 7" charge is legal for the STALKER's own Conceal-order Charge (6+2) but not here.

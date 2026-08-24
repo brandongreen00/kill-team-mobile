@@ -44,7 +44,7 @@ import { getAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { ruleOf, successes } from '../../core/dice.ts';
 import { supportDistance } from '../../core/equipment/index.ts';
-import { baseGap, baseRadius, dist } from '../../core/geometry.ts';
+import { baseGap, baseRadius, basesOverlap, dist } from '../../core/geometry.ts';
 import { HookRegistry, type HookEvents } from '../../core/hooks.ts';
 import { advanceShoot, checkTarget, startShoot, validTargets } from '../../core/sequences/shoot.ts';
 import type { ShootSequence, FightSequence } from '../../core/sequences/types.ts';
@@ -1402,7 +1402,7 @@ function flyDestination(
     return { ok: false, reason: 'it must be set up in a location it can be placed' };
   for (const other of aliveOperatives(state)) {
     if (other.id === op.id) continue;
-    if (baseGap(pos, c.base, op.rot, other.pos, card(ctx, other).base, other.rot) < -1e-4)
+    if (basesOverlap(pos, c.base, op.rot, other.pos, card(ctx, other).base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   const landed: Body = { id: op.id, pos, z, rot: op.rot, base: c.base, height: modelHeight(c) };

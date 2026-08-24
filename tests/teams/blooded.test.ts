@@ -60,7 +60,7 @@ import {
   whisperedTarget,
 } from '../../src/teams/blooded/index.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
-import { act, activate, battle, mapById, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 
 const DATA = teamData('blooded');
@@ -1086,8 +1086,9 @@ describe('FLENSER', () => {
     place(state, f.id, 10, 11);
     place(state, foe.id, 13, 11);
     const s = activate(ctx, state, f.id, 'conceal');
-    expect(getAction('Charge')!.check(ctx, s, s.operatives[f.id]!, { path: { points: [{ x: 12.2, y: 11 }] } }).ok).toBe(false);
-    expect(def.check(ctx, s, s.operatives[f.id]!, { path: { points: [{ x: 12.2, y: 11 }] } }).ok).toBe(true);
+    const into = { path: { points: [chargeTo(ctx, s, f.id, foe.id)] } };
+    expect(getAction('Charge')!.check(ctx, s, s.operatives[f.id]!, into).ok).toBe(false);
+    expect(def.check(ctx, s, s.operatives[f.id]!, into).ok).toBe(true);
   });
 
   it('Wretched: "you can strike the enemy operative in that sequence with one of your unresolved successes"', () => {
@@ -1120,7 +1121,7 @@ describe('OGRYN', () => {
     place(state, o.id, 10, 11);
     place(state, foe.id, 14, 11);
     let s = activate(ctx, state, o.id);
-    const charged = act(ctx, s, o.id, 'Charge', { path: { points: [{ x: 13, y: 11 }] } });
+    const charged = act(ctx, s, o.id, 'Charge', { path: { points: [chargeTo(ctx, s, o.id, foe.id)] } });
     expect(charged.ok).toBe(true);
     s = charged.state;
     const before = s.operatives[foe.id]!.wounds;

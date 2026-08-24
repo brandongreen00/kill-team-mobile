@@ -51,7 +51,7 @@ import {
   wristChainWeapons,
 } from '../../src/teams/goremonger/index.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
-import { act, activate, battle, mapById, opWith, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, settle, teamContext } from './harness.ts';
 
 const DATA = teamData('goremonger');
 /** `TeamData` does not surface everything, so the committed bytes are read straight from the file. */
@@ -544,7 +544,7 @@ describe('SANGUAVITAE (faction rule)', () => {
     place(state, op.id, 10, 10);
     place(state, foe.id, 14, 10);
     let s = activate(ctx, state, op.id, 'engage');
-    s = act(ctx, s, op.id, 'Charge', { path: { points: [{ x: 12.8, y: 10 }] } }).state;
+    s = act(ctx, s, op.id, 'Charge', { path: { points: [chargeTo(ctx, s, op.id, foe.id)] } }).state;
     const out = act(ctx, s, op.id, SANGUAVITAE_ACTION.rake, { targetOperativeId: foe.id });
     expect(out.ok).toBe(true);
     expect(out.state.operatives[foe.id]!.wounds).toBe(7);
@@ -1145,7 +1145,7 @@ describe('firefight ploys', () => {
     state.teams.p1.cp = 1;
     let s = activate(ctx, state, op.id, 'engage');
     expect(goremonger.ploys.find((p) => p.id === FP.unbridledAggression)!.usable!(s, 'p1').ok).toBe(false);
-    s = act(ctx, s, op.id, 'Charge', { path: { points: [{ x: 12.8, y: 10 }] } }).state;
+    s = act(ctx, s, op.id, 'Charge', { path: { points: [chargeTo(ctx, s, op.id, foe.id)] } }).state;
     expect(goremonger.ploys.find((p) => p.id === FP.unbridledAggression)!.usable!(s, 'p1').ok).toBe(true);
     s = reduce(s, { t: 'UsePloy', player: 'p1', ployId: FP.unbridledAggression }, ctx).state;
     const glaive = profileOf(C.aspirant, 'Chainglaive');

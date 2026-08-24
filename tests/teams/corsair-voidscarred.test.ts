@@ -862,7 +862,9 @@ describe('SHADE RUNNER › Blink Pack and Slicing Attack', () => {
     state.operatives[foe]!.pos = { x: state.operatives[id]!.pos.x + 4, y: state.operatives[id]!.pos.y };
     const s = activate(ctx, state, id);
     const op = s.operatives[id]!;
-    const onTop = { x: op.pos.x + 3.2, y: op.pos.y };
+    // Within the enemy's control range (1" base to base) without standing in its base:
+    // "the sides of different bases can touch, but a base cannot be placed on another".
+    const onTop = { x: op.pos.x + 2.7, y: op.pos.y };
     expect(getAction(BLINK_REPOSITION)!.check(ctx, s, op, { targetPos: onTop }).ok).toBe(false);
     expect(getAction(BLINK_CHARGE)!.check(ctx, s, op, { targetPos: onTop }).ok).toBe(true);
     // …and a Charge must finish there.
