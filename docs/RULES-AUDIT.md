@@ -29,7 +29,7 @@ Ranked by how much each defect distorts a real game.
 | W-02 | FIXED `3f93c80` | engine | critical | Operate Hatch and Breach can never be performed on any map — both `available` predicates test for things the data never contains |
 | W-03 | FIXED `3f93c80` | engine | critical | No Gallowdark or Tomb World wall can ever intervene — the 0.6" minimum-edge filter discards every 0.365"-thick wall's corners and ends |
 | W-04 | FIXED | data | critical | Volkus stronghold walls are extruded to the building's maximum height, so both Vantage levels are blind on all six maps |
-| W-05 | open | mixed | critical | No crit-op mission action can be performed in the shipped UI — five of nine crit ops score 0VP for a human player |
+| W-05 | FIXED | mixed | critical | No crit-op mission action can be performed in the shipped UI — five of nine crit ops score 0VP for a human player |
 | W-06 | FIXED `1978520` | engine | critical | Limited x never exhausts a weapon — weaponExhausted() has no call sites |
 | W-07 | FIXED `1978520` | engine | critical | Heavy only blocks shooting after moving, never moving after shooting |
 | W-08 | FIXED `1978520` | engine | critical | Pick Up Marker only checks that the TEAM controls the marker, so any operative lifts it from anywhere on the board |
@@ -133,7 +133,7 @@ Test: A map-quality test alongside tests/maps-volkus-doors.test.ts quoting killz
 
 ### W-05 · No crit-op mission action can be performed in the shipped UI — five of nine crit ops score 0VP for a human player
 
-**OPEN** · mixed · critical
+**FIXED** · mixed · critical
 
 Rules pinned: `the-missions.txt:171 (Loot)`; `approved-ops-2025.txt:100 ("Score VP by performing mission actions and controlling objective markers")`
 

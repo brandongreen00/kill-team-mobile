@@ -15,7 +15,7 @@
  * Nothing here decides a rule. Legality comes from `availableActions`, `validTargets`,
  * `reachableCells` and `validateMove`; the answers are only ever *rendered* here.
  */
-import { actionAvailability } from '../../core/actions.ts';
+import { actionAvailability, actionTargetOptions, getAction } from '../../core/actions.ts';
 import type { ActionParams } from '../../core/intents.ts';
 import {
   moveBudget,
@@ -373,6 +373,7 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
 
   // --- a move being aimed -------------------------------------------------
   if (ui.move) return movePlan({ store, ui, setUi }, op, ui.move.action);
+  if (ui.aimAction) return aimPlan({ store, ui, setUi }, op, ui.aimAction);
 
   // --- a shot being aimed -------------------------------------------------
   const ranged = weaponsOf(ctx, state, op, 'ranged');
@@ -477,14 +478,24 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
 
         <div class="actions">
           <p class="section-title">Actions</p>
-          {rows.map(({ def, ap, ok, reason }) => (
+          {rows.map(({ def, ap, ok, reason, needsTarget }) => (
             // An illegal action is NOT `disabled` + `title`: `title` does not exist on a
             // touch screen, so the reason is rendered in the row where a thumb can read it.
             <button
               key={def.id}
               class={ok ? undefined : 'is-blocked'}
               disabled={!ok}
-              onClick={() => (isMoveAction(def.id) ? setUi({ move: { action: def.id } }) : perform(def.id))}
+              onClick={() => {
+                if (isMoveAction(def.id)) return setUi({ move: { action: def.id } });
+                // A mission action has to be told WHICH marker. One legal option needs no
+                // screen; more than one is a real choice and gets the aim list.
+                if (needsTarget && AIMED_KINDS.has(needsTarget)) {
+                  const opts = actionTargetOptions(ctx, state, op, def);
+                  if (opts.length === 1) return perform(def.id, opts[0]!.params as Record<string, unknown>);
+                  return setUi({ aimAction: def.id });
+                }
+                return perform(def.id);
+              }}
             >
               {isMoveAction(def.id) ? <IconMove size={20} /> : null}
               <span style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
@@ -548,6 +559,53 @@ function PloyList({ store, player }: { store: Store; player: PlayerId }) {
 }
 
 /* ------------------------------------------------------------ aiming a move */
+
+/**
+ * Actions the sheet cannot dispatch bare, because the reducer needs a marker or access point.
+ *
+ * Read from the core's own `actionAvailability`, never from a list kept here: which actions are
+ * parameterised is a rules fact, and CLAUDE.md forbids the UI re-implementing a core selector.
+ */
+const AIMED_KINDS = new Set(['marker', 'markerChoice', 'part']);
+
+function aimPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, actionId: string): CommandPlan {
+  const { state, ctx } = store;
+  const def = getAction(actionId);
+  const opts = def ? actionTargetOptions(ctx, state, op, def) : [];
+  const cancel = () => setUi({ aimAction: undefined });
+  return {
+    id: 'firefight.aim',
+    step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}`,
+    title: `${def?.name ?? actionId} — choose a target`,
+    help: def?.sourceText,
+    frame: rectAround(op, 10),
+    detent: 'half',
+    turnOf: op.player,
+    selectedId: op.id,
+    actions: [{ id: 'cancel', label: 'Back', onClick: cancel }],
+    body: (
+      <div class="actions">
+        {opts.length === 0 && <p class="entry-meta why">No legal target for this action right now.</p>}
+        {opts.map((o) => (
+          <button
+            key={o.id || 'bare'}
+            onClick={() => {
+              store.dispatch({
+                t: 'PerformAction',
+                operativeId: op.id,
+                action: actionId,
+                params: o.params as never,
+              });
+              cancel();
+            }}
+          >
+            <span style={{ flex: 1, textAlign: 'left' }}>{o.label}</span>
+          </button>
+        ))}
+      </div>
+    ),
+  };
+}
 
 function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: MoveAction): CommandPlan {
   const { state, ctx } = store;

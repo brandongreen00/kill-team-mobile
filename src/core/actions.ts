@@ -26,9 +26,9 @@ import { findProfile,
 } from './state.ts';
 import { effectiveRules, startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
 import { startFight, advanceFight } from './sequences/fight.ts';
-import { hasType } from './terrain.ts';
+import { hasType, pointDistanceToPart } from './terrain.ts';
 import type { ActionParams } from './intents.ts';
-import type { GameState, OperativeState, PlayerId, Vec2 } from './types.ts';
+import type { GameState, MarkerState, OperativeState, PlayerId, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
 
 export interface ActionDef {
@@ -658,7 +658,7 @@ export function actionCost(ctx: GameContext, state: GameState, op: OperativeStat
  * access point in range and `Breach` on an already-open point all come back `ok: true` and
  * are then rejected on dispatch. `actionAvailability` closes it.
  */
-export type ActionTargetKind = 'point' | 'operative' | 'part' | 'marker';
+export type ActionTargetKind = 'point' | 'operative' | 'part' | 'marker' | 'markerChoice';
 
 const NEEDS_TARGET: Record<string, ActionTargetKind> = {
   Reposition: 'point',
@@ -673,7 +673,125 @@ const NEEDS_TARGET: Record<string, ActionTargetKind> = {
   Breach: 'part',
   'Pick Up Marker': 'marker',
   'Place Marker': 'point',
+  // Crit-op and tac-op mission actions. Each takes `markerId`, and until this landed the UI
+  // rendered every one of them disabled: the branch below returns early on `needsTarget`, and
+  // `play.tsx` had no way to aim one, so it fell through to `def.check(ctx, state, op, {})`,
+  // whose reason is always "select an objective marker". Five of the nine crit ops therefore
+  // scored 0VP for a human player for the whole battle (docs/RULES-AUDIT.md W-05).
+  Secure: 'marker',
+  Loot: 'marker',
+  'Initiate Transmission': 'marker',
+  Download: 'marker',
+  'Compile Data': 'marker',
+  'Send Data': 'marker',
+  Reboot: 'marker',
+  'Plant Device': 'marker',
+  Retrieve: 'marker',
+  Clear: 'marker',
+  'Pick Up Intelligence': 'marker',
+  // "If the centre objective marker has it, move it to either player's objective marker (your
+  // choice)" — the param is `choice`, and on the other leg the rule gives no choice at all.
+  'Move Orb': 'markerChoice',
 };
+
+/** A marker as the player sees it named. */
+function markerLabel(m: MarkerState): string {
+  const owner = m.owner ? ` (${m.owner})` : '';
+  return m.kind === 'objective' ? `objective ${m.id}${owner}` : `${m.kind} ${m.id}${owner}`;
+}
+
+export interface ActionTargetOption {
+  id: string;
+  label: string;
+  params: ActionParams;
+}
+
+/**
+ * Every parameter set this action would accept right now, judged by the action's own `check`.
+ *
+ * The counterpart of `validTargets` for the parameterised actions. The UI must never decide
+ * which markers an action considers — Download refuses your own objectives, Reboot wants an
+ * inert one, Pick Up Intelligence an `intelligence` marker and Ammo Resupply an `ammoCache`.
+ * Only `check` knows, and CLAUDE.md forbids the UI re-implementing a core selector.
+ */
+export function actionTargetOptions(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  def: ActionDef,
+): ActionTargetOption[] {
+  switch (NEEDS_TARGET[def.id]) {
+    case 'marker':
+      return Object.values(state.markers)
+        .map((m) => ({ id: m.id, label: markerLabel(m), params: { markerId: m.id } as ActionParams }))
+        .filter((o) => def.check(ctx, state, op, o.params).ok);
+    case 'markerChoice': {
+      // "If a player's objective marker has it, move it to the centre objective marker" — no
+      // choice clause, unlike the centre leg's "(your choice)". `check` accepts `{}` on that
+      // leg and IGNORES a `choice` param, so enumerating markers there would offer three
+      // buttons that all do the same thing.
+      if (def.check(ctx, state, op, {}).ok)
+        return [{ id: '', label: 'the centre objective marker', params: {} }];
+      const out: ActionTargetOption[] = [];
+      for (const m of Object.values(state.markers)) {
+        if (m.kind !== 'objective') continue;
+        const params: ActionParams = { choice: m.id };
+        if (def.check(ctx, state, op, params).ok) out.push({ id: m.id, label: markerLabel(m), params });
+      }
+      return out;
+    }
+    case 'part':
+      return terrain(ctx, state)
+        .parts.filter((part) => part.role === 'accessPoint')
+        .map((part) => ({
+          id: part.id,
+          label: `access point ${part.id}`,
+          params: { partId: part.id } as ActionParams,
+        }))
+        .filter((o) => def.check(ctx, state, op, o.params).ok);
+    case 'operative':
+      return aliveOperatives(state)
+        .filter((o) => o.id !== op.id)
+        .map((o) => ({
+          id: o.id,
+          label: o.letter,
+          params: { targetOperativeId: o.id, targetId: o.id } as ActionParams,
+        }))
+        .filter((o) => def.check(ctx, state, op, o.params).ok);
+    default:
+      return [];
+  }
+}
+
+/**
+ * Why this action has no legal target, in the operative's terms rather than the parameter's.
+ *
+ * `check(ctx, state, op, {})` is the wrong thing to report: for Secure it says "select an
+ * objective marker" when the truth is "the active operative does not control that objective
+ * marker". Ask the nearest candidate of the right kind instead, and fall back to the bare form
+ * only when the killzone holds no candidate at all.
+ */
+function noTargetReason(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  def: ActionDef,
+  kind: ActionTargetKind,
+): string {
+  const near =
+    kind === 'part'
+      ? terrain(ctx, state)
+          .parts.filter((part) => part.role === 'accessPoint')
+          .map((part) => ({ params: { partId: part.id } as ActionParams, d: pointDistanceToPart(op.pos, part) }))
+      : Object.values(state.markers).map((m) => ({
+          params: (kind === 'markerChoice' ? { choice: m.id } : { markerId: m.id }) as ActionParams,
+          d: dist(op.pos, m.pos),
+        }));
+  near.sort((a, b) => a.d - b.d);
+  const first = near[0];
+  const verdict = first ? def.check(ctx, state, op, first.params) : def.check(ctx, state, op, {});
+  return verdict.reason ?? 'no legal target';
+}
 
 export interface ActionAvailability {
   def: ActionDef;
@@ -702,6 +820,20 @@ export function actionAvailability(ctx: GameContext, state: GameState, op: Opera
     // reason string. That was tried, and it disabled every weapon in the game for a whole
     // battle, because Shoot's reason is "weapon and target required" and the pattern did not
     // include it.
+    // A marker / access-point action CAN be judged before it is aimed, by asking `check` about
+    // every candidate. Doing so is what stops the ids added above from becoming enabled dead
+    // buttons — the failure Pick Up Marker showed for the whole of this branch's life: it is
+    // offered while the operative carries nothing and stands 12" from every marker, and one
+    // click writes "no such marker" into `state.rejected`.
+    //
+    // `point` and `operative` keep the early return. Movement is judged by `validateMove` and
+    // Shoot/Fight by `validTargets`, both of which the caller already runs, and enumerating
+    // every operative through `Shoot.check` on each render is not worth its cost.
+    if (needsTarget === 'marker' || needsTarget === 'markerChoice' || needsTarget === 'part') {
+      const opts = actionTargetOptions(ctx, state, op, row.def);
+      if (opts.length > 0) return { ...row, needsTarget };
+      return { ...row, ok: false, needsTarget, reason: noTargetReason(ctx, state, op, row.def, needsTarget) };
+    }
     if (needsTarget) return { ...row, needsTarget };
     if (!row.ok) return row;
     // A parameter-free action can be checked right now, and often fails: Guard while engaged,
