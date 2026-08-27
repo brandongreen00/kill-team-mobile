@@ -759,6 +759,12 @@ before starting any of them, because eleven of the twelve entries below are wron
 about their own cause, line numbers or blast radius, and eight of the twelve proposed plans were
 rejected by the verifier with a run-backed objection.
 
+`docs/RULES-AUDIT-PLANS.md` has since been trimmed to the **nine items still open** (W-18, W-21,
+W-22, W-23, W-28, W-29, W-32, W-33, W-36) — the entries for the three that landed (W-05, W-30, W-31)
+were dropped once the code superseded them. The unabridged twelve-item version, with the full
+investigator/verifier exchange for those three as well, is retrievable with
+`git show 6164462:docs/RULES-AUDIT-PLANS.md`.
+
 The one substantive reversal: **W-22's reasoning is refuted.** The investigator argued that a rule
 which prices crossing presupposes crossing is legal; the verifier showed the corpus settles it the
 other way — Accessible says "Operatives can move through … (this takes precedence over Bases, and
