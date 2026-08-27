@@ -46,7 +46,7 @@ Ranked by how much each defect distorts a real game.
 | W-19 | FIXED `10509af` | engine | major | The Accessible +1" is charged for every increment that merely starts or ends on Accessible terrain, and only once when two parts are crossed |
 | W-20 | FIXED `10509af` | engine | major | Vertical movement is unvalidated: `path.endZ` teleports for free, and a jump to a feature 1" higher is charged as a 2" climb and banned during a Dash |
 | W-21 | open | engine | major | The retaliating operative still cannot choose among its melee weapons — 64 of 454 datacards are locked to card order |
-| W-22 | open | engine | major | Razor wire is built as solid terrain, so the Obstructing +1" is computed and then thrown away and the wire cannot be crossed at all |
+| W-22 | open (RE-FILED) | engine | minor | ~~Razor wire cannot be crossed at all~~ — **refuted**. The residual is the unmodelled "within 1\" of it" clause on the Obstructing toll |
 | W-23 | open | engine | major | The portable barricade gives cover to anyone behind it — the "only while an operative is connected to it" gate is never implemented |
 | W-24 | FIXED | engine | major | Smoke's Piercing softening adds a defence die unconditionally, so Piercing Crits 2 into smoke always faces 4 dice |
 | W-25 | FIXED | engine | major | Kill grade is a one-way ratchet — a REANIMATED operative never lowers the opponent's grade or takes back the VP |
@@ -64,6 +64,7 @@ Ranked by how much each defect distorts a real game.
 | W-37 | FIXED | engine | minor | Gambit alternation is not enforced by the reducer, and the AI driver lets the initiative player use every gambit first |
 | W-38 | FIXED | engine | minor | A granted free action is modelled as +1 APL, so the ±1 clamp cancels it against any other APL change |
 | W-39 | FIXED `10509af` | engine | minor | The Ceiling "regardless of the operative's height" exemption is still dead at the final-placement check |
+| W-40 | open | engine | major | The route planner never generates a climb-over path, so the bot cannot cross ANY solid equipment terrain feature a human can cross by hand |
 
 ## Detail
 
@@ -403,13 +404,38 @@ Files: `src/core/sequences/fight.ts`, `src/core/decisions.ts`, `src/core/sequenc
 
 Test: tests/rules-review.test.ts quoting core-rules.txt:377 against the real data/teams/blooded.json Traitor Chieftain: startFight raises a decision with kind 'selectRetaliationWeapon' whose options include both the Bayonet and the Power weapon, and resolving it to the Power weapon gives the defender Atk 4 / Dmg 4/6.
 
-### W-22 · Razor wire is built as solid terrain, so the Obstructing +1" is computed and then thrown away and the wire cannot be crossed at all
+### W-22 · ~~Razor wire cannot be crossed at all~~ — REFUTED; re-filed as the unmodelled "within 1"" clause
 
-**OPEN** · engine · major
+**OPEN (RE-FILED)** · engine · minor
 
 Rules pinned: `universal-equipment.txt:100 ("Razor wire is Exposed and Obstructing terrain"; "Whenever an operative would cross over this terrain feature within 1\" of it, treat the distance as an additional 1\"")`
 
-**Problem.** Verified still open at src/core/equipment/kit.ts:145: buildEquipmentFeature sets `solid: !insignificant`, and razor wire's types are ['Exposed','Obstructing'], so the part is solid with z0=0, z1=1.42". In validateMove the +1" Obstructing charge is computed at line 192 and pushed onto the leg — and three statements later the same segment is handed to pathBlockedByTerrain, which iterates index.solid and skips only Accessible, Insignificant and Ceiling, so the wire is returned and the move is rejected as 'cannot move through equipment (Exposed+Obstructing)'. The toll is unreachable on any horizontal move and a 2.8"-wide piece of equipment behaves as an impassable wall for the whole battle. The 'within 1" of it' clause is also absent: obstructingCrossings only charges when the segment literally crosses the polygon.
+**Problem — as filed, and why it is wrong.** The original entry claimed three things: that razor
+wire cannot be crossed, that the Obstructing toll is computed and thrown away, and that a 2.8"
+piece of equipment behaves as an impassable wall. **All three were disproved by running the
+code** during the 2026-08-24 verification pass (docs/RULES-AUDIT-PLANS.md W-22).
+
+The corpus settles the reading. Compare the two pricing rules: killzones.txt:222 (Accessible)
+says "Operatives **can move through** Accessible terrain (**this takes precedence over** Bases,
+and Terrain and Movement), but it counts as an additional 1" to do so", while
+universal-equipment.txt:102 (Obstructing) says only "Whenever an operative would **cross over**
+this terrain feature within 1" of it, treat the distance as an additional 1"". The drafters knew
+exactly how to grant move-through permission and override killzones.txt:160, and did so for
+Accessible alone. And "cross over" is the corpus's own word for the climb — killzones.txt:160
+"they must move around, **climb over** or drop/jump off it".
+
+Measured, the engine already does exactly that. Identical straight-cross and climb-over paths
+against razor wire, a light barricade and the heavy barricade: all three refuse the straight
+cross and allow the climb-over, razor wire at a total of 6" with the Obstructing inch charged on
+the across-the-top increment. An operative with a 6" budget reaches 52 cells on the far side —
+it simply walks round. Razor wire is not special.
+
+**What is actually left.** Only the "within 1" of it" half of universal-equipment.txt:102:
+`obstructingCrossings` charges only when the segment literally crosses the polygon, so slipping
+round the end of the wire inside 1" is free. Minor, and it needs an owner decision on which
+predicate models it (see docs/RULES-AUDIT-PLANS.md W-22 OWNER). Do NOT implement the original
+description: leave `pathBlockedByTerrain`, `defaultSolid` and `kit.ts`'s `solid: !insignificant`
+alone.
 
 **Fix.** Give Obstructing parts `solid: false` in buildEquipmentFeature (or add `if (hasType(part,'Obstructing')) continue;` to pathBlockedByTerrain next to the Insignificant skip), so crossing is legal and the already-correct +1" applies. Then widen obstructingCrossings from segmentCrossesPoly to 'crosses the polygon inflated by 1"' to implement the within-1" clause.
 
@@ -690,6 +716,39 @@ Rules pinned: `killzones.txt:235 ("Operatives with a round base of 50mm or less,
 Files: `src/core/terrain.ts`
 
 Test: tests/rules-review.test.ts quoting killzones.txt:235: a Ceiling part with z0 = 2.0 over a 32mm-based operative of model height 2.2" — the operative may both move under it and FINISH under it; a 60mm-based operative in the same spot is rejected.
+
+### W-40 · The route planner never generates a climb-over path, so the bot cannot cross any solid equipment
+
+**OPEN** · engine · major
+
+Rules pinned: `killzones.txt:160 ("Operatives cannot move through terrain — they must move around, climb over or drop/jump off it")`; `killzones.txt:182 (the climb-over increments: "moves up for 2\" … moves across 3\" until its base is fully past the terrain feature, then drops down for 0\"")`
+
+**Problem.** Found underneath W-22, and it is not razor-wire-specific — which is exactly why it
+needs its own entry rather than being folded into that one. `validateMove` correctly ACCEPTS a
+hand-built climb-over path across razor wire, a light barricade or the heavy barricade, charging
+the climb and, for Obstructing terrain, the extra inch on the across-the-top increment. But the
+path builder that `reachableCells` and the AI's move enumeration go through only ever produces
+horizontal routes around an obstacle. So a human tapping a destination can cross a barricade and
+the bot never can — it walks round, every time, on every map.
+
+Measured under W-22: an operative with a 6" budget reaches 52 cells beyond a 2.8" razor wire, all
+of them by going around; not one of the enumerated paths climbs it.
+
+**Fix.** In the path builder, when the straight leg to a neighbour cell is refused by
+`pathBlockedByTerrain` and the blocking part is climbable (not Wall, within the operative's climb
+reach), emit the three-increment climb-over — up, across until the base is fully past, down —
+and price it through the same `validateMove` the hand-built path uses. Do not special-case
+equipment: killzones.txt:160 is general terrain, so ruins and rubble gain the same route.
+
+**Risk.** Medium-high, and it is an AI-strength change as much as a rules one: every reachable-cell
+set on every map grows, so seeded soak replays and the AI latency budget both move. Land it on its
+own, re-baseline deliberately, and re-measure `tests/ai.test.ts`'s 300ms box before and after.
+
+Files: `src/core/movement.ts`, `src/ai/moves.ts`, `tests/rules-review.test.ts`
+
+Test: quoting killzones.txt:160 — `reachableCells` for an operative with a 6" budget on the far
+side of a light barricade includes at least one cell reachable ONLY by climbing it, and the
+returned path for that cell has an up/across/down leg triple whose total matches `validateMove`.
 
 ## Verification pass, 2026-08-24
 
