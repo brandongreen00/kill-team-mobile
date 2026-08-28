@@ -65,7 +65,7 @@ Ranked by how much each defect distorts a real game.
 | W-37 | FIXED | engine | minor | Gambit alternation is not enforced by the reducer, and the AI driver lets the initiative player use every gambit first |
 | W-38 | FIXED | engine | minor | A granted free action is modelled as +1 APL, so the ±1 clamp cancels it against any other APL change |
 | W-39 | FIXED `10509af` | engine | minor | The Ceiling "regardless of the operative's height" exemption is still dead at the final-placement check |
-| W-40 | open | engine | major | The route planner never generates a climb-over path, so the bot cannot cross ANY solid equipment terrain feature a human can cross by hand |
+| W-40 | FIXED | engine | major | The route planner never generates a climb-over path, so the bot cannot cross ANY solid equipment terrain feature a human can cross by hand |
 | W-41 | open | engine | major | The route planner never generates a JUMP either, so the move shading and the bot both miss every gap-crossing on a platform map |
 | W-42 | open | engine | minor | The rampart-before-jump clause is unimplemented, and the upward half of the jump test does not require Vantage terrain at all |
 
@@ -722,7 +722,7 @@ Test: tests/rules-review.test.ts quoting killzones.txt:235: a Ceiling part with 
 
 ### W-40 · The route planner never generates a climb-over path, so the bot cannot cross any solid equipment
 
-**OPEN** · engine · major
+**FIXED** · engine · major
 
 Rules pinned: `killzones.txt:160 ("Operatives cannot move through terrain — they must move around, climb over or drop/jump off it")`; `killzones.txt:182 (the climb-over increments: "moves up for 2\" … moves across 3\" until its base is fully past the terrain feature, then drops down for 0\"")`
 
@@ -752,6 +752,25 @@ Files: `src/core/movement.ts`, `src/ai/moves.ts`, `tests/rules-review.test.ts`
 Test: quoting killzones.txt:160 — `reachableCells` for an operative with a 6" budget on the far
 side of a light barricade includes at least one cell reachable ONLY by climbing it, and the
 returned path for that cell has an up/across/down leg triple whose total matches `validateMove`.
+
+**Fixed, and the entry above is wrong about the cause.** It blames the path builder for only
+producing horizontal routes; the real defect is one line earlier. `reachableCells` gave every
+cell a single elevation from `closestSurface(np, cur.z)`, which returns the level nearest the
+operative's feet while `surfacesAt` always offers 0 — so from the killzone floor the answer was
+always 0, the fill's climb arithmetic was unreachable code, and **no cell above the floor existed
+in the field on any of the 24 shipped maps**. Climbing onto Vantage terrain was as impossible as
+climbing over a wall, which this entry does not say. Both halves are fixed: the fill expands every
+level `surfacesAt` offers, and a step refused by a climbable solid part emits one macro edge
+carrying the top it crosses, which `routePath` turns into the up/across/down triple.
+
+Also wrong here: the proposed hook point. Measured on Volkus, `baseBlockedByTerrain` refuses
+20–60× more steps per fill than `pathBlockedByTerrain`, so wiring the fix only to the path guard —
+what this entry proposes — would have been a no-op on the reported wall. Both guards feed it.
+
+The blast radius the entry predicted did not materialise. It called for a deliberate re-baseline
+of the seeded replays and the AI latency box; no seeded test moved, and replacing the fill's
+sort-per-pop with a binary heap left the worst AI decision at 237/231ms against a 300ms box,
+better than the 246ms measured before the change. See D-107.
 
 ### W-41 · The route planner never generates a jump, so the move shading and the bot both miss every gap-crossing
 
@@ -786,7 +805,14 @@ so this shows up as a badly mispriced route rather than an unreachable one — a
 as a jump and about 7" via the floor, which is most of a Move stat. Where the floor between is
 hazardous, occupied, or more than 3" below, it is unreachable.
 
-**Fix.** Extend the same path builder W-40 touches. From a cell on Vantage terrain higher than 2",
+**Update (W-40 landed).** Half of the cause above is gone: the field now has elevated cells, so
+"there is no transition in it that can leave a rooftop except by walking off the edge" is no
+longer true — an operative can climb up and drop off. What is still missing is the jump itself:
+no edge crosses a GAP, so the 16-of-36 Bheta-Decima platform pairs within 4" of each other are
+still routed the long way round, and the bot still never jumps.
+
+**Fix.** Extend the same path builder W-40 touches — the climb-over edge added there is the shape
+to copy. From a cell on Vantage terrain higher than 2",
 emit one straight-line increment to every standable cell within 4" whose surface is not more than
 1" above the current one, and price it through `validateMove` exactly as the hand-built path is
 priced. Land it with W-40 or immediately after — they are one function and one re-baseline.

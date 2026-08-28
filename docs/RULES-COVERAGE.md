@@ -15,7 +15,7 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 | Firefight 2 — Perform Actions: AP ≤ APL, action restrictions, min 0AP, decide after seeing effects | ✔ | `actions.ts::actionCost`/`availableActions`, `reducer.ts` `PerformAction` | `rejects a second Reposition in the same activation` |
 | Cancel-and-revert when an action cannot be completed | ✔ | `reducer.ts` `PerformAction` (state snapshot before `perform`) | core suite (rejected shot leaves state unchanged) |
 | Firefight 3 — Expended | ✔ | `reducer.ts` `EndActivation` | core suite |
-| Counteract: expended Engage operative, free 1AP excluding Guard, ≤2", once per TP, not an activation | ✔ | `phases.ts::counteractCandidates`, `reducer.ts` `Counteract` | `counteract: an expended Engage operative, once per turning point, and not an activation` |
+| Counteract: expended Engage operative, free 1AP excluding Guard, ≤2", once per TP, not an activation | ✔ | `phases.ts::counteractCandidates`, `counteractActionsAllowed`, `counteractMoveLeft`; `reducer.ts` `Counteract`. The 2" is cumulative over the counteraction, and the action count is a hook a team rule can raise (D-106) | `counteract: an expended Engage operative, once per turning point, and not an activation`, `"That operative cannot move more than 2" … while counteracting" — across BOTH actions, not each` |
 | Battle ends after 4 turning points; most VP wins, ties draw | ✔ | `phases.ts::MAX_TURNING_POINTS`, `determineWinner` | ops suite |
 
 ## Universal actions
@@ -41,7 +41,7 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 | Rule | Status | Implementation | Test |
 | --- | --- | --- | --- |
 | Bases: may touch, never stack; friendly pass-through; not through terrain; not off-board | ✔ | `geometry.ts::basesOverlap`, `movement.ts` | `a base cannot be over the edge of the killzone` |
-| "Operatives cannot move through terrain — they must move around, climb over or drop/jump off it" | ✔ | `terrain.ts::pathBlockedByTerrain`, checked per increment in `movement.ts::validateMove` and `reachableCells`; `movement.ts::routePath` builds the way round (D-064, D-065) | `cannot move through terrain`, `a route around the terrain is legal even though the straight line through it is not`, `an operative cannot walk through a wall` |
+| "Operatives cannot move through terrain — they must move around, climb over or drop/jump off it" | ✔ | `terrain.ts::pathBlockedByTerrain`, checked per increment in `movement.ts::validateMove` and `reachableCells`; `movement.ts::routePath` builds the way round, and over (D-064, D-065, D-107) | `cannot move through terrain`, `a route around the terrain is legal even though the straight line through it is not`, `an operative cannot walk through a wall`, `the reach field crosses a 2" Heavy wall` |
 | Accessible: move through, +1", centre of base only — "takes precedence over Bases, and Terrain and Movement" | ✔ | `terrain.ts::accessibleCrossings` + the `Accessible` exemption in `pathBlockedByTerrain` | `Accessible terrain can still be moved through` |
 | Insignificant: "can move over and across ... without going up and down" | ✔ | `pathBlockedByTerrain` exemption | `Insignificant terrain does not block a move` |
 | Control range = visible to and within 1", mutual | ✔ | `visibility.ts::withinControlRange` | core suite |

@@ -232,7 +232,7 @@ export const PARTIAL: Record<string, string> = {
   [`${AB.tentacledGrasp}.timing`]:
     'canPerformAction is a pure query the AI runs many times per activation, so the D6 is rolled once at the enemy\'s onActivationStart while it is within the BLOATSPAWN\'s control range and the ban then holds for that activation (the Nemesis Claw CHAIN SNARE precedent); the counteraction half is invisible because Counteract emits no onActivationStart',
   [`${AB.swipe}.counteraction`]:
-    'the reducer refuses a counteraction action whose ap is not 1 and hard-codes one action per counteraction, so the free 0AP FIGHT chain is reachable during an activation only — the Deathwatch Veteran Astartes gap; the chain is four sibling ActionDefs (the Phase Sweep precedent), so at most four enemies in control range can be swiped',
+    'the reducer refuses a counteraction action whose printed ap is not 1, so the free 0AP FIGHT chain is reachable during an activation only; the one-action cap that used to compound this is now the counteractActions hook (D-106), and the ap gate is what remains. The chain is four sibling ActionDefs (the Phase Sweep precedent), so at most four enemies in control range can be swiped',
   [`${SP.rustEmanations}.timing`]:
     'the demotion is applied to the opponent\'s already-rolled pool at every post-roll onWeaponRules emit, so it lands before their re-roll offer is built and again at the retention step — the end state is exact, but the opponent learns a 3 is a fail one emit later than the printed "cannot retain"',
   [`${FP.revoltingTechnology}.window`]:

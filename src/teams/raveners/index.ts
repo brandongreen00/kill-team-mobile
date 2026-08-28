@@ -209,7 +209,7 @@ export const REMINDER_ONLY: Record<string, string> = {
   [`${RULE.instincts}.orderFirst`]:
     'onOrderChange is declared but never emitted and the Counteract intent carries no order, so "you can change its order FIRST" (and then still act) has no seam; the "instead of performing an action" half IS live as Change Order (Predatory Instincts)',
   [`${RULE.instincts}.freeBurrow`]:
-    'the reducer hard-codes one action per counteraction with no hook ("a counteracting operative can only perform one action"), so the ADDITIONAL free Burrow during a counteraction is unreachable — the Deathwatch Veteran Astartes gap',
+    'the ADDITIONAL free Burrow during a counteraction is not implemented. It is no longer unreachable: D-106 added the counteractActions hook for exactly this shape, and this clause wants the same treatment as Deathwatch Veteran Astartes',
   [AB.ambush]:
     'every clause hangs off interrupting an enemy activation and the engine has no activation-order seam (nothing runs after an action); its only enforceable clause is the target lock, which is a pure penalty, so the trigger is recorded as a Subterranean Ambush token for the UI and nothing is enforced',
   [`${AB.crest}.rerollFight`]:

@@ -2,6 +2,42 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-28 — Climbing, and the Deathwatch second counteract (D-106, D-107)
+
+Two owner reports from a live game, both real, both fixed.
+
+**"I can't climb over 2 inch high heavy walls."** `validateMove` was never the bug: a hand-built
+three-increment climb-over of a real 2" Volkus wall validates at 4" of a 6" budget and goes
+through `reduce` with zero rejections. Nothing could propose it. `reachableCells` gave every grid
+cell one elevation, `closestSurface(np, cur.z)` — the level nearest the operative's feet, and
+`surfacesAt` always offers 0 — so from the killzone floor the answer was always 0 and **no cell
+above the floor existed in the field on any of the 24 shipped maps**. Every Vantage level in the
+game was unreachable through the move preview and the AI, which is the larger half of the defect
+and is not what W-40 had filed. The fill now expands every level, and a step refused by a
+climbable solid part emits a climb-over macro edge that `routePath` turns into the rules' up /
+across / down increments. On the reported wall: 0 far-side cells before, 21 after, the cheapest at
+exactly the 4" `validateMove` charges. Gallowdark's 2.362" walls stay impassable — they are typed
+`Wall`, which is checked first — and Volkus parts at 3.5"/4"/7" stay outside the 3" climb reach.
+
+The fill's queue was re-sorted on every pop, O(n² log n); it is a binary heap now, which paid for
+the larger field and then some — worst AI decision 246ms before the change, 237/231ms after,
+against a 300ms box. **W-40 is closed and its filed cause is corrected in place.** W-41 (jumping
+across a gap) is still open, but half its cause went with this: elevated cells now exist.
+
+**"Deathwatch don't seem to be allowed their 2nd counteract action."** VETERAN ASTARTES prints
+two halves and only the first was implemented. The kernel capped every counteraction at one
+action with no seam, so `counteractActions` is now a hook: the reducer, the AI and the command
+sheet all read `counteractActionsAllowed`. The constraints stay with the granting rule, because
+the kernel deliberately skips action restrictions during a counteraction. Three things had to be
+fixed with it, none of them reachable until a counteraction could have two actions: the 2" cap is
+on the counteraction and was applied per action, so Reposition 2" then Dash 2" moved 4"; the two
+`… (Veteran Astartes)` actions became legal in a counteraction and would have made a third; and
+ANGEL OF DEATH's WRATH OF VENGEANCE, which had been inert since it was written, had no `usable`
+guard and outside a counteraction really did hand out a fourth AP.
+
+**Next:** W-41, the jump edge — same function, same shape as the climb-over edge, and it wants
+the same one-shot re-baseline discipline.
+
 ## 2026-08-23 — The Close Quarters killzones are no longer sealed (W-01)
 
 The owner pointed at <https://wahapedia.ru/kill-team3/the-rules/approved-ops-2025/>, which
