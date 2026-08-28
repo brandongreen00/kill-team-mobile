@@ -31,7 +31,14 @@ import type { MovePath } from '../../core/intents.ts';
 import { validTargets } from '../../core/sequences/shoot.ts';
 import { basePerimeter } from '../../core/geometry.ts';
 import { aliveOperatives, apBudgetOf, aplOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../../core/state.ts';
-import { counteractCandidates, gambitOptions, gambitToAct, whoActivates } from '../../core/phases.ts';
+import {
+  counteractActionsAllowed,
+  counteractCandidates,
+  counteractMoveLeft,
+  gambitOptions,
+  gambitToAct,
+  whoActivates,
+} from '../../core/phases.ts';
 import { otherPlayer, type OperativeState, type PlayerId, type Vec2 } from '../../core/types.ts';
 import { createBattle } from '../../core/init.ts';
 import { defaultCritOpId } from '../data.ts';
@@ -387,13 +394,21 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
     store.dispatch({ t: 'PerformAction', operativeId: op.id, action, params: params as never });
   };
 
+  // "One free 1AP action, excluding Guard" — offering the rest would be offering rejections.
+  // The count is the core's (`counteractActionsAllowed`), because a team rule can raise it;
+  // once it is spent every row would be refused, so the list empties rather than showing
+  // enabled buttons that toast. The gate is the def's PRINTED ap, matching the reducer's
+  // `def.ap !== 1`, not `a.ap`, which is the cost after discounts.
+  const counteractSpent =
+    counteracting && Number(state.opState['counteract']?.['actionsUsed'] ?? 0) >= counteractActionsAllowed(ctx, state, op);
   const rows = actions
     .filter((a) => a.def.id !== 'Shoot' && a.def.id !== 'Fight')
-    // "One free 1AP action, excluding Guard" — offering the rest would be offering rejections.
-    .filter((a) => !counteracting || (a.ap === 1 && a.def.id !== 'Guard'));
+    .filter((a) => !counteracting || (!counteractSpent && a.def.ap === 1 && a.def.id !== 'Guard'));
 
-  const shootRow = actions.find((a) => a.def.id === 'Shoot');
-  const fightRow = actions.find((a) => a.def.id === 'Fight');
+  // Shoot and Fight get their own sections below rather than a row in `rows`, so they need the
+  // same counteract gate: an exhausted counteraction must not render an enabled weapon button.
+  const shootRow = counteractSpent ? undefined : actions.find((a) => a.def.id === 'Shoot');
+  const fightRow = counteractSpent ? undefined : actions.find((a) => a.def.id === 'Fight');
 
   return {
     id: counteracting ? 'firefight.counteracting' : 'firefight.act',
@@ -612,9 +627,11 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
   const dc = card(ctx, op);
   // "Counteracting: ... it cannot move more than 2\"." The reducer applies that cap via
   // `withCounteractCap`; without it here the preview shaded a full 6" of reachable board,
-  // drew the ghost green at 5", and the dispatch was then refused.
+  // drew the ghost green at 5", and the dispatch was then refused. `counteractMoveLeft` is the
+  // core's own answer, and it is what is LEFT of the counteraction's 2" — a second granted
+  // action must not get a fresh 2".
   const counteracting = (state.opState['counteract'] as { operativeId?: string } | undefined)?.operativeId === op.id;
-  const opts = moveOptionsFor(action, counteracting ? 2 : undefined);
+  const opts = moveOptionsFor(action, counteracting ? counteractMoveLeft(state, op) : undefined);
   const budget = moveBudget(ctx, state, op, opts);
 
   const cells = reachableCells(ctx, state, op, budget, 0.5);

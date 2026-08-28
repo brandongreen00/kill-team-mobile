@@ -27,6 +27,7 @@ import { findProfile,
 import { effectiveRules, startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
 import { startFight, advanceFight } from './sequences/fight.ts';
 import { baseDistanceToPart, hasType, pointDistanceToPart } from './terrain.ts';
+import { counteractMoveLeft } from './phases.ts';
 import type { ActionParams } from './intents.ts';
 import type { GameState, MarkerState, OperativeState, PlayerId, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
@@ -84,7 +85,10 @@ const did = (op: OperativeState, action: string): boolean => op.actionsThisActiv
  */
 function withCounteractCap(state: GameState, op: OperativeState, opts: MoveOptions): MoveOptions {
   const counteracting = state.opState['counteract']?.['operativeId'] === op.id;
-  return counteracting ? { ...opts, hardCap: 2 } : opts;
+  // The cap is on the COUNTERACTION, not on each action in it. A flat 2" per action was only
+  // ever right because a counteraction was only ever one action; the moment a rule grants a
+  // second, Reposition 2" followed by Dash 2" moves 4".
+  return counteracting ? { ...opts, hardCap: counteractMoveLeft(state, op) } : opts;
 }
 
 /**
@@ -162,6 +166,10 @@ function applyMove(
     }
   }
   checkMines(ctx, state, op, v.legs);
+  // Spend against the counteraction's shared 2", not this action's own.
+  const counteract = state.opState['counteract'];
+  if (counteract?.['operativeId'] === op.id)
+    counteract['movedInches'] = Number(counteract['movedInches'] ?? 0) + v.total;
   log(state, {
     kind: 'action',
     player: op.player,

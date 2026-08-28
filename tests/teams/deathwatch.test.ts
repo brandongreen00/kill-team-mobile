@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { availableActions, getAction } from '../../src/core/actions.ts';
 import { zeroStatMods } from '../../src/core/hooks.ts';
 import { reduce } from '../../src/core/reducer.ts';
-import { counteractCandidates } from '../../src/core/phases.ts';
+import { counteractActionsAllowed, counteractCandidates, counteractMoveLeft } from '../../src/core/phases.ts';
 import { validateMove } from '../../src/core/movement.ts';
 import { newPool } from '../../src/core/dice.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
@@ -328,6 +328,135 @@ describe('Veteran Astartes — "it can perform either two Shoot actions or two F
     expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).not.toContain(ork.id);
     ork.order = 'engage';
     expect(counteractCandidates(ctx, state, 'p2').map((o) => o.id)).toContain(ork.id);
+  });
+
+  /**
+   * The second half of the same sentence, which did nothing at all until now: the kernel capped
+   * every counteraction at one action, so the grant had nowhere to live.
+   */
+  describe('"it can perform an additional 1AP action for free during that counteraction"', () => {
+    /**
+     * Put `id` into a counteraction, the way the Firefight phase would: "alternating until all
+     * of one player's operatives are expended, in which case they can counteract between their
+     * opponent's remaining activations." So the whole side is expended and the opponent still
+     * has someone ready — `whoActivates` then returns the counteract window by itself.
+     */
+    const counteract = (ctx: ReturnType<typeof teamContext>, state: GameState, id: string): GameState => {
+      const op = state.operatives[id]!;
+      for (const o of Object.values(state.operatives)) {
+        // Clear ground: EVERY_ROLE deploys a crowded board, and "a base cannot be placed on
+        // another" would refuse the moves these tests use to spend the counteraction.
+        if (o.id !== id) o.pos = { x: 28, y: 20 };
+        if (o.player !== op.player) continue;
+        o.expended = true;
+        o.ready = false;
+        o.counteractedThisTP = false;
+      }
+      op.pos = { x: 10, y: 11 };
+      state.activePlayer = op.player;
+      const out = reduce(state, { t: 'Counteract', player: op.player, operativeId: id }, ctx);
+      expect(out.ok, out.reason).toBe(true);
+      return out.state;
+    };
+
+    it('grants a second action, and still refuses a third', () => {
+      expect(rule('deathwatch.rule.veteran-astartes')).toContain(
+        'it can perform an additional 1AP action for free during that counteraction',
+      );
+      const { ctx, state } = setup();
+      const id = opWith(state, 'p1', MARKSMAN);
+      let s = counteract(ctx, state, id);
+      expect(counteractActionsAllowed(ctx, s, s.operatives[id]!)).toBe(2);
+
+      const first = act(ctx, s, id, 'Reposition', { path: { points: [{ x: s.operatives[id]!.pos.x + 1, y: s.operatives[id]!.pos.y }] } });
+      expect(first.ok).toBe(true);
+      s = first.state;
+      // The second is the one the rule grants, and it is free: a counteraction spends no AP.
+      const second = act(ctx, s, id, 'Guard (Vigilant Marksman)');
+      const other = second.ok ? second : act(ctx, s, id, 'Dash', { path: { points: [{ x: s.operatives[id]!.pos.x + 0.5, y: s.operatives[id]!.pos.y }] } });
+      expect(other.ok, other.reason).toBe(true);
+      s = other.state;
+      expect(s.operatives[id]!.apSpent).toBe(0);
+
+      // …and a third is refused, by the same sentence's silence.
+      const third = act(ctx, s, id, 'Pick Up Marker');
+      expect(third.ok).toBe(false);
+    });
+
+    it('"but both actions must be different"', () => {
+      expect(rule('deathwatch.rule.veteran-astartes')).toContain('both actions must be different');
+      const { ctx, state } = setup();
+      const id = opWith(state, 'p1', MARKSMAN);
+      let s = counteract(ctx, state, id);
+      const at = (dx: number) => ({ path: { points: [{ x: s.operatives[id]!.pos.x + dx, y: s.operatives[id]!.pos.y }] } });
+      s = act(ctx, s, id, 'Reposition', at(1)).state;
+      const again = act(ctx, s, id, 'Reposition', at(0.5));
+      expect(again.ok).toBe(false);
+      expect(again.reason).toMatch(/both counteraction actions must be different/);
+    });
+
+    it('"you cannot perform a Fight and Shoot action during the same counteraction"', () => {
+      expect(rule('deathwatch.rule.veteran-astartes')).toContain(
+        'you cannot perform a Fight and Shoot action during the same counteraction',
+      );
+      const { ctx, state } = setup({ foe: kommandos as unknown as typeof deathwatch });
+      const id = opWith(state, 'p1', MARKSMAN);
+      const enemy = opWith(state, 'p2', 'kommandos.boss-nob');
+      let s = counteract(ctx, state, id);
+      // Nose to nose, so both a Shoot and a Fight are otherwise available.
+      s.operatives[enemy]!.pos = { x: s.operatives[id]!.pos.x + 1.4, y: s.operatives[id]!.pos.y };
+      s.operatives[enemy]!.z = s.operatives[id]!.z;
+      const shot = act(ctx, s, id, 'Shoot', { weaponName: 'Bolt pistol', targetId: enemy });
+      if (!shot.ok) return; // no legal shot on this fixture; the "different" test above still pins the pair
+      s = settle(ctx, shot.state);
+      const fight = act(ctx, s, id, 'Fight', { meleeWeaponName: 'Fists', targetId: enemy });
+      expect(fight.ok).toBe(false);
+      expect(fight.reason).toMatch(/cannot perform a Fight and Shoot action/);
+    });
+
+    it('a kill team without the rule still gets exactly one action, with the printed refusal', () => {
+      const { ctx, state } = setup({ foe: kommandos as unknown as typeof deathwatch });
+      const id = opWith(state, 'p2', 'kommandos.boss-nob');
+      let s = counteract(ctx, state, id);
+      expect(counteractActionsAllowed(ctx, s, s.operatives[id]!)).toBe(1);
+      s = act(ctx, s, id, 'Reposition', { path: { points: [{ x: s.operatives[id]!.pos.x + 1, y: s.operatives[id]!.pos.y }] } }).state;
+      const second = act(ctx, s, id, 'Dash', { path: { points: [{ x: s.operatives[id]!.pos.x + 0.5, y: s.operatives[id]!.pos.y }] } });
+      expect(second.ok).toBe(false);
+      expect(second.reason).toBe('a counteracting operative can only perform one action');
+    });
+
+    it('core-rules: "That operative cannot move more than 2\" … while counteracting" — across BOTH actions, not each', () => {
+      const { ctx, state } = setup();
+      const id = opWith(state, 'p1', MARKSMAN);
+      let s = counteract(ctx, state, id);
+      const start = { ...s.operatives[id]!.pos };
+      const to = (dx: number) => ({ path: { points: [{ x: start.x + dx, y: start.y }] } });
+      const first = act(ctx, s, id, 'Reposition', to(2));
+      expect(first.ok).toBe(true);
+      s = first.state;
+      expect(counteractMoveLeft(s, s.operatives[id]!)).toBe(0);
+      // The whole 2" is spent, so the granted second action cannot be another move.
+      const second = act(ctx, s, id, 'Dash', to(3));
+      expect(second.ok).toBe(false);
+    });
+
+    it('Veteran Astartes\u2019 own two-action clause stays inside an ACTIVATION', () => {
+      // "During each friendly DEATHWATCH operative's ACTIVATION, it can perform either two
+      // Shoot actions or two Fight actions" — a counteraction is not an activation, so the
+      // granted second action can never be this, which would make a third.
+      const { ctx, state } = setup({ foe: kommandos as unknown as typeof deathwatch });
+      const id = opWith(state, 'p1', MARKSMAN);
+      const enemy = opWith(state, 'p2', 'kommandos.boss-nob');
+      const s = counteract(ctx, state, id);
+      s.operatives[id]!.actionsThisActivation = ['Shoot'];
+      // Asserted on the action's own `check`: through the reducer it is refused a clause
+      // earlier, by "both actions must be different", which is also correct but pins the
+      // wrong rule. Either way it can never be performed.
+      const guard = getAction(VETERAN_SHOOT)!.check(ctx, s, s.operatives[id]!, { weaponName: 'Bolt pistol', targetId: enemy });
+      expect(guard.ok).toBe(false);
+      expect(guard.reason).toMatch(/applies during an activation, not a counteraction/);
+      expect(act(ctx, s, id, VETERAN_SHOOT, { weaponName: 'Bolt pistol', targetId: enemy }).ok).toBe(false);
+    });
   });
 });
 

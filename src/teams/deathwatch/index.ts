@@ -377,6 +377,39 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     ev.allowed = true;
   });
 
+  // "Whenever it does, it can perform an additional 1AP action for free during that
+  // counteraction, but both actions must be different and you cannot perform a Fight and Shoot
+  // action during the same counteraction."
+  //
+  // The grant and its two constraints are separate hooks on purpose. The kernel's counteraction
+  // deliberately skips action restrictions — "Counteracting isn't an activation… it means action
+  // restrictions won't apply" — so "both actions must be different" is NOT the universal
+  // restriction reappearing; it is this rule's own condition, and it lives with this rule.
+  reg.on('counteractActions', T.bind(RULE_VETERAN_ASTARTES, 13), (ev) => {
+    if (!T.mineKw(ev.operative, KW)) return;
+    ev.actions = Math.max(ev.actions, 2);
+  });
+
+  reg.on('canPerformAction', T.bind(RULE_VETERAN_ASTARTES, 13), (ev) => {
+    if (!T.mineKw(ev.operative, KW)) return;
+    if (ev.state.opState['counteract']?.['operativeId'] !== ev.operative.id) return;
+    const done = ev.operative.actionsThisActivation;
+    if (done.length === 0) return;
+    // Compare on what each action IS, not on the id it is registered under: a team's own
+    // `Fight (…)` variant carries `treatedAs: 'Fight'`, and two different ids that are both
+    // Fight are not two different actions.
+    const kind = counteractKind(ev.action);
+    if (done.includes(kind)) {
+      ev.allowed = false;
+      ev.reason = 'Veteran Astartes: both counteraction actions must be different';
+      return;
+    }
+    if ((kind === 'Fight' && done.includes('Shoot')) || (kind === 'Shoot' && done.includes('Fight'))) {
+      ev.allowed = false;
+      ev.reason = 'Veteran Astartes: cannot perform a Fight and Shoot action during the same counteraction';
+    }
+  });
+
   // ---- Special Issue Ammunition -------------------------------------------
   // "…select one of the following weapon rules for that operative's ranged weapons to have
   //  until the end of the action."
@@ -923,6 +956,15 @@ registerAction({
   sourceText: text(RULE_VETERAN_ASTARTES),
   available: (ctx, _state, op) => isDeathwatch(ctx, op),
   check(ctx, state, op, params) {
+    // "During each friendly DEATHWATCH operative's ACTIVATION, it can perform either two Shoot
+    // actions or two Fight actions" — a counteraction is not an activation ("Counteracting
+    // isn't an activation, it's instead of activating"). The check below keys off
+    // `actionsThisActivation`, which a counteraction repopulates from empty, and `apSpent`
+    // stays 0 throughout one — so without this guard the second counteraction action could be
+    // this, and a THIRD action would follow it. `Guard (Vigilant Marksman)` is guarded the
+    // same way for the same reason.
+    if (state.opState['counteract']?.['operativeId'] === op.id)
+      return { ok: false, reason: 'Veteran Astartes applies during an activation, not a counteraction' };
     if (op.actionsThisActivation.includes('Fight'))
       return { ok: false, reason: 'either two Shoot actions or two Fight actions' };
     if (!op.actionsThisActivation.includes('Shoot'))
@@ -951,6 +993,15 @@ registerAction({
   sourceText: text(RULE_VETERAN_ASTARTES),
   available: (ctx, _state, op) => isDeathwatch(ctx, op),
   check(ctx, state, op, params) {
+    // "During each friendly DEATHWATCH operative's ACTIVATION, it can perform either two Shoot
+    // actions or two Fight actions" — a counteraction is not an activation ("Counteracting
+    // isn't an activation, it's instead of activating"). The check below keys off
+    // `actionsThisActivation`, which a counteraction repopulates from empty, and `apSpent`
+    // stays 0 throughout one — so without this guard the second counteraction action could be
+    // this, and a THIRD action would follow it. `Guard (Vigilant Marksman)` is guarded the
+    // same way for the same reason.
+    if (state.opState['counteract']?.['operativeId'] === op.id)
+      return { ok: false, reason: 'Veteran Astartes applies during an activation, not a counteraction' };
     if (op.actionsThisActivation.includes('Shoot'))
       return { ok: false, reason: 'either two Shoot actions or two Fight actions' };
     if (!op.actionsThisActivation.includes('Fight'))
@@ -1004,6 +1055,23 @@ export const PHASE_SWEEP_ACTIONS = [
   'Fight (Phase Sweep 3)',
   'Fight (Phase Sweep 4)',
 ];
+
+/**
+ * What an action IS, for the two clauses Veteran Astartes puts on a counteraction: "both
+ * actions must be different and you cannot perform a Fight and Shoot action during the same
+ * counteraction".
+ *
+ * `treatedAs` is the general answer — a team's own `Fight (…)` variant carries
+ * `treatedAs: 'Fight'`, and two ids that are both Fight are not two different actions. The
+ * Phase Sweep chain deliberately does not carry it, because each link needs an action-restriction
+ * key of its own, so the links are named here: every one of them is a Fight.
+ */
+function counteractKind(actionId: string): string {
+  if (PHASE_SWEEP_ACTIONS.includes(actionId)) return 'Fight';
+  if (actionId === VETERAN_FIGHT) return 'Fight';
+  if (actionId === VETERAN_SHOOT) return 'Shoot';
+  return getAction(actionId)?.treatedAs ?? actionId;
+}
 
 function phaseSweepTarget(
   ctx: GameContext,

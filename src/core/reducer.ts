@@ -19,6 +19,7 @@ import { inControlRange,
 import {
   MAX_TURNING_POINTS,
   bothPassedGambit,
+  counteractActionsAllowed,
   counteractCandidates,
   determineWinner,
   endTurningPoint,
@@ -343,7 +344,9 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       delete next.opState['counteractDeclined'];
       next.activeOperativeId = op.id;
       next.activePlayer = intent.player;
-      next.opState['counteract'] = { operativeId: op.id, actionsUsed: 0 };
+      // `movedInches` accumulates across the whole counteraction: the 2" cap is on the
+      // counteraction, not on each action in it (see `counteractMoveLeft`).
+      next.opState['counteract'] = { operativeId: op.id, actionsUsed: 0, movedInches: 0 };
       log(next, { kind: 'action', player: intent.player, text: `${op.letter} counteracts` });
       return ok(next);
     }
@@ -375,8 +378,11 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       if (counteracting && def.ap !== 1) return fail('a counteraction must be a 1AP action');
       if (counteracting && def.id === 'Guard') return fail('a counteraction cannot be the Guard action');
       // "you can select an expended friendly operative with an Engage order to perform a
-      // 1AP action (excluding Guard) for free" — ONE action, not an unlimited free turn.
-      if (counteracting && Number(counteract?.['actionsUsed'] ?? 0) > 0)
+      // 1AP action (excluding Guard) for free" — ONE action, not an unlimited free turn. A team
+      // rule may raise the allowance (Deathwatch's Veteran Astartes grants a second); the
+      // CONSTRAINTS that come with such a grant are the granting rule's own job, through
+      // `canPerformAction` below, because a counteraction deliberately skips action restrictions.
+      if (counteracting && Number(counteract?.['actionsUsed'] ?? 0) >= counteractActionsAllowed(ctx, next, op))
         return fail('a counteracting operative can only perform one action');
       // `apBudgetOf`, not `aplOf`: a granted free action adds AP without being an APL stat
       // change, so it is not subject to the +-1 clamp (D-100).
