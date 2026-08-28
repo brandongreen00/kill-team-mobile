@@ -38,6 +38,7 @@ export const HOOK_NAMES = [
   'onActivationStart',
   'onActivationEnd',
   'onCounteract',
+  'counteractActions',
   'onActionCost',
   'canPerformAction',
   'onMoveDistance',
@@ -153,6 +154,17 @@ export interface HookEvents {
   onActivationStart: { state: GameState; operative: OperativeState };
   onActivationEnd: { state: GameState; operative: OperativeState };
   onCounteract: { state: GameState; operative: OperativeState; allowed: boolean; reason?: string };
+  /**
+   * How many actions this counteraction is allowed, defaulting to the printed one.
+   *
+   * A separate name from `onCounteract`, which is an ELIGIBILITY query emitted once per
+   * candidate on every render and already mutated for other purposes. This one is asked at the
+   * moment an action is attempted, so a rule that grants the extra action mid-counteraction is
+   * still seen. Deathwatch's Veteran Astartes ("Whenever it does, it can perform an additional
+   * 1AP action for free during that counteraction") is the reason it exists; the constraints
+   * that come with such a grant belong in `canPerformAction`, which can already refuse.
+   */
+  counteractActions: { state: GameState; operative: OperativeState; actions: number };
   onActionCost: { state: GameState; operative: OperativeState; action: string; ap: number };
   canPerformAction: { state: GameState; operative: OperativeState; action: string; allowed: boolean; reason?: string };
   onMoveDistance: { state: GameState; operative: OperativeState; action: string; inches: number };

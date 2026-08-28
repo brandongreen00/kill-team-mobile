@@ -206,7 +206,10 @@ export function generateMoves(
   for (const { cell } of ranked) {
     if (out.length >= limit) break;
     if (cell.pos.x === op.pos.x && cell.pos.y === op.pos.y) continue;
-    const key = `${cell.pos.x.toFixed(1)},${cell.pos.y.toFixed(1)}`;
+    // The LEVEL is part of the identity now that the field has more than one. Without it the
+    // rooftop above a floor cell — or the far side of a wall, which shares x/y with nothing —
+    // was silently dropped as a duplicate of whichever the ranking happened to reach first.
+    const key = `${cell.pos.x.toFixed(1)},${cell.pos.y.toFixed(1)},${cell.z.toFixed(1)}`;
     if (seen.has(key)) continue;
     seen.add(key);
     const candidate = buildPath(ctx, state, op, cell, action, options, field);

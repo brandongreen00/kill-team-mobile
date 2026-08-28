@@ -12,7 +12,14 @@ import { reduce } from '../core/reducer.ts';
 import type { GameContext } from '../core/context.ts';
 import { terrain } from '../core/context.ts';
 import type { ActionParams, Intent } from '../core/intents.ts';
-import { counteractCandidates, gambitOptions, guardInterruptCandidates, whoActivates } from '../core/phases.ts';
+import {
+  counteractActionsAllowed,
+  counteractCandidates,
+  counteractMoveLeft,
+  gambitOptions,
+  guardInterruptCandidates,
+  whoActivates,
+} from '../core/phases.ts';
 import {
   aliveOperatives,
   aplOf,
@@ -132,14 +139,19 @@ export function actionCandidates(
 ): Candidate[] {
   const out: Candidate[] = [];
   const counteracting = opts.counteracting ?? false;
-  // ENGINE GAP (src/core/reducer.ts › PerformAction): while counteracting, neither the AP
-  // limit nor action restrictions are applied, so the reducer would accept an unbounded
-  // stream of 1AP actions. The rule is "one free 1AP action", so the AI offers exactly one.
-  if (counteracting && op.actionsThisActivation.length > 0) return out;
+  // How many actions the counteraction has left. The reducer caps this too; both read
+  // `counteractActionsAllowed` so a team rule that grants a second action (Deathwatch's
+  // Veteran Astartes) widens the AI's enumeration and the reducer's gate together — offering
+  // an action the reducer would refuse is a rejected intent, which the soak asserts against.
+  if (counteracting) {
+    const used = Number(state.opState['counteract']?.['actionsUsed'] ?? 0);
+    if (used >= counteractActionsAllowed(ctx, state, op)) return out;
+  }
   const defs = counteracting ? counteractActionDefs(ctx, state, op) : availableActions(ctx, state, op).filter((a) => a.ok).map((a) => a.def);
   const pc = positionContext(ctx, state, op, opts.weights);
   const moveLimit = opts.moveLimit ?? 6;
-  const hardCap = counteracting ? 2 : undefined;
+  // The counteraction's REMAINING inches, not a flat 2" per action — see `counteractMoveLeft`.
+  const hardCap = counteracting ? counteractMoveLeft(state, op) : undefined;
   const moveActions = defs
     .map((d) => d.id)
     .filter((id): id is MoveAction => id === 'Reposition' || id === 'Dash' || id === 'Fall Back' || id === 'Charge');

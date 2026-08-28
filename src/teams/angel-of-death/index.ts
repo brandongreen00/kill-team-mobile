@@ -4,7 +4,7 @@
  */
 import { getAction, registerAction } from '../../core/actions.ts';
 import { HookRegistry } from '../../core/hooks.ts';
-import { log } from '../../core/state.ts';
+import { FREE_ACTION_RULE, log } from '../../core/state.ts';
 import type { GameState, OperativeState, PlayerId } from '../../core/types.ts';
 import { teamData } from '../data.ts';
 import {
@@ -368,6 +368,32 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   });
 
   // WRATH OF VENGEANCE (firefight) — an extra free 1AP action during a counteraction.
+  //
+  // "It can perform an additional 1AP action for free during that counteraction, but both
+  // actions must be different." The free-AP effect below is what a free action normally is
+  // (D-100), but AP is not what limits a counteraction: the reducer forces `ap = 0` and skips
+  // the budget check entirely, and caps on the action COUNT instead. So the grant has to be
+  // made through `counteractActions` as well, reading the very effect the ploy left behind.
+  reg.on('counteractActions', T.bind('angel-of-death.fp.wrath-of-vengeance', 20), (ev) => {
+    if (ev.operative.player !== T.player) return;
+    const eff = effectOn(ev.state, ev.operative.id, FREE_ACTION_RULE);
+    if (eff?.source.id !== 'angel-of-death.fp.wrath-of-vengeance') return;
+    ev.actions = Math.max(ev.actions, 2);
+  });
+
+  // "…but both actions must be different." No Fight-and-Shoot clause on this one, unlike
+  // Deathwatch's Veteran Astartes — the printed text stops at "different".
+  reg.on('canPerformAction', T.bind('angel-of-death.fp.wrath-of-vengeance', 20), (ev) => {
+    if (ev.operative.player !== T.player) return;
+    if (ev.state.opState['counteract']?.['operativeId'] !== ev.operative.id) return;
+    const eff = effectOn(ev.state, ev.operative.id, FREE_ACTION_RULE);
+    if (eff?.source.id !== 'angel-of-death.fp.wrath-of-vengeance') return;
+    const kind = getAction(ev.action)?.treatedAs ?? ev.action;
+    if (!ev.operative.actionsThisActivation.includes(kind)) return;
+    ev.allowed = false;
+    ev.reason = 'Wrath of Vengeance: both counteraction actions must be different';
+  });
+
   reg.on('onPloyUsed', T.bind('angel-of-death.fp.wrath-of-vengeance', 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== 'angel-of-death.fp.wrath-of-vengeance') return;
     const counteracting = (ev.state.opState['counteract'] as { operativeId?: string } | undefined)?.operativeId;
@@ -543,6 +569,21 @@ export const angelOfDeath = defineTeam({
   ploys,
   equipment,
   actions,
+  ployUsable: {
+    // "Use this firefight ploy when a friendly ANGEL OF DEATH operative is counteracting."
+    // Without this the ploy was playable at any point in any activation, where the free-AP
+    // effect it leaves behind is NOT inert — it really did hand out a fourth AP.
+    // The keyword is left to `onPloyUsed`, which already picks from
+    // `T.friendlies(state, 'ANGEL OF DEATH')` and does nothing when that list is empty; a
+    // `usable` guard gets no context to read datacards with.
+    'angel-of-death.fp.wrath-of-vengeance': (state, player) => {
+      const id = (state.opState['counteract'] as { operativeId?: string } | undefined)?.operativeId;
+      const op = id ? state.operatives[id] : undefined;
+      return op && op.player === player
+        ? { ok: true }
+        : { ok: false, reason: 'only while a friendly ANGEL OF DEATH operative is counteracting' };
+    },
+  },
   aiHints: {
     roles: {
       'angel-of-death.space-marine-captain': 'leader',

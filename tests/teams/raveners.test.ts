@@ -664,7 +664,11 @@ describe('Predatory Instincts', () => {
     expect(ruleText(RULE.instincts)).toContain('You can change its order first');
     expect(ruleText(RULE.instincts)).toContain('it can perform a free Burrow action');
     expect(REMINDER_ONLY[`${RULE.instincts}.orderFirst`]).toContain('onOrderChange');
-    expect(REMINDER_ONLY[`${RULE.instincts}.freeBurrow`]).toContain('one action per counteraction');
+    // The engine reason changed when D-106 gave a counteraction an action allowance: the seam
+    // this clause needed now exists, so the reminder records "not implemented" rather than
+    // "unreachable". The clause itself is still not implemented.
+    expect(REMINDER_ONLY[`${RULE.instincts}.freeBurrow`]).toContain('counteractActions');
+    expect(REMINDER_ONLY[`${RULE.instincts}.freeBurrow`]).toContain('not implemented');
   });
 });
 

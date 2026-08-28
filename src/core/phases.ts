@@ -5,7 +5,7 @@
  */
 import type { GameContext } from './context.ts';
 import { aliveOperatives, log, recordRoll, removeIncapacitated } from './state.ts';
-import type { GameState, PlayerId } from './types.ts';
+import type { GameState, OperativeState, PlayerId } from './types.ts';
 import { otherPlayer } from './types.ts';
 
 export const MAX_TURNING_POINTS = 4;
@@ -200,6 +200,40 @@ export function counteractCandidates(ctx: GameContext, state: GameState, player:
     // "That friendly operative cannot counteract during the turning point" after On Guard.
     .filter((o) => o.guardSpentTP !== state.turningPoint);
 }
+
+/**
+ * How many actions the operative currently counteracting is allowed.
+ *
+ * Core rules: "you can select one of their expended operatives with an Engage order to perform
+ * a 1AP action (excluding Guard) for free" — ONE action, which is the default here. A team rule
+ * may raise it: Deathwatch's Veteran Astartes prints "Whenever it does, it can perform an
+ * additional 1AP action for free during that counteraction".
+ *
+ * Asked at the moment of the action rather than stored at the start of the counteraction, so a
+ * ploy used mid-counteraction is honoured. Exported because the reducer, the AI's legal-intent
+ * enumeration and the UI must all read one answer rather than three copies of the number.
+ */
+export function counteractActionsAllowed(ctx: GameContext, state: GameState, op: OperativeState): number {
+  return ctx.hooks.emit('counteractActions', state, { state, operative: op, actions: 1 }).actions;
+}
+
+/**
+ * The inches of movement left in this counteraction.
+ *
+ * "That operative cannot move more than 2\", or must be set up wholly within 2\" if it's removed
+ * and set up again, while counteracting (this is not a change to its Move stat, and takes
+ * precedence over all other rules)." The cap is on the COUNTERACTION, not on each action in it,
+ * so with two actions granted a flat 2" per action would let an operative Reposition 2" and then
+ * Dash 2". What has already been spent is accumulated on the counteract state by `applyMove`.
+ */
+export function counteractMoveLeft(state: GameState, op: OperativeState): number {
+  const c = state.opState['counteract'];
+  if (c?.['operativeId'] !== op.id) return Infinity;
+  return Math.max(0, COUNTERACT_MOVE_CAP - Number(c['movedInches'] ?? 0));
+}
+
+/** "That operative cannot move more than 2\" … while counteracting". */
+export const COUNTERACT_MOVE_CAP = 2;
 
 /**
  * On Guard: "Once during each enemy operative's activation, after that enemy operative
