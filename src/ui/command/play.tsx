@@ -634,7 +634,10 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
   const opts = moveOptionsFor(action, counteracting ? counteractMoveLeft(state, op) : undefined);
   const budget = moveBudget(ctx, state, op, opts);
 
-  const cells = reachableCells(ctx, state, op, budget, 0.5);
+  // A Dash "cannot climb during this move, but it can drop and jump", so the shading must not
+  // promise a climb-over it would then refuse. The AI shares one field across all four move
+  // actions and filters instead, in `buildPath`, which re-validates every candidate.
+  const cells = reachableCells(ctx, state, op, budget, 0.5, { ...(opts.noClimb ? { noClimb: true } : {}) });
 
   /**
    * The path the operative would actually walk to reach `dest`.

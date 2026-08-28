@@ -27,6 +27,7 @@ import {
   pathBlockedByTerrain,
   surfaceAt,
   surfacesAt,
+  type IndexedPart,
   type TerrainIndex,
 } from './terrain.ts';
 import { aliveOperatives, card, inControlRange, moveOf, body } from './state.ts';
@@ -489,6 +490,29 @@ function closestSurface(index: TerrainIndex, p: Vec2, fromZ: number): number {
   return best;
 }
 
+/**
+ * The far side of `poly` along the ray from `origin` in direction `(ux, uy)`: the largest t at
+ * which the ray crosses an edge, or null if it misses. Used to answer "how far must the
+ * operative travel before its base is fully past this terrain feature", which is a question
+ * about the outline in the direction of travel, not about the bounding box.
+ */
+function rayExit(poly: Vec2[], origin: Vec2, ux: number, uy: number): number | null {
+  let best: number | null = null;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+    const a = poly[j]!;
+    const b = poly[i]!;
+    const ex = b.x - a.x;
+    const ey = b.y - a.y;
+    const den = ux * ey - uy * ex;
+    if (Math.abs(den) < 1e-12) continue; // parallel
+    const t = ((a.x - origin.x) * ey - (a.y - origin.y) * ex) / den;
+    const u = ((a.x - origin.x) * uy - (a.y - origin.y) * ux) / den;
+    if (t < 0 || u < -1e-9 || u > 1 + 1e-9) continue;
+    if (best === null || t > best) best = t;
+  }
+  return best;
+}
+
 function canStandAt(index: TerrainIndex, p: Vec2, z: number): boolean {
   if (z <= 1e-6) return true;
   return Math.abs(surfaceAt(index, p, z + 0.05) - z) < 0.05;
@@ -568,6 +592,13 @@ export interface ReachCell {
   z: number;
   cost: number;
   from?: string;
+  /**
+   * Set when this cell was reached by climbing OVER a terrain part rather than by stepping.
+   * `top` is the height it went over and `foot` is where it started up, which is everything
+   * `routePath` needs to emit the up / across / down increment triple the rules describe. The
+   * top itself is never a cell: nothing may finish on a part it is only climbing over.
+   */
+  via?: { top: number; foot: Vec2 };
 }
 
 const cellKey = (p: Vec2, z: number): string => `${p.x.toFixed(1)},${p.y.toFixed(1)},${z.toFixed(1)}`;
@@ -585,6 +616,8 @@ export function reachableCells(
   op: OperativeState,
   budget: number,
   step = 0.5,
+  /** Dash "cannot climb during this move, but it can drop and jump" — so it cannot climb over. */
+  opts: { noClimb?: boolean } = {},
 ): Map<string, ReachCell> {
   const index = terrain(ctx, state);
   const c = card(ctx, op);
@@ -593,6 +626,41 @@ export function reachableCells(
   const key = cellKey;
   const start: ReachCell = { pos: { ...op.pos }, z: op.z, cost: 0 };
   const queue: ReachCell[] = [start];
+  /**
+   * A binary min-heap on `cost`. This is Dijkstra, and the queue used to be re-sorted in full
+   * on every pop - O(n log n) per expansion, so O(n^2 log n) over the fill. That was affordable
+   * while the field was a single level of floor cells; it is not now that the field has levels
+   * and climb-over edges and is half again as large.
+   */
+  const push = (node: ReachCell): void => {
+    queue.push(node);
+    let i = queue.length - 1;
+    while (i > 0) {
+      const parent = (i - 1) >> 1;
+      if (queue[parent]!.cost <= queue[i]!.cost) break;
+      [queue[parent], queue[i]] = [queue[i]!, queue[parent]!];
+      i = parent;
+    }
+  };
+  const pop = (): ReachCell => {
+    const top = queue[0]!;
+    const last = queue.pop()!;
+    if (queue.length > 0) {
+      queue[0] = last;
+      let i = 0;
+      for (;;) {
+        const l = i * 2 + 1;
+        const r = l + 1;
+        let small = i;
+        if (l < queue.length && queue[l]!.cost < queue[small]!.cost) small = l;
+        if (r < queue.length && queue[r]!.cost < queue[small]!.cost) small = r;
+        if (small === i) break;
+        [queue[small], queue[i]] = [queue[i]!, queue[small]!];
+        i = small;
+      }
+    }
+    return top;
+  };
   out.set(key(start.pos, start.z), start);
   const dirs = [
     [step, 0],
@@ -604,33 +672,119 @@ export function reachableCells(
     [-step, step],
     [-step, -step],
   ];
+  const r = baseRadius(c.base);
+  /**
+   * "Operatives cannot move through terrain — they must move around, CLIMB OVER or drop/jump
+   * off it."
+   *
+   * A step refused by a solid part the operative could climb is not a dead end: it is the
+   * three-increment climb-over the rules work through — "moves up for 2\" … until it's above
+   * the highest point it must climb over. It moves across 3\" until its base is fully past the
+   * terrain feature, then drops down for 0\"". None of that can be expressed as a 0.5\" lattice
+   * step, because the far side is several cells away and the wall top is not a level anything
+   * may stand on, so it is emitted as one macro edge carrying the top it goes over.
+   */
+  const climbOver = (part: IndexedPart, dx: number, dy: number, cur: ReachCell): void => {
+    if (hasType(part, 'Wall')) return; // "Operatives cannot move over or through Wall terrain."
+    const rise = part.z1 - cur.z;
+    if (rise <= 1e-6 || rise > 3 + 1e-6) return; // "within … 3" vertically … to climb it"
+    const len = Math.hypot(dx, dy);
+    const ux = dx / len;
+    const uy = dy / len;
+    // Far enough that the base is fully past the part, measured through the part along this
+    // direction rather than assumed from the lattice: these walls are 0.2" thick and a cell
+    // sampled mid-wall lands inside them only some of the time.
+    // How far along THIS direction the part actually reaches, by intersecting the ray with the
+    // part's outline. The bounding box is the wrong measure: for a diagonal step across a
+    // 0.2"-thick, 5.5"-long wall its extent along the ray is the wall's LENGTH, and the
+    // operative would be sent four inches further than the rule asks.
+    const exit = rayExit(part.poly, cur.pos, ux, uy);
+    if (exit === null) return;
+    // "It moves across N\" until its base is fully past the terrain feature."
+    const across = exit + r;
+    // Whole steps along the SAME direction, so the landing stays on the fill's own lattice —
+    // which is anchored at the operative, not at the board origin, so rounding to a global
+    // grid would break `cellKey` and the `from` chain. The first n that clears the part wins;
+    // rounding to the nearest instead lands short, inside it.
+    const n = Math.max(1, Math.ceil(across / len - 1e-9));
+    if (n * len > budget) return;
+    const snapped = { x: cur.pos.x + dx * n, y: cur.pos.y + dy * n };
+    if (snapped.x < 0 || snapped.y < 0 || snapped.x > state.map.board.w || snapped.y > state.map.board.h) return;
+    const lz = closestSurface(index, snapped, cur.z);
+    if (baseBlockedByTerrain(index, snapped, c.base, op.rot, lz, h)) return;
+    if (baseTouchesHazardous(index, snapped, c.base, op.rot)) return;
+    // Over the top, the part being climbed does not block itself — the same exemption
+    // `validateMove` applies to an increment that changes level.
+    if (pathBlockedByTerrain(index, cur.pos, snapped, part.z1, c.base, h, new Set([part.feature.id]))) return;
+    if (index.walls.some((w) => w.solid !== false && crossesWall(w, cur.pos, snapped) && !isOpenAccessPoint(w))) return;
+    // Priced per leg, as `validateMove` will price the three increments this becomes:
+    // "increments are always rounded up to the nearest inch", the climb is "a minimum of 2"
+    // vertically", and a drop of 2" or less is ignored.
+    const drop = part.z1 - lz;
+    const cost =
+      cur.cost + ceil1(Math.max(2, rise)) + ceil1(dist(cur.pos, snapped)) + ceil1(Math.max(0, drop - 2));
+    if (cost > budget + 1e-6) return;
+    const k = key(snapped, lz);
+    const prev = out.get(k);
+    if (prev && prev.cost <= cost) return;
+    const node: ReachCell = {
+      pos: snapped,
+      z: lz,
+      cost,
+      from: key(cur.pos, cur.z),
+      via: { top: part.z1, foot: { ...cur.pos } },
+    };
+    out.set(k, node);
+    push(node);
+  };
+
   let guard = 0;
   while (queue.length > 0 && guard++ < 20000) {
-    queue.sort((a, b) => a.cost - b.cost);
-    const cur = queue.shift()!;
+    const cur = pop();
     for (const [dx, dy] of dirs) {
       const np = { x: cur.pos.x + dx!, y: cur.pos.y + dy! };
       if (np.x < 0 || np.y < 0 || np.x > state.map.board.w || np.y > state.map.board.h) continue;
-      const nz = closestSurface(index, np, cur.z);
-      const dz = nz - cur.z;
-      if (dz > 3 + 1e-6) continue;
-      const stepCost = Math.hypot(dx!, dy!) + (dz > 0 ? Math.max(2, dz) : 0) + (dz < -2 ? -dz - 2 : 0);
-      const cost = cur.cost + stepCost;
-      if (cost > budget + 1e-6) continue;
-      if (baseBlockedByTerrain(index, np, c.base, op.rot, nz, h)) continue;
-      if (baseTouchesHazardous(index, np, c.base, op.rot)) continue;
-      if (index.walls.some((w) => w.solid !== false && crossesWall(w, cur.pos, np) && !isOpenAccessPoint(w))) continue;
-      const exempt =
-        Math.abs(dz) > 1e-6
-          ? new Set([...featureIdsSupporting(index, cur.pos, cur.z), ...featureIdsSupporting(index, np, nz)])
-          : undefined;
-      if (pathBlockedByTerrain(index, cur.pos, np, Math.max(cur.z, nz), c.base, h, exempt)) continue;
-      const k = key(np, nz);
-      const prev = out.get(k);
-      if (prev && prev.cost <= cost) continue;
-      const node: ReachCell = { pos: np, z: nz, cost, from: key(cur.pos, cur.z) };
-      out.set(k, node);
-      queue.push(node);
+      // EVERY level standable here, not just the one nearest our feet.
+      //
+      // This used to be `closestSurface(index, np, cur.z)`, which returns the level nearest
+      // `cur.z` and always has 0 to choose from (`surfacesAt` seeds it). From the killzone
+      // floor that is always 0, so `dz` was always 0 and the climb arithmetic below was dead
+      // code: the field contained no cell above the floor anywhere, on any map, and every
+      // Vantage level in the game was unreachable through the move preview and the AI.
+      for (const nz of surfacesAt(index, np)) {
+        const dz = nz - cur.z;
+        // "An operative must be within 1" horizontally and 3" vertically of terrain that's
+        // visible to them to climb it." A 0.5" step is inside the horizontal inch; the
+        // vertical reach is the gate. Any drop is allowed.
+        if (dz > 3 + 1e-6) continue;
+        // "Each climb is treated as a minimum of 2" vertically", and "ignore 2" of vertical
+        // distance that they drop during each action" — optimistic per drop rather than per
+        // action, which is the pre-existing approximation and stays admissible.
+        const stepCost = Math.hypot(dx!, dy!) + (dz > 0 ? Math.max(2, dz) : 0) + (dz < -2 ? -dz - 2 : 0);
+        const cost = cur.cost + stepCost;
+        if (cost > budget + 1e-6) continue;
+        if (index.walls.some((w) => w.solid !== false && crossesWall(w, cur.pos, np) && !isOpenAccessPoint(w))) continue;
+        const exempt =
+          Math.abs(dz) > 1e-6
+            ? new Set([...featureIdsSupporting(index, cur.pos, cur.z), ...featureIdsSupporting(index, np, nz)])
+            : undefined;
+        // What refuses the plain step, if anything — kept rather than discarded, because a
+        // solid part low enough to climb is not an obstacle, it is a climb-over.
+        const blocking =
+          baseBlockedByTerrain(index, np, c.base, op.rot, nz, h) ??
+          pathBlockedByTerrain(index, cur.pos, np, Math.max(cur.z, nz), c.base, h, exempt);
+        if (blocking) {
+          if (nz === 0 && !opts.noClimb) climbOver(blocking, dx!, dy!, cur);
+          continue;
+        }
+        if (baseTouchesHazardous(index, np, c.base, op.rot)) continue;
+        const k = key(np, nz);
+        const prev = out.get(k);
+        if (prev && prev.cost <= cost) continue;
+        const node: ReachCell = { pos: np, z: nz, cost, from: key(cur.pos, cur.z) };
+        out.set(k, node);
+        push(node);
+      }
     }
   }
   return out;
@@ -676,6 +830,9 @@ export function routePath(
   const h = heightOf(ctx, op);
   const straight = (a: ReachCell, b: ReachCell): boolean => {
     if (Math.abs(a.z - b.z) > 1e-6) return false; // a level change is its own increment
+    // A climb-over starts and ends on the same level, so the level guard above does not catch
+    // it — but it is three increments over the top of something, never one straight line.
+    if (b.via) return false;
     if (index.walls.some((w) => w.solid !== false && crossesWall(w, a.pos, b.pos) && !isOpenAccessPoint(w)))
       return false;
     return pathBlockedByTerrain(index, a.pos, b.pos, a.z, c.base, h) === null;
@@ -692,8 +849,18 @@ export function routePath(
         break;
       }
     }
-    points.push({ ...chain[j]!.pos });
-    zs.push(chain[j]!.z);
+    const node = chain[j]!;
+    if (node.via) {
+      // "The operative moves up for 2\" … until it's above the highest point it must climb
+      // over. It moves across N\" until its base is fully past the terrain feature, then drops
+      // down." Up in place, across at the top, down on the far side — the same three
+      // increments `validateMove` accepts and prices.
+      points.push({ ...node.via.foot }, { ...node.pos }, { ...node.pos });
+      zs.push(node.via.top, node.via.top, node.z);
+    } else {
+      points.push({ ...node.pos });
+      zs.push(node.z);
+    }
     i = j;
   }
   if (points.length === 0) return null;
