@@ -14,6 +14,7 @@
     "lint": "eslint . && node tools/lint/no_math_random.mjs",
     "lint:rng": "node tools/lint/no_math_random.mjs",
     "e2e": "playwright test",
+    "ui:review": "node tools/ui-review/capture.mjs",
     "maps:extract": "python3 tools/maps/extract_cards.py",
     "maps:overlay": "python3 tools/maps/render_overlay.py",
     "maps:validate": "python3 tools/maps/validate_maps.py",

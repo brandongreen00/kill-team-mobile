@@ -463,10 +463,21 @@ const ROUTE_LABEL: Record<NonNullable<UiState['route']>, string> = {
   menu: 'Menu',
 };
 
+/**
+ * The plan's action id is published on the button, for the same reason the topbar publishes
+ * `data-screen`: a test or the `docs/ui-review` capture can press "confirm the move" without
+ * matching a label that says `Normal Move — costs 4"` today and something else tomorrow.
+ */
 function ActionButton({ action }: { action: CommandAction }) {
   const cls = action.tone === 'primary' ? 'primary' : action.tone === 'quiet' ? 'quiet' : action.tone === 'danger' ? 'danger' : '';
   return (
-    <button class={cls} disabled={action.disabled} title={action.hint} onClick={action.onClick}>
+    <button
+      class={cls}
+      data-action={action.id}
+      disabled={action.disabled}
+      title={action.hint}
+      onClick={action.onClick}
+    >
       {action.icon}
       <span>{action.label}</span>
     </button>
