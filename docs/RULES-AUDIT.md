@@ -3,7 +3,8 @@
 A fifteen-domain, line-by-line audit of this implementation against the verbatim Wahapedia text
 for Warhammer 40,000 Kill Team 3rd edition. The rules corpus it was read against lives in
 `docs/rules-source/` and is gitignored (see the IP note in CLAUDE.md); `tools/` documents how to
-re-fetch it. Sixty-two findings survived verification and dedupe to the work items below.
+re-fetch it. Sixty-two findings survived verification and dedupe to the work items below; two more
+(W-41, W-42) were added later from an owner question about jumping.
 
 Every item here was checked against the code, not inferred from a doc table — several rules that
 `docs/RULES-COVERAGE.md` marked implemented turned out to do nothing at all. Items marked FIXED
@@ -65,6 +66,8 @@ Ranked by how much each defect distorts a real game.
 | W-38 | FIXED | engine | minor | A granted free action is modelled as +1 APL, so the ±1 clamp cancels it against any other APL change |
 | W-39 | FIXED `10509af` | engine | minor | The Ceiling "regardless of the operative's height" exemption is still dead at the final-placement check |
 | W-40 | open | engine | major | The route planner never generates a climb-over path, so the bot cannot cross ANY solid equipment terrain feature a human can cross by hand |
+| W-41 | open | engine | major | The route planner never generates a JUMP either, so the move shading and the bot both miss every gap-crossing on a platform map |
+| W-42 | open | engine | minor | The rampart-before-jump clause is unimplemented, and the upward half of the jump test does not require Vantage terrain at all |
 
 ## Detail
 
@@ -749,6 +752,90 @@ Files: `src/core/movement.ts`, `src/ai/moves.ts`, `tests/rules-review.test.ts`
 Test: quoting killzones.txt:160 — `reachableCells` for an operative with a 6" budget on the far
 side of a light barricade includes at least one cell reachable ONLY by climbing it, and the
 returned path for that cell has an up/across/down leg triple whose total matches `validateMove`.
+
+### W-41 · The route planner never generates a jump, so the move shading and the bot both miss every gap-crossing
+
+**OPEN** · engine · major
+
+Rules pinned: `killzones.txt:171 ("Operatives can jump from Vantage terrain higher than 2\" from the killzone floor when they move off it. You can move them up to 4\" horizontally from the edge when they jump, done like any other move except in one straight-line increment")`; `killzones.txt:174 ("Jumping means operatives can move across gaps in terrain up to 4\" wide, and can jump up to 4\" over things lower than them")`; `killzones.txt:172 ("When jumping to a terrain feature, you can ignore its height difference of 1\" or less")`
+
+**Problem.** The same defect as W-40, in the same function, for the other half of
+`killzones.txt:160`'s "climb over or drop/jump off it". `validateMove` implements jumping
+correctly — the 4" reach, the one-straight-line-increment rule, the ignored height difference of
+1" or less, and Dash's "it cannot climb during this move, but it can drop and jump".
+`reachableCells` does not implement it at all: it steps 0.5" to ADJACENT cells only, takes
+`closestSurface` at each, and refuses `dz > 3`. There is no transition in it that can leave a
+rooftop except by walking off the edge.
+
+Measured, two 4"-high platforms with a 3" gap between them and a 6" budget: `validateMove`
+accepts the jump across (`ok`, total 4", one horizontal leg), and `reachableCells` puts **0 of
+its 261 cells** on the far rooftop.
+
+The consequence is not symmetrical. A human can still make the jump, because `movePlan` falls
+back to a direct straight-line increment when the field has no cell near the tapped destination —
+so the ghost goes green over a gap the shading says is out of reach, which is its own bug. The AI
+cannot: `src/ai/moves.ts` enumerates moves from the field alone, so **the bot never jumps, on any
+map**. The comment at `src/ai/moves.ts:5` claims the field "already respects climb / drop / jump";
+it respects drop.
+
+Bheta-Decima is where this costs the most. All 9 Vantage parts on each of the six maps sit at
+z = 3", i.e. higher than 2" and all at the same height, so every gap between them is a jump with
+its height difference ignored. On bheta-decima-1, **16 of the 36 platform pairs are within 4" of
+each other**. The far platform is usually still reachable the long way (drop 3", walk, climb 3"),
+so this shows up as a badly mispriced route rather than an unreachable one — a 2.3" gap costs 3"
+as a jump and about 7" via the floor, which is most of a Move stat. Where the floor between is
+hazardous, occupied, or more than 3" below, it is unreachable.
+
+**Fix.** Extend the same path builder W-40 touches. From a cell on Vantage terrain higher than 2",
+emit one straight-line increment to every standable cell within 4" whose surface is not more than
+1" above the current one, and price it through `validateMove` exactly as the hand-built path is
+priced. Land it with W-40 or immediately after — they are one function and one re-baseline.
+
+**Risk.** Same shape as W-40 and additive to it: the reachable set grows again, so the seeded soak
+replays and `tests/ai.test.ts`'s 300ms box both move. Do not land the two separately without
+re-baselining between them.
+
+Files: `src/core/movement.ts`, `src/ai/moves.ts`, `tests/rules-review.test.ts`
+
+Test: quoting killzones.txt:174 — for the two-platform fixture above, `reachableCells` with a 6"
+budget contains a cell on the far platform, and `routePath` for it returns a single straight-line
+increment that `validateMove` prices as one `jump` leg.
+
+### W-42 · The rampart-before-jump clause is unimplemented, and the upward jump test does not require Vantage terrain
+
+**OPEN** · engine · minor
+
+Rules pinned: `killzones.txt:172 ("When jumping from Vantage terrain, if there is a terrain part such as a rampart at the edge the operative would jump from, the operative must climb it first then jump from the highest point it must climb over. When jumping to a terrain feature, you can ignore its height difference of 1\" or less, including its rampart (if any)")`
+
+**Problem.** Two small holes in `validateMove`'s jump handling, both in the same place.
+
+1. Nothing implements the rampart clause. A jump is priced from the operative's current `z`, and
+   a rampart part standing at the edge it leaves from is neither climbed nor charged. This became
+   live in this branch rather than being latent: W-04 gives Volkus Stronghold A a `rampart` part
+   along its upper-floor edge, which is exactly the geometry the sentence is about.
+2. `isJumpLanding` (src/core/movement.ts:514) gates the upward/level half on `fromZ > 2` alone.
+   The downward half correctly also requires `isOnVantageAt(index, cur, curZ)`. So an operative
+   standing on a 3"-high surface that is not Vantage terrain may jump up to 4" sideways onto a
+   neighbouring feature, which the rule does not allow — it is jumping "from Vantage terrain". The
+   `index` parameter is already threaded into `isJumpLanding` and unused, which is how it was
+   missed.
+
+**Fix.** Add the `isOnVantageAt` precondition to `isJumpLanding` — one term, and the argument is
+already there. For the rampart, find the parts the jump increment crosses at the departure edge,
+take the highest that the operative must climb over, charge that climb, and start the 4" from
+there; the landing side already ignores a difference of 1" or less, which the same sentence says
+covers the destination's rampart too.
+
+**Risk.** Low. The Vantage precondition only removes moves; the rampart charge only makes a jump
+that already validated more expensive. Both change `validateMove` totals, so re-run the seeded
+soak.
+
+Files: `src/core/movement.ts`, `tests/rules-review.test.ts`
+
+Test: quoting killzones.txt:172 — an operative on a 4" Vantage floor with a 1"-high rampart at the
+edge is charged the climb before the jump, and its 4" of horizontal reach is measured from the
+rampart, not from where it stood; and an operative on a 3"-high non-Vantage surface is refused the
+sideways jump the same geometry allows from Vantage terrain.
 
 ## Verification pass, 2026-08-24
 
