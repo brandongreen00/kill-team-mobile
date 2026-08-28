@@ -12,17 +12,7 @@
 import { getAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { countCrits, piercingValue } from '../../core/dice.ts';
-import {
-  baseGap,
-  baseRadius,
-  baseWhollyWithin,
-  dist,
-  distancePointToSegment,
-  mmToInches,
-  pointInPoly,
-  segmentCrossesPoly,
-  segmentsIntersect,
-} from '../../core/geometry.ts';
+import { baseGap, baseRadius, baseWhollyWithin, basesOverlap, dist, distancePointToSegment, mmToInches, pointInPoly, segmentCrossesPoly, segmentsIntersect } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import { sideWeapon } from '../../core/sequences/fight.ts';
 import {
@@ -639,8 +629,11 @@ function reanimator(reg: HookRegistry, T: TeamHooks): void {
       });
     }
     // "After that action, that friendly operative can immediately perform a free Dash action"
-    // (D-015) and "if this rule was used during that friendly operative's activation, that
-    // activation ends" — so from here the Dash is the only action it may still perform.
+    // (D-013: it lands on the next AP it spends) and "if this rule was used during that friendly
+    // operative's activation, that activation ends" — so from here the Dash is the only action it
+    // may still perform. The free AP is deliberately NOT an APL change (D-100): were it one, the
+    // −1 APL this same rule just applied would swallow it under the ±1 clamp and Reanimate would
+    // hand out a Dash the operative could never take.
     // REMINDER ONLY: "but must end that action within this operative's control range or within
     // your OBELISK NODE MATRIX" — no hook constrains where a move ENDS. The predicate is
     // exported as `reanimateDashEndLegal` for the UI.
@@ -1473,9 +1466,11 @@ function actions(data: typeof DATA): ActionDef[] {
       },
       perform: (ctx, state, op, params) => {
         const target = canoptekControlTarget(ctx, state, op, params.targetOperativeId)!;
-        // The AP the bonus lands on, read BEFORE `grantFreeAction` pushes its own +1.
+        // Which AP the bonus lands on: the next one if the target is mid-activation, otherwise
+        // the one after its own APL is spent.
         const threshold = state.activeOperativeId === target.id ? target.apSpent : aplOf(ctx, state, target);
-        // "That selected operative can immediately perform a 1AP action for free" (D-015).
+        // "That selected operative can immediately perform a 1AP action for free" — free AP on
+        // top of its APL budget, not an APL stat change (docs/DECISIONS.md D-100).
         grantFreeAction(state, target, {
           sourceId: ACT.canoptekControl,
           sourceText: shortQuote(actionText(CARD.geomancer, ACT.canoptekControl)),
@@ -1743,7 +1738,7 @@ function breachDestination(
     if (other.id === op.id) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    if (dist(pos, other.pos) - r - baseRadius(oc.base) < -1e-4)
+    if (basesOverlap(pos, c.base, op.rot, other.pos, oc.base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   const landed: Body = { id: op.id, pos, z, rot: op.rot, base: c.base, height: modelHeight(c) };
@@ -1881,8 +1876,8 @@ function extras(reg: HookRegistry, T: TeamHooks): void {
     if (!controlCapActive(ev.state, ev.operative)) return;
     ev.inches = Math.min(ev.inches, 2);
   });
-  // "That selected operative can immediately perform a 1AP action for free" — the bonus AP is
-  // the last one it spends (D-015), so a 2AP action can never be paid for with it (the Corsair
+  // "That selected operative can immediately perform a 1AP action for free" — the free AP is
+  // the last one it spends (D-100), so a 2AP action can never be paid for with it (the Corsair
   // Voidscarred Veteran Raider cap).
   reg.on('canPerformAction', T.bind(ACT.canoptekControl, 14), (ev) => {
     if (ev.operative.player !== T.player) return;
@@ -1895,26 +1890,24 @@ function extras(reg: HookRegistry, T: TeamHooks): void {
   });
 
   /*
-   * `grantFreeAction` models a free action as one extra AP (D-015) by pushing +1 into
-   * `aplMods`, which the engine never pops — `expireActivationEffects` drops the effect and
-   * leaves the modifier behind. Reanimate hands one out at every prevented incapacitation and
-   * CANOPTEK CONTROL at every use, so without this upkeep those operatives would sit on APL 3
-   * for the rest of the battle (the Death Korps / Ratlings / Corsair Voidscarred precedent).
+   * A `grantFreeAction` grant expires at the end of the recipient's activation
+   * (docs/DECISIONS.md D-100), which covers every grant that is actually spent. Both of this
+   * team's grants can be made to an operative that is not activating: Reanimate fires whenever an
+   * incapacitation is prevented — most often in the enemy's activation — and CANOPTEK CONTROL
+   * names any friendly CANOPTEK operative visible to and within 6". If that operative is already
+   * expended its activation never ends again, so nothing would clear the grant and it would still
+   * be sitting there when the Ready step readied it next turning point. This sweep is that bound:
+   * an unspent free action does not survive the turning point it was given in.
    */
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  const dropStaleGrants = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (!FREE_ACTION_SOURCES.has(eff.source.id)) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bindText('canoptek.aplUpkeep', text(RULE_MATRIX), 90), (ev) => {
-    if (ev.operative.player === T.player) upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('canoptek.aplUpkeep', text(RULE_MATRIX), 90), (ev) => {
+  reg.on('onReadyStep', T.bindText('canoptek.freeActionSweep', text(RULE_MATRIX), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) upkeep(ev.state, o);
+    for (const o of T.friendlies(ev.state)) dropStaleGrants(ev.state, o);
   });
 }
 

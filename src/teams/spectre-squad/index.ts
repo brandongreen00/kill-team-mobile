@@ -10,8 +10,9 @@
  *    activation". **The engine emits no post-action hook** (`offerGuardInterrupt` in
  *    `src/core/reducer.ts` is the only thing that runs there and it emits nothing), so the
  *    interrupt is taken at the LAST moment of that activation the engine does expose,
- *    `onActivationEnd`, and the free action itself is docs/DECISIONS.md D-015's extra AP —
- *    it lands on the interrupting operative's own next activation.
+ *    `onActivationEnd`, and the free action itself is AP granted outside the APL budget
+ *    (docs/DECISIONS.md D-100) — it lands on the interrupting operative's own next
+ *    activation (D-013), on top of whatever APL that operative has.
  *  - "you can spend 1 of your Fieldcraft points" is a player choice with no decision
  *    channel, so it is auto-spent on the stated D-022 policy below.
  */

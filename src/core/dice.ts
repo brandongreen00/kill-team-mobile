@@ -15,6 +15,12 @@ export interface Die {
   state: DieState;
   rolled: boolean;
   rerolledFrom?: number;
+  /**
+   * What this die was retained as before the defender blocked it. A blocked die keeps no
+   * trace of that in `state`, and Devastating x fires on RETAINED critical successes — so
+   * without this a blocked NORMAL success read as a retained crit.
+   */
+  blockedFrom?: 'crit' | 'normal';
   /** Which rule produced or changed this die, for the log. */
   note?: string;
 }
@@ -101,13 +107,13 @@ export function accurateValue(rules: WeaponRule[]): number {
 }
 
 /** Piercing x / Piercing Crits x: how many defence dice the defender loses. */
-export function piercingValue(rules: WeaponRule[], retainedCrits: number): number {
+export function piercingValue(rules: WeaponRule[], retainedCrits: number, cap = Infinity): number {
   let p = 0;
   const flat = ruleOf(rules, 'Piercing');
-  if (flat) p = Math.max(p, flat.x ?? 1);
+  if (flat) p = Math.max(p, Math.min(flat.x ?? 1, cap));
   if (retainedCrits > 0) {
     const pc = ruleOf(rules, 'PiercingCrits');
-    if (pc) p = Math.max(p, pc.x ?? 1);
+    if (pc) p = Math.max(p, Math.min(pc.x ?? 1, cap));
   }
   return p;
 }
@@ -116,6 +122,16 @@ export function piercingValue(rules: WeaponRule[], retainedCrits: number): numbe
 export function lethalThreshold(rules: WeaponRule[]): number | undefined {
   const r = ruleOf(rules, 'Lethal');
   return r?.x;
+}
+
+/**
+ * The classification a weapon's dice are graded with. Both the first roll and every re-roll
+ * must use it: "your successes equal to or greater than x are critical successes" does not
+ * stop applying because the dice was re-rolled.
+ */
+export function lethalOpts(rules: WeaponRule[]): ClassifyOpts {
+  const l = lethalThreshold(rules);
+  return l !== undefined ? { lethal: l } : {};
 }
 
 /** Retention transforms the player may choose to apply, in an order of their choice. */
@@ -158,7 +174,12 @@ export function retentionOptions(pool: DicePool, rules: WeaponRule[], obscured: 
         'Rending: If you retain any critical successes, you can retain one of your normal successes as a Critical success instead.',
     });
   }
-  if (hasRule(rules, 'Punishing') && c > 0 && f > 0) {
+  // Punishing keys off retained CRITICAL successes, and obscured leaves the attacker with
+  // none: "All the attacker's critical successes are retained as normal successes and cannot
+  // be changed to critical successes (this takes precedence over all other rules)." Severe and
+  // Rending were already guarded; Punishing was not, so it was offered — and taken — on a shot
+  // that could not have a critical success to trigger it.
+  if (hasRule(rules, 'Punishing') && critsAllowed && c > 0 && f > 0) {
     out.push({
       id: 'punishing',
       label: 'Punishing: retain a fail as a normal success',

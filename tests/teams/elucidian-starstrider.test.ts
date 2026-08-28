@@ -9,7 +9,7 @@ import { moveBudget } from '../../src/core/movement.ts';
 import { counteractCandidates, endTurningPoint, gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aplOf, hitOf, inflictDamage, moveOf, weaponsOf } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage, moveOf, weaponsOf } from '../../src/core/state.ts';
 import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
 import type { GameState, OperativeState, PlayerId, WeaponProfile } from '../../src/core/types.ts';
 import { teamData } from '../../src/teams/data.ts';
@@ -1312,12 +1312,22 @@ describe('CANID › GATHER', () => {
     s = out.state;
     const grant = s.effects.find((e) => e.rule === 'teamFreeAction' && e.operativeId === canid);
     expect(grant?.data?.['only']).toEqual(['Dash', 'Reposition', 'Pick Up Marker', 'Place Marker']);
-    expect(aplOf(ctx, s, s.operatives[canid]!)).toBe(3); // 2 APL + the free action
+    // "Perform a FREE Dash or Reposition action": the AP is granted outside the APL budget
+    // (D-100), so the CANID's printed APL 2 is untouched and its activation has 3 AP instead.
+    expect(s.operatives[canid]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, s.operatives[canid]!)).toBe(2);
+    expect(freeApOf(s, s.operatives[canid]!)).toBe(1);
+    expect(apBudgetOf(ctx, s, s.operatives[canid]!)).toBe(3);
     // Once the CANID's own AP is spent, the bonus AP is restricted to those four actions.
     s.operatives[canid]!.apSpent = 2;
     const menu = availableActions(ctx, s, s.operatives[canid]!);
     expect(menu.find((a) => a.def.id === 'Reposition')!.ok).toBe(true);
     expect(menu.find((a) => a.def.id === 'Fight')!.ok).toBe(false);
+    // "immediately": the grant dies with the activation, so nothing is banked for the next one.
+    const ended = reduce(s, { t: 'EndActivation', operativeId: canid }, ctx);
+    expect([ended.ok, ended.reason]).toEqual([true, undefined]);
+    expect(freeApOf(ended.state, ended.state.operatives[canid]!)).toBe(0);
+    expect(apBudgetOf(ctx, ended.state, ended.state.operatives[canid]!)).toBe(2);
     // While engaged there is no Dash or Reposition to make free, so the action is refused.
     const t = setup();
     const c2 = t.state.operatives[opWith(t.state, 'p1', C.canid)]!;

@@ -2,6 +2,109 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-23 — The Close Quarters killzones are no longer sealed (W-01)
+
+The owner pointed at <https://wahapedia.ru/kill-team3/the-rules/approved-ops-2025/>, which
+carries all 24 map cards at the resolution `tools/maps` was calibrated against. Re-extracting
+volkus-1 from them reproduced the committed data **byte for byte** — same 14 features, same 37
+parts, zero geometry drift — which is the proof that these are the source cards and that the
+pipeline is intact. Then the two real defects:
+
+- **The hatchway pill was matched to its wall with a threshold that cut through the middle of
+  the true distribution.** The pill is drawn alongside the wall; measured across all twelve CQ
+  cards, its perpendicular offset clusters at 18–22px (118 pairs) with the nearest unrelated
+  pairing at 73px. The test was `thickness * 2.2` = 19.8px, so it kept only the tightest few:
+  **6 access points across the six Gallowdark maps and zero on every Tomb World card**. At
+  `thickness * 4` it is 59 hatchways on Gallowdark, and 36 hatchways plus 22 breach points on
+  Tomb World.
+- **The access point was placed beside the wall rather than in it**, so the wall ran unbroken
+  behind it and opening a hatchway changed nothing. It now takes the wall's thickness and the
+  pill's length, and the wall is emitted as two bars either side.
+
+Measured before: an operative on gallowdark-1 could reach 10" vertically on a 23.9" board — one
+compartment. Both halves are pinned on the shipped data in `tests/rules-review.test.ts`.
+
+Two things fell out of the re-extraction. **D-014 is half closed** — volkus-6 K and its host A
+came good, and their allow-list and PENDING entries are deleted (both files fail if a listed
+entry starts passing). And CQ template fitting now matches a wall-only piece on the extent of
+its whole run rather than its largest bar, because which bar is larger is an accident of where
+the hatchway sits.
+
+`pnpm maps:validate`: **24 maps, 0 gate failures.**
+
+Still open on the killzone data: W-04, the Volkus stronghold walls extruded to the building's
+maximum height, which blinds both Vantage levels. That one needs a parapet height the cards do
+not print, so it is with the owner.
+
+## 2026-08-23 — Rules audit: 62 verified findings, and the AI loses its exploits
+
+A 15-domain line-by-line audit against the verbatim Wahapedia text (`docs/rules-source/`,
+gitignored) produced 62 findings that survived verification. Everything below is fixed with a
+test that fails against the code before it; the remaining work items are listed at the end.
+
+The full list of 39 work items, with what each one breaks and how to fix it, is
+`docs/RULES-AUDIT.md`.
+
+**Open, and worth reading first** — the audit's three worst findings are not in this batch:
+1. `wallCornerZones` discards every corner whose adjacent edge is under 0.6", and every
+   extracted Gallowdark / Tomb World wall is **0.365" thick** — so it returns `[]` for all 94
+   wall parts and **nobody is ever in cover or obscured on those killzones**.
+2. `Operate Hatch` gates on `p.feature.kind.includes('hatch') !== false` (kinds are
+   `gallowdark.wallA3`, so this is `false !== false`) and `Breach` gates on a `breachWall` role
+   no map file contains. **Neither action can be performed on any map**, and all six Tomb World
+   maps ship zero access points, so the board is sealed into disconnected rooms.
+3. Volkus stronghold walls are extruded to the building's maximum height, so both Vantage
+   levels are blind — the modelling flaw D-065 had to work around.
+
+**AI strength moved, and the reason matters.** Tactical vs Greedy was 70% wins / VP 7.6:3.8 and
+is now 58% / VP 8.0:6.0. That is the AI losing exploits, not the AI getting worse: its
+heuristics were tuned against an engine that let it shoot with a Heavy weapon and then
+Reposition out of sight, throw a Limited 1 weapon four times, walk over mines without setting
+them off, and lift a marker a team-mate was standing on from across the board. Only Heavy is
+asymmetric — Greedy never planned a shoot-and-scoot, and the Tactical agent's greedy
+in-activation search does not price the move a Heavy shot forfeits. **Re-tuning the evaluation
+against the corrected rules is the next AI task**, and the regression floors in
+`tests/ai.test.ts` are re-baselined with that written down rather than quietly lowered.
+
+## 2026-08-23 — Rules review: you could walk through walls, and 18 doors were missing (D-064…D-066)
+
+Owner report, with a screenshot: a Dash moved an operative straight through a Volkus stronghold
+wall, and "the bottom layer of Volkus, particularly that stronghold, has a door that is
+accessible terrain" — which the app did not model. Both were real, and they turned out to be
+the same bug seen from two sides.
+
+- **`validateMove` never checked the path.** It checked climb/drop/jump legality, budget,
+  hazardous areas, control range and the FINAL base position — and, for a crossing, only parts
+  typed `Wall`. Volkus walls are `Heavy`, so nothing stopped a straight line through them.
+  Killzones: *"Operatives cannot move through terrain — they must move around, climb over or
+  drop/jump off it."* Now `terrain.ts::pathBlockedByTerrain` runs per increment, exempting
+  Accessible, Insignificant and Ceiling by their own printed precedence clauses, and exempting
+  the feature an increment is climbing onto or dropping from (D-064, D-065).
+- **Which meant path *generation* had to change too.** Both the AI and the board's move preview
+  declared a single straight increment to the destination — only ever legal because nothing
+  checked it. `reachableCells` now records each cell's parent, and `routePath` turns that back
+  into the fewest increments that actually walk round the terrain. The AI still beats
+  GreedyAgent 78% and RandomLegalAgent 96%, with zero rejected intents across the soak.
+- **18 of 24 Volkus doorways were unmodelled holes.** `_volkus_doors` only ever resolved
+  Stronghold B. Stronghold A (0/6) and both Large Ruins (0/12) shipped with the doorway as a
+  gap in the wall ring: free to cross, no cover, obscuring nobody. Fixing the movement bug alone
+  would have **sealed those buildings**, because Stronghold A's doorway is 1.17" and a 32mm base
+  is 1.26" — it only fits because the door is Accessible terrain. `tools/maps/doors.py` recovers
+  each door from the hole it leaves, validated by reproducing all six card-read Stronghold B
+  doors exactly (D-066).
+
+`tests/maps-volkus-doors.test.ts` walks the real shipped maps: through every one of the 24
+doors, and into every wall.
+
+**Also closed: 40 of 48 kill teams had no rules at all.** `src/ui/App.tsx` had registered
+`BATCH_1` since phase 5 — carried forward through five more batches — so a battle with any of
+the other 40 teams ran with no faction rules, no ploys, no faction equipment and no unique
+actions, and said nothing, because `rebuildHooks` optional-chains a module it cannot find. The
+modules were all written, imported and tested; the shell just never handed them to the context.
+It now registers `ALL_TEAM_MODULES`, which costs **30 bytes** in the bundle: `src/teams/index.ts`
+imports all 48 at the top, so the barrel was already shipping. `tests/wiring.test.ts` pins that
+every team `data/teams/_index.json` offers has a module behind it.
+
 ## 2026-08-22 — Merging batch 6: three regressions a clean merge hid (D-061…D-063)
 
 main's batch-6 work and this branch's UI overhaul merged with conflicts in two append-only docs

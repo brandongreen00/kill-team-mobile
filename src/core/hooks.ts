@@ -41,6 +41,7 @@ export const HOOK_NAMES = [
   'onActionCost',
   'canPerformAction',
   'onMoveDistance',
+  'onMovePermissions',
   'onMoveRules',
   'onSetUpAgain',
   'availableWeapons',
@@ -155,6 +156,20 @@ export interface HookEvents {
   onActionCost: { state: GameState; operative: OperativeState; action: string; ap: number };
   canPerformAction: { state: GameState; operative: OperativeState; action: string; allowed: boolean; reason?: string };
   onMoveDistance: { state: GameState; operative: OperativeState; action: string; inches: number };
+  /**
+   * Where a move is allowed to GO, as opposed to how far. Rules that print a permission the
+   * universal actions do not have register here — Gellerpox BARGE ("it can move through enemy
+   * operatives and within control range of them"), Striking Scorpions' PATIENT STALK, SUDDEN
+   * BLOW ("that operative can move within control range of enemy operatives"). Both were
+   * silently satisfied while `validateMove` checked only where a move ENDED.
+   */
+  onMovePermissions: {
+    state: GameState;
+    operative: OperativeState;
+    action: string;
+    mayEnterEnemyControlRange: boolean;
+    mayMoveThroughEnemies: boolean;
+  };
   onMoveRules: {
     state: GameState;
     operative: OperativeState;
@@ -222,8 +237,17 @@ export interface HookEvents {
     target: OperativeState;
     valid: boolean;
     reason?: string;
-    /** Overrides discovered by rules (Seek, smoke, Bheta restrictions). */
+    /**
+     * Seek / Seek Light and friends: terrain that cannot be USED for cover when selecting a
+     * valid target. "Whilst this can allow such operatives to be targeted…, it doesn't
+     * remove their cover save (if any)" — so this narrows the targeting view only.
+     */
     ignoreCoverTerrain: 'none' | 'light' | 'all';
+    /**
+     * The stronger form: a rule that says the operative "cannot be in cover" at all, which
+     * takes the cover save with it (e.g. Exodite Dragon Masters' DRACONIC CAVALRY TACTICS).
+     */
+    denyCover?: boolean;
     forceVisible: boolean;
     /**
      * "Having other friendly operatives within an enemy operative's control range doesn't

@@ -7,10 +7,18 @@ import { describe, expect, it } from 'vitest';
 import { getAction } from '../../src/core/actions.ts';
 import { addRolled, newPool, type DicePool } from '../../src/core/dice.ts';
 import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
-import { gambitOptions } from '../../src/core/phases.ts';
+import { gambitOptions, readyStep } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, aplOf, inflictDamage, markerController, moveOf } from '../../src/core/state.ts';
+import {
+  aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
+  inflictDamage,
+  markerController,
+  moveOf,
+} from '../../src/core/state.ts';
 import { moveBudget } from '../../src/core/movement.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import rawJson from '../../data/teams/canoptek-circle.json';
@@ -952,7 +960,11 @@ describe('CANOPTEK CIRCLE unique actions', () => {
     const out = act(ctx, s, geo.id, ACT.canoptekControl, { targetOperativeId: mate.id });
     expect(out.ok).toBe(true);
     const target = out.state.operatives[mate.id]!;
-    expect(aplOf(ctx, out.state, target)).toBe(3); // the free AP
+    // "…for free": AP on top of the APL budget, not an APL stat change (docs/DECISIONS.md D-100),
+    // so the STAT stays where it was and only the budget the AP gate reads goes up.
+    expect(aplOf(ctx, out.state, target)).toBe(2);
+    expect(freeApOf(out.state, target)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, target)).toBe(3);
     // Once it is spending that bonus AP, its move is capped at 2".
     target.apSpent = 2;
     expect(moveBudget(ctx, out.state, target, { action: 'Reposition' })).toBe(2);
@@ -1091,11 +1103,17 @@ describe('CANOPTEK CIRCLE datacard abilities', () => {
     // "Subtract 1 from this and that operative's APL stats until the end of their next activations."
     expect(aplOf(ctx, state, rea)).toBe(1);
     expect(victim.aplMods).toContain(-1);
-    // …and "that friendly operative can immediately perform a free Dash action", which D-015
-    // models as one extra AP restricted to Dash — so during that window the two cancel and the
-    // Dash is the only action left (APL changes clamp to ±1).
-    expect(victim.aplMods).toContain(1);
-    expect(aplOf(ctx, state, victim)).toBe(2);
+    // …and "that friendly operative can immediately perform a free Dash action", modelled as one
+    // AP outside the APL budget restricted to Dash (docs/DECISIONS.md D-100). The two halves of
+    // the rule do not cancel: the printed −1 really lowers the APL stat, and the free Dash is
+    // still there on top of it. Were the Dash an APL change it would meet the −1 under "the total
+    // can never be more than -1 or +1 from its normal APL" and the operative would be handed a
+    // free action it could never perform.
+    expect(aplOf(ctx, state, victim)).toBe(1);
+    expect(freeApOf(state, victim)).toBe(1);
+    expect(apBudgetOf(ctx, state, victim)).toBe(2);
+    expect(state.effects.find((e) => e.rule === 'teamFreeAction' && e.operativeId === victim.id)?.data?.['only'])
+      .toContain('Dash');
     // "Once per turning point" — a second friendly dies for real.
     const other = place(state, opWith(state, 'p1', CARD.accelerator), 12, 11);
     other.wounds = 1;
@@ -1353,20 +1371,45 @@ describe('CANOPTEK CIRCLE aiHints', () => {
 });
 
 // ===========================================================================
-describe('CANOPTEK CIRCLE — free-action upkeep and soak safety', () => {
-  it('the +1 AP `grantFreeAction` pushes is popped at the activation boundary, not left for the battle', () => {
+describe('CANOPTEK CIRCLE — free-action lifetime and soak safety', () => {
+  it('a free action lasts one activation: it expires with the activation it was spent in', () => {
     const { ctx, state } = setup();
     isolate(state, []);
     const geo = place(state, opWith(state, 'p1', CARD.geomancer), 10, 11);
     const mate = place(state, opWith(state, 'p1', CARD.warrior), 13, 11);
     const s1 = activate(ctx, state, geo.id, 'engage');
     const s2 = act(ctx, s1, geo.id, ACT.canoptekControl, { targetOperativeId: mate.id }).state;
-    expect(s2.operatives[mate.id]!.aplMods).toContain(1);
+    expect(freeApOf(s2, s2.operatives[mate.id]!)).toBe(1);
+    expect(apBudgetOf(ctx, s2, s2.operatives[mate.id]!)).toBe(3);
     const s3 = reduce(s2, { t: 'EndActivation', operativeId: geo.id }, ctx).state;
     const s4 = activate(ctx, s3, mate.id, 'engage');
     const s5 = reduce(s4, { t: 'EndActivation', operativeId: mate.id }, ctx).state;
-    expect(s5.operatives[mate.id]!.aplMods).not.toContain(1);
+    // "…can immediately perform a 1AP action for free" is one action, not a permanent bonus.
+    expect(freeApOf(s5, s5.operatives[mate.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, s5, s5.operatives[mate.id]!)).toBe(2);
     expect(aplOf(ctx, s5, s5.operatives[mate.id]!)).toBe(2);
+  });
+
+  it('a free action handed to an already-expended operative does not survive to the next turning point', () => {
+    const { ctx, state } = setup();
+    isolate(state, []);
+    const geo = place(state, opWith(state, 'p1', CARD.geomancer), 10, 11);
+    const mate = place(state, opWith(state, 'p1', CARD.warrior), 13, 11);
+    // The recipient has already had its activation, so its activation never ends again this
+    // turning point and nothing expires the grant on its own.
+    let s = activate(ctx, state, mate.id, 'engage');
+    s = reduce(s, { t: 'EndActivation', operativeId: mate.id }, ctx).state;
+    s = activate(ctx, s, geo.id, 'engage');
+    s = act(ctx, s, geo.id, ACT.canoptekControl, { targetOperativeId: mate.id }).state;
+    expect(freeApOf(s, s.operatives[mate.id]!)).toBe(1);
+    s = reduce(s, { t: 'EndActivation', operativeId: geo.id }, ctx).state;
+    expect(freeApOf(s, s.operatives[mate.id]!)).toBe(1);
+    // "…can IMMEDIATELY perform a 1AP action for free" — an unspent grant is spent or lost, and
+    // must not be waiting for the operative when the Ready step readies it next turning point.
+    s.turningPoint += 1;
+    readyStep(ctx, s);
+    expect(freeApOf(s, s.operatives[mate.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[mate.id]!)).toBe(2);
   });
 
   it('MOLECULAR BREACH is capped at 2" while the operative is spending a CANOPTEK CONTROL free action', () => {

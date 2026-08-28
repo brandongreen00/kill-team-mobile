@@ -3,7 +3,7 @@
  * Everything here is pure w.r.t. the outside world; it may mutate the GameState passed in
  * (the reducer clones before calling).
  */
-import { baseGap } from './geometry.ts';
+import { bodyGap, baseGap } from './geometry.ts';
 import { zeroStatMods, type StatMods } from './hooks.ts';
 import { terrain, type GameContext } from './context.ts';
 import { surfaceAt } from './terrain.ts';
@@ -16,6 +16,7 @@ import type {
   MarkerState,
   OperativeState,
   PlayerId,
+  Vec2,
   Weapon,
   WeaponProfile,
 } from './types.ts';
@@ -86,6 +87,44 @@ export function aplOf(ctx: GameContext, state: GameState, op: OperativeState): n
 }
 
 /**
+ * The rule name an "immediately perform a free 1AP action" grant is recorded under.
+ *
+ * It lives in the core rather than in `src/teams/helpers.ts` because the AP budget is a core
+ * question — `helpers.ts` re-exports it so the 22 team modules that write the effect are
+ * unchanged.
+ */
+export const FREE_ACTION_RULE = 'teamFreeAction';
+
+/**
+ * AP granted OUTSIDE the APL budget: "One friendly operative can immediately perform a free
+ * 1AP action."
+ *
+ * Free AP is deliberately not an APL stat change. Modelled as `aplMods.push(1)` it went
+ * through the same clamp as real stat changes — "regardless of how many APL stat changes an
+ * operative is affected by, the total can never be more than -1 or +1 from its normal APL" —
+ * so an operative already at +1 from a ploy gained nothing at all from a free action, and one
+ * at -1 spent the free action undoing the debuff instead of performing it in addition
+ * (docs/DECISIONS.md D-015, superseded by D-100).
+ */
+export function freeApOf(state: GameState, op: OperativeState): number {
+  let ap = 0;
+  for (const e of state.effects) {
+    if (e.rule === FREE_ACTION_RULE && e.operativeId === op.id) ap += Number(e.data?.['ap'] ?? 1);
+  }
+  return ap;
+}
+
+/**
+ * The AP this operative may spend in its activation: its APL, plus any free AP.
+ *
+ * This is the one selector the AP gate, the AI and the UI all read. `aplOf` stays the STAT —
+ * it is what marker control totals, and free AP must never leak into that.
+ */
+export function apBudgetOf(ctx: GameContext, state: GameState, op: OperativeState): number {
+  return aplOf(ctx, state, op) + freeApOf(state, op);
+}
+
+/**
  * "Subtract 2" from the Move stat of injured operatives" and "An operative's Move stat can
  * never be changed to less than 4"."
  */
@@ -139,7 +178,8 @@ export const isInjured = (ctx: GameContext, op: OperativeState): boolean =>
 export function gapBetween(ctx: GameContext, a: OperativeState, b: OperativeState): number {
   const ca = card(ctx, a);
   const cb = card(ctx, b);
-  return baseGap(a.pos, ca.base, a.rot, b.pos, cb.base, b.rot);
+  // Operative to operative is a 3D measurement — see `bodyGap`.
+  return bodyGap(a.pos, ca.base, a.rot, a.z, b.pos, cb.base, b.rot, b.z);
 }
 
 export function inControlRange(ctx: GameContext, state: GameState, a: OperativeState, b: OperativeState): boolean {
@@ -199,7 +239,22 @@ export function weaponsOf(ctx: GameContext, state: GameState, op: OperativeState
     // save, renamed weapon), fall back to the full card rather than sending it in unarmed.
     carried = picked.length > 0 ? picked : fromCard;
   }
-  const all = [...carried, ...extra];
+  // Limited x: "After an operative uses this weapon x times in the battle, they no longer
+  // have it." `weaponExhausted` existed and had no call site anywhere, so `weaponUses` was
+  // counted up and never read: the highest-damage profiles in the game — melta bombs,
+  // demolition charges, fusion grenades — could be thrown in all four turning points. Six
+  // team modules re-implemented the check in their own `availableWeapons` hooks, which hid
+  // the hole for those teams only. Filtering here routes it through Shoot's check, Fight's
+  // check, the AI's legal-intent enumeration and the UI at once.
+  //
+  // The weapon of a sequence that is still resolving is exempt: `finishShoot` counts the use
+  // while the sequence is live, and every later step looks the weapon up again to read its
+  // profile and rules. Dropping it mid-sequence is what "used it once, so you no longer have
+  // it" must NOT mean while the shot is still being resolved.
+  const inUse = weaponsInUse(state);
+  const all = [...carried, ...extra].filter(
+    (w) => inUse.has(w.name) || !w.profiles.every((p) => weaponExhausted(op, w, p)),
+  );
   if (!type) return all;
   return all.filter((w) => w.profiles.some((p) => p.type === type));
 }
@@ -208,6 +263,16 @@ export function findProfile(w: Weapon, profileName?: string): WeaponProfile | un
   if (!profileName) return w.profiles[0];
   return w.profiles.find((p) => (p.name ?? '') === profileName) ?? w.profiles[0];
 }
+
+/** The weapons of a sequence that is still resolving, which must stay resolvable. */
+function weaponsInUse(state: GameState): ReadonlySet<string> {
+  const seq = state.sequence;
+  if (!seq) return EMPTY_NAMES;
+  if (seq.kind === 'shoot') return new Set([seq.weaponName]);
+  return new Set([seq.attackerWeapon, ...(seq.defenderWeapon ? [seq.defenderWeapon] : [])]);
+}
+
+const EMPTY_NAMES: ReadonlySet<string> = new Set<string>();
 
 /** Limited x: "After an operative uses this weapon x times in the battle, they no longer have it." */
 export function weaponExhausted(op: OperativeState, w: Weapon, profile: WeaponProfile): boolean {
@@ -237,15 +302,24 @@ export function markerContestedBy(
   const gap = baseGap(op.pos, c.base, op.rot, marker.pos, { shape: 'round', mm: marker.diameterMm }, 0);
   if (gap > 1 + 1e-6) return false;
   const idx = terrain(ctx, state);
-  const markerBody: Body = {
-    id: marker.id,
-    pos: marker.pos,
-    z: marker.z,
+  return withinControlRange(idx, body(ctx, op), markerBody(marker));
+}
+
+/**
+ * A marker as a `Body`, so the visibility selectors can take one.
+ *
+ * Markers are flat tokens; 0.2" of height is enough that a sampled silhouette line starts
+ * just above the surface the marker rests on rather than inside it.
+ */
+export function markerBody(m: { id: string; pos: Vec2; z: number; diameterMm: number }): Body {
+  return {
+    id: m.id,
+    pos: m.pos,
+    z: m.z,
     rot: 0,
-    base: { shape: 'round', mm: marker.diameterMm },
+    base: { shape: 'round', mm: m.diameterMm },
     height: 0.2,
   };
-  return withinControlRange(idx, body(ctx, op), markerBody);
 }
 
 /**

@@ -8,7 +8,10 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { makeContext, type GameContext } from '../../src/core/context.ts';
+import { basesOverlap } from '../../src/core/geometry.ts';
 import { createBattle } from '../../src/core/init.ts';
+import { card } from '../../src/core/state.ts';
+import { gambitToAct } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { ScriptedRng, SeededRng } from '../../src/core/rng.ts';
 import type { GameState, KillzoneMap, PlayerId, Vec2 } from '../../src/core/types.ts';
@@ -168,6 +171,62 @@ export function activate(ctx: GameContext, state: GameState, operativeId: string
   const op = state.operatives[operativeId]!;
   state.activePlayer = op.player; // it is this player's activation
   return reduce(state, { t: 'ActivateOperative', player: op.player, operativeId, order }, ctx).state;
+}
+
+/**
+ * The furthest point along the straight line from `moverId` toward `enemyId` at which the two
+ * bases do NOT overlap — i.e. where a Charge finishes with the bases touching.
+ *
+ * Core rules › Bases: "The sides of different bases can touch, but a base cannot be placed on
+ * another." Until the rules review, `validateMove`'s overlap guards were dead comparisons
+ * (`baseGap` clamps at zero, so `baseGap(...) < -1e-4` never fired), so a fixture could end a
+ * Charge anywhere "near" an enemy — including inside its base — and nothing objected. Charge
+ * fixtures written that way are now illegal, and this is how they say what they meant:
+ * as close as the rules allow. Control range is 1" base-to-base, so a Charge that ends here
+ * still ends engaged.
+ *
+ * Binary search rather than `rA + rB`, because ovals are ellipses with a facing and their
+ * overlap is not a function of two radii.
+ */
+export function chargeTo(
+  ctx: GameContext,
+  state: GameState,
+  moverId: string,
+  enemyId: string,
+  margin = 0.02,
+): Vec2 {
+  const mover = state.operatives[moverId]!;
+  const foe = state.operatives[enemyId]!;
+  const a = mover.pos;
+  const b = foe.pos;
+  const at = (t: number): Vec2 => ({ x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t });
+  const hits = (p: Vec2): boolean =>
+    basesOverlap(p, card(ctx, mover).base, mover.rot, foe.pos, card(ctx, foe).base, foe.rot);
+  if (hits(a)) throw new Error(`${moverId} already overlaps ${enemyId}: fix the placement, not the path`);
+  let lo = 0;
+  let hi = 1;
+  if (!hits(at(1))) return { ...b };
+  for (let i = 0; i < 40; i++) {
+    const m = (lo + hi) / 2;
+    if (hits(at(m))) hi = m;
+    else lo = m;
+  }
+  const span = Math.hypot(b.x - a.x, b.y - a.y);
+  return at(Math.max(0, lo - margin / Math.max(span, 1e-6)));
+}
+
+/**
+ * Hand the opponent their alternating STRATEGIC GAMBIT turn, by passing on their behalf.
+ *
+ * Core rules › STRATEGIC GAMBIT: "Starting with the player who has initiative, each player
+ * alternates either using a STRATEGIC GAMBIT or passing." A test that only cares about one
+ * player's gambit still has to let the other player take their turn between two of them.
+ * Returns the state unchanged when it is already `player`'s turn.
+ */
+export function yieldGambitTurn(ctx: GameContext, state: GameState, player: PlayerId): GameState {
+  if (gambitToAct(state) === player) return state;
+  const other: PlayerId = player === 'p1' ? 'p2' : 'p1';
+  return reduce(state, { t: 'PassGambit', player: other }, ctx).state;
 }
 
 /**

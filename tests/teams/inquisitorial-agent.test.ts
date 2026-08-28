@@ -7,7 +7,7 @@ import { actionCost, availableActions, getAction } from '../../src/core/actions.
 import { gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { hitOf, inflictDamage, markerController, moveOf, aplOf } from '../../src/core/state.ts';
+import { apBudgetOf, freeApOf, hitOf, inflictDamage, markerController, moveOf, aplOf } from '../../src/core/state.ts';
 import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
 import type { GameState, KillzoneMap, OperativeState, PlayerId, WeaponProfile } from '../../src/core/types.ts';
 import { registerAction } from '../../src/core/actions.ts';
@@ -41,7 +41,7 @@ import {
   quarryOf,
   tomeOf,
 } from '../../src/teams/inquisitorial-agent/index.ts';
-import { activate, act, battle, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 
 const DATA = teamData('inquisitorial-agent');
@@ -637,12 +637,12 @@ describe('DEATH WORLD VETERAN', () => {
     vet.pos = { x: 12, y: 11 };
     foe.pos = { x: 15, y: 11 };
     const s = settle(ctx, activate(ctx, state, vet.id, 'conceal'));
-    expect(getAction('Charge')!.check(ctx, s, s.operatives[vet.id]!, { path: { points: [{ x: 14.2, y: 11 }] } }).ok).toBe(
+    expect(getAction('Charge')!.check(ctx, s, s.operatives[vet.id]!, { path: { points: [chargeTo(ctx, s, vet.id, foe.id)] } }).ok).toBe(
       false,
     );
     const hunter = getAction(HUNTER_CHARGE)!;
     expect(hunter.treatedAs).toBe('Charge');
-    expect(hunter.check(ctx, s, s.operatives[vet.id]!, { path: { points: [{ x: 14.2, y: 11 }] } }).ok).toBe(true);
+    expect(hunter.check(ctx, s, s.operatives[vet.id]!, { path: { points: [chargeTo(ctx, s, vet.id, foe.id)] } }).ok).toBe(true);
     // Only the DEATH WORLD VETERAN gets it.
     expect(hunter.available!(ctx, s, s.operatives[opWith(s, 'p1', CARD.questkeeper)]!)).toBe(false);
   });
@@ -1113,9 +1113,13 @@ describe('TEMPESTUS SCION', () => {
     expect(victim.incapacitated).toBeFalsy();
     // "Subtract 1 from this and that operative's APL stats until the end of their next activations."
     expect(aplOf(ctx, state, medic)).toBe(1);
-    // The victim keeps its APL because the free Dash is modelled as one extra AP (D-015): the
-    // -1 and the +1 net out, and the last AP is restricted to a Dash.
-    expect(aplOf(ctx, state, victim)).toBe(2);
+    // The victim is subtracted from as well, so its APL STAT is 1. "That friendly operative can
+    // immediately perform a free Dash action" grants an action, not a stat change, so it does
+    // not net off against that -1 (docs/DECISIONS.md D-100): it is one AP on top of the stat,
+    // and it is the last AP the victim spends.
+    expect(aplOf(ctx, state, victim)).toBe(1);
+    expect(freeApOf(state, victim)).toBe(1);
+    expect(apBudgetOf(ctx, state, victim)).toBe(2);
     victim.apSpent = 1;
     expect(
       ctx.hooks.emit('canPerformAction', state, { state, operative: victim, action: 'Shoot', allowed: true }).allowed,
@@ -1359,7 +1363,7 @@ describe('Firefight ploys', () => {
     expect(inquisitorialAgent.ploys.find((p) => p.id === FP.absoluteAuthority)!.usable!(s, 'p1').ok).toBe(false);
   });
 
-  it('RELENTLESS IN PURSUIT: the free Reposition or Charge (D-015 extra AP restricted to those actions)', () => {
+  it('RELENTLESS IN PURSUIT: the free Reposition or Charge is AP outside the APL stat', () => {
     expect(rule(FP.relentlessInPursuit)).toContain(
       'that friendly INQUISITORIAL AGENT operative can either perform a free Reposition action',
     );
@@ -1376,14 +1380,24 @@ describe('Firefight ploys', () => {
     const s = reduce(state, { t: 'UsePloy', player: 'p1', ployId: FP.relentlessInPursuit, data: { operativeId: mine.id } }, ctx)
       .state;
     const boosted = s.operatives[mine.id]!;
-    expect(boosted.aplMods).toEqual([1]);
-    expect(aplOf(ctx, s, boosted)).toBe(3);
+    // "can either perform a free Reposition action" is an action, not an APL stat change, so
+    // the APL stat is untouched and the operative simply has one AP more to spend than its APL
+    // (docs/DECISIONS.md D-100).
+    expect(boosted.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, boosted)).toBe(2);
+    expect(apBudgetOf(ctx, s, boosted)).toBe(3);
     boosted.apSpent = 2;
     const shoot = ctx.hooks.emit('canPerformAction', s, { state: s, operative: boosted, action: 'Shoot', allowed: true });
     expect(shoot.allowed).toBe(false);
     expect(
       ctx.hooks.emit('canPerformAction', s, { state: s, operative: boosted, action: 'Charge', allowed: true }).allowed,
     ).toBe(true);
+    // "immediately": the AP belongs to that one activation and goes away with it, so the
+    // operative is back on its printed 2AP afterwards rather than carrying a spare AP around.
+    let after = activate(ctx, s, mine.id);
+    after = reduce(after, { t: 'EndActivation', operativeId: mine.id }, ctx).state;
+    expect(freeApOf(after, after.operatives[mine.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, after, after.operatives[mine.id]!)).toBe(2);
   });
 
   it('THE EMPEROR\'S WILL: "you can ignore any changes to its stats (including its weapons\' stats)"', () => {

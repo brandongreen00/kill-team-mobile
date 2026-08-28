@@ -23,6 +23,12 @@ export interface ShootSequence {
   /** The primary target; Blast/Torrent secondaries are queued behind it. */
   targetId: string;
   queue: string[];
+  /**
+   * Which weapon rule filled `queue`. Blast: "Secondary targets are in cover and obscured if
+   * the primary target was." Torrent prints no such clause, so its secondaries are checked
+   * for themselves.
+   */
+  spread?: 'blast' | 'torrent';
   resolvedTargets: string[];
   weaponName: string;
   profileName?: string;
@@ -76,6 +82,8 @@ export interface FightSequence {
   /** Whose turn it is to resolve a die. */
   turn: 'attacker' | 'defender';
   usedRerolls: string[];
+  /** Which sides have run out of re-roll grants, for the alternating window. */
+  rerollsDone?: { attacker: boolean; defender: boolean };
   usedRetention: string[];
   /** Shock: "The first time you strike with a critical success in each sequence..." */
   shockUsed: { attacker: boolean; defender: boolean };

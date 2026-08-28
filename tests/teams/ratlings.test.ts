@@ -8,7 +8,7 @@ import { createGameContext } from '../../src/core/game.ts';
 import { getAction } from '../../src/core/actions.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { SeededRng } from '../../src/core/rng.ts';
-import { hitOf, saveOf, inflictDamage } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, saveOf, inflictDamage } from '../../src/core/state.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
 import { kommandos } from '../../src/teams/kommandos/index.ts';
@@ -36,7 +36,7 @@ import { teamData } from '../../src/teams/data.ts';
 import { makeTeamHooks } from '../../src/teams/helpers.ts';
 import { defaultRoster, validateRosterFor } from '../../src/teams/selection.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
-import { act, activate, battle, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { GameState, KillzoneMap, WeaponProfile } from '../../src/core/types.ts';
 
@@ -555,7 +555,7 @@ describe('BULLGRYN and OGRYN', () => {
     foe.pos = { x: 15, y: 11 };
     const before = foe.wounds;
     let s = activate(ctx, state, ogryn.id);
-    const charged = act(ctx, s, ogryn.id, 'Charge', { path: { points: [{ x: 13.6, y: 11 }] } });
+    const charged = act(ctx, s, ogryn.id, 'Charge', { path: { points: [chargeTo(ctx, s, ogryn.id, foe.id)] } });
     expect(charged.ok).toBe(true);
     s = reduce(charged.state, { t: 'EndActivation', operativeId: ogryn.id }, ctx).state;
     expect(s.operatives[foe.id]!.wounds).toBeLessThan(before);
@@ -1177,17 +1177,47 @@ describe('Faction equipment', () => {
 
 // ---------------------------------------------------------------------------
 describe('Free-action book-keeping', () => {
-  it('the +1 APL a free Dash grant pushes is popped once the window closes', () => {
+  it('a Scarper grant is AP outside the APL stat, and it expires with the activation it is spent in', () => {
+    // "you can perform a free Dash action with one friendly RATLING operative" grants an
+    // action, not an APL stat change, so the APL stat is untouched and the operative simply has
+    // one AP more than its APL to spend (docs/DECISIONS.md D-100).
+    expect(rule(RULE.scarper)).toContain('you can perform a free Dash action with one friendly RATLING operative');
     const { ctx, state } = setup();
     const foe = opWith(state, 'p2', 'kommandos.boy');
     let s = activate(ctx, state, foe);
     s = reduce(s, { t: 'EndActivation', operativeId: foe }, ctx).state;
     const grant = s.effects.find((e) => e.rule === 'teamFreeAction' && e.source.id === RULE.scarper)!;
     const holder = grant.operativeId!;
-    expect(s.operatives[holder]!.aplMods).toContain(1);
+    const apl = aplOf(ctx, s, s.operatives[holder]!);
+    expect(s.operatives[holder]!.aplMods).toEqual([]);
+    expect(freeApOf(s, s.operatives[holder]!)).toBe(1);
+    expect(apBudgetOf(ctx, s, s.operatives[holder]!)).toBe(apl + 1);
+    // The AP belongs to that one Dash: it goes away with the activation it is spent in, so a
+    // team Scarper feeds after every enemy activation never accumulates AP.
     s = activate(ctx, s, holder);
     s = reduce(s, { t: 'EndActivation', operativeId: holder }, ctx).state;
-    expect(s.operatives[holder]!.aplMods).not.toContain(1);
+    expect(freeApOf(s, s.operatives[holder]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[holder]!)).toBe(apl);
+  });
+
+  it('a Scarper grant nobody spent does not outlive its turning point', () => {
+    // "Each friendly operative can only do this once per turning point, and cannot do so after
+    //  the final activation of the turning point." The offer is made between activations, so an
+    //  operative that is already expended has no activation left for the AP to expire with; the
+    //  Ready step is what closes that window.
+    expect(rule(RULE.scarper)).toContain('cannot do so after the final activation of the turning point');
+    const { ctx, state } = setup();
+    const foe = opWith(state, 'p2', 'kommandos.boy');
+    let s = activate(ctx, state, foe);
+    s = reduce(s, { t: 'EndActivation', operativeId: foe }, ctx).state;
+    const grant = s.effects.find((e) => e.rule === 'teamFreeAction' && e.source.id === RULE.scarper)!;
+    const holder = s.operatives[grant.operativeId!]!;
+    holder.expended = true; // it had already activated when the offer was made
+    holder.ready = false;
+    expect(freeApOf(s, holder)).toBe(1);
+    ctx.hooks.emit('onReadyStep', s, { state: s, player: 'p1', cp: 0 });
+    expect(freeApOf(s, holder)).toBe(0);
+    expect(apBudgetOf(ctx, s, holder)).toBe(aplOf(ctx, s, holder));
   });
 
   it('a Scarper free action can only be spent on a Dash', () => {

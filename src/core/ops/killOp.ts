@@ -6,11 +6,19 @@
  * the battle, if your kill grade is higher than your opponent's, you score 1VP."
  *
  * Grades are recomputed at the end of each turning point from the operatives that have been
- * incapacitated. That cannot change any total (each new grade is worth exactly 1VP and the
- * op's 6VP cap is never reached before grade 5 + the end-of-battle point), it only moves the
- * log line to the end of the turning point.
+ * incapacitated. Each grade is worth exactly 1VP and the op's 6VP cap is never reached before
+ * grade 5 + the end-of-battle point, so the recompute only moves the log line to the end of
+ * the turning point — except where it moves DOWN, which reanimation makes possible and which
+ * the rules say costs the VP back.
  */
-import { END_OF_BATTLE_SLOT, awardVP, ignoredForKillOp, killOpStartingSize, KILL_OP_ID } from './common.ts';
+import {
+  END_OF_BATTLE_SLOT,
+  awardVP,
+  ignoredForKillOp,
+  killOpStartingSize,
+  revokeVP,
+  KILL_OP_ID,
+} from './common.ts';
 import { killGradeFor } from './killGrade.ts';
 import { KILL_OP_TEXT } from './text.ts';
 import type { GameContext } from '../context.ts';
@@ -35,6 +43,16 @@ export function updateKillGrade(ctx: GameContext, state: GameState, player: Play
   while (team.killGrade < grade) {
     team.killGrade += 1;
     awardVP(ctx, state, player, KILL_OP_ID, 1, `Kill op: reached kill grade ${team.killGrade}`);
+  }
+  // "As REANIMATED operatives are no longer incapacitated (and are therefore no longer
+  // 'kills'), your opponent's kill grade can go down during the battle (they lose VP
+  // accordingly)." HIEROTEK CIRCLE's reanimate() clears `incapacitated` and `removed`, which
+  // is what `incapacitatedEnemies` counts, so the count already drops back — only the grade
+  // and the VP were a one-way ratchet.
+  while (team.killGrade > grade) {
+    const lost = team.killGrade;
+    team.killGrade -= 1;
+    revokeVP(state, player, KILL_OP_ID, 1, `Kill op: kill grade ${lost} lost to reanimation`);
   }
 }
 

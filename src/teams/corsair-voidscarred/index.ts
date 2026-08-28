@@ -8,15 +8,15 @@
  *
  * Three shapes drive the module:
  *
- *  - **Aeldari Raiders** hands EVERY operative a free Dash on EVERY activation, so the module
- *    owns the `aplMods` upkeep that pops `grantFreeAction`'s un-popped +1 (docs/DECISIONS.md
- *    D-015; the Ratlings Scarper and Death Korps REGROUP precedent). Without it the whole kill
- *    team would sit on APL 3 for the rest of the battle.
+ *  - **Aeldari Raiders** hands EVERY operative a free Dash on EVERY activation. That grant is AP
+ *    outside the APL budget (docs/DECISIONS.md D-100) and expires with the activation it was
+ *    given for. Four rules here hand one out, so the module keeps exactly ONE grant live per
+ *    operative at a time: free actions from different rules are not cumulative.
  *  - **Two interrupts** (the FELARCH's One Step Ahead and the KURNITE HUNTER's Erudite Hunter)
  *    fire "after an enemy operative performs an action". The engine emits no post-action hook,
  *    so both are taken at the last moment it does expose — the enemy's `onActivationEnd` — and
- *    the free action is D-015's extra AP on the interrupting operative's own next activation
- *    (the Spectre Squad Elite Fieldcraft precedent).
+ *    the free action lands on the interrupting operative's own next activation (D-013; the
+ *    Spectre Squad Elite Fieldcraft precedent).
  *  - **The SHADE RUNNER's Blink Pack** is a remove-and-set-up-again move, which `validateMove`
  *    cannot express, so it is three sibling `ActionDef`s with `treatedAs` pointing at the
  *    universal move actions (D-021; the Sanctifiers CHERUB Fly precedent).
@@ -24,7 +24,7 @@
 import { actionCost, getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { hasRule, ruleOf } from '../../core/dice.ts';
-import { baseGap, baseRadius, dist, distancePointToSegment } from '../../core/geometry.ts';
+import { baseGap, baseRadius, basesOverlap, dist, distancePointToSegment } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import { validateMove } from '../../core/movement.ts';
 import { advanceShoot, checkTarget, effectiveRules, startShoot } from '../../core/sequences/shoot.ts';
@@ -186,7 +186,7 @@ const E_WARDING_SHIELD = 'cv.wardingShield';
 const E_WARP_FOLD_LOCK = 'cv.warpFoldLock';
 const E_QUICK_TRIGGER = 'cv.quickTrigger';
 
-/** Every rule of this team that hands out a `grantFreeAction`, for the `aplMods` upkeep. */
+/** Every rule of this team that hands out a `grantFreeAction`, for the stale-grant sweep. */
 const FREE_ACTION_SOURCES: ReadonlySet<string> = new Set<string>([
   RULE.aeldariRaiders,
   SP.plunderers,
@@ -376,12 +376,14 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // Aeldari Raiders
   // =========================================================================
   // "Each friendly CORSAIR VOIDSCARRED operative can perform a free Dash action during their
-  //  activation." — docs/DECISIONS.md D-015: one extra AP restricted to Dash.
+  //  activation." — one AP outside the operative's APL budget, restricted to Dash (D-100).
   reg.on('onActivationStart', T.bind(RULE.aeldariRaiders, 10), (ev) => {
     const op = ev.operative;
     if (!T.mineKw(op, KW)) return;
-    // PLUNDERERS already handed this operative a free Dash for the turning point; APL changes
-    // clamp to ±1 so a second grant would add nothing but a stray `aplMods` entry.
+    // One live grant per operative. PLUNDERERS (and the two interrupts) may already have handed
+    // this one a free action: free AP sums, so a second grant would be a second AP — and only
+    // the FIRST grant's `only` list is read when the engine polices what that AP may be spent
+    // on, which would let the extra AP through unrestricted.
     if (effectOn(ev.state, op.id, FREE_ACTION_RULE)) return;
     // FELARCH › Veteran Raider: "This operative can perform a 1AP action for free during their
     // activation as a result of the Aeldari Raiders rule (instead of the Dash action)."
@@ -411,25 +413,24 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   });
 
   /*
-   * `grantFreeAction` models a free action as one extra AP (D-015) by pushing +1 into
-   * `aplMods`, which the engine never pops. Aeldari Raiders hands one out at EVERY activation,
-   * so without this upkeep every CORSAIR VOIDSCARRED operative would sit on APL 3 for the rest
-   * of the battle. Reported as a seam.
+   * A grant expires at the end of the recipient's activation (D-100), which covers Aeldari
+   * Raiders — given at the start of the very activation it is for. The other three do not
+   * always land on the operative that is activating: PLUNDERERS hands out D3 of them as a
+   * STRATEGIC GAMBIT, and both interrupts fire during the ENEMY's activation. If such a
+   * recipient is already expended its own activation never ends again, so nothing takes the
+   * grant back and it would still be waiting at the next Ready step. This sweep is that bound,
+   * and it is what keeps the one-grant-at-a-time guard above from being poisoned by a stale
+   * grant nobody spent.
    */
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  const dropStaleGrants = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (!FREE_ACTION_SOURCES.has(eff.source.id)) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bindText('cv.aplUpkeep', text(RULE.aeldariRaiders), 90), (ev) => {
-    if (ev.operative.player === T.player) upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('cv.aplUpkeep', text(RULE.aeldariRaiders), 90), (ev) => {
+  reg.on('onReadyStep', T.bindText('cv.freeActionSweep', text(RULE.aeldariRaiders), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) upkeep(ev.state, o);
+    for (const o of T.friendlies(ev.state)) dropStaleGrants(ev.state, o);
   });
 
   // =========================================================================
@@ -438,7 +439,8 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // "Once per battle, after an enemy operative performs an action, if this operative is ready,
   //  you can use this rule." The engine emits nothing after an action, so the interrupt is
   //  taken at the enemy's `onActivationEnd` (the Spectre Squad Elite Fieldcraft precedent) and
-  //  the free Shoot/Fight is D-015's extra AP on the FELARCH's own next activation.
+  //  the free Shoot/Fight is one AP outside the FELARCH's APL budget, on its own next
+  //  activation (D-013, D-100).
   //
   //  It costs the FELARCH 1 APL, so it is auto-used on a stated deterministic policy (D-022):
   //  at the first enemy activation that ends with a ready FELARCH able to shoot or fight THAT
@@ -500,9 +502,9 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   });
 
   // "After you perform that action, subtract 1 from this operative's APL stat until the end of
-  //  its next activation." The free action lands on the FELARCH's own next activation (D-015),
+  //  its next activation." The free action lands on the FELARCH's own next activation (D-013),
   //  so the penalty is armed at the END of that activation and expires one activation later —
-  //  otherwise the +1 and the −1 would simply cancel and the rule would do nothing.
+  //  applied any earlier it would eat into the very activation the rule just paid for.
   reg.on('onActivationEnd', T.bind(A.oneStepAhead, 13), (ev) => {
     const op = ev.operative;
     if (op.player !== T.player || !effectOn(ev.state, op.id, E_ONE_STEP)) return;
@@ -627,7 +629,8 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   });
   // "…after that enemy operative performs an action in which it moves, you can interrupt to use
   //  this rule." Nothing runs after an action, so the interrupt is taken at the end of that
-  //  enemy's activation and the free move is D-015's extra AP.
+  //  enemy's activation and the free move is one AP outside the HUNTER's APL budget (D-100),
+  //  spent in its own next activation (D-013).
   reg.on('onActivationEnd', T.bind(A.eruditeHunter, 13), (ev) => {
     const foe = ev.operative;
     if (foe.player === T.player) return;
@@ -854,8 +857,9 @@ export function eruditeEndPositionLegal(
 function ploys(reg: HookRegistry, T: TeamHooks): void {
   // ---- PLUNDERERS (strategy) ---------------------------------------------
   // "Up to D3 friendly CORSAIR VOIDSCARRED operatives can immediately perform a free Dash
-  //  action in an order of your choice." The free Dash is D-015's extra AP, so it lands on each
-  //  operative's next activation; the operatives themselves come from the gambit's `data` with
+  //  action in an order of your choice." The free Dash is one AP outside the APL budget, so it
+  //  lands on each operative's next activation (D-013); the operatives themselves come from the
+  //  gambit's `data` with
   //  a deterministic, logged default (D-016).
   reg.on('onPloyUsed', T.bind(SP.plunderers, 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== SP.plunderers) return;
@@ -885,8 +889,8 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     log(ev.state, { kind: 'ploy', player: T.player, text: `PLUNDERERS: ${chosen.length} free Dash actions` });
   });
   // "This turning point, each that does so cannot perform the Dash action during their
-  //  activation." Under D-015 the free Dash IS spent during that activation, so the ban is
-  //  scoped to the operative's own AP: it may still take the Dash the ploy paid for.
+  //  activation." The free Dash IS spent during that activation (D-013), so the ban is scoped
+  //  to the operative's own AP: it may still take the Dash the ploy paid for.
   reg.on('canPerformAction', T.bind(SP.plunderers, 21), (ev) => {
     const op = ev.operative;
     if (op.player !== T.player) return;
@@ -1471,7 +1475,7 @@ function blinkDestination(
     if (other.id === op.id) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    if (baseGap(pos, c.base, op.rot, other.pos, oc.base, other.rot) < -1e-4)
+    if (basesOverlap(pos, c.base, op.rot, other.pos, oc.base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   const landed: Body = { id: op.id, pos, z, rot: op.rot, base: c.base, height: body(ctx, op).height };

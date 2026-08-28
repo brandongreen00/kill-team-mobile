@@ -28,7 +28,7 @@
 import { getAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { HookRegistry, type RerollGrant } from '../../core/hooks.ts';
-import { baseGap, baseRadius, dist } from '../../core/geometry.ts';
+import { baseGap, baseRadius, basesOverlap, dist } from '../../core/geometry.ts';
 import { validateMove } from '../../core/movement.ts';
 import { sideWeapon } from '../../core/sequences/fight.ts';
 import { checkTarget, effectiveRules } from '../../core/sequences/shoot.ts';
@@ -551,8 +551,11 @@ function inKillRange(T: TeamHooks, state: GameState, op: OperativeState, victim:
 
 function sanguavitae(reg: HookRegistry, T: TeamHooks, mine: (op: OperativeState) => boolean): void {
   // Mania — "Until the start of that operative's next activation, add 1 to its APL stat."
-  // `aplOf` consults `onStatMod`, so this expires with the effect instead of leaking a permanent
-  // `aplMods` entry (the Death Korps / Ratlings upkeep gap).
+  // This really is an APL STAT change, so it must go through the ±1 clamp — but `op.aplMods` has
+  // no owner in the core, and a modifier pushed into it stands for the rest of the battle unless
+  // the team pops it by hand at the right moment (the Ratlings upkeep). `aplOf` also consults
+  // `onStatMod`, which is clamped the same way and is read live, so riding the hook off the
+  // effect expires the +1 exactly when the effect does and leaves nothing behind.
   reg.on('onStatMod', T.bindText(`${RULE.sanguavitae}.mania`, SANGUAVITAE_TEXT.mania, 12), (ev) => {
     if (!mine(ev.operative)) return;
     if (!effectOn(ev.state, ev.operative.id, MANIA)) return;
@@ -813,7 +816,7 @@ function placeableAt(
     if (other.id === op.id) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    if (Math.hypot(pos.x - other.pos.x, pos.y - other.pos.y) - r - baseRadius(oc.base) < -1e-4) return { ok: false };
+    if (basesOverlap(pos, card.base, op.rot, other.pos, oc.base, other.rot)) return { ok: false };
   }
   return { ok: true, z };
 }
@@ -1116,8 +1119,10 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   // "Select one friendly GOREMONGER operative. If it has a Conceal order, change it to Engage.
   //  Then it can immediately perform a free Charge action, but cannot move more than 3" during
   //  that action."
-  // The engine has no intent for an action outside an activation (D-015), so the free Charge is
-  // its own 0AP `Charge (Hunt for Blood)` ActionDef and lands on that operative's activation.
+  // The engine has no intent for an action outside an activation, so the free Charge lands on that
+  // operative's activation. It is its own 0AP `Charge (Hunt for Blood)` ActionDef (D-021) rather
+  // than a `grantFreeAction`, because the printed 3" cap and the order change belong to this ploy
+  // alone; being 0AP it never touches the APL stat or the free-AP budget (D-100) at all.
   reg.on('onPloyUsed', T.bind(SP.huntForBlood, 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== SP.huntForBlood) return;
     const wanted = ev.data?.['operativeId'];
@@ -1792,7 +1797,7 @@ function actions(data: TeamData): ActionDef[] {
     },
 
     // =====================================================================
-    // HUNT FOR BLOOD's free Charge (D-015 / D-021)
+    // HUNT FOR BLOOD's free Charge (D-021)
     // =====================================================================
     {
       id: CHARGE_HUNT,

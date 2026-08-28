@@ -31,6 +31,7 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 | Fight 1AP — the 4-step sequence incl. assists | ✔ | `sequences/fight.ts::assistCount` | teams suite |
 | Guard 1AP + On Guard (Close Quarters only) | ✔ | `actions.ts`, `reducer.ts` `OnGuardInterrupt` | `Guard is not offered on an open killzone` / `Guard is available in a Close Quarters killzone` |
 | Hatchway Fight 1AP (Close Quarters) | ✔ | `actions.ts` | teams/ops suite |
+| Door Fight 1AP (Volkus Cityfight) | ✔ | `actions.ts` | `rules-review.test.ts` |
 | Operate Hatch 1AP (maps with hatchways) | ✔ | `actions.ts` | maps suite |
 | Breach 2AP + AP discounts + concussion roll (Tomb World) | ✔ | `actions.ts` | maps suite |
 | Move With Barricade 1AP (Portable Barricade) | ◐ | `src/core/equipment/` | equipment suite |
@@ -40,7 +41,16 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 | Rule | Status | Implementation | Test |
 | --- | --- | --- | --- |
 | Bases: may touch, never stack; friendly pass-through; not through terrain; not off-board | ✔ | `geometry.ts::basesOverlap`, `movement.ts` | `a base cannot be over the edge of the killzone` |
+| "Operatives cannot move through terrain — they must move around, climb over or drop/jump off it" | ✔ | `terrain.ts::pathBlockedByTerrain`, checked per increment in `movement.ts::validateMove` and `reachableCells`; `movement.ts::routePath` builds the way round (D-064, D-065) | `cannot move through terrain`, `a route around the terrain is legal even though the straight line through it is not`, `an operative cannot walk through a wall` |
+| Accessible: move through, +1", centre of base only — "takes precedence over Bases, and Terrain and Movement" | ✔ | `terrain.ts::accessibleCrossings` + the `Accessible` exemption in `pathBlockedByTerrain` | `Accessible terrain can still be moved through` |
+| Insignificant: "can move over and across ... without going up and down" | ✔ | `pathBlockedByTerrain` exemption | `Insignificant terrain does not block a move` |
 | Control range = visible to and within 1", mutual | ✔ | `visibility.ts::withinControlRange` | core suite |
+| Bases: "not through enemy operatives"; "cannot move within control range of an enemy operative, unless…" | ✔ | `movement.ts::enemyOnTheWay`, per increment; relaxed through `onMovePermissions` (D-072) | `friendly operatives can move through other friendly operatives … but not through enemy operatives`, `it cannot move within control range of an enemy operative` |
+| Seek / Vantage deny cover for TARGETING only — "it doesn't remove their cover save (if any)" | ✔ | `visibility.ts::coverAndObscured` returns `inCover` (the save) and `inCoverForTargeting` (D-068) | `Seek: "it doesn't remove their cover save (if any)"` |
+| Lethal x+ survives a re-roll | ✔ | `dice.ts::lethalOpts` carried in the reroll decision's `ctx` | `a RE-ROLLED result is graded the same way` |
+| Devastating x / Stun fire on RETAINED critical successes | ✔ | `Die.blockedFrom` distinguishes a blocked crit from a blocked normal | `a blocked NORMAL success is not a critical success` |
+| Command Re-roll is exempt from the once-per-TP ploy cap | ✔ | `decisions.ts::applyReroll`, `shoot.ts`, `fight.ts` | `other than Command Re-roll, each player cannot use each ploy more than once per turning point` |
+| Fight: "both players select one melee weapon to use that their operative has" | ✔ | `fight.ts::meleeProfileOf` | `not the first profile on the card` |
 | Damage / wounded / injured (−2" Move floor 4", Hit −1) / incapacitated | ✔ | `state.ts::inflictDamage`, `isInjured`, `moveOf` | `injured: -2" Move (floor 4") and Hit worsened by 1` |
 | Cover: intervening terrain within the target's control range, denied within 2" | ✔ | `visibility.ts::coverAndObscured` | `cover is denied within 2" of the active operative` |
 | Obscured: intervening Heavy terrain, ignoring Heavy within 1" of either operative | ✔ | `visibility.ts::coverAndObscured` | `obscured ignores Heavy terrain within 1" of either operative` |
@@ -97,6 +107,9 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 | Breach point + Breach 2AP + concussion | — | — | — | ✔ | `actions.ts` |
 | Teleport pad (one operative, not on the floor, mutual control range, teleport from TP2) | — | — | — | ◐ | `types.ts::onTeleportPadId`, `state.ts::inControlRange` — the teleport move itself is pending |
 | Hazardous area (no base may touch; restricted targeting/movement) | — | ✔ | — | — | `terrain.ts::baseTouchesHazardous`; the 4"-of-hazardous targeting restriction is pending |
+| Cityfight: Door Fight 1AP | ✔ | — | — | — | `actions.ts` — gated on `killzone === 'volkus'` AND a `role: 'door'` part existing (D-104) |
+| Stronghold H: one friendly operative on the highest upper level | ◐ | — | — | — | `terrain.ts::occupancyCapExceeded`, called by `validateMove`, `canDeployAt` and the two team set-up-again paths (D-105). The cap is enforced; "placed to one side" and the oversized-base fallback are not |
+| Cityfight: Garrisoned Stronghold, Condensed Stronghold | — | — | — | — | **not implemented** — Volkus has no killzone module (audit W-29) |
 | Close Quarters: Condensed Environment, Guard/On Guard, Hatchway Fight | — | — | ✔ | ✔ | `weaponRules.ts::condensedEnvironmentRules`, `actions.ts`, `reducer.ts` — gated by `map.closeQuarters` (D-002) |
 
 ## Known gaps
@@ -106,5 +119,11 @@ Test names are the `it(...)` strings; every one of them quotes the rule text it 
 - Bheta-Decima restricted targeting (4" of hazardous between floor-level operatives; gantry
   footprints between Vantage and floor) is specified in `data/terrain/bheta-decima.json` but not
   yet enforced in `checkTarget`.
-- Volkus Stronghold B "only one friendly operative on the highest level, placed to one side" is
-  data-only.
+- Volkus Stronghold B: the one-friendly-operative cap is enforced (D-105). The rest of
+  § Stronghold H is not — "that operative must be placed on one side or the other of that level,
+  it cannot be placed in the middle", and the oversized-base fallback. The plate measures
+  2.04" × 2.15", so a 32mm base does not fit inside either ~1.02" half, which makes the
+  oversized-base case the normal one on this geometry rather than the exception. Splitting the
+  plate needs a division the cards do not print; see docs/RULES-AUDIT-PLANS.md W-31.
+- Volkus has no killzone module, so Garrisoned Stronghold and Condensed Stronghold are
+  unimplemented; see docs/RULES-AUDIT-PLANS.md W-29.

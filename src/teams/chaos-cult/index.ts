@@ -202,7 +202,7 @@ const TEAM_CARVE_OUTS = new Set<string>([
   WINGS_FALL_BACK,
 ]);
 
-/** Every rule of this team that hands out a `grantFreeAction`, for the `aplMods` upkeep. */
+/** Every rule of this team that hands out a `grantFreeAction`, for the stale-grant sweep. */
 const FREE_ACTION_SOURCES = new Set<string>([
   ACT.inciteSlaughter,
   ACT.inciteUrgency,
@@ -1190,29 +1190,27 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   });
 
   // =========================================================================
-  // The `grantFreeAction` APL upkeep
+  // Free actions nobody spent
   // =========================================================================
   /*
-   * `grantFreeAction` models a free action as one extra AP (D-015) by pushing +1 into
-   * `aplMods`, which the engine never pops. COVERT GUISES hands three out during the Strategy
-   * phase and INCITE SLAUGHTER / INCITE URGENCY one per DEMAGOGUE action, so without this upkeep
-   * a CHAOS CULT operative would sit on APL 3 for the rest of the battle (the Corsair Aeldari
-   * Raiders / Death Korps REGROUP / Ratlings Scarper precedent).
+   * A `grantFreeAction` grant expires at the end of the recipient's activation
+   * (docs/DECISIONS.md D-100), which is every grant that gets spent. This team hands most of its
+   * grants out to an operative that is not the one activating: COVERT GUISES gives D3 of them
+   * away in the Strategy phase, and INCITE SLAUGHTER / INCITE URGENCY name another operative
+   * within 9". If that operative is already expended, or is never activated before the turning point
+   * ends, its activation never ends again and nothing would take the grant back — it would be
+   * waiting for the operative when the Ready step readied it. "…can IMMEDIATELY perform a free
+   * action" is one window, so the sweep closes it with the turning point.
    */
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  const dropStaleGrants = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (!FREE_ACTION_SOURCES.has(eff.source.id)) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bindText('chaos-cult.aplUpkeep', text(RULE.mutation), 90), (ev) => {
-    if (mine(ev.operative)) upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('chaos-cult.aplUpkeep', text(RULE.mutation), 90), (ev) => {
+  reg.on('onReadyStep', T.bindText('chaos-cult.freeActionSweep', text(RULE.mutation), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) upkeep(ev.state, o);
+    for (const o of T.friendlies(ev.state)) dropStaleGrants(ev.state, o);
   });
 
   // =========================================================================
@@ -1491,7 +1489,7 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
    *
    * The second Fight is `Fight (Unleash the Daemon)` — its own `ActionDef` with its own
    * restriction key (D-021, the Plague Marines Astartes shape) — and "one of them can be free"
-   * is D-015's one extra AP restricted to a Fight.
+   * is one AP outside the operative's APL budget, restricted to a Fight (D-100).
    */
   reg.on('onPloyUsed', T.bind(FP.unleashTheDaemon, 21), (ev) => {
     if (ev.player !== T.player || ev.ployId !== FP.unleashTheDaemon) return;
@@ -2031,7 +2029,7 @@ function vortexPosition(ctx: GameContext, state: GameState, op: OperativeState, 
   return { ...op.pos };
 }
 
-/** The D-015 free action a SUPPORT action hands to another operative. */
+/** The free action a SUPPORT action hands to another operative — AP on top of its APL budget. */
 function grantFreeActionFor(
   ctx: GameContext,
   state: GameState,

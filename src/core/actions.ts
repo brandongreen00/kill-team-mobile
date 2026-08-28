@@ -9,10 +9,11 @@
  */
 import { baseGap, dist } from './geometry.ts';
 import { terrain, type GameContext } from './context.ts';
-import { validateMove, type MoveOptions } from './movement.ts';
-import {
+import { validateMove, type MoveLeg, type MoveOptions } from './movement.ts';
+import { findProfile,
   aliveOperatives,
   aplOf,
+  apBudgetOf,
   card,
   enemiesInControlRange,
   inflictDamage,
@@ -23,11 +24,11 @@ import {
   settleZ,
   weaponsOf,
 } from './state.ts';
-import { startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
+import { effectiveRules, startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
 import { startFight, advanceFight } from './sequences/fight.ts';
-import { hasType } from './terrain.ts';
+import { baseDistanceToPart, hasType, pointDistanceToPart } from './terrain.ts';
 import type { ActionParams } from './intents.ts';
-import type { GameState, OperativeState, PlayerId } from './types.ts';
+import type { GameState, MarkerState, OperativeState, PlayerId, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
 
 export interface ActionDef {
@@ -86,6 +87,41 @@ function withCounteractCap(state: GameState, op: OperativeState, opts: MoveOptio
   return counteracting ? { ...opts, hardCap: 2 } : opts;
 }
 
+/**
+ * Heavy, the half that was missing.
+ *
+ * Appendix › Heavy: "An operative cannot use this weapon in an activation or counteraction in
+ * which it moved, AND IT CANNOT MOVE IN AN ACTIVATION OR COUNTERACTION IN WHICH IT USED THIS
+ * WEAPON. If the rule is Heavy (x only), where x is a move action, only that move is allowed,
+ * e.g. Heavy (Dash only)."
+ *
+ * Only the first clause existed, so shoot-and-scoot — fire from a vantage point for 1AP, then
+ * Reposition back out of sight — was legal with all 127 Heavy profiles in the game.
+ */
+function heavyForbidsMove(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  action: MoveOptions['action'],
+): string | undefined {
+  const used = op.weaponsUsedThisActivation ?? [];
+  if (used.length === 0) return undefined;
+  for (const { weapon, profile: profileName } of used) {
+    const w = weaponsOf(ctx, state, op, 'ranged').find((x) => x.name === weapon);
+    // The PROFILE that was fired, not every profile the weapon has: a weapon whose second
+    // profile is Heavy must not forbid a move because its first one was used.
+    const profile = w ? findProfile(w, profileName) : undefined;
+    if (!profile) continue;
+    const heavy = effectiveRules(ctx, state, profile, { operative: op, weaponName: weapon }).find(
+      (r) => r.id === 'Heavy',
+    );
+    if (!heavy) continue;
+    if (heavy.only && heavy.only === action) continue; // "only that move is allowed"
+    return `${weapon} is Heavy — it cannot move in an activation in which it used this weapon`;
+  }
+  return undefined;
+}
+
 function moveCheck(
   ctx: GameContext,
   state: GameState,
@@ -94,6 +130,8 @@ function moveCheck(
   opts: MoveOptions,
 ): { ok: boolean; reason?: string } {
   if (!params.path) return { ok: false, reason: 'no path supplied' };
+  const heavy = heavyForbidsMove(ctx, state, op, opts.action);
+  if (heavy) return { ok: false, reason: heavy };
   const v = validateMove(ctx, state, op, params.path, withCounteractCap(state, op, opts));
   return v.ok ? { ok: true } : { ok: false, reason: v.reason ?? 'illegal move' };
 }
@@ -107,6 +145,8 @@ function applyMove(
   label: string,
 ): { ok: boolean; reason?: string } {
   if (!params.path) return { ok: false, reason: 'no path supplied' };
+  const heavy = heavyForbidsMove(ctx, state, op, opts.action);
+  if (heavy) return { ok: false, reason: heavy };
   const v = validateMove(ctx, state, op, params.path, withCounteractCap(state, op, opts));
   if (!v.ok) return { ok: false, reason: v.reason ?? 'illegal move' };
   op.pos = { ...v.endPos };
@@ -121,7 +161,7 @@ function applyMove(
       m.z = op.z;
     }
   }
-  checkMines(ctx, state, op);
+  checkMines(ctx, state, op, v.legs);
   log(state, {
     kind: 'action',
     player: op.player,
@@ -133,11 +173,31 @@ function applyMove(
 
 /** Mines: "The first time that marker is within an operative's control range, remove that
  *  marker and inflict D3+3 damage on that operative." */
-function checkMines(ctx: GameContext, state: GameState, op: OperativeState): void {
+/**
+ * Mines, along the whole move rather than only where it stopped.
+ *
+ * `checkMines` was called once, after `op.pos` had been set to the end of the path, so a
+ * Reposition straight over a mine did not fire it: the marker stayed on the board and could be
+ * walked across again, all battle. The legs of the validated move are sampled at 0.2" — under
+ * half the smallest base radius — so a base cannot step over one between two samples.
+ */
+function checkMines(ctx: GameContext, state: GameState, op: OperativeState, legs?: MoveLeg[]): void {
+  const probes: { pos: Vec2; z: number }[] = [{ pos: op.pos, z: op.z }];
+  for (const leg of legs ?? []) {
+    const span = Math.hypot(leg.to.x - leg.from.x, leg.to.y - leg.from.y);
+    const steps = Math.max(1, Math.ceil(span / 0.2));
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      probes.push({
+        pos: { x: leg.from.x + (leg.to.x - leg.from.x) * t, y: leg.from.y + (leg.to.y - leg.from.y) * t },
+        z: t < 1 ? leg.fromZ : leg.toZ,
+      });
+    }
+  }
   for (const marker of Object.values(state.markers)) {
     if (marker.kind !== 'mine') continue;
     if (marker.flags['triggered']) continue;
-    if (!markerContestedBy(ctx, state, marker, op)) continue;
+    if (!probes.some((p) => markerContestedBy(ctx, state, marker, { ...op, pos: p.pos, z: p.z }))) continue;
     marker.flags['triggered'] = true;
     const d3 = ctx.rng.d3();
     recordRoll(state, 'mine', [d3], op.player, 'Mines D3+3');
@@ -267,6 +327,12 @@ registerAction({
     const marker = params.markerId ? state.markers[params.markerId] : undefined;
     if (!marker) return { ok: false, reason: 'no such marker' };
     if (!marker.flags['pickUpAllowed']) return { ok: false, reason: 'this marker cannot be picked up' };
+    // "Remove a marker THE ACTIVE OPERATIVE CONTROLS." Asking only whether the TEAM controls
+    // it — a question answered by the total APL of everyone contesting it — let any operative
+    // anywhere on the board lift a marker a team-mate was standing on, and `perform` then
+    // teleported the marker to it.
+    if (!markerContestedBy(ctx, state, marker, op))
+      return { ok: false, reason: 'that marker is not within this operative\'s control range' };
     if (markerController(ctx, state, marker) !== op.player)
       return { ok: false, reason: 'your operatives do not control that marker' };
     return { ok: true };
@@ -331,7 +397,12 @@ registerAction({
     // Heavy: "cannot use this weapon in an activation in which it moved".
     const w = weaponsOf(ctx, state, op, 'ranged').find((x) => x.name === params.weaponName);
     const profile = w?.profiles.find((p) => (p.name ?? '') === (params.profileName ?? '')) ?? w?.profiles[0];
-    const heavy = profile?.rules.find((r) => r.id === 'Heavy');
+    // Off `effectiveRules`, not the printed profile: a hook that grants or removes Heavy was
+    // invisible to this test.
+    const heavyRules = profile
+      ? effectiveRules(ctx, state, profile, { operative: op, weaponName: params.weaponName! })
+      : [];
+    const heavy = heavyRules.find((r) => r.id === 'Heavy');
     if (heavy) {
       const moved = op.actionsThisActivation.some((a) =>
         ['Reposition', 'Dash', 'Charge', 'Fall Back', 'Move With Barricade'].includes(a),
@@ -419,11 +490,92 @@ registerAction({
     const ap = touchingOpenAccessPoint(ctx, state, op);
     if (!ap) return { ok: false, reason: 'base is not touching an open hatchway’s access point' };
     if (!params.targetId) return { ok: false, reason: 'select an enemy operative across the hatchway' };
+    // "…instead select an enemy operative WITHIN 2" OF, AND ON THE OTHER SIDE OF, an open
+    // hatchway's access point the active operative is touching." Neither half was checked, so
+    // this was a 1AP Fight against any enemy anywhere on the board.
+    const target = state.operatives[params.targetId];
+    if (!target || target.removed || target.player === op.player)
+      return { ok: false, reason: 'select an enemy operative across the hatchway' };
+    const centre = { x: (ap.bounds.min.x + ap.bounds.max.x) / 2, y: (ap.bounds.min.y + ap.bounds.max.y) / 2 };
+    const tc = card(ctx, target);
+    if (baseGap(target.pos, tc.base, target.rot, centre, { shape: 'round', mm: 20 }, 0) > 2 + 1e-6)
+      return { ok: false, reason: 'the enemy operative is more than 2" from the access point' };
+    const side = acrossFrom(ap, centre);
+    if (side(target.pos) === side(op.pos))
+      return { ok: false, reason: 'the enemy operative is on the same side of the hatchway' };
     return { ok: true };
   },
   perform(ctx, state, op, params) {
     const weapon = params.meleeWeaponName ?? weaponsOf(ctx, state, op, 'melee')[0]?.name;
     if (!weapon) return { ok: false, reason: 'operative has no melee weapon' };
+    const r = startFight(ctx, state, op, weapon, params.meleeProfileName, params.targetId!, { hatchway: true });
+    if (!r.ok) return r;
+    advanceFight(ctx, state);
+    return { ok: true };
+  },
+});
+
+// ---------------------------------------------------------------------------
+// Killzone: Volkus (Cityfight)
+// ---------------------------------------------------------------------------
+
+/** The door part this operative's base is touching, if any. */
+function touchingDoor(ctx: GameContext, state: GameState, op: OperativeState) {
+  // "on the killzone floor" is a condition on the TARGET, but the extractor gives a door the
+  // whole wall band (z 0..4 on a stronghold), so without this an operative standing on the
+  // level-1 Vantage floor at z=3 registers as touching the doorway underneath it.
+  if (op.z > 1e-6) return undefined;
+  const index = terrain(ctx, state);
+  const c = card(ctx, op);
+  return index.parts.find((p) => p.role === 'door' && baseDistanceToPart(op.pos, c.base, op.rot, p) <= 1e-6);
+}
+
+registerAction({
+  id: 'Door Fight',
+  name: 'Door Fight',
+  ap: 1,
+  type: 'universal',
+  treatedAs: 'Fight',
+  sourceText:
+    'DOOR FIGHT 1AP: Fight with the active operative. In the Select Enemy Operative step, instead '
+    + 'select an enemy operative on the killzone floor and within 2" of, and on the other side of, a '
+    + 'door the active operative is touching. For the duration of that action, those operatives are '
+    + 'treated as being within each other\u2019s control range. This action is treated as a Fight '
+    + 'action. An operative cannot perform this action while within control range of an enemy '
+    + 'operative, or if its base isn\u2019t touching a door.',
+  // NOT `killzone === 'volkus'` alone: tests/fixtures.ts `testMap()` is killzone 'volkus' with no
+  // terrain at all, and that predicate would offer Door Fight in every synthetic fixture in the
+  // suite and hand the AI a candidate to probe on every board. Gate on the data actually holding
+  // a door, the way Operate Hatch gates on an access point existing.
+  available: (ctx, state) =>
+    state.map.killzone === 'volkus' && terrain(ctx, state).parts.some((p) => p.role === 'door'),
+  check(ctx, state, op, params) {
+    if (state.map.killzone !== 'volkus')
+      return { ok: false, reason: 'Door Fight is a Killzone: Volkus action' };
+    if (engaged(ctx, state, op)) return { ok: false, reason: 'within control range of an enemy operative' };
+    const door = touchingDoor(ctx, state, op);
+    if (!door) return { ok: false, reason: 'its base isn’t touching a door' };
+    if (!params.targetId) return { ok: false, reason: 'select an enemy operative through the door' };
+    const target = state.operatives[params.targetId];
+    if (!target || target.removed || target.player === op.player)
+      return { ok: false, reason: 'select an enemy operative through the door' };
+    if (target.z > 1e-6) return { ok: false, reason: 'the enemy operative is not on the killzone floor' };
+    const tc = card(ctx, target);
+    if (baseDistanceToPart(target.pos, tc.base, target.rot, door) > 2 + 1e-6)
+      return { ok: false, reason: 'the enemy operative is more than 2" from the door' };
+    const centre = { x: (door.bounds.min.x + door.bounds.max.x) / 2, y: (door.bounds.min.y + door.bounds.max.y) / 2 };
+    const side = acrossFrom(door, centre);
+    if (side(target.pos) === side(op.pos))
+      return { ok: false, reason: 'the enemy operative is on the same side of the door' };
+    if (weaponsOf(ctx, state, op, 'melee').length === 0)
+      return { ok: false, reason: 'operative has no melee weapon' };
+    return { ok: true };
+  },
+  perform(ctx, state, op, params) {
+    const weapon = params.meleeWeaponName ?? weaponsOf(ctx, state, op, 'melee')[0]?.name;
+    if (!weapon) return { ok: false, reason: 'operative has no melee weapon' };
+    // "For the duration of that action, those operatives are treated as being within each
+    // other's control range" — the same bypass Hatchway Fight uses.
     const r = startFight(ctx, state, op, weapon, params.meleeProfileName, params.targetId!, { hatchway: true });
     if (!r.ok) return r;
     advanceFight(ctx, state);
@@ -449,7 +601,8 @@ registerAction({
   type: 'mission',
   sourceText:
     'OPERATE HATCH 1AP: Open or close a hatchway that\'s access point is within the operative\'s control range... An operative cannot perform this action while within control range of an enemy operative, or if that hatchway is open and its access point is within an enemy operative\'s control range.',
-  available: (ctx, state) => terrain(ctx, state).parts.some((p) => p.role === 'accessPoint' && p.feature.kind.includes('hatch') !== false),
+  available: (ctx, state) =>
+    terrain(ctx, state).parts.some((p) => p.role === 'accessPoint' && p.opensAs !== 'breachWall'),
   check(ctx, state, op, params) {
     if (engaged(ctx, state, op)) return { ok: false, reason: 'within control range of an enemy operative' };
     const index = terrain(ctx, state);
@@ -489,13 +642,22 @@ registerAction({
   type: 'mission',
   sourceText:
     'BREACH 2AP: Open a closed breach point thats access point is within the operative\'s control range... Roll one D6 separately for each operative that\'s on the other side of the access point and has that access point within its control range: on a 4+, subtract 1 from that operative\'s APL stat until the end of its next activation and inflict damage on it equal to the dice result halved (rounding up).',
-  available: (ctx, state) => terrain(ctx, state).parts.some((p) => p.role === 'breachWall'),
+  available: (ctx, state) =>
+    terrain(ctx, state).parts.some(
+      (p) => p.role === 'accessPoint' && p.opensAs === 'breachWall' && p.state !== 'open',
+    ),
   check(ctx, state, op, params) {
     if (engaged(ctx, state, op)) return { ok: false, reason: 'within control range of an enemy operative' };
     const index = terrain(ctx, state);
     const part = params.partId ? index.byId.get(params.partId) : undefined;
     if (!part || part.role !== 'accessPoint') return { ok: false, reason: 'no breach point selected' };
+    if (part.opensAs !== 'breachWall') return { ok: false, reason: 'that access point is a hatchway, not a breach point' };
     if (part.state === 'open') return { ok: false, reason: 'that breach point is already open' };
+    // "Open a closed breach point that's access point is WITHIN THE OPERATIVE'S CONTROL RANGE."
+    const bc = card(ctx, op);
+    const bCentre = { x: (part.bounds.min.x + part.bounds.max.x) / 2, y: (part.bounds.min.y + part.bounds.max.y) / 2 };
+    if (baseGap(op.pos, bc.base, op.rot, bCentre, { shape: 'round', mm: 20 }, 0) > 1 + 1e-6)
+      return { ok: false, reason: 'the breach point is not within control range' };
     // "It cannot perform this action for less than 2AP during an activation/counteraction in
     // which it performed the Charge or Shoot action (or vice versa)."
     return { ok: true };
@@ -504,12 +666,15 @@ registerAction({
     const index = terrain(ctx, state);
     const part = index.byId.get(params.partId!)!;
     state.terrainState[part.id] = { state: 'open' };
-    for (const sibling of part.feature.parts) {
-      if (sibling.role === 'breachWall') state.terrainState[sibling.id] = { state: 'open' };
-    }
     const centre = { x: (part.bounds.min.x + part.bounds.max.x) / 2, y: (part.bounds.min.y + part.bounds.max.y) / 2 };
+    // "Roll one D6 separately for each operative that's ON THE OTHER SIDE of the access point
+    // and has that access point within its control range." The side test was missing, so the
+    // blast caught the breacher's own team standing behind it.
+    const side = acrossFrom(part, centre);
+    const mySide = side(op.pos);
     for (const other of aliveOperatives(state)) {
       if (other.id === op.id) continue;
+      if (side(other.pos) === mySide) continue;
       const oc = card(ctx, other);
       if (baseGap(other.pos, oc.base, other.rot, centre, { shape: 'round', mm: 20 }, 0) > 1 + 1e-6) continue;
       const roll = ctx.rng.d6();
@@ -531,6 +696,20 @@ registerAction({
   },
 });
 
+/**
+ * Which side of a wall a point is on.
+ *
+ * An access point is a rectangle set into a wall; its LONG axis runs along the wall, so the
+ * short axis is the direction that crosses it. Returns a sign, or 0 for a point on the line.
+ */
+function acrossFrom(part: { bounds: { min: Vec2; max: Vec2 } }, centre: Vec2): (p: Vec2) => number {
+  const w = part.bounds.max.x - part.bounds.min.x;
+  const h = part.bounds.max.y - part.bounds.min.y;
+  return w >= h
+    ? (p: Vec2) => Math.sign(p.y - centre.y) // wall runs along x, so crossing is in y
+    : (p: Vec2) => Math.sign(p.x - centre.x);
+}
+
 /** AP cost after hook modifiers; "the minimum is always 0AP". */
 export function actionCost(ctx: GameContext, state: GameState, op: OperativeState, action: ActionDef): number {
   const ev = ctx.hooks.emit('onActionCost', state, { state, operative: op, action: action.id, ap: action.ap });
@@ -547,7 +726,7 @@ export function actionCost(ctx: GameContext, state: GameState, op: OperativeStat
  * access point in range and `Breach` on an already-open point all come back `ok: true` and
  * are then rejected on dispatch. `actionAvailability` closes it.
  */
-export type ActionTargetKind = 'point' | 'operative' | 'part' | 'marker';
+export type ActionTargetKind = 'point' | 'operative' | 'part' | 'marker' | 'markerChoice';
 
 const NEEDS_TARGET: Record<string, ActionTargetKind> = {
   Reposition: 'point',
@@ -562,7 +741,125 @@ const NEEDS_TARGET: Record<string, ActionTargetKind> = {
   Breach: 'part',
   'Pick Up Marker': 'marker',
   'Place Marker': 'point',
+  // Crit-op and tac-op mission actions. Each takes `markerId`, and until this landed the UI
+  // rendered every one of them disabled: the branch below returns early on `needsTarget`, and
+  // `play.tsx` had no way to aim one, so it fell through to `def.check(ctx, state, op, {})`,
+  // whose reason is always "select an objective marker". Five of the nine crit ops therefore
+  // scored 0VP for a human player for the whole battle (docs/RULES-AUDIT.md W-05).
+  Secure: 'marker',
+  Loot: 'marker',
+  'Initiate Transmission': 'marker',
+  Download: 'marker',
+  'Compile Data': 'marker',
+  'Send Data': 'marker',
+  Reboot: 'marker',
+  'Plant Device': 'marker',
+  Retrieve: 'marker',
+  Clear: 'marker',
+  'Pick Up Intelligence': 'marker',
+  // "If the centre objective marker has it, move it to either player's objective marker (your
+  // choice)" — the param is `choice`, and on the other leg the rule gives no choice at all.
+  'Move Orb': 'markerChoice',
 };
+
+/** A marker as the player sees it named. */
+function markerLabel(m: MarkerState): string {
+  const owner = m.owner ? ` (${m.owner})` : '';
+  return m.kind === 'objective' ? `objective ${m.id}${owner}` : `${m.kind} ${m.id}${owner}`;
+}
+
+export interface ActionTargetOption {
+  id: string;
+  label: string;
+  params: ActionParams;
+}
+
+/**
+ * Every parameter set this action would accept right now, judged by the action's own `check`.
+ *
+ * The counterpart of `validTargets` for the parameterised actions. The UI must never decide
+ * which markers an action considers — Download refuses your own objectives, Reboot wants an
+ * inert one, Pick Up Intelligence an `intelligence` marker and Ammo Resupply an `ammoCache`.
+ * Only `check` knows, and CLAUDE.md forbids the UI re-implementing a core selector.
+ */
+export function actionTargetOptions(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  def: ActionDef,
+): ActionTargetOption[] {
+  switch (NEEDS_TARGET[def.id]) {
+    case 'marker':
+      return Object.values(state.markers)
+        .map((m) => ({ id: m.id, label: markerLabel(m), params: { markerId: m.id } as ActionParams }))
+        .filter((o) => def.check(ctx, state, op, o.params).ok);
+    case 'markerChoice': {
+      // "If a player's objective marker has it, move it to the centre objective marker" — no
+      // choice clause, unlike the centre leg's "(your choice)". `check` accepts `{}` on that
+      // leg and IGNORES a `choice` param, so enumerating markers there would offer three
+      // buttons that all do the same thing.
+      if (def.check(ctx, state, op, {}).ok)
+        return [{ id: '', label: 'the centre objective marker', params: {} }];
+      const out: ActionTargetOption[] = [];
+      for (const m of Object.values(state.markers)) {
+        if (m.kind !== 'objective') continue;
+        const params: ActionParams = { choice: m.id };
+        if (def.check(ctx, state, op, params).ok) out.push({ id: m.id, label: markerLabel(m), params });
+      }
+      return out;
+    }
+    case 'part':
+      return terrain(ctx, state)
+        .parts.filter((part) => part.role === 'accessPoint')
+        .map((part) => ({
+          id: part.id,
+          label: `access point ${part.id}`,
+          params: { partId: part.id } as ActionParams,
+        }))
+        .filter((o) => def.check(ctx, state, op, o.params).ok);
+    case 'operative':
+      return aliveOperatives(state)
+        .filter((o) => o.id !== op.id)
+        .map((o) => ({
+          id: o.id,
+          label: o.letter,
+          params: { targetOperativeId: o.id, targetId: o.id } as ActionParams,
+        }))
+        .filter((o) => def.check(ctx, state, op, o.params).ok);
+    default:
+      return [];
+  }
+}
+
+/**
+ * Why this action has no legal target, in the operative's terms rather than the parameter's.
+ *
+ * `check(ctx, state, op, {})` is the wrong thing to report: for Secure it says "select an
+ * objective marker" when the truth is "the active operative does not control that objective
+ * marker". Ask the nearest candidate of the right kind instead, and fall back to the bare form
+ * only when the killzone holds no candidate at all.
+ */
+function noTargetReason(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  def: ActionDef,
+  kind: ActionTargetKind,
+): string {
+  const near =
+    kind === 'part'
+      ? terrain(ctx, state)
+          .parts.filter((part) => part.role === 'accessPoint')
+          .map((part) => ({ params: { partId: part.id } as ActionParams, d: pointDistanceToPart(op.pos, part) }))
+      : Object.values(state.markers).map((m) => ({
+          params: (kind === 'markerChoice' ? { choice: m.id } : { markerId: m.id }) as ActionParams,
+          d: dist(op.pos, m.pos),
+        }));
+  near.sort((a, b) => a.d - b.d);
+  const first = near[0];
+  const verdict = first ? def.check(ctx, state, op, first.params) : def.check(ctx, state, op, {});
+  return verdict.reason ?? 'no legal target';
+}
 
 export interface ActionAvailability {
   def: ActionDef;
@@ -591,6 +888,20 @@ export function actionAvailability(ctx: GameContext, state: GameState, op: Opera
     // reason string. That was tried, and it disabled every weapon in the game for a whole
     // battle, because Shoot's reason is "weapon and target required" and the pattern did not
     // include it.
+    // A marker / access-point action CAN be judged before it is aimed, by asking `check` about
+    // every candidate. Doing so is what stops the ids added above from becoming enabled dead
+    // buttons — the failure Pick Up Marker showed for the whole of this branch's life: it is
+    // offered while the operative carries nothing and stands 12" from every marker, and one
+    // click writes "no such marker" into `state.rejected`.
+    //
+    // `point` and `operative` keep the early return. Movement is judged by `validateMove` and
+    // Shoot/Fight by `validTargets`, both of which the caller already runs, and enumerating
+    // every operative through `Shoot.check` on each render is not worth its cost.
+    if (needsTarget === 'marker' || needsTarget === 'markerChoice' || needsTarget === 'part') {
+      const opts = actionTargetOptions(ctx, state, op, row.def);
+      if (opts.length > 0) return { ...row, needsTarget };
+      return { ...row, ok: false, needsTarget, reason: noTargetReason(ctx, state, op, row.def, needsTarget) };
+    }
     if (needsTarget) return { ...row, needsTarget };
     if (!row.ok) return row;
     // A parameter-free action can be checked right now, and often fails: Guard while engaged,
@@ -606,7 +917,8 @@ export function availableActions(
   op: OperativeState,
 ): { def: ActionDef; ap: number; ok: boolean; reason?: string }[] {
   const out: { def: ActionDef; ap: number; ok: boolean; reason?: string }[] = [];
-  const apl = aplOf(ctx, state, op);
+  // The AP an activation may spend: the APL stat plus any granted free AP (D-100).
+  const apl = apBudgetOf(ctx, state, op);
   for (const def of allActions()) {
     if (def.available && !def.available(ctx, state, op)) continue;
     const ap = actionCost(ctx, state, op, def);

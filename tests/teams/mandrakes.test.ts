@@ -10,7 +10,17 @@ import { gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { advanceFight, startFight } from '../../src/core/sequences/fight.ts';
 import { advanceShoot, checkTarget, effectiveRules, smokeAreas, startShoot } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, aplOf, inflictDamage, moveOf, saveOf, hitOf, weaponsOf } from '../../src/core/state.ts';
+import {
+  aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
+  inflictDamage,
+  moveOf,
+  saveOf,
+  hitOf,
+  weaponsOf,
+} from '../../src/core/state.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import { teamData } from '../../src/teams/data.ts';
 import { rareRuleText, rareRuleTextFor } from '../../src/teams/helpers.ts';
@@ -969,10 +979,20 @@ describe('Strategy ploys', () => {
     const grant = s.effects.find((e) => e.rule === 'teamFreeAction' && e.operativeId === mate);
     expect(grant).toBeDefined();
     expect(grant!.data?.['only']).toEqual(['Dash']);
-    expect(s.operatives[mate]!.aplMods).toContain(1);
-    // The un-popped +1 is cleaned up at the Ready step, or every operative drifts to APL 3.
+    // "can perform a free Dash action" grants an action, not an APL stat change: the APL stat
+    // is untouched (docs/DECISIONS.md D-100) and the operative simply has one AP more to spend
+    // than its printed APL 2.
+    expect(s.operatives[mate]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, s.operatives[mate]!)).toBe(2);
+    expect(freeApOf(s, s.operatives[mate]!)).toBe(1);
+    expect(apBudgetOf(ctx, s, s.operatives[mate]!)).toBe(3);
+    // "After each enemy operative's activation, before the next operative is activated" — the
+    // offer does not outlive the turning point it was made in. An operative that is already
+    // expended never ends another activation for the core to expire the AP with, so the Ready
+    // step takes it back.
     ctx.hooks.emit('onReadyStep', s, { state: s, player: 'p1', cp: 0 });
-    expect(s.operatives[mate]!.aplMods).not.toContain(1);
+    expect(freeApOf(s, s.operatives[mate]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[mate]!)).toBe(2);
   });
 
   it('CREEPING HORROR only picks an operative that is WITHIN SHADOW with a Conceal order', () => {

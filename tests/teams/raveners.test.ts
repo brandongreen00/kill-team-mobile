@@ -13,6 +13,9 @@ import { effectiveRules, checkTarget } from '../../src/core/sequences/shoot.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import {
   aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
   inflictDamage,
   markerController,
   moveOf,
@@ -58,7 +61,7 @@ import {
   tunnelStepLegal,
 } from '../../src/teams/raveners/index.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
-import { act, activate, battle, mapById, opWith, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, teamContext } from './harness.ts';
 
 const DATA = teamData('raveners');
 /** `TeamData` does not surface `notes[]`, so the committed bytes are read straight from the file. */
@@ -925,7 +928,7 @@ describe('TREMORSCYTHE', () => {
     const foe = place(state, opWith(state, 'p2', CARD.warrior), 15, 11);
     isolate(state, [id, foe.id]);
     const def = getAction(CHARGE_HYPERSENSORY)!;
-    const params = { path: { points: [{ x: 14.2, y: 11 }] } };
+    const params = { path: { points: [chargeTo(ctx, state, op.id, foe.id)] } };
     expect(def.check(ctx, state, op, params).ok).toBe(false);
     expect(def.check(ctx, state, op, params).reason).toContain('Burrow action');
     op.actionsThisActivation.push(BURROW);
@@ -977,7 +980,7 @@ describe('WARRIOR › Instinctive Behaviour', () => {
     const { ctx, state } = setup();
     const warrior = state.operatives[opWith(state, 'p1', CARD.warrior)]!;
     const me = place(state, warrior.id, 12, 11);
-    const foe = place(state, opWith(state, 'p2', CARD.warrior), 12.9, 11);
+    const foe = place(state, opWith(state, 'p2', CARD.warrior), 13.7, 11); // engaged: 40mm bases need 1.575" of centres
     isolate(state, [me.id, foe.id]);
     const profile = profileOf(CARD.warrior, 'Scything talons');
     const read = (): boolean =>
@@ -1167,20 +1170,29 @@ describe('Strategy ploys', () => {
     expect(roll(s).map((g) => g.mode)).toEqual(['any']);
   });
 
-  it('WRITHE OUT OF SIGHT grants a free Burrow (and a free Reposition within 2" of your TUNNEL), then pops its own +1 APL', () => {
+  it('WRITHE OUT OF SIGHT grants a free Burrow (and a free Reposition within 2" of your TUNNEL)', () => {
+    expect(ruleText(SP.writheOutOfSight)).toContain('can immediately perform a free Burrow action');
     const { ctx, state } = setup();
     tunnelAt(state, 'p1', [{ x: 12, y: 11 }]);
     const op = place(state, opWith(state, 'p1', CARD.warrior), 13, 11);
     isolate(state, [op.id]);
     const s = useGambit(ctx, state, SP.writheOutOfSight, { operativeId: op.id });
     const me = s.operatives[op.id]!;
-    expect(me.aplMods).toContain(1);
+    // A free action is an action, not an APL stat change: the printed APL 3 is untouched and
+    // the operative has a fourth AP to spend on the named actions (docs/DECISIONS.md D-100).
+    expect(me.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, me)).toBe(3);
+    expect(freeApOf(s, me)).toBe(1);
+    expect(apBudgetOf(ctx, s, me)).toBe(4);
     const eff = s.effects.find((e) => e.rule === 'teamFreeAction' && e.operativeId === me.id)!;
     expect(eff.data?.['only']).toEqual([BURROW, 'Reposition', 'Fall Back']);
-    // The upkeep pops the +1 the engine never pops (the Corsair Aeldari Raiders precedent).
+    // The ploy is a STRATEGIC GAMBIT, so the AP waits for the operative's own activation and
+    // expires with it — this module does not have to take it back.
     const after = reduce(activate(ctx, s, me.id), { t: 'EndActivation', operativeId: me.id }, ctx).state;
-    expect(after.operatives[me.id]!.aplMods.filter((m) => m === 1)).toHaveLength(0);
-    expect(REMINDER_ONLY[`${SP.writheOutOfSight}.fallBack`]).toContain('ONE extra AP');
+    expect(freeApOf(after, after.operatives[me.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, after, after.operatives[me.id]!)).toBe(3);
+    // "it can immediately perform a free Fall Back" is one AP against a 2AP action.
+    expect(REMINDER_ONLY[`${SP.writheOutOfSight}.fallBack`]).toContain('Fall Back costs 2AP');
   });
 
   it('TUNNEL LURKERS: a Conceal-order operative on your TUNNEL stops being a valid target', () => {
@@ -1261,10 +1273,13 @@ describe('Firefight ploys', () => {
   it('SLITHERING EVASION: "Perform the Charge action while within control range of an enemy operative"', () => {
     const { ctx, state } = setup();
     const me = place(state, opWith(state, 'p1', CARD.warrior), 12, 11);
-    const foe = place(state, opWith(state, 'p2', CARD.warrior), 12.9, 11);
+    // Engaged with `me` (40mm bases: 1.575" of centres to touch, 1" of control range on top),
+    // but off the line to `other` — the ploy permits Charging while ALREADY engaged, and that
+    // is not permission to walk over the model in the way.
+    const foe = place(state, opWith(state, 'p2', CARD.warrior), 12, 12.8);
     const other = place(state, opWith(state, 'p2', CARD.prime), 17, 11);
     isolate(state, [me.id, foe.id, other.id]);
-    const params = { path: { points: [{ x: 15.4, y: 11 }] } };
+    const params = { path: { points: [{ x: 15.3, y: 11 }] } };
     // The universal Charge refuses: "already within control range of an enemy operative".
     expect(getAction('Charge')!.check(ctx, state, me, params).ok).toBe(false);
     let s = activate(ctx, state, me.id);

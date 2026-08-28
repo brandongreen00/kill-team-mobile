@@ -13,6 +13,8 @@ import { reduce } from '../src/core/reducer.ts';
 import { defaultDecisionOption } from '../src/core/decisions.ts';
 import { SeededRng } from '../src/core/rng.ts';
 import { makeCard, testMap } from './fixtures.ts';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import type { GameState, PlayerId } from '../src/core/types.ts';
 
 function ctxWithCards(seed = 4) {
@@ -51,6 +53,38 @@ function drainDecisions(state: GameState, ctx: ReturnType<typeof ctxWithCards>, 
   }
   return s;
 }
+
+describe('the shell registers every kill team', () => {
+  it('a context carrying all 48 modules builds, and every one registers its hooks', async () => {
+    const { ALL_TEAM_MODULES } = await import('../src/teams/index.ts');
+    // The shell shipped `BATCH_1` for six batches, so 40 of the 48 selectable teams played a
+    // whole battle with no faction rules, ploys, equipment or unique actions — silently,
+    // because `rebuildHooks` optional-chains a module it cannot find. Nothing failed; the
+    // rules simply were not there.
+    expect(ALL_TEAM_MODULES).toHaveLength(48);
+    const ctx = createGameContext({
+      rng: new SeededRng(1),
+      datacards: [makeCard({ id: 'test.trooper', name: 'TROOPER' })],
+      maps: [testMap()],
+      teams: ALL_TEAM_MODULES,
+    });
+    expect(ctx.hooks).toBeTruthy();
+    // Every module is reachable by the id a roster stores.
+    const ids = new Set(ALL_TEAM_MODULES.map((mod) => mod.id));
+    expect(ids.size).toBe(48);
+  });
+
+  it('every team the roster builder offers has a module behind it', async () => {
+    const { ALL_TEAM_MODULES } = await import('../src/teams/index.ts');
+    const index = JSON.parse(
+      readFileSync(join(process.cwd(), 'data', 'teams', '_index.json'), 'utf8'),
+    ) as { id: string }[] | { teams: { id: string }[] };
+    const selectable = (Array.isArray(index) ? index : index.teams).map((t) => t.id);
+    const have = new Set(ALL_TEAM_MODULES.map((mod) => mod.id));
+    const missing = selectable.filter((id) => !have.has(id));
+    expect(missing).toEqual([]);
+  });
+});
 
 describe('assembled game context', () => {
   it('lets any rule layer claim a decision kind the kernel has never heard of', () => {

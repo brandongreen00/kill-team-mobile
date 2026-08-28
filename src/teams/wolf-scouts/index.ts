@@ -665,10 +665,12 @@ function fenrisianWolf(reg: HookRegistry, T: TeamHooks): void {
     const wolf = T.friendlies(ev.state).find((o) => o.datacardId === FENRISIAN_WOLF);
     if (!wolf || currentApl(T, ev.state, wolf) < 2) return;
     if (!useOncePerBattle(ev.state, `wolf-scouts.pounce:${T.player}`)) return;
-    // D-015 defers the free action into the wolf's next activation, which is also where the
-    // "-1 APL and it cannot perform any of the aforementioned actions" penalty lands. The two
-    // cancel in APL terms, so the activation keeps two AP: the free one is restricted TO
-    // Charge/Fall Back/Reposition, and the wolf's own AP is barred FROM them.
+    // D-013 defers the free action into the wolf's next activation, which is also where the
+    // "-1 APL and it cannot perform any of the aforementioned actions" penalty lands. They are
+    // two different currencies (D-100): the -1 is a real APL STAT change — so the wolf also
+    // counts as APL 1 wherever the stat is read, marker control included — while the free action
+    // is AP granted outside that budget. Net, the activation still has two AP: the wolf's own,
+    // barred FROM Charge/Fall Back/Reposition, and the free one, restricted TO them.
     const threshold = Math.max(0, currentApl(T, ev.state, wolf) - 1);
     wolf.aplMods.push(-1);
     effect(ev.state, {

@@ -18,7 +18,7 @@ import type { Intent } from '../core/intents.ts';
 import { getAction } from '../core/actions.ts';
 import { reduce } from '../core/reducer.ts';
 import type { Rng } from '../core/rng.ts';
-import { aliveOperatives, aplOf } from '../core/state.ts';
+import { aliveOperatives, apBudgetOf } from '../core/state.ts';
 import type { GameState, OperativeState, PlayerId } from '../core/types.ts';
 import { operativeValue, shotPlans, shotValue } from './combat.ts';
 import { startingWounds } from '../core/state.ts';
@@ -208,7 +208,7 @@ export class TacticalAgent implements Agent {
     const steps: PlanStep[] = [];
     let score = this.score(ctx, current, player);
     const op = current.operatives[opId];
-    const maxSteps = op ? Math.min(4, Math.max(1, aplOf(ctx, current, op))) : 2;
+    const maxSteps = op ? Math.min(4, Math.max(1, apBudgetOf(ctx, current, op))) : 2;
 
     for (let depth = 0; depth < maxSteps; depth++) {
       if (this.exhausted()) break;

@@ -3,7 +3,7 @@
  * Every interactive choice (rerolls, retention, allocation, strike/block, cover-vs-obscured,
  * On Guard interrupts, ploy offers) comes back through here.
  */
-import { applyObscured, applyRetention, classify, rerollDie, successes, type DicePool } from './dice.ts';
+import { applyObscured, applyRetention, classify, rerollDie, successes, type ClassifyOpts, type DicePool } from './dice.ts';
 import type { GameContext } from './context.ts';
 import { findProfile, hitOf, log, recordRoll, saveOf, weaponsOf } from './state.ts';
 import { advanceShoot, applyAllocation, effectiveRules } from './sequences/shoot.ts';
@@ -113,16 +113,29 @@ export function resolveDecision(
   return { ok: true };
 }
 
-function poolFor(state: GameState, decision: PendingDecision): { pool: DicePool; hit: number } | null {
+function poolFor(
+  state: GameState,
+  decision: PendingDecision,
+): { pool: DicePool; hit: number; classify: ClassifyOpts } | null {
   const hit = Number(decision.ctx?.['hit'] ?? 4);
+  // "Your successes equal to or greater than x are critical successes." A re-rolled dice is
+  // still a dice from this weapon, so it is graded against the same critical threshold the
+  // first roll used. Without carrying these, a re-rolled 5 on a Lethal 5+ weapon came back
+  // as a normal success — worth `dmgN` instead of `dmgC`, and invisible to Devastating.
+  const lethal = decision.ctx?.['lethal'];
+  const critOn = decision.ctx?.['critOn'];
+  const classify: ClassifyOpts = {
+    ...(typeof lethal === 'number' ? { lethal } : {}),
+    ...(typeof critOn === 'number' ? { critOn } : {}),
+  };
   const seq = state.sequence;
   if (!seq) return null;
   if (seq.kind === 'shoot') {
     const isDefence = decision.who === seq.defender && seq.step === 'defenceRerolls';
-    return { pool: isDefence ? seq.defence : seq.attack, hit };
+    return { pool: isDefence ? seq.defence : seq.attack, hit, classify };
   }
   const side = (decision.ctx?.['side'] ?? 'attacker') as 'attacker' | 'defender';
-  return { pool: side === 'attacker' ? seq.attackerPool : seq.defenderPool, hit };
+  return { pool: side === 'attacker' ? seq.attackerPool : seq.defenderPool, hit, classify };
 }
 
 function applyReroll(
@@ -135,13 +148,17 @@ function applyReroll(
   if (optionId === 'keep') return;
   const found = poolFor(state, decision);
   if (!found) return;
-  const { pool, hit } = found;
+  const { pool, hit, classify } = found;
   const cp = Number(decision.ctx?.['cp'] ?? 0);
   if (cp > 0) {
     const team = state.teams[decision.who];
     if (team.cp < cp) return;
     team.cp -= cp;
-    team.ploysUsedTP.push(String(decision.ctx?.['grantId'] ?? 'commandReroll'));
+    const grantId = String(decision.ctx?.['grantId'] ?? 'commandReroll');
+    // "Other than Command Re-roll, each player cannot use each ploy more than once per
+    // turning point." A team's own CP-priced re-roll grant IS capped; Command Re-roll is
+    // not, so recording it here locked it out for the rest of the turning point.
+    if (!grantId.startsWith('commandReroll')) team.ploysUsedTP.push(grantId);
     log(state, { kind: 'ploy', player: decision.who, text: `Command Re-roll (${cp}CP)` });
   }
 
@@ -163,7 +180,7 @@ function applyReroll(
     if (!die || !die.rolled) continue;
     const v = ctx.rng.d6();
     rolled.push(v);
-    rerollDie(die, v, hit);
+    rerollDie(die, v, hit, classify);
   }
   if (rolled.length > 0) {
     recordRoll(state, 'reroll', rolled, decision.who, String(decision.ctx?.['grantId'] ?? ''));

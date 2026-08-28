@@ -418,7 +418,7 @@ function popTimedApl(state: GameState, op: OperativeState): void {
   dropEffects(state, (e) => due.includes(e));
 }
 
-/** The rules of this team that hand out a D-015 free action, so the bonus AP can be un-done. */
+/** The rules of this team that hand out a free action, for the stale-grant sweep below. */
 const FREE_ACTION_SOURCES: ReadonlySet<string> = new Set<string>([FP.relentlessInPursuit, AB.medic]);
 
 // ---------------------------------------------------------------------------
@@ -1019,17 +1019,20 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   });
 
   // =========================================================================
-  // Bookkeeping: timed APL and spent free-action grants
+  // Bookkeeping: timed APL, and free-action grants nobody spent
   // =========================================================================
+  // The APL stat changes are the module's own to undo — `aplMods` has no owner in the core, so
+  // an "until the end of its next activation" +1 or -1 that is not popped here would stand for
+  // the rest of the battle. A free action needs no such pop: it is AP, not a stat change, and
+  // `expireActivationEffects` drops it as soon as the recipient's activation ends.
   const bookkeeping = actionTextOf(CARD.scionVox, ACT.signal);
   reg.on('onActivationEnd', T.bindText('inquisitorial-agent.aplBookkeeping', bookkeeping, 90), (ev) => {
     if (ev.operative.player !== T.player) return;
     popTimedApl(ev.state, ev.operative);
-    clearSpentGrant(ev.state, ev.operative);
   });
   reg.on('onReadyStep', T.bindText('inquisitorial-agent.aplBookkeeping', bookkeeping, 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) clearSpentGrant(ev.state, o);
+    for (const o of T.friendlies(ev.state)) dropStaleGrant(ev.state, o);
   });
 }
 
@@ -1052,15 +1055,18 @@ function currentProfileOf(T: TeamHooks, state: GameState, op: OperativeState): W
 }
 
 /**
- * `grantFreeAction` models a free action as one extra AP (D-015) by pushing +1 into `aplMods`,
- * which the engine never pops. This team hands that grant to an operative that has not
- * activated yet (RELENTLESS IN PURSUIT, Medic!), so the bonus is un-done once its window closes.
+ * A free action is one AP outside the APL budget, and it expires with the activation it was
+ * given for (docs/DECISIONS.md D-100) — the core does that itself. Neither of this team's
+ * grants is aimed at the operative that is activating, though: RELENTLESS IN PURSUIT names a
+ * friendly chasing an enemy and Medic! saves whichever operative was about to be
+ * incapacitated, and an operative that is already expended never ends another activation this
+ * turning point. Nothing would take that AP back, so it would still be waiting when the
+ * operative activates in the NEXT turning point, long after "immediately". The Ready step is
+ * where that window closes. The source check keeps the sweep to grants this team made.
  */
-function clearSpentGrant(state: GameState, op: OperativeState): void {
+function dropStaleGrant(state: GameState, op: OperativeState): void {
   const eff = effectOn(state, op.id, FREE_ACTION_RULE);
   if (!eff || !FREE_ACTION_SOURCES.has(eff.source.id)) return;
-  const at = op.aplMods.lastIndexOf(1);
-  if (at >= 0) op.aplMods.splice(at, 1);
   dropEffects(state, (e) => e === eff);
 }
 

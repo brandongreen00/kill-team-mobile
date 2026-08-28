@@ -13,20 +13,24 @@
  * Core rules › Reposition: "This must be done in one or more straight-line increments, and
  * increments are always rounded up to the nearest inch."
  */
-import { dist, baseGap } from './geometry.ts';
+import { dist, baseGap, baseRadius, basesOverlap } from './geometry.ts';
 import { terrain, type GameContext } from './context.ts';
 import {
   accessibleCrossings,
   baseBlockedByTerrain,
   baseTouchesHazardous,
+  featureIdsSupporting,
+  hasType,
   obstructingCrossings,
+  occupancyCapExceeded,
+  partsSupporting,
+  pathBlockedByTerrain,
   surfaceAt,
   surfacesAt,
-  hasType,
   type TerrainIndex,
 } from './terrain.ts';
 import { aliveOperatives, card, inControlRange, moveOf, body } from './state.ts';
-import { isVisible } from './visibility.ts';
+import { isVisible, withinControlRange } from './visibility.ts';
 import type { MovePath } from './intents.ts';
 import type { GameState, OperativeState, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
@@ -60,6 +64,8 @@ export interface MoveOptions {
   noClimb?: boolean;
   /** Charge / Fall Back may move within enemy control range. */
   mayEnterEnemyControlRange?: boolean;
+  /** "It can move through enemy operatives" — a printed permission, never the default. */
+  mayMoveThroughEnemies?: boolean;
   /** Charge must finish within control range; Reposition/Dash must not. */
   mustFinishEngaged?: boolean;
   mustNotFinishEngaged?: boolean;
@@ -107,6 +113,8 @@ export function validateMove(
   const index = terrain(ctx, state);
   const c = card(ctx, op);
   const budget = moveBudget(ctx, state, op, opts);
+  opts = movePermissions(ctx, state, op, opts);
+  const probes = enemyProbes(ctx, state, op, opts);
   const legs: MoveLeg[] = [];
   let cur: Vec2 = { ...op.pos };
   let curZ = op.z;
@@ -126,20 +134,42 @@ export function validateMove(
 
   if (path.points.length === 0) return fail('no movement declared');
 
+  const lastIndex = path.points.length - 1;
   for (let i = 0; i < path.points.length; i++) {
     const next = path.points[i]!;
     const horizontal = dist(cur, next);
-    const declaredZ = path.zs?.[i];
+    const startZ = curZ;
+    // `path.endZ` is the elevation the operative finishes at, so it is the declared z of the
+    // LAST waypoint. Applied after the loop instead, as it used to be, the climb or drop it
+    // asks for cost nothing and skipped every restriction: a Reposition with
+    // `{ points: [1" away], endZ: 3 }` was a free 3" ascent onto a rooftop, and a Dash could
+    // do it too, despite "it cannot climb during this move".
+    const declaredZ = path.zs?.[i] ?? (i === lastIndex ? path.endZ : undefined);
     const targetZ = declaredZ !== undefined ? declaredZ : closestSurface(index, next, curZ);
     const dz = targetZ - curZ;
 
     // --- vertical handling ------------------------------------------------
-    if (dz > 1e-6) {
+    if (dz > 1e-6 && isJumpLanding(index, cur, curZ, next, targetZ)) {
+      // "When jumping to a terrain feature, you can ignore its height difference of 1" or
+      // less." Ignored means ignored: no 2" minimum, and no climb — so a Dash, which "cannot
+      // climb during this move, but it can drop and jump", may do it.
+      legs.push({
+        from: cur,
+        to: next,
+        fromZ: curZ,
+        toZ: targetZ,
+        kind: 'jump',
+        raw: dz,
+        charged: 0,
+        note: 'height difference ignored',
+      });
+      curZ = targetZ;
+    } else if (dz > 1e-6) {
       // Climb. "An operative must be within 1" horizontally and 3" vertically of terrain
       // that's visible to them to climb it."
       if (opts.noClimb) return fail(`${opts.action} cannot climb`);
       if (dz > 3 + 1e-6) return fail(`cannot climb ${dz.toFixed(1)}" (more than 3" vertically)`);
-      if (horizontal > 1 + 1e-6 && !isJumpLanding(index, cur, curZ, next, targetZ))
+      if (horizontal > 1 + 1e-6)
         return fail('must be within 1" horizontally of the terrain to climb it');
       const vertical = ladderAvailable(index, ctx, state, op, cur, next) && !ladderUsed ? 1 : Math.max(2, dz);
       if (vertical === 1) ladderUsed = true;
@@ -182,7 +212,16 @@ export function validateMove(
     if (horizontal > 1e-6) {
       // Accessible terrain: "counts as an additional 1"... Only the centre of an operative's
       // base needs to move through Accessible terrain."
-      const access = accessibleCrossings(index, cur, next, curZ);
+      // "Operatives can move THROUGH Accessible terrain … but it counts as an additional 1" to
+      // do so." The floor an operative is standing on is not terrain it moves through, and
+      // `segmentCrossesPoly` answers true whenever an endpoint is inside the polygon — so
+      // every increment along a Bheta-Decima gantry (whose floors are Accessible) was charged
+      // the extra inch, and a 3" Dash along one cost 4".
+      const standingOn = new Set<string>([
+        ...partsSupporting(index, cur, startZ).map((p) => p.id),
+        ...partsSupporting(index, next, curZ).map((p) => p.id),
+      ]);
+      const access = accessibleCrossings(index, cur, next, curZ).filter((p) => !standingOn.has(p.id));
       const obstructing = obstructingCrossings(index, cur, next);
       const extra = (access.length > 0 ? 1 : 0) + (obstructing.length > 0 ? 1 : 0);
       const charged = ceil1(horizontal + extra);
@@ -201,13 +240,46 @@ export function validateMove(
       // Wall terrain: "Operatives cannot move over or through Wall terrain."
       const wall = index.walls.find((w) => w.solid !== false && crossesWall(w, cur, next) && !isOpenAccessPoint(w));
       if (wall) return fail('cannot move through Wall terrain');
+
+      // "Operatives cannot move through terrain — they must move around, climb over or
+      // drop/jump off it." An increment that also changes level IS the climb over / drop off,
+      // so the feature being climbed or dropped from does not block itself.
+      const changesLevel = Math.abs(curZ - startZ) > 1e-6;
+      const exempt = changesLevel
+        ? new Set([
+            ...featureIdsSupporting(index, cur, startZ),
+            ...featureIdsSupporting(index, next, curZ),
+          ])
+        : undefined;
+      const through = pathBlockedByTerrain(
+        index,
+        cur,
+        next,
+        Math.max(startZ, curZ),
+        c.base,
+        heightOf(ctx, op),
+        exempt,
+      );
+      if (through)
+        return fail(`cannot move through ${through.role ?? 'terrain'} (${through.types.join('+')})`);
+
+      // Core rules › Bases: "Friendly operatives can move through other friendly operatives
+      // (the base and the miniature), but not through enemy operatives."
+      // Core rules › Reposition: "It cannot move within control range of an enemy operative,
+      // unless one or more other friendly operatives are already within control range of that
+      // enemy operative, in which case it can move within control range of that enemy
+      // operative but cannot finish the move there."
+      // Both were checked only where the move ENDED, so an operative walked over an enemy's
+      // base and through its control range and the reducer raised no objection.
+      const blockedBy = enemyOnTheWay(ctx, state, op, cur, next, Math.max(startZ, curZ), opts, probes);
+      if (blockedBy) return fail(blockedBy);
     }
 
     cur = { ...next };
   }
 
   // --- final position legality -------------------------------------------
-  const finalZ = path.endZ ?? curZ;
+  const finalZ = curZ;
   const rot = path.endRot ?? op.rot;
   const blocked = baseBlockedByTerrain(index, cur, c.base, rot, finalZ, heightOf(ctx, op));
   if (blocked) return fail(`cannot finish on ${blocked.role ?? 'terrain'} (${blocked.types.join('+')})`);
@@ -215,12 +287,21 @@ export function validateMove(
   if (finalZ > 1e-6 && !canStandAt(index, cur, finalZ))
     return fail('operatives can only finish a move on Vantage terrain');
   if (outOfBoard(state, cur, op, ctx, rot)) return fail('bases cannot be over the edge of the killzone');
+  const overfull = occupancyCapExceeded(index, aliveOperatives(state), op.id, op.player, cur, finalZ);
+  if (overfull)
+    return fail(
+      `no more than ${overfull.maxOperatives} friendly operative can be on the highest upper level of that terrain feature at once`,
+    );
 
   for (const other of aliveOperatives(state)) {
     if (other.id === op.id) continue;
     const oc = card(ctx, other);
     if (Math.abs(other.z - finalZ) > 1.0) continue;
-    if (baseGap(cur, c.base, rot, other.pos, oc.base, other.rot) < -1e-4)
+    // Core rules › Bases: "The sides of different bases can touch, but a base cannot be placed
+    // on another." `baseGap` clamps at zero on both of its branches, so the old
+    // `< -1e-4` spelling could never fire — `canDeployAt` was moved to `basesOverlap` and
+    // movement was not, so deployment and movement disagreed about one rule (D-050).
+    if (basesOverlap(cur, c.base, rot, other.pos, oc.base, other.rot))
       return fail('a base cannot be placed on another');
   }
 
@@ -241,6 +322,142 @@ export function validateMove(
     return fail(`cannot move more than ${opts.hardCap}" while counteracting`);
 
   return { ok: true, legs, total, budget, endPos: cur, endZ: finalZ };
+}
+
+/**
+ * Walk one increment past every living enemy. Returns a reason, or undefined.
+ *
+ * The base test is absolute — no move may pass through an enemy's base. The control-range
+ * test is waived for a Charge and a Fall Back ("it may move within control range of an enemy
+ * operative but cannot finish there"), and for the printed exception: an enemy some other
+ * friendly operative is already engaged with may be moved past.
+ */
+/** Fold in any printed permission a rule grants this move (`onMovePermissions`). */
+function movePermissions(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  opts: MoveOptions,
+): MoveOptions {
+  const ev = ctx.hooks.emit('onMovePermissions', state, {
+    state,
+    operative: op,
+    action: opts.action,
+    mayEnterEnemyControlRange: opts.mayEnterEnemyControlRange ?? false,
+    mayMoveThroughEnemies: opts.mayMoveThroughEnemies ?? false,
+  });
+  if (ev.mayEnterEnemyControlRange === (opts.mayEnterEnemyControlRange ?? false) &&
+      ev.mayMoveThroughEnemies === (opts.mayMoveThroughEnemies ?? false))
+    return opts;
+  return {
+    ...opts,
+    mayEnterEnemyControlRange: ev.mayEnterEnemyControlRange,
+    mayMoveThroughEnemies: ev.mayMoveThroughEnemies,
+  };
+}
+
+function enemyOnTheWay(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  from: Vec2,
+  to: Vec2,
+  z: number,
+  opts: MoveOptions,
+  probes: EnemyProbe[],
+): string | undefined {
+  if (probes.length === 0) return undefined;
+  const c = card(ctx, op);
+  const rOp = baseRadius(c.base);
+
+  let index: TerrainIndex | undefined;
+
+  for (const { operative: enemy, base: eBase, radius: rEnemy } of probes) {
+    const ec = { base: eBase };
+    // Cheap rejection first: how close does this increment ever get to the enemy? Almost
+    // every enemy is nowhere near almost every increment, and the control-range test below
+    // costs two visibility sweeps.
+    const near = distancePointToSegment(enemy.pos, from, to);
+    const reach = rOp + rEnemy + 1 + 0.05;
+    if (near > reach) continue;
+
+    const span = dist(from, to);
+    // 0.2" is under half the smallest base radius in the game, so a base cannot slip past an
+    // enemy between two samples.
+    const steps = Math.max(1, Math.ceil(span / 0.2));
+    const eBody = body(ctx, enemy);
+    let startedEngagedWith: boolean | undefined;
+    const startedEngaged = (e: OperativeState): boolean =>
+      (startedEngagedWith ??= inControlRange(ctx, state, op, e));
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const p = { x: from.x + (to.x - from.x) * t, y: from.y + (to.y - from.y) * t };
+      if (dist(p, enemy.pos) > reach) continue;
+      // "Friendly operatives can move through other friendly operatives (the base and the
+      // miniature), but not through enemy operatives." Dead for the same reason, and D-050
+      // counted only the end-of-move site: this is the BASE half of D-072, which has never
+      // fired either, so `mayMoveThroughEnemies` has never had anything to permit.
+      if (!opts.mayMoveThroughEnemies && basesOverlap(p, c.base, op.rot, enemy.pos, ec.base, enemy.rot))
+        return `cannot move through ${enemy.letter}'s base`;
+      if (opts.mayEnterEnemyControlRange) continue;
+      // "It cannot MOVE WITHIN control range" — an enemy it is already within control range
+      // of when the move starts is not one it moves within control range of. Without this an
+      // operative that is legitimately engaged (Fall Back, or a rule that lets it Dash out of
+      // combat) could not move at all, because the start of its own path failed the test.
+      // Worked out only once an increment actually enters a control range: it is another
+      // visibility sweep, and almost no increment ever gets here.
+      if (startedEngaged(enemy)) break;
+      index ??= terrain(ctx, state);
+      const here = { id: op.id, pos: p, z, rot: op.rot, base: c.base, height: body(ctx, op).height };
+      if (!withinControlRange(index, here, eBody)) continue;
+      // "…unless one or more other friendly operatives are ALREADY within control range of
+      // that enemy operative" — measured before this move, which is the state we are in.
+      // Worked out only once an increment actually enters the control range, because it is
+      // another visibility sweep per friendly operative.
+      const screened = aliveOperatives(state, op.player).some(
+        (f) => f.id !== op.id && inControlRange(ctx, state, f, enemy),
+      );
+      if (screened) break; // this enemy may be moved past for the whole increment
+      return `cannot move within control range of ${enemy.letter}`;
+    }
+  }
+  return undefined;
+}
+
+/**
+ * Everything about one enemy that does not change during a move, worked out once.
+ *
+ * `validateMove` runs thousands of times per AI decision and `enemyOnTheWay` once per
+ * increment inside it, so rebuilding the enemy list and looking up every datacard per
+ * increment showed up in the 300ms decision budget.
+ */
+interface EnemyProbe {
+  operative: OperativeState;
+  base: ReturnType<typeof card>['base'];
+  radius: number;
+}
+
+function enemyProbes(ctx: GameContext, state: GameState, op: OperativeState, opts: MoveOptions): EnemyProbe[] {
+  if (opts.mayMoveThroughEnemies && opts.mayEnterEnemyControlRange) return [];
+  const out: EnemyProbe[] = [];
+  for (const e of aliveOperatives(state, otherPlayer(op.player))) {
+    if (e.id === op.id) continue;
+    const base = card(ctx, e).base;
+    out.push({ operative: e, base, radius: baseRadius(base) });
+  }
+  return out;
+}
+
+/** Shortest distance from a point to a line segment. */
+function distancePointToSegment(p: Vec2, a: Vec2, b: Vec2): number {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len2 = dx * dx + dy * dy;
+  if (len2 < 1e-12) return dist(p, a);
+  const t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2));
+  const qx = p.x - (a.x + t * dx);
+  const qy = p.y - (a.y + t * dy);
+  return Math.sqrt(qx * qx + qy * qy);
 }
 
 export function moveBudget(ctx: GameContext, state: GameState, op: OperativeState, opts: MoveOptions): number {
@@ -345,9 +562,22 @@ function outOfBoard(state: GameState, p: Vec2, op: OperativeState, ctx: GameCont
   return p.x - r < -1e-6 || p.y - r < -1e-6 || p.x + r > w + 1e-6 || p.y + r > h + 1e-6;
 }
 
+/** One cell of a reachability field. `from` is the key of the cell it was reached from. */
+export interface ReachCell {
+  pos: Vec2;
+  z: number;
+  cost: number;
+  from?: string;
+}
+
+const cellKey = (p: Vec2, z: number): string => `${p.x.toFixed(1)},${p.y.toFixed(1)},${z.toFixed(1)}`;
+
 /**
  * Reachability field for the AI and for "can this operative reach X?" previews.
- * 0.5" grid flood fill respecting climb/drop/jump/Wall/Accessible/hazardous.
+ * 0.5" grid flood fill respecting climb/drop/jump/Wall/Accessible/hazardous, and — like
+ * `validateMove` — the rule that operatives cannot move through terrain. Each cell records
+ * the cell it was reached from, so `routePath` can turn the field back into a legal path
+ * that goes AROUND terrain rather than through it.
  */
 export function reachableCells(
   ctx: GameContext,
@@ -355,14 +585,14 @@ export function reachableCells(
   op: OperativeState,
   budget: number,
   step = 0.5,
-): Map<string, { pos: Vec2; z: number; cost: number }> {
+): Map<string, ReachCell> {
   const index = terrain(ctx, state);
   const c = card(ctx, op);
   const h = heightOf(ctx, op);
-  const out = new Map<string, { pos: Vec2; z: number; cost: number }>();
-  const key = (p: Vec2, z: number) => `${p.x.toFixed(1)},${p.y.toFixed(1)},${z.toFixed(1)}`;
-  const start = { pos: { ...op.pos }, z: op.z, cost: 0 };
-  const queue: { pos: Vec2; z: number; cost: number }[] = [start];
+  const out = new Map<string, ReachCell>();
+  const key = cellKey;
+  const start: ReachCell = { pos: { ...op.pos }, z: op.z, cost: 0 };
+  const queue: ReachCell[] = [start];
   out.set(key(start.pos, start.z), start);
   const dirs = [
     [step, 0],
@@ -390,15 +620,117 @@ export function reachableCells(
       if (baseBlockedByTerrain(index, np, c.base, op.rot, nz, h)) continue;
       if (baseTouchesHazardous(index, np, c.base, op.rot)) continue;
       if (index.walls.some((w) => w.solid !== false && crossesWall(w, cur.pos, np) && !isOpenAccessPoint(w))) continue;
+      const exempt =
+        Math.abs(dz) > 1e-6
+          ? new Set([...featureIdsSupporting(index, cur.pos, cur.z), ...featureIdsSupporting(index, np, nz)])
+          : undefined;
+      if (pathBlockedByTerrain(index, cur.pos, np, Math.max(cur.z, nz), c.base, h, exempt)) continue;
       const k = key(np, nz);
       const prev = out.get(k);
       if (prev && prev.cost <= cost) continue;
-      const node = { pos: np, z: nz, cost };
+      const node: ReachCell = { pos: np, z: nz, cost, from: key(cur.pos, cur.z) };
       out.set(k, node);
       queue.push(node);
     }
   }
   return out;
+}
+
+/**
+ * Turn a reachability-field cell back into a `MovePath` that goes AROUND terrain.
+ *
+ * Both the AI and the board's move preview used to declare a single straight-line increment to
+ * the destination. That was only ever legal because nothing checked the increment against the
+ * terrain it crossed; now that it does, a destination the flood fill reached by walking round a
+ * wall needs the path that actually walks round it.
+ *
+ * The parent chain is followed back to the operative, then greedily simplified: consecutive
+ * steps at the same level are merged into one increment for as far as the straight line between
+ * them stays legal. Fewer increments matter — "increments are always rounded up to the nearest
+ * inch", so every extra corner can cost up to another inch.
+ *
+ * Returns null if the cell is the operative's own, or its chain is broken.
+ */
+export function routePath(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  field: Map<string, ReachCell>,
+  target: ReachCell,
+): MovePath | null {
+  const chain: ReachCell[] = [];
+  let node: ReachCell | undefined = target;
+  const seen = new Set<string>();
+  while (node) {
+    const k = cellKey(node.pos, node.z);
+    if (seen.has(k)) break; // defensive: a cycle would hang the reconstruction
+    seen.add(k);
+    chain.push(node);
+    node = node.from ? field.get(node.from) : undefined;
+  }
+  chain.reverse();
+  if (chain.length < 2) return null;
+
+  const index = terrain(ctx, state);
+  const c = card(ctx, op);
+  const h = heightOf(ctx, op);
+  const straight = (a: ReachCell, b: ReachCell): boolean => {
+    if (Math.abs(a.z - b.z) > 1e-6) return false; // a level change is its own increment
+    if (index.walls.some((w) => w.solid !== false && crossesWall(w, a.pos, b.pos) && !isOpenAccessPoint(w)))
+      return false;
+    return pathBlockedByTerrain(index, a.pos, b.pos, a.z, c.base, h) === null;
+  };
+
+  const points: Vec2[] = [];
+  const zs: number[] = [];
+  let i = 0;
+  while (i < chain.length - 1) {
+    let j = i + 1;
+    for (let k = chain.length - 1; k > i + 1; k--) {
+      if (straight(chain[i]!, chain[k]!)) {
+        j = k;
+        break;
+      }
+    }
+    points.push({ ...chain[j]!.pos });
+    zs.push(chain[j]!.z);
+    i = j;
+  }
+  if (points.length === 0) return null;
+  return { points, zs };
+}
+
+/**
+ * The cheapest legal path to a destination, or null. Convenience wrapper for callers that have
+ * a point rather than a field cell: the field is flooded once and the nearest reached cell to
+ * `dest` within half a step is routed to.
+ */
+export function routeTo(
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  dest: Vec2,
+  budget: number,
+  step = 0.5,
+): MovePath | null {
+  const field = reachableCells(ctx, state, op, budget, step);
+  let best: ReachCell | undefined;
+  let bestD = Infinity;
+  for (const cell of field.values()) {
+    const d = dist(cell.pos, dest);
+    if (d < bestD) {
+      bestD = d;
+      best = cell;
+    }
+  }
+  if (!best || bestD > step) return null;
+  const routed = routePath(ctx, state, op, field, best);
+  if (!routed) return null;
+  // The caller asked for `dest`, not the cell centre the field happened to land on.
+  const points = [...routed.points];
+  const zs = [...(routed.zs ?? [])];
+  points[points.length - 1] = { ...dest };
+  return { points, ...(zs.length > 0 ? { zs } : {}) };
 }
 
 /** Human-readable diagnostics for the UI, naming the rule that blocked the move. */

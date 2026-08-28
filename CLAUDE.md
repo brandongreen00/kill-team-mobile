@@ -23,6 +23,7 @@ shoot/fight → scoring parity; it is deleted in the final QA phase.
 | `pnpm test` | Vitest unit + acceptance tests |
 | `pnpm lint:rng` | Fails if `Math.random` appears outside `src/core/rng.ts` |
 | `pnpm e2e` | Playwright smoke on phone + desktop viewports |
+| `pnpm ui:review` | Re-capture `docs/ui-review/` by playing a battle at three viewports |
 | `pnpm maps:extract` | Re-extract `data/maps/**` from the official Approved Ops card PNGs |
 | `pnpm maps:overlay` | Render extraction overlays into `docs/maps/overlays/` for visual review |
 | `pnpm teams:scrape` / `pnpm teams:normalise` | Rebuild `data/teams/**` from Wahapedia (build-time only) |
@@ -93,7 +94,7 @@ there, never a new place to navigate to. The UI may read any non-mutating `(ctx,
 selector from `src/core/**` and may never re-implement one — if the answer is not exported, add
 a named selector to the core in the same change (`canDeployAt`, `actionAvailability`,
 `deployToAct`, `gambitToAct` are the four that exist for this reason). Re-capture
-`docs/ui-review/` and look at it.
+`docs/ui-review/` with `pnpm ui:review` and look at it.
 
 ## Rules invariants worth remembering
 

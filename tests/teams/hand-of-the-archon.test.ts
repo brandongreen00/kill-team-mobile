@@ -9,7 +9,7 @@ import { reduce } from '../../src/core/reducer.ts';
 import { readyStep } from '../../src/core/phases.ts';
 import { advanceFight, startFight } from '../../src/core/sequences/fight.ts';
 import { checkTarget, effectiveRules, startShoot, advanceShoot } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, aplOf, inflictDamage, markerController, moveOf } from '../../src/core/state.ts';
+import { aliveOperatives, apBudgetOf, aplOf, freeApOf, inflictDamage, markerController, moveOf } from '../../src/core/state.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import { teamData } from '../../src/teams/data.ts';
 import { rareRuleTextFor } from '../../src/teams/helpers.ts';
@@ -395,6 +395,7 @@ describe('Invigorations — "You can spend friendly operatives’ Pain tokens on
   });
 
   it('Vitalised Surge: "can immediately perform a free Dash action" after incapacitating an enemy', () => {
+    expect(INVIGORATION_TEXT['vitalised-surge']).toContain('can immediately perform a free Dash action');
     const { ctx, state } = setup();
     const killer = state.operatives[opWith(state, 'p1', C.flayer)]!;
     const foe = state.operatives[opWith(state, 'p2', C.agent)]!;
@@ -402,13 +403,30 @@ describe('Invigorations — "You can spend friendly operatives’ Pain tokens on
     place(state, killer.id, 10, 10);
     place(state, foe.id, 10.7, 10);
     givePain(state, killer, 1); // one token: Dark Animus (which needs two) stays out of the way
-    const s = activate(ctx, state, killer.id);
+    let s = activate(ctx, state, killer.id);
     s.operatives[foe.id]!.wounds = 1;
     inflictDamage(ctx, s, s.operatives[foe.id]!, 4, 'other'); // Power From Pain pays the second
-    // D-015: the free action is one extra AP restricted to a Dash.
-    expect(aplOf(ctx, s, s.operatives[killer.id]!)).toBe(3);
+    // D-100: "a free Dash action" is free AP, not an APL stat change — the APL stat that marker
+    // control totals is untouched and the activation gets a third AP restricted to the Dash.
+    expect(s.operatives[killer.id]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, s.operatives[killer.id]!)).toBe(2);
+    expect(freeApOf(s, s.operatives[killer.id]!)).toBe(1);
+    expect(apBudgetOf(ctx, s, s.operatives[killer.id]!)).toBe(3);
     expect(getAction(SURGE_DASH)!.available!(ctx, s, s.operatives[killer.id]!)).toBe(true);
     expect(painOf(s, s.operatives[killer.id]!)).toBe(1);
+    // And the extra AP is really spendable: with both of its own AP gone the Dash still goes
+    // through the reducer's AP gate, which reads `apBudgetOf`. The Dash happens "after the
+    // operative incapacitates an enemy operative AND THAT ENEMY OPERATIVE IS REMOVED FROM THE
+    // KILLZONE", so the corpse is off the board and no longer pins the killer in control range.
+    s.operatives[foe.id]!.removed = true;
+    s.operatives[killer.id]!.apSpent = 2;
+    const dash = act(ctx, s, killer.id, SURGE_DASH, { path: { points: [{ x: 11.5, y: 10 }] } });
+    expect(dash.ok).toBe(true);
+    s = dash.state;
+    expect(s.operatives[killer.id]!.apSpent).toBe(3);
+    // "Immediately" — it does not survive the activation it was earned in.
+    s = reduce(s, { t: 'EndActivation', operativeId: killer.id }, ctx).state;
+    expect(freeApOf(s, s.operatives[killer.id]!)).toBe(0);
   });
 
   it('Stimulated Senses: "re-roll any of your dice results of one result" after rolling attack dice', () => {

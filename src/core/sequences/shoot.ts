@@ -19,13 +19,14 @@ import {
   countNormals,
   devastatingDamage,
   hasRule,
-  lethalThreshold,
+  lethalOpts,
   newPool,
   piercingValue,
   rerollDie,
   retentionOptions,
   ruleOf,
   successes,
+  type ClassifyOpts,
   type Die,
   type DicePool,
 } from '../dice.ts';
@@ -77,7 +78,14 @@ export const COMMAND_REROLL: Omit<RerollGrant, 'player'> = {
 export interface TargetCheck {
   valid: boolean;
   reason?: string;
+  /** The cover state that decides the cover SAVE. */
   inCover: boolean;
+  /**
+   * Cover as the VALID TARGET test sees it. Seek / Seek Light and the Vantage Light denial
+   * narrow this and leave `inCover` alone: "Whilst this can allow such operatives to be
+   * targeted (assuming they're visible), it doesn't remove their cover save (if any)."
+   */
+  inCoverForTargeting: boolean;
   obscured: boolean;
   mustChoose: boolean;
   vantageAccurate: number;
@@ -89,6 +97,29 @@ export function smokeAreas(state: GameState): SmokeArea[] {
   return Object.values(state.markers)
     .filter((m) => m.kind === 'smoke')
     .map((m) => ({ markerId: m.id, centre: m.pos, z0: m.z, radius: 1 }));
+}
+
+/**
+ * Is this target wholly within an area of smoke, and far enough away for it to matter?
+ *
+ * Every defence roll in the game asks this, and almost every board has no smoke on it at
+ * all, so the marker scan is a plain loop that bails before `smokeAreas` allocates.
+ */
+export function smokeSoftensPiercing(
+  ctx: GameContext,
+  state: GameState,
+  target: OperativeState,
+  distance: number,
+): boolean {
+  if (distance <= 2 + 1e-6) return false; // "unless they're within 2" of each other"
+  let any = false;
+  for (const m of Object.values(state.markers)) {
+    if (m.kind === 'smoke') {
+      any = true;
+      break;
+    }
+  }
+  return any && whollyWithinSmoke(body(ctx, target), smokeAreas(state));
 }
 
 /**
@@ -112,6 +143,7 @@ export function checkTarget(
   const base: TargetCheck = {
     valid: false,
     inCover: false,
+    inCoverForTargeting: false,
     obscured: false,
     mustChoose: false,
     vantageAccurate: 0,
@@ -156,8 +188,12 @@ export function checkTarget(
 
   const cover = coverAndObscured(index, view, t, {
     ignoreCoverTerrain: hookEv.ignoreCoverTerrain,
+    ...(hookEv.denyCover ? { denyCover: true } : {}),
     vantageDeniesLightCover: vantageDeniesLight,
-    ignore: vantageIgnoreFilter(index, view, t),
+    // "Thirdly, for the purposes of OBSCURED, ignore Heavy terrain connected to Vantage
+    // terrain…" — obscured only. Passed as `ignore` it also deleted the cover that same
+    // Heavy part was giving.
+    ignoreForObscured: vantageIgnoreFilter(index, view, t),
   });
 
   // Smoke grenades create a dynamic obscuring area.
@@ -167,17 +203,20 @@ export function checkTarget(
   const result: TargetCheck = {
     valid: true,
     inCover: cover.inCover,
+    inCoverForTargeting: cover.inCoverForTargeting,
     obscured: cover.obscured || smokeObscure,
     mustChoose: cover.mustChoose,
     vantageAccurate: vAcc,
-    vantageImprovedCover: vantageDeniesLight && cover.inCover,
+    // "…it doesn't remove their cover save, and the defender can retain it as a critical
+    // success instead, or retain one additional cover save."
+    vantageImprovedCover: vantageDeniesLight && cover.inCover && !cover.inCoverForTargeting,
     distance,
   };
 
   if (!hookEv.valid) return { ...result, valid: false, reason: hookEv.reason ?? 'not a valid target' };
 
   // Conceal: valid only if visible AND not in cover.
-  if (target.order === 'conceal' && result.inCover && !opts.pointBlank)
+  if (target.order === 'conceal' && result.inCoverForTargeting && !opts.pointBlank)
     return { ...result, valid: false, reason: 'target has a Conceal order and is in cover' };
 
   // Shoot while engaged is illegal unless this is a point-blank shot (On Guard).
@@ -365,6 +404,7 @@ export function startShoot(
     attackerId: attacker.id,
     targetId: target.id,
     queue: secondaryTargets(ctx, state, attacker, target, profile, rules).map((o) => o.id),
+    ...(ruleOf(rules, 'Blast') ? { spread: 'blast' as const } : ruleOf(rules, 'Torrent') ? { spread: 'torrent' as const } : {}),
     resolvedTargets: [],
     weaponName,
     ...(profileName ? { profileName } : {}),
@@ -386,6 +426,12 @@ export function startShoot(
     free: opts.free ?? false,
   };
   state.sequence = seq;
+  // Heavy reads this: "it cannot move in an activation or counteraction in which it used this
+  // weapon".
+  (attacker.weaponsUsedThisActivation ??= []).push({
+    weapon: weaponName,
+    ...(profileName ? { profile: profileName } : {}),
+  });
   log(state, {
     kind: 'action',
     player: attacker.player,
@@ -504,7 +550,13 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
         const next = grants.find((g) => !seq.usedRerolls.includes(g.id));
         if (next) {
           seq.usedRerolls.push(next.id);
-          const opts = rerollDecision(state, next, seq.attack, hitStat(ctx, state, attacker, profile, seq));
+          const opts = rerollDecision(
+            state,
+            next,
+            seq.attack,
+            hitStat(ctx, state, attacker, profile, seq),
+            lethalOpts(rules),
+          );
           if (opts) return;
           break;
         }
@@ -563,7 +615,16 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
 
       case 'rollDefence': {
         const retainedCrits = countCrits(seq.attack);
-        const piercing = piercingValue(rules, retainedCrits);
+        // "...whenever an operative is shooting an enemy operative wholly within an area of
+        // smoke, weapons with the Piercing 2 or Piercing Crits 2 weapon rule have the
+        // Piercing 1 or Piercing Crits 1 weapon rule (respectively) instead, unless they're
+        // within 2" of each other."  It downgrades the RULE, so it can never hand back a die
+        // Piercing did not take: a Piercing Crits 2 shot with no retained critical pierces 0
+        // in smoke exactly as it does out of it.  Modelled here rather than in the equipment
+        // module because it is a property of the smoke, not of who bought the grenade — an
+        // operative standing in the enemy's smoke gets it too.
+        const softened = smokeSoftensPiercing(ctx, state, target, actx.distance);
+        const piercing = piercingValue(rules, retainedCrits, softened ? 1 : Infinity);
         const ev = ctx.hooks.emit('onDefenceDice', state, {
           state,
           ctx: actx,
@@ -606,7 +667,9 @@ export function advanceShoot(ctx: GameContext, state: GameState): void {
       case 'defenceRerolls': {
         const grants: RerollGrant[] = [];
         const defTeam = state.teams[seq.defender];
-        if (defTeam.cp >= 1 && !defTeam.ploysUsedTP.includes('commandReroll:defence'))
+        // Command Re-roll is the one ploy with no once-per-turning-point cap; `usedRerolls`
+        // still stops it being offered twice against the same roll.
+        if (defTeam.cp >= 1)
           grants.push({ ...COMMAND_REROLL, id: 'commandReroll:defence', player: seq.defender });
         const ev = ctx.hooks.emit('onDefenceDice', state, {
           state,
@@ -706,11 +769,6 @@ function hitStat(
   return hitOf(ctx, state, attacker, profile, (seq.pointBlank ? -1 : 0) + extra);
 }
 
-function lethalOpts(rules: WeaponRule[]) {
-  const l = lethalThreshold(rules);
-  return l !== undefined ? { lethal: l } : {};
-}
-
 function attackContext(
   ctx: GameContext,
   state: GameState,
@@ -755,14 +813,19 @@ function attackRerollGrants(
   if (hasRule(rules, 'Relentless'))
     grants.push({ id: 'relentless', label: 'Relentless: re-roll any of your attack dice', mode: 'any' });
   const team = state.teams[seq.attacker];
-  if (team.cp >= 1 && !team.ploysUsedTP.includes('commandReroll:attack'))
-    grants.push({ ...COMMAND_REROLL, id: 'commandReroll:attack', player: seq.attacker });
+  if (team.cp >= 1) grants.push({ ...COMMAND_REROLL, id: 'commandReroll:attack', player: seq.attacker });
   const ev = ctx.hooks.emit('onRollAttack', state, { state, ctx: actx, dice: [], rerolls: grants });
   return ev.rerolls;
 }
 
 /** Push a reroll decision; returns true when a decision was raised. */
-function rerollDecision(state: GameState, grant: RerollGrant, pool: DicePool, hit: number): boolean {
+function rerollDecision(
+  state: GameState,
+  grant: RerollGrant,
+  pool: DicePool,
+  hit: number,
+  classify: ClassifyOpts = {},
+): boolean {
   const candidates = pool.dice.filter((d) => d.rolled && d.state !== 'discarded');
   if (candidates.length === 0) return false;
   let options: { id: string; label: string; data?: Record<string, unknown> }[];
@@ -792,7 +855,9 @@ function rerollDecision(state: GameState, grant: RerollGrant, pool: DicePool, hi
     prompt: grant.label,
     optional: true,
     options: [...options, { id: 'keep', label: 'Keep the dice as rolled' }],
-    ctx: { grantId: grant.id, mode: grant.mode, hit, cp: grant.cp ?? 0, pool: pool === undefined ? '' : '' },
+    // The classification travels with the decision: a re-rolled dice belongs to the same
+    // weapon, so it is graded against the same critical threshold (Lethal x+ / a rare rule).
+    ctx: { grantId: grant.id, mode: grant.mode, hit, cp: grant.cp ?? 0, ...classify },
     ...(grant.sourceText ? { sourceText: grant.sourceText } : {}),
   });
   return true;
@@ -806,8 +871,16 @@ function push(state: GameState, d: PendingDecision): void {
 export function applyAllocation(seq: ShootSequence, unblockedCrits: number, unblockedNormals: number): void {
   const critDice = seq.attack.dice.filter((d) => d.state === 'crit');
   const normalDice = seq.attack.dice.filter((d) => d.state === 'normal');
-  for (let i = unblockedCrits; i < critDice.length; i++) critDice[i]!.state = 'blocked';
-  for (let i = unblockedNormals; i < normalDice.length; i++) normalDice[i]!.state = 'blocked';
+  // Remember what each blocked die was retained as: Devastating x and Stun both key off
+  // RETAINED critical successes, and 'blocked' alone cannot tell a crit from a normal.
+  for (let i = unblockedCrits; i < critDice.length; i++) {
+    critDice[i]!.state = 'blocked';
+    critDice[i]!.blockedFrom = 'crit';
+  }
+  for (let i = unblockedNormals; i < normalDice.length; i++) {
+    normalDice[i]!.state = 'blocked';
+    normalDice[i]!.blockedFrom = 'normal';
+  }
 }
 
 function resolveAttackDice(
@@ -824,7 +897,9 @@ function resolveAttackDice(
 
   // Devastating x fires on RETAINED crits, before blocking is considered, and the success is
   // not discarded ("it can still be resolved later in the sequence").
-  const retainedCrits = seq.attack.dice.filter((d) => d.state === 'crit' || d.state === 'blocked').length;
+  const retainedCrits = seq.attack.dice.filter(
+    (d) => d.state === 'crit' || (d.state === 'blocked' && d.blockedFrom === 'crit'),
+  ).length;
   const dev = devastatingDamage(rules, retainedCrits);
   if (dev.perCrit > 0) {
     const totalDev = dev.perCrit * retainedCrits;
@@ -892,7 +967,6 @@ function nextTarget(ctx: GameContext, state: GameState, seq: ShootSequence): voi
     nextTarget(ctx, state, seq);
     return;
   }
-  // Blast/Torrent secondaries inherit cover/obscured from the primary.
   seq.targetId = nextId;
   seq.secondary = true;
   seq.defender = next.player;
@@ -900,7 +974,20 @@ function nextTarget(ctx: GameContext, state: GameState, seq: ShootSequence): voi
   seq.defence = newPool();
   seq.usedRerolls = [];
   seq.usedRetention = [];
-  seq.coverChoiceMade = true;
+  if (seq.spread === 'torrent' && profile) {
+    // Torrent's secondaries are each "a valid target as normal" — the rule says nothing about
+    // inheriting the primary's cover, and inheriting it handed a secondary standing in the
+    // open a free retained success (or took one away from a secondary behind a barricade).
+    const check = checkTarget(ctx, state, attacker, next, profile, rules, { secondary: true });
+    seq.inCover = check.inCover;
+    seq.obscured = check.obscured;
+    seq.vantageAccurate = check.vantageAccurate;
+    seq.vantageImprovedCover = check.vantageImprovedCover;
+    seq.coverChoiceMade = !check.mustChoose;
+  } else {
+    // Blast: "Secondary targets are in cover and obscured if the primary target was."
+    seq.coverChoiceMade = true;
+  }
   seq.step = 'rollAttack';
   log(state, { kind: 'action', player: seq.attacker, text: `Secondary target: ${next.letter}` });
 }

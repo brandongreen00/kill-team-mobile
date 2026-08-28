@@ -35,9 +35,10 @@ const TOL_IN = 0.05;
 const PENDING: Record<string, string> = {
   // D-014 dashed-rectangle recall. The piece's outline was missed, so it was cut out of the
   // raised level it tucks under and is a fragment of that silhouette instead of a rectangle.
+  // volkus-6.K came good when the cards were re-extracted with the fixed `dashed_rects()`
+  // (2026-08-23) and its entry is deleted, as this file's own honesty test requires.
   'volkus-3.K': 'D-014 recall: cut out of large ruin D instead of its own dashed rectangle',
   'volkus-5.J': 'D-014 recall: cut out of large ruin C instead of its own dashed rectangle',
-  'volkus-6.K': 'D-014 recall: cut out of stronghold A instead of its own dashed rectangle',
   'volkus-4.I': 'traced as an 8-vertex blob; the piece is printed touching its neighbour',
   // Detected dashed rectangles whose box is the OUTER extent of the dash stroke, so the
   // footprint comes out ~0.08" (2px) large on both axes.

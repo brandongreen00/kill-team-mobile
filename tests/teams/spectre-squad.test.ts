@@ -7,7 +7,7 @@ import { availableActions, getAction } from '../../src/core/actions.ts';
 import { counteractCandidates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { checkTarget, effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { hitOf, inflictDamage, markerController } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage, markerController } from '../../src/core/state.ts';
 import type { AttackContext } from '../../src/core/hooks.ts';
 import type { GameState, OperativeState, PlayerId, WeaponProfile } from '../../src/core/types.ts';
 import { teamData } from '../../src/teams/data.ts';
@@ -333,7 +333,14 @@ describe('Elite Fieldcraft — the interrupt', () => {
     const granted = s.effects.filter((e) => e.rule === 'teamFreeAction' && e.player === 'p1');
     expect(granted).toHaveLength(1);
     expect(granted[0]!.data?.['only']).toEqual(['Shoot', FIELDCRAFT_SHOOT, 'Dash', 'Reposition']);
-    expect(s.operatives[granted[0]!.operativeId!]!.aplMods).toContain(1);
+    // "…can immediately perform a free Shoot, Dash or Reposition action": AP outside the APL
+    // budget (D-100), so the interrupting operative's printed APL 2 is untouched and it gets a
+    // third point to spend on that activation.
+    const chosen = s.operatives[granted[0]!.operativeId!]!;
+    expect(chosen.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, chosen)).toBe(2);
+    expect(freeApOf(s, chosen)).toBe(1);
+    expect(apBudgetOf(ctx, s, chosen)).toBe(3);
   });
 
   it('"You cannot interrupt each enemy operative\'s activation more than once per activation"', () => {

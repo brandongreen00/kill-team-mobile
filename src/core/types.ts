@@ -92,6 +92,13 @@ export interface TerrainPart {
   z1: number;
   types: TerrainType[];
   role?: PartRole;
+  /**
+   * For a `accessPoint` part: which action opens it. The extractor has always written this and
+   * the core never declared it, so `Operate Hatch` gated on `feature.kind.includes('hatch')`
+   * (kinds are `gallowdark.wallA3`) and `Breach` gated on a `breachWall` role that appears in
+   * no map file — neither action could be performed on any map.
+   */
+  opensAs?: 'hatch' | 'breachWall';
   /** Doors, hatches and breach points toggle at runtime. */
   state?: 'open' | 'closed';
   /**
@@ -104,6 +111,15 @@ export interface TerrainPart {
   standable?: boolean;
   /** Does a base moving at ground level collide with this part? */
   solid?: boolean;
+  /**
+   * Cap on FRIENDLY operatives standing on this part at once, per player.
+   *
+   * Killzones § Stronghold H: "You cannot have more than one friendly operative on the highest
+   * upper level of Stronghold B at once… (this means an enemy operative cannot be prevented
+   * from moving onto or being set up on the other side)." Written by `tools/maps/terrain.py`;
+   * the engine must never hard-code which level that is.
+   */
+  maxOperatives?: number;
 }
 
 export interface TerrainFeature {
@@ -305,6 +321,14 @@ export interface OperativeState {
   apSpent: number;
   /** Actions performed this activation, for action restrictions. */
   actionsThisActivation: string[];
+  /**
+   * Weapon names used this activation or counteraction. Heavy needs it: "An operative cannot
+   * use this weapon in an activation or counteraction in which it moved, AND IT CANNOT MOVE IN
+   * AN ACTIVATION OR COUNTERACTION IN WHICH IT USED THIS WEAPON." Only the first half was
+   * implemented, so shoot-and-scoot — the thing the rule exists to forbid — was legal with all
+   * 127 Heavy profiles.
+   */
+  weaponsUsedThisActivation?: { weapon: string; profile?: string }[];
   onGuard: boolean;
   /** Set when a Guard interrupt is used; blocks counteract for the TP. */
   guardSpentTP: number | null;

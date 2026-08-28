@@ -5,9 +5,10 @@
 import { actionCost, availableActions, getAction } from './actions.ts';
 import { resolveDecision } from './decisions.ts';
 import { rebuildHooks, terrain, type GameContext } from './context.ts';
-import {
+import { inControlRange,
   aliveOperatives,
   aplOf,
+  apBudgetOf,
   card,
   log,
   recordRoll,
@@ -23,6 +24,7 @@ import {
   endTurningPoint,
   expireActivationEffects,
   gambitOptions,
+  gambitToAct,
   guardInterruptCandidates,
   readyStep,
   rollInitiative,
@@ -32,7 +34,7 @@ import {
 import { advanceShoot, startShoot } from './sequences/shoot.ts';
 import { advanceFight, startFight } from './sequences/fight.ts';
 import { baseWhollyWithin, baseGap, basesOverlap } from './geometry.ts';
-import { baseTouchesHazardous } from './terrain.ts';
+import { baseTouchesHazardous, occupancyCapExceeded, surfaceAt } from './terrain.ts';
 import type { Intent } from './intents.ts';
 import type { GameState, KillzoneMap, OperativeState, PlayerId, Vec2 } from './types.ts';
 import { otherPlayer } from './types.ts';
@@ -64,6 +66,17 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
   switch (intent.t) {
     // ---- setup -----------------------------------------------------------
     case 'RollOff': {
+      // Approved Ops owns the per-turning-point roll-off: `beginInitiative` rolls, opens the
+      // initiative-card window and ends with the WINNER deciding who has initiative. Rolling
+      // here as well meant one RollOff intent consumed four dice, recorded two initiative
+      // rolls, and spent the once-per-battle roll-off modifiers (Rune of Prophecy, Mastermind)
+      // on the throw that was then discarded — and because the phantom roll overwrote
+      // `state.initiative`, the real roll-off's tie-break read the phantom's winner instead of
+      // whoever held initiative last turning point.
+      if (next.phase !== 'setup' && ctx.beginInitiative) {
+        ctx.beginInitiative(ctx, next);
+        return ok(next);
+      }
       const r = rollInitiative(ctx, next);
       if (r.winner === null) {
         // Setup roll-off re-rolls ties; the per-TP roll-off does not (Approved Ops).
@@ -76,9 +89,6 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
         if (next.phase !== 'setup') next.initiative = r.winner;
         log(next, { kind: 'system', text: `${r.winner} wins the roll-off` });
       }
-      // Approved Ops: starting with the roll-off LOSER, players alternate playing an
-      // initiative card or passing until both pass.
-      if (next.phase !== 'setup') ctx.beginInitiative?.(ctx, next);
       if (next.phase === 'setup') next.setup.step = 'chooseDropZone';
       return ok(next);
     }
@@ -185,7 +195,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       if (!op) return fail('no such operative');
       if (op.player !== intent.player) return fail('not your operative');
       const rot = intent.rotDeg ?? 0;
-      const legal = canDeployAt(ctx, next, op, intent.pos, rot);
+      const legal = canDeployAt(ctx, next, op, intent.pos, rot, intent.z);
       if (!legal.ok) return fail(legal.reason ?? 'that operative cannot be set up there');
       op.pos = { ...intent.pos };
       op.rot = rot;
@@ -248,6 +258,11 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
 
     // ---- strategy phase --------------------------------------------------
     case 'UseGambit': {
+      // "Starting with the player who has initiative, each player alternates either using a
+      // STRATEGIC GAMBIT or passing. The players repeat this process until they have both
+      // passed in succession." The order lived only in `gambitToAct`, which the UI consulted
+      // and nothing else did, so an out-of-turn gambit was simply applied.
+      if (gambitToAct(next) !== intent.player) return fail('it is not your turn to use a STRATEGIC GAMBIT');
       const opts = gambitOptions(ctx, next, intent.player);
       if (!opts.some((o) => o.id === intent.gambitId))
         return fail(`'${intent.gambitId}' is not an available STRATEGIC GAMBIT right now`);
@@ -272,6 +287,7 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
     }
 
     case 'PassGambit': {
+      if (gambitToAct(next) !== intent.player) return fail('it is not your turn to use a STRATEGIC GAMBIT');
       next.teams[intent.player].passedGambit = true;
       if (bothPassedGambit(next)) {
         next.phase = 'firefight';
@@ -300,6 +316,9 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       op.onGuard = false;
       op.apSpent = 0;
       op.actionsThisActivation = [];
+      op.weaponsUsedThisActivation = [];
+      delete next.opState['guardInterruptUsedFor'];
+      delete next.opState['counteractDeclined'];
       next.activeOperativeId = op.id;
       next.activePlayer = intent.player;
       next.firefightStep = 'performActions';
@@ -319,6 +338,9 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       op.apSpent = 0;
       // "Counteracting isn't an activation... action restrictions won't apply."
       op.actionsThisActivation = [];
+      op.weaponsUsedThisActivation = [];
+      delete next.opState['guardInterruptUsedFor'];
+      delete next.opState['counteractDeclined'];
       next.activeOperativeId = op.id;
       next.activePlayer = intent.player;
       next.opState['counteract'] = { operativeId: op.id, actionsUsed: 0 };
@@ -328,8 +350,11 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
 
     case 'DeclineCounteract': {
       next.activePlayer = otherPlayer(intent.player);
-      for (const o of aliveOperatives(next, intent.player)) o.counteractedThisTP = true;
-      log(next, { kind: 'action', player: intent.player, text: 'declines to counteract' });
+      // Only THIS window is declined. Marking every operative as having counteracted — which
+      // is what this did — gave up every counteract for the rest of the turning point, though
+      // the only budget the rule imposes is one per operative, spent by counteracting.
+      next.opState['counteractDeclined'] = { player: intent.player, at: next.activationsThisTP };
+      log(next, { kind: 'action', player: intent.player, text: 'declines to counteract this window' });
       return ok(next);
     }
 
@@ -353,7 +378,9 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       // 1AP action (excluding Guard) for free" — ONE action, not an unlimited free turn.
       if (counteracting && Number(counteract?.['actionsUsed'] ?? 0) > 0)
         return fail('a counteracting operative can only perform one action');
-      if (!counteracting && op.apSpent + ap > aplOf(ctx, next, op))
+      // `apBudgetOf`, not `aplOf`: a granted free action adds AP without being an APL stat
+      // change, so it is not subject to the +-1 clamp (D-100).
+      if (!counteracting && op.apSpent + ap > apBudgetOf(ctx, next, op))
         return fail(`not enough AP for ${def.name}`);
       const hookEv = ctx.hooks.emit('canPerformAction', next, { state: next, operative: op, action: def.id, allowed: true });
       if (!hookEv.allowed) return fail(hookEv.reason ?? `${def.name} is not allowed`);
@@ -434,20 +461,24 @@ export function reduce(state: GameState, intent: Intent, ctx: GameContext): Redu
       if (!op.onGuard) return fail('that operative is not on guard');
       const interrupted = next.activeOperativeId ? next.operatives[next.activeOperativeId] : undefined;
       if (!interrupted || interrupted.player === intent.player) return fail('nothing to interrupt');
+      // "ONCE DURING EACH ENEMY OPERATIVE'S ACTIVATION, after that enemy operative performs an
+      // action, you can interrupt that activation…" The only bookkeeping was per operative, so
+      // a three-strong overwatch net fired three free Shoots into one 2AP activation.
+      if (next.opState['guardInterruptUsedFor']?.['operativeId'] === interrupted.id)
+        return fail('the On Guard window for this activation has already been used');
+      next.opState['guardInterruptUsedFor'] = { operativeId: interrupted.id };
       op.onGuard = false;
       op.guardSpentTP = next.turningPoint; // "cannot counteract during the turning point"
       const params = intent.params ?? {};
       if (intent.action === 'Shoot') {
         const weapon = params.weaponName ?? '';
         const targetId = params.targetId ?? interrupted.id;
-        const pointBlank = baseGap(
-          op.pos,
-          card(ctx, op).base,
-          op.rot,
-          next.operatives[targetId]!.pos,
-          card(ctx, next.operatives[targetId]!).base,
-          next.operatives[targetId]!.rot,
-        ) <= 1;
+        // Point-blank is a CONTROL RANGE question, not a distance one: "visible to and within
+        // 1"". Measuring raw base-to-base let an on-guard operative shoot point-blank through
+        // a Gallowdark wall — they are 0.365" thick, so almost any pair hugging opposite faces
+        // is inside 1" — and a point-blank shot skips the Conceal-in-cover target check too.
+        const targetOp = next.operatives[targetId];
+        const pointBlank = Boolean(targetOp) && inControlRange(ctx, next, op, targetOp!);
         const r = startShoot(ctx, next, op, weapon, params.profileName, targetId, { pointBlank, free: true });
         if (!r.ok) return fail(r.reason ?? 'the interrupt shot is not possible');
         if (pointBlank) {
@@ -553,6 +584,7 @@ export function canDeployAt(
   op: OperativeState,
   pos: Vec2,
   rotDeg = 0,
+  z?: number,
 ): { ok: boolean; reason?: string } {
   const zoneKey = state.setup.dropZone[op.player] ?? op.player;
   const zone = state.map.dropZones[zoneKey];
@@ -566,15 +598,21 @@ export function canDeployAt(
     if (other.id === op.id || other.pos.x < -50) continue;
     const oc = card(ctx, other);
     // `basesOverlap`, NOT `baseGap(...) < -1e-4`. `baseGap` clamps at zero
-    // (geometry.ts › baseGap), so that comparison can never be true and this guard has never
-    // fired — two operatives could be set up on the same square inch. Eight further copies of
-    // the same dead comparison remain in `movement.ts` and seven team modules; they are left
-    // alone deliberately, because switching them changes what is a legal END POSITION for a
-    // move and sixteen rules tests currently encode the permissive behaviour. See
-    // docs/DECISIONS.md.
+    // (geometry.ts › baseGap), so that comparison can never be true. Deployment was moved to
+    // this spelling first and movement followed in W-34 (docs/DECISIONS.md D-102), so the two
+    // finally agree about one rule.
     if (basesOverlap(pos, dc.base, rotDeg, other.pos, oc.base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
+  // "…an enemy operative cannot be prevented from moving onto OR BEING SET UP ON the other
+  // side": the Stronghold H cap binds every way an operative arrives, not just a move.
+  const at = z ?? surfaceAt(index, pos);
+  const overfull = occupancyCapExceeded(index, aliveOperatives(state), op.id, op.player, pos, at);
+  if (overfull)
+    return {
+      ok: false,
+      reason: `no more than ${overfull.maxOperatives} friendly operative can be on the highest upper level of that terrain feature at once`,
+    };
   return { ok: true };
 }
 
@@ -625,6 +663,8 @@ function finishSequenceIfDone(ctx: GameContext, state: GameState): void {
 function offerGuardInterrupt(ctx: GameContext, state: GameState, active: OperativeState): void {
   if (!state.map.closeQuarters) return;
   if (state.sequence && state.sequence.step !== 'done') return;
+  // "Once during each enemy operative's activation" — do not re-offer a window already spent.
+  if (state.opState['guardInterruptUsedFor']?.['operativeId'] === active.id) return;
   const defender = otherPlayer(active.player);
   const candidates = guardInterruptCandidates(state, defender);
   if (candidates.length === 0) return;
@@ -681,8 +721,8 @@ function advancePhase(ctx: GameContext, state: GameState): void {
  * stop unchanged.
  */
 function advanceTurningPoint(ctx: GameContext, state: GameState): void {
-  endTurningPoint(ctx, state);
-  ctx.scoreEndOfTurningPoint?.(ctx, state);
+  // The score is read while the turning point's effects are still live — see `endTurningPoint`.
+  endTurningPoint(ctx, state, ctx.scoreEndOfTurningPoint);
   if (state.turningPoint >= (state.maxTurningPoints || MAX_TURNING_POINTS)) {
     state.phase = 'battleEnd';
     ctx.scoreEndOfBattle?.(ctx, state);

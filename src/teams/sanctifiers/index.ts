@@ -44,7 +44,7 @@ import { getAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { ruleOf, successes } from '../../core/dice.ts';
 import { supportDistance } from '../../core/equipment/index.ts';
-import { baseGap, baseRadius, dist } from '../../core/geometry.ts';
+import { baseGap, baseRadius, basesOverlap, dist } from '../../core/geometry.ts';
 import { HookRegistry, type HookEvents } from '../../core/hooks.ts';
 import { advanceShoot, checkTarget, startShoot, validTargets } from '../../core/sequences/shoot.ts';
 import type { ShootSequence, FightSequence } from '../../core/sequences/types.ts';
@@ -310,21 +310,16 @@ function spendingFreeAction(state: GameState, op: OperativeState, sourceId: stri
   return op.apSpent >= Number(eff.data?.['threshold'] ?? 0);
 }
 
-/** Drops a stale +1 `aplMods` entry so a granted-but-unused free action cannot accumulate. */
-function dropUnusedFreeApl(reg: HookRegistry, T: TeamHooks, sourceId: string, priority: number): void {
-  reg.on('onActivationEnd', T.bindText(`${sourceId}.cleanup`, 'The granted AP lasts for that activation only.', priority), (ev) => {
-    if (ev.operative.player !== T.player) return;
-    const eff = effectOn(ev.state, ev.operative.id, FREE_ACTION_RULE);
-    if (!eff || eff.source.id !== sourceId) return;
-    const at = ev.operative.aplMods.lastIndexOf(1);
-    if (at >= 0) ev.operative.aplMods.splice(at, 1);
-  });
-}
-
 /**
  * "…can immediately perform a free Charge, Fall Back or Reposition action" — Fall Back costs
- * 2AP, and D-015 models a free action as ONE extra AP, so the surcharge is removed while the
- * grant is being spent. Without this the printed "free Fall Back" would be unpayable.
+ * 2AP, and a granted free action is ONE AP outside the operative's APL budget
+ * (docs/DECISIONS.md D-100), so the surcharge is removed while the grant is the AP being
+ * spent. Without this the printed "free Fall Back" would be unpayable.
+ *
+ * Nothing in this module hands the AP back afterwards: it is not an APL stat change sitting
+ * in `aplMods` but an effect the core expires with the activation it is spent in. A grant made
+ * outside the recipient's activation — Lead the Procession, MIRACLE, RALLY THE FLOCK — simply
+ * waits for that operative's next one, which is the model the free action is landed on.
  */
 function freeActionCost(reg: HookRegistry, T: TeamHooks, sourceId: string, priority: number): void {
   reg.on('onActionCost', T.bindText(`${sourceId}.cost`, 'A free action costs no AP of the operative’s own.', priority), (ev) => {
@@ -542,7 +537,8 @@ function confessor(reg: HookRegistry, T: TeamHooks): void {
   //  action … but each cannot move more than … 3"."
   //
   // Nothing runs at the end of an ACTION, so the grants are made when the CONFESSOR's
-  // activation ends, and each lands on the recipient's own next activation (D-015).
+  // activation ends, and each is one AP outside the recipient's APL budget (docs/DECISIONS.md
+  // D-100) on its own next activation.
   reg.on('onActivationEnd', T.bind(A_LEAD, 12), (ev) => {
     const op = ev.operative;
     if (op.player !== T.player || op.datacardId !== CONFESSOR) return;
@@ -569,7 +565,6 @@ function confessor(reg: HookRegistry, T: TeamHooks): void {
     ev.inches = Math.min(ev.inches, 3); // "cannot move more than … 3""
   });
   freeActionCost(reg, T, A_LEAD, 14);
-  dropUnusedFreeApl(reg, T, A_LEAD, 41);
 
   // ---- Commanding Declamation -------------------------------------------
   // "Whenever an enemy operative would perform an action during an activation … while visible
@@ -797,7 +792,6 @@ function persecutor(reg: HookRegistry, T: TeamHooks): void {
       only: [MERCILESS_FIGHT],
     });
   });
-  dropUnusedFreeApl(reg, T, A_MERCILESS, 42);
 
   // "If this operative is incapacitated during the Fight action, you can strike the enemy
   //  operative in that sequence with one of your unresolved successes before this operative is
@@ -885,7 +879,6 @@ function miraculist(reg: HookRegistry, T: TeamHooks): void {
     ev.inches = Math.min(ev.inches, 3); // "for the latter, it cannot move more than 3""
   });
   freeActionCost(reg, T, A_MIRACLE, 14);
-  dropUnusedFreeApl(reg, T, A_MIRACLE, 44);
 }
 
 /**
@@ -1083,7 +1076,6 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     ev.inches = Math.min(ev.inches, 3);
   });
   freeActionCost(reg, T, SP_RALLY_THE_FLOCK, 22);
-  dropUnusedFreeApl(reg, T, SP_RALLY_THE_FLOCK, 45);
 
   // ---- ROSARIUS (firefight) ---------------------------------------------
   // "Use this firefight ploy when an attack dice inflicts Normal Dmg on a friendly SANCTIFIER
@@ -1410,7 +1402,7 @@ function flyDestination(
     return { ok: false, reason: 'it must be set up in a location it can be placed' };
   for (const other of aliveOperatives(state)) {
     if (other.id === op.id) continue;
-    if (baseGap(pos, c.base, op.rot, other.pos, card(ctx, other).base, other.rot) < -1e-4)
+    if (basesOverlap(pos, c.base, op.rot, other.pos, card(ctx, other).base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   const landed: Body = { id: op.id, pos, z, rot: op.rot, base: c.base, height: modelHeight(c) };

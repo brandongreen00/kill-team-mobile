@@ -33,7 +33,7 @@
 import { getAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { addAutoNormal } from '../../core/dice.ts';
-import { baseGapToPoly, baseRadius, dist } from '../../core/geometry.ts';
+import { baseGapToPoly, baseRadius, basesOverlap, dist } from '../../core/geometry.ts';
 import { HookRegistry, type RerollGrant } from '../../core/hooks.ts';
 import {
   aliveOperatives,
@@ -376,7 +376,7 @@ function canBePlacedAt(
     if (other.id === op.id) continue;
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
-    if (dist(pos, other.pos) - r - baseRadius(oc.base) < -1e-4)
+    if (basesOverlap(pos, c.base, op.rot, other.pos, oc.base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   return { ok: true, z };
@@ -1037,9 +1037,11 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
    *  turning point, and you cannot select each friendly operative for this ploy more than once
    *  per turning point."
    *
-   * D-015: the free Dash is one extra AP restricted to Dash, landing on that operative's next
-   * activation. PARTIAL — "and ends that action WITHIN SHADOW" has no seam (no hook constrains
-   * where a move ENDS); the predicate is exported as `creepingHorrorEndLegal` for the UI.
+   * The free Dash is one AP outside that operative's APL budget (docs/DECISIONS.md D-100),
+   * restricted to Dash and landing on its next activation — the ploy fires between activations,
+   * so the recipient is never the operative on the board clock. PARTIAL — "and ends that action
+   * WITHIN SHADOW" has no seam (no hook constrains where a move ENDS); the predicate is exported
+   * as `creepingHorrorEndLegal` for the UI.
    */
   reg.on('onActivationEnd', T.bind(SP.creepingHorror, 20), (ev) => {
     if (!gambitUsed(ev.state, T.player, SP.creepingHorror)) return;
@@ -1060,23 +1062,20 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       only: ['Dash'],
     });
   });
-  // `grantFreeAction` pushes +1 onto `aplMods`, which the engine never pops (the Ratlings and
-  // Death Korps upkeep): pop it again when the grant expires, or every operative would drift to
-  // APL 3 for the rest of the battle.
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  // The free AP expires with the activation it is spent in, which the core does by itself. But
+  // this offer is made to an operative that is standing still between two activations, and one
+  // that is already expended never ends another activation this turning point — so nothing
+  // would take the AP back and it would still be there next turning point, long after "before
+  // the next operative is activated". The Ready step is where that window closes.
+  const dropStaleGrants = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (eff.source.id !== SP.creepingHorror) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bind(SP.creepingHorror, 92), (ev) => {
-    upkeep(ev.state, ev.operative);
-  });
   reg.on('onReadyStep', T.bind(SP.creepingHorror, 92), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) upkeep(ev.state, o);
+    for (const o of T.friendlies(ev.state)) dropStaleGrants(ev.state, o);
   });
 
   // =========================================================================

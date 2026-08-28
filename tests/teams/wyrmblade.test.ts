@@ -11,7 +11,15 @@ import { gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { resolveFightDie } from '../../src/core/sequences/fight.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, inflictDamage, markerController, statMods } from '../../src/core/state.ts';
+import {
+  aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
+  inflictDamage,
+  markerController,
+  statMods,
+} from '../../src/core/state.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import rawJson from '../../data/teams/wyrmblade.json';
 import { selectionEntries, teamData } from '../../src/teams/data.ts';
@@ -66,7 +74,7 @@ import {
   trapMarkers,
   wyrmblade,
 } from '../../src/teams/wyrmblade/index.ts';
-import { act, activate, battle, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, rosterIncluding, teamContext } from './harness.ts';
 import { heavyBlock, rect, testMap } from '../fixtures.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
@@ -839,10 +847,18 @@ describe('WYRMBLADE strategy ploys', () => {
     const two = opWith(state, 'p1', GUNNER);
     spread(state); // nobody engaged
     const s = useGambit(ctx, state, SP_DIVERT, { operativeIds: [agent, one, two] });
-    expect(s.operatives[agent]!.aplMods).toContain(1);
-    expect(s.operatives[one]!.aplMods).toContain(1);
+    // "…can immediately perform a free Dash or Charge action" is AP outside the APL budget
+    // (D-100), so the APL stat of every one of them is left exactly where the datacard prints it.
+    expect(freeApOf(s, s.operatives[agent]!)).toBe(1);
+    expect(freeApOf(s, s.operatives[one]!)).toBe(1);
+    expect(s.operatives[agent]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, s.operatives[agent]!)).toBe(3); // KELERMORPH, printed APL 3
+    expect(apBudgetOf(ctx, s, s.operatives[agent]!)).toBe(4);
+    expect(aplOf(ctx, s, s.operatives[one]!)).toBe(2); // NEOPHYTE WARRIOR, printed APL 2
+    expect(apBudgetOf(ctx, s, s.operatives[one]!)).toBe(3);
     // 2 + 1 = the whole budget; the third named operative gets nothing.
-    expect(s.operatives[two]!.aplMods).not.toContain(1);
+    expect(freeApOf(s, s.operatives[two]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[two]!)).toBe(aplOf(ctx, s, s.operatives[two]!));
     const grant = s.effects.find((e) => e.rule === FREE_ACTION_RULE && e.operativeId === one);
     expect(grant?.data?.['only']).toEqual(['Dash', 'Charge']);
   });
@@ -862,16 +878,26 @@ describe('WYRMBLADE strategy ploys', () => {
     expect(own.inches).toBe(6);
   });
 
-  it('DIVERT AND DISAPPEAR: the granted +1 APL is popped again, so nobody sits on APL 3 for the battle', () => {
+  it('DIVERT AND DISAPPEAR: the free action is a window, not a banked AP', () => {
+    expect(ruleText(SP_DIVERT)).toContain('can immediately perform a free Dash or Charge action');
     const { ctx, state } = setup();
     const id = opWith(state, 'p1', WARRIOR);
     spread(state);
     const s0 = useGambit(ctx, state, SP_DIVERT, { operativeIds: [id] });
-    expect(s0.operatives[id]!.aplMods).toContain(1);
+    // The grant is AP outside the APL budget, so the printed APL 2 stays 2 (D-100).
+    expect(s0.operatives[id]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s0, s0.operatives[id]!)).toBe(2);
+    expect(apBudgetOf(ctx, s0, s0.operatives[id]!)).toBe(3);
+    // "immediately": the grant expires with the activation it is spent in…
     let s = activate(ctx, s0, id, 'engage');
     s = reduce(s, { t: 'EndActivation', operativeId: id }, ctx).state;
-    expect(s.operatives[id]!.aplMods).not.toContain(1);
     expect(s.effects.some((e) => e.rule === FREE_ACTION_RULE && e.operativeId === id)).toBe(false);
+    expect(freeApOf(s, s.operatives[id]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[id]!)).toBe(2);
+    // …and an operative that never spends it does not carry it into the next turning point.
+    const stale = { ...s0, turningPoint: 2 };
+    ctx.hooks.emit('onReadyStep', stale, { state: stale, player: 'p1', cp: 1 });
+    expect(freeApOf(stale, stale.operatives[id]!)).toBe(0);
   });
 
   it('DIVERT AND DISAPPEAR: an engaged CULT AGENT is offered the free Fall Back and pays the −1 APL', () => {
@@ -881,7 +907,7 @@ describe('WYRMBLADE strategy ploys', () => {
     const foe = opWith(state, 'p2', WARRIOR);
     isolate(state, [agent, foe]);
     place(state, agent, 10, 10);
-    place(state, foe, 11.3, 10); // within control range
+    place(state, foe, 11.5, 10); // within control range, bases touching not overlapping
     const s0 = useGambit(ctx, state, SP_DIVERT, { operativeIds: [agent] });
     const grant = s0.effects.find((e) => e.rule === FREE_ACTION_RULE && e.operativeId === agent);
     expect(grant?.data?.['only']).toEqual(['Fall Back']);
@@ -1391,7 +1417,11 @@ describe('WYRMBLADE datacard abilities', () => {
     place(state, foe.id, 12.5, 10);
     locus.order = 'conceal';
     const charge = getAction(CHARGE_QUICKSILVER)!;
-    expect(charge.check(ctx, state, locus, { path: { points: [{ x: 11.4, y: 10 }] } }).reason).toContain(
+    // As close as the rules allow: "the sides of different bases can touch, but a base cannot
+    // be placed on another". Still inside the enemy's 1" control range, which is what the
+    // ability requires the move to finish within.
+    const into = { path: { points: [chargeTo(ctx, state, locus.id, foe.id)] } };
+    expect(charge.check(ctx, state, locus, into).reason).toContain(
       'has not been triggered',
     );
 
@@ -1403,11 +1433,11 @@ describe('WYRMBLADE datacard abilities', () => {
     expect(armed?.data?.['enemyId']).toBe(foe.id);
 
     s = activate(ctx, s, locus.id, 'conceal');
-    const ok = charge.check(ctx, s, s.operatives[locus.id]!, { path: { points: [{ x: 11.4, y: 10 }] } });
+    const ok = charge.check(ctx, s, s.operatives[locus.id]!, into);
     expect(ok.ok, ok.reason).toBe(true);
     // A move that does not end within control range of THAT enemy is refused.
     expect(charge.check(ctx, s, s.operatives[locus.id]!, { path: { points: [{ x: 10, y: 12 }] } }).ok).toBe(false);
-    const out = act(ctx, s, locus.id, CHARGE_QUICKSILVER, { path: { points: [{ x: 11.4, y: 10 }] } });
+    const out = act(ctx, s, locus.id, CHARGE_QUICKSILVER, into);
     expect(out.ok, out.reason).toBe(true);
     expect(out.state.operatives[locus.id]!.order).toBe('engage'); // "you can change its order to do so"
     expect(out.state.operatives[locus.id]!.apSpent).toBe(0); // free

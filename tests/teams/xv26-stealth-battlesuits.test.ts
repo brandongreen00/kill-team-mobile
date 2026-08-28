@@ -11,7 +11,16 @@ import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
 import { counteractCandidates, gambitOptions, readyStep } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, hitOf, markerController, moveOf, statMods } from '../../src/core/state.ts';
+import {
+  aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
+  hitOf,
+  markerController,
+  moveOf,
+  statMods,
+} from '../../src/core/state.ts';
 import rawJson from '../../data/teams/xv26-stealth-battlesuits.json';
 import { teamData } from '../../src/teams/data.ts';
 import { makeTeamHooks } from '../../src/teams/helpers.ts';
@@ -878,7 +887,12 @@ describe('VECTORED RETRO-THRUSTERS (firefight ploy)', () => {
     isolate(state, [friendly.id, enemy.id]);
     enemy.actionsThisActivation.push('Charge');
     ctx.hooks.emit('onPloyUsed', state, { state, player: 'p1', ployId: FP.vectoredRetroThrusters, kind: 'firefight' });
-    expect(friendly.aplMods).toEqual([1]);
+    // "can immediately perform a free Fall Back action": AP outside the APL budget (D-100), so
+    // the LIBERATOR's printed APL 3 is untouched and only its activation's budget grows.
+    expect(friendly.aplMods).toEqual([]);
+    expect(aplOf(ctx, state, friendly)).toBe(3);
+    expect(freeApOf(state, friendly)).toBe(1);
+    expect(apBudgetOf(ctx, state, friendly)).toBe(4);
     const ev = ctx.hooks.emit('onMoveDistance', state, {
       state,
       operative: friendly,
@@ -905,7 +919,12 @@ describe('VECTORED RETRO-THRUSTERS (firefight ploy)', () => {
       data: { operativeId: enemy.id, action: 'Charge', inches: 5 },
     });
     ctx.hooks.emit('onPloyUsed', state, { state, player: 'p1', ployId: FP.vectoredRetroThrusters, kind: 'firefight' });
-    expect(enemy.aplMods).toEqual([1]);
+    // The charging enemy's own free Reposition is likewise AP outside the APL budget (D-100) —
+    // it is mid-activation, so this is the AP it spends on the carve-out action right now.
+    expect(enemy.aplMods).toEqual([]);
+    expect(aplOf(ctx, state, enemy)).toBe(3);
+    expect(freeApOf(state, enemy)).toBe(1);
+    expect(apBudgetOf(ctx, state, enemy)).toBe(4);
     const ev = ctx.hooks.emit('onMoveDistance', state, {
       state,
       operative: enemy,
@@ -1669,8 +1688,13 @@ describe('NEUTRALISER › Multispectrum Sensor Package', () => {
     const enemy = place(state, opWith(state, 'p2', SHAS_VRE), 17, 11);
     isolate(state, [sensor.id, near.id, far.id, enemy.id]);
     ctx.hooks.emit('onActivationStart', state, { state, operative: enemy });
-    expect(near.aplMods).toEqual([1]);
-    expect(far.aplMods).toEqual([]);
+    // The free Dash is AP outside the APL budget (D-100): the APL stat of a LIBERATOR that is
+    // within 3" stays at its printed 3, and only its AP budget goes up.
+    expect(freeApOf(state, near)).toBe(1);
+    expect(near.aplMods).toEqual([]);
+    expect(aplOf(ctx, state, near)).toBe(3);
+    expect(apBudgetOf(ctx, state, near)).toBe(4);
+    expect(freeApOf(state, far)).toBe(0);
     const ev = ctx.hooks.emit('canPerformAction', state, {
       state,
       operative: near,
@@ -1696,13 +1720,14 @@ describe('NEUTRALISER › Multispectrum Sensor Package', () => {
     const far = place(state, opWith(state, 'p2', SHAS_VRE), 27, 11);
     isolate(state, [sensor.id, near.id, far.id]);
     ctx.hooks.emit('onActivationStart', state, { state, operative: far });
-    expect(near.aplMods).toEqual([]); // more than 8" away
+    expect(freeApOf(state, near)).toBe(0); // more than 8" away
     const close = place(state, opWith(state, 'p2', LIBERATOR), 17, 11);
     ctx.hooks.emit('onActivationStart', state, { state, operative: close });
-    expect(near.aplMods).toEqual([1]);
-    near.aplMods.length = 0;
+    expect(freeApOf(state, near)).toBe(1);
+    // "Once per turning point": a second enemy activation grants nothing, and free AP sums rather
+    // than clamping (D-100), so a second grant would show up here as a second point.
     ctx.hooks.emit('onActivationStart', state, { state, operative: close });
-    expect(near.aplMods).toEqual([]); // once per turning point
+    expect(freeApOf(state, near)).toBe(1);
   });
 
   it('"cannot end that move within 3\\" of an enemy operative" is reminder-only, exported for the UI', () => {

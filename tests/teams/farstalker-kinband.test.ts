@@ -11,7 +11,7 @@ import { gambitOptions, readyStep } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { advanceFight, startFight } from '../../src/core/sequences/fight.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aliveOperatives, aplOf, inflictDamage, markerContestedBy } from '../../src/core/state.ts';
+import { aliveOperatives, apBudgetOf, aplOf, freeApOf, inflictDamage, markerContestedBy } from '../../src/core/state.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import rawJson from '../../data/teams/farstalker-kinband.json';
 import { teamData } from '../../src/teams/data.ts';
@@ -43,7 +43,7 @@ import {
   markOf,
   pechraMarker,
 } from '../../src/teams/farstalker-kinband/index.ts';
-import { act, activate, battle, opWith, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, opWith, settle, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
@@ -1083,7 +1083,10 @@ describe('CUT-SKIN — Vicious Duellist and Savage Assault', () => {
     place(state, foe.id, 10.6, 10);
     place(state, other.id, 10, 10.6);
     let s = activate(ctx, state, cutSkin.id);
-    expect(aplOf(ctx, s, s.operatives[cutSkin.id]!)).toBe(3); // D-015: the free action is one extra AP
+    // "…can immediately perform a free FIGHT action afterwards" — D-100: free AP, not an APL
+    // stat change, so the APL stat is untouched and the activation has one more AP to spend.
+    expect(aplOf(ctx, s, s.operatives[cutSkin.id]!)).toBe(2);
+    expect(apBudgetOf(ctx, s, s.operatives[cutSkin.id]!)).toBe(3);
     // The free FIGHT is illegal until the first Fight has happened.
     expect(getAction(SAVAGE_FIGHT)!.check(ctx, s, s.operatives[cutSkin.id]!, {}).ok).toBe(false);
     const first = act(ctx, s, cutSkin.id, 'Fight', { meleeWeaponName: "Cut-skin's blades", targetId: foe.id });
@@ -1093,20 +1096,33 @@ describe('CUT-SKIN — Vicious Duellist and Savage Assault', () => {
       const def = getAction(SAVAGE_FIGHT)!;
       expect(def.check(ctx, s, s.operatives[cutSkin.id]!, { targetId: other.id })).toMatchObject({ ok: false });
       expect(def.check(ctx, s, s.operatives[cutSkin.id]!, { targetId: foe.id }).ok).toBe(true);
+      // And the AP really is extra: with both of its own AP spent the reducer's AP gate still
+      // lets the free FIGHT through, because it checks `apBudgetOf`, not the APL stat.
+      s.operatives[cutSkin.id]!.apSpent = 2;
+      const free = act(ctx, s, cutSkin.id, SAVAGE_FIGHT, { meleeWeaponName: "Cut-skin's blades", targetId: foe.id });
+      expect(free.ok).toBe(true);
+      expect(free.state.operatives[cutSkin.id]!.apSpent).toBe(3);
     }
     expect(abilityText(C.cutSkin, AB.savageAssault)).toContain('This takes precedence over action restrictions');
   });
 
-  it('the free-action APL grant is popped at the end of the activation', () => {
+  it('Savage Assault’s free AP expires with the activation and never touches the APL stat', () => {
     const { ctx, state } = setup();
     const cutSkin = state.operatives[opWith(state, 'p1', C.cutSkin)]!;
     isolate(state, [cutSkin.id]);
     place(state, cutSkin.id, 10, 10);
     let s = activate(ctx, state, cutSkin.id);
-    expect(aplOf(ctx, s, s.operatives[cutSkin.id]!)).toBe(3);
-    s = reduce(s, { t: 'EndActivation', operativeId: cutSkin.id }, ctx).state;
+    // "…can immediately perform a free FIGHT action afterwards" grants AP, not APL: the stat
+    // marker control totals is untouched, and no modifier is left on the operative to leak.
     expect(s.operatives[cutSkin.id]!.aplMods).toEqual([]);
     expect(aplOf(ctx, s, s.operatives[cutSkin.id]!)).toBe(2);
+    expect(freeApOf(s, s.operatives[cutSkin.id]!)).toBe(1);
+    expect(apBudgetOf(ctx, s, s.operatives[cutSkin.id]!)).toBe(3);
+    // The grant lasts "during each of its activations", so it goes when the activation does.
+    s = reduce(s, { t: 'EndActivation', operativeId: cutSkin.id }, ctx).state;
+    expect(freeApOf(s, s.operatives[cutSkin.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[cutSkin.id]!)).toBe(2);
+    expect(abilityText(C.cutSkin, AB.savageAssault)).toContain('immediately perform a free FIGHT action');
   });
 });
 
@@ -1166,7 +1182,9 @@ describe('HOUND — Beast and Bad-tempered', () => {
     s = reduce(s, { t: 'EndActivation', operativeId: enemy.id }, ctx).state;
     const after = s.operatives[hound.id]!;
     expect(after.order).toBe('engage'); // "(you can change its order to Engage to do so)"
-    expect(aplOf(ctx, s, after)).toBe(3);
+    // The free Charge is an extra AP on the HOUND's own next activation, never an APL change.
+    expect(aplOf(ctx, s, after)).toBe(2);
+    expect(apBudgetOf(ctx, s, after)).toBe(3);
     expect(abilityText(C.hound, AB.badTempered)).toContain('this operative can immediately perform a free Charge action');
   });
 
@@ -1282,7 +1300,10 @@ describe('PISTOLIER — Quick Draw and Salvo', () => {
     });
     const eff = s.effects.find((e) => e.rule === E.salvo && e.operativeId === pistolier.id);
     expect(eff?.data?.['firstTargetId']).toBe(a.id);
-    expect(aplOf(ctx, s, s.operatives[pistolier.id]!)).toBe(3);
+    // "Shoot with this weapon against both of them" — the second shot rides free AP, so it is
+    // still there when the PISTOLIER has spent all of its own.
+    expect(aplOf(ctx, s, s.operatives[pistolier.id]!)).toBe(2);
+    expect(apBudgetOf(ctx, s, s.operatives[pistolier.id]!)).toBe(3);
     const def = getAction(SALVO_SHOOT)!;
     expect(def.check(ctx, s, s.operatives[pistolier.id]!, { targetId: a.id })).toMatchObject({
       ok: false,
@@ -1303,7 +1324,7 @@ describe('STALKER — Stalker and STEALTH ATTACK', () => {
     place(state, stalker.id, 10, 10);
     place(state, foe.id, 13, 10);
     stalker.order = 'conceal';
-    const path = { points: [{ x: 12.4, y: 10 }] };
+    const path = { points: [chargeTo(ctx, state, stalker.id, foe.id)] };
     expect(getAction('Charge')!.check(ctx, state, stalker, { path })).toMatchObject({
       ok: false,
       reason: 'cannot Charge with a Conceal order',
@@ -1347,7 +1368,7 @@ describe('STALKER — Stalker and STEALTH ATTACK', () => {
     isolate(state, [stalker.id, foe.id]);
     state.map = HEAVY_MAP();
     place(state, stalker.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y);
-    place(state, foe.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y + 4);
+    place(state, foe.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y + 4.4); // the 3.1" move ends touching it
     stalker.order = 'conceal';
     const s = activate(ctx, state, stalker.id, 'conceal');
     const before = s.operatives[foe.id]!.wounds;
@@ -1373,7 +1394,7 @@ describe('STALKER — Stalker and STEALTH ATTACK', () => {
     const foe = state.operatives[opWith(state, 'p2', C.warrior)]!;
     isolate(state, [stalker.id, foe.id]);
     place(state, stalker.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y);
-    place(state, foe.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y + 7.5);
+    place(state, foe.id, BESIDE_HEAVY.x, BESIDE_HEAVY.y + 8); // so the 6.6" move below ends touching, not inside
     stalker.order = 'conceal';
     const def = getAction(ACT.stealthAttack)!;
     // Move 6": a 7" charge is legal for the STALKER's own Conceal-order Charge (6+2) but not here.
@@ -1445,7 +1466,10 @@ describe('Unique actions — BOW-HUNTER, HOUND and TRACKER', () => {
     expect(s.operatives[hound.id]!.pos.x).toBeCloseTo(13, 5);
     // The free move still counts as that action for action restrictions.
     expect(s.operatives[hound.id]!.actionsThisActivation).toContain('Reposition');
-    expect(aplOf(ctx, s, s.operatives[hound.id]!)).toBe(3);
+    // "it can perform a free Pick Up Marker or Place Marker action" — free AP on top of the
+    // HOUND's own two, not an APL stat change.
+    expect(aplOf(ctx, s, s.operatives[hound.id]!)).toBe(2);
+    expect(apBudgetOf(ctx, s, s.operatives[hound.id]!)).toBe(3);
     expect(
       getAction('Charge')!.check(ctx, s, s.operatives[hound.id]!, { path: { points: [{ x: 15, y: 10 }] } }),
     ).toMatchObject({ ok: false, reason: 'already performed Reposition, Dash or Fall Back this activation' });

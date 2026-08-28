@@ -94,8 +94,6 @@ import {
   dropEffects,
   effect,
   effectOn,
-  effectsOn,
-  FREE_ACTION_RULE,
   gambitUsed,
   giveToken,
   grantFreeAction,
@@ -219,7 +217,7 @@ export const REMINDER_ONLY: Record<string, string> = {
   [EQ.heightenedSenses]:
     'initiativeRollModifiers is emitted BEFORE the D6 and rerollOffered is never consulted by rollInitiative, so an initiative re-roll cannot be expressed',
   [`${SP.writheOutOfSight}.fallBack`]:
-    'D-015 models a free action as ONE extra AP and APL changes clamp to ±1, so the printed free Fall Back (2AP) cannot be paid for; the free Reposition and the free Burrow are live',
+    'a granted free action is ONE AP outside the APL budget (docs/DECISIONS.md D-100) and Fall Back costs 2AP, so the grant cannot pay for the printed free Fall Back; the free Reposition and the free Burrow are live',
 };
 
 // ---------------------------------------------------------------------------
@@ -1003,7 +1001,11 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   // "Select one friendly RAVENER operative in the killzone. That friendly operative can
   //  immediately perform a free Burrow action. If it's within 2" of your TUNNEL, it can
   //  immediately perform a free Fall Back or Reposition action before it does so."
-  // D-015: one extra AP restricted to the named actions, landing on its next activation.
+  // One AP outside that operative's APL budget (docs/DECISIONS.md D-100), restricted to the
+  // named actions and landing on its next activation. Nothing sweeps the grant afterwards:
+  // this is a STRATEGIC GAMBIT, so it is used before anybody has activated in the turning
+  // point and the recipient's own activation is always still to come — `expireActivationEffects`
+  // takes the AP back when that activation ends.
   reg.on('onPloyUsed', T.bind(SP.writheOutOfSight, 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== SP.writheOutOfSight) return;
     const candidates = T.friendlies(ev.state, KW).filter((o) => !isUnderground(ev.state, o));
@@ -1016,24 +1018,6 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       threshold: currentApl(T, ev.state, op),
       only: near ? [BURROW, 'Reposition', 'Fall Back'] : [BURROW],
     });
-  });
-  // `grantFreeAction` pushes +1 into `aplMods`, which the engine never pops (the Corsair
-  // Aeldari Raiders / Death Korps REGROUP upkeep) — without this the operative would sit on
-  // APL 4 for the rest of the battle.
-  const upkeep = (state: GameState, op: OperativeState): void => {
-    for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
-      if (eff.source.id !== SP.writheOutOfSight) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
-      dropEffects(state, (e) => e === eff);
-    }
-  };
-  reg.on('onActivationEnd', T.bind(SP.writheOutOfSight, 90), (ev) => {
-    if (ev.operative.player === T.player) upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bind(SP.writheOutOfSight, 90), (ev) => {
-    if (ev.player !== T.player) return;
-    for (const op of T.friendlies(ev.state)) upkeep(ev.state, op);
   });
 
   // =========================================================================

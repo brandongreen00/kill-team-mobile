@@ -30,7 +30,7 @@
 import { getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { countCrits, hasRule, lethalThreshold, successes, type Die } from '../../core/dice.ts';
-import { baseGap, baseRadius } from '../../core/geometry.ts';
+import { baseGap, baseRadius, basesOverlap } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import { validateMove } from '../../core/movement.ts';
 import { advanceFight, resolveFightDie, sideWeapon } from '../../core/sequences/fight.ts';
@@ -1014,7 +1014,7 @@ function canPlaceAt(ctx: GameContext, state: GameState, op: OperativeState, pos:
   for (const other of aliveOperatives(state)) {
     if (other.id === op.id) continue;
     if (Math.abs(other.z - z) > 1) continue;
-    if (baseGap(pos, c.base, op.rot, other.pos, card(ctx, other).base, other.rot) < -1e-4) return false;
+    if (basesOverlap(pos, c.base, op.rot, other.pos, card(ctx, other).base, other.rot)) return false;
   }
   return true;
 }

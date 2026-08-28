@@ -60,13 +60,13 @@ _STRONGHOLD_B = ('chronic: Stronghold B is the only piece with two upper levels 
                  '6.0") and fits low on cards where D-014 played no part. Filed separately.')
 IOU_ALLOW = {
     # --- missed dashed rectangles: the piece is a slice of its host's blob ---
+    # volkus-6 K and its host A came good when the cards were re-extracted with the fixed
+    # `dashed_rects()` (2026-08-23); the rest are still carved out of their hosts.
     ('volkus-3', 'K'): _D014,
     ('volkus-5', 'J'): _D014,
-    ('volkus-6', 'K'): _D014,
     # --- and the hosts they were carved out of ---
     ('volkus-3', 'D'): _D014,
     ('volkus-5', 'C'): _D014,
-    ('volkus-6', 'A'): _D014,
     ('volkus-6', 'C'): _D014,
     # --- unrelated to D-014, tracked on their own ---
     ('volkus-1', 'B'): _STRONGHOLD_B,

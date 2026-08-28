@@ -14,10 +14,13 @@
     "lint": "eslint . && node tools/lint/no_math_random.mjs",
     "lint:rng": "node tools/lint/no_math_random.mjs",
     "e2e": "playwright test",
+    "ui:review": "node tools/ui-review/capture.mjs",
     "maps:extract": "python3 tools/maps/extract_cards.py",
     "maps:overlay": "python3 tools/maps/render_overlay.py",
     "maps:validate": "python3 tools/maps/validate_maps.py",
     "maps:test": "python3 tools/maps/test_extract.py",
+    "maps:doors": "python3 tools/maps/derive_doors.py",
+    "maps:doors:check": "python3 tools/maps/derive_doors.py --check && python3 tools/maps/test_doors.py",
     "teams:scrape": "python3 tools/teams/scrape_wahapedia.py",
     "teams:normalise": "python3 tools/teams/normalise.py",
     "soak": "vitest run tests/soak --reporter=basic"

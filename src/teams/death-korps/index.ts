@@ -796,9 +796,11 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     // "After that action, that friendly operative can immediately perform a free Dash action,
     //  but must end that move within this operative's control range." The end-position half is
     //  REMINDER-ONLY (no seam constrains where a move ends); the free Dash itself is granted.
-    // D-015 lands the free action on the next AP the operative spends; when that is a whole
+    // D-013 lands the free action on the next AP the operative spends; when that is a whole
     // activation away the -1 APL below is already in force, so the threshold drops with it and
-    // the operative really does get one ordinary AP plus the Dash.
+    // the operative really does get one ordinary AP plus the Dash. The Dash itself is AP outside
+    // the APL budget (D-100), so the -1 lowers what the operative pays for and never the free
+    // action it was promised.
     grantFreeAction(ev.state, victim, {
       sourceId: A.medic,
       sourceText: shortQuote(abilityText(C.medic, A.medic)),
@@ -1047,28 +1049,26 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (!list.includes(ev.ctx.attacker.id)) list.push(ev.ctx.attacker.id);
   });
 
-  // ---- free-action bookkeeping --------------------------------------------
-  // `grantFreeAction` models the free action as one extra AP (D-015) by pushing a +1 into
-  // `aplMods` that the engine never pops. REGROUP and the CHRONOMETER hand that grant to the
-  // WHOLE kill team, so without this every Death Korps operative would sit on APL 3 for the
-  // rest of the battle. The grant is un-done once its window has closed. Reported as a seam.
-  const clearSpentGrants = (state: GameState, op: OperativeState): void => {
+  // ---- free actions nobody spent ------------------------------------------
+  // A grant expires at the end of the recipient's activation (docs/DECISIONS.md D-100), which
+  // covers every one that is spent. This team hands most of its grants out to operatives that are
+  // not activating: REGROUP and the CHRONOMETER give one to the WHOLE kill team as a STRATEGIC
+  // GAMBIT, and Medic! fires whenever an incapacitation is prevented. An operative that is
+  // already expended never ends an activation again, so nothing takes its grant back and it
+  // would still be holding a free Dash when the Ready step readied it. "…can IMMEDIATELY perform
+  // a free Dash action" is one window; this closes it with the turning point.
+  const dropStaleGrants = (state: GameState, op: OperativeState): void => {
     const eff = effectOn(state, op.id, FREE_ACTION_RULE);
     if (!eff || !FREE_ACTION_SOURCES.has(eff.source.id)) return;
-    const at = op.aplMods.lastIndexOf(1);
-    if (at >= 0) op.aplMods.splice(at, 1);
     dropEffects(state, (e) => e === eff);
   };
-  reg.on('onActivationEnd', T.bindText('death-korps.freeAction', text(SP.regroup), 90), (ev) => {
-    if (ev.operative.player === T.player) clearSpentGrants(ev.state, ev.operative);
-  });
   reg.on('onReadyStep', T.bindText('death-korps.freeAction', text(SP.regroup), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) clearSpentGrants(ev.state, o);
+    for (const o of T.friendlies(ev.state)) dropStaleGrants(ev.state, o);
   });
 }
 
-/** Every rule of this team that hands out a `grantFreeAction`, for the clean-up above. */
+/** Every rule of this team that hands out a `grantFreeAction`, for the sweep above. */
 const FREE_ACTION_SOURCES: ReadonlySet<string> = new Set<string>([SP.regroup, EQ.chronometer, A.medic, A.mineLayer]);
 
 function hasShot(state: GameState, id: string): boolean {

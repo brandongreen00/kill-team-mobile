@@ -62,12 +62,16 @@ export function App() {
       setTeams(t);
       // A fully wired context: ops, equipment, the initiative-card flow and — so a roster's
       // kill team actually plays by its own rules — every implemented team module.
-      const { BATCH_1 } = await import('../teams/index.ts');
+      // This registered only BATCH_1 for six batches, so 40 of the 48 selectable teams
+      // fought whole battles with no faction rules, ploys, equipment or unique actions, and
+      // said nothing about it: `rebuildHooks` optional-chains a module it cannot find.
+      // `tests/wiring.test.ts` now pins that every selectable team has a module.
+      const { ALL_TEAM_MODULES } = await import('../teams/index.ts');
       const ctx = createGameContext({
         rng: new SeededRng(1),
         maps: m,
         datacards: t.flatMap((team) => team.datacards ?? []),
-        teams: BATCH_1,
+        teams: ALL_TEAM_MODULES,
       });
       const map = m[0] ?? fallbackMap();
       const s = new Store(createBattle(ctx, { map, seed: 1, mode: 'match', critOpId: defaultCritOpId() }), ctx);
@@ -459,10 +463,21 @@ const ROUTE_LABEL: Record<NonNullable<UiState['route']>, string> = {
   menu: 'Menu',
 };
 
+/**
+ * The plan's action id is published on the button, for the same reason the topbar publishes
+ * `data-screen`: a test or the `docs/ui-review` capture can press "confirm the move" without
+ * matching a label that says `Normal Move — costs 4"` today and something else tomorrow.
+ */
 function ActionButton({ action }: { action: CommandAction }) {
   const cls = action.tone === 'primary' ? 'primary' : action.tone === 'quiet' ? 'quiet' : action.tone === 'danger' ? 'danger' : '';
   return (
-    <button class={cls} disabled={action.disabled} title={action.hint} onClick={action.onClick}>
+    <button
+      class={cls}
+      data-action={action.id}
+      disabled={action.disabled}
+      title={action.hint}
+      onClick={action.onClick}
+    >
       {action.icon}
       <span>{action.label}</span>
     </button>

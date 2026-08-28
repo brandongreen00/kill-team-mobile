@@ -510,6 +510,51 @@ describe('kill op', () => {
     expect(vpFromOp(game.state, 'p1', 'kill.killOp')).toBe(3);
     expect(vpFromOp(game.state, 'p2', 'kill.killOp')).toBe(0);
   });
+
+  it('"your opponent\'s kill grade can go down during the battle (they lose VP accordingly)"', () => {
+    const game = makeGame({ n: 5 });
+    game.state.turningPoint = 2;
+    const victims = game.state.teams.p2.operativeIds.slice(0, 2);
+    for (const victim of victims) kill(game, victim, game.state.teams.p1.operativeIds[0]!);
+    scoreEndOfTurningPoint(game.ctx, game.state);
+    expect(game.state.teams.p1.killGrade).toBe(2);
+    expect(vpFromOp(game.state, 'p1', 'kill.killOp')).toBe(2);
+    const vpBefore = game.state.teams.p1.vp;
+    // Exactly what HIEROTEK CIRCLE's reanimate() does to one of them.
+    const back = game.state.operatives[victims[0]!]!;
+    back.removed = false;
+    back.incapacitated = false;
+    game.state.turningPoint = 3;
+    scoreEndOfTurningPoint(game.ctx, game.state);
+    expect(game.state.teams.p1.killGrade).toBe(1);
+    expect(vpFromOp(game.state, 'p1', 'kill.killOp')).toBe(1);
+    expect(game.state.teams.p1.vp).toBe(vpBefore - 1);
+    // "...this won't retroactively change any other VPs": the tac op's slots are untouched.
+    expect(vpFromOp(game.state, 'p1', 'tac.rout')).toBe(0);
+    // And the grade is re-scored if the operative goes down again — the 6VP cap came back too.
+    back.incapacitated = true;
+    game.state.turningPoint = 4;
+    scoreEndOfTurningPoint(game.ctx, game.state);
+    expect(game.state.teams.p1.killGrade).toBe(2);
+    expect(vpFromOp(game.state, 'p1', 'kill.killOp')).toBe(2);
+  });
+
+  it('"The row you use is determined by the STARTING number of enemy operatives"', () => {
+    // A 6-operative team grown to 9 mid-battle. Row 6 is [1,2,4,5,6] and row 9 is [2,4,5,7,9],
+    // so four kills is grade 3 on the row the rules name and grade 2 on the live roster.
+    const game = makeGame({ n: 6 });
+    expect(game.state.teams.p2.startingSize).toBe(6);
+    for (let i = 0; i < 3; i++) {
+      const id = `p2-extra-${i}`;
+      game.state.operatives[id] = { ...game.state.operatives[game.state.teams.p2.operativeIds[0]!]!, id };
+      game.state.teams.p2.operativeIds.push(id);
+    }
+    game.state.turningPoint = 3;
+    for (const victim of game.state.teams.p2.operativeIds.slice(0, 4))
+      kill(game, victim, game.state.teams.p1.operativeIds[0]!);
+    scoreEndOfTurningPoint(game.ctx, game.state);
+    expect(game.state.teams.p1.killGrade).toBe(3);
+  });
 });
 
 // ---------------------------------------------------------------------------

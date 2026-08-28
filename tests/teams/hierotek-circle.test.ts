@@ -3,10 +3,11 @@
  * Source: https://wahapedia.ru/kill-team3/kill-teams/hierotek-circle/
  */
 import { describe, expect, it } from 'vitest';
+import { availableActions } from '../../src/core/actions.ts';
 import { createGameContext } from '../../src/core/game.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { SeededRng, ScriptedRng } from '../../src/core/rng.ts';
-import { aplOf, inflictDamage, markerController } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, inflictDamage, markerController } from '../../src/core/state.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { martyrsOp, martyrTokens } from '../../src/core/ops/tac/martyrs.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
@@ -341,13 +342,48 @@ describe('HIEROTEK CIRCLE ploys', () => {
   });
 
   it('COMMAND UNDERLINGS: "can immediately perform a free Dash action" near a CRYPTEK', () => {
+    // "Each other friendly HIEROTEK CIRCLE operative visible to and within 6\" of a friendly
+    //  CRYPTEK operative can immediately perform a free Dash action in an order of your choice."
+    // A granted action is AP outside the APL budget, never an APL stat change
+    // (docs/DECISIONS.md D-100): a Necron handed a Dash by its Cryptek is no more capable of
+    // holding an objective than it was a moment earlier, so `aplOf` — the stat markers are
+    // totalled from — must not move, while `apBudgetOf` gains the one AP the Dash costs.
+    expect(rule('hierotek-circle.sp.command-underlings')).toContain('can immediately perform a free Dash action');
     const { ctx, state } = setup();
     const chrono = state.operatives[opWith(state, 'p1', 'hierotek-circle.chronomancer')]!;
     const guardian = state.operatives[opWith(state, 'p1', 'hierotek-circle.immortal-guardian')]!;
     chrono.pos = { x: 10, y: 11 };
     guardian.pos = { x: 14, y: 11 };
     const out = reduce(state, { t: 'UseGambit', player: 'p1', gambitId: 'hierotek-circle.sp.command-underlings' }, ctx);
-    expect(out.state.operatives[guardian.id]!.aplMods).toContain(1);
+    const s = out.state;
+    const granted = s.operatives[guardian.id]!;
+    const apl = aplOf(ctx, s, granted);
+    expect(s.effects.some((e) => e.rule === 'teamFreeAction' && e.operativeId === granted.id)).toBe(true);
+    expect(granted.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, granted)).toBe(apl);
+    expect(freeApOf(s, granted)).toBe(1);
+    expect(apBudgetOf(ctx, s, granted)).toBe(apl + 1);
+  });
+
+  it('COMMAND UNDERLINGS: the granted AP buys a Dash and nothing else, and dies with the activation', () => {
+    // "…can immediately perform a free DASH action." The restriction half of the grant is what
+    // stops the extra AP being spent on a Shoot; and because a free action is one window, not a
+    // standing bonus, it must not still be there once the operative's activation has ended.
+    expect(rule('hierotek-circle.sp.command-underlings')).toContain('free Dash action');
+    const { ctx, state } = setup();
+    const chrono = state.operatives[opWith(state, 'p1', 'hierotek-circle.chronomancer')]!;
+    const guardian = state.operatives[opWith(state, 'p1', 'hierotek-circle.immortal-guardian')]!;
+    chrono.pos = { x: 10, y: 11 };
+    guardian.pos = { x: 14, y: 11 };
+    let s = reduce(state, { t: 'UseGambit', player: 'p1', gambitId: 'hierotek-circle.sp.command-underlings' }, ctx).state;
+    s = activate(ctx, s, guardian.id);
+    const op = s.operatives[guardian.id]!;
+    op.apSpent = aplOf(ctx, s, op); // its own AP is gone; only the free one is left
+    const acts = availableActions(ctx, s, op);
+    expect(acts.find((a) => a.def.name === 'Dash')?.ok).toBe(true);
+    expect(acts.find((a) => a.def.name === 'Shoot')?.ok).toBe(false);
+    s = reduce(s, { t: 'EndActivation', operativeId: guardian.id }, ctx).state;
+    expect(freeApOf(s, s.operatives[guardian.id]!)).toBe(0);
   });
 
   it('CORTICAL CONTROL: "ignore the distance requirement" of a SUPPORT unique action', () => {

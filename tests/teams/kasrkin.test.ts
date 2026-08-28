@@ -8,10 +8,10 @@ import { canSelectWeapon } from '../../src/core/sequences/shoot.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { moveBudget } from '../../src/core/movement.ts';
 import { availableActions } from '../../src/core/actions.ts';
-import { aplOf, inflictDamage, markerController } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, inflictDamage, markerController } from '../../src/core/state.ts';
 import { kasrkin, SKILLS, skillGambitId } from '../../src/teams/kasrkin/index.ts';
 import { teamData } from '../../src/teams/data.ts';
-import { activate, battle, opWith, rosterIncluding, teamContext } from './harness.ts';
+import { activate, battle, opWith, rosterIncluding, teamContext, yieldGambitTurn } from './harness.ts';
 import type { GameState } from '../../src/core/types.ts';
 
 const DATA = teamData('kasrkin');
@@ -104,7 +104,9 @@ describe('Skill at Arms — "STRATEGIC GAMBIT. Select a SKILL AT ARMS for friend
     expect(second.map((o) => o.id)).not.toContain(skillGambitId('light-em-up'));
     expect(second.length).toBe(3);
 
-    s = reduce(s, { t: 'UseGambit', player: 'p1', gambitId: skillGambitId('strike-fast') }, ctx).state;
+    // "each player alternates either using a STRATEGIC GAMBIT or passing": the second SKILL AT
+    // ARMS is a second gambit, so p2 takes their turn in between.
+    s = reduce(yieldGambitTurn(ctx, s, 'p1'), { t: 'UseGambit', player: 'p1', gambitId: skillGambitId('strike-fast') }, ctx).state;
     const third = ctx.hooks.emit('gambitOptions', s, { state: s, player: 'p1', options: [] }).options;
     expect(third.filter((o) => o.id.startsWith('kasrkin.rule.skill-at-arms:'))).toHaveLength(0);
   });
@@ -326,7 +328,21 @@ describe('KASRKIN ploys', () => {
     const cpBefore = s.teams.p1.cp;
     s = reduce(s, { t: 'UseGambit', player: 'p1', gambitId: 'kasrkin.sp.relocate', data: { operativeId: recon } }, ctx).state;
     expect(s.teams.p1.cp).toBe(cpBefore); // 1CP spent, 1CP refunded
-    expect(s.operatives[recon]!.aplMods).toContain(1);
+    // "…can immediately perform a free Dash action in an order of your choice." The Dash is one
+    // AP outside the APL budget, not an APL stat change (docs/DECISIONS.md D-100): the ploy
+    // buys a move, and moving up the board does not make a Kasrkin better at holding ground, so
+    // `aplOf` — the stat marker control is totalled from — is untouched.
+    expect(rule('kasrkin.sp.relocate')).toContain('can immediately perform a free Dash action');
+    const trooper = s.operatives[recon]!;
+    const apl = aplOf(ctx, s, trooper);
+    expect(trooper.aplMods).toEqual([]);
+    expect(freeApOf(s, trooper)).toBe(1);
+    expect(apBudgetOf(ctx, s, trooper)).toBe(apl + 1);
+    // One window, not a standing bonus: the AP goes away with the activation it is spent in.
+    let after = activate(ctx, s, recon);
+    after = reduce(after, { t: 'EndActivation', operativeId: recon }, ctx).state;
+    expect(freeApOf(after, after.operatives[recon]!)).toBe(0);
+    expect(apBudgetOf(ctx, after, after.operatives[recon]!)).toBe(apl);
   });
 
   it('SEIZE THE INITIATIVE cannot be used by the player with initiative and grants a free non-move action', () => {
@@ -340,7 +356,17 @@ describe('KASRKIN ploys', () => {
     const out = reduce(s2, { t: 'UsePloy', player: 'p1', ployId: ploy.id, data: { operativeId: target } }, ctx);
     expect(out.ok).toBe(true);
     const op = out.state.operatives[target]!;
-    expect(aplOf(ctx, out.state, op)).toBe(3); // APL 2 + the free action
+    // "One friendly KASRKIN operative can immediately perform a 1AP action for free." Free means
+    // outside the APL budget (docs/DECISIONS.md D-100): the APL stat stays where it was and the
+    // operative simply has one AP more than its APL to spend this activation. Modelled as an APL
+    // change instead, a Kasrkin already carrying a +1 from another rule would be handed nothing
+    // at all by this ploy, because "the total can never be more than -1 or +1 from its normal
+    // APL" would eat it.
+    expect(rule('kasrkin.fp.seize-the-initiative')).toContain('can immediately perform a 1AP action for free');
+    expect(op.aplMods).toEqual([]);
+    expect(aplOf(ctx, out.state, op)).toBe(2); // the printed APL, unmoved
+    expect(freeApOf(out.state, op)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, op)).toBe(3);
     // "but it cannot move during that action"
     op.apSpent = 2;
     const move = availableActions(ctx, out.state, op).find((a) => a.def.id === 'Dash');

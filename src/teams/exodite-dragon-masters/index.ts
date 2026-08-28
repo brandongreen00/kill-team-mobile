@@ -47,7 +47,7 @@
 import { actionCost, getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { addAutoNormal, allocateSavesOptimally, countCrits, countNormals, hasRule } from '../../core/dice.ts';
-import { baseGap, baseRadius, dist, rotate, segmentCrossesPoly, sub } from '../../core/geometry.ts';
+import { baseGap, baseRadius, basesOverlap, dist, rotate, segmentCrossesPoly, sub } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import type { ActionParams } from '../../core/intents.ts';
 import { advanceFight, startFight } from '../../core/sequences/fight.ts';
@@ -519,7 +519,7 @@ function canPlaceAt(
   for (const other of aliveOperatives(state)) {
     if (other.id === op.id) continue;
     if (Math.abs(other.z - z) > 1) continue;
-    if (baseGap(pos, c.base, rot, other.pos, cardOfOp(ctx, other).base, other.rot) < -1e-4)
+    if (basesOverlap(pos, c.base, rot, other.pos, cardOfOp(ctx, other).base, other.rot))
       return { ok: false, reason: 'a base cannot be placed on another' };
   }
   return { ok: true };
@@ -1255,7 +1255,10 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   reg.on('onValidTarget', T.bind(RULE.cavalry, 8), (ev) => {
     if (!mounted(ev.target) || !T.ctx) return;
     const from = ev.viewFrom ?? ev.attacker;
-    if (!mountedCoverAndObscured(T.ctx, ev.state, from, ev.target).inCover) ev.ignoreCoverTerrain = 'all';
+    // "…cannot be in cover from or obscured by Light terrain, terrain parts less than 2"
+    // tall or terrain that's not wholly intervening." That is the strong form: it takes the
+    // cover save with it, unlike Seek's "it doesn't remove their cover save (if any)".
+    if (!mountedCoverAndObscured(T.ctx, ev.state, from, ev.target).inCover) ev.denyCover = true;
   });
   reg.on('onCollectAttackDice', T.bind(RULE.cavalry, 8), (ev) => {
     if (ev.ctx.type !== 'ranged' || !T.ctx) return;

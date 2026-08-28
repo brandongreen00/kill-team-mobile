@@ -23,6 +23,7 @@ from scipy import ndimage
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cardlib as C          # noqa: E402
+import doors as DOORS        # noqa: E402
 import geom as G             # noqa: E402
 import labels as L           # noqa: E402
 import terrain as T          # noqa: E402
@@ -856,8 +857,9 @@ def cq_features(img, frame, killzone):
     pill = C.mask_exact(img, C.PALETTE['hatch_cq'], 8)
     for blob in G.component_masks(pill, 60):
         ys, xs = np.where(blob)
-        access.append(((xs.min() + xs.max() + 1) / 2, (ys.min() + ys.max() + 1) / 2,
-                       xs.max() - xs.min() > ys.max() - ys.min()))
+        access.append(dict(cx=(xs.min() + xs.max() + 1) / 2, cy=(ys.min() + ys.max() + 1) / 2,
+                           x0=xs.min(), y0=ys.min(), x1=xs.max() + 1, y1=ys.max() + 1,
+                           horiz=xs.max() - xs.min() > ys.max() - ys.min()))
 
     chips = [(t, cx, cy) for t, cx, cy, _ in L.chips(img, 'cq')]
     blackchips = [(t, cx, cy, b) for t, cx, cy, b in L.chips(img, 'black', **L.BLACK_CHIP)]
@@ -1032,15 +1034,22 @@ def _cq_wall_feature(seg, frame, lx, ly, thick, access, killzone):
     poly = G.px_rect_to_board(frame, *px_box)
     a = frame.to_board(*a_px)
     b = frame.to_board(*b_px)
-    # nearest access-point pill lying along this wall
+    # The access-point pill printed alongside this wall.
+    #
+    # The pill is drawn BESIDE the wall with its long axis running along it. Measured across
+    # all twelve Close Quarters cards, the perpendicular offset of a pill from the wall it
+    # marks clusters at 18-22px (118 pairs) and the nearest unrelated pairing is at 73px — a
+    # 3.5x gap. The old threshold was `thick * 2.2` = 19.8px, which cut through the middle of
+    # that cluster and kept only the tightest few: 3 access points out of 10 pills on
+    # gallowdark-1, and ZERO on every Tomb World card. `thick * 4` = 36px sits in the gap.
     ap = None
-    for cx, cy, horiz in access:
-        if orient == 'h' and horiz and abs(cy - a_px[1]) < thick * 2.2 \
-                and min(a_px[0], b_px[0]) - 4 <= cx <= max(a_px[0], b_px[0]) + 4:
-            ap = (cx, cy)
-        if orient == 'v' and not horiz and abs(cx - a_px[0]) < thick * 2.2 \
-                and min(a_px[1], b_px[1]) - 4 <= cy <= max(a_px[1], b_px[1]) + 4:
-            ap = (cx, cy)
+    for cand in access:
+        if orient == 'h' and cand['horiz'] and abs(cand['cy'] - a_px[1]) < thick * 4 \
+                and min(a_px[0], b_px[0]) - 4 <= cand['cx'] <= max(a_px[0], b_px[0]) + 4:
+            ap = cand
+        if orient == 'v' and not cand['horiz'] and abs(cand['cx'] - a_px[0]) < thick * 4 \
+                and min(a_px[1], b_px[1]) - 4 <= cand['cy'] <= max(a_px[1], b_px[1]) + 4:
+            ap = cand
     return dict(label=label, orient=orient, span=span, poly=poly, a=a, b=b, access=ap,
                 px=px_box)
 
@@ -1203,16 +1212,39 @@ def _finish_cq(walls, extras, mapId, killzone, frame):
         kind = T.LABEL_TO_KIND.get((killzone, label), '%s.wallUnknown' % killzone)
         counters[label] += 1
         fid = '%s.%s-%d' % (mapId, label, counters[label])
-        parts = [dict(id=fid + '.wall', featureId=fid, poly=G.round_poly(w['poly']),
-                      z0=0.0, z1=T.h('cq.wall.top'), types=list(T.CQ_WALL_TYPES),
-                      role='wall', blocksVisibility=True, solid=True, standable=False)]
         spec = T.PIECES.get(kind, {})
+        x0, y0, x1, y1 = w['px']
+        wall_boxes = [(x0, y0, x1, y1)]
+        access_box = None
         if w['access'] is not None and (spec.get('hatch') or spec.get('breach')):
-            cx, cy = w['access']
-            half = (frame.lattice_x[1] - frame.lattice_x[0]) * 0.14
-            box = G.px_rect_to_board(frame, cx - half, cy - half, cx + half, cy + half)
+            # The access point is a NOTCH IN THE WALL, not a marker beside it: it takes the
+            # wall's own thickness, and the pill's long extent gives the width of the opening.
+            # It used to be a square centred on the pill — which is drawn alongside the wall,
+            # not in it — so the wall ran unbroken behind it and opening a hatchway changed
+            # nothing: `wallRouteDistance` across one was Infinity open or closed.
+            ap = w['access']
+            if w['orient'] == 'h':
+                ax0, ax1 = ap['x0'], ap['x1']
+                ax0, ax1 = max(ax0, x0), min(ax1, x1)
+                access_box = (ax0, y0, ax1, y1)
+                wall_boxes = [b for b in ((x0, y0, ax0, y1), (ax1, y0, x1, y1)) if b[2] - b[0] > 1]
+            else:
+                ay0, ay1 = ap['y0'], ap['y1']
+                ay0, ay1 = max(ay0, y0), min(ay1, y1)
+                access_box = (x0, ay0, x1, ay1)
+                wall_boxes = [b for b in ((x0, y0, x1, ay0), (x0, ay1, x1, y1)) if b[3] - b[1] > 1]
+
+        parts = []
+        for n, box in enumerate(wall_boxes):
+            suffix = '.wall' if len(wall_boxes) == 1 else '.wall%d' % n
+            parts.append(dict(id=fid + suffix, featureId=fid,
+                              poly=G.round_poly(G.px_rect_to_board(frame, *box)),
+                              z0=0.0, z1=T.h('cq.wall.top'), types=list(T.CQ_WALL_TYPES),
+                              role='wall', blocksVisibility=True, solid=True, standable=False))
+        if access_box is not None:
             role = 'hatch' if spec.get('hatch') else 'breachWall'
-            parts.append(dict(id=fid + '.access', featureId=fid, poly=G.round_poly(box),
+            parts.append(dict(id=fid + '.access', featureId=fid,
+                              poly=G.round_poly(G.px_rect_to_board(frame, *access_box)),
                               z0=0.0, z1=T.h('cq.wall.top'),
                               types=list(T.CQ_ACCESS_CLOSED), role='accessPoint',
                               state='closed', blocksVisibility=True, solid=True,
@@ -1333,6 +1365,14 @@ def main(argv):
             feat['placement']['flip'] = bool(f['flip'])
             feat.setdefault('qa', {})['templateIoU'] = f['iou']
         write_terrain(kz, templates)
+    # Doors are read off the card as a white dashed segment across the wall, which in practice
+    # only ever resolves on Stronghold B. Recover the rest from the hole they leave in the wall
+    # ring, now that `placement.rotDeg` / `flip` are known. See tools/maps/doors.py.
+    fill_volkus_doors(maps)
+    # ...and only once the doors exist, because a door is part of the ring and is capped with
+    # the wall band it sits in.
+    cap_stronghold_walls(maps)
+
     for mid, m in maps.items():
         ious = [f['qa']['templateIoU'] for f in m['features'] if 'qa' in f]
         if ious:
@@ -1341,6 +1381,183 @@ def main(argv):
         C.dump_json(os.path.join(OUT_MAPS, m['killzone'], '%s.json' % mid), m)
     C.dump_json(os.path.join(ROOT, 'docs', 'maps', 'fit-report.json'), qa_fits)
     print('wrote %d maps' % len(maps))
+
+
+def cap_stronghold_walls(maps):
+    """Stop a stronghold's wall ring 1" above the level it encloses, not at the piece maximum.
+
+    Killzones §Vantage is the rule this serves: an operative on Vantage terrain is meant to see
+    out. The traced ink ring carries no height of its own, so every wall part was extruded to
+    the PIECE's maximum height — 5.906" for Stronghold A, 7.48" for Stronghold B — while the
+    Vantage floors those rings enclose sit at 3.0" and 6.0". The edge of every upper level was
+    therefore a 2.9"/4.5" opaque Heavy parapet, and climbing the two biggest features on all six
+    maps was a pure downside. Measured on the shipped data, the best spot on volkus-1 Stronghold
+    A's roof saw 31 of 568 killzone-floor positions (5%).
+
+    A wall band rises `volkus.stronghold.parapet` above the highest floor of its own feature
+    that it BORDERS. Bordering matters: Stronghold B's ring encloses a small second level in one
+    corner, and capping the WHOLE ring at that level's parapet leaves its big lower level in a
+    4" well exactly as before (measured: 17% -> 17%). Per-band it reaches 36-56% on every one of
+    the eighteen stronghold levels across the six maps.
+
+    The `*.top` heights stay in the catalogue: they are the promethium tank and the tower, which
+    the cards do not draw and the extraction therefore never emits.
+    """
+    pad = 0.35  # a traced wall is ~0.21" thick; this reaches the floor it stands against
+    parapet = T.h('volkus.stronghold.parapet')
+    for m in maps.values():
+        if m['killzone'] != 'volkus':
+            continue
+        for feat in m['features']:
+            if not feat['kind'].startswith('volkus.stronghold'):
+                continue
+            floors = [p for p in feat['parts'] if p.get('role') == 'floor']
+            if not floors:
+                continue
+            base = min(p['z1'] for p in floors) + parapet
+            rebuilt = []
+            for part in feat['parts']:
+                if part.get('role') == 'wall':
+                    rebuilt.extend(_split_wall_band(part, floors, base, parapet, pad,
+                                                    ramparts=feat['kind'] == 'volkus.strongholdA'))
+                elif part.get('role') == 'door':
+                    # A door is one physical object and is never split; it takes the band of
+                    # the run it sits in, decided at its own midpoint.
+                    part['z1'] = round(_band_at(_rect_centre(part['poly']), floors, base, parapet, pad), 3)
+                    rebuilt.append(part)
+                else:
+                    rebuilt.append(part)
+            feat['parts'] = rebuilt
+            for i, p in enumerate(feat['parts']):
+                p['id'] = '%s.p%d' % (feat['id'], i)
+
+
+def _boxes_touch(a, b, pad):
+    return (a[0] - pad <= b[2] and a[2] + pad >= b[0]
+            and a[1] - pad <= b[3] and a[3] + pad >= b[1])
+
+
+def _rect_centre(poly):
+    """Centre of a board-space polygon given as [{x, y}, ...]."""
+    b = DOORS._bbox(poly)
+    return ((b[0] + b[2]) / 2, (b[1] + b[3]) / 2)
+
+
+def _band_at(pt, floors, base, parapet, pad):
+    """The parapet band at a point: 1" above the highest floor whose footprint reaches it."""
+    zs = [f['z1'] for f in floors
+          if _boxes_touch(DOORS._bbox(f['poly']), (pt[0], pt[1], pt[0], pt[1]), pad)]
+    return (max(zs) + parapet) if zs else base
+
+
+def _split_wall_band(part, floors, base, parapet, pad, ramparts=False):
+    """One wall bar, cut into the parapet bands its length passes through.
+
+    Bounding boxes alone are not enough. Stronghold B's second level is a small square in one
+    corner of the ring, and the ring's east bar runs the whole side of the building — its bbox
+    overlaps that square, so capping the WHOLE bar at the upper parapet leaves the big lower
+    level in a 4" well exactly as before (measured on volkus-1: 17% -> 19% of the killzone
+    floor visible). Cutting the bar where the upper floor's extent ends gives the corner its
+    parapet and the rest of the side its own: 19% -> 45%.
+    """
+    b = DOORS._bbox(part['poly'])
+    axis = 0 if (b[2] - b[0]) >= (b[3] - b[1]) else 1
+    lo, hi = b[axis], b[axis + 2]
+    # Intervals of this bar's length that a HIGHER floor stands against.
+    raised = []
+    for f in floors:
+        z = f['z1'] + parapet
+        if z <= base + 1e-6:
+            continue
+        fb = DOORS._bbox(f['poly'])
+        if not _boxes_touch(fb, b, pad):
+            continue
+        a0, a1 = max(lo, fb[axis] - pad), min(hi, fb[axis + 2] + pad)
+        if a1 - a0 > 0.05:
+            raised.append((a0, a1, z))
+    raised.sort()
+    out, cursor = [], lo
+    for a0, a1, z in raised:
+        if a0 - cursor > 0.05:
+            out.append((cursor, a0, base))
+        if a1 > cursor:
+            out.append((max(cursor, a0), a1, z))
+            cursor = a1
+    if hi - cursor > 0.05 or not out:
+        out.append((cursor, hi, base))
+    pieces = []
+    for a0, a1, z in out:
+        rect = list(b)
+        rect[axis], rect[axis + 2] = a0, a1
+        poly = DOORS.rect_poly(rect)
+        if not ramparts:
+            pieces.append({**part, 'poly': poly, 'z1': round(z, 3)})
+            continue
+        # Killzones §Stronghold F: "The small broken ramparts on the edge of the Vantage
+        # terrain of Stronghold A are Insignificant and Exposed terrain." So on Stronghold A
+        # the Heavy wall stops at the level it holds up, and the last inch is a rampart, which
+        # `defaultBlocksVisibility` correctly treats as too small and open to obstruct a line.
+        # Stronghold B gets no such clause — §Stronghold ends "All other parts of it are Heavy
+        # terrain" — so its parapet stays Heavy and its lower level stays partly enclosed.
+        pieces.append({**part, 'poly': poly, 'z1': round(z - parapet, 3)})
+        pieces.append({**part, 'poly': poly, 'role': 'rampart',
+                       'types': ['Insignificant', 'Exposed'],
+                       'z0': round(z - parapet, 3), 'z1': round(z, 3),
+                       'blocksVisibility': False, 'solid': False, 'standable': False})
+    return pieces or [part]
+
+
+def fill_volkus_doors(maps):
+    """Add the `door` part to every Volkus feature whose doorway was left as a bare hole.
+
+    Calibration is across every instance in this run, so a partial re-extraction of one map
+    has less to go on than a full one; `tools/maps/derive_doors.py --check` is the gate that
+    catches anything left unresolved.
+    """
+    instances = []
+    for m in maps.values():
+        if m['killzone'] != 'volkus':
+            continue
+        for feat in m['features']:
+            if feat['kind'] not in DOORS.DOOR_KINDS:
+                continue
+            if any(p.get('role') == 'door' for p in feat['parts']):
+                continue
+            walls = [p['poly'] for p in feat['parts'] if p.get('role') == 'wall']
+            if walls:
+                instances.append(dict(id=feat['id'], kind=feat['kind'],
+                                      placement=feat['placement'], walls=walls, feature=feat))
+    if not instances:
+        return
+    resolved, _how = DOORS.derive_doors(instances)
+    for inst in instances:
+        box = resolved.get(inst['id'])
+        if box is None:
+            continue
+        # A wall bar traced across the opening plugs the door; cut the doorway back out of it.
+        feat_walls = [p for p in inst['feature']['parts'] if p.get('role') == 'wall']
+        overlap = DOORS.clip_walls_out_of_doorway(box, [p['poly'] for p in feat_walls])
+        if overlap:
+            rebuilt = []
+            for p in inst['feature']['parts']:
+                pieces = overlap.get(feat_walls.index(p)) if p in feat_walls else None
+                if pieces is None:
+                    rebuilt.append(p)
+                    continue
+                rebuilt.extend(dict(p, poly=DOORS.rect_poly(r)) for r in pieces)
+            inst['feature']['parts'] = rebuilt
+        spec = next((p for p in T.PIECES[inst['kind']]['parts'] if p.get('role') == 'door'), None)
+        if spec is None:
+            continue
+        feat = inst['feature']
+        walls = [p for p in feat['parts'] if p.get('role') == 'wall']
+        feat['parts'].insert(len(walls), dict(
+            id='', featureId=feat['id'], poly=DOORS.rect_poly(box),
+            z0=float(spec['z0']), z1=float(spec['z1']), types=list(spec['types']),
+            role='door', blocksVisibility=bool(spec.get('blocksVisibility', True)),
+            standable=bool(spec.get('standable', False)), solid=bool(spec.get('solid', False))))
+        for i, p in enumerate(feat['parts']):
+            p['id'] = '%s.p%d' % (feat['id'], i)
 
 
 FOOTPRINT_ROLES = ('floor', 'rubble', 'crate', 'teleportPad', 'ledge')
@@ -1362,6 +1579,16 @@ def _footprint(feat):
         key = (pref, a)
         if best is None or key > best[0]:
             best = (key, poly)
+    if best is not None and best[0][0] == 0:
+        # A piece that is nothing but wall — every Close Quarters wall — is matched on the
+        # extent of the WHOLE run, not its largest bar. An access point notches the run into
+        # two bars, and which of them is larger is an accident of where the hatchway sits, so
+        # fitting on one of them made the same physical piece look like a different one.
+        bars = [p for p in feat['parts'] if p.get('role') in ('wall', 'accessPoint')]
+        if bars:
+            xs = [q['x'] for p in bars for q in p['poly']]
+            ys = [q['y'] for p in bars for q in p['poly']]
+            return [[min(xs), min(ys)], [max(xs), min(ys)], [max(xs), max(ys)], [min(xs), max(ys)]]
     return best[1] if best else None
 
 

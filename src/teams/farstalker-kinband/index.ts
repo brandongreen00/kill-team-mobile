@@ -16,7 +16,7 @@
  *  - **Six unique actions**, and docs/DECISIONS.md D-026 puts their whole legality in `check`.
  *  - **Two rare weapon rules**: `Concealed Position` is a PROFILE-level restriction carried by
  *    `onSelectWeapon` (D-032, the spectre-squad / death-korps precedent) and `Salvo` is a
- *    second free Shoot action at a different target (D-015 + D-021).
+ *    second free Shoot action at a different target (D-100 + D-021).
  */
 import { getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
@@ -891,9 +891,12 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
    *  operative to fight against during that action (and only if it's still valid to fight
    *  against). This takes precedence over action restrictions."
    *
-   * Nothing runs at the end of an action, so the extra AP (D-015) is granted at the start of the
+   * Nothing runs at the end of an action, so the free AP (D-100) is granted at the start of the
    * activation and restricted to `Fight (Savage Assault)`, whose own `check` carries every
-   * printed condition (D-026). The AP is simply unusable if the operative never fights.
+   * printed condition (D-026). The AP is simply unusable if the operative never fights. It is
+   * free AP, not an APL stat change, so "this takes precedence over action restrictions" is not
+   * quietly cancelled by the +-1 APL clamp when something else has already raised this
+   * operative's APL.
    */
   reg.on('onActivationStart', T.bind(AB.savageAssault, 12), (ev) => {
     const op = ev.operative;
@@ -957,7 +960,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   //  within control range of enemy operatives, this operative can immediately perform a free
   //  Charge action (you can change its order to Engage to do so)."
   // PARTIAL: with no post-action hook the test is taken at the end of that enemy's activation,
-  // and the free Charge is D-015's extra AP on the HOUND's own next activation.
+  // and the free Charge is D-100's free AP on the HOUND's own next activation.
   reg.on('onActivationEnd', T.bind(AB.badTempered, 13), (ev) => {
     const enemy = ev.operative;
     if (enemy.player === T.player || !T.ctx) return;
@@ -1015,7 +1018,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
    * PARTIAL, exactly as the Spectre Squad's Elite Fieldcraft: `state.sequence` is single-slot,
    * so a second shoot sequence cannot be started inside the enemy's. The interrupt is taken at
    * the Select Valid Target step (and, for a Blast secondary, as its dice are collected) and the
-   * shot itself is D-015's extra AP on the PISTOLIER's own next activation, locked to that enemy
+   * shot itself is D-100's free AP on the PISTOLIER's own next activation, locked to that enemy
    * through `Shoot (Quick Draw)`.
    */
   reg.on('onSelectTarget', T.bind(AB.quickDraw, 12), (ev) => {
@@ -1035,7 +1038,7 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   //  operatives. Shoot with this weapon against both of them in an order of your choice (roll
   //  each sequence separately)."
   // The engine's secondary-target queue makes one sequence inherit the primary's cover, so the
-  // second shot is its own `Shoot (Salvo)` action instead — D-015's extra AP, locked to a
+  // second shot is its own `Shoot (Salvo)` action instead — D-100's free AP, locked to a
   // different target. PARTIAL: it is a second ACTION, so "until the end of that action" rules
   // (Piercing Shot / Toxin Shot) do not span both halves.
   reg.on('onCollectAttackDice', T.bind(AB.salvo, 13), (ev) => {
@@ -1076,25 +1079,28 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // once-per-turning-point use when the equipment's own use is already gone.
 
   // =========================================================================
-  // `grantFreeAction` pushes +1 onto `aplMods`, which the engine never pops (the Ratlings /
-  // Death Korps / Mandrakes upkeep). Pop it when the grant expires, or every operative drifts
-  // to APL 3 for the rest of the battle.
+  // Free actions that were offered and never taken
   // =========================================================================
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  // Free AP expires by itself: `grantFreeAction` records it on an effect that expires at the end
+  // of the grantee's activation, which `expireActivationEffects` honours (D-100). That covers
+  // Savage Assault, Salvo and GATHER, granted inside the operative's own activation.
+  //
+  // It does NOT cover the two grants this team makes to an operative that is not activating —
+  // Bad-tempered arms the HOUND at the end of an enemy's activation, Quick Draw arms the
+  // PISTOLIER while an enemy is shooting it — because both are spent "on its own next
+  // activation" (PARTIAL, above), and an operative that was already expended when it earned the
+  // offer never gets one. Such an offer belongs to the turning point that earned it, so the
+  // Ready step sweeps away anything still unspent rather than letting a free Charge cross into
+  // the next turning point.
+  const dropUntakenGrant = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (eff.player !== T.player) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bindText('farstalker.aplUpkeep', text(RULE.farstalker), 92), (ev) => {
-    if (ev.operative.player !== T.player) return;
-    upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('farstalker.aplUpkeep', text(RULE.farstalker), 92), (ev) => {
+  reg.on('onReadyStep', T.bindText('farstalker.freeActionUpkeep', text(RULE.farstalker), 92), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) upkeep(ev.state, o);
+    for (const o of T.friendlies(ev.state)) dropUntakenGrant(ev.state, o);
   });
 
   // "At the start of this operative's next activation or if it's removed from the killzone

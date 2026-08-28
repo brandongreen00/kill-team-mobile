@@ -222,6 +222,37 @@ export function awardVP(
   return granted;
 }
 
+/**
+ * Take back VP this op awarded, newest slot first. Returns the VP actually removed.
+ *
+ * Approved Ops › kill op: "As REANIMATED operatives are no longer incapacitated … your
+ * opponent's kill grade can go down during the battle (they lose VP accordingly)." Only this
+ * op's slots are touched, per the same paragraph's "won't retroactively change any other VPs",
+ * and lowering them frees the op's 6VP cap again so a grade re-reached is re-scored.
+ */
+export function revokeVP(
+  state: GameState,
+  player: PlayerId,
+  opId: string,
+  vp: number,
+  note: string,
+): number {
+  if (vp <= 0) return 0;
+  const slots = vpSlots(state, player, opId);
+  let left = vp;
+  for (let i = slots.length - 1; i >= 0 && left > 0; i--) {
+    const take = Math.min(slots[i] ?? 0, left);
+    if (take <= 0) continue;
+    slots[i] = (slots[i] ?? 0) - take;
+    left -= take;
+  }
+  const removed = vp - left;
+  if (removed <= 0) return 0;
+  state.teams[player].vp -= removed;
+  log(state, { kind: 'score', player, text: `${note} — -${removed}VP`, data: { opId, vp: -removed } });
+  return removed;
+}
+
 // ---------------------------------------------------------------------------
 // Kill records
 // ---------------------------------------------------------------------------
@@ -352,9 +383,20 @@ export function ignoredForKillOp(ctx: GameContext, state: GameState, op: Operati
   return dc?.keywords.some((k) => k.toUpperCase().replace(/[^A-Z]/g, '') === 'IGNOREDFORKILLOP') ?? false;
 }
 
-/** Enemy operatives that count for the kill op: the whole starting roster minus ignored ones. */
+/**
+ * Enemy operatives that count for the kill op: the STARTING roster minus ignored ones.
+ *
+ * Approved Ops › kill op: "The row you use is determined by the starting number of enemy
+ * operatives." Read off the live roster instead, a rule that adds operatives mid-battle
+ * (CANOPTEK CIRCLE 'A Ceaseless Scuttling', usable every turning point after the first) moved
+ * the opponent onto a harder row part-way through: a 6-operative team grown to 9 turns row 6
+ * [1,2,4,5,6] into row 9 [2,4,5,7,9], costing the opponent a VP at four kills. `startingSize`
+ * is stamped once at SelectRoster and mid-battle additions only ever push, so the starting
+ * roster is the head of `operativeIds`.
+ */
 export function killOpStartingSize(ctx: GameContext, state: GameState, player: PlayerId): number {
-  return state.teams[player].operativeIds.filter((id) => {
+  const team = state.teams[player];
+  return team.operativeIds.slice(0, team.startingSize).filter((id) => {
     const op = state.operatives[id];
     return op ? !ignoredForKillOp(ctx, state, op) : false;
   }).length;

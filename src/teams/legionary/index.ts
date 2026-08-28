@@ -560,8 +560,9 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     ev.assists = 0;
   });
   // "…this operative can perform a free Charge action … but it cannot move more than 2"."
-  // D-015: a free action is one extra AP restricted to Charge, spent on the BUTCHER's own
-  // activation, so the grant is only made while it is still ready.
+  // The free Charge is one AP outside the BUTCHER's APL budget (docs/DECISIONS.md D-100), and
+  // it is spent in the BUTCHER's own activation, so the grant is only made while it is still
+  // ready. It expires with that activation by itself, so nothing here takes it back.
   reg.on('onActivationEnd', T.bind('legionary.butcher.devastating-onslaught', 13), (ev) => {
     if (ev.operative.player === T.player) return;
     for (const butcher of T.friendlies(ev.state).filter((o) => o.datacardId === 'legionary.butcher')) {
@@ -583,14 +584,6 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     if (!free || free.source.id !== 'legionary.butcher.devastating-onslaught') return;
     if (ev.operative.apSpent < Number(free.data?.['threshold'] ?? 0)) return; // still on its own AP
     ev.inches = Math.min(ev.inches, 2); // "but it cannot move more than 2""
-  });
-  // The granted AP is for that activation only; drop it again so it cannot accumulate.
-  reg.on('onActivationEnd', T.bind('legionary.butcher.devastating-onslaught', 15), (ev) => {
-    if (ev.operative.player !== T.player) return;
-    const free = effectOn(ev.state, ev.operative.id, FREE_ACTION_RULE);
-    if (!free || free.source.id !== 'legionary.butcher.devastating-onslaught') return;
-    const at = ev.operative.aplMods.lastIndexOf(1);
-    if (at >= 0) ev.operative.aplMods.splice(at, 1);
   });
 
   // ---- ICON BEARER › Icon Bearer ----------------------------------------

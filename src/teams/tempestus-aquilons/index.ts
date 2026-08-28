@@ -48,15 +48,7 @@ import {
   grenadeWeapon,
   withGrenadeBudgetIgnored,
 } from '../../core/equipment/grenades.ts';
-import {
-  baseGap,
-  baseRadius,
-  basePerimeter,
-  baseWhollyWithin,
-  dist,
-  distancePointToPoly,
-  pointInPoly,
-} from '../../core/geometry.ts';
+import { baseGap, basePerimeter, baseRadius, baseWhollyWithin, basesOverlap, dist, distancePointToPoly, pointInPoly } from '../../core/geometry.ts';
 import type { HookRegistry, RerollGrant } from '../../core/hooks.ts';
 import { validateMove } from '../../core/movement.ts';
 import { checkTarget, effectiveRules, validTargets } from '../../core/sequences/shoot.ts';
@@ -75,13 +67,7 @@ import {
   removeIncapacitated,
   weaponsOf,
 } from '../../core/state.ts';
-import {
-  baseBlockedByTerrain,
-  baseTouchesHazardous,
-  hasType,
-  surfaceAt,
-  type TerrainIndex,
-} from '../../core/terrain.ts';
+import { baseBlockedByTerrain, baseTouchesHazardous, hasType, occupancyCapExceeded, surfaceAt, type TerrainIndex } from '../../core/terrain.ts';
 import type {
   BaseShape,
   GameState,
@@ -226,7 +212,7 @@ export const REMINDER_ONLY: Record<string, string> = {
   [`${AB.veteran}.commandRerollFight`]:
     'fight.ts emits no post-roll hook at all (D-031), so the Command Re-roll discount reaches a shoot attack roll and a defence roll only — a melee Command Re-roll is offered by offerRerolls with no seam to price it',
   [`${AB.gunfight}.timing`]:
-    'nothing runs at the end of an action and onIncapacitated.freeActions is never consumed, so "after the action, before incapacitated operatives are removed (including this one, if relevant)" becomes D-015\'s extra AP on the GUNFIGHTER\'s own next activation (the Spectre Elite Fieldcraft shape); a GUNFIGHTER incapacitated by that shot never fires back, and "you can change its order to Engage to do so" is subsumed by the order it chooses when it activates',
+    'nothing runs at the end of an action and onIncapacitated.freeActions is never consumed, so "after the action, before incapacitated operatives are removed (including this one, if relevant)" becomes D-100\'s free AP on the GUNFIGHTER\'s own next activation (the Spectre Elite Fieldcraft shape); a GUNFIGHTER incapacitated by that shot never fires back, and "you can change its order to Engage to do so" is subsumed by the order it chooses when it activates',
   [`${AB.viciousKnifeFighter}.block`]:
     'the engine builds the strike/block options inside resolveFightDie, so the immediately-resolved second dice is always taken as a strike — "you can immediately resolve another" cannot be offered as a choice (the Celestian Bladed Stance / Deathwatch Adaptive Swordsmanship / Farstalker Stealth Attack precedent)',
   [EQ.remoteOverseer]:
@@ -528,11 +514,15 @@ export function landingSpot(
     // "With no part of its base underneath Vantage terrain."
     if (underVantage(index, pos, c.base, op.rot, z))
       return { ok: false, reason: 'no part of its base can be underneath Vantage terrain' };
+    // Killzones § Stronghold H caps the highest upper level "at once", and its parenthesis
+    // says "moving onto OR BEING SET UP ON" — so a drop honours it as a move would.
+    if (occupancyCapExceeded(index, aliveOperatives(state), op.id, op.player, pos, z))
+      return { ok: false, reason: 'only one friendly operative can be on that level at once' };
     for (const other of aliveOperatives(state)) {
       if (other.id === op.id || isAbove(state, other)) continue;
       const oc = ctx.datacards.get(other.datacardId);
       if (!oc) continue;
-      if (dist(pos, other.pos) - r - baseRadius(oc.base) < -1e-4)
+      if (basesOverlap(pos, c.base, op.rot, other.pos, oc.base, other.rot))
         return { ok: false, reason: 'a base cannot be placed on another' };
     }
     // "Not within control range of enemy operatives (unless you're setting up a PRECURSOR
@@ -882,14 +872,19 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
     });
   });
   // "After the action … this operative can perform a free Shoot action." Nothing runs at the end
-  // of an action, so the grant is D-015's extra AP, taken at the end of the enemy activation and
-  // spent on the GUNFIGHTER's own next activation (see REMINDER_ONLY for the timing loss).
+  // of an action, so the grant is D-100's free AP — AP outside the APL budget — taken at the end
+  // of the enemy activation and spent on the GUNFIGHTER's own next activation (see REMINDER_ONLY
+  // for the timing loss). Only ever one at a time: the free Shoot spends the single GUNFIGHT_DEBT,
+  // so a second pending grant would be an AP the GUNFIGHTER could never legally use.
   reg.on('onActivationEnd', T.bind(AB.gunfight, 20), (ev) => {
     if (ev.operative.player === T.player) return;
     for (const me of T.friendlies(ev.state).filter((o) => o.datacardId === CARD.gunfighter)) {
       const debt = effectOn(ev.state, me.id, GUNFIGHT_DEBT);
       if (!debt || debt.data?.['granted']) continue;
       debt.data = { ...(debt.data ?? {}), granted: true };
+      // A second trigger refreshes the dice cap but must not bank a second AP: the shot spends
+      // the one debt, so the extra AP could never legally be used.
+      if (effectOn(ev.state, me.id, FREE_ACTION_RULE)) continue;
       grantFreeAction(ev.state, me, {
         sourceId: AB.gunfight,
         sourceText: shortQuote(abilityText(CARD.gunfighter, AB.gunfight)),
@@ -980,8 +975,8 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // PRECURSOR › Dynamic
   // =========================================================================
   // "Whenever this operative performs the Shoot or Fight action, it can immediately perform a
-  //  free Dash action afterwards." D-015: one extra AP restricted to Dash — plus the
-  //  `Dash (Dynamic)` carve-out, which is the only way to Dash after a Charge.
+  //  free Dash action afterwards." D-100: one AP outside the APL budget, restricted to Dash —
+  //  plus the `Dash (Dynamic)` carve-out, which is the only way to Dash after a Charge.
   reg.on('onCollectAttackDice', T.bind(AB.dynamic, 12), (ev) => {
     const me = ev.ctx.attacker;
     if (me.player !== T.player || me.datacardId !== CARD.precursor || ev.ctx.secondary) return;
@@ -1101,21 +1096,23 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   // TROOPER › Swift Landing — read by `landingRadius`, inside the LAND action.
   // =========================================================================
 
-  // D-015 grants push +1 into `aplMods`, which the engine never pops.
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  // A free action is spent inside the granted operative's own activation, and the engine drops
+  // the grant when that activation ends (`expireActivationEffects`, D-100) — so nothing needs
+  // undoing there. What the engine cannot close is a window that never opened: Gunfight grants
+  // its free Shoot at the END of an enemy activation, and Rapid Insertion in the Gambit step, so
+  // an operative that is already expended — or that is never activated again — carries a grant
+  // with no activation left to spend it in. "…can immediately perform a free action" is an
+  // immediate window, not a bankable one, so the Ready step of the next turning point clears
+  // whatever was never taken.
+  const dropUnspentGrant = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (!FREE_ACTION_SOURCES.has(eff.source.id)) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bind(RULE.dropInsertion, 90), (ev) => {
-    if (ev.operative.player === T.player) upkeep(ev.state, ev.operative);
-  });
   reg.on('onReadyStep', T.bind(RULE.dropInsertion, 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const op of T.friendlies(ev.state)) upkeep(ev.state, op);
+    for (const op of T.friendlies(ev.state)) dropUnspentGrant(ev.state, op);
   });
 
   // The per-activation ledger the HOT DROP ploy and Vantage drop test read.
@@ -1183,7 +1180,7 @@ function parseDagger(): Weapon {
   };
 }
 
-/** The rules of this team that hand out a D-015 free action, so the bonus AP can be un-done. */
+/** The rules of this team that hand out a free action, so an unspent grant can be closed out. */
 const FREE_ACTION_SOURCES: ReadonlySet<string> = new Set<string>([AB.dynamic, AB.gunfight, AB.rapidInsertion]);
 
 const sameName = (a: string | undefined, b: string): boolean =>
@@ -1370,9 +1367,11 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
       sourceText: shortQuote(printed(SP.dropAndSecure)),
       player: T.player,
       data: { markerId: chosen.id },
-      // "Until the Ready step of the NEXT Strategy phase" — deliberately not
-      // `endOfTurningPoint`, which `expireEffects` drops BEFORE `scoreEndOfTurningPoint` reads
-      // marker control, i.e. exactly when this ploy is meant to be deciding it.
+      // "Until the Ready step of the NEXT Strategy phase" — which is LATER than the end of
+      // the turning point, so `endOfTurningPoint` would drop it too early on its own terms.
+      // The `onReadyStep` handler below is what actually ends it.
+      // (It was also written this way because `expireEffects` used to run before
+      // `scoreEndOfTurningPoint`; that ordering is fixed in the core now — D-091.)
       expiry: { kind: 'endOfBattle' },
     });
     log(ev.state, { kind: 'ploy', player: T.player, text: `DROP AND SECURE: ${chosen.id}` });
@@ -1950,8 +1949,8 @@ registerAction({
     });
     dropEffects(state, (e) => e.rule === GUNFIGHT_DEBT && e.operativeId === op.id);
     // GUNFIGHT_SHOT lives to the end of the activation rather than being dropped here: the shoot
-    // sequence can suspend on a decision, and this is the operative's last AP by construction
-    // (D-015), so no other shot of its can pick the cap up.
+    // sequence can suspend on a decision, and the free AP is the operative's last by construction
+    // (D-100), so no other shot of its can pick the cap up.
     return getAction('Shoot')!.perform(ctx, state, op, {
       ...params,
       weaponName: shot.weaponName!,

@@ -293,7 +293,7 @@
    "label": "B2",
    "parts": [
     {
-     "id": "tomb-world-3.B2-1.wall",
+     "id": "tomb-world-3.B2-1.wall0",
      "featureId": "tomb-world-3.B2-1",
      "poly": [
       {
@@ -301,11 +301,11 @@
        "y": 15.567
       },
       {
-       "x": 11.906,
+       "x": 9.067,
        "y": 15.567
       },
       {
-       "x": 11.906,
+       "x": 9.067,
        "y": 15.933
       },
       {
@@ -323,6 +323,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.B2-1.wall1",
+     "featureId": "tomb-world-3.B2-1",
+     "poly": [
+      {
+       "x": 11.055,
+       "y": 15.567
+      },
+      {
+       "x": 11.906,
+       "y": 15.567
+      },
+      {
+       "x": 11.906,
+       "y": 15.933
+      },
+      {
+       "x": 11.055,
+       "y": 15.933
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.B2-1.access",
+     "featureId": "tomb-world-3.B2-1",
+     "poly": [
+      {
+       "x": 9.067,
+       "y": 15.567
+      },
+      {
+       "x": 11.055,
+       "y": 15.567
+      },
+      {
+       "x": 11.055,
+       "y": 15.933
+      },
+      {
+       "x": 9.067,
+       "y": 15.933
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "breachWall"
     }
    ],
    "placement": {
@@ -389,7 +460,7 @@
    "label": "B3",
    "parts": [
     {
-     "id": "tomb-world-3.B3-1.wall",
+     "id": "tomb-world-3.B3-1.wall0",
      "featureId": "tomb-world-3.B3-1",
      "poly": [
       {
@@ -397,11 +468,11 @@
        "y": 15.567
       },
       {
-       "x": 23.344,
+       "x": 20.545,
        "y": 15.567
       },
       {
-       "x": 23.344,
+       "x": 20.545,
        "y": 15.933
       },
       {
@@ -419,6 +490,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.B3-1.wall1",
+     "featureId": "tomb-world-3.B3-1",
+     "poly": [
+      {
+       "x": 22.533,
+       "y": 15.567
+      },
+      {
+       "x": 23.344,
+       "y": 15.567
+      },
+      {
+       "x": 23.344,
+       "y": 15.933
+      },
+      {
+       "x": 22.533,
+       "y": 15.933
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.B3-1.access",
+     "featureId": "tomb-world-3.B3-1",
+     "poly": [
+      {
+       "x": 20.545,
+       "y": 15.567
+      },
+      {
+       "x": 22.533,
+       "y": 15.567
+      },
+      {
+       "x": 22.533,
+       "y": 15.933
+      },
+      {
+       "x": 20.545,
+       "y": 15.933
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -437,7 +579,7 @@
    "label": "B3",
    "parts": [
     {
-     "id": "tomb-world-3.B3-2.wall",
+     "id": "tomb-world-3.B3-2.wall0",
      "featureId": "tomb-world-3.B3-2",
      "poly": [
       {
@@ -445,11 +587,11 @@
        "y": 7.942
       },
       {
-       "x": 8.094,
+       "x": 5.255,
        "y": 7.942
       },
       {
-       "x": 8.094,
+       "x": 5.255,
        "y": 8.308
       },
       {
@@ -467,6 +609,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.B3-2.wall1",
+     "featureId": "tomb-world-3.B3-2",
+     "poly": [
+      {
+       "x": 7.242,
+       "y": 7.942
+      },
+      {
+       "x": 8.094,
+       "y": 7.942
+      },
+      {
+       "x": 8.094,
+       "y": 8.308
+      },
+      {
+       "x": 7.242,
+       "y": 8.308
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.B3-2.access",
+     "featureId": "tomb-world-3.B3-2",
+     "poly": [
+      {
+       "x": 5.255,
+       "y": 7.942
+      },
+      {
+       "x": 7.242,
+       "y": 7.942
+      },
+      {
+       "x": 7.242,
+       "y": 8.308
+      },
+      {
+       "x": 5.255,
+       "y": 8.308
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -533,7 +746,7 @@
    "label": "B2",
    "parts": [
     {
-     "id": "tomb-world-3.B2-2.wall",
+     "id": "tomb-world-3.B2-2.wall0",
      "featureId": "tomb-world-3.B2-2",
      "poly": [
       {
@@ -541,11 +754,11 @@
        "y": 7.942
       },
       {
-       "x": 19.531,
+       "x": 16.692,
        "y": 7.942
       },
       {
-       "x": 19.531,
+       "x": 16.692,
        "y": 8.308
       },
       {
@@ -563,6 +776,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.B2-2.wall1",
+     "featureId": "tomb-world-3.B2-2",
+     "poly": [
+      {
+       "x": 18.68,
+       "y": 7.942
+      },
+      {
+       "x": 19.531,
+       "y": 7.942
+      },
+      {
+       "x": 19.531,
+       "y": 8.308
+      },
+      {
+       "x": 18.68,
+       "y": 8.308
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.B2-2.access",
+     "featureId": "tomb-world-3.B2-2",
+     "poly": [
+      {
+       "x": 16.692,
+       "y": 7.942
+      },
+      {
+       "x": 18.68,
+       "y": 7.942
+      },
+      {
+       "x": 18.68,
+       "y": 8.308
+      },
+      {
+       "x": 16.692,
+       "y": 8.308
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "breachWall"
     }
    ],
    "placement": {
@@ -629,16 +913,16 @@
    "label": "A4",
    "parts": [
     {
-     "id": "tomb-world-3.A4-1.wall",
+     "id": "tomb-world-3.A4-1.wall0",
      "featureId": "tomb-world-3.A4-1",
      "poly": [
       {
        "x": 4.099,
-       "y": 8.125
+       "y": 14.817
       },
       {
        "x": 4.464,
-       "y": 8.125
+       "y": 14.817
       },
       {
        "x": 4.464,
@@ -659,6 +943,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.A4-1.wall1",
+     "featureId": "tomb-world-3.A4-1",
+     "poly": [
+      {
+       "x": 4.099,
+       "y": 8.125
+      },
+      {
+       "x": 4.464,
+       "y": 8.125
+      },
+      {
+       "x": 4.464,
+       "y": 12.83
+      },
+      {
+       "x": 4.099,
+       "y": 12.83
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.A4-1.access",
+     "featureId": "tomb-world-3.A4-1",
+     "poly": [
+      {
+       "x": 4.099,
+       "y": 12.83
+      },
+      {
+       "x": 4.464,
+       "y": 12.83
+      },
+      {
+       "x": 4.464,
+       "y": 14.817
+      },
+      {
+       "x": 4.099,
+       "y": 14.817
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -677,16 +1032,16 @@
    "label": "A1",
    "parts": [
     {
-     "id": "tomb-world-3.A1-1.wall",
+     "id": "tomb-world-3.A1-1.wall0",
      "featureId": "tomb-world-3.A1-1",
      "poly": [
       {
        "x": 4.099,
-       "y": 0.5
+       "y": 3.217
       },
       {
        "x": 4.464,
-       "y": 0.5
+       "y": 3.217
       },
       {
        "x": 4.464,
@@ -707,6 +1062,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.A1-1.wall1",
+     "featureId": "tomb-world-3.A1-1",
+     "poly": [
+      {
+       "x": 4.099,
+       "y": 0.5
+      },
+      {
+       "x": 4.464,
+       "y": 0.5
+      },
+      {
+       "x": 4.464,
+       "y": 1.23
+      },
+      {
+       "x": 4.099,
+       "y": 1.23
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.A1-1.access",
+     "featureId": "tomb-world-3.A1-1",
+     "poly": [
+      {
+       "x": 4.099,
+       "y": 1.23
+      },
+      {
+       "x": 4.464,
+       "y": 1.23
+      },
+      {
+       "x": 4.464,
+       "y": 3.217
+      },
+      {
+       "x": 4.099,
+       "y": 3.217
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "breachWall"
     }
    ],
    "placement": {
@@ -725,16 +1151,16 @@
    "label": "A3",
    "parts": [
     {
-     "id": "tomb-world-3.A3-1.wall",
+     "id": "tomb-world-3.A3-1.wall0",
      "featureId": "tomb-world-3.A3-1",
      "poly": [
       {
        "x": 7.911,
-       "y": 15.75
+       "y": 18.386
       },
       {
        "x": 8.276,
-       "y": 15.75
+       "y": 18.386
       },
       {
        "x": 8.276,
@@ -755,6 +1181,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.A3-1.wall1",
+     "featureId": "tomb-world-3.A3-1",
+     "poly": [
+      {
+       "x": 7.911,
+       "y": 15.75
+      },
+      {
+       "x": 8.276,
+       "y": 15.75
+      },
+      {
+       "x": 8.276,
+       "y": 16.399
+      },
+      {
+       "x": 7.911,
+       "y": 16.399
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.A3-1.access",
+     "featureId": "tomb-world-3.A3-1",
+     "poly": [
+      {
+       "x": 7.911,
+       "y": 16.399
+      },
+      {
+       "x": 8.276,
+       "y": 16.399
+      },
+      {
+       "x": 8.276,
+       "y": 18.386
+      },
+      {
+       "x": 7.911,
+       "y": 18.386
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -773,16 +1270,16 @@
    "label": "A1",
    "parts": [
     {
-     "id": "tomb-world-3.A1-2.wall",
+     "id": "tomb-world-3.A1-2.wall0",
      "featureId": "tomb-world-3.A1-2",
      "poly": [
       {
        "x": 19.349,
-       "y": 8.125
+       "y": 11.289
       },
       {
        "x": 19.714,
-       "y": 8.125
+       "y": 11.289
       },
       {
        "x": 19.714,
@@ -803,6 +1300,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.A1-2.wall1",
+     "featureId": "tomb-world-3.A1-2",
+     "poly": [
+      {
+       "x": 19.349,
+       "y": 8.125
+      },
+      {
+       "x": 19.714,
+       "y": 8.125
+      },
+      {
+       "x": 19.714,
+       "y": 9.301
+      },
+      {
+       "x": 19.349,
+       "y": 9.301
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.A1-2.access",
+     "featureId": "tomb-world-3.A1-2",
+     "poly": [
+      {
+       "x": 19.349,
+       "y": 9.301
+      },
+      {
+       "x": 19.714,
+       "y": 9.301
+      },
+      {
+       "x": 19.714,
+       "y": 11.289
+      },
+      {
+       "x": 19.349,
+       "y": 11.289
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "breachWall"
     }
    ],
    "placement": {
@@ -821,16 +1389,16 @@
    "label": "A4",
    "parts": [
     {
-     "id": "tomb-world-3.A4-2.wall",
+     "id": "tomb-world-3.A4-2.wall0",
      "featureId": "tomb-world-3.A4-2",
      "poly": [
       {
        "x": 19.349,
-       "y": 0.5
+       "y": 3.339
       },
       {
        "x": 19.714,
-       "y": 0.5
+       "y": 3.339
       },
       {
        "x": 19.714,
@@ -851,6 +1419,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.A4-2.wall1",
+     "featureId": "tomb-world-3.A4-2",
+     "poly": [
+      {
+       "x": 19.349,
+       "y": 0.5
+      },
+      {
+       "x": 19.714,
+       "y": 0.5
+      },
+      {
+       "x": 19.714,
+       "y": 1.352
+      },
+      {
+       "x": 19.349,
+       "y": 1.352
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.A4-2.access",
+     "featureId": "tomb-world-3.A4-2",
+     "poly": [
+      {
+       "x": 19.349,
+       "y": 1.352
+      },
+      {
+       "x": 19.714,
+       "y": 1.352
+      },
+      {
+       "x": 19.714,
+       "y": 3.339
+      },
+      {
+       "x": 19.349,
+       "y": 3.339
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -869,16 +1508,16 @@
    "label": "A3",
    "parts": [
     {
-     "id": "tomb-world-3.A3-2.wall",
+     "id": "tomb-world-3.A3-2.wall0",
      "featureId": "tomb-world-3.A3-2",
      "poly": [
       {
        "x": 23.161,
-       "y": 15.75
+       "y": 22.523
       },
       {
        "x": 23.526,
-       "y": 15.75
+       "y": 22.523
       },
       {
        "x": 23.526,
@@ -899,6 +1538,77 @@
      "blocksVisibility": true,
      "solid": true,
      "standable": false
+    },
+    {
+     "id": "tomb-world-3.A3-2.wall1",
+     "featureId": "tomb-world-3.A3-2",
+     "poly": [
+      {
+       "x": 23.161,
+       "y": 15.75
+      },
+      {
+       "x": 23.526,
+       "y": 15.75
+      },
+      {
+       "x": 23.526,
+       "y": 20.536
+      },
+      {
+       "x": 23.161,
+       "y": 20.536
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "wall",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false
+    },
+    {
+     "id": "tomb-world-3.A3-2.access",
+     "featureId": "tomb-world-3.A3-2",
+     "poly": [
+      {
+       "x": 23.161,
+       "y": 20.536
+      },
+      {
+       "x": 23.526,
+       "y": 20.536
+      },
+      {
+       "x": 23.526,
+       "y": 22.523
+      },
+      {
+       "x": 23.161,
+       "y": 22.523
+      }
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "role": "accessPoint",
+     "state": "closed",
+     "blocksVisibility": true,
+     "solid": true,
+     "standable": false,
+     "openTypes": [
+      "Accessible",
+      "Insignificant",
+      "Exposed"
+     ],
+     "opensAs": "hatch"
     }
    ],
    "placement": {
@@ -1199,7 +1909,7 @@
  "source": {
   "card": "docs/context-pack/research/approved-ops/maps/Tomb-World3.png",
   "pxPerInch": 24.6557,
-  "extractedAt": "2026-08-17",
+  "extractedAt": "2026-08-23",
   "tool": "tools/maps/extract_cards.py",
   "qa": {
    "pxPerInch": 24.6557,

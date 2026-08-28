@@ -14,7 +14,9 @@ import { advanceShoot, checkTarget, effectiveRules, startShoot } from '../../src
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import {
   aliveOperatives,
+  apBudgetOf,
   aplOf,
+  freeApOf,
   hitOf,
   inflictDamage,
   moveOf,
@@ -58,7 +60,7 @@ import {
   whisperedTarget,
 } from '../../src/teams/blooded/index.ts';
 import { GreedyAgent, RandomLegalAgent, clearDeployCache, clearMoveCache, playGame } from '../../src/ai/index.ts';
-import { act, activate, battle, mapById, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 
 const DATA = teamData('blooded');
@@ -1006,7 +1008,26 @@ describe('ENFORCER', () => {
     const out = act(ctx, s, enf.id, ACT.enforce, { targetOperativeId: me.id });
     expect(out.ok).toBe(true);
     s = out.state;
-    expect(aplOf(ctx, s, s.operatives[me.id]!)).toBe(cardOf(me.datacardId).apl + 1);
+    // "…for free" is AP the operative was never entitled to, not an APL stat change
+    // (docs/DECISIONS.md D-100). The APL STAT — the number that totals for marker control — is
+    // untouched; only the budget the AP gate reads goes up.
+    expect(aplOf(ctx, s, s.operatives[me.id]!)).toBe(cardOf(me.datacardId).apl);
+    expect(freeApOf(s, s.operatives[me.id]!)).toBe(1);
+    expect(apBudgetOf(ctx, s, s.operatives[me.id]!)).toBe(cardOf(me.datacardId).apl + 1);
+    // And the AP is really there to spend: with its own APL used up, one more 1AP action still
+    // passes the gate — moving no more than 2".
+    s = reduce(s, { t: 'EndActivation', operativeId: enf.id }, ctx).state;
+    s = activate(ctx, s, me.id);
+    s.operatives[me.id]!.apSpent = cardOf(me.datacardId).apl; // now spending the free AP
+    const from = s.operatives[me.id]!.pos;
+    expect(act(ctx, s, me.id, 'Dash', { path: { points: [{ x: from.x + 3, y: from.y }] } }).reason).toContain('2');
+    const free = act(ctx, s, me.id, 'Dash', { path: { points: [{ x: from.x + 2, y: from.y }] } });
+    expect(free.ok).toBe(true);
+    expect(free.state.operatives[me.id]!.apSpent).toBe(cardOf(me.datacardId).apl + 1);
+    // …and it does not outlive the activation it was spent in.
+    const after = reduce(free.state, { t: 'EndActivation', operativeId: me.id }, ctx).state;
+    expect(freeApOf(after, after.operatives[me.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, after, after.operatives[me.id]!)).toBe(cardOf(me.datacardId).apl);
   });
 
   it('ENFORCE: "If the selected friendly operative is a COMMSMAN, it cannot perform the Sacrilegious Actuation or Signal actions."', () => {
@@ -1065,8 +1086,9 @@ describe('FLENSER', () => {
     place(state, f.id, 10, 11);
     place(state, foe.id, 13, 11);
     const s = activate(ctx, state, f.id, 'conceal');
-    expect(getAction('Charge')!.check(ctx, s, s.operatives[f.id]!, { path: { points: [{ x: 12.2, y: 11 }] } }).ok).toBe(false);
-    expect(def.check(ctx, s, s.operatives[f.id]!, { path: { points: [{ x: 12.2, y: 11 }] } }).ok).toBe(true);
+    const into = { path: { points: [chargeTo(ctx, s, f.id, foe.id)] } };
+    expect(getAction('Charge')!.check(ctx, s, s.operatives[f.id]!, into).ok).toBe(false);
+    expect(def.check(ctx, s, s.operatives[f.id]!, into).ok).toBe(true);
   });
 
   it('Wretched: "you can strike the enemy operative in that sequence with one of your unresolved successes"', () => {
@@ -1099,7 +1121,7 @@ describe('OGRYN', () => {
     place(state, o.id, 10, 11);
     place(state, foe.id, 14, 11);
     let s = activate(ctx, state, o.id);
-    const charged = act(ctx, s, o.id, 'Charge', { path: { points: [{ x: 13, y: 11 }] } });
+    const charged = act(ctx, s, o.id, 'Charge', { path: { points: [chargeTo(ctx, s, o.id, foe.id)] } });
     expect(charged.ok).toBe(true);
     s = charged.state;
     const before = s.operatives[foe.id]!.wounds;
@@ -1116,6 +1138,25 @@ describe('OGRYN', () => {
     expect(aplOf(ctx, state, o)).toBe(base);
     o.aplMods.push(1);
     expect(aplOf(ctx, state, o)).toBe(base);
+  });
+
+  it('Chem-enhanced ignores APL changes without swallowing an ENFORCEd free action', () => {
+    expect(abilityText(CARD.ogryn, AB.chemEnhanced)).toContain('ignore any changes to this operative’s APL stat');
+    expect(actionOf(CARD.enforcer, ACT.enforce).text).toContain('perform a 1AP action for free');
+    const { ctx, state } = setup({ roles: [CARD.ogryn, CARD.enforcer] });
+    const o = state.operatives[opWith(state, 'p1', CARD.ogryn)]!;
+    const enf = state.operatives[opWith(state, 'p1', CARD.enforcer)]!;
+    isolate(state, [o.id, enf.id]);
+    place(state, enf.id, 10, 11);
+    place(state, o.id, 12, 11);
+    const base = cardOf(CARD.ogryn).apl;
+    let s = activate(ctx, state, enf.id);
+    s = act(ctx, s, enf.id, ACT.enforce, { targetOperativeId: o.id }).state;
+    // The two rules do not meet: "for free" is AP outside the APL budget (docs/DECISIONS.md
+    // D-100), so Chem-enhanced has nothing to ignore and the free AP survives the ability that
+    // cancels every APL change.
+    expect(aplOf(ctx, s, s.operatives[o.id]!)).toBe(base);
+    expect(apBudgetOf(ctx, s, s.operatives[o.id]!)).toBe(base + 1);
   });
 
   it('Chem-enhanced: "it’s not affected by enemy operatives’ Shock and Stun weapon rules"', () => {

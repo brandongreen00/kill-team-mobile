@@ -1053,8 +1053,9 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
   // "Select one other friendly HERNKYN YAEGIR operative visible to and within 6\" of that
   //  friendly operative, but that isn't itself within control range of enemy operatives. The
   //  selected operative can perform a free Shoot action."
-  //  D-015: the free action is one extra AP restricted to Shoot, so it is the LAST AP the
-  //  operative spends — which is exactly the window every clause below is gated on.
+  //  D-100: the free action is one extra AP restricted to Shoot, granted on top of the APL
+  //  budget, so it is the LAST AP the operative spends — exactly the window every clause below
+  //  is gated on.
   reg.on('onPloyUsed', T.bind(FP.stalwartDefence, 20), (ev) => {
     if (ev.player !== T.player || ev.ployId !== FP.stalwartDefence) return;
     const enemy = ev.state.activeOperativeId ? ev.state.operatives[ev.state.activeOperativeId] : undefined;
@@ -1105,30 +1106,36 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     ev.reason = 'STALWART DEFENCE: no grenades, Blast or x" Devastating x weapons';
   });
 
-  // `grantFreeAction` pushes a +1 into `aplMods` that the engine never pops (D-015), and this
-  // team hands one out to the WHOLE kill team through Dauntless Explorers — without this upkeep
-  // every operative would sit on APL 3 for the rest of the battle (the Ratlings/Death Korps
-  // precedent). The same sweep pops Brazen Killer's -1 once its window has closed.
+  // Free AP looks after itself: `grantFreeAction` records it on an effect that expires at the
+  // end of the grantee's activation, and `expireActivationEffects` honours that (D-100). What
+  // no expiry can reach is a grant nobody took, and all three of this team's grants are handed
+  // to an operative that is NOT activating — Dauntless Explorers arms the whole kill team during
+  // the STRATEGIC GAMBIT step, Wroughtlock Negotiation and STALWART DEFENCE arm one operative
+  // while an enemy is activating. "Can immediately perform a free Reposition/Shoot action" is an
+  // offer made in one turning point, so the Ready step clears anything still unspent rather than
+  // letting an operative that was expended without taking it carry the AP into the next.
   const FREE_SOURCES = new Set<string>([RULE.dauntlessExplorers, A.wroughtlockNegotiation, FP.stalwartDefence]);
-  const upkeep = (state: GameState, op: OperativeState): void => {
-    for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
-      if (!FREE_SOURCES.has(eff.source.id)) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
-      dropEffects(state, (e) => e === eff);
-    }
-    for (const eff of effectsOn(state, op.id, E.brazenApl)) {
-      if (eff.expiry.kind !== 'endOfNextActivation' || !eff.expiry.armed) continue;
-      const at = op.aplMods.lastIndexOf(-1);
-      if (at >= 0) op.aplMods.splice(at, 1);
-    }
-  };
-  reg.on('onActivationEnd', T.bindText('hy.aplUpkeep', text(RULE.resourceful), 90), (ev) => {
-    upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('hy.aplUpkeep', text(RULE.resourceful), 90), (ev) => {
+  reg.on('onReadyStep', T.bindText('hy.freeActionUpkeep', text(RULE.resourceful), 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const o of T.friendlies(ev.state)) upkeep(ev.state, o);
+    for (const op of T.friendlies(ev.state)) {
+      for (const eff of effectsOn(ev.state, op.id, FREE_ACTION_RULE)) {
+        if (!FREE_SOURCES.has(eff.source.id)) continue;
+        dropEffects(ev.state, (e) => e === eff);
+      }
+    }
+  });
+
+  // Brazen Killer's "subtract 1 from its APL stat until the end of its next activation" IS an
+  // APL stat change, so it lives in `op.aplMods` — and those the engine really does never pop.
+  // This takes it out at the same boundary where `expireActivationEffects` drops the effect that
+  // recorded it. It runs for every operative rather than friendlies only, because the operative
+  // carrying the debuff is an ENEMY of the player who owns this rule.
+  reg.on('onActivationEnd', T.bindText('hy.brazenKillerUpkeep', abilityText(C.bombast, A.brazenKiller), 90), (ev) => {
+    for (const eff of effectsOn(ev.state, ev.operative.id, E.brazenApl)) {
+      if (eff.expiry.kind !== 'endOfNextActivation' || !eff.expiry.armed) continue;
+      const at = ev.operative.aplMods.lastIndexOf(-1);
+      if (at >= 0) ev.operative.aplMods.splice(at, 1);
+    }
   });
 }
 

@@ -13,6 +13,9 @@ import { advanceFight, startFight } from '../../src/core/sequences/fight.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import {
   aliveOperatives,
+  apBudgetOf,
+  aplOf,
+  freeApOf,
   hitOf,
   inflictDamage,
   markerController,
@@ -56,7 +59,7 @@ import {
   placeTacticianMarker,
 } from '../../src/teams/hearthkyn-salvager/index.ts';
 import { makeTeamHooks } from '../../src/teams/helpers.ts';
-import { act, activate, battle, opWith, rosterIncluding, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, opWith, rosterIncluding, teamContext } from './harness.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import type { GameState, OperativeState, PlayerId, Vec2, WeaponProfile } from '../../src/core/types.ts';
@@ -671,11 +674,22 @@ describe('Firefight ploys', () => {
     s.teams.p1.cp = 3;
     s = reduce(s, { t: 'UsePloy', player: 'p1', ployId: 'hearthkyn-salvager.fp.the-ancestors-are-watching' }, ctx).state;
     const me = s.operatives[op]!;
-    expect(me.aplMods).toContain(1);
+    // "a FREE Shoot or a free Fight action" — D-100: free AP, not an APL stat change, so the APL
+    // stat is untouched and the activation is one AP longer than the datacard.
+    expect(me.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, me)).toBe(2);
+    expect(freeApOf(s, me)).toBe(1);
+    expect(apBudgetOf(ctx, s, me)).toBe(3);
     // Once its own AP is spent, the bonus AP is restricted to the two named actions.
     me.apSpent = 2;
     const actions = availableActions(ctx, s, me);
     expect(actions.find((a) => a.def.id === 'Reposition')!.reason).toBe('the free action must be Shoot or Fight');
+    // And the third AP is genuinely there to spend: the reducer's AP gate reads `apBudgetOf`.
+    expect(actions.find((a) => a.def.id === 'Shoot')!.reason).not.toBe('not enough AP');
+    // "Until the end of THAT ACTIVATION" — and no further.
+    const ended = reduce(s, { t: 'EndActivation', operativeId: op }, ctx).state;
+    expect(freeApOf(ended, ended.operatives[op]!)).toBe(0);
+    expect(apBudgetOf(ctx, ended, ended.operatives[op]!)).toBe(2);
     expect(ruleText('hearthkyn-salvager.fp.the-ancestors-are-watching')).toContain('free Shoot or a free Fight action');
   });
 
@@ -1397,7 +1411,8 @@ describe('DÔZR › KNUX SMASH', () => {
     const foe = state.operatives[opWith(state, 'p2', LUGGER)]!;
     isolate(state, [dozr.id, foe.id]);
     place(state, dozr.id, 10, 10);
-    place(state, foe.id, 10.6, 10);
+    // Within control range but not inside the DÔZR's base — it is a big model.
+    place(state, foe.id, 11.5, 10);
     return { ctx, state, dozr, foe };
   }
 
@@ -1431,7 +1446,7 @@ describe('DÔZR › KNUX SMASH', () => {
     const s = activate(ctx, state, dozr.id);
     const out = act(ctx, s, dozr.id, 'hearthkyn-salvager.d-zr.act.knux-smash', { targetOperativeId: foe.id });
     expect(out.ok).toBe(true);
-    expect(out.state.operatives[foe.id]!.pos).toEqual({ x: 10.6, y: 10 });
+    expect(out.state.operatives[foe.id]!.pos).toEqual({ x: 11.5, y: 10 });
   });
 
   it('the free Charge is its own action, is capped at 3" and only exists after KNUX SMASH', () => {
@@ -1448,7 +1463,7 @@ describe('DÔZR › KNUX SMASH', () => {
     s = out.state;
     const me = s.operatives[dozr.id]!;
     expect(getAction(KNUX_CHARGE)!.available!(ctx, s, me)).toBe(true);
-    expect(getAction(KNUX_CHARGE)!.check(ctx, s, me, { path: { points: [{ x: 12.3, y: 10 }] } }).ok).toBe(true);
+    expect(getAction(KNUX_CHARGE)!.check(ctx, s, me, { path: { points: [chargeTo(ctx, s, me.id, foe.id)] } }).ok).toBe(true);
     expect(getAction(KNUX_CHARGE)!.check(ctx, s, me, { path: { points: [{ x: 14, y: 14 }] } }).ok).toBe(false);
     expect(actionOf(DOZR, 'hearthkyn-salvager.d-zr.act.knux-smash').text).toContain('cannot move more than 3"');
   });

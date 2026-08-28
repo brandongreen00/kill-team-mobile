@@ -5,10 +5,10 @@
 import { describe, expect, it } from 'vitest';
 import { availableActions } from '../../src/core/actions.ts';
 import { moveBudget } from '../../src/core/movement.ts';
-import { gambitOptions } from '../../src/core/phases.ts';
+import { gambitOptions, readyStep } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aplOf, inflictDamage, saveOf, weaponsOf } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, inflictDamage, saveOf, weaponsOf } from '../../src/core/state.ts';
 import type { AttackContext } from '../../src/core/hooks.ts';
 import type { GameState, OperativeState, PlayerId, Vec2, WeaponProfile } from '../../src/core/types.ts';
 import { teamData } from '../../src/teams/data.ts';
@@ -683,6 +683,14 @@ describe('MEDIC, VOX-OPERATOR and SPOTTER', () => {
     expect(victim.wounds).toBe(1);
     expect(aplOf(ctx, state, medic)).toBe(1);
     expect(state.effects.some((e) => e.rule === 'teamFreeAction' && e.operativeId === victim.id)).toBe(true);
+    // The two halves of the rule are independent: "subtract 1 from … that operative's APL stat"
+    // really lowers the victim's APL, and the free Dash it is promised sits outside that budget
+    // (docs/DECISIONS.md D-100). Were the Dash an APL change the two would meet under "the total
+    // can never be more than -1 or +1 from its normal APL" and cancel, and the victim would be
+    // handed a Dash it could never take.
+    expect(aplOf(ctx, state, victim)).toBe(1);
+    expect(freeApOf(state, victim)).toBe(1);
+    expect(apBudgetOf(ctx, state, victim)).toBe(2);
   });
 
   it('Medic! "cannot be used … if this operative is within control range of an enemy operative"', () => {
@@ -976,6 +984,17 @@ describe('Strategy ploys', () => {
     expect(granted(near.id)).toBe(true);
     expect(granted(far.id)).toBe(false);
     expect(granted(leader.id)).toBe(false); // "Each OTHER friendly … operative"
+    // "…can immediately perform a free Dash action" is AP outside the APL budget, not an APL
+    // stat change (docs/DECISIONS.md D-100).
+    expect(aplOf(ctx, s, s.operatives[near.id]!)).toBe(2);
+    expect(apBudgetOf(ctx, s, s.operatives[near.id]!)).toBe(3);
+    // A whole kill team is handed one of these at once and most of them will not be spent by an
+    // operative whose activation ever ends this turning point, so the grant must not survive to
+    // the next: "immediately" cannot mean "some time next turning point".
+    s.turningPoint = 2;
+    readyStep(ctx, s);
+    expect(freeApOf(s, s.operatives[near.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[near.id]!)).toBe(2);
   });
 
   it('REGROUP and the CHRONOMETER STRATEGIC GAMBIT cannot be used in the same turning point', () => {

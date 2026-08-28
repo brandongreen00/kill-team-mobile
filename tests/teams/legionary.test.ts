@@ -9,7 +9,7 @@ import { moveBudget } from '../../src/core/movement.ts';
 import { counteractCandidates, gambitOptions } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { hitOf, inflictDamage, saveOf } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage, saveOf } from '../../src/core/state.ts';
 import type { AttackContext } from '../../src/core/hooks.ts';
 import type { GameState, OperativeState, PlayerId, WeaponProfile } from '../../src/core/types.ts';
 import { teamData } from '../../src/teams/data.ts';
@@ -870,9 +870,21 @@ describe('LEGIONARY datacard abilities', () => {
     expect(assists.assists).toBe(0);
 
     ctx.hooks.emit('onActivationEnd', state, { state, operative: foe });
-    expect(butcher.aplMods).toContain(1);
+    // "this operative can perform a free Charge action" grants an action, not an APL stat
+    // change, so the printed APL 3 is untouched and the free Charge is a fourth AP on top of it
+    // (docs/DECISIONS.md D-100).
+    expect(butcher.aplMods).toEqual([]);
+    expect(aplOf(ctx, state, butcher)).toBe(3);
+    expect(freeApOf(state, butcher)).toBe(1);
+    expect(apBudgetOf(ctx, state, butcher)).toBe(4);
     butcher.apSpent = 3; // the granted AP is the last one it spends
     expect(moveBudget(ctx, state, butcher, { action: 'Charge', bonusInches: 2 })).toBeCloseTo(2);
+    // The free AP belongs to that one activation and expires with it, so the BUTCHER is back on
+    // its printed 3AP afterwards however many enemy activations end next to it.
+    let s = activate(ctx, state, butcher.id);
+    s = reduce(s, { t: 'EndActivation', operativeId: butcher.id }, ctx).state;
+    expect(freeApOf(s, s.operatives[butcher.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[butcher.id]!)).toBe(3);
   });
 
   it('Icon Bearer: "treat this operative’s APL stat as 1 higher" whenever determining control of a marker', () => {

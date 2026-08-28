@@ -55,6 +55,7 @@ export function readyStep(ctx: GameContext, state: GameState): void {
     op.counteractedThisTP = false;
     op.apSpent = 0;
     op.actionsThisActivation = [];
+    op.weaponsUsedThisActivation = [];
     // "It's the start of the next turning point" ends Guard.
     op.onGuard = false;
     op.guardSpentTP = null;
@@ -108,10 +109,25 @@ export function whoActivates(
     const canCounteract = ctx
       ? counteractCandidates(ctx, state, next).length > 0
       : aliveOperatives(state, next).some((o) => o.expended && o.order === 'engage' && !o.counteractedThisTP);
-    if (canCounteract) return { player: next, mode: 'counteract' };
+    if (canCounteract && !counteractDeclinedHere(state, next)) return { player: next, mode: 'counteract' };
     return { player: other, mode: 'activate' };
   }
   return null;
+}
+
+/**
+ * Has this player already passed on THIS counteract window?
+ *
+ * Declining used to mark every one of the player's operatives as having counteracted, which
+ * only `readyStep` clears — so passing on one window silently gave up every counteract for the
+ * rest of the turning point. The only per-turning-point budget the rule imposes is per
+ * operative, and it is spent by actually counteracting. A window is identified by the number
+ * of activations that have happened, which `EndActivation` increments, so the next window
+ * opens by itself.
+ */
+export function counteractDeclinedHere(state: GameState, player: PlayerId): boolean {
+  const d = state.opState['counteractDeclined'];
+  return d?.['player'] === player && d?.['at'] === state.activationsThisTP;
 }
 
 /**
@@ -198,9 +214,26 @@ export function guardInterruptCandidates(state: GameState, defender: PlayerId) {
 // End of turning point
 // ---------------------------------------------------------------------------
 
-export function endTurningPoint(ctx: GameContext, state: GameState): void {
+/**
+ * End of the turning point, in the order the rules resolve it.
+ *
+ * `scoreEndOfTurningPoint` is passed in and called BETWEEN the `onEndOfTP` emit and the expiry
+ * sweep. It used to run after `endTurningPoint` had already returned, so every effect with
+ * `expiry.kind === 'endOfTurningPoint'` — 119 of them across `src/` — was gone before the crit
+ * op read marker control. Marker control is decided by total contesting APL, and APL modifiers
+ * reach `aplOf` through `onStatMod` hooks that read `state.effects`, so a ploy bought precisely
+ * to win the end-of-turning-point control check expired a few lines before the check ran.
+ * Tempestus Aquilons' DROP AND SECURE had already been given `endOfBattle` expiry to work
+ * around this, with a comment naming the ordering.
+ */
+export function endTurningPoint(
+  ctx: GameContext,
+  state: GameState,
+  score?: (ctx: GameContext, state: GameState) => void,
+): void {
   removeIncapacitated(ctx, state);
   ctx.hooks.emit('onEndOfTP', state, { state });
+  score?.(ctx, state);
   expireEffects(state);
   log(state, { kind: 'system', text: `End of turning point ${state.turningPoint}` });
 }

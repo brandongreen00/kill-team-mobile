@@ -525,24 +525,25 @@ function rules(reg: HookRegistry, T: TeamHooks): void {
   skysplinterAssassin(reg, T);
 
   /*
-   * `grantFreeAction` models a free action as one extra AP (D-015) by pushing a +1 into
-   * `aplMods`, which the engine never pops (the Death Korps / Ratlings upkeep). Vitalised Surge
-   * hands one out on every kill, so without this a killer would keep APL 3 for the battle.
+   * Vitalised Surge's free Dash is free AP on an effect that expires at the end of the killer's
+   * activation (D-100), so the usual case — a kill made during that operative's own activation —
+   * needs nothing from this module.
+   *
+   * A kill can also be made outside it: an On Guard interrupt shoots or fights while the ENEMY
+   * is the active operative, so the killer is handed a Dash it can only take in an activation of
+   * its own — and if it was already expended when it fired, that activation never comes. "Can
+   * immediately perform a free Dash action" is an offer for the moment it was earned in, not a
+   * credit to carry, so the Ready step clears anything still unspent.
    */
-  const upkeep = (state: GameState, op: OperativeState): void => {
+  const dropUntakenSurge = (state: GameState, op: OperativeState): void => {
     for (const eff of effectsOn(state, op.id, FREE_ACTION_RULE)) {
       if (eff.source.id !== RULE.invigorations) continue;
-      const at = op.aplMods.lastIndexOf(1);
-      if (at >= 0) op.aplMods.splice(at, 1);
       dropEffects(state, (e) => e === eff);
     }
   };
-  reg.on('onActivationEnd', T.bindText('handOfTheArchon.aplUpkeep', INVIGORATION_TEXT['vitalised-surge'], 90), (ev) => {
-    if (ev.operative.player === T.player) upkeep(ev.state, ev.operative);
-  });
-  reg.on('onReadyStep', T.bindText('handOfTheArchon.aplUpkeep', INVIGORATION_TEXT['vitalised-surge'], 90), (ev) => {
+  reg.on('onReadyStep', T.bindText('handOfTheArchon.freeActionUpkeep', INVIGORATION_TEXT['vitalised-surge'], 90), (ev) => {
     if (ev.player !== T.player) return;
-    for (const op of T.friendlies(ev.state)) upkeep(ev.state, op);
+    for (const op of T.friendlies(ev.state)) dropUntakenSurge(ev.state, op);
   });
 }
 

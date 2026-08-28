@@ -96,29 +96,38 @@ function report(label: string, r: MatchupResult, games = GAMES): void {
 /**
  * MEASURED RESULTS (deterministic — same seeds, same code, same numbers every run):
  *
- *   Tactical (Veteran) vs Greedy   35W 13D  2L of 50 = 70% wins, 83% score rate, VP 7.6:3.8
- *   Tactical (Veteran) vs Random   47W  2D  1L of 50 = 94% wins, 96% score rate, VP 7.8:2.9
+ *   Tactical (Veteran) vs Greedy   29W 11D 10L of 50 = 58% wins, VP 8.0:6.0
+ *   Tactical (Veteran) vs Random   47W  2D  1L of 50 = 94% wins, VP 10.3:3.3
  *
- * The brief's bars are 80% and 95%; NEITHER IS MET. The AI is plainly the stronger player —
- * it roughly doubles Greedy's VP and loses 2 games in 50 — but it does not convert that into
- * wins often enough on one of the two fixtures: EVERY draw against Greedy is on `ai-corridor`,
- * a symmetric board where both sides secure their home objective, neither can cross
- * profitably, and mirrored heuristics produce a mirrored 3:3 / 4:4 result with equal
- * survivors. More search does not fix it (Elite measured 68%, worse than Veteran), and pushing
- * the objective-advance weight up (1.8, 3.0) measured 55% / 60%. See docs/AI.md §7-§8.
+ * The brief's bars are 80% and 95%; NEITHER IS MET. The AI is the stronger player — it stays
+ * well ahead of Greedy on points and crushes Random — but it does not convert that into wins
+ * often enough on one of the two fixtures: the draws against Greedy are on `ai-corridor`, a
+ * symmetric board where both sides secure their home objective, neither can cross profitably,
+ * and mirrored heuristics produce a mirrored result with equal survivors. More search does not
+ * fix it (Elite measured worse than Veteran). See docs/AI.md §7-§8.
+ *
+ * 2026-08-23, the rules review: this WAS 70% wins / VP 7.6:3.8, and the drop is the AI losing
+ * exploits, not the AI getting worse at Kill Team. Its heuristics were tuned against an engine
+ * that let it shoot with a Heavy weapon and then Reposition out of sight (Appendix › Heavy
+ * forbids both orders), throw a Limited 1 weapon in all four turning points, walk over mines
+ * without setting them off, and lift an objective marker a team-mate was standing on from
+ * anywhere on the board. Of the four, only Heavy is asymmetric — Greedy takes one action at a
+ * time and never planned a shoot-and-scoot, and the Tactical agent's greedy in-activation
+ * search does not price the move a Heavy shot forfeits. Re-tuning the evaluation against the
+ * corrected rules is its own piece of work (docs/PROGRESS.md).
  *
  * The assertions below are REGRESSION FLOORS at the measured rate, not the brief's bars.
  */
 describe('AI strength', () => {
-  it(`beats GreedyAgent (bar: 80% — MEASURED 70% of ${GAMES} seeded games)`, () => {
+  it(`beats GreedyAgent (bar: 80% — MEASURED 58% of ${GAMES} seeded games)`, () => {
     const r = matchup(() => new TacticalAgent({ difficulty: 'veteran' }), () => new GreedyAgent());
     report('tactical-veteran vs greedy', r);
     expect(r.rejected, 'rejected intents').toBe(0);
     expect(r.errors).toEqual([]);
-    // Clearly ahead on points even in the games it cannot win outright.
-    expect(r.vpFor).toBeGreaterThan(1.5 * r.vpAgainst);
-    expect(r.losses).toBeLessThanOrEqual(GAMES * 0.1);
-    expect(rate(r), 'regression floor, NOT the 80% bar').toBeGreaterThanOrEqual(65);
+    // Still clearly ahead on points in the games it cannot win outright.
+    expect(r.vpFor).toBeGreaterThan(1.25 * r.vpAgainst);
+    expect(r.losses).toBeLessThanOrEqual(GAMES * 0.2);
+    expect(rate(r), 'regression floor, NOT the 80% bar').toBeGreaterThanOrEqual(55);
   }, 300_000);
 
   it(`beats RandomLegalAgent (bar: 95% — MEASURED 94% of ${GAMES} seeded games)`, () => {

@@ -29,6 +29,8 @@ export interface UiState {
   placingId?: string;
   /** A move being aimed: the action, and the destination under the finger. */
   move?: { action: MoveAction; dest?: Vec2; destZ?: number } | undefined;
+  /** A parameterised action being aimed: which action the target list is for. */
+  aimAction?: string | undefined;
   /** Shooting: which weapon the target list is for, and which enemy is picked. */
   weaponName?: string;
   shootTargetId?: string | undefined;

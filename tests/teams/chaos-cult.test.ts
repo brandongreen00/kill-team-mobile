@@ -7,13 +7,15 @@ import { describe, expect, it } from 'vitest';
 import { actionCost, getAction } from '../../src/core/actions.ts';
 import { addRolled, newPool, type DicePool } from '../../src/core/dice.ts';
 import { zeroStatMods, HookRegistry, type AttackContext } from '../../src/core/hooks.ts';
-import { gambitOptions } from '../../src/core/phases.ts';
+import { gambitOptions, readyStep } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { advanceFight, startFight } from '../../src/core/sequences/fight.ts';
 import { effectiveRules, startShoot } from '../../src/core/sequences/shoot.ts';
 import {
   aliveOperatives,
+  apBudgetOf,
   aplOf,
+  freeApOf,
   hitOf,
   inflictDamage,
   markerController,
@@ -58,7 +60,7 @@ import {
   mutatedThisTP,
   setAccursedGift,
 } from '../../src/teams/chaos-cult/index.ts';
-import { act, activate, battle, mapById, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, mapById, opWith, rosterIncluding, settle, teamContext } from './harness.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import type { GameState, KillzoneMap, OperativeState, WeaponProfile } from '../../src/core/types.ts';
@@ -143,7 +145,7 @@ const WINGS_PATH = {
   points: [
     { x: 13, y: 8.5 },
     { x: 13, y: 9.2 },
-    { x: 13, y: 10.2 },
+    { x: 13, y: 12.2 },
   ],
   zs: [undefined, 3, 3],
 } as unknown as never;
@@ -584,7 +586,7 @@ describe('Accursed Gifts (faction rule)', () => {
     mutateOperative(ctx, state, state.operatives[id]!, 'mutant');
     let s = activate(ctx, state, id, 'engage');
     const before = s.operatives[foe]!.wounds;
-    const charged = act(ctx, s, id, 'Charge', { path: { points: [{ x: 10, y: 11 }, { x: 11.1, y: 11 }] } });
+    const charged = act(ctx, s, id, 'Charge', { path: { points: [chargeTo(ctx, s, id, foe)] } });
     expect(charged.ok).toBe(true);
     s = reduce(charged.state, { t: 'EndActivation', operativeId: id }, ctx).state;
     expect(s.operatives[foe]!.wounds).toBe(before - 1);
@@ -651,14 +653,14 @@ describe('Accursed Gifts (faction rule)', () => {
     place(state, id, 13, 8.5);
     mutateOperative(ctx, state, state.operatives[id]!, 'mutant');
     const s = activate(ctx, state, id, 'engage');
-    // The path costs 7" (a 3" climb, then two Accessible-terrain legs); the MUTANT's Move stat
-    // is 6", so the universal Reposition cannot afford it and treating the climb as 2" can.
+    // The path costs 7" (a 3" climb, then 1" and 3" along the platform); the MUTANT's Move
+    // stat is 6", so the universal Reposition cannot afford it and treating the climb as 2" can.
     expect(getAction('Reposition')!.check(ctx, s, s.operatives[id]!, { path: WINGS_PATH }).ok).toBe(false);
     expect(getAction(WINGS_REPOSITION)!.check(ctx, s, s.operatives[id]!, { path: WINGS_PATH }).ok).toBe(true);
     const out = act(ctx, s, id, WINGS_REPOSITION, { path: WINGS_PATH });
     expect(out.ok).toBe(true);
     expect(out.state.operatives[id]!.z).toBe(3);
-    expect(out.state.operatives[id]!.pos).toEqual({ x: 13, y: 10.2 });
+    expect(out.state.operatives[id]!.pos).toEqual({ x: 13, y: 12.2 });
     expect(out.state.operatives[id]!.actionsThisActivation).toContain('Reposition');
   });
 
@@ -687,10 +689,10 @@ describe('Datacard abilities', () => {
     const foe = idsOf(state, 'p2', CARD.devotee)[0]!;
     isolate(state, [blade, foe]);
     place(state, blade, 10, 11);
-    place(state, foe, 10.6, 11);
+    place(state, foe, 11.4, 11); // engaged, but touching rather than standing in each other
     const before = state.operatives[foe]!.wounds;
     let s = activate(ctx, state, foe, 'engage');
-    const moved = act(ctx, s, foe, 'Fall Back', { path: { points: [{ x: 10.6, y: 11 }, { x: 15, y: 11 }] } });
+    const moved = act(ctx, s, foe, 'Fall Back', { path: { points: [{ x: 15, y: 11 }] } });
     expect(moved.ok).toBe(true);
     s = reduce(moved.state, { t: 'EndActivation', operativeId: foe }, ctx).state;
     expect(s.operatives[foe]!.wounds).toBe(before - 3);
@@ -703,7 +705,7 @@ describe('Datacard abilities', () => {
     const foe = idsOf(state, 'p2', CARD.devotee)[0]!;
     isolate(state, [blade, foe]);
     place(state, blade, 10, 11);
-    place(state, foe, 10.6, 11);
+    place(state, foe, 11.4, 11); // engaged, but touching rather than standing in each other
     const before = state.operatives[foe]!.wounds;
     let s = activate(ctx, state, foe, 'engage');
     s = reduce(s, { t: 'EndActivation', operativeId: foe }, ctx).state;
@@ -880,7 +882,12 @@ describe('Unique actions', () => {
     const s = activate(ctx, state, boss, 'engage');
     const out = act(ctx, s, boss, ACT.inciteSlaughter, { targetOperativeId: mate });
     expect(out.ok).toBe(true);
-    expect(out.state.operatives[mate]!.aplMods).toContain(1);
+    // "a free Fight action" is AP outside the recipient's APL budget, not an APL stat change
+    // (docs/DECISIONS.md D-100) — the APL stat is untouched and only the AP gate sees the extra.
+    expect(out.state.operatives[mate]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, out.state, out.state.operatives[mate]!)).toBe(2);
+    expect(freeApOf(out.state, out.state.operatives[mate]!)).toBe(1);
+    expect(apBudgetOf(ctx, out.state, out.state.operatives[mate]!)).toBe(3);
     const free = out.state.effects.find((e) => e.rule === 'teamFreeAction' && e.operativeId === mate);
     expect(free?.data?.['only']).toEqual(['Fight', FIGHT_DAEMON]);
   });
@@ -1248,7 +1255,10 @@ describe('Firefight ploys', () => {
     let s = activate(ctx, state, id, 'engage');
     const aplBefore = aplOf(ctx, s, s.operatives[id]!);
     s = reduce(s, { t: 'UsePloy', player: 'p1', ployId: FP.unleashTheDaemon }, ctx).state;
-    expect(aplOf(ctx, s, s.operatives[id]!)).toBe(aplBefore + 1);
+    // "one of them can be free": the second Fight is paid for with AP outside the APL budget
+    // (docs/DECISIONS.md D-100), so the APL stat does not move and the budget does.
+    expect(aplOf(ctx, s, s.operatives[id]!)).toBe(aplBefore);
+    expect(apBudgetOf(ctx, s, s.operatives[id]!)).toBe(aplBefore + 1);
     // Pretend the first Fight has resolved: the second Fight is a separate ActionDef with its
     // own restriction key, so action restrictions do not refuse it.
     s.operatives[id]!.actionsThisActivation.push('Fight');
@@ -1451,7 +1461,8 @@ describe('Faction equipment', () => {
     expect(state.rolls.some((r) => r.kind === 'regeneration')).toBe(false);
   });
 
-  it('the module pops the +1 APL that grantFreeAction pushes, so nobody sits on APL 3', () => {
+  it('COVERT GUISES: "can immediately perform a free Reposition action" is one AP, for one activation', () => {
+    expect(ruleText(EQ.covertGuises)).toContain('can immediately perform a free Reposition action');
     const { ctx, state } = setup({ equipment: [EQ.covertGuises], script: [2] }); // D3 = 1
     const devotees = idsOf(state, 'p1', CARD.devotee);
     devotees.forEach((id, i) => place(state, id, 3, 3 + (i % 8) * 2));
@@ -1459,12 +1470,34 @@ describe('Faction equipment', () => {
     state.strategyStep = 'gambit';
     let s = reduce(state, { t: 'UseGambit', player: 'p1', gambitId: EQ.covertGuises }, ctx).state;
     const lucky = s.effects.find((e) => e.rule === 'teamFreeAction' && e.source.id === EQ.covertGuises)!.operativeId!;
-    expect(aplOf(ctx, s, s.operatives[lucky]!)).toBe(3);
+    // The DEVOTEE's APL stat — the number that totals for marker control — never moves; only the
+    // AP it may spend in that activation does (docs/DECISIONS.md D-100).
+    expect(s.operatives[lucky]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, s.operatives[lucky]!)).toBe(2);
+    expect(apBudgetOf(ctx, s, s.operatives[lucky]!)).toBe(3);
     s.phase = 'firefight';
     s = activate(ctx, s, lucky, 'engage');
     s = reduce(s, { t: 'EndActivation', operativeId: lucky }, ctx).state;
-    expect(s.operatives[lucky]!.aplMods).toEqual([]);
-    expect(aplOf(ctx, s, s.operatives[lucky]!)).toBe(2);
+    expect(freeApOf(s, s.operatives[lucky]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[lucky]!)).toBe(2);
+  });
+
+  it('COVERT GUISES: a free Reposition nobody spent does not survive the turning point', () => {
+    expect(ruleText(EQ.covertGuises)).toContain('immediately');
+    const { ctx, state } = setup({ equipment: [EQ.covertGuises], script: [2] }); // D3 = 1
+    const devotees = idsOf(state, 'p1', CARD.devotee);
+    devotees.forEach((id, i) => place(state, id, 3, 3 + (i % 8) * 2));
+    state.phase = 'strategy';
+    state.strategyStep = 'gambit';
+    const s = reduce(state, { t: 'UseGambit', player: 'p1', gambitId: EQ.covertGuises }, ctx).state;
+    const lucky = s.effects.find((e) => e.rule === 'teamFreeAction' && e.source.id === EQ.covertGuises)!.operativeId!;
+    expect(freeApOf(s, s.operatives[lucky]!)).toBe(1);
+    // The DEVOTEE never activates. Its activation therefore never ends, so nothing expires the
+    // grant on its own — and "immediately" cannot mean "at any point in a later turning point".
+    s.turningPoint += 1;
+    readyStep(ctx, s);
+    expect(freeApOf(s, s.operatives[lucky]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[lucky]!)).toBe(2);
   });
 
   it('every equipment option carries an aiHints.equipmentValue and every ploy a ployValue', () => {

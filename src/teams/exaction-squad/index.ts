@@ -844,10 +844,10 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
    * such operatives to be targeted…, it doesn't remove their cover save (if any), unless the
    * friendly operative is within 2" as normal."
    *
-   * The core denies cover inside 2" inside `coverAndObscured`, and the only seam that reaches it
-   * is `onValidTarget.ignoreCoverTerrain` — which also clears `seq.inCover`, i.e. the cover save.
-   * So the save is put back at the Roll Defence Dice step, by recomputing what the cover would
-   * have been without the ploy.
+   * `onValidTarget.ignoreCoverTerrain` is exactly the right seam: since the rules review it
+   * narrows the VALID TARGET test only and leaves `seq.inCover` — the cover save — alone,
+   * which is what "it doesn't remove their cover save (if any)" asks for. The 2" case needs
+   * no special handling either: the core denies cover inside 2" before this ever runs.
    */
   reg.on('onValidTarget', T.bind(SP_GUILT, 20), (ev) => {
     if (!gambitUsed(ev.state, T.player, SP_GUILT)) return;
@@ -855,21 +855,6 @@ function ploys(reg: HookRegistry, T: TeamHooks): void {
     if (T.gap(ev.attacker, ev.target) > 4 + EPS) return;
     ev.ignoreCoverTerrain = 'all';
   });
-  reg.on('onDefenceDice', T.bind(SP_GUILT, 21), (ev) => {
-    if (!gambitUsed(ev.state, T.player, SP_GUILT)) return;
-    if (ev.ctx.type !== 'ranged' || !T.mineKw(ev.ctx.attacker, KW)) return;
-    const target = ev.ctx.defender;
-    const seq = shootSeq(ev.state);
-    if (!target || !seq || seq.inCover || !T.ctx) return;
-    if (ev.ctx.distance <= 2 + EPS || ev.ctx.distance > 4 + EPS) return; // "within 2" as normal"
-    if (hasRule(ev.ctx.rules, 'Saturate')) return;
-    const index = terrain(T.ctx, ev.state);
-    const a = body(T.ctx, ev.ctx.attacker);
-    const t = body(T.ctx, target);
-    const cover = coverAndObscured(index, a, t, { ignore: vantageIgnoreFilter(index, a, t) });
-    if (cover.inCover) ev.coverSave = true; // "it doesn't remove their cover save (if any)"
-  });
-
   // ---- INVIOLATE JURISDICTION (strategy) ---------------------------------
   reg.on('onDefenceDice', T.bind(SP_INVIOLATE, 20), (ev) => {
     if (!gambitUsed(ev.state, T.player, SP_INVIOLATE)) return;

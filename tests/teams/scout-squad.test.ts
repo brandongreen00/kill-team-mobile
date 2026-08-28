@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { availableActions } from '../../src/core/actions.ts';
 import { moveBudget } from '../../src/core/movement.ts';
 import { reduce } from '../../src/core/reducer.ts';
-import { aplOf, hitOf, moveOf } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, moveOf } from '../../src/core/state.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { rebuildHooks, type GameContext } from '../../src/core/context.ts';
 import { counteractCandidates } from '../../src/core/phases.ts';
@@ -480,10 +480,16 @@ describe('SCOUT SQUAD strategy ploys', () => {
     const start = { ...state, turningPoint: 2 };
     for (const id of start.teams.p1.operativeIds) start.operatives[id]!.order = 'conceal';
     const s = reduce(start, { t: 'UseGambit', player: 'p1', gambitId: 'scout-squad.sp.stealth-relocation' }, ctx).state;
-    const granted = s.teams.p1.operativeIds.filter((id) => s.operatives[id]!.aplMods.includes(1));
+    // The grant is free AP, not an APL stat change (docs/DECISIONS.md D-100), so it is found
+    // through `freeApOf` rather than by looking for a +1 in `aplMods`.
+    const granted = s.teams.p1.operativeIds.filter((id) => freeApOf(s, s.operatives[id]!) > 0);
     expect(granted).toHaveLength(1);
     const op = s.operatives[granted[0]!]!;
-    op.apSpent = aplOf(ctx, s, op) - 1;
+    expect(op.aplMods).toEqual([]);
+    expect(apBudgetOf(ctx, s, op)).toBe(aplOf(ctx, s, op) + 1);
+    // Spend the operative's OWN AP, so the next one it pays with is the free one — which is
+    // where the "must be Dash" restriction bites.
+    op.apSpent = aplOf(ctx, s, op);
     const shoot = availableActions(ctx, s, op).find((a) => a.def.id === 'Shoot');
     expect(shoot?.reason ?? '').toMatch(/free action must be Dash/);
   });

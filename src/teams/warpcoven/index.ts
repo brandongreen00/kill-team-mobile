@@ -18,13 +18,7 @@
 import { getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext, type DecisionHandler } from '../../core/context.ts';
 import { classify, rerollDie } from '../../core/dice.ts';
-import {
-  baseGap,
-  baseRadius,
-  baseWithin,
-  dist,
-  segmentCrossesPoly,
-} from '../../core/geometry.ts';
+import { baseGap, baseRadius, baseWithin, basesOverlap, dist, segmentCrossesPoly } from '../../core/geometry.ts';
 import { HookRegistry } from '../../core/hooks.ts';
 import type { ActionParams } from '../../core/intents.ts';
 import {
@@ -44,7 +38,7 @@ import {
   settleZ,
   weaponsOf,
 } from '../../core/state.ts';
-import { baseBlockedByTerrain, baseTouchesHazardous, surfaceAt } from '../../core/terrain.ts';
+import { baseBlockedByTerrain, baseTouchesHazardous, occupancyCapExceeded, surfaceAt } from '../../core/terrain.ts';
 import { isVisible } from '../../core/visibility.ts';
 import type { FightSequence, ShootSequence } from '../../core/sequences/types.ts';
 import type {
@@ -1435,8 +1429,11 @@ function canPlaceAt(ctx: GameContext, state: GameState, op: OperativeState, pos:
     const oc = ctx.datacards.get(other.datacardId);
     if (!oc) continue;
     if (Math.abs(other.z - z) > 1) continue;
-    if (baseGap(pos, card.base, op.rot, other.pos, oc.base, other.rot) < -1e-4) return false;
+    if (basesOverlap(pos, card.base, op.rot, other.pos, oc.base, other.rot)) return false;
   }
+  // Killzones § Stronghold H caps the highest upper level "at once" and its parenthesis says
+  // "moving onto OR BEING SET UP ON", so a set-up-again path has to honour it too.
+  if (occupancyCapExceeded(index, aliveOperatives(state), op.id, op.player, pos, z)) return false;
   return true;
 }
 
@@ -1513,9 +1510,13 @@ registerAction({
  * isn't incapacitated, it can immediately perform a free Fight action afterwards … This takes
  * precedence over action restrictions."
  *
- * A free action is 0AP, so it needs no APL grant (`grantFreeAction` pushes a +1 `aplMods` the
- * engine never pops, which would leave the CHAMPION permanently on APL 3). Its own id carries
- * its own action restriction, so it can be performed once per activation and no more.
+ * A `grantFreeAction` grant would be the wrong shape twice over. It is the LAST AP the operative
+ * spends, where the rule says "afterwards" — immediately after the first Fight, with the rest of
+ * the activation still to come — and it reaches the universal Fight through the universal Fight's
+ * own restriction key, which is the very restriction this rule takes precedence over. So the free
+ * Fight is its own 0AP ActionDef (D-021) instead: at 0AP it never touches the APL stat or the free
+ * AP budget (D-100), and its own id carries its own action restriction, so it can be performed
+ * once per activation and no more.
  */
 registerAction({
   id: SAVAGE_BRUTALITY_FIGHT,

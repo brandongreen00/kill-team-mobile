@@ -7,7 +7,7 @@
  * candidates and re-runs the engine's own `check()` (and `validateMove`) on each one before
  * it is ever offered to an agent.
  */
-import { actionCost, allActions, availableActions, getAction, type ActionDef } from '../core/actions.ts';
+import { actionCost, actionTargetOptions, allActions, availableActions, getAction, type ActionDef } from '../core/actions.ts';
 import { reduce } from '../core/reducer.ts';
 import type { GameContext } from '../core/context.ts';
 import { terrain } from '../core/context.ts';
@@ -19,6 +19,7 @@ import {
   card,
   enemiesInControlRange,
   gapBetween,
+  markerContestedBy,
   markerController,
   markersNear,
 } from '../core/state.ts';
@@ -180,6 +181,9 @@ export function actionCandidates(
       case 'Pick Up Marker':
         for (const marker of Object.values(state.markers)) {
           if (!marker.flags['pickUpAllowed']) continue;
+          // Same rule as the action's own check: the ACTIVE operative must control it, so
+          // it must be contesting it, not merely on the controlling team.
+          if (!markerContestedBy(ctx, state, marker, op)) continue;
           if (markerController(ctx, state, marker) !== op.player) continue;
           push(out, ctx, state, op, def, { markerId: marker.id }, 'action', 14, `pick up ${marker.kind}`);
         }
@@ -227,6 +231,13 @@ function missionCandidates(ctx: GameContext, state: GameState, op: OperativeStat
     attempts.push({ targetOperativeId: friend.id, targetId: friend.id });
   }
   attempts.push({ targetPos: { ...op.pos }, markerPos: { ...op.pos } });
+  // Everything the action's own `check` would accept right now. Until W-05 the bot reached a
+  // crit-op mission action only when one of the heuristics above happened to guess its param,
+  // so ops like Move Orb were never performed in a soak at all. The bare `{}` form is NOT
+  // seeded here — it stays at the tail below, where the comment explains why.
+  for (const o of actionTargetOptions(ctx, state, op, def)) {
+    if (Object.keys(o.params).length > 0) attempts.push(o.params);
+  }
 
   // The no-params attempt goes LAST: several ops accept it in `check` and then fail in
   // `perform` ("select an enemy operative"), which the reducer reverts AND records as a
@@ -239,7 +250,10 @@ function missionCandidates(ctx: GameContext, state: GameState, op: OperativeStat
   const out: Candidate[] = [];
   const seen = new Set<string>();
   for (const params of attempts) {
-    if (out.length >= 3) break;
+    // Raised from 3 with the seeding above: a board with several objective markers can offer
+    // more legal parameter sets than the old cap admitted, and truncating them starved the
+    // heuristic attempts that follow.
+    if (out.length >= 6) break;
     const key = JSON.stringify(params);
     if (seen.has(key)) continue;
     seen.add(key);

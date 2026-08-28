@@ -9,7 +9,16 @@
 import type { GameContext } from '../core/context.ts';
 import { baseGap, dist } from '../core/geometry.ts';
 import type { MovePath } from '../core/intents.ts';
-import { moveBudget, moveOptionsFor, reachableCells, validateMove, type MoveAction, type MoveOptions } from '../core/movement.ts';
+import {
+  moveBudget,
+  moveOptionsFor,
+  reachableCells,
+  routePath,
+  validateMove,
+  type MoveAction,
+  type MoveOptions,
+  type ReachCell,
+} from '../core/movement.ts';
 import { aliveOperatives, card } from '../core/state.ts';
 import type { GameState, OperativeState, Vec2 } from '../core/types.ts';
 import { otherPlayer } from '../core/types.ts';
@@ -27,11 +36,7 @@ export interface MoveCandidate {
 
 export { moveOptionsFor } from '../core/movement.ts';
 
-interface Cell {
-  pos: Vec2;
-  z: number;
-  cost: number;
-}
+type Cell = ReachCell;
 
 /**
  * Reachability fields are pure in (map, terrain state, operative base/pos/rot, budget) — they
@@ -170,7 +175,9 @@ export function generateMoves(
   const options = moveOptionsFor(action, opts.hardCap);
   const budget = Math.min(moveBudget(ctx, state, op, options), opts.hardCap ?? Infinity);
   if (budget <= 0) return [];
-  const reachable = cellsWithin(ctx, state, op, budget, opts.step ?? 0.5);
+  const step = opts.step ?? 0.5;
+  const field = fieldFor(ctx, state, op, budget, step);
+  const reachable = cellsWithin(ctx, state, op, budget, step);
   if (reachable.length === 0) return [];
 
   const bucket = budget <= 3 ? 1 : 1.5;
@@ -202,15 +209,17 @@ export function generateMoves(
     const key = `${cell.pos.x.toFixed(1)},${cell.pos.y.toFixed(1)}`;
     if (seen.has(key)) continue;
     seen.add(key);
-    const candidate = buildPath(ctx, state, op, cell, action, options);
+    const candidate = buildPath(ctx, state, op, cell, action, options, field);
     if (candidate) out.push(candidate);
   }
   return out;
 }
 
 /**
- * Turn a reachable cell into a legal path: try the straight line, then a two-leg dog-leg via
- * a mid-point, then a shortened straight line. Anything that fails `validateMove` is dropped.
+ * Turn a reachable cell into a legal path: the straight line first because it is the cheapest
+ * (one increment, one round-up), then the field's own route around the terrain, then a two-leg
+ * dog-leg via a mid-point. Anything that fails `validateMove` is dropped, so a move intent can
+ * never be rejected.
  */
 function buildPath(
   ctx: GameContext,
@@ -219,21 +228,27 @@ function buildPath(
   cell: Cell,
   action: MoveAction,
   options: MoveOptions,
+  field?: Map<string, Cell>,
 ): MoveCandidate | null {
-  const attempts: Vec2[][] = [[cell.pos]];
+  const attempts: MovePath[] = [{ points: [cell.pos] }];
+  // The flood fill reached this cell by walking round whatever is in the way; the straight
+  // line to it usually goes through that terrain, which is not a legal move.
+  if (field) {
+    const routed = routePath(ctx, state, op, field, cell);
+    if (routed && routed.points.length > 1) attempts.push(routed);
+  }
   const mid = { x: (op.pos.x + cell.pos.x) / 2, y: (op.pos.y + cell.pos.y) / 2 };
-  attempts.push([mid, cell.pos]);
+  attempts.push({ points: [mid, cell.pos] });
   // Two perpendicular dog-legs, which get around a corner the straight line clips. Only worth
   // the extra `validateMove` calls for a Charge, where reaching the target is the whole point.
   if (action === 'Charge') {
     const dx = cell.pos.x - op.pos.x;
     const dy = cell.pos.y - op.pos.y;
-    attempts.push([{ x: op.pos.x + dx, y: op.pos.y }, cell.pos]);
-    attempts.push([{ x: op.pos.x, y: op.pos.y + dy }, cell.pos]);
+    attempts.push({ points: [{ x: op.pos.x + dx, y: op.pos.y }, cell.pos] });
+    attempts.push({ points: [{ x: op.pos.x, y: op.pos.y + dy }, cell.pos] });
   }
 
-  for (const points of attempts) {
-    const path: MovePath = { points };
+  for (const path of attempts) {
     const v = validateMove(ctx, state, op, path, options);
     if (v.ok) return { action, path, pos: v.endPos, z: v.endZ, cost: v.total };
   }

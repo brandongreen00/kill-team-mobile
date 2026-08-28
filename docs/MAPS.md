@@ -122,11 +122,12 @@ land within 0.25" of 1"/2"/3"/4" are flagged in the table.
 
 | Height id | Inches | Confidence | Provenance |
 | --- | --- | --- | --- |
-| `volkus.strongholdA.top` | **5.906"** | `community` | Tale of Painters, "Review: Kill Team: Hivestorm Pt.1" (2024-09): Stronghold A (promethium-tank build) "footprint of approx. 18 x 13 cm, with a max. height of 15 cm" -> 150mm / 25.4 |
+| `volkus.strongholdA.top` | **5.906"** | `community` | *The piece maximum — the promethium tank, which the cards do not draw and the extraction never emits. It is no longer what the traced wall ring is extruded to; see §4a.* Tale of Painters, "Review: Kill Team: Hivestorm Pt.1" (2024-09): Stronghold A (promethium-tank build) "footprint of approx. 18 x 13 cm, with a max. height of 15 cm" -> 150mm / 25.4 |
 | `volkus.strongholdA.level1` | **3.000"** | `community` | Tale of Painters, Hivestorm review: Stronghold A has "a floor at 3″ height" |
-| `volkus.strongholdB.top` | **7.480"** | `community` | Tale of Painters, Hivestorm review: Stronghold B "footprint of approx. 19 x 19cm, a maximum height of 19 cm" -> 190mm / 25.4 |
+| `volkus.strongholdB.top` | **7.480"** | `community` | *As Stronghold A: the piece maximum, not the height of the traced ring — see §4a.* Tale of Painters, Hivestorm review: Stronghold B "footprint of approx. 19 x 19cm, a maximum height of 19 cm" -> 190mm / 25.4 |
 | `volkus.strongholdB.level1` | **3.000"** | `community` | Tale of Painters, Hivestorm review: Stronghold B "floors placed at 3″ and 6″ height" |
 | `volkus.strongholdB.level2` | **6.000"** | `community` | Tale of Painters, Hivestorm review: Stronghold B "floors placed at 3″ and 6″ height" |
+| `volkus.stronghold.parapet` | **1.000"** | `assumed` | No published figure. The wall a stronghold level stands behind is modelled as 1" of parapet above that level, the same convention already used for `volkus.largeRuin.top`. **CONFIRMED BY OWNER 2026-08-23.** See §4a. |
 | `volkus.largeRuin.level1` | **3.500"** | `community` | Tale of Painters, Hivestorm review: Manufactorum Ruins have "a top floor (placed at 3.5″ from the bottom)". Killzones rules: for intervening and targeting lines this level is TREATED as the height of a stronghold’s first upper level (3.0") — see `treatAsZ`. |
 | `volkus.largeRuin.top` | **4.500"** | `assumed` | No published figure. Upper rampart modelled as 1" of Light parapet above the 3.5" floor. CONFIRM WITH OWNER. |
 | `volkus.smallRuin.top` | **2.000"** | `assumed` | No published figure; the small ruin is a low corner wall roughly two thirds the height of a stronghold’s first floor. CONFIRM WITH OWNER. |
@@ -143,6 +144,45 @@ land within 0.25" of 1"/2"/3"/4" are flagged in the table.
 | `bheta.condenser.ledge` | **2.750"** | `assumed` | The inner ledge is Exposed + Insignificant, i.e. the rules explicitly say to ignore the slight height difference, so this value is cosmetic. CONFIRM WITH OWNER. ⚠ within 0.25" of the 3" rules threshold — **not** snapped |
 | `bheta.condenser.battlement` | **3.750"** | `assumed` | Battlements modelled as 0.75" of Light parapet above the roof. CONFIRM WITH OWNER. ⚠ within 0.25" of the 4" rules threshold — **not** snapped |
 
+### 4a. Stronghold wall bands (the parapet, D-101)
+
+A stronghold's wall is one ink ring on the card with no height of its own, so the
+extractor used to extrude **every** wall part to the piece's maximum — 5.906" for
+Stronghold A, 7.48" for Stronghold B — while the Vantage floors those rings enclose
+sit at 3.0" and 6.0". The edge of every upper level was therefore a 2.9"/4.5" opaque
+Heavy parapet, and climbing the two biggest features on all six maps was a pure
+downside.
+
+`cap_stronghold_walls` in `tools/maps/extract_cards.py` now bands the ring:
+
+* each traced bar is **cut where the upper floor's extent ends** and each piece
+  capped 1" above the highest floor of its own feature that it borders. Cutting
+  matters — Stronghold B's second level is a small square in one corner, and capping
+  the whole ring at that level's parapet leaves the big lower level in a 4" well
+  exactly as before;
+* on **Stronghold A** that last inch is a `rampart` part typed
+  `['Insignificant','Exposed']`, per Killzones § Stronghold F ("The small broken
+  ramparts on the edge of the Vantage terrain of Stronghold A are Insignificant and
+  Exposed terrain"). The engine already treats that pair as neither solid nor
+  visibility-blocking;
+* on **Stronghold B** it stays Heavy, because § Stronghold ends "All other parts of
+  it are Heavy terrain" and names ramparts only for A.
+
+Measured as "the best standable spot on that level, and the share of 1"-grid
+killzone-floor positions it can see", over all six maps:
+
+| Level | Before | After |
+| --- | --- | --- |
+| Stronghold A roof (z 3.0) | 4–18% | 48–68% |
+| Stronghold B lower (z 3.0) | 6–17% | 21–48% |
+| Stronghold B top (z 6.0) | 5–7% | 49–61% |
+
+Stronghold B's lower gantry on volkus-1 is the floor of that range at 21%: it sits in
+the board corner behind a Heavy parapet, which is what the rules describe. Pinned by
+`tests/maps-volkus-vantage.test.ts`, whose real assertion is the structural one — no
+wall bar rises more than the parapet above the floor it borders — with the visibility
+share as a regression guard at 20%.
+
 ### Heights to confirm with the owner (highest value first)
 
 1. ~~**`bheta.gantry.deck`**~~ — **CONFIRMED by the owner 2026-08-17 at 3.0"**. No
@@ -156,8 +196,9 @@ land within 0.25" of 1"/2"/3"/4" are flagged in the table.
 2. **`volkus.smallRuin.top` (2.0"), `volkus.heavyRubble.top` (1.5"),
    `volkus.lightRubble.top` (1.0")** — no published figures. These sit right on
    the 2" free-drop threshold, so they change how operatives cross the board.
-3. **`volkus.largeRuin.top` (4.5", assumed)** — the upper *rampart* height. The
-   floor beneath it (3.5") is published.
+3. ~~**`volkus.stronghold.parapet` (1.0")**~~ — **CONFIRMED by the owner
+   2026-08-23 at 1.0"**, and `volkus.largeRuin.top` (4.5") follows the same
+   convention: 1" of parapet above the 3.5" floor beneath it, which is published.
 4. **`cq.light.top` (1.2")** — Tomb World sarcophagus and debris.
 5. **`volkus.wreckage.top` / `volkus.crates.top`** — pieces L, M and N are on
    the Volkus map cards and in `keys/VS1.png` but are **not** in the core-book
@@ -176,7 +217,7 @@ at most one friendly operative — carried as `maxOperatives: 1`.
 
 ## 5. QA gates
 
-`pnpm maps:validate` — **24 maps, 0 gate failures.**
+`pnpm maps:validate` — **24 maps, 0 gate failures** (re-run 2026-08-23 against the cards).
 
 | Gate | Check | Result |
 | --- | --- | --- |
@@ -196,6 +237,72 @@ genuinely printed 2.0" into P2 territory, so the check is a report, not a gate.
 
 Territory-seam check (`centreSeamErrIn`, the printed tint boundary against the
 derived centre line): **≤ 0.041" on all 24 maps**.
+
+### Access points (`pnpm maps:extract`)
+
+A Close Quarters hatchway or breach point is printed as a dark pill (RGB 63,57,52, 49×14px)
+drawn **alongside** the wall it belongs to, with its long axis running along that wall. Two
+things were wrong with how that was read.
+
+The **match** was `abs(offset) < wall_thickness * 2.2`, i.e. 19.8px. Measured across all twelve
+Close Quarters cards, the perpendicular offset of a pill from the wall it marks clusters at
+**18–22px** (118 pairs) and the nearest unrelated pairing is at **73px** — a 3.5× gap. The old
+threshold cut straight through the middle of the true cluster: 3 access points out of 10 pills
+on gallowdark-1, and **zero on every Tomb World card**. It is now `thickness * 4` = 36px, which
+sits in the gap.
+
+The **placement** put a small square at the pill's centre — which is beside the wall, not in
+it — so the wall ran unbroken behind the access point and opening a hatchway changed nothing:
+`wallRouteDistance` across one was Infinity open or closed. The access point now takes the
+wall's own thickness and the pill's long extent, and the wall is emitted as two bars either
+side of it. It is a gap in the wall, which is what a doorway is.
+
+| Killzone | hatchways | breach points | before |
+| --- | --- | --- | --- |
+| Gallowdark | 59 | 0 | 6 access points across all six maps |
+| Tomb World | 36 | 22 | **0** |
+
+`tests/rules-review.test.ts` pins both halves on the shipped data: no wall part may overlap an
+access point of its own feature, and with every hatchway open an operative must reach across
+more than 70% of the board in each axis. On the previous data gallowdark-1's vertical reach was
+10" on a 23.9" board — one compartment.
+
+Template fitting changed with it: a piece that is nothing but wall is now matched on the extent
+of the whole run rather than its largest bar, because which bar is larger is an accident of
+where the hatchway sits.
+
+### Doors (`pnpm maps:doors:check`)
+
+`_volkus_doors` reads a door off the card as a white dashed segment printed across the wall,
+and demands a blob 12–14 px on its short side. In practice that only ever fired on Stronghold
+B, so **18 of the 24 door-bearing features shipped with the doorway as an unmodelled hole** in
+the wall ring — not Accessible, not Heavy, not there. The gap cost nothing to cross, gave no
+cover and obscured nobody; and once a move increment is checked against terrain (D-064), a
+1.17" hole is narrower than a 32 mm base, so the buildings would have sealed shut instead.
+
+`tools/maps/doors.py` recovers the door from the hole itself and `pnpm maps:doors` writes it
+in (it also runs inside `pnpm maps:extract`, so a re-extraction produces the same data). Two
+doorways additionally had a wall bar traced across them; those are clipped back out.
+
+| Piece | Instances | Door width | Resolved from |
+| --- | --- | --- | --- |
+| Stronghold A | 6 | 1.17" | wall ring ×5, consensus ×1 (volkus-5, whose top wall traces as three sub-thickness slivers) |
+| Stronghold B | 6 | 1.92" | read off the card by `_volkus_doors`; reproduced exactly by the derivation as a check |
+| Large Ruin | 12 | 1.88" | wall ring ×12 |
+
+The derivation is validated rather than assumed: given nothing but wall geometry it lands on
+all six card-read Stronghold B doors to within the rounding of the stored polygons.
+`tools/maps/test_doors.py` pins that, plus one-door-per-feature and Accessible + Heavy typing;
+`tests/maps-volkus-doors.test.ts` walks an operative through every door and into every wall on
+the real shipped maps.
+
+### D-014 is half closed
+
+Re-extracting from the cards with the fixed `dashed_rects()` recovered **volkus-6 K** and its
+host **A**: K is a clean rectangle again and Stronghold A's floor is whole (4.396–9.771 rather
+than 6.562–9.771). Their entries are deleted from `IOU_ALLOW` and from the `PENDING` list in
+`tests/maps-rubble.test.ts`, as both files' own honesty checks require. `volkus-3 K/D`,
+`volkus-5 J/C` and `volkus-6 C` are still carved out of their hosts.
 
 ## 6. Known nits
 

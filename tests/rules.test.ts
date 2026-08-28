@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createBattle } from '../src/core/init.ts';
 import { reduce } from '../src/core/reducer.ts';
 import { defaultDecisionOption } from '../src/core/decisions.ts';
-import { validateMove } from '../src/core/movement.ts';
+import { reachableCells, routePath, routeTo, validateMove } from '../src/core/movement.ts';
 import { buildTerrainIndex, wallRouteDistance } from '../src/core/terrain.ts';
 import { counteractCandidates, readyStep, whoActivates } from '../src/core/phases.ts';
 import { aplOf, isInjured, moveOf, weaponsOf } from '../src/core/state.ts';
@@ -42,6 +42,124 @@ describe('movement (Killzones › Terrain and Movement)', () => {
     expect(v.legs.map((l) => l.charged)).toEqual([4, 4]);
     expect(v.ok).toBe(false);
     expect(v.reason).toContain('exceeds');
+  });
+
+  it('cannot move through terrain — "they must move around, climb over or drop/jump off it"', () => {
+    const ctx = testContext();
+    // A 4" high Heavy wall, 0.5" thick, across the operative's path.
+    const map = testMap({ features: [heavyBlock('w', 8, 4, 0.5, 10, 4)] });
+    const s = battle(ctx, map);
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    op.pos = { x: 6, y: 9 };
+    const v = validateMove(ctx, s, op, { points: [{ x: 11, y: 9 }] }, { action: 'Reposition' });
+    expect(v.ok).toBe(false);
+    expect(v.reason).toContain('cannot move through');
+  });
+
+  it('a route around the terrain is legal even though the straight line through it is not', () => {
+    const ctx = testContext();
+    // The wall spans y 4..14, so y = 3.5 is open board to walk round its end.
+    const map = testMap({ features: [heavyBlock('w', 8, 4, 0.5, 10, 4)] });
+    const s = battle(ctx, map);
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    op.pos = { x: 6, y: 5 };
+    const around = validateMove(
+      ctx,
+      s,
+      op,
+      { points: [{ x: 7.5, y: 3 }, { x: 10, y: 3 }] },
+      { action: 'Reposition' },
+    );
+    expect(around.ok).toBe(true);
+  });
+
+  it('routePath walks the operative round terrain the straight line cannot cross', () => {
+    const ctx = testContext();
+    const map = testMap({ features: [heavyBlock('w', 8, 4, 0.5, 10, 4)] });
+    const s = battle(ctx, map);
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    op.pos = { x: 6.5, y: 5 };
+    const routed = routeTo(ctx, s, op, { x: 9.5, y: 5 }, 6);
+    expect(routed).not.toBeNull();
+    // More than one increment: the straight line would cross the wall.
+    expect(routed!.points.length).toBeGreaterThan(1);
+    expect(validateMove(ctx, s, op, routed!, { action: 'Reposition' }).ok).toBe(true);
+  });
+
+  it('Accessible terrain can still be moved through — "this takes precedence over ... Terrain and Movement"', () => {
+    const ctx = testContext();
+    const door: TerrainFeature = {
+      id: 'd',
+      kind: 'test.door',
+      label: 'D',
+      placement: { x: 8, y: 8, rotDeg: 0, flip: false },
+      parts: [
+        {
+          id: 'd.body',
+          featureId: 'd',
+          poly: rect(8, 8, 0.5, 2),
+          z0: 0,
+          z1: 4,
+          types: ['Accessible', 'Heavy'],
+          role: 'door',
+        },
+      ],
+    };
+    const s = battle(ctx, testMap({ features: [door] }));
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    op.pos = { x: 7, y: 9 };
+    const v = validateMove(ctx, s, op, { points: [{ x: 10, y: 9 }] }, { action: 'Reposition' });
+    expect(v.ok).toBe(true);
+    // "it counts as an additional 1" to do so"
+    expect(v.legs[v.legs.length - 1]!.charged).toBe(4);
+  });
+
+  it('Insignificant terrain does not block a move — "an operative can move over and across ... without going up and down"', () => {
+    const ctx = testContext();
+    const step: TerrainFeature = {
+      id: 'f',
+      kind: 'test.firestep',
+      label: 'F',
+      placement: { x: 8, y: 8, rotDeg: 0, flip: false },
+      parts: [
+        {
+          id: 'f.body',
+          featureId: 'f',
+          poly: rect(8, 8, 0.5, 2),
+          z0: 0,
+          z1: 1,
+          types: ['Vantage', 'Insignificant', 'Exposed'],
+          role: 'firestep',
+        },
+      ],
+    };
+    const s = battle(ctx, testMap({ features: [step] }));
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    op.pos = { x: 7, y: 9 };
+    op.z = 0;
+    const v = validateMove(ctx, s, op, { points: [{ x: 10, y: 9 }] }, { action: 'Reposition' });
+    expect(v.ok).toBe(true);
+  });
+
+  it('the reachability field no longer reports cells only reachable by walking through terrain', () => {
+    const ctx = testContext();
+    // A closed box of Heavy walls with no opening: nothing inside is reachable.
+    const map = testMap({
+      features: [
+        heavyBlock('n', 8, 12, 6, 0.5, 4),
+        heavyBlock('s', 8, 6, 6, 0.5, 4),
+        heavyBlock('w2', 8, 6, 0.5, 6.5, 4),
+        heavyBlock('e', 13.5, 6, 0.5, 6.5, 4),
+      ],
+    });
+    const s = battle(ctx, map);
+    const op = s.operatives[s.teams.p1.operativeIds[0]!]!;
+    op.pos = { x: 5, y: 9 };
+    const field = reachableCells(ctx, s, op, 6, 0.5);
+    const inside = [...field.values()].filter(
+      (c) => c.pos.x > 8.8 && c.pos.x < 13.2 && c.pos.y > 6.8 && c.pos.y < 11.7,
+    );
+    expect(inside).toEqual([]);
   });
 
   it('treats each climb as a minimum of 2" vertically', () => {

@@ -14,7 +14,9 @@ import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
 import {
   aliveOperatives,
+  apBudgetOf,
   aplOf,
+  freeApOf,
   hitOf,
   inflictDamage,
   markerController,
@@ -1401,18 +1403,25 @@ describe('strategy ploys', () => {
     );
     const cur = activate(ctx, s, meId);
     expect(cur.effects.some((e) => e.rule === 'hunter-clade.accelerantAgents' && e.operativeId === meId)).toBe(true);
-    // "one of them can be free" — D-015's extra AP, restricted to a Fight.
-    expect(cur.operatives[meId]!.aplMods).toContain(1);
+    // "one of them can be FREE" — D-100: free AP restricted to a Fight, not an APL stat change,
+    // so the RUSTSTALKER keeps its printed APL and gains a third AP for the activation.
+    expect(cur.operatives[meId]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, cur, cur.operatives[meId]!)).toBe(2);
+    expect(freeApOf(cur, cur.operatives[meId]!)).toBe(1);
+    expect(apBudgetOf(ctx, cur, cur.operatives[meId]!)).toBe(3);
     const def = getAction(FIGHT_ACCELERANT)!;
     // Before the first Fight the extra action is refused.
     expect(def.check(ctx, cur, cur.operatives[meId]!, { targetId: foe.id }).ok).toBe(false);
     cur.operatives[meId]!.actionsThisActivation = ['Fight']; // the first Fight has happened
     // A second universal Fight is refused by the action restriction…
     expect(act(ctx, cur, meId, 'Fight', { targetId: foe.id }).ok).toBe(false);
-    // …and `Fight (Accelerant Agents)` is the printed second one, resolving as a real fight.
+    // …and `Fight (Accelerant Agents)` is the printed second one, resolving as a real fight —
+    // on the free AP, with both of the operative's own AP already spent.
+    cur.operatives[meId]!.apSpent = 2;
     expect(def.available!(ctx, cur, cur.operatives[meId]!)).toBe(true);
     const out = act(ctx, cur, meId, FIGHT_ACCELERANT, { targetId: foe.id });
     expect(out.ok).toBe(true);
+    expect(out.state.operatives[meId]!.apSpent).toBe(3);
     expect(out.state.sequence?.kind === 'fight' || out.state.pending.length > 0).toBe(true);
   });
 

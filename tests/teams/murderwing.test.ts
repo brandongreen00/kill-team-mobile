@@ -8,7 +8,7 @@ import { effectiveRules } from '../../src/core/sequences/shoot.ts';
 import { moveBudget } from '../../src/core/movement.ts';
 import { counteractCandidates } from '../../src/core/phases.ts';
 import { reduce } from '../../src/core/reducer.ts';
-import { aplOf, hitOf, inflictDamage, markerController, moveOf } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage, markerController, moveOf } from '../../src/core/state.ts';
 import { zeroStatMods, type RerollGrant } from '../../src/core/hooks.ts';
 import {
   ASTARTES_FIGHT,
@@ -208,13 +208,15 @@ describe('Jump Pack — "it can do a BOOST for that increment … remove it from
     place(state, id, { x: 5, y: 5 });
     place(state, foeId, { x: 10.4, y: 5 });
     let s = activate(ctx, state, id);
-    const bad = act(ctx, s, id, BOOST_REPOSITION, { targetPos: { x: 9.2, y: 5 } });
+    // 9.1 is inside the enemy's control range with the bases touching; at 9.2 the two 32mm
+    // bases (1.26" of centres) overlap, and the refusal would be about that instead.
+    const bad = act(ctx, s, id, BOOST_REPOSITION, { targetPos: { x: 9.1, y: 5 } });
     expect(bad.ok).toBe(false);
     expect(bad.reason).toContain('control range');
     // The Charge variant must finish there instead.
-    const good = act(ctx, s, id, BOOST_CHARGE, { targetPos: { x: 9.2, y: 5 } });
+    const good = act(ctx, s, id, BOOST_CHARGE, { targetPos: { x: 9.1, y: 5 } });
     expect(good.ok).toBe(true);
-    expect(good.state.operatives[id]!.pos.x).toBeCloseTo(9.2, 5);
+    expect(good.state.operatives[id]!.pos.x).toBeCloseTo(9.1, 5);
   });
 
   it('"as long as no part of its base is underneath Vantage terrain" — and it cannot be set up underneath one either', () => {
@@ -1083,7 +1085,7 @@ describe('Faction equipment', () => {
     place(state, id, { x: 5, y: 5 });
     place(state, foeId, { x: 10.4, y: 5 });
     let s = activate(ctx, state, id);
-    s = act(ctx, s, id, BOOST_CHARGE, { targetPos: { x: 9.2, y: 5 } }).state;
+    s = act(ctx, s, id, BOOST_CHARGE, { targetPos: { x: 9.1, y: 5 } }).state; // 32mm bases: 1.26" of centres
     const before = s.operatives[foeId]!.wounds;
     const out = act(ctx, s, id, 'CLAWED CHARGE', { targetOperativeId: foeId });
     expect(out.ok).toBe(true);
@@ -1099,18 +1101,29 @@ describe('Faction equipment', () => {
     const mineId = opWith(state, 'p1', RAPTOR);
     const foeId = opWith(state, 'p2', SKYSEAR);
     place(state, mineId, { x: 5, y: 5 });
-    place(state, foeId, { x: 6.2, y: 5 });
+    place(state, foeId, { x: 6.3, y: 5 }); // engaged, bases touching rather than overlapping
     let s = activate(ctx, state, foeId);
     s = act(ctx, s, foeId, 'Fall Back', { path: { points: [{ x: 11, y: 5 }] } }).state;
     expect(s.operatives[foeId]!.actionsThisActivation).toContain('Fall Back');
     s = reduce(s, { t: 'EndActivation', operativeId: foeId }, ctx).state;
-    // The grant is one extra AP restricted to Reposition/Charge (docs/DECISIONS.md D-015).
+    // The grant is one AP outside the APL budget, restricted to Reposition/Charge
+    // (docs/DECISIONS.md D-100). The RAPTOR's APL stat does not move — a warp-fuelled lunge is
+    // an action, not a stat change, and were it modelled as one the +-1 APL clamp would cancel
+    // it outright for a RAPTOR already carrying a +1.
     s = activate(ctx, s, mineId);
     const mine = s.operatives[mineId]!;
-    expect(aplOf(ctx, s, mine)).toBe(4);
+    expect(mine.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, mine)).toBe(3); // the printed APL, unmoved
+    expect(freeApOf(s, mine)).toBe(1);
+    expect(apBudgetOf(ctx, s, mine)).toBe(4);
     mine.apSpent = 3; // spending the bonus AP now
     expect(moveBudget(ctx, s, mine, { action: 'Reposition' })).toBe(3);
     expect(rule('murderwing.eq.warp-fuel')).toContain('cannot use more than 3" of move distance');
+    // "…can IMMEDIATELY perform a free Reposition or Charge action": one window. The AP is gone
+    // once that activation ends, so a WARP FUEL trigger every turning point never stockpiles.
+    const after = reduce(s, { t: 'EndActivation', operativeId: mineId }, ctx).state;
+    expect(freeApOf(after, after.operatives[mineId]!)).toBe(0);
+    expect(apBudgetOf(ctx, after, after.operatives[mineId]!)).toBe(3);
   });
 
   it('VOX-CASTERS: "Each enemy operative within 3" of this operative takes a stun test … on a 3+, subtract 1 from its APL stat"', () => {

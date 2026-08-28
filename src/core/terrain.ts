@@ -45,6 +45,8 @@ export interface TerrainIndex {
   standable: IndexedPart[];
   /** Parts that physically stop a base at ground level. */
   solid: IndexedPart[];
+  /** Parts carrying a `maxOperatives` cap. Empty on every killzone but Volkus. */
+  capped: IndexedPart[];
   hazardous: Poly[];
 }
 
@@ -149,6 +151,7 @@ export function buildTerrainIndex(map: KillzoneMap, state?: GameState): TerrainI
     walls: parts.filter((p) => p.typeSet.has('Wall')),
     standable: parts.filter((p) => p.standable),
     solid: parts.filter((p) => p.solid),
+    capped: parts.filter((p) => p.maxOperatives !== undefined),
     hazardous: map.hazardous ?? [],
   };
 }
@@ -206,12 +209,13 @@ export function baseBlockedByTerrain(
   const pts = [centre, ...basePerimeter(centre, base, rotDeg, 16)];
   for (const part of index.solid) {
     if (part.z1 <= z + 1e-6) continue; // we're standing on or above it
-    if (part.z0 >= z + height - 1e-6) {
-      // Part is entirely above the model — Ceiling terrain explicitly allows this for
-      // bases <= 50mm round / 60x35 oval, and physically anything shorter passes too.
-      if (hasType(part, 'Ceiling') && baseFitsUnderCeiling(base)) continue;
-      continue;
-    }
+    if (part.z0 >= z + height - 1e-6) continue; // entirely above the model: we pass underneath
+    // "Operatives with a round base of 50mm or less, or an oval base of 60x35mm, can move
+    // underneath Ceiling terrain REGARDLESS OF THE OPERATIVE'S HEIGHT (this takes precedence
+    // over Terrain and Movement)." This test used to sit inside the branch above, where both
+    // arms continued — so it never changed an answer, and an operative taller than the
+    // clearance was refused a position the rule explicitly allows.
+    if (part.z0 >= z + 1e-6 && hasType(part, 'Ceiling') && baseFitsUnderCeiling(base)) continue;
     for (const p of pts) {
       if (withinBounds(part, p) && pointInPoly(p, part.poly)) return part;
     }
@@ -220,6 +224,43 @@ export function baseBlockedByTerrain(
 }
 
 /** Ceiling: "round base of 50mm or less, or an oval base of 60x35mm". */
+/**
+ * The capped part this placement would overfill, or null.
+ *
+ * Killzones § Stronghold H: "You cannot have more than one friendly operative on the highest
+ * upper level of Stronghold B at once, and that operative must be placed on one side or the
+ * other of that level… (this means an enemy operative cannot be prevented from moving onto **or
+ * being set up on** the other side)." The cap is per player — an enemy may share the level — and
+ * it binds every way an operative arrives, which is why this is one exported helper rather than
+ * a test repeated at each placement site. The side-placement and oversized-base halves of that
+ * paragraph are NOT implemented; see docs/RULES-COVERAGE.md.
+ *
+ * `index.capped` is empty on all eighteen non-Volkus maps and on every synthetic fixture, so
+ * this costs nothing where it does not apply — which matters, because `reachableCells` calls
+ * `validateMove` once per grid cell.
+ */
+export function occupancyCapExceeded(
+  index: TerrainIndex,
+  operatives: readonly { id: string; player: string; pos: Vec2; z: number }[],
+  moverId: string,
+  moverPlayer: string,
+  pos: Vec2,
+  z: number,
+): IndexedPart | null {
+  if (index.capped.length === 0) return null;
+  for (const part of partsSupporting(index, pos, z)) {
+    const cap = part.maxOperatives;
+    if (cap === undefined) continue;
+    let friends = 0;
+    for (const o of operatives) {
+      if (o.id === moverId || o.player !== moverPlayer) continue;
+      if (partsSupporting(index, o.pos, o.z).some((q) => q.id === part.id)) friends += 1;
+    }
+    if (friends >= cap) return part;
+  }
+  return null;
+}
+
 export function baseFitsUnderCeiling(base: BaseShape): boolean {
   if (base.shape === 'round') return base.mm <= 50;
   const [w, h] = base.mm;
@@ -245,6 +286,62 @@ export function accessibleCrossings(index: TerrainIndex, a: Vec2, b: Vec2, z: nu
   return index.parts.filter(
     (p) => hasType(p, 'Accessible') && p.z0 <= z + 1e-6 && p.z1 >= z - 1e-6 && segmentCrossesPoly(a, b, p.poly),
   );
+}
+
+/**
+ * The terrain feature ids whose standable surface holds an operative at (p, z). Ground level
+ * belongs to no feature, so it returns an empty set.
+ */
+export function featureIdsSupporting(index: TerrainIndex, p: Vec2, z: number): Set<string> {
+  const out = new Set<string>();
+  for (const part of partsSupporting(index, p, z)) out.add(part.feature.id);
+  return out;
+}
+
+/**
+ * Killzones › Terrain and Movement: "Operatives cannot move through terrain — they must move
+ * around, climb over or drop/jump off it."
+ *
+ * The part of a straight-line increment that travels HORIZONTALLY at level `z` may not pass
+ * through solid terrain standing at that level. Three types are exempt, each by its own rule:
+ *
+ *  - Accessible — "Operatives can move through Accessible terrain (this takes precedence over
+ *    Bases, and Terrain and Movement)". `accessibleCrossings` charges the extra 1".
+ *  - Insignificant — "An operative can move over and across Insignificant terrain without
+ *    going up and down."
+ *  - Ceiling — "Operatives with a round base of 50mm or less, or an oval base of 60x35mm, can
+ *    move underneath Ceiling terrain regardless of the operative's height (this takes
+ *    precedence over Terrain and Movement)."
+ *
+ * `exemptFeatureIds` carries the "climb over / drop off IT" half of the rule: the feature an
+ * operative is climbing onto or dropping from does not block the increment that does so.
+ *
+ * The test is against the centre line, matching `accessibleCrossings` and `obstructingCrossings`;
+ * the full base is still checked where the operative finishes (`baseBlockedByTerrain`).
+ * See docs/DECISIONS.md D-064.
+ */
+export function pathBlockedByTerrain(
+  index: TerrainIndex,
+  a: Vec2,
+  b: Vec2,
+  z: number,
+  base: BaseShape,
+  height: number,
+  exemptFeatureIds?: ReadonlySet<string>,
+): IndexedPart | null {
+  for (const part of index.solid) {
+    if (part.z1 <= z + 1e-6) continue; // level with or below our feet — we walk on or over it
+    if (part.z0 >= z + height - 1e-6) continue; // entirely above our head — we walk under it
+    // Bounding-box reject first: this runs per increment, and `validateMove` runs thousands of
+    // times per AI decision.
+    if (!segmentMayHitPart(part, a, b)) continue;
+    if (hasType(part, 'Accessible')) continue;
+    if (hasType(part, 'Insignificant')) continue;
+    if (hasType(part, 'Ceiling') && part.z0 >= z + 1e-6 && baseFitsUnderCeiling(base)) continue;
+    if (exemptFeatureIds?.has(part.feature.id)) continue;
+    if (segmentCrossesPoly(a, b, part.poly)) return part;
+  }
+  return null;
 }
 
 /** Obstructing equipment (razor wire): +1" when crossing within 1" of it. */
@@ -326,7 +423,15 @@ export function wallCornerZones(part: IndexedPart, minEdge = 0.6, radius = 0.35)
     const prev = poly[(i - 1 + n) % n]!;
     const cur = poly[i]!;
     const next = poly[(i + 1) % n]!;
-    if (dist(prev, cur) < minEdge || dist(cur, next) < minEdge) continue;
+    // "…minor parts of the wall that protrude do not make a corner or end alone; it must be
+    // the MAIN STRUCTURE of the wall that turns a corner or ends." A vertex belongs to the
+    // main structure when at least one of its edges is a substantial run — not when BOTH are.
+    // Requiring both discarded every vertex of every extracted wall, because each is a
+    // rectangle 0.365" thick and every vertex has one 0.365" edge: `wallCornerZones` returned
+    // [] for all 94 wall parts across the Gallowdark maps, `interveningParts` then skipped the
+    // wall entirely, and on the killzones where walls are essentially the only terrain nobody
+    // was ever in cover and nobody was ever obscured.
+    if (Math.max(dist(prev, cur), dist(cur, next)) < minEdge) continue;
     const ax = cur.x - prev.x;
     const ay = cur.y - prev.y;
     const bx = next.x - cur.x;

@@ -598,9 +598,10 @@ function mechanosutureArray(reg: HookRegistry, T: TeamHooks): void {
       player: T.player,
       expiry: { kind: 'endOfAction' },
     });
-    // "After that action, that friendly operative can immediately perform a free Dash action" —
-    // D-015 — "…If this rule was used during that friendly operative's activation, that
-    // activation ends", so from here the Dash is the only action it may still perform.
+    // "After that action, that friendly operative can immediately perform a free Dash action"
+    // (D-013: it lands on the next AP it spends, which is AP outside its APL budget — D-100) —
+    // "…If this rule was used during that friendly operative's activation, that activation ends",
+    // so from here the Dash is the only action it may still perform.
     // REMINDER ONLY: "but must end that move within this operative's control range" — no hook
     // constrains where a move ENDS (`sutureDashEndLegal` is exported for the UI).
     grantFreeAction(ev.state, victim, {

@@ -15,12 +15,22 @@
  * Nothing here decides a rule. Legality comes from `availableActions`, `validTargets`,
  * `reachableCells` and `validateMove`; the answers are only ever *rendered* here.
  */
-import { actionAvailability } from '../../core/actions.ts';
+import { actionAvailability, actionTargetOptions, getAction } from '../../core/actions.ts';
 import type { ActionParams } from '../../core/intents.ts';
-import { moveBudget, moveOptionsFor, reachableCells, validateMove, type MoveAction } from '../../core/movement.ts';
+import {
+  moveBudget,
+  moveOptionsFor,
+  reachableCells,
+  routePath,
+  validateMove,
+  type MoveAction,
+  type MoveValidation,
+  type ReachCell,
+} from '../../core/movement.ts';
+import type { MovePath } from '../../core/intents.ts';
 import { validTargets } from '../../core/sequences/shoot.ts';
 import { basePerimeter } from '../../core/geometry.ts';
-import { aliveOperatives, aplOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../../core/state.ts';
+import { aliveOperatives, apBudgetOf, aplOf, card, enemiesInControlRange, isInjured, weaponsOf } from '../../core/state.ts';
 import { counteractCandidates, gambitOptions, gambitToAct, whoActivates } from '../../core/phases.ts';
 import { otherPlayer, type OperativeState, type PlayerId, type Vec2 } from '../../core/types.ts';
 import { createBattle } from '../../core/init.ts';
@@ -161,10 +171,10 @@ export function activateChoicePlan({ store, ui, setUi }: PlayArgs): CommandPlan 
       actions: [
         {
           id: 'decline',
-          // Not "not now": the reducer marks every one of that player's operatives as having
-          // counteracted, so declining forfeits the rest of the turning point. The label has
-          // to say so, and it is not the primary.
-          label: 'Decline — no more counteracts this turning point',
+          // "Not now" is the truth again: declining used to mark every one of that player's
+          // operatives as having counteracted, forfeiting the rest of the turning point, and
+          // this label was written around that. It declines this window only.
+          label: 'Not now',
           tone: candidates.length > 0 ? 'quiet' : 'primary',
           onClick: () => store.dispatch({ t: 'DeclineCounteract', player: turn.player }),
         },
@@ -350,7 +360,9 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
   const { state, ctx } = store;
   const op = state.operatives[state.activeOperativeId!]!;
   const dc = card(ctx, op);
-  const apl = aplOf(ctx, state, op);
+  // The activation's AP budget, not the APL stat: a granted free action adds AP without
+  // being an APL stat change (D-100). `Datacard` below still shows the STAT.
+  const apl = apBudgetOf(ctx, state, op);
   const left = apl - op.apSpent;
   /**
    * A counteract is not an activation: the operative gets ONE free 1AP action other than
@@ -361,6 +373,7 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
 
   // --- a move being aimed -------------------------------------------------
   if (ui.move) return movePlan({ store, ui, setUi }, op, ui.move.action);
+  if (ui.aimAction) return aimPlan({ store, ui, setUi }, op, ui.aimAction);
 
   // --- a shot being aimed -------------------------------------------------
   const ranged = weaponsOf(ctx, state, op, 'ranged');
@@ -465,14 +478,24 @@ export function activationPlan({ store, ui, setUi }: PlayArgs): CommandPlan {
 
         <div class="actions">
           <p class="section-title">Actions</p>
-          {rows.map(({ def, ap, ok, reason }) => (
+          {rows.map(({ def, ap, ok, reason, needsTarget }) => (
             // An illegal action is NOT `disabled` + `title`: `title` does not exist on a
             // touch screen, so the reason is rendered in the row where a thumb can read it.
             <button
               key={def.id}
               class={ok ? undefined : 'is-blocked'}
               disabled={!ok}
-              onClick={() => (isMoveAction(def.id) ? setUi({ move: { action: def.id } }) : perform(def.id))}
+              onClick={() => {
+                if (isMoveAction(def.id)) return setUi({ move: { action: def.id } });
+                // A mission action has to be told WHICH marker. One legal option needs no
+                // screen; more than one is a real choice and gets the aim list.
+                if (needsTarget && AIMED_KINDS.has(needsTarget)) {
+                  const opts = actionTargetOptions(ctx, state, op, def);
+                  if (opts.length === 1) return perform(def.id, opts[0]!.params as Record<string, unknown>);
+                  return setUi({ aimAction: def.id });
+                }
+                return perform(def.id);
+              }}
             >
               {isMoveAction(def.id) ? <IconMove size={20} /> : null}
               <span style={{ flex: 1, textAlign: 'left', minWidth: 0 }}>
@@ -537,6 +560,53 @@ function PloyList({ store, player }: { store: Store; player: PlayerId }) {
 
 /* ------------------------------------------------------------ aiming a move */
 
+/**
+ * Actions the sheet cannot dispatch bare, because the reducer needs a marker or access point.
+ *
+ * Read from the core's own `actionAvailability`, never from a list kept here: which actions are
+ * parameterised is a rules fact, and CLAUDE.md forbids the UI re-implementing a core selector.
+ */
+const AIMED_KINDS = new Set(['marker', 'markerChoice', 'part']);
+
+function aimPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, actionId: string): CommandPlan {
+  const { state, ctx } = store;
+  const def = getAction(actionId);
+  const opts = def ? actionTargetOptions(ctx, state, op, def) : [];
+  const cancel = () => setUi({ aimAction: undefined });
+  return {
+    id: 'firefight.aim',
+    step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}`,
+    title: `${def?.name ?? actionId} — choose a target`,
+    help: def?.sourceText,
+    frame: rectAround(op, 10),
+    detent: 'half',
+    turnOf: op.player,
+    selectedId: op.id,
+    actions: [{ id: 'cancel', label: 'Back', onClick: cancel }],
+    body: (
+      <div class="actions">
+        {opts.length === 0 && <p class="entry-meta why">No legal target for this action right now.</p>}
+        {opts.map((o) => (
+          <button
+            key={o.id || 'bare'}
+            onClick={() => {
+              store.dispatch({
+                t: 'PerformAction',
+                operativeId: op.id,
+                action: actionId,
+                params: o.params as never,
+              });
+              cancel();
+            }}
+          >
+            <span style={{ flex: 1, textAlign: 'left' }}>{o.label}</span>
+          </button>
+        ))}
+      </div>
+    ),
+  };
+}
+
 function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: MoveAction): CommandPlan {
   const { state, ctx } = store;
   const dc = card(ctx, op);
@@ -546,11 +616,44 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
   const counteracting = (state.opState['counteract'] as { operativeId?: string } | undefined)?.operativeId === op.id;
   const opts = moveOptionsFor(action, counteracting ? 2 : undefined);
   const budget = moveBudget(ctx, state, op, opts);
-  const points = ui.move?.dest ? [ui.move.dest] : [];
-  const path = { points };
-  const check = points.length > 0 ? validateMove(ctx, state, op, path, opts) : null;
 
   const cells = reachableCells(ctx, state, op, budget, 0.5);
+
+  /**
+   * The path the operative would actually walk to reach `dest`.
+   *
+   * A single straight increment is preferred — it is the cheapest, because "increments are
+   * always rounded up to the nearest inch" and one increment rounds up once. When the straight
+   * line would cut through terrain the operative cannot move through, the route the engine's
+   * own flood fill took to get there is used instead, so tapping a spot behind a wall walks
+   * round the wall rather than being refused.
+   */
+  const planTo = (dest: Vec2): { path: MovePath; check: MoveValidation } => {
+    const direct: MovePath = { points: [dest] };
+    const straight = validateMove(ctx, state, op, direct, opts);
+    if (straight.ok) return { path: direct, check: straight };
+    let best: ReachCell | undefined;
+    let bestD = Infinity;
+    for (const cell of cells.values()) {
+      const d = Math.hypot(cell.pos.x - dest.x, cell.pos.y - dest.y);
+      if (d < bestD) {
+        bestD = d;
+        best = cell;
+      }
+    }
+    if (!best || bestD > 0.5) return { path: direct, check: straight };
+    const routed = routePath(ctx, state, op, cells, best);
+    if (!routed || routed.points.length < 2) return { path: direct, check: straight };
+    const points = [...routed.points];
+    points[points.length - 1] = { ...dest };
+    const viaRoute: MovePath = { points, ...(routed.zs ? { zs: routed.zs } : {}) };
+    const routedCheck = validateMove(ctx, state, op, viaRoute, opts);
+    return routedCheck.ok ? { path: viaRoute, check: routedCheck } : { path: direct, check: straight };
+  };
+
+  const plan = ui.move?.dest ? planTo(ui.move.dest) : null;
+  const path: MovePath = plan?.path ?? { points: [] };
+  const check = plan?.check ?? null;
   const cancel = () => setUi({ move: undefined });
 
   return {
@@ -575,7 +678,7 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
       base: dc.base,
       rotDeg: op.rot,
       legal: (world: Vec2) => {
-        const v = validateMove(ctx, state, op, { points: [world] }, opts);
+        const v = planTo(world).check;
         return v.ok ? { ok: true } : { ok: false, ...(v.reason ? { reason: v.reason } : {}) };
       },
       commit: (world: Vec2) => setUi({ move: { action, dest: world } }),
@@ -592,11 +695,11 @@ function movePlan({ store, ui, setUi }: PlayArgs, op: OperativeState, action: Mo
         </g>
         {ui.move?.dest && (
           <>
-            <line
-              x1={op.pos.x}
-              y1={op.pos.y}
-              x2={ui.move.dest.x}
-              y2={ui.move.dest.y}
+            {/* The whole route, corner by corner — drawing a straight line to a destination
+                the operative reaches by walking round a wall would misreport the distance. */}
+            <polyline
+              points={[op.pos, ...path.points].map((pt) => `${pt.x.toFixed(3)},${pt.y.toFixed(3)}`).join(' ')}
+              fill="none"
               stroke={check?.ok ? '#5fd08a' : '#ff7a6b'}
               stroke-width={0.08}
               stroke-dasharray="0.3 0.2"

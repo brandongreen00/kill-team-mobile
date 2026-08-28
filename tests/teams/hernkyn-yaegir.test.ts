@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest';
 import { getAction } from '../../src/core/actions.ts';
 import { reduce } from '../../src/core/reducer.ts';
 import { effectiveRules } from '../../src/core/sequences/shoot.ts';
-import { aplOf, hitOf, inflictDamage } from '../../src/core/state.ts';
+import { apBudgetOf, aplOf, freeApOf, hitOf, inflictDamage } from '../../src/core/state.ts';
 import type { AttackContext } from '../../src/core/hooks.ts';
 import { zeroStatMods } from '../../src/core/hooks.ts';
 import type { GameState, KillzoneMap, OperativeState, PlayerId, WeaponProfile } from '../../src/core/types.ts';
@@ -32,7 +32,7 @@ import {
   resourcefulPoints,
 } from '../../src/teams/hernkyn-yaegir/index.ts';
 import { rareRuleTextFor } from '../../src/teams/helpers.ts';
-import { act, activate, battle, opWith, teamContext } from './harness.ts';
+import { act, activate, battle, chargeTo, opWith, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 
 const DATA = teamData('hernkyn-yaegir');
@@ -475,7 +475,11 @@ describe('Dauntless Explorers', () => {
     expect(grants.map((g) => g.operativeId)).toContain(inside.id);
     expect(grants.map((g) => g.operativeId)).not.toContain(outside.id);
     expect(grants[0]!.data?.['only']).toEqual(['Reposition']);
-    expect(s.operatives[inside.id]!.aplMods).toContain(1);
+    // "can immediately perform a FREE Reposition action" — free AP (D-100), so the APL stat is
+    // untouched and the operative simply has one more AP than its datacard gives it.
+    expect(s.operatives[inside.id]!.aplMods).toEqual([]);
+    expect(aplOf(ctx, s, s.operatives[inside.id]!)).toBe(2);
+    expect(apBudgetOf(ctx, s, s.operatives[inside.id]!)).toBe(3);
   });
 
   it('the free-action engine refuses anything but a Reposition once the bonus AP is being spent', () => {
@@ -557,7 +561,7 @@ describe('BLADEKYN', () => {
     op.pos = { x: 8, y: 11 };
     foe.pos = { x: 11, y: 11 };
     const s = activate(ctx, state, op.id, 'conceal');
-    const path = { points: [{ x: 10.1, y: 11 }] };
+    const path = { points: [chargeTo(ctx, s, op.id, foe.id)] };
     expect(getAction('Charge')!.check(ctx, s, s.operatives[op.id]!, { path }).reason).toContain('Conceal');
     expect(getAction(STALKER_CHARGE)!.check(ctx, s, s.operatives[op.id]!, { path }).ok).toBe(true);
     // Only a BLADEKYN has it, and it is treated as a Charge for action restrictions.
@@ -1420,18 +1424,31 @@ describe('The kill team plays', () => {
     expect(out.state.sequence?.kind).toBe('shoot');
   });
 
-  it('the free-action +1 APL is popped when the activation ends, so nobody keeps APL 3 for the battle', () => {
+  it('Dauntless Explorers’ free AP is a third AP to spend, and it expires with the activation', () => {
+    expect(rule(RULE.dauntlessExplorers)).toContain('can immediately perform a free Reposition action');
     const { ctx, state } = setup({ picks: [C.theyn, C.bladekyn] });
     for (const id of state.teams.p1.operativeIds) state.operatives[id]!.pos = { x: 3, y: 11 };
     let s = gambit(ctx, state, RULE.dauntlessExplorers);
     const op = s.operatives[opWith(s, 'p1', C.bladekyn)]!;
-    expect(op.aplMods).toContain(1);
+    // "can immediately perform a free Reposition action": AP, not APL. Nothing is written to
+    // `aplMods`, so nothing can be left behind there either.
+    expect(op.aplMods).toEqual([]);
+    expect(freeApOf(s, op)).toBe(1);
     s.phase = 'firefight';
     s.firefightStep = 'performActions';
     s.activePlayer = 'p1';
     s = activate(ctx, s, op.id);
+    expect(apBudgetOf(ctx, s, s.operatives[op.id]!)).toBe(3);
+    // Its own 2AP gone, the free Reposition still passes the reducer's AP gate.
+    s.operatives[op.id]!.apSpent = 2;
+    const moved = act(ctx, s, op.id, 'Reposition', { path: { points: [{ x: 5, y: 11 }] } });
+    expect(moved.ok).toBe(true);
+    s = moved.state;
+    expect(s.operatives[op.id]!.apSpent).toBe(3);
+    // "Immediately", during that turning point's activation — and then it is gone.
     s = reduce(s, { t: 'EndActivation', operativeId: op.id }, ctx).state;
-    expect(s.operatives[op.id]!.aplMods).not.toContain(1);
+    expect(freeApOf(s, s.operatives[op.id]!)).toBe(0);
+    expect(apBudgetOf(ctx, s, s.operatives[op.id]!)).toBe(2);
     expect(aplOf(ctx, s, s.operatives[op.id]!)).toBe(2);
   });
 });
