@@ -109,7 +109,7 @@ layouts are deliberately asymmetric (Killzones › SETTING UP KILLZONES:
 | `volkus-3` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 6" / P2 6" | (19.021, 3.812) on&nbsp;D | (11.229, 19.271) | (14.979, 11.021) | 14: A B C D E F G H I J K L M N | 0.36 / 1.00 | 0.30 |  |
 | `volkus-4` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (7.062, 12.896) on&nbsp;A | (14.979, 9.229) | (24.229, 11.021) | 14: A B C D E F G H I J K L M N | 0.91 / 0.99 | 0.09 |  |
 | `volkus-5` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (25.229, 13.729) | (5.188, 8.021) on&nbsp;C | (14.979, 11.021) | 14: A B C D E F G H I J K L M N | 0.32 / 0.99 | 0.31 |  |
-| `volkus-6` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (23.771, 13.771) | (7.021, 8.188) | (14.979, 11.021) on&nbsp;C | 14: A B C D E F G H I J K L M N | 0.23 / 0.99 | 0.21 |  |
+| `volkus-6` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (23.771, 13.771) | (7.021, 8.188) | (14.979, 11.021) on&nbsp;C | 14: A B C D E F G H I J K L M N | 0.69 / 0.99 | 0.21 |  |
 
 ## 4. Heights, provenance and confidence
 
@@ -227,9 +227,10 @@ at most one friendly operative — carried as `maxOperatives: 1`.
 | G4 | every numbered feature labelled | pass on all 24 — the last exception, `tomb-world-1.B?-1`, is gone (§5a) |
 | G5 | exactly 3 objectives (p1/p2/centre) | pass on all 24 |
 | G6 | drop-zone depth is a printed value | pass — Volkus 6"/3", Bheta-Decima 6"/4"/3", CQ 4.3125" (long-edge) / 4.28125" (short-edge) |
-| G7 | fitted-template IoU: ≥ 0.92 is reported, **< 0.85 fails the build** | median 0.97–1.00 on every map; 20 features below 0.92, of which 13 are below 0.85 and carry an explicit allow-list entry with a reason (`IOU_ALLOW` in `validate_maps.py`) — see §6 |
+| G7 | fitted-template IoU: ≥ 0.92 is reported, **< 0.85 fails the build** | median 0.97–1.00 on every map; 16 features below 0.92, of which 10 are below 0.85 and carry an explicit allow-list entry with a reason (`IOU_ALLOW` in `validate_maps.py`) — see §6 |
 | G8 | CQ wall centrelines within 0.1" of a **half** lattice step | worst 0.0003"; the half step is there because two pieces really are printed offset by half a square (§5a) |
 | G9 | 180° rotational symmetry | reported, not gated (0.09–0.58; the layouts are asymmetric by design) |
+| G10 | every printed close-quarters wall letter is consumed by exactly one piece | 0 unconsumed on all 12 CQ maps |
 
 Objective-marker accuracy: the neutral marker sits within **0.02"–0.10"** of the
 centre line on 23 maps. `bheta-decima-5` is the exception — its neutral marker is
@@ -256,11 +257,14 @@ came of that, and all three are fixed by reading the blocks instead:
   was drawn 0.365" wide where the card draws 1.095". That is a real hole in a sealed room,
   not a drawing artefact, and it is what the board rendered.
 * **The tiling was guessed.** A run was tiled by fitting the printed letters onto lattice
-  edges. The blocks give the piece boundaries exactly, which repairs `tomb-world-1` (its A2
-  was tiled at the wrong length — the only entry ever allow-listed for the CQ tiler, now
-  deleted) and its unreadable `B?` wall. **Every wall piece on all twelve cards now carries
-  exactly one printed letter, no letter is left over, and every card's multiset is inside the
-  printed killzone inventory.**
+  edges. The blocks give the piece boundaries exactly. Measured against the previous
+  extraction, ten of the twelve cards come out with byte-identical wall bars and only the two
+  already known bad change: `tomb-world-1` (its A2 was tiled at the wrong length — the only
+  entry ever allow-listed for the CQ tiler, now deleted — and its unreadable `B?` wall is a B2
+  with a breach point) and **`tomb-world-6`, which was missing a B4 short wall entirely**.
+  **Every wall piece on all twelve cards now carries exactly one printed letter, no letter is
+  left over, and every card's multiset is inside the printed killzone inventory** — pinned by
+  gate G10, because a run the tiler drops leaves no feature for G4 and no extra piece for G3.
 * **Two pieces are printed off the lattice** — `tomb-world-1`'s A2 and `tomb-world-6`'s B4 sit
   offset by exactly half a square. Snapping them to a lattice line moved them 1.9". Block
   centres are snapped to the nearest **half** step, which absorbs the 2–3 px by which the
@@ -280,9 +284,10 @@ the same grey also draws the one-pixel dashed centre line, which is rejected on 
 
 Both are `Heavy, Wall`, `z 0–2.362"`, and both are emitted as **parts of the wall piece whose
 end lands on the block**, not as features of their own — see D-108. A post on the board
-perimeter is centred 0.469" from the edge and is 0.548" of half-width, so 0.079" of it would
-hang off the board; the card draws it clipped and so does the extraction, which is why a
-handful of blocks are not square.
+perimeter is centred on a lattice node half a post-width from the edge, so part of it would
+hang off the board: 0.079" against the 0.46875" border strip on the short sides and 0.048"
+against the 0.5" strip on the long ones. The card draws it clipped and so does the extraction,
+which is why **49 of the 211 blocks are not square** (25 clipped in x, 24 in y).
 
 Two `tomb-world-3` objective markers are printed close enough to a post to overlap it as 40mm
 discs (`obj.p1` by 0.057", `obj.p2` by 0.016"). That is what the card prints; the markers stay
@@ -356,9 +361,12 @@ than 6.562–9.771). Their entries are deleted from `IOU_ALLOW` and from the `PE
 
 ## 6. Known nits
 
-* **20 features below the 0.92 IoU gate** (out of 353), 13 of them below the
+* **16 features below the 0.92 IoU gate** (out of 365), 10 of them below the
   0.85 hard floor and therefore allow-listed by name in `validate_maps.py`.
-  - **Volkus `K`/`J` and their hosts `A`, `C`, `D` (0.23–0.79) — D-014
+  Four went away in the close-quarters re-extract (§5a): `tomb-world-1`'s `A2`,
+  which was the only close-quarters entry the allow-list ever had, and three
+  more features that came good with the corrected tiling.
+  - **Volkus `K`/`J` and their hosts `C`, `D` (0.32–0.79) — D-014
     dashed-rectangle recall.** *An earlier version of this section said these
     pieces were "the visible part of a piece overlapped by another piece". That
     was wrong.* `dashed_rects()` used to gate on a fixed count of dash segments,
@@ -386,9 +394,11 @@ than 6.562–9.771). Their entries are deleted from `IOU_ALLOW` and from the `PE
     *shape* of failure as D-014 (a merged blob divided between two chips) but a
     different cause: `bheta_features()` never calls `dashed_rects()`. Needs the
     card to diagnose.
-  - `tomb-world-1` `A2` (0.51) and its one unlabelled wall: two label chips on
-    that card are unreadable, so one long wall is tiled as two 1-square segments.
   - `tomb-world-5` `C5` (0.91) is a hair under the gate.
+  - *`tomb-world-1` `A2` (0.51) and its one unlabelled wall used to be here: the
+    long wall was tiled at the wrong length and two chips went unread. Both are
+    fixed by §5a — that A2 is a single 7.625" piece at IoU 1.00, there is no
+    `B?` on any card, and the allow-list entry is deleted.*
 * **`data/terrain/volkus.json` → `footprints` is wrong for multi-part pieces.**
   It stores one placed part rather than the union of them, so Stronghold A reads
   as 5.374 × 5.563 against a built 8 × 6, and the small ruins E/F as a single

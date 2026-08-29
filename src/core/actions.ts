@@ -55,6 +55,16 @@ export interface ActionDef {
   perform(ctx: GameContext, state: GameState, op: OperativeState, params: ActionParams): { ok: boolean; reason?: string };
   /** Actions "treated as" another action for restriction purposes (Guard -> Shoot). */
   treatedAs?: string;
+  /**
+   * What this action must be aimed at, when the core's own `NEEDS_TARGET` table cannot say.
+   *
+   * A team's variant of a parameterised action carries a faction id — BATTLECLADE's
+   * `Operate Hatch (Remote Access)`, CANOPTEK CIRCLE's `Operate Hatch (Obelisk Node Control)` —
+   * and the kernel knows no faction (CLAUDE.md §5), so it cannot list them. Without this both
+   * were dead: `actionTargetOptions` returned nothing to aim, `actionAvailability` judged them
+   * with empty params, and `src/ai/legal.ts` built no candidate.
+   */
+  needsTarget?: ActionTargetKind;
   sourceText: string;
 }
 
@@ -801,7 +811,8 @@ const NEEDS_TARGET: Record<string, ActionTargetKind> = {
  * rather than at a marker — that decides whether the board is armed for a tap on a door — and
  * CLAUDE.md forbids the UI keeping its own copy of the list.
  */
-export const actionTargetKind = (actionId: string): ActionTargetKind | undefined => NEEDS_TARGET[actionId];
+export const actionTargetKind = (actionId: string): ActionTargetKind | undefined =>
+  getAction(actionId)?.needsTarget ?? NEEDS_TARGET[actionId];
 
 /** A marker as the player sees it named. */
 function markerLabel(m: MarkerState): string {
@@ -813,7 +824,7 @@ function markerLabel(m: MarkerState): string {
  * An access point as the player sees it named.
  *
  * The list used to read `access point gallowdark-1.A3-1.access`, which tells a player nothing
- * about WHICH of the sixteen hatchways on the board it is. A hatchway is identified on the map
+ * about WHICH of the ten hatchways on the board it is. A hatchway is identified on the map
  * card by the wall piece it is cut into, so that is what is named, along with the state it is
  * in and how far away it is — the three things that decide whether this is the one you meant.
  */
@@ -822,6 +833,21 @@ export function accessPointLabel(op: OperativeState, part: IndexedPart): string 
   const where = part.feature.label ? ` in wall ${part.feature.label}` : '';
   const gap = pointDistanceToPart(op.pos, part);
   return `${part.state === 'open' ? 'open ' : ''}${what}${where} — ${gap.toFixed(1)}" away`;
+}
+
+/**
+ * An operative as the aim list names it: its letter, its datacard and how far away it is.
+ *
+ * A bare letter is what the list used to render, which is enough for Shoot and Fight — they
+ * have their own screens, with cover and distance per target. It is not enough for HATCHWAY
+ * FIGHT and DOOR FIGHT, the two Fights aimed through a door: those reach the generic list, and
+ * committing a whole fight sequence by choosing between two buttons reading "C" and "D" is not
+ * a choice a player can make.
+ */
+export function operativeLabel(ctx: GameContext, from: OperativeState, target: OperativeState): string {
+  const gap = baseGap(from.pos, card(ctx, from).base, from.rot, target.pos, card(ctx, target).base, target.rot);
+  const side = target.player === from.player ? 'friendly' : 'enemy';
+  return `${target.letter} — ${card(ctx, target).name}, ${side}, ${gap.toFixed(1)}" away`;
 }
 
 /** Every access point on the board, nearest first. The UI draws and aims at these. */
@@ -851,7 +877,7 @@ export function actionTargetOptions(
   op: OperativeState,
   def: ActionDef,
 ): ActionTargetOption[] {
-  switch (NEEDS_TARGET[def.id]) {
+  switch (def.needsTarget ?? NEEDS_TARGET[def.id]) {
     case 'marker':
       return Object.values(state.markers)
         .map((m) => ({ id: m.id, label: markerLabel(m), params: { markerId: m.id } as ActionParams }))
@@ -884,7 +910,7 @@ export function actionTargetOptions(
         .filter((o) => o.id !== op.id)
         .map((o) => ({
           id: o.id,
-          label: o.letter,
+          label: operativeLabel(ctx, op, o),
           params: { targetOperativeId: o.id, targetId: o.id } as ActionParams,
         }))
         .filter((o) => def.check(ctx, state, op, o.params).ok);
@@ -940,7 +966,7 @@ export interface ActionAvailability {
  */
 export function actionAvailability(ctx: GameContext, state: GameState, op: OperativeState): ActionAvailability[] {
   return availableActions(ctx, state, op).map((row) => {
-    const needsTarget = NEEDS_TARGET[row.def.id];
+    const needsTarget = row.def.needsTarget ?? NEEDS_TARGET[row.def.id];
     // An action that must be AIMED cannot be judged before it has been: `check` with empty
     // params always fails, and its reason is about the missing parameter, not about the
     // operative. Report it as needing a target and let the caller judge the aimed version

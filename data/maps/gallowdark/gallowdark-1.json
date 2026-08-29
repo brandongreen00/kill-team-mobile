@@ -2185,6 +2185,7 @@
    "jointBlocks": 17,
    "wallEnds": 0,
    "unlabelledWalls": 0,
+   "unconsumedLabels": 0,
    "templateIoUMin": 1.0,
    "templateIoUMedian": 1.0
   }

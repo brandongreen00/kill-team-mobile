@@ -600,14 +600,18 @@ function aimPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, actionId: s
   // Operate Hatch and Breach are aimed at a piece of TERRAIN, and a hatchway is a thing the
   // player can see on the board. Arm it: the list below stays as the accessible fallback, but
   // the obvious move is to tap the door you meant.
-  const onTerrain = actionTargetKind(actionId) === 'part';
-  const legalPartIds = onTerrain ? opts.map((o) => o.id) : [];
+  const kind = actionTargetKind(actionId);
+  const onTerrain = kind === 'part';
+  const onEnemy = kind === 'operative';
+  const legalIds = opts.map((o) => o.id);
   return {
     id: 'firefight.aim',
     step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}`,
     title: onTerrain
       ? `${def?.name ?? actionId} — tap the door`
-      : `${def?.name ?? actionId} — choose a target`,
+      : onEnemy
+        ? `${def?.name ?? actionId} — tap the operative`
+        : `${def?.name ?? actionId} — choose a target`,
     help: def?.sourceText,
     frame: rectAround(op, 10),
     detent: 'half',
@@ -615,17 +619,35 @@ function aimPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, actionId: s
     selectedId: op.id,
     ...(onTerrain
       ? {
-          partIds: legalPartIds,
+          partIds: legalIds,
           armed: {
             onPart: (partId: string) => {
               const pick = opts.find((o) => o.id === partId);
               if (pick) commit(pick.params);
             },
           },
-          armedNote: legalPartIds.length
+          armedNote: legalIds.length
             ? 'Tap a highlighted hatchway or breach point.'
             : 'No access point is within this operative’s control range.',
-          ...(legalPartIds.length ? {} : { armedTone: 'blocked' as const }),
+          ...(legalIds.length ? {} : { armedTone: 'blocked' as const }),
+        }
+      : {}),
+    // HATCHWAY FIGHT and DOOR FIGHT are aimed at an enemy on the FAR side of a door, so the
+    // candidates are not the ones the board already rings as engaged: ring them here, and let
+    // a tap on the board pick one, exactly as the Shoot screen does for its targets.
+    ...(onEnemy
+      ? {
+          targetIds: legalIds,
+          armed: {
+            onOperative: (target: OperativeState) => {
+              const pick = opts.find((o) => o.id === target.id);
+              if (pick) commit(pick.params);
+            },
+          },
+          armedNote: legalIds.length
+            ? 'Tap a ringed enemy operative.'
+            : 'No enemy operative is on the other side of a door this operative is touching.',
+          ...(legalIds.length ? {} : { armedTone: 'blocked' as const }),
         }
       : {}),
     actions: [{ id: 'cancel', label: 'Back', onClick: cancel }],

@@ -395,6 +395,28 @@ def test_cq_half_square_offset_piece_is_placed_where_it_is_printed():
           'got span=%s label=%s off=%.1f px' % (seg['span'], seg['label'], off))
 
 
+def test_cq_dropped_run_leaves_its_printed_letter_behind():
+    """A run the tiler cannot see leaves its letter unconsumed, and that is the alarm.
+
+    A piece whose ends BOTH butt into the side of another wall carries no connector block, so
+    it forms no chain and no feature — and nothing downstream can tell: there is no unlabelled
+    segment for G4, and G3 only checks that a piece is not over-used. The printed letter left
+    on the card is the only evidence, so it is counted and G10 fails on it.
+    """
+    img, frame, lx, ly = cq_card()
+    for x in (lx[1], lx[3]):                          # two vertical A pieces with posts
+        cq_bar(img, (x, ly[2]), (x, ly[4]))
+        cq_block(img, (x, ly[2]))
+        cq_block(img, (x, ly[4]))
+    cq_bar(img, (lx[1], ly[3]), (lx[3], ly[3]))       # joined by a bar with no post at either end
+    chips = [('A1', lx[1] - 22, ly[3]), ('A2', lx[3] + 22, ly[3]), ('A3', (lx[1] + lx[3]) / 2, ly[3] - 22)]
+    _blocks, segs = _tile(img, frame, chips)
+    consumed = {s['chip'] for s in segs if s['chip'] is not None}
+    check('the dropped run leaves one letter unconsumed',
+          len(chips) - len(consumed) == 1,
+          'segs=%d consumed=%d of %d' % (len(segs), len(consumed), len(chips)))
+
+
 def test_cq_run_that_butts_into_another_wall_still_ends_there():
     """A piece can end against the SIDE of another run, where the card prints no post."""
     img, frame, lx, ly = cq_card()
@@ -419,7 +441,8 @@ def main():
                test_cq_blocks_are_found_and_wall_ends_told_apart,
                test_cq_pieces_are_tiled_by_their_printed_letters,
                test_cq_half_square_offset_piece_is_placed_where_it_is_printed,
-               test_cq_run_that_butts_into_another_wall_still_ends_there):
+               test_cq_run_that_butts_into_another_wall_still_ends_there,
+               test_cq_dropped_run_leaves_its_printed_letter_behind):
         print('\n== %s' % fn.__name__)
         fn()
     print('\n%d failure(s)' % len(FAILURES))

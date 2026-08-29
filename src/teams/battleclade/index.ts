@@ -1486,6 +1486,9 @@ function remoteOperateHatch(): ActionDef {
     ap: 1,
     type: 'unique',
     treatedAs: 'Operate Hatch',
+    // Aimed at a hatchway, exactly as the universal action is. Without it the sheet had
+    // nothing to aim and `src/ai/legal.ts` built no candidate, so the ploy was unusable.
+    needsTarget: 'part',
     sourceText: text(FP.remoteAccess),
     available: (ctx, state, op) =>
       hasKw(ctx, op, KW) &&

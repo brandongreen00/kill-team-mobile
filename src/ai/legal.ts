@@ -205,15 +205,18 @@ export function actionCandidates(
           push(out, ctx, state, op, def, { markerPos: { ...op.pos } }, 'action', 2, 'place marker');
         break;
       case 'Operate Hatch':
-      case 'Breach': {
-        const index = terrain(ctx, state);
-        for (const part of index.parts) {
-          if (part.role !== 'accessPoint') continue;
-          push(out, ctx, state, op, def, { partId: part.id }, 'action', 3, `${def.name} ${part.id}`);
-        }
+      case 'Breach':
+        accessPointCandidates(out, ctx, state, op, def);
         break;
-      }
       default:
+        // A team's own variant of an access-point action — BATTLECLADE's Remote Access hatch,
+        // CANOPTEK CIRCLE's Obelisk Node Control — carries a faction id this switch cannot
+        // name, and `missionCandidates` never builds a `partId`, so the bot could not reach
+        // either. It declares its kind on the ActionDef instead.
+        if (def.needsTarget === 'part') {
+          accessPointCandidates(out, ctx, state, op, def);
+          break;
+        }
         // Mission actions (ops) and team unique actions: the params are op-specific, so a
         // small set of plausible ones is tried and the engine's own `check` decides which are
         // legal. This is how the AI scores crit/tac ops without knowing any op by name.
@@ -228,6 +231,20 @@ export function actionCandidates(
  * Mission / unique actions. Ops record progress by stamping marker flags, so the param that
  * matters is nearly always a marker the operative controls or an enemy nearby.
  */
+/** Every access point on the board as a candidate; the action's own `check` culls them. */
+function accessPointCandidates(
+  out: Candidate[],
+  ctx: GameContext,
+  state: GameState,
+  op: OperativeState,
+  def: ActionDef,
+): void {
+  for (const part of terrain(ctx, state).parts) {
+    if (part.role !== 'accessPoint') continue;
+    push(out, ctx, state, op, def, { partId: part.id }, 'action', 3, `${def.name} ${part.id}`);
+  }
+}
+
 function missionCandidates(ctx: GameContext, state: GameState, op: OperativeState, def: ActionDef): Candidate[] {
   const attempts: ActionParams[] = [];
   for (const marker of markersNear(ctx, state, op)) {

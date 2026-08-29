@@ -18,10 +18,13 @@ a sealed room, not a drawing artefact.
 
 `cq_features` is rewritten to read the blocks and not the lattice, and three more bugs fell out of
 it. The block set is an independent measurement of where the pieces end, and it disagreed with the
-lattice tiling on exactly the two cards already known bad — so **every wall piece on all twelve
-cards now carries exactly one printed letter, no letter is left over, and every card's multiset is
-inside the printed killzone inventory**; `tomb-world-1`'s unreadable `B?` wall and the one
-`IOU_ALLOW` entry ever granted to the CQ tiler are both gone. Two pieces turn out to be printed
+lattice tiling on exactly two of the twelve cards — both of which were wrong. `tomb-world-1` loses
+its unreadable `B?` wall and the one `IOU_ALLOW` entry ever granted to the CQ tiler, and
+**`tomb-world-6` gains a B4 short wall that was simply missing from the map**. So now **every wall
+piece on all twelve cards carries exactly one printed letter, no letter is left over, and every
+card's multiset is inside the printed killzone inventory** — and a new gate, G10, fails the build
+if a printed letter is ever left unconsumed again, because a run the tiler drops leaves no feature
+for G4 to notice and no extra piece for G3. Two pieces turn out to be printed
 **off** the lattice by exactly half a square (`tomb-world-1` A2, `tomb-world-6` B4) and were being
 snapped onto a line 1.9" away. And the thirteen grey ✕ glyphs the Tomb World key calls **WALL END**
 were invisible to the old detector, because the cross punches an 84px hole in the wall colour at
@@ -29,7 +32,7 @@ the node.
 
 **"Tomb world and gallowdark don't have clearly outlined doors / hatches to use."** Two problems in
 one coat. A closed access point is rewritten to `['Heavy','Wall']` — byte-identical to the wall it
-is cut into — and `fillFor` keys only on types, so all sixteen hatchways on a board were invisible;
+is cut into — and `fillFor` keys only on types, so every hatchway on a board — ten of them on most cards — was invisible;
 so was every Volkus doorway. The board now draws them: a closed access point is a panel with a
 lock, an open one a gap between two jambs, amber for a 1AP Operate Hatch and red for a 2AP Breach.
 The close-quarters wall family is stroked once as a silhouette and then filled, so a run stops
@@ -47,8 +50,13 @@ every Volkus map. And `src/ai/moves.ts` keyed its reachability cache on the **co
 `state.terrainState` entries, so closing a hatchway returned the field computed while it was open —
 latent until this change made hatchways usable, and a direct route to a rejected intent.
 
-**Next:** HATCHWAY FIGHT and DOOR FIGHT are aimable now but still take the operative's first melee
-weapon with no profile choice, unlike a normal Fight. W-41, the jump edge, is unchanged.
+**Next:** two things this uncovered and did not fix. `canDeployAt` never tests terrain at all,
+so an operative can be set up with its base inside a wall and the deployment ghost paints those
+cells legal — the posts make the area larger but not the bug; fixing it means teaching
+`src/ai/deploy.ts` the same rule, which is 132 soak failures' worth of its own change. And no
+melee action anywhere in the UI offers a weapon or a profile: HATCHWAY FIGHT and DOOR FIGHT
+take the first melee weapon, and so does the ordinary Fight screen. W-41, the jump edge, is
+unchanged.
 
 ## 2026-08-28 — Climbing, and the Deathwatch second counteract (D-106, D-107)
 

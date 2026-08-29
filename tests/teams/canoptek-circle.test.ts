@@ -4,7 +4,7 @@
  * Source: https://wahapedia.ru/kill-team3/kill-teams/canoptek-circle/
  */
 import { describe, expect, it } from 'vitest';
-import { getAction } from '../../src/core/actions.ts';
+import { actionTargetKind, getAction } from '../../src/core/actions.ts';
 import { addRolled, newPool, type DicePool } from '../../src/core/dice.ts';
 import { zeroStatMods, type AttackContext } from '../../src/core/hooks.ts';
 import { gambitOptions, readyStep } from '../../src/core/phases.ts';
@@ -20,6 +20,7 @@ import {
   moveOf,
 } from '../../src/core/state.ts';
 import { moveBudget } from '../../src/core/movement.ts';
+import { buildTerrainIndex } from '../../src/core/terrain.ts';
 import { rareWeaponRuleText } from '../../src/core/weaponRules.ts';
 import rawJson from '../../data/teams/canoptek-circle.json';
 import { teamData } from '../../src/teams/data.ts';
@@ -47,7 +48,7 @@ import {
   placeObeliskNodes,
   withinMatrix,
 } from '../../src/teams/canoptek-circle/index.ts';
-import { act, activate, battle, opWith, settle, teamContext } from './harness.ts';
+import { act, activate, battle, mapById, opWith, settle, teamContext } from './harness.ts';
 import { heavyBlock, testMap } from '../fixtures.ts';
 import type { GameContext } from '../../src/core/context.ts';
 import type { FightSequence, ShootSequence } from '../../src/core/sequences/types.ts';
@@ -1340,6 +1341,26 @@ describe('CANOPTEK CIRCLE datacard abilities', () => {
     const def = getAction(NODE_OPERATE_HATCH)!;
     expect(def.available!(ctx, state, geo)).toBe(false); // no hatchways on the test map
     expect(def.check(ctx, state, geo, { partId: 'nope' }).ok).toBe(false);
+  });
+
+  it('the Operate Hatch variant is a HATCHWAY action, and something can aim it', () => {
+    // Two ways this was unusable. Delegating to the universal `Operate Hatch.perform` without
+    // its `opensAs` guard would open a Tomb World BREACH POINT for 1AP; and the core's
+    // NEEDS_TARGET table is keyed by action id, which the kernel cannot extend with a faction
+    // id, so nothing built a `partId` for it — not the sheet's aim list, not `src/ai/legal.ts`.
+    const def = getAction(NODE_OPERATE_HATCH)!;
+    expect(def.needsTarget).toBe('part');
+    expect(actionTargetKind(NODE_OPERATE_HATCH)).toBe('part');
+
+    const { ctx, state } = setup({ map: mapById('tomb-world-2') });
+    const geo = opWith(state, 'p1', CARD.geomancer);
+    const breach = buildTerrainIndex(state.map, state).parts.find(
+      (p) => p.role === 'accessPoint' && p.opensAs === 'breachWall',
+    )!;
+    expect(breach).toBeDefined();
+    expect(def.check(ctx, state, state.operatives[geo]!, { partId: breach.id }).reason).toContain(
+      'breach point, not a hatchway',
+    );
   });
 });
 

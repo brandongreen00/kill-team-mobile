@@ -110,8 +110,8 @@ const WALL_SILHOUETTE_ROLES = new Set(['wall', 'connector', 'wallEnd']);
  * They used to be drawn with `fillFor`, which reads the terrain TYPES — and a closed hatchway
  * is `Heavy, Wall`, exactly like the wall it is cut into, while a Volkus doorway is
  * `Accessible, Heavy` and lost to the same green. So on Gallowdark and Tomb World every one of
- * the sixteen hatchways on the board was invisible, and the only way to find one was to open
- * the Operate Hatch list and read part ids.
+ * the ten hatchways on the board was invisible, and the only way to find one was to open the
+ * Operate Hatch list and read part ids.
  *
  * The vocabulary is deliberately small and shared by all three: a CLOSED access point is a
  * panel with a lock, an OPEN one is a gap between two jambs with a dashed threshold, and the
@@ -955,7 +955,16 @@ export function Board({
                     }
                     onOperativeClick?.(op);
                   }}
-                  style={{ cursor: onOperativeClick ? 'pointer' : 'default' }}
+                  style={{
+                    cursor: onOperativeClick ? 'pointer' : 'default',
+                    // While the board is armed for a DOOR, the operatives stop taking taps.
+                    // An operative gets a 44px invisible disc — about 1" of board at fit zoom
+                    // on a phone — and it is painted after the terrain, so the one operative
+                    // standing in base contact with a hatchway (the only position from which
+                    // Operate Hatch is legal at all) covered the middle of the very door the
+                    // prompt asks you to tap.
+                    ...(armed?.onPart && !armed.onOperative ? { pointerEvents: 'none' as const } : {}),
+                  }}
                 >
                   {/* The real base, to scale: this is the shape control range is measured from. */}
                   <polygon

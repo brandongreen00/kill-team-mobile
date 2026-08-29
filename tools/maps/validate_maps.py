@@ -15,6 +15,7 @@ Gates
   G7 templates     fitted-template IoU >= 0.92
   G8 lattice       close-quarters wall centrelines sit within 0.1" of a HALF lattice step
   G9 symmetry      report 180-degree rotational symmetry of the terrain footprint
+  G10 letters      every printed close-quarters wall letter was consumed by exactly one piece
 """
 from __future__ import annotations
 
@@ -212,6 +213,23 @@ def check(m, allowed=None):
 
     # G9 180-degree symmetry of the terrain footprint
     info['symmetry'] = round(_symmetry(m), 3)
+
+    # G10 every printed letter was consumed.
+    #
+    # G3 only checks that a piece is not used MORE than the inventory holds and G4 can only
+    # report a feature that exists, so a close-quarters run the tiler drops entirely — one
+    # whose ends both butt into the side of another wall, leaving it with no connector block to
+    # chain from — is invisible to both: no feature, no unlabelled segment, no extra piece.
+    # The letter it leaves behind on the card is the only evidence, and "every wall piece
+    # carries exactly one printed letter and none is left over" is the property the whole
+    # block-driven rewrite rests on (D-108).
+    if m['closeQuarters']:
+        left = m['source']['qa'].get('unconsumedLabels')
+        info['unconsumedLabels'] = left
+        if left is None:
+            fails.append('G10 no unconsumedLabels in the QA block — re-run pnpm maps:extract')
+        elif left:
+            fails.append('G10 %d printed wall letter(s) consumed by no piece' % left)
 
     if 'centreSeamErrIn' in m['source']['qa']:
         info['seamErrIn'] = m['source']['qa']['centreSeamErrIn']

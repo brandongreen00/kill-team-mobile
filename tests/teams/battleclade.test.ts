@@ -4,7 +4,7 @@
  * Source: https://wahapedia.ru/kill-team3/kill-teams/battleclade/
  */
 import { describe, expect, it } from 'vitest';
-import { getAction } from '../../src/core/actions.ts';
+import { actionTargetKind, actionTargetOptions, getAction } from '../../src/core/actions.ts';
 import { addRolled, newPool, type DicePool } from '../../src/core/dice.ts';
 import { zeroStatMods, HookRegistry, type AttackContext } from '../../src/core/hooks.ts';
 import { gambitOptions, counteractCandidates } from '../../src/core/phases.ts';
@@ -1165,6 +1165,17 @@ describe('BATTLECLADE firefight ploys', () => {
     place(state, priest, centre.x + 6, centre.y);
     expect(def.check(ctx, state, state.operatives[priest]!, { partId: access.id }).reason).toContain('within 4"');
     expect(REMINDER_ONLY[`${FP.remoteAccess}.mission`]).toContain('src/core/ops');
+
+    // The ploy is only usable if something can AIM it. The core's NEEDS_TARGET table is keyed
+    // by action id and the kernel knows no faction, so an id like
+    // `Operate Hatch (Remote Access)` is not in it: the def declares its own kind, and both
+    // the sheet's aim list and the AI's candidate builder read that.
+    expect(def.needsTarget).toBe('part');
+    expect(actionTargetKind(REMOTE_OPERATE_HATCH)).toBe('part');
+    place(state, priest, centre.x + 3, centre.y);
+    const aimed = actionTargetOptions(ctx, state, state.operatives[priest]!, def);
+    expect(aimed.map((o) => o.id)).toContain(access.id);
+    expect(aimed[0]!.label).toMatch(/hatchway/);
   });
 
   it('AUTO-FERRIC SUPPLICATION ignores Piercing against a TECH-PRIEST for one sequence', () => {

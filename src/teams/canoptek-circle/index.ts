@@ -1832,6 +1832,9 @@ function nodeOperateHatch(): ActionDef {
     ap: 1,
     type: 'unique',
     treatedAs: 'Operate Hatch',
+    // Aimed at a hatchway, exactly as the universal action is. Without it the sheet had
+    // nothing to aim and `src/ai/legal.ts` built no candidate, so the ability was unusable.
+    needsTarget: 'part',
     sourceText: abilityText(CARD.geomancer, AB.obeliskNodeControl),
     available: (ctx, state, op) =>
       op.datacardId === CARD.geomancer && (universal().available?.(ctx, state, op) ?? true),

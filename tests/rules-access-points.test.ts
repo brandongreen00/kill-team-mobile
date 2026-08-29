@@ -13,7 +13,7 @@
  *     CENTRE. An access point is ~2" wide, so an operative standing at the edge of a doorway,
  *     plainly within 1" of it, measured 1.2" from that centre and was refused.
  *  3. The aim list named its options `access point gallowdark-1.A3-1.access`, which does not
- *     say which of the sixteen hatchways on the board it is.
+ *     say which of the ten hatchways on the board it is.
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';

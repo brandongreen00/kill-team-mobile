@@ -858,7 +858,7 @@ def cq_features(img, frame, killzone):
       are printed offset by half a square, which the old lattice-edge sampler snapped onto a
       lattice line and mis-sized.
     * A block with a grey cross knocked out of it is a WALL END (keys/TW3.jpg) rather than a
-      connector — twelve of them across the twelve cards.
+      connector — thirteen of them across the twelve cards.
     """
     wall = C.mask_exact(img, C.PALETTE['wall_cq'], 6)
     lx, ly = frame.lattice_x, frame.lattice_y
@@ -881,6 +881,11 @@ def cq_features(img, frame, killzone):
 
     thick = _wall_thickness(wall, blocks)
     segs = _cq_tile(lines, chips, step_px)
+    # A printed letter with no piece is the tiler failing SILENTLY: a run whose ends both butt
+    # into the side of another wall contributes no block, so it forms no chain and no feature
+    # at all — there is no unlabelled segment for G4 to report and no extra piece for G3. The
+    # count is emitted so `validate_maps.py` can fail on it (G10).
+    leftover = len(chips) - len({s['chip'] for s in segs if s['chip'] is not None})
     walls = [_cq_wall_feature(seg, frame, thick, access) for seg in segs]
     joints = [_cq_joint_feature(b, frame, killzone) for b in blocks]
 
@@ -893,7 +898,8 @@ def cq_features(img, frame, killzone):
     qa = dict(step_px=step_px, wall_px=thick,
               block_px=float(np.median([b['side'] for b in blocks])) if blocks else 0.0,
               blocks=len(blocks), wallEnds=sum(1 for b in blocks if b['kind'] == 'wallEnd'),
-              unlabelled=sum(1 for s in segs if s['label'] is None))
+              unlabelled=sum(1 for s in segs if s['label'] is None),
+              unconsumed_labels=leftover)
     return walls, joints, extras, qa
 
 
@@ -1108,7 +1114,7 @@ def _cq_tile(lines, chips, step):
             axis, chain = lines[li][0], lines[li][1]
             for (i, j, span), ci in zip(til, picked):
                 segs.append(dict(axis=axis, span=span, a=chain[i], b=chain[j],
-                                 label=chips[ci][0]))
+                                 label=chips[ci][0], chip=ci))
         return segs
     # No complete solution: fall back to the finest tiling and label what can be labelled, so
     # a card that changes still extracts (and G4 reports the missing letters).
@@ -1119,7 +1125,7 @@ def _cq_tile(lines, chips, step):
         for (i, j, span) in til:
             cx, cy = (chain[i][0] + chain[j][0]) / 2, (chain[i][1] + chain[j][1]) / 2
             pick = None
-            for t, tx, ty in chips:
+            for ci, (t, tx, ty) in enumerate(chips):
                 if t[0] != ('A' if span == 2 else 'B'):
                     continue
                 along = abs(tx - cx) if axis == 'h' else abs(ty - cy)
@@ -1127,9 +1133,9 @@ def _cq_tile(lines, chips, step):
                 if along > CHIP_ALONG * step or perp > CHIP_PERP * step:
                     continue
                 if pick is None or along + perp < pick[0]:
-                    pick = (along + perp, t)
+                    pick = (along + perp, t, ci)
             segs.append(dict(axis=axis, span=span, a=chain[i], b=chain[j],
-                             label=pick[1] if pick else None))
+                             label=pick[1] if pick else None, chip=pick[2] if pick else None))
     return segs
 
 
@@ -1317,6 +1323,7 @@ def build_map(card, mapId, killzone, name):
         qa['jointBlocks'] = wqa['blocks']
         qa['wallEnds'] = wqa['wallEnds']
         qa['unlabelledWalls'] = wqa['unlabelled']
+        qa['unconsumedLabels'] = wqa['unconsumed_labels']
 
     objectives = _finish_objectives(objs, features, annotations, killzone)
 
