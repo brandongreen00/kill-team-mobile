@@ -22,6 +22,9 @@ src/ai/
   caches.ts    every module-level cache, and the per-game reset
 ```
 
+The agent plays **in the app** as well as in the soak, as a selectable opponent. That layer is
+UI, not AI, so it lives in `src/ui/ai/**` and is documented in §10.
+
 ## 1. Why the intents are always legal
 
 `reducer.legalIntents()` lists the intent *shapes* a player may submit, but it emits
@@ -242,9 +245,12 @@ Raised from AI work; none are worked around in a way that hides them.
 5. **`EndActivation` treats a counteraction as an activation**: it increments
    `activationsThisTP` and ticks smoke even when `opState.counteract` is set, though
    "counteracting isn't an activation" (CLAUDE.md).
-6. **`OnGuardInterrupt` never clears `opState.guardOffer`** (`reducer.ts`), so a UI or AI
-   polling that flag is offered the same interrupt repeatedly. The runner de-duplicates by
-   `state.seq`.
+6. ~~**`OnGuardInterrupt` never clears `opState.guardOffer`**~~ — **fixed since this was
+   filed.** Both `OnGuardInterrupt` and `DeclineInterrupt` now end with
+   `delete next.opState['guardOffer']` (`reducer.ts`), and `offerGuardInterrupt` refuses to
+   re-open a window already spent on this activation (`guardInterruptUsedFor`). A poller is
+   offered the interrupt once. The runner's `state.seq` de-duplication is now belt and braces;
+   `src/ui/ai/driver.ts` needs none.
 7. **`legalIntents` emits `PerformAction` without params**, which is always rejected for every
    action that needs one. Callers must parameterise; §1 is the AI's answer.
 8. **Several op mission actions accept a `check` they cannot `perform`.** With no params, an op
@@ -253,3 +259,123 @@ Raised from AI work; none are worked around in a way that hides them.
    intents (it broke two Gallowdark team-soak games). The AI now confirms every mission-action
    candidate with a trial `reduce` on a forked RNG, but `check` and `perform` should agree on
    what params an action requires.
+
+## 10. In the app — the AI as an opponent
+
+`src/ai/**` plays through `Intent`s and nothing else, so making it a selectable opponent needed
+no rules code at all. What it needed was the three things `playGame` does that are not "ask the
+agent and dispatch", and one thing the app does that `playGame` never has to: **share a battle
+with somebody**.
+
+```
+src/ui/ai/
+  opponent.ts  who is in each seat, the difficulty, the AI's kill team — persisted
+  roster.ts    the AI's kill team, equipment and tac op
+  setup.ts     the setup intents, which the agent cannot produce at all
+  driver.ts    aiTurn() — whose move is it; AiDriver.step() — take it
+src/ui/command/opponent.tsx   the picker, the opponent's turn, and the AI-stopped screen
+```
+
+### Whose move is it
+
+`aiTurn(ctx, state, opponent)` answers that from **selectors only** — no enumeration, no search,
+no agent. It has to: `commandPlan` calls it on every render to decide whether the board is the
+player's or the opponent's, and a render that ran a 200ms search would be unusable. `step()` is
+the only thing that thinks, and it is called **once per dispatched intent**, because
+`TacticalAgent` shifts a step off its plan queue *before* it validates it — a second,
+speculative `act()` on the same state silently throws a planned action away.
+
+Its branch order is `commandPlan`'s own, so the screen and the driver cannot disagree:
+
+| | who owes it | why it is not `actorFor` |
+| --- | --- | --- |
+| `pending[0]` | `decision.who` | only `pending[0]`, because that is the window the screen is showing |
+| `opState.guardOffer` | `offer.player` | On Guard is not a `PendingDecision`; the reducer does not block on it |
+| active operative `removed` | its owner | see below |
+| `phase === 'setup'` | `aiSetupTurn` | `actorFor` returns **null** for the whole of setup |
+| `strategy`/gambit | `gambitToAct` | |
+| `firefight` | the active operative's **owner**, else `whoActivates(state, ctx)` | `PerformAction` and `EndActivation` carry no player field — the reducer authorises them on `activeOperativeId` alone, so a driver keyed on "whose turn" would play the person's activation for them. And `whoActivates` is asked **with** the context, which `actorFor` omits: without one it cannot see a team rule that widens who may counteract |
+
+**The corpse holding the activation.** An operative killed mid-activation — a counter-strike, an
+On Guard shot — leaves `activeOperativeId` pointing at it: `removeIncapacitated` does not clear
+it and nothing ends that activation, so it is never marked expended, the activation clock never
+ticks it and `onActivationEnd` never fires. In pass-and-play the players walk past it. In a solo
+battle it is a dead end as soon as the surviving side runs out of ready operatives, so the driver
+sends `EndActivation` for it **whoever owns it**. That is a pre-existing hole in the shell, fixed
+here only for battles that have an AI in them.
+
+### Setup
+
+`actorFor` returns null for `phase === 'setup'` and `legalIntents` enumerates no setup intent, so
+the agent is never even consulted before the first activation. `src/ui/ai/setup.ts` is the app's
+answer, and it differs from `playGame`'s hand-written script in two ways that matter:
+
+- it goes through **`BeginDeployment`**, which the runner skips — so `setup.revealed` is written
+  and `setup.step` can become `placeEquipment`, the only route by which a barricade or a ladder
+  ever reaches the killzone;
+- it deploys by **alternating thirds** (`deployToAct`, `deployBatchRemaining`), which is the
+  printed rule, rather than the runner's one-at-a-time alternation.
+
+Placements are taken from `deployPositions` (`src/ai/deploy.ts`, a ranked list rather than a
+single answer) and re-checked with `canDeployAt` before dispatch, because the placer checks the
+drop zone, hazardous areas and base overlap while `canDeployAt` also enforces the Stronghold
+occupancy cap.
+
+### What it brings
+
+`defaultRoster` for the kill team, `applyLoadouts` after the dispatch, up to four universal
+equipment options that need no setting up, and one of the twelve tac ops by battle seed
+(docs/DECISIONS.md D-110). All 48 bundled teams field a legal kill team this way, pinned in
+`tests/ai-opponent.test.ts`.
+
+### Pacing, and what it costs
+
+One intent per macrotask (`AI_PACE_MS`, 150ms, in `App.tsx`). The timer is not decoration:
+`Store.dispatch` notifies its subscribers synchronously, so driving the AI from the subscriber
+would re-enter the reducer from inside the previous notification — and it lets the screen that
+says whose turn it is paint *before* the search that blocks the thread starts.
+
+Latency here is much heavier than §6's figures, which are the synthetic 4-operative arena.
+Measured on `bheta-decima-1` with real kill teams (scout-squad 9 vs chaos-cult 14), one whole
+bot-vs-bot battle driven through the app's `Store`:
+
+| Difficulty | intents | worst decision | p95 | mean | total thinking |
+| --- | --- | --- | --- | --- | --- |
+| Recruit | 280 | 153ms | 95ms | 23ms | 6.5s |
+| Veteran | 324 | 1208ms | 501ms | 86ms | 27.9s |
+| Elite | 327 | 1191ms | 659ms | 104ms | 34.1s |
+
+A solo battle is about half of that, spread over four turning points. `enforceTimeBudget` stays
+**off**, as it is everywhere else: a clock-dependent cutoff would make the same seed play
+differently on a slower phone, and a battle is supposed to replay byte-identically from
+`(rosters, map, seed, intents[])`. `nodeBudget` is the limiter.
+
+### Lifecycle
+
+Everything `playGame` does per process, the app has to do per battle, and did not do at all:
+`resetAiCaches()` (reachability fields keyed by map and position; damage estimates keyed by
+datacard), `agent.reset()`, and a fresh `SeededRng` — `App` built its RNG once at boot and
+neither "New battle" nor the killzone browser ever replaced it, so every subsequent battle
+continued the previous one's dice. All three now happen in one place, `newBattle()` in `App.tsx`.
+
+AI intents are dispatched with `{ undoable: false }`. Undo is there so a *person* can take back
+their own misplaced operative; there is nothing to take back about the opponent's activation, and
+a snapshot of the whole `GameState` per intent is not free.
+
+### When it stops
+
+The AI's acceptance bar is zero rejected intents, so a refusal is a defect, not a rules result.
+`AiDriver` stops on the first one, clears `store.lastRejection` (the toast layer phrases it as
+something the *player* did wrong) and the shell shows `ai.error`, whose one action hands that
+seat to the player and carries on with the same battle.
+
+### Known weaknesses of the app layer
+
+- **The AI takes no placeable equipment** — no barricades, ladders, mines or ammo caches, because
+  nothing in `src/ai/**` can choose a spot for one. A human opponent can, so this is a real (if
+  small) asymmetry.
+- **Its tac op is chosen blind**, by seed, from all twelve. §8 already applies.
+- **The AI's kill team is `defaultRoster`'s**, which is the printed list filled greedily in
+  order — a legal kill team, not a considered one.
+- **A watched battle plays itself; a solo one still needs four "Continue" presses a turning
+  point** (D-109). That is deliberate, but it is the thing most likely to be re-litigated.

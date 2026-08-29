@@ -27,28 +27,44 @@ import { MapBrowser } from './MapBrowser.tsx';
 import { RosterBuilder } from './roster/RosterBuilder.tsx';
 import { Store, setStore } from './store.ts';
 import { commandPlan } from './command/index.tsx';
+import { opponentSummary } from './command/opponent.tsx';
 import { emptyUi, type CommandAction, type CommandPlan, type UiState } from './command/types.ts';
+import { AiDriver } from './ai/driver.ts';
+import { isAi, readOpponent, writeOpponent, type OpponentConfig } from './ai/opponent.ts';
 import { applyLoadouts } from '../teams/selection.ts';
 import { createGameContext } from '../core/game.ts';
 import { SeededRng } from '../core/rng.ts';
 import { createBattle } from '../core/init.ts';
 import { defaultCritOpId, loadMaps, loadTeams, type TeamData } from './data.ts';
-import { IconAlert, IconBack, IconLog, IconMap, IconMenu, IconRoster, IconTarget } from './icons.tsx';
+import { IconAlert, IconBack, IconHandover, IconLog, IconMap, IconMenu, IconRoster, IconTarget } from './icons.tsx';
 import type { GameState, KillzoneMap, PlayerId } from '../core/types.ts';
 
 const PLAYER_LABEL: Record<PlayerId, string> = { p1: 'Player 1', p2: 'Player 2' };
 /** How long a rejection stays on screen. Long enough to read a sentence. */
 const TOAST_MS = 4200;
+/**
+ * The beat between the AI's intents.
+ *
+ * Two jobs, and the smaller one is the reason it cannot be zero: the AI thinks on the main
+ * thread — measured at 86ms mean and 1.2s worst on a real killzone with full rosters — so each
+ * decision must be scheduled as its own task, after the screen that says whose turn it is has
+ * painted. The larger job is that a kill team's activation is four to eight intents, and an
+ * opponent whose whole turn lands in one frame is not an opponent you can follow.
+ */
+const AI_PACE_MS = 150;
 
 export function App() {
   const [maps, setMaps] = useState<KillzoneMap[]>([]);
   const [teams, setTeams] = useState<TeamData[]>([]);
   const [store, setLocalStore] = useState<Store | null>(null);
-  const [, force] = useState(0);
+  const [renders, force] = useState(0);
   const [ui, setUiState] = useState<UiState>(emptyUi);
   const [detent, setDetent] = useState<Detent>('rest');
   const [sheetRest, setSheetRest] = useState(140);
   const [toasts, setToasts] = useState<{ id: number; text: string; count: number }[]>([]);
+  const [opponent, setOpponentState] = useState<OpponentConfig>(readOpponent);
+  const [aiError, setAiError] = useState<string | null>(null);
+  const driverRef = useRef<AiDriver | null>(null);
   const windowClass = useWindowClass();
   const isDesktop = windowClass === 'desktop';
   const sideSheet = windowClass === 'side';
@@ -77,6 +93,7 @@ export function App() {
       const s = new Store(createBattle(ctx, { map, seed: 1, mode: 'match', critOpId: defaultCritOpId() }), ctx);
       setStore(s);
       setLocalStore(s);
+      driverRef.current = new AiDriver({ store: s, teams: t, opponent: readOpponent() });
       s.subscribe(() => force((n) => n + 1));
     })();
   }, []);
@@ -115,11 +132,79 @@ export function App() {
 
   useEffect(() => () => (toastTimer.current ? clearTimeout(toastTimer.current) : undefined), []);
 
+  // --- the AI opponent --------------------------------------------------
+  /** Persisted, so the choice survives a reload and a change of killzone. */
+  const setOpponent = useCallback((next: OpponentConfig) => {
+    setOpponentState(writeOpponent(next));
+    setAiError(null);
+  }, []);
+
+  useEffect(() => {
+    driverRef.current?.configure(opponent, teams);
+  }, [opponent, teams]);
+
+  /**
+   * Start a battle. The ONE place that does, because four things have to happen together and
+   * the two paths that used to do it (the killzone browser and "New battle") agreed on none of
+   * them: re-seed the RNG (the context's stream was built once at boot and never replaced, so
+   * every "new" battle continued the old dice), drop the AI's module-level caches (reachability
+   * fields keyed by map and position, damage estimates keyed by datacard — `playGame` does this
+   * per game and nothing in the app did it at all), throw away any half-executed activation
+   * plan, and clear the aiming state the previous battle left in `UiState`.
+   */
+  const newBattle = useCallback(
+    (opts: { map?: KillzoneMap; seed?: number } = {}) => {
+      if (!store) return;
+      const map = opts.map ?? store.state.map;
+      const seed = opts.seed ?? store.state.seed + 1;
+      store.ctx.rng = new SeededRng(seed);
+      driverRef.current?.newBattle();
+      setAiError(null);
+      store.reset(createBattle(store.ctx, { map, seed, mode: store.state.mode, critOpId: defaultCritOpId() }));
+      // Everything except the answer to "who is playing?", which the player gave once and the
+      // menu can still change — and which they have NOT given if the picker is still up, which
+      // it is when the killzone is chosen from the menu before the first battle.
+      setUiState((s) => ({ opponentChosen: s.opponentChosen }));
+    },
+    [store],
+  );
+
+  /**
+   * One intent per macrotask, and never two in flight.
+   *
+   * `Store.dispatch` ends by notifying its subscribers, so driving the AI from the subscriber
+   * itself would re-enter the reducer from inside the previous notification. The timer breaks
+   * that, and it also lets the screen that says whose turn it is paint before the search that
+   * blocks the thread starts. `TacticalAgent` takes a step off its plan queue before it
+   * validates it, so a second, speculative `step()` on the same state would silently discard a
+   * planned action — hence the busy latch as well as the effect key.
+   */
+  const aiBusy = useRef(false);
+  useEffect(() => {
+    const driver = driverRef.current;
+    if (!driver || aiError || aiBusy.current) return;
+    // Not until "Play". Choosing "Watch the AI play itself" makes it the AI's move immediately,
+    // and without this the battle starts underneath the picker — which then cannot be reached
+    // again, because it is only offered while the setup step is still the roll-off.
+    if (!ui.opponentChosen) return;
+    if (!driver.turn()) return;
+    aiBusy.current = true;
+    const handle = setTimeout(() => {
+      aiBusy.current = false;
+      const result = driver.step();
+      if (result.error) setAiError(result.error);
+    }, AI_PACE_MS);
+    return () => {
+      clearTimeout(handle);
+      aiBusy.current = false;
+    };
+  }, [store?.state, renders, opponent, aiError, ui.opponentChosen]);
+
   const plan: CommandPlan | null = useMemo(
-    () => (store ? commandPlan({ store, teams, ui, setUi }) : null),
+    () => (store ? commandPlan({ store, teams, ui, setUi, opponent, setOpponent, aiError, newBattle }) : null),
     // The store mutates in place and notifies through `force`, so the render counter is part
     // of the key: without it the plan would be computed from a stale state object.
-    [store, teams, ui, setUi, store?.state],
+    [store, teams, ui, setUi, store?.state, opponent, setOpponent, aiError, newBattle],
   );
 
   /**
@@ -159,12 +244,13 @@ export function App() {
 
   const state: GameState = store.state;
   const decision = state.pending[0];
+  const aiTeamName = teams.find((t) => t.id === opponent.teamId)?.name;
 
   const pickMap = (id: string) => {
     const map = maps.find((m) => m.id === id);
     if (!map) return;
-    store.reset(createBattle(store.ctx, { map, seed: state.seed, mode: state.mode, critOpId: defaultCritOpId() }));
-    setUiState(emptyUi);
+    newBattle({ map, seed: state.seed });
+    setUi({ route: undefined });
   };
 
   /**
@@ -336,6 +422,14 @@ export function App() {
                 <IconLog size={20} />
                 <span style={{ flex: 1, textAlign: 'left' }}>Battle log</span>
               </button>
+              <button
+                disabled={state.phase !== 'setup' || state.setup.step !== 'rollOff'}
+                title={state.setup.step !== 'rollOff' ? 'The kill teams are already being chosen' : undefined}
+                onClick={() => setUi({ route: undefined, opponentChosen: false })}
+              >
+                <IconHandover size={20} />
+                <span style={{ flex: 1, textAlign: 'left' }}>Opponent — {opponentSummary(opponent, aiTeamName)}</span>
+              </button>
               <button disabled={state.phase !== 'setup'} title={state.phase !== 'setup' ? 'The battle has begun' : undefined} onClick={() => setUi({ route: 'killzones' })}>
                 <IconMap size={20} />
                 <span style={{ flex: 1, textAlign: 'left' }}>Killzone — {state.map.name}</span>
@@ -363,9 +457,12 @@ export function App() {
           <span
             key={p}
             class={`team-chip is-${p}${plan.turnOf === p ? ' is-active' : ''}`}
-            aria-label={`${PLAYER_LABEL[p]}: ${state.teams[p].vp} victory points, ${state.teams[p].cp} command points${plan.turnOf === p ? ' — to act' : ''}`}
+            aria-label={`${PLAYER_LABEL[p]}${isAi(opponent, p) ? ' (AI)' : ''}: ${state.teams[p].vp} victory points, ${state.teams[p].cp} command points${plan.turnOf === p ? ' — to act' : ''}`}
           >
             <i class="dot" />
+            {/* Which side is the opponent has to be legible at a glance for the whole battle:
+                the scoreline is the only thing on screen in every single state. */}
+            {isAi(opponent, p) && <b class="chip-ai">AI</b>}
             {state.teams[p].vp}VP · {state.teams[p].cp}CP
           </span>
         ))}

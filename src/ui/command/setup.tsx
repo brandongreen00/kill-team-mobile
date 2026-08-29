@@ -30,6 +30,7 @@ import {
   type EquipmentItem,
 } from '../../core/equipment/index.ts';
 import { IconCheck, IconDice, IconHandover, IconMap, IconTarget, IconUndo } from '../icons.tsx';
+import { needsHandover, type OpponentConfig } from '../ai/opponent.ts';
 import type { CommandAction, CommandPlan, UiState, WorldRect } from './types.ts';
 import { rectOfPolys } from './types.ts';
 
@@ -41,6 +42,8 @@ export interface PanelArgs {
   teams: TeamData[];
   ui: UiState;
   setUi: (next: Partial<UiState>) => void;
+  /** Which seats are people. Only a two-person battle has anything to hand over. */
+  opponent: OpponentConfig;
 }
 
 const pts = (poly: readonly Vec2[]): string => poly.map((p) => `${p.x.toFixed(3)},${p.y.toFixed(3)}`).join(' ');
@@ -234,7 +237,9 @@ export function selectOperativesPlan(args: PanelArgs): CommandPlan {
     };
   }
 
-  if (ui.handedOverTo !== next) {
+  // These two hand-overs never went through `handoverGate`, so they need the same test it
+  // makes: with one person playing there is nobody to pass the phone to.
+  if (needsHandover(args.opponent) && ui.handedOverTo !== next) {
     return {
       id: 'setup.handover',
       step: 'Setup · 3 of 3',
@@ -288,10 +293,11 @@ export function selectOperativesPlan(args: PanelArgs): CommandPlan {
  * derivable marker for "this player has finished choosing" — the UI holds no step of its own,
  * and a reload or a re-render lands back on exactly the same question.
  */
-function loadoutPlan({ store, teams, ui, setUi }: PanelArgs, player: PlayerId): CommandPlan {
+function loadoutPlan(args: PanelArgs, player: PlayerId): CommandPlan {
+  const { store, teams, ui, setUi } = args;
   const { state, ctx } = store;
 
-  if (ui.handedOverTo !== player) {
+  if (needsHandover(args.opponent) && ui.handedOverTo !== player) {
     return {
       id: 'setup.loadoutHandover',
       step: 'Setup · 3 of 3',

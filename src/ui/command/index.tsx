@@ -22,6 +22,9 @@ import {
   guardOffer,
   strategyPlan,
 } from './play.tsx';
+import { aiActingPlan, aiErrorPlan, opponentPlan } from './opponent.tsx';
+import { aiTurn } from '../ai/driver.ts';
+import { needsHandover, type OpponentConfig } from '../ai/opponent.ts';
 
 const LABEL: Record<PlayerId, string> = { p1: 'Player 1', p2: 'Player 2' };
 
@@ -78,6 +81,10 @@ export function handoverGate(
 ): CommandPlan | null {
   const { store, ui, setUi } = args;
   if (store.state.mode !== 'match') return null;
+  // One person in the room: there is nobody to hand the phone to, and nobody to hide it from.
+  // Suppressed HERE rather than by flipping the battle to `mode: 'sandbox'`, which would also
+  // unlock `MoveOperativeFree` — a rules hole opened to fix a presentation problem.
+  if (!needsHandover(args.opponent)) return null;
   const holder = ui.handedOverTo ?? deviceHolder(store.state);
   if (holder === who) return null;
   return {
@@ -106,20 +113,55 @@ export interface CommandArgs {
   teams: TeamData[];
   ui: UiState;
   setUi: (next: Partial<UiState>) => void;
+  /** Which seats are people and which are the AI. See `src/ui/ai/opponent.ts`. */
+  opponent: OpponentConfig;
+  setOpponent: (next: OpponentConfig) => void;
+  /** Set when the AI stopped; the battle waits on a person rather than spinning. */
+  aiError?: string | null;
+  /**
+   * Start a fresh battle. The one path: it re-seeds the RNG, drops the AI's caches and its
+   * half-executed plan, and clears the aiming state — none of which the two places that used
+   * to call `store.reset` themselves did.
+   */
+  newBattle?: (opts?: { map?: import('../../core/types.ts').KillzoneMap; seed?: number }) => void;
 }
 
 export function commandPlan(args: CommandArgs): CommandPlan {
-  const { store } = args;
+  const { store, ui } = args;
   const { state } = store;
 
-  // A reactive window outranks everything: the rules block on it, so the screen does too.
+  // An AI that has stopped outranks the rules: every screen below assumes the battle can still
+  // move, and this one is the only place that says it cannot.
+  if (args.aiError) return aiErrorPlan(args, args.aiError);
+
+  // Who is playing, asked once, before the first die. It sits above the setup switch rather
+  // than inside it because the answer changes who owns almost every screen underneath.
+  if (state.phase === 'setup' && state.setup.step === 'rollOff' && !ui.opponentChosen) return opponentPlan(args);
+
+  /**
+   * Whose move is it?
+   *
+   * This sits ABOVE the two reactive windows, not below them, and that ordering is the whole
+   * safety property of a solo battle. `aiTurn` reads `pending[0]` and `guardOffer` FIRST and
+   * returns null unless the seat they belong to is an AI one — so a window the *player* owes
+   * still falls through to their own screen below. Putting this branch second instead looks
+   * equivalent and is not: `decisionPlan` and `guardInterruptPlan` render live, tappable
+   * options for whoever the window belongs to, and `handoverGate` — the one thing that used to
+   * stand between the player and the opponent's controls — now correctly stands down when
+   * there is only one person in the room. The player would be handed the AI's re-roll, its
+   * cover-or-obscured choice and its On Guard interrupt to answer.
+   */
+  const ai = aiTurn(store.ctx, state, args.opponent);
+  if (ai) return aiActingPlan(args, ai);
+
+  // A reactive window outranks everything else: the rules block on it, so the screen does too.
   const decision = state.pending[0];
   if (decision) return decisionPlan(args, decision);
 
   // On Guard is second, and it is a special case worth stating: it is NOT a PendingDecision,
   // the reducer does not block on it, so if this branch did not exist the active player would
   // simply carry on and the opponent's interrupt would never happen.
-  const guard = guardOffer(store);
+  const guard = guardOffer(state);
   if (guard)
     return (
       handoverGate(

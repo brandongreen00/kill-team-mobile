@@ -18,6 +18,36 @@ async function ready(page: Page): Promise<void> {
   await expect(page.locator('svg.board-main')).toBeVisible();
 }
 
+/**
+ * Answer the opponent picker, which is now the first screen of the app.
+ *
+ * `mode` is the label on the row to choose; the default is the pass-and-play the rest of this
+ * suite is written around. Every test that plays a battle goes through here, so the picker
+ * cannot be skipped by accident and then silently leave a test asserting on the wrong screen.
+ */
+async function chooseOpponent(page: Page, mode: RegExp = /Pass and play/): Promise<void> {
+  await expect(page.locator('.topbar')).toHaveAttribute('data-screen', 'setup.opponent');
+  await page.locator('.sheet-body .actions button, .rail .actions button').filter({ hasText: mode }).first().click();
+  await page.locator('.prompt .actions button[data-action="start"]').click();
+  // The picker opens at `half` and the roll-off wants `rest`, so leaving this screen is the
+  // one place in the app where the sheet animates before the next test step. `height` has a
+  // 0.24s transition; measuring or tapping through it reads the previous screen's geometry.
+  await settleSheet(page);
+}
+
+/** Wait for the sheet to stop animating: two identical heights, one frame apart. */
+async function settleSheet(page: Page): Promise<void> {
+  const sheet = page.locator('.sheet');
+  if (!(await sheet.count())) return; // desktop mounts the same content in a rail
+  let last = -1;
+  for (let i = 0; i < 20; i++) {
+    const h = (await sheet.boundingBox())?.height ?? 0;
+    if (h === last) return;
+    last = h;
+    await page.waitForTimeout(60);
+  }
+}
+
 const promptTitle = (page: Page) => page.locator('.prompt-title').first();
 
 /** The plan id the shell is currently showing — the state, not the sentence. */
@@ -25,6 +55,7 @@ const screenId = (page: Page) => page.locator('.topbar').getAttribute('data-scre
 
 /** Drive setup as far as deployment: roll off, drop zone, two kill teams, reveal. */
 async function setUpToDeployment(page: Page, opts: { equipment?: boolean } = {}): Promise<void> {
+  await chooseOpponent(page);
   await page.getByRole('button', { name: /Roll off/ }).click();
   const take = page.getByRole('button', { name: /Take initiative/ });
   if (await take.count()) await take.click();
@@ -109,9 +140,12 @@ test('the board fills its pane instead of letterboxing into a strip', async ({ p
   expect(geometry.paneH).toBeGreaterThan(200);
 });
 
-test('the first screen says what to do, and there is no tab bar to find it in', async ({ page }) => {
+test('the first screen asks who is playing, then says what to do', async ({ page }) => {
   await page.goto('/');
   await ready(page);
+  // Who is in the room decides who owns almost every screen after it, so it is asked first.
+  await expect(promptTitle(page)).toContainText('Who is playing?');
+  await chooseOpponent(page);
   await expect(promptTitle(page)).toContainText('Roll off for initiative');
   await expect(page.getByRole('button', { name: /Roll off/ })).toBeVisible();
   // The old shell's four tabs are gone: the sheet always shows the current step.
@@ -121,6 +155,7 @@ test('the first screen says what to do, and there is no tab bar to find it in', 
 test('the board zooms and can be put back to the whole killzone', async ({ page }) => {
   await page.goto('/');
   await ready(page);
+  await chooseOpponent(page);
   const board = page.locator('svg.board-main');
   const before = Number(((await board.getAttribute('viewBox')) ?? '').split(' ')[2]);
 
@@ -156,6 +191,7 @@ test('the board zooms and can be put back to the whole killzone', async ({ page 
 test('adding operatives never moves the control under your thumb', async ({ page }) => {
   await page.goto('/');
   await ready(page);
+  await chooseOpponent(page);
   await page.getByRole('button', { name: /Roll off/ }).click();
   const take = page.getByRole('button', { name: /Take initiative/ });
   if (await take.count()) await take.click();
@@ -288,12 +324,16 @@ test('the command sheet expands and collapses, and never hides the board while a
   test.skip(testInfo.project.name === 'desktop' || testInfo.project.name === 'phone-landscape', 'no detents in this layout');
   await page.goto('/');
   await ready(page);
+  await chooseOpponent(page);
   const sheet = page.locator('.sheet');
   await expect(sheet).toHaveAttribute('data-detent', 'rest');
   const restHeight = (await sheet.boundingBox())?.height ?? 0;
 
   await page.locator('.sheet-grab').click();
   await expect(sheet).toHaveAttribute('data-detent', 'half');
+  // `data-detent` flips on the click; the height follows it over 0.24s. Measure the end state,
+  // not the frame the attribute changed on.
+  await settleSheet(page);
   const halfHeight = (await sheet.boundingBox())?.height ?? 0;
   expect(halfHeight).toBeGreaterThan(restHeight);
 
@@ -305,6 +345,7 @@ test('the command sheet expands and collapses, and never hides the board while a
   // The board pane is inset by the RESTING height only, so expanding never reflows it.
   const paneBefore = await page.evaluate(() => document.querySelector('.board-pane')!.getBoundingClientRect().height);
   await page.locator('.sheet-grab').click();
+  await settleSheet(page);
   const paneAfter = await page.evaluate(() => document.querySelector('.board-pane')!.getBoundingClientRect().height);
   expect(Math.abs(paneAfter - paneBefore)).toBeLessThanOrEqual(1);
 });
@@ -365,6 +406,8 @@ test('the shell publishes which screen it is on', async ({ page }) => {
   // rather than on copy that keeps being edited.
   await page.goto('/');
   await ready(page);
+  expect(await screenId(page)).toBe('setup.opponent');
+  await chooseOpponent(page);
   expect(await screenId(page)).toBe('setup.rollOff');
   await page.getByRole('button', { name: /Roll off/ }).click();
   expect(await screenId(page)).toMatch(/^setup\.(initiative|dropZone)$/);
@@ -435,4 +478,97 @@ test('a screen that arms the board still shows the list it tells you to pick fro
   expect(box.y + box.height).toBeLessThanOrEqual(page.viewportSize()!.height);
   await pick.click({ timeout: 3000 });
   expect(await screenId(page)).toBe('firefight.order');
+});
+
+/* ------------------------------------------------------------ the AI opponent */
+
+test('the AI plays its own side, and never asks the solo player to hand over the phone', async ({ page }) => {
+  // Everything about the AI opponent that a person actually sees: the picker, the opponent's
+  // own screen, a kill team it chose for itself, and — the thing a solo game most obviously
+  // must not do — no "hand the device to Player 2" between the screens that are secret in a
+  // two-player battle.
+  test.setTimeout(180_000);
+  const errors: string[] = [];
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  page.on('pageerror', (e) => errors.push(String(e)));
+
+  await page.goto('/');
+  await ready(page);
+  await chooseOpponent(page, /you are Player 1/);
+
+  const handovers: string[] = [];
+  const watchForHandover = async () => {
+    const id = await screenId(page);
+    if (id && /handover/i.test(id)) handovers.push(id);
+    return id;
+  };
+
+  await page.getByRole('button', { name: /Roll off/ }).click();
+  for (let i = 0; i < 60; i++) {
+    const id = await watchForHandover();
+    if (id === 'setup.initiative') await page.getByRole('button', { name: /Take initiative/ }).click();
+    else if (id === 'setup.dropZone') await page.getByRole('button', { name: /Take the orange drop zone/ }).click();
+    else if (id === 'ai.acting') await page.waitForTimeout(200);
+    else break;
+  }
+
+  // The player's own kill team, chosen the ordinary way.
+  for (let i = 0; i < 80 && (await watchForHandover()) !== 'setup.selectOperatives'; i++) await page.waitForTimeout(200);
+  await page.getByRole('button', { name: /Choose operatives/ }).click();
+  await page.locator('.team-list button').first().click();
+  for (let i = 0; i < 25; i++) {
+    const add = page.locator('button.add:not([disabled])').first();
+    if (!(await add.count())) break;
+    await add.click();
+  }
+  await page.getByRole('button', { name: /Lock in Player/ }).click();
+
+  for (let i = 0; i < 80 && (await watchForHandover()) !== 'setup.loadout'; i++) await page.waitForTimeout(200);
+  await page.locator('.tac-ops button').first().click();
+  await page.locator('.prompt .actions button[data-action="confirm-loadout"]').click();
+
+  // …and by the reveal the AI has quietly done all of its own: kill team, equipment, tac op.
+  for (let i = 0; i < 120 && (await watchForHandover()) !== 'setup.reveal'; i++) await page.waitForTimeout(200);
+  expect(await screenId(page)).toBe('setup.reveal');
+  await expect(page.locator('.team-card.is-p2 .entry-name')).not.toBeEmpty();
+  await expect(page.locator('.team-card.is-p2 .entry-meta')).toContainText(/\d+ operatives/);
+
+  expect(handovers, 'a solo game has nobody to hand the phone to').toEqual([]);
+  expect(errors).toEqual([]);
+});
+
+test('watching the AI play itself needs no input at all', async ({ page }) => {
+  // The strongest end-to-end statement the app can make about the driver: with both seats
+  // driven it also owns the beats that belong to nobody — the roll-off, the ready step, the
+  // end-of-turning-point score — so a battle runs from the picker to the firefight with no
+  // click after "Play".
+  test.setTimeout(240_000);
+  const errors: string[] = [];
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  page.on('pageerror', (e) => errors.push(String(e)));
+
+  await page.goto('/');
+  await ready(page);
+  await chooseOpponent(page, /Watch the AI play itself/);
+
+  let reached = '';
+  for (let i = 0; i < 900; i++) {
+    const w = await page.evaluate(() => ({
+      id: document.querySelector('.topbar')?.getAttribute('data-screen') ?? '',
+      // `textContent`, not `innerText`: `.prompt-step` is uppercased in CSS, and `innerText`
+      // returns what is painted.
+      step: document.querySelector('.prompt-step')?.textContent ?? '',
+      help: document.querySelector('.prompt-help')?.textContent ?? '',
+    }));
+    if (w.id === 'ai.error') throw new Error(`the AI stopped: ${w.help}`);
+    if (/Firefight/.test(w.step) || w.id === 'battleEnd') {
+      reached = w.id === 'battleEnd' ? 'battleEnd' : w.step;
+      break;
+    }
+    await page.waitForTimeout(200);
+  }
+  expect(reached, 'a watched battle should reach the firefight on its own').toMatch(/Firefight|battleEnd/);
+  // Two kill teams are on the killzone, chosen and deployed with no human input.
+  expect(await page.locator('svg.board-main g.operatives > *').count()).toBeGreaterThan(4);
+  expect(errors).toEqual([]);
 });

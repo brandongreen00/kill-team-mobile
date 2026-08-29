@@ -33,7 +33,13 @@ Back.
 
 ### Precedence
 
-`pending[0]` → `opState.guardOffer` → route → setup step → phase.
+`aiError` → `setup.opponent` → `pending[0]` → `opState.guardOffer` → `ai.acting` → route →
+setup step → phase.
+
+`ai.acting` sits **below** the two reactive windows deliberately: those already route by `who`,
+and a window the *player* owes is theirs to answer even while the AI holds the activation. It
+sits **above** the setup switch and the phase branches so that no screen the AI owns is ever
+rendered armed — the player must not be able to play the opponent's turn for it.
 
 `guardOffer` is second and deliberately so: On Guard is **not** a `PendingDecision`. The
 reducer writes `state.opState.guardOffer` and does not block on it, so the UI is the only thing
@@ -59,6 +65,9 @@ gives the board 405×281 instead of 405×88.
 
 | State | `plan.id` | Board | Sheet |
 | --- | --- | --- | --- |
+| boot, `!ui.opponentChosen` | `setup.opponent` | untouched | who is playing, how well the AI plays, its kill team |
+| the AI owes the next intent | `ai.acting` | framed on what it is doing; **not armed** | whose turn, and the last few log lines |
+| the AI stopped | `ai.error` | — | what happened · **Play that side yourself** |
 | `setup.step = rollOff` | `setup.rollOff` | whole killzone | "Roll off for initiative" · **Roll off** |
 | `= chooseDropZone`, no initiative yet | `setup.initiative` | — | who takes initiative |
 | `= chooseDropZone` | `setup.dropZone` | both zones tinted and **tappable** | take orange / take grey |
@@ -323,7 +332,11 @@ default the engine marks `auto`/`keep`. Two things are not generic:
 - **The handover.** In a match the phone is assumed to be with whoever is acting
   (`deviceHolder`), so a reactive window belonging to the other player asks for it by name
   first, and hands it back on resolve (D-057). Sandbox mode skips this entirely — one person
-  driving both sides does not want to confirm a handover every time a save is rolled.
+  driving both sides does not want to confirm a handover every time a save is rolled. So does
+  any battle with an AI seat: the handover is **secrecy, not politeness** (kill teams, equipment
+  and tac ops are chosen in secret), and with one person in the room there is nobody to hide the
+  screen from. That is `needsHandover(opponent)` (D-108), and it is applied at all three gates —
+  `handoverGate`, and the two written inline in `setup.tsx`, which never went through it.
 
 ## Screenshots
 
@@ -360,9 +373,15 @@ of stage the sheet takes 68% instead.
 
 ## Known gaps
 
-- No pre-battle screen: the app boots straight into a battle on the first killzone. Choosing a
-  killzone and a crit op is behind the menu, and `state.critOpId` is unset by default, so no
-  crit op scores.
+- The pre-battle screen asks who is playing (`setup.opponent`) but not what you are playing:
+  the killzone and the crit op are still behind the menu, and there is no mission select. The
+  crit op defaults to `crit.secure` rather than being unset, so scoring works.
+- A solo battle still asks the player to press through the beats the rules give to nobody — the
+  roll-off, the ready step, the reveal, the end-of-turning-point score. That is deliberate
+  (D-109): they are where you read the board and decide you are ready. A *watched* battle
+  (both seats AI) takes them itself, so it plays from the picker to the result with no input.
+- The `ai.acting` screen has no controls at all, which is the point, but it also means there is
+  no way to pause the opponent and study the board mid-turn. The battle log is the fallback.
 - Waypoints: a move is a single straight leg to the ghost. A path around a corner has to be
   taken in two actions.
 - Dice are sized in world inches, so they shrink with the zoom instead of staying a constant

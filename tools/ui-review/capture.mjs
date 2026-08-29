@@ -46,6 +46,8 @@ const VIEWPORTS = [
 
 /** Every numbered screen, in flow order. `required: false` = only if the dice go that way. */
 const SHOTS = [
+  ['00-opponent'],
+  ['00b-opponent-ai'],
   ['01-first-screen'],
   ['02-sheet-half'],
   ['03-sheet-full'],
@@ -78,6 +80,10 @@ const SHOTS = [
   ['28-battle-end'],
   ['29-reroll', false],
   ['30-handover-mid-battle', false],
+  // Captured by a second, short pass: the main battle is pass-and-play, so the only way to
+  // photograph the opponent's turn is to play a battle that has one.
+  ['31-ai-acting'],
+  ['32-ai-deploying'],
 ];
 const REQUIRED = SHOTS.filter(([, req]) => req !== false).map(([n]) => n);
 
@@ -239,6 +245,28 @@ class Capture {
  * advances the battle by one step. Returning is enough — the loop re-reads the screen id.
  */
 const HANDLERS = {
+  /**
+   * The new first screen: who is playing. The main run stays pass-and-play — every handler
+   * below assumes a second person — so this snaps the AI half of the screen and then puts it
+   * back. `31-ai-acting` and `32-ai-deploying` come from `captureAi` instead.
+   */
+  'setup.opponent': async (c) => {
+    await c.snap('00-opponent');
+    await click(c.page.locator('.sheet-body .actions button, .rail .actions button').filter({ hasText: 'you are Player 1' }), c.page);
+    await c.snap('00b-opponent-ai');
+    await click(c.page.locator('.sheet-body .actions button, .rail .actions button').filter({ hasText: 'Pass and play' }), c.page);
+    await click(action(c.page, 'start'), c.page);
+  },
+
+  /**
+   * Nothing to press: the opponent is playing. Reached only in a battle with an AI seat, so in
+   * the main run it never fires — but a handler has to exist, or the loop would call it a
+   * screen with no way forward.
+   */
+  'ai.acting': async (c) => {
+    await c.page.waitForTimeout(150);
+  },
+
   'setup.rollOff': async (c) => {
     await c.snap('01-first-screen');
     await detent(c.page, 'half');
@@ -606,8 +634,48 @@ async function capture(browser, { prefix, use }) {
   }
 
   await context.close();
+  await captureAi(browser, { prefix, use }, c, errors);
   const missing = REQUIRED.filter((n) => !c.taken.has(n));
   return { prefix, missing, errors, stuck: state.stuck, taken: [...c.taken] };
+}
+
+/**
+ * A second, short pass: a battle with nobody in it.
+ *
+ * The main run is pass-and-play, which is the right default — most of the numbered screens
+ * only exist because there are two people — but it means the opponent's own screen is never
+ * reached. This plays a watched battle just far enough to photograph it twice: the moment the
+ * AI takes over, and the AI mid-deployment, which is the one place the board is doing
+ * something a still frame can show. It runs in a fresh context, so the opponent choice it
+ * writes to `localStorage` cannot leak into the next viewport's main run.
+ */
+async function captureAi(browser, { prefix, use }, c, errors) {
+  const context = await browser.newContext({ ...use });
+  const page = await context.newPage();
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  page.on('pageerror', (e) => errors.push(String(e)));
+  const shots = new Capture(page, prefix, errors);
+  try {
+    await page.goto(BASE);
+    await page.locator('svg.board-main').waitFor({ state: 'visible', timeout: 30_000 });
+    await click(page.locator('.sheet-body .actions button, .rail .actions button').filter({ hasText: 'Watch the AI' }), page);
+    await click(action(page, 'start'), page);
+
+    // The AI owns every beat in a watched battle, so `ai.acting` arrives on its own.
+    for (let i = 0; i < 200 && (await screen(page)) !== 'ai.acting'; i++) await page.waitForTimeout(100);
+    await shots.snap('31-ai-acting');
+
+    // …and then keep watching until it is putting operatives on the killzone.
+    for (let i = 0; i < 900; i++) {
+      const w = await where(page);
+      if (w.id === 'ai.acting' && /deploying/.test(w.title)) break;
+      await page.waitForTimeout(100);
+    }
+    await shots.snap('32-ai-deploying');
+  } finally {
+    await context.close();
+  }
+  for (const name of shots.taken) c.taken.add(name);
 }
 
 async function main() {

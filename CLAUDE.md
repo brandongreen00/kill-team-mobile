@@ -88,6 +88,12 @@ must never hard-code a height.
 **Run an AI soak.** `pnpm soak` plays bot-vs-bot games across maps and asserts zero rejected intents
 and no exceptions.
 
+**Play against the AI.** The first screen of the app (`setup.opponent`) picks who holds each seat.
+The AI side is driven by `src/ui/ai/**` — `aiTurn()` says whose move it is from selectors alone
+(`commandPlan` and the driver both read it, so they cannot disagree), `AiDriver.step()` takes it,
+one intent per macrotask. Setup is the app's own (`src/ui/ai/setup.ts`): the agent cannot produce
+a setup intent at all. Read `docs/AI.md` §10 before changing any of it.
+
 **Change the phone UI.** Read `docs/UI.md` first. The shell has no tab bar: `commandPlan(state)`
 in `src/ui/command/` derives exactly one screen from GameState, and a new screen is a branch
 there, never a new place to navigate to. The UI may read any non-mutating `(ctx, state, …)`

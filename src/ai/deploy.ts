@@ -42,22 +42,28 @@ function zoneGrid(
 }
 
 /**
- * Where should this operative set up? Forward toward the objectives, spread out enough that a
- * Blast weapon cannot catch two operatives, and never on top of a friend.
+ * Every legal spot in the drop zone, best first: forward toward the objectives, spread out
+ * enough that a Blast weapon cannot catch two operatives, and never on top of a friend.
+ *
+ * A list rather than a single answer because these three checks are not quite all of them.
+ * `canDeployAt` also enforces the Stronghold occupancy cap (a rule about the *level* an
+ * operative arrives on, which this scoring knows nothing about), so a caller that must never
+ * have a placement refused — the app's AI opponent, whose acceptance bar is zero rejected
+ * intents — walks this list until one passes the reducer's own gate. `playGame` takes the
+ * head and is unaffected.
  */
-export function deployPosition(ctx: GameContext, state: GameState, op: OperativeState): Vec2 | null {
+export function deployPositions(ctx: GameContext, state: GameState, op: OperativeState, limit = 32): Vec2[] {
   const zoneKey = state.setup.dropZone[op.player] ?? op.player;
   const zone = state.map.dropZones[zoneKey];
-  if (!zone || zone.length === 0) return null;
+  if (!zone || zone.length === 0) return [];
   const c = card(ctx, op);
   const grid = zoneGrid(state.map, zoneKey, zone, c.base, op.rot);
-  if (grid.length === 0) return null;
+  if (grid.length === 0) return [];
   const index = terrain(ctx, state);
   const objectives = Object.values(state.markers).filter((m) => m.kind === 'objective');
   const placed = aliveOperatives(state).filter((o) => o.pos.x > -50);
 
-  let best: Vec2 | null = null;
-  let bestScore = -Infinity;
+  const scored: { pos: Vec2; score: number }[] = [];
   for (const p of grid) {
     if (baseTouchesHazardous(index, p, c.base, op.rot)) continue;
     let blocked = false;
@@ -77,13 +83,17 @@ export function deployPosition(ctx: GameContext, state: GameState, op: Operative
     let nearest = Infinity;
     for (const m of objectives) nearest = Math.min(nearest, dist(p, m.pos));
     if (nearest < Infinity) objectivePull = -Math.min(nearest, 30);
-    const score = objectivePull * 1.0 + spread * 0.6;
-    if (score > bestScore) {
-      bestScore = score;
-      best = p;
-    }
+    scored.push({ pos: p, score: objectivePull * 1.0 + spread * 0.6 });
   }
-  return best;
+  // A stable sort keeps grid order among equal scores, so the head is exactly the point the
+  // single-answer scan below used to return.
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, limit).map((s) => s.pos);
+}
+
+/** Where should this operative set up? The best spot, or null when the zone has none. */
+export function deployPosition(ctx: GameContext, state: GameState, op: OperativeState): Vec2 | null {
+  return deployPositions(ctx, state, op, 1)[0] ?? null;
 }
 
 /** Reset the cached drop-zone grids (used between soak runs). */

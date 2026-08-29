@@ -39,7 +39,7 @@ import {
   gambitToAct,
   whoActivates,
 } from '../../core/phases.ts';
-import { otherPlayer, type OperativeState, type PlayerId, type Vec2 } from '../../core/types.ts';
+import { otherPlayer, type GameState, type KillzoneMap, type OperativeState, type PlayerId, type Vec2 } from '../../core/types.ts';
 import { createBattle } from '../../core/init.ts';
 import { defaultCritOpId } from '../data.ts';
 import type { Store } from '../store.ts';
@@ -55,6 +55,12 @@ export interface PlayArgs {
   store: Store;
   ui: UiState;
   setUi: (next: Partial<UiState>) => void;
+  /**
+   * Start a fresh battle (`App`). Optional so the play screens can still be unit-tested with a
+   * bare store, but "New battle" below is the reason it exists: resetting the state alone left
+   * the RNG stream, the AI's caches and its half-executed activation plan behind.
+   */
+  newBattle?: (opts?: { map?: KillzoneMap; seed?: number }) => void;
 }
 
 /* ------------------------------------------------------------- strategy */
@@ -261,8 +267,8 @@ export interface GuardOffer {
   operativeIds: string[];
 }
 
-export function guardOffer(store: Store): GuardOffer | null {
-  const raw = store.state.opState['guardOffer'] as GuardOffer | undefined;
+export function guardOffer(state: GameState): GuardOffer | null {
+  const raw = state.opState['guardOffer'] as GuardOffer | undefined;
   return raw && Array.isArray(raw.operativeIds) && raw.operativeIds.length > 0 ? raw : null;
 }
 
@@ -943,7 +949,7 @@ export function endOfTpPlan({ store }: PlayArgs): CommandPlan {
   };
 }
 
-export function battleEndPlan({ store, setUi }: PlayArgs): CommandPlan {
+export function battleEndPlan({ store, setUi, newBattle }: PlayArgs): CommandPlan {
   const { state, ctx } = store;
   const winner = state.winner;
   return {
@@ -962,6 +968,8 @@ export function battleEndPlan({ store, setUi }: PlayArgs): CommandPlan {
         label: 'New battle',
         tone: 'primary',
         onClick: () => {
+          if (newBattle) return newBattle();
+          // Standalone (a test harness with no App around it): the state still resets.
           store.reset(createBattle(ctx, { map: state.map, seed: state.seed + 1, mode: state.mode, critOpId: defaultCritOpId() }));
           setUi({ selectedId: undefined, placingId: undefined, move: undefined, weaponName: undefined, handedOverTo: undefined });
         },

@@ -63,8 +63,16 @@ export class Store {
     return () => this.listeners.delete(fn);
   }
 
-  dispatch(intent: Intent): boolean {
-    const before = NEVER_UNDOABLE.has(intent.t) ? null : snapshot(this.state);
+  /**
+   * `undoable: false` skips the snapshot. Undo exists so a *person* can take back a misplaced
+   * operative; there is nothing for them to take back about the opponent's activation, and a
+   * deep copy of the whole GameState — the map included — per AI intent is the single most
+   * expensive thing in an AI-driven turning point. The dice check below still runs, because a
+   * roll invalidates everything the player could otherwise still undo, whoever rolled it.
+   */
+  dispatch(intent: Intent, opts: { undoable?: boolean } = {}): boolean {
+    const undoable = opts.undoable !== false && !NEVER_UNDOABLE.has(intent.t);
+    const before = undoable ? snapshot(this.state) : null;
     const rngBefore = this.ctx.rng.cursor();
     const rollsBefore = this.state.rolls.length;
     const out = reduce(this.state, intent, this.ctx);

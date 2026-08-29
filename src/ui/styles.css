@@ -197,7 +197,11 @@ body {
   gap: var(--s1);
   align-items: center;
   min-width: 0;
-  flex: 0 1 auto;
+  /* Never shrinks. It used to be `0 1 auto`, which shares the squeeze with the wordmark — so
+     when both chips carry an AI badge on a 390px phone the SECOND chip lost its command points
+     to `overflow: hidden` while "KILL TEAM" kept most of its width. The wordmark is the thing
+     that is supposed to yield (see `.topbar h1`); this makes it yield all of it. */
+  flex: 0 0 auto;
   overflow: hidden;
 }
 
@@ -225,6 +229,19 @@ body {
 .team-chip.is-p2 .dot {
   background: var(--p2);
 }
+/* Which seat the AI is holding, in the one strip that is on screen in every single state.
+   A letterform rather than a colour: the two team colours are already spoken for. */
+.chip-ai {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 1px 3px;
+  border-radius: 4px;
+  background: var(--ink-3);
+  color: var(--bg);
+  line-height: 1.4;
+}
+
 .team-chip.is-active {
   border-color: var(--accent);
   color: var(--ink);

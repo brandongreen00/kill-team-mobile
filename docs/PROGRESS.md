@@ -2,6 +2,77 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-29 — You can play on your own now (D-108, D-109, D-110)
+
+The AI has been able to play a whole game of Kill Team since phase 7. It could not play *yours*:
+nothing in the app could select it, so `src/ai/**` was reachable only from `tests/soak` and
+`pnpm soak`, and the app was pass-and-play or nothing. The first screen of the app now asks who
+is playing — pass and play, the AI as Player 2, the AI as Player 1, or both seats driven so you
+can watch — with a difficulty and, if you want to choose it, the AI's kill team.
+
+**No rules code changed.** The agent already drove the game through `Intent`s and nothing else,
+which is the whole point of architecture rule #1, so the work was entirely in `src/ui/ai/**`:
+who is in each seat, what the AI brings, the setup intents the agent cannot produce, and one
+function — `aiTurn()` — that answers "whose move is it?" from selectors alone, which both
+`commandPlan` and the driver read so the screen and the AI can never disagree.
+
+Four things were not obvious and are worth writing down.
+
+**The hand-over was asking one person to hand the phone to themselves.** `handoverGate` stood
+down only for `mode: 'sandbox'`, and the shortcut on offer was to make a solo battle a sandbox
+one — which would also have unlocked `MoveOperativeFree`, a rules hole opened to fix a
+presentation problem. The real rule is that the hand-over is *secrecy*: kill teams, equipment and
+tac ops are chosen in secret, so it exists only when there are two people. `needsHandover` says
+exactly that, and it had to be applied at three gates, not one — `setup.handover` and
+`setup.loadoutHandover` are written inline in `setup.tsx` and never went through `handoverGate`
+at all (D-108).
+
+**The board had to stop being tappable.** Every screen in the shell is derived from "whose turn
+is it" on the assumption that whoever is to act is holding the phone. Without an `ai.acting`
+branch a solo player is shown the opponent's activation screen — the AI's operatives ringed, the
+board armed — and can simply play its turn for it. That branch sits below the two reactive
+windows (a decision the *player* owes is still theirs, even mid-AI-activation) and above
+everything else.
+
+**A corpse can hold the activation.** An operative killed mid-activation by a counter-strike or
+an On Guard shot leaves `activeOperativeId` pointing at it; `removeIncapacitated` does not clear
+it and nothing ever ends that activation, so it is never expended and `onActivationEnd` never
+fires. Two people walk past it. A solo battle dead-ends on it as soon as the surviving side runs
+out of ready operatives, so the driver now sends `EndActivation` for it whoever owns it. **This
+is a pre-existing hole in the shell** and is only closed here for battles with an AI in them.
+
+**Nothing was resetting between battles.** `App` built its `SeededRng` once at boot and neither
+"New battle" nor the killzone browser replaced it, so every subsequent battle continued the
+previous one's dice; and `resetAiCaches()` — which `playGame` calls per game, against caches
+keyed on ids that repeat across battles — was called by nothing in the app at all. Both, plus
+the agent's half-executed plan, now happen in one `newBattle()`.
+
+Measured, driving whole bot-vs-bot battles through the app's own `Store` on `bheta-decima-1`
+with real kill teams (9 vs 14 operatives) — the numbers in `docs/AI.md` §6 are the synthetic
+4-operative arena and are much lighter than this:
+
+| Difficulty | intents | worst decision | p95 | mean | thinking per battle |
+| --- | --- | --- | --- | --- | --- |
+| Recruit | 280 | 153ms | 95ms | 23ms | 6.5s |
+| Veteran | 324 | 1208ms | 501ms | 86ms | 27.9s |
+| Elite | 327 | 1191ms | 659ms | 104ms | 34.1s |
+
+One intent per macrotask at 150ms, so the screen paints before each decision blocks the thread.
+`enforceTimeBudget` stays off everywhere: a clock-dependent cutoff would make the same seed play
+differently on a slower phone.
+
+New tests: `tests/ai-opponent.test.ts` plays whole battles through the `Store` (zero rejected
+intents, replays byte-identically from a seed, two battles in one process), fields a legal kill
+team for all 48 bundled teams with the loadout actually recorded, and pins that the driver never
+touches the player's activation or their reactive window; `tests/ai-command-plan.test.tsx` pins
+the screens. `e2e/smoke.spec.ts` gains a solo battle that asserts no hand-over screen ever
+appears, and a watched one that reaches the firefight with no input after "Play".
+
+**Next:** the AI takes no placeable equipment (no barricades, ladders, mines or ammo caches),
+because nothing in `src/ai/**` can choose a spot for one — a small but real asymmetry against a
+human opponent. And `docs/AI.md` §8's stalemate on symmetric boards is unchanged; a solo player
+will meet it on `ai-corridor`-shaped killzones.
+
 ## 2026-08-28 — Climbing, and the Deathwatch second counteract (D-106, D-107)
 
 Two owner reports from a live game, both real, both fixed.

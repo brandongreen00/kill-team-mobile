@@ -50,6 +50,12 @@ export interface UiState {
    * button that commits it. Inside the component, both sat below the fold on a phone.
    */
   allocate?: { decisionId: string; crits: number; normals: number } | undefined;
+  /**
+   * The opponent picker has been answered. It is the first screen of the app, so its absence
+   * is what makes it show; it is UI state rather than a rules field because "who is holding
+   * the phone" is not something a replay of this battle needs to know.
+   */
+  opponentChosen?: boolean | undefined;
   /** A full-screen route over the battle. */
   route?: 'rosters' | 'log' | 'killzones' | 'menu' | undefined;
 }
