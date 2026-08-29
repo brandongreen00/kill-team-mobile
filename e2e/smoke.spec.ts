@@ -436,3 +436,32 @@ test('a screen that arms the board still shows the list it tells you to pick fro
   await pick.click({ timeout: 3000 });
   expect(await screenId(page)).toBe('firefight.order');
 });
+
+test('a Close Quarters killzone shows its hatchways and breach points as doors', async ({ page }) => {
+  // The board used to draw a closed hatchway with `fillFor`, which reads the terrain TYPES —
+  // and a closed access point is `Heavy, Wall`, the same as the wall it is cut into. So on
+  // Gallowdark and Tomb World every hatchway on the board was invisible, and the only way to
+  // find one was to open the Operate Hatch list and read part ids. Both killzones are checked
+  // because they carry different doors: Gallowdark is all hatchways, Tomb World also prints
+  // breach points, which need a 2AP Breach rather than a 1AP Operate Hatch.
+  await page.goto('/');
+  await ready(page);
+
+  for (const [killzone, want] of [
+    ['Gallowdark 1', ['door-hatch']],
+    ['Tomb World 2', ['door-hatch', 'door-breach']],
+  ] as const) {
+    await page.getByRole('button', { name: 'Menu' }).click();
+    await page.getByRole('button', { name: /^Killzone — / }).click();
+    await page.locator('button.thumb', { hasText: killzone }).first().click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.locator('.sheet-body, .rail').first()).toContainText(killzone);
+
+    for (const cls of want) {
+      await expect(page.locator(`svg.board-main .terrain .${cls}`).first()).toBeVisible();
+    }
+    // And a joint block at every wall-piece end, which is what makes a corner square.
+    const posts = await page.locator('svg.board-main .terrain-silhouette polygon').count();
+    expect(posts).toBeGreaterThan(20);
+  }
+});

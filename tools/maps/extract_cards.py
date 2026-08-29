@@ -838,19 +838,34 @@ def bheta_hazard(img, frame):
 # ===========================================================================
 
 def cq_features(img, frame, killzone):
-    """Walls snapped to the 7x6 lattice, plus pads and light terrain."""
+    """Close-quarters walls, read off the printed CONNECTOR BLOCKS rather than off the lattice.
+
+    The card draws a wall run as a 9px bar, and every point where a physical wall PIECE ends —
+    a piece-to-piece joint, a free end, or the end of a piece running into the side of another —
+    as a 27px square block: the connector post the wall sections slot into. Measured on all
+    twelve Close Quarters cards, both figures are exact on every one of the 200+ blocks.
+
+    Those blocks are the ground truth this reads:
+
+    * They make a corner SQUARE. Extruding only the 9px bars left a quarter-block notch at
+      every L-corner, which is what the card does not draw and the physical terrain does not
+      have.
+    * They fix the piece boundaries exactly, so the printed letters no longer have to be
+      guessed onto a lattice tiling. Every card now resolves to a tiling in which EVERY piece
+      carries exactly one printed letter and no letter is left over — and on all twelve cards
+      the resulting multiset is within the killzone's printed inventory.
+    * They locate pieces the lattice cannot: `tomb-world-1`'s A2 and `tomb-world-6`'s B-wall
+      are printed offset by half a square, which the old lattice-edge sampler snapped onto a
+      lattice line and mis-sized.
+    * A block with a grey cross knocked out of it is a WALL END (keys/TW3.jpg) rather than a
+      connector — twelve of them across the twelve cards.
+    """
     wall = C.mask_exact(img, C.PALETTE['wall_cq'], 6)
     lx, ly = frame.lattice_x, frame.lattice_y
-    step_px = (lx[1] - lx[0])
+    step_px = lx[1] - lx[0]
 
-    occupied_h = {}      # (i, j) -> horizontal edge from node (i,j) to (i+1,j)
-    occupied_v = {}
-    for j in range(len(ly)):
-        for i in range(len(lx) - 1):
-            occupied_h[(i, j)] = _edge_covered(wall, lx[i], ly[j], lx[i + 1], ly[j])
-    for i in range(len(lx)):
-        for j in range(len(ly) - 1):
-            occupied_v[(i, j)] = _edge_covered(wall, lx[i], ly[j], lx[i], ly[j + 1])
+    solid, blocks = _cq_blocks(img, wall, frame)
+    lines = _cq_lines(solid, blocks, step_px)
 
     # Access points (hatchway / breach point) — the dark pill printed beside a wall.
     access = []
@@ -864,12 +879,10 @@ def cq_features(img, frame, killzone):
     chips = [(t, cx, cy) for t, cx, cy, _ in L.chips(img, 'cq')]
     blackchips = [(t, cx, cy, b) for t, cx, cy, b in L.chips(img, 'black', **L.BLACK_CHIP)]
 
-    runs = _cq_runs(occupied_h, occupied_v)
-    feats = _assign_labels(runs, chips, lx, ly)
-    walls = []
-    thick = _wall_thickness(wall, lx, ly, occupied_h, occupied_v)
-    for f in feats:
-        walls.append(_cq_wall_feature(f, frame, lx, ly, thick, access, killzone))
+    thick = _wall_thickness(wall, blocks)
+    segs = _cq_tile(lines, chips, step_px)
+    walls = [_cq_wall_feature(seg, frame, thick, access) for seg in segs]
+    joints = [_cq_joint_feature(b, frame, killzone) for b in blocks]
 
     extras = []
     for t, cx, cy, box in blackchips:
@@ -877,133 +890,286 @@ def cq_features(img, frame, killzone):
         if kind is None:
             continue
         extras.append(dict(label=t, kind=kind, box=box, centre=(cx, cy)))
-    return walls, extras, dict(step_px=step_px, wall_px=thick)
+    qa = dict(step_px=step_px, wall_px=thick,
+              block_px=float(np.median([b['side'] for b in blocks])) if blocks else 0.0,
+              blocks=len(blocks), wallEnds=sum(1 for b in blocks if b['kind'] == 'wallEnd'),
+              unlabelled=sum(1 for s in segs if s['label'] is None))
+    return walls, joints, extras, qa
 
 
-def _edge_covered(wall, xa, ya, xb, yb, samples=17, frac=0.8):
-    hits = 0
-    for t in np.linspace(0.12, 0.88, samples):
-        x = int(round(xa + (xb - xa) * t))
-        y = int(round(ya + (yb - ya) * t))
-        if wall[max(0, min(wall.shape[0] - 1, y)), max(0, min(wall.shape[1] - 1, x))]:
-            hits += 1
-    return hits / samples >= frac
+def _cq_blocks(img, wall, frame):
+    """The printed connector / wall-end blocks, and the wall mask with the crosses filled in.
 
+    A wall end is an ordinary block with a grey cross knocked out of its middle, so the cross
+    has to be put back before the block can be found; the same colour also draws the dashed
+    centre line, which is one pixel wide and is rejected on size.
 
-def _cq_runs(oh, ov):
-    """Maximal straight runs of occupied lattice edges."""
-    runs = []
-    js = sorted({j for (_, j) in oh})
-    for j in js:
-        i = 0
-        cols = sorted({i for (i, jj) in oh if jj == j})
-        while i < len(cols):
-            if oh.get((cols[i], j)):
-                k = i
-                while k + 1 < len(cols) and oh.get((cols[k + 1], j)) and cols[k + 1] == cols[k] + 1:
-                    k += 1
-                runs.append(('h', cols[i], j, cols[k] - cols[i] + 1))
-                i = k + 1
-            else:
-                i += 1
-    iss = sorted({i for (i, _) in ov})
-    for i in iss:
-        rows = sorted({j for (ii, j) in ov if ii == i})
-        k = 0
-        while k < len(rows):
-            if ov.get((i, rows[k])):
-                m = k
-                while m + 1 < len(rows) and ov.get((i, rows[m + 1])) and rows[m + 1] == rows[m] + 1:
-                    m += 1
-                runs.append(('v', i, rows[k], rows[m] - rows[k] + 1))
-                k = m + 1
-            else:
-                k += 1
-    return runs
-
-
-def _assign_labels(runs, chips, lx, ly):
-    """Attach each printed wall label to the run it sits beside, then tile each
-    run with the labelled pieces (A* spans two lattice squares, B* one).
-
-    A chip near a T-junction is close to two runs; it is given to the run whose
-    centreline it is nearer to, and only if it lies strictly *along* that run —
-    which is what separates e.g. an "A3" printed above a horizontal wall from
-    the vertical wall that starts underneath it.
+    Centres are snapped to the nearest HALF lattice step. Two things need it: the cards draw
+    the border strip compressed, so a block on the board perimeter is shifted a couple of
+    pixels inwards to keep it printed, and an interior block can land half a pixel off. Half a
+    step rather than a whole one because two pieces really are printed offset by half a square
+    (`tomb-world-1` A2, `tomb-world-6` B4), 47px from any lattice line and nowhere near the
+    ~3px the snap absorbs.
     """
-    stepx, stepy = lx[1] - lx[0], ly[1] - ly[0]
-    max_perp = 0.55 * stepx
-    best = {}
-    for ci, (t, cx, cy) in enumerate(chips):
-        pick = None
-        for ri, (orient, i, j, length) in enumerate(runs):
-            if orient == 'h':
-                pos = (cx - lx[i]) / stepx
-                perp = abs(cy - ly[j])
-            else:
-                pos = (cy - ly[j]) / stepy
-                perp = abs(cx - lx[i])
-            if not (0.05 <= pos <= length - 0.05):
-                continue
-            if perp > max_perp:
-                continue
-            if pick is None or perp < pick[0]:
-                pick = (perp, ri, pos)
-        if pick is not None:
-            best.setdefault(pick[1], []).append((pick[2], t))
-
+    raw = C.mask_exact(img, C.PALETTE['wall_end_cq'], 4)
+    crosses, centres = np.zeros_like(raw), []
+    for blob in G.component_masks(raw, 40):
+        ys, xs = np.where(blob)
+        if xs.max() - xs.min() > C.CQ_BLOCK_PX + 1 or ys.max() - ys.min() > C.CQ_BLOCK_PX + 1:
+            continue
+        crosses |= blob
+        centres.append(((xs.min() + xs.max()) / 2, (ys.min() + ys.max()) / 2))
+    solid = ndimage.binary_closing(wall | crosses, np.ones((3, 3), bool))
+    # A block is the only thing on the card wide enough to survive an erosion by more than the
+    # bar: 27px keeps a 15px core, 9px keeps nothing.
+    core = C.CQ_BLOCK_PX - C.CQ_BAR_PX - 5
+    lab, n = ndimage.label(ndimage.binary_erosion(solid, np.ones((core, core), bool)))
     out = []
-    for ri, (orient, i, j, length) in enumerate(runs):
-        mine = sorted(best.get(ri, []))
-        placed = []
-        taken = [False] * length
-        for pos, t in mine:
-            span = 2 if t.startswith('A') else 1     # A* walls are two squares long
-            if span > length:
-                span = length
-            # the chip is printed centred on its piece
-            off = int(round(pos - span / 2.0))
-            off = max(0, min(length - span, off))
-            while off + span <= length and any(taken[off:off + span]):
-                off += 1
-            if off + span > length:
-                off = 0
-                while off + span <= length and any(taken[off:off + span]):
-                    off += 1
-            if off + span > length:
-                continue                             # no room: label dropped
-            for k in range(off, off + span):
-                taken[k] = True
-            placed.append((off, span, t))
-        for k in range(length):                      # unlabelled remainder
-            if not taken[k]:
-                placed.append((k, 1, None))
-        for off, span, t in sorted(placed):
-            out.append((orient, i, j, off, span, t))
+    for k in range(1, n + 1):
+        ys, xs = np.where(lab == k)
+        cx, cy = (xs.min() + xs.max()) / 2, (ys.min() + ys.max()) / 2
+        end = any(abs(cx - a) < 6 and abs(cy - b) < 6 for a, b in centres)
+        # The printed side, measured rather than assumed: the erosion shrank the block by the
+        # structuring element, so give it back. This is the number the QA block reports.
+        side = ((xs.max() - xs.min() + core) + (ys.max() - ys.min() + core)) / 2
+        out.append(dict(x=_snap_half(cx, frame.lattice_x), y=_snap_half(cy, frame.lattice_y),
+                        side=float(side), kind='wallEnd' if end else 'connector'))
+    return solid, out
+
+
+SNAP_PX = 8
+
+
+def _snap_half(v, lattice):
+    half = (lattice[1] - lattice[0]) / 2
+    k = round((v - lattice[0]) / half)
+    snapped = lattice[0] + k * half
+    return float(snapped) if abs(snapped - v) <= SNAP_PX else float(v)
+
+
+def _cq_lines(solid, blocks, step):
+    """Group the blocks into collinear chains joined by a printed bar.
+
+    A chain is one straight wall run; its nodes are the only places a piece may start or end.
+    A run that ends by butting into the side of another wall has no block there, so the chain
+    is extended to where the bar stops, snapped to a whole number of squares.
+    """
+    H, W = solid.shape
+
+    def on(x, y):
+        xi, yi = int(round(x)), int(round(y))
+        return 0 <= yi < H and 0 <= xi < W and bool(solid[yi, xi])
+
+    nodes = [(b['x'], b['y']) for b in blocks]
+    chains = []
+    for axis, (dx, dy) in (('h', (1, 0)), ('v', (0, 1))):
+        key = (lambda p: round(p[1])) if axis == 'h' else (lambda p: round(p[0]))
+        pos = (lambda p: p[0]) if axis == 'h' else (lambda p: p[1])
+        buckets = defaultdict(list)
+        for p in nodes:
+            buckets[key(p)].append(p)
+        merged = []
+        for k in sorted(buckets):
+            if merged and k - merged[-1][0] <= 2:
+                merged[-1][1].extend(buckets[k])
+            else:
+                merged.append([k, list(buckets[k])])
+        for _, pts in merged:
+            pts = sorted(pts, key=pos)
+            chain = []
+            for a, b in zip(pts, pts[1:]):
+                d = pos(b) - pos(a)
+                span = int(round(d / step))
+                joined = (span in (1, 2) and abs(d - span * step) <= 5
+                          and on((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+                          and on(a[0] + dx * (C.CQ_BLOCK_PX // 2 + 3),
+                                 a[1] + dy * (C.CQ_BLOCK_PX // 2 + 3)))
+                if not joined:
+                    if chain:
+                        chains.append((axis, chain))
+                    chain = []
+                    continue
+                if not chain:
+                    chain = [a]
+                chain.append(b)
+            if chain:
+                chains.append((axis, chain))
+    # A block that joined no chain still carries a wall if a bar leaves it: a lone one-piece run.
+    seen = {(round(p[0], 1), round(p[1], 1)) for _, ch in chains for p in ch}
+    for b in blocks:
+        if (round(b['x'], 1), round(b['y'], 1)) in seen:
+            continue
+        for axis, (dx, dy) in (('h', (1, 0)), ('v', (0, 1))):
+            for sgn in (1, -1):
+                q = _cq_open_end(on, (b['x'], b['y']), dx * sgn, dy * sgn, step)
+                if q is not None:
+                    chains.append((axis, sorted([(b['x'], b['y']), q],
+                                                key=lambda p: p[0] if axis == 'h' else p[1])))
+    out = []
+    for axis, chain in chains:
+        dx, dy = (1, 0) if axis == 'h' else (0, 1)
+        chain = list(chain)
+        for end, sgn in ((0, -1), (-1, 1)):
+            q = _cq_open_end(on, chain[end], dx * sgn, dy * sgn, step)
+            if q is None:
+                continue
+            if end == 0:
+                chain.insert(0, q)
+            else:
+                chain.append(q)
+        out.append((axis, chain))
     return out
 
 
-def _wall_thickness(wall, lx, ly, oh, ov):
-    """Median printed wall stroke, measured perpendicular to occupied edges.
+def _cq_open_end(on, p, dx, dy, step):
+    """How far a bar runs out of `p` with no block to close it, snapped to whole squares."""
+    reach = C.CQ_BLOCK_PX // 2 + 3
+    if not on(p[0] + dx * reach, p[1] + dy * reach):
+        return None
+    t = reach
+    while t < step * 2.6 and on(p[0] + dx * (t + 1), p[1] + dy * (t + 1)):
+        t += 1
+    span = max(1, min(2, int(round(t / step))))
+    return (p[0] + dx * span * step, p[1] + dy * span * step)
 
-    Sampling has to avoid the lattice nodes, where the printed pillar blocks are
-    two to three times wider than the wall itself.
+
+# A printed letter sits beside the middle of its piece. Measured across the twelve cards the
+# worst along-the-wall offset is 0.33 squares and the worst perpendicular one 0.29; these
+# tolerances sit clear of both without ever admitting a letter from a neighbouring run.
+CHIP_ALONG = 0.40
+CHIP_PERP = 0.62
+
+
+def _cq_tile(lines, chips, step):
+    """Tile every run so that each piece carries exactly one printed letter.
+
+    Cutting at every block over-segments: a block is a piece end for at least ONE of the runs
+    that meet there, not for both, so a long wall crossed by another run has a block at its
+    own middle. The letters resolve it — an A is two squares and a B is one — and because
+    every piece on a card is lettered, the tiling that consumes every letter exactly once is
+    unique. It is found by depth-first search over the per-run tilings, minimising the total
+    letter-to-piece-centre distance.
     """
+    cands = []
+    for li, (axis, chain) in enumerate(lines):
+        opts = []
+        for til in _cq_tilings(chain, step):
+            per, ok = [], True
+            for (i, j, span) in til:
+                cx, cy = (chain[i][0] + chain[j][0]) / 2, (chain[i][1] + chain[j][1]) / 2
+                fits = []
+                for ci, (t, tx, ty) in enumerate(chips):
+                    if t[0] != ('A' if span == 2 else 'B'):
+                        continue
+                    along = abs(tx - cx) if axis == 'h' else abs(ty - cy)
+                    perp = abs(ty - cy) if axis == 'h' else abs(tx - cx)
+                    if along > CHIP_ALONG * step or perp > CHIP_PERP * step:
+                        continue
+                    fits.append((along + perp, ci))
+                if not fits:
+                    ok = False
+                    break
+                per.append(sorted(fits))
+            if ok:
+                opts.append((til, per))
+        cands.append((li, axis, chain, opts))
+
+    best = [None]
+
+    def walk(k, used, cost, chosen):
+        if best[0] is not None and cost >= best[0][0]:
+            return
+        if k == len(cands):
+            if len(used) == len(chips):
+                best[0] = (cost, list(chosen))
+            return
+        li, axis, chain, opts = cands[k]
+        for til, per in opts:
+            def assign(m, used2, c2, picked):
+                if best[0] is not None and c2 >= best[0][0]:
+                    return
+                if m == len(per):
+                    chosen.append((li, til, list(picked)))
+                    walk(k + 1, used2, c2, chosen)
+                    chosen.pop()
+                    return
+                for d, ci in per[m]:
+                    if ci in used2:
+                        continue
+                    picked.append(ci)
+                    assign(m + 1, used2 | {ci}, c2 + d, picked)
+                    picked.pop()
+            assign(0, used, cost, [])
+
+    walk(0, frozenset(), 0.0, [])
+    if best[0] is not None:
+        segs = []
+        for li, til, picked in best[0][1]:
+            axis, chain = lines[li][0], lines[li][1]
+            for (i, j, span), ci in zip(til, picked):
+                segs.append(dict(axis=axis, span=span, a=chain[i], b=chain[j],
+                                 label=chips[ci][0]))
+        return segs
+    # No complete solution: fall back to the finest tiling and label what can be labelled, so
+    # a card that changes still extracts (and G4 reports the missing letters).
+    segs = []
+    for axis, chain in lines:
+        til = _cq_tilings(chain, step)
+        til = min(til, key=lambda t: -len(t)) if til else []
+        for (i, j, span) in til:
+            cx, cy = (chain[i][0] + chain[j][0]) / 2, (chain[i][1] + chain[j][1]) / 2
+            pick = None
+            for t, tx, ty in chips:
+                if t[0] != ('A' if span == 2 else 'B'):
+                    continue
+                along = abs(tx - cx) if axis == 'h' else abs(ty - cy)
+                perp = abs(ty - cy) if axis == 'h' else abs(tx - cx)
+                if along > CHIP_ALONG * step or perp > CHIP_PERP * step:
+                    continue
+                if pick is None or along + perp < pick[0]:
+                    pick = (along + perp, t)
+            segs.append(dict(axis=axis, span=span, a=chain[i], b=chain[j],
+                             label=pick[1] if pick else None))
+    return segs
+
+
+def _cq_tilings(chain, step):
+    """Every way to cover a run with pieces of one or two squares that start and end on a node."""
+    n = len(chain)
+    out = []
+
+    def rec(i, acc):
+        if i == n - 1:
+            out.append(list(acc))
+            return
+        for j in (i + 1, i + 2):
+            if j >= n:
+                break
+            d = abs((chain[j][0] - chain[i][0]) + (chain[j][1] - chain[i][1]))
+            span = int(round(d / step))
+            if span not in (1, 2) or abs(d - span * step) > 5:
+                continue
+            acc.append((i, j, span))
+            rec(j, acc)
+            acc.pop()
+
+    rec(0, [])
+    return out
+
+
+def _wall_thickness(wall, blocks):
+    """Median printed wall stroke, measured perpendicular to a bar leaving each block."""
     runs = []
-    for (i, j), on in oh.items():
-        if not on:
-            continue
-        x = int(round((lx[i] + lx[i + 1]) / 2))
-        y = int(round(ly[j]))
-        runs.append(_run_len(wall[:, x], y))
-    for (i, j), on in ov.items():
-        if not on:
-            continue
-        y = int(round((ly[j] + ly[j + 1]) / 2))
-        x = int(round(lx[i]))
-        runs.append(_run_len(wall[y, :], x))
+    off = C.CQ_BLOCK_PX // 2 + 6
+    for b in blocks:
+        x, y = int(round(b['x'])), int(round(b['y']))
+        for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            px, py = x + dx * off, y + dy * off
+            if not (0 <= py < wall.shape[0] and 0 <= px < wall.shape[1]) or not wall[py, px]:
+                continue
+            runs.append(_run_len(wall[:, px], py) if dx else _run_len(wall[py, :], px))
     runs = [r for r in runs if r]
-    return float(np.median(runs)) if runs else 9.0
+    return float(np.median(runs)) if runs else float(C.CQ_BAR_PX)
 
 
 def _run_len(line, k):
@@ -1018,40 +1184,50 @@ def _run_len(line, k):
     return b - a + 1
 
 
-def _cq_wall_feature(seg, frame, lx, ly, thick, access, killzone):
-    orient, i, j, off, span, label = seg
+def _cq_wall_feature(seg, frame, thick, access):
+    """One wall piece: the bar between its two end blocks, plus the access point cut into it."""
+    (ax, ay), (bx, by) = seg['a'], seg['b']
     half = thick / 2
-    if orient == 'h':
-        xa, xb = lx[i + off], lx[i + off + span]
-        y = ly[j]
-        px_box = (xa, y - half, xb, y + half)
-        a_px, b_px = (xa, y), (xb, y)
+    if seg['axis'] == 'h':
+        px_box = (min(ax, bx), ay - half, max(ax, bx), ay + half)
     else:
-        ya, yb = ly[j + off], ly[j + off + span]
-        x = lx[i]
-        px_box = (x - half, ya, x + half, yb)
-        a_px, b_px = (x, ya), (x, yb)
+        px_box = (ax - half, min(ay, by), ax + half, max(ay, by))
     poly = G.px_rect_to_board(frame, *px_box)
-    a = frame.to_board(*a_px)
-    b = frame.to_board(*b_px)
+    a = frame.to_board(ax, ay)
+    b = frame.to_board(bx, by)
     # The access-point pill printed alongside this wall.
     #
     # The pill is drawn BESIDE the wall with its long axis running along it. Measured across
     # all twelve Close Quarters cards, the perpendicular offset of a pill from the wall it
     # marks clusters at 18-22px (118 pairs) and the nearest unrelated pairing is at 73px — a
-    # 3.5x gap. The old threshold was `thick * 2.2` = 19.8px, which cut through the middle of
-    # that cluster and kept only the tightest few: 3 access points out of 10 pills on
-    # gallowdark-1, and ZERO on every Tomb World card. `thick * 4` = 36px sits in the gap.
+    # 3.5x gap. `thick * 4` = 36px sits in the gap.
     ap = None
     for cand in access:
-        if orient == 'h' and cand['horiz'] and abs(cand['cy'] - a_px[1]) < thick * 4 \
-                and min(a_px[0], b_px[0]) - 4 <= cand['cx'] <= max(a_px[0], b_px[0]) + 4:
+        if seg['axis'] == 'h' and cand['horiz'] and abs(cand['cy'] - ay) < thick * 4 \
+                and min(ax, bx) - 4 <= cand['cx'] <= max(ax, bx) + 4:
             ap = cand
-        if orient == 'v' and not cand['horiz'] and abs(cand['cx'] - a_px[0]) < thick * 4 \
-                and min(a_px[1], b_px[1]) - 4 <= cand['cy'] <= max(a_px[1], b_px[1]) + 4:
+        if seg['axis'] == 'v' and not cand['horiz'] and abs(cand['cx'] - ax) < thick * 4 \
+                and min(ay, by) - 4 <= cand['cy'] <= max(ay, by) + 4:
             ap = cand
-    return dict(label=label, orient=orient, span=span, poly=poly, a=a, b=b, access=ap,
-                px=px_box)
+    return dict(label=seg['label'], orient=seg['axis'], span=seg['span'], poly=poly, a=a, b=b,
+                access=ap, px=px_box)
+
+
+def _cq_joint_feature(block, frame, killzone):
+    """A connector post or a wall end: the printed square block, centred on its node.
+
+    A post on the board perimeter is centred 0.469" from the edge and is half of 1.095" wide,
+    so 0.079" of it would hang off the board. The card draws it clipped and the killzone has
+    no floor out there, so it is clipped here too.
+    """
+    half = C.CQ_BLOCK / 2
+    cx, cy = frame.to_board(block['x'], block['y'])
+    x0, x1 = max(0.0, cx - half), min(frame.board_w, cx + half)
+    y0, y1 = max(0.0, cy - half), min(frame.board_h, cy + half)
+    return dict(kind='%s.%s' % (killzone, block['kind']), role=block['kind'],
+                label='X' if block['kind'] == 'wallEnd' else None,
+                poly=[(x0, y0), (x1, y0), (x1, y1), (x0, y1)],
+                centre=(cx, cy))
 
 
 # ===========================================================================
@@ -1133,10 +1309,14 @@ def build_map(card, mapId, killzone, name):
         features = _finish_open(raw, mapId, group=True)
         hazardous = bheta_hazard(img, frame)
     else:
-        walls, extras, wqa = cq_features(img, frame, killzone)
-        features = _finish_cq(walls, extras, mapId, killzone, frame)
+        walls, joints, extras, wqa = cq_features(img, frame, killzone)
+        features = _finish_cq(walls, joints, extras, mapId, killzone, frame)
         qa['latticeStepPx'] = round(wqa['step_px'], 3)
         qa['wallThicknessPx'] = round(wqa['wall_px'], 2)
+        qa['blockPx'] = round(wqa['block_px'], 2)
+        qa['jointBlocks'] = wqa['blocks']
+        qa['wallEnds'] = wqa['wallEnds']
+        qa['unlabelledWalls'] = wqa['unlabelled']
 
     objectives = _finish_objectives(objs, features, annotations, killzone)
 
@@ -1204,10 +1384,45 @@ def _finish_open(raw, mapId, group=False):
     return feats
 
 
-def _finish_cq(walls, extras, mapId, killzone, frame):
+def _finish_cq(walls, joints, extras, mapId, killzone, frame):
     feats = []
     counters = defaultdict(int)
-    for w in walls:
+    # A joint block belongs to a wall PIECE, not to itself.
+    #
+    # It is physically its own sprue part, and modelling it that way was the first attempt —
+    # but a TerrainFeature is what the rules count, and "an operative cannot be in cover from
+    # and obscured by the same terrain feature" is keyed on the feature id. A block emitted as
+    # its own feature hands the defender cover from the post AND obscured by the very wall bar
+    # it caps: one printed wall piece paying out both. So each block is folded into the piece
+    # whose end lands on it, deterministically the first in the tiling order, and the union of
+    # the polygons is unchanged either way.
+    owner = {}
+    for wi, w in enumerate(walls):
+        for end in (w['a'], w['b']):
+            for ji, j in enumerate(joints):
+                if ji in owner:
+                    continue
+                if abs(j['centre'][0] - end[0]) < 0.03 and abs(j['centre'][1] - end[1]) < 0.03:
+                    owner[ji] = wi
+    # A block that no piece ENDS on is a post standing in the middle of a run — `gallowdark-2`
+    # prints one at the midpoint of its vertical A3. It belongs to the piece whose bar runs
+    # through it.
+    for ji, j in enumerate(joints):
+        if ji in owner:
+            continue
+        for wi, w in enumerate(walls):
+            a, b = w['a'], w['b']
+            lo_x, hi_x = min(a[0], b[0]) - 0.03, max(a[0], b[0]) + 0.03
+            lo_y, hi_y = min(a[1], b[1]) - 0.03, max(a[1], b[1]) + 0.03
+            if lo_x <= j['centre'][0] <= hi_x and lo_y <= j['centre'][1] <= hi_y:
+                owner[ji] = wi
+                break
+    mine = defaultdict(list)
+    for ji, wi in owner.items():
+        mine[wi].append(joints[ji])
+    orphans = [j for ji, j in enumerate(joints) if ji not in owner]
+
+    for wi, w in enumerate(walls):
         label = w['label'] or ('A?' if w['span'] == 2 else 'B?')
         kind = T.LABEL_TO_KIND.get((killzone, label), '%s.wallUnknown' % killzone)
         counters[label] += 1
@@ -1250,12 +1465,30 @@ def _finish_cq(walls, extras, mapId, killzone, frame):
                               state='closed', blocksVisibility=True, solid=True,
                               standable=False,
                               openTypes=list(T.CQ_ACCESS_OPEN), opensAs=role))
+        for n, j in enumerate(mine.get(wi, [])):
+            parts.append(dict(id='%s.%s%d' % (fid, j['role'], n), featureId=fid,
+                              poly=G.round_poly(j['poly']), z0=0.0, z1=T.h('cq.wall.top'),
+                              types=list(T.CQ_WALL_TYPES), role=j['role'],
+                              blocksVisibility=True, solid=True, standable=False))
         a, b = w['a'], w['b']
         feats.append(dict(id=fid, kind=kind, label=label, parts=parts,
                           placement=dict(x=round((a[0] + b[0]) / 2, 3),
                                          y=round((a[1] + b[1]) / 2, 3),
                                          rotDeg=0 if w['orient'] == 'h' else 90,
                                          flip=False)))
+    # A block with no wall piece ending on it would be a detection failure, not a piece: it is
+    # emitted on its own so the QA overlay shows it rather than dropping it silently.
+    for j in orphans:
+        counters[j['role']] += 1
+        fid = '%s.%s-%d' % (mapId, j['role'], counters[j['role']])
+        part = dict(id=fid + '.block', featureId=fid, poly=G.round_poly(j['poly']),
+                    z0=0.0, z1=T.h('cq.wall.top'), types=list(T.CQ_WALL_TYPES),
+                    role=j['role'], blocksVisibility=True, solid=True, standable=False)
+        feats.append(dict(id=fid, kind=j['kind'], label=j['label'] or 'X', parts=[part],
+                          placement=dict(x=round(float(j['centre'][0]), 3),
+                                         y=round(float(j['centre'][1]), 3),
+                                         rotDeg=0, flip=False)))
+
     for e in extras:
         counters[e['label']] += 1
         fid = '%s.%s' % (mapId, e['label'])
@@ -1603,10 +1836,36 @@ def write_terrain(killzone, templates):
                          'gallowdark': ['cq'], 'tomb-world': ['cq']}[killzone]},
                pieces=[])
     for kind, spec in pieces.items():
-        entry = dict(kind=kind, name=spec['name'], labels=spec['labels'],
-                     inventoryCount=spec['count'])
+        entry = dict(kind=kind, name=spec['name'], labels=spec['labels'])
+        if spec['count'] is not None:
+            entry['inventoryCount'] = spec['count']
         if spec.get('notes'):
             entry['notes'] = spec['notes']
+        if spec.get('joint'):
+            # The connector post / wall end printed at a wall-piece end. Its footprint is
+            # measured, not fitted: it is a square of exactly CQ_BLOCK_PX on every one of the
+            # 200+ blocks across the twelve cards, so there is nothing to fit a template to.
+            half = C.CQ_BLOCK / 2
+            entry['sideIn'] = round(C.CQ_BLOCK, 5)
+            entry['parts'] = [dict(role='wallEnd' if spec.get('end') else 'connector',
+                                   types=list(T.CQ_WALL_TYPES), z0=0.0,
+                                   z1=T.h('cq.wall.top'), heightRef='cq.wall.top')]
+            entry['footprints'] = {(spec['labels'][0] if spec['labels'] else 'joint'):
+                                   G.round_poly([(-half, -half), (half, -half),
+                                                 (half, half), (-half, half)])}
+            entry['notes'] = list(entry.get('notes', [])) + [
+                'The square block the card draws wherever a wall PIECE ends: three bar-widths '
+                'across, and what makes a close-quarters corner square. It is not one of the '
+                'numbered wall pieces and the cards print no inventory for it, so none is '
+                'claimed here.',
+                'In data/maps/** it is a PART of the wall piece whose end lands on it, not a '
+                'feature of its own: "an operative cannot be in cover from and obscured by the '
+                'same terrain feature" is keyed on the feature, and a post that is its own '
+                'feature pays out both for one printed wall.',
+                'The killzone key prints a cross on the WALL END variant (keys/TW3.jpg); the '
+                'connector is unmarked.']
+            out['pieces'].append(entry)
+            continue
         if 'span' in spec:
             entry['spanSquares'] = spec['span']
             entry['lengthIn'] = round(spec['span'] * C.CQ_SQUARE, 5)

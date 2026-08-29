@@ -1,7 +1,7 @@
 {
  "killzone": "tomb-world",
  "generatedBy": "tools/maps/extract_cards.py",
- "generatedAt": "2026-08-23",
+ "generatedAt": "2026-08-29",
  "heights": {
   "cq.wall.top": {
    "inches": 2.362,
@@ -112,20 +112,20 @@
    "footprints": {
     "A2": [
      {
-      "x": -3.812,
-      "y": -0.182
+      "x": -3.813,
+      "y": -0.183
      },
      {
-      "x": 3.813,
-      "y": -0.182
+      "x": 3.812,
+      "y": -0.183
      },
      {
-      "x": 3.813,
-      "y": 0.183
+      "x": 3.812,
+      "y": 0.182
      },
      {
-      "x": -3.812,
-      "y": 0.183
+      "x": -3.813,
+      "y": 0.182
      }
     ]
    }
@@ -277,20 +277,20 @@
    "footprints": {
     "B1": [
      {
-      "x": -0.183,
-      "y": -1.907
+      "x": -1.907,
+      "y": -0.183
      },
      {
-      "x": 0.182,
-      "y": -1.907
+      "x": 1.906,
+      "y": -0.183
      },
      {
-      "x": 0.182,
-      "y": 1.906
+      "x": 1.906,
+      "y": 0.182
      },
      {
-      "x": -0.183,
-      "y": 1.906
+      "x": -1.907,
+      "y": 0.182
      }
     ]
    }
@@ -337,20 +337,20 @@
    "footprints": {
     "B2": [
      {
-      "x": -1.906,
-      "y": -0.182
+      "x": -0.182,
+      "y": -1.906
      },
      {
-      "x": 1.907,
-      "y": -0.182
+      "x": 0.183,
+      "y": -1.906
      },
      {
-      "x": 1.907,
-      "y": 0.183
+      "x": 0.183,
+      "y": 1.906
      },
      {
-      "x": -1.906,
-      "y": 0.183
+      "x": -0.182,
+      "y": 1.906
      }
     ]
    }
@@ -635,6 +635,94 @@
      }
     ]
    }
+  },
+  {
+   "kind": "tomb-world.connector",
+   "name": "Wall Connector",
+   "labels": [],
+   "sideIn": 1.09508,
+   "parts": [
+    {
+     "role": "connector",
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top"
+    }
+   ],
+   "footprints": {
+    "joint": [
+     {
+      "x": -0.548,
+      "y": -0.548
+     },
+     {
+      "x": 0.548,
+      "y": -0.548
+     },
+     {
+      "x": 0.548,
+      "y": 0.548
+     },
+     {
+      "x": -0.548,
+      "y": 0.548
+     }
+    ]
+   },
+   "notes": [
+    "The square block the card draws wherever a wall PIECE ends: three bar-widths across, and what makes a close-quarters corner square. It is not one of the numbered wall pieces and the cards print no inventory for it, so none is claimed here.",
+    "In data/maps/** it is a PART of the wall piece whose end lands on it, not a feature of its own: \"an operative cannot be in cover from and obscured by the same terrain feature\" is keyed on the feature, and a post that is its own feature pays out both for one printed wall.",
+    "The killzone key prints a cross on the WALL END variant (keys/TW3.jpg); the connector is unmarked."
+   ]
+  },
+  {
+   "kind": "tomb-world.wallEnd",
+   "name": "Wall End",
+   "labels": [
+    "X"
+   ],
+   "sideIn": 1.09508,
+   "parts": [
+    {
+     "role": "wallEnd",
+     "types": [
+      "Heavy",
+      "Wall"
+     ],
+     "z0": 0.0,
+     "z1": 2.362,
+     "heightRef": "cq.wall.top"
+    }
+   ],
+   "footprints": {
+    "X": [
+     {
+      "x": -0.548,
+      "y": -0.548
+     },
+     {
+      "x": 0.548,
+      "y": -0.548
+     },
+     {
+      "x": 0.548,
+      "y": 0.548
+     },
+     {
+      "x": -0.548,
+      "y": 0.548
+     }
+    ]
+   },
+   "notes": [
+    "The square block the card draws wherever a wall PIECE ends: three bar-widths across, and what makes a close-quarters corner square. It is not one of the numbered wall pieces and the cards print no inventory for it, so none is claimed here.",
+    "In data/maps/** it is a PART of the wall piece whose end lands on it, not a feature of its own: \"an operative cannot be in cover from and obscured by the same terrain feature\" is keyed on the feature, and a post that is its own feature pays out both for one printed wall.",
+    "The killzone key prints a cross on the WALL END variant (keys/TW3.jpg); the connector is unmarked."
+   ]
   }
  ]
 }

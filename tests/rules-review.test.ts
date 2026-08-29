@@ -951,6 +951,24 @@ describe('Wall terrain has corners and ends', () => {
     const withZones = walls.filter((w) => wallCornerZones(w).length > 0);
     expect(withZones.length).toBe(walls.length);
   });
+
+  it('a connector post is a corner of the wall, and the card draws one at every wall-piece end', () => {
+    // "…minor parts of the wall that protrude do not make a corner or end alone; it must be
+    // the MAIN STRUCTURE of the wall that turns a corner or ends." A connector post is not a
+    // protrusion: it is 1.095" square against a 0.365" bar, it is where the physical wall
+    // piece ends, and it is what makes a Close Quarters corner square (D-108). So it has to
+    // offer corner zones exactly as the bar does.
+    const map = JSON.parse(
+      readFileSync(join(process.cwd(), 'data', 'maps', 'gallowdark', 'gallowdark-1.json'), 'utf8'),
+    ) as KillzoneMap;
+    const index = buildTerrainIndex(map);
+    const joints = index.parts.filter((p) => p.role === 'connector' || p.role === 'wallEnd');
+    expect(joints.length).toBeGreaterThan(10);
+    for (const j of joints) {
+      expect(j.types).toContain('Wall');
+      expect(wallCornerZones(j).length).toBe(4);
+    }
+  });
 });
 
 describe('counteract and On Guard windows', () => {

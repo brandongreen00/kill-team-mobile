@@ -340,6 +340,26 @@ PIECES: dict[str, dict] = {
                               name='Debris', count=4, light=True),
     'tomb-world.teleportPad': dict(killzone='tomb-world', labels=['T'], name='Teleport Pad',
                                    count=2, pad=True),
+
+    # ---------------- Close-quarters wall joints (both killzones) ----------------
+    #
+    # Every point where a physical wall piece ENDS is drawn on the card as a square block
+    # three bar-widths across — the connector post the wall sections slot into, and what makes
+    # a Gallowdark / Tomb World corner SQUARE rather than a mitred notch. It carries no printed
+    # letter, because it is not one of the numbered wall pieces.
+    #
+    # A block with a grey cross knocked out of it is a WALL END instead (keys/TW3.jpg: "WALL
+    # END"): the Necron sarcophagus slab that caps a run rather than joining two. Geometrically
+    # identical, so it is typed the same; kept as its own kind because the card distinguishes
+    # it and a player setting the killzone up has to place a different sprue part.
+    'gallowdark.connector': dict(killzone='gallowdark', labels=[], name='Wall Connector',
+                                 count=None, joint=True),
+    'gallowdark.wallEnd': dict(killzone='gallowdark', labels=['X'], name='Wall End',
+                               count=None, joint=True, end=True),
+    'tomb-world.connector': dict(killzone='tomb-world', labels=[], name='Wall Connector',
+                                 count=None, joint=True),
+    'tomb-world.wallEnd': dict(killzone='tomb-world', labels=['X'], name='Wall End',
+                               count=None, joint=True, end=True),
 }
 
 # Close-quarters part templates (shared by both CQ killzones).

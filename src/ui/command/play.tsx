@@ -15,7 +15,7 @@
  * Nothing here decides a rule. Legality comes from `availableActions`, `validTargets`,
  * `reachableCells` and `validateMove`; the answers are only ever *rendered* here.
  */
-import { actionAvailability, actionTargetOptions, getAction } from '../../core/actions.ts';
+import { actionAvailability, actionTargetKind, actionTargetOptions, getAction } from '../../core/actions.ts';
 import type { ActionParams } from '../../core/intents.ts';
 import {
   moveBudget,
@@ -576,44 +576,64 @@ function PloyList({ store, player }: { store: Store; player: PlayerId }) {
 /* ------------------------------------------------------------ aiming a move */
 
 /**
- * Actions the sheet cannot dispatch bare, because the reducer needs a marker or access point.
+ * Actions the sheet cannot dispatch bare, because the reducer needs a marker, an access point
+ * or an enemy.
  *
  * Read from the core's own `actionAvailability`, never from a list kept here: which actions are
  * parameterised is a rules fact, and CLAUDE.md forbids the UI re-implementing a core selector.
+ *
+ * `'operative'` is here for HATCHWAY FIGHT and DOOR FIGHT, the two Fights aimed at an enemy on
+ * the far side of a door rather than at one in control range. Shoot and Fight carry the same
+ * kind but never reach this list — they are filtered out of `rows` and have their own screens.
  */
-const AIMED_KINDS = new Set(['marker', 'markerChoice', 'part']);
+const AIMED_KINDS = new Set(['marker', 'markerChoice', 'part', 'operative']);
 
 function aimPlan({ store, ui, setUi }: PlayArgs, op: OperativeState, actionId: string): CommandPlan {
   const { state, ctx } = store;
   const def = getAction(actionId);
   const opts = def ? actionTargetOptions(ctx, state, op, def) : [];
   const cancel = () => setUi({ aimAction: undefined });
+  const commit = (params: unknown) => {
+    store.dispatch({ t: 'PerformAction', operativeId: op.id, action: actionId, params: params as never });
+    cancel();
+  };
+  // Operate Hatch and Breach are aimed at a piece of TERRAIN, and a hatchway is a thing the
+  // player can see on the board. Arm it: the list below stays as the accessible fallback, but
+  // the obvious move is to tap the door you meant.
+  const onTerrain = actionTargetKind(actionId) === 'part';
+  const legalPartIds = onTerrain ? opts.map((o) => o.id) : [];
   return {
     id: 'firefight.aim',
     step: `Turning point ${state.turningPoint} · ${LABEL[op.player]}`,
-    title: `${def?.name ?? actionId} — choose a target`,
+    title: onTerrain
+      ? `${def?.name ?? actionId} — tap the door`
+      : `${def?.name ?? actionId} — choose a target`,
     help: def?.sourceText,
     frame: rectAround(op, 10),
     detent: 'half',
     turnOf: op.player,
     selectedId: op.id,
+    ...(onTerrain
+      ? {
+          partIds: legalPartIds,
+          armed: {
+            onPart: (partId: string) => {
+              const pick = opts.find((o) => o.id === partId);
+              if (pick) commit(pick.params);
+            },
+          },
+          armedNote: legalPartIds.length
+            ? 'Tap a highlighted hatchway or breach point.'
+            : 'No access point is within this operative’s control range.',
+          ...(legalPartIds.length ? {} : { armedTone: 'blocked' as const }),
+        }
+      : {}),
     actions: [{ id: 'cancel', label: 'Back', onClick: cancel }],
     body: (
       <div class="actions">
         {opts.length === 0 && <p class="entry-meta why">No legal target for this action right now.</p>}
         {opts.map((o) => (
-          <button
-            key={o.id || 'bare'}
-            onClick={() => {
-              store.dispatch({
-                t: 'PerformAction',
-                operativeId: op.id,
-                action: actionId,
-                params: o.params as never,
-              });
-              cancel();
-            }}
-          >
+          <button key={o.id || 'bare'} onClick={() => commit(o.params)}>
             <span style={{ flex: 1, textAlign: 'left' }}>{o.label}</span>
           </button>
         ))}

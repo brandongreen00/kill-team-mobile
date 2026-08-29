@@ -50,6 +50,7 @@ export interface TerrainIndex {
   hazardous: Poly[];
 }
 
+/** The fallback for a hand-built fixture; the maps carry `openTypes` on every access point. */
 const OPEN_ACCESS_TYPES: TerrainType[] = ['Accessible', 'Insignificant', 'Exposed'];
 
 /**
@@ -96,7 +97,7 @@ export function effectivePart(part: TerrainPart, state?: GameState): TerrainPart
   if (st === undefined || part.role === undefined) return part;
   if (part.role === 'accessPoint') {
     return st === 'open'
-      ? { ...part, state: st, types: [...OPEN_ACCESS_TYPES], solid: false, blocksVisibility: false }
+      ? { ...part, state: st, types: [...(part.openTypes ?? OPEN_ACCESS_TYPES)], solid: false, blocksVisibility: false }
       : { ...part, state: st, types: ['Heavy', 'Wall'], solid: true, blocksVisibility: true };
   }
   if (part.role === 'hatch') {
@@ -364,8 +365,24 @@ export function obstructingCrossings(index: TerrainIndex, a: Vec2, b: Vec2): Ind
 export function wallRouteDistance(index: TerrainIndex, a: Vec2, b: Vec2, pad = 0.02): number {
   const solidWalls = index.walls.filter((w) => w.solid !== false);
   if (solidWalls.length === 0) return dist(a, b);
-  const blocked = (p: Vec2, q: Vec2): boolean =>
-    solidWalls.some((w) => segmentCrossesPoly(p, q, w.poly));
+  // Bounding-box reject before the polygon test. This is an all-pairs loop over 4W+2 nodes
+  // that scans every wall for every pair, so it is O(W^3) and W is now half as large again on
+  // the close-quarters maps (every wall-piece joint carries its connector post). The reject
+  // is what `pathBlockedByTerrain` already does and costs four comparisons.
+  const blocked = (p: Vec2, q: Vec2): boolean => {
+    const x0 = Math.min(p.x, q.x);
+    const x1 = Math.max(p.x, q.x);
+    const y0 = Math.min(p.y, q.y);
+    const y1 = Math.max(p.y, q.y);
+    return solidWalls.some(
+      (w) =>
+        w.bounds.max.x >= x0 &&
+        w.bounds.min.x <= x1 &&
+        w.bounds.max.y >= y0 &&
+        w.bounds.min.y <= y1 &&
+        segmentCrossesPoly(p, q, w.poly),
+    );
+  };
   if (!blocked(a, b)) return dist(a, b);
 
   const nodes: Vec2[] = [a, b];

@@ -2427,6 +2427,16 @@
    "y": 11.937
   },
   {
+   "label": "B4",
+   "mapId": "tomb-world-6",
+   "featureIndex": 11,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 6.187,
+   "y": 13.844
+  },
+  {
    "label": "B3",
    "mapId": "tomb-world-1",
    "featureIndex": 1,
@@ -2539,131 +2549,21 @@
   {
    "label": "B3",
    "mapId": "tomb-world-6",
-   "featureIndex": 13,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 11.906,
-   "y": 6.218
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-1",
-   "featureIndex": 2,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 13.812,
-   "y": 11.937
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-2",
-   "featureIndex": 7,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 8.094,
-   "y": 21.469
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-2",
-   "featureIndex": 8,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 11.907,
-   "y": 13.844
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-3",
-   "featureIndex": 2,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 10.0,
-   "y": 15.75
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-3",
-   "featureIndex": 7,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 17.625,
-   "y": 8.125
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-4",
-   "featureIndex": 5,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 10.0,
-   "y": 11.938
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-4",
-   "featureIndex": 6,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 17.625,
-   "y": 11.937
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-5",
-   "featureIndex": 12,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 11.906,
-   "y": 6.218
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-5",
    "featureIndex": 14,
    "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
-   "x": 19.532,
-   "y": 10.032
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-6",
-   "featureIndex": 4,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 13.812,
-   "y": 11.937
-  },
-  {
-   "label": "B2",
-   "mapId": "tomb-world-6",
-   "featureIndex": 12,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 11.907,
-   "y": 10.032
+   "x": 11.906,
+   "y": 6.218
   },
   {
    "label": "A4",
    "mapId": "tomb-world-1",
-   "featureIndex": 3,
+   "featureIndex": 2,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 19.531,
+   "x": 15.718,
    "y": 11.937
   },
   {
@@ -2777,121 +2677,21 @@
    "y": 8.125
   },
   {
-   "label": "A2",
+   "label": "B1",
    "mapId": "tomb-world-1",
-   "featureIndex": 4,
-   "iou": 0.5048,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 13.813,
-   "y": 4.313
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-2",
    "featureIndex": 3,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
-   "x": 19.531,
-   "y": 11.937
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-2",
-   "featureIndex": 9,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 11.907,
-   "y": 8.125
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-3",
-   "featureIndex": 3,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 15.718,
-   "y": 15.75
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-3",
-   "featureIndex": 6,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 11.907,
-   "y": 8.125
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-4",
-   "featureIndex": 13,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 8.094,
-   "y": 8.125
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-4",
-   "featureIndex": 14,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 19.531,
-   "y": 15.75
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-5",
-   "featureIndex": 9,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 8.094,
-   "y": 8.125
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-5",
-   "featureIndex": 11,
-   "iou": 1.0,
-   "rotDeg": 90,
-   "flip": false,
-   "x": 11.907,
+   "x": 21.438,
    "y": 11.938
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-6",
-   "featureIndex": 1,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 8.093,
-   "y": 19.562
-  },
-  {
-   "label": "A2",
-   "mapId": "tomb-world-6",
-   "featureIndex": 9,
-   "iou": 1.0,
-   "rotDeg": 0,
-   "flip": false,
-   "x": 15.719,
-   "y": 4.313
   },
   {
    "label": "B1",
    "mapId": "tomb-world-1",
    "featureIndex": 5,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 4.282,
    "y": 10.032
@@ -2901,7 +2701,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 0,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 6.188,
    "y": 19.563
@@ -2911,7 +2711,7 @@
    "mapId": "tomb-world-2",
    "featureIndex": 14,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 23.343,
    "y": 13.844
@@ -2921,7 +2721,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 0,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 13.813,
    "y": 19.563
@@ -2931,7 +2731,7 @@
    "mapId": "tomb-world-3",
    "featureIndex": 1,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 6.187,
    "y": 15.75
@@ -2941,7 +2741,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 1,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 6.188,
    "y": 19.563
@@ -2951,7 +2751,7 @@
    "mapId": "tomb-world-4",
    "featureIndex": 9,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 6.187,
    "y": 4.312
@@ -2961,7 +2761,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 13,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 19.531,
    "y": 13.844
@@ -2971,7 +2771,7 @@
    "mapId": "tomb-world-5",
    "featureIndex": 15,
    "iou": 1.0,
-   "rotDeg": 0,
+   "rotDeg": 90,
    "flip": false,
    "x": 19.532,
    "y": 6.219
@@ -2981,7 +2781,7 @@
    "mapId": "tomb-world-6",
    "featureIndex": 6,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 21.438,
    "y": 11.938
@@ -2991,10 +2791,120 @@
    "mapId": "tomb-world-6",
    "featureIndex": 8,
    "iou": 1.0,
-   "rotDeg": 90,
+   "rotDeg": 0,
    "flip": false,
    "x": 10.0,
    "y": 8.125
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-1",
+   "featureIndex": 4,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 13.813,
+   "y": 4.313
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-2",
+   "featureIndex": 3,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 19.531,
+   "y": 11.937
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-2",
+   "featureIndex": 9,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 11.907,
+   "y": 8.125
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-3",
+   "featureIndex": 3,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 15.718,
+   "y": 15.75
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-3",
+   "featureIndex": 6,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 11.907,
+   "y": 8.125
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-4",
+   "featureIndex": 13,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 8.094,
+   "y": 8.125
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-4",
+   "featureIndex": 14,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 19.531,
+   "y": 15.75
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-5",
+   "featureIndex": 9,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 8.094,
+   "y": 8.125
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-5",
+   "featureIndex": 11,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 11.907,
+   "y": 11.938
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-6",
+   "featureIndex": 1,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 8.093,
+   "y": 19.562
+  },
+  {
+   "label": "A2",
+   "mapId": "tomb-world-6",
+   "featureIndex": 9,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 15.719,
+   "y": 4.313
   },
   {
    "label": "A3",
@@ -3109,7 +3019,7 @@
   {
    "label": "A3",
    "mapId": "tomb-world-6",
-   "featureIndex": 14,
+   "featureIndex": 15,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -3229,7 +3139,7 @@
   {
    "label": "A1",
    "mapId": "tomb-world-6",
-   "featureIndex": 11,
+   "featureIndex": 12,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -3237,7 +3147,7 @@
    "y": 15.75
   },
   {
-   "label": "B?",
+   "label": "B2",
    "mapId": "tomb-world-1",
    "featureIndex": 10,
    "iou": 1.0,
@@ -3245,6 +3155,106 @@
    "flip": false,
    "x": 15.718,
    "y": 13.844
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-2",
+   "featureIndex": 7,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 8.094,
+   "y": 21.469
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-2",
+   "featureIndex": 8,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 11.907,
+   "y": 13.844
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-3",
+   "featureIndex": 2,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 10.0,
+   "y": 15.75
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-3",
+   "featureIndex": 7,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 17.625,
+   "y": 8.125
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-4",
+   "featureIndex": 5,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 10.0,
+   "y": 11.938
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-4",
+   "featureIndex": 6,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 17.625,
+   "y": 11.937
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-5",
+   "featureIndex": 12,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 11.906,
+   "y": 6.218
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-5",
+   "featureIndex": 14,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 19.532,
+   "y": 10.032
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-6",
+   "featureIndex": 4,
+   "iou": 1.0,
+   "rotDeg": 90,
+   "flip": false,
+   "x": 13.812,
+   "y": 11.937
+  },
+  {
+   "label": "B2",
+   "mapId": "tomb-world-6",
+   "featureIndex": 13,
+   "iou": 1.0,
+   "rotDeg": 0,
+   "flip": false,
+   "x": 11.907,
+   "y": 10.032
   },
   {
    "label": "C3",
@@ -3299,7 +3309,7 @@
   {
    "label": "C3",
    "mapId": "tomb-world-6",
-   "featureIndex": 15,
+   "featureIndex": 16,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -3359,7 +3369,7 @@
   {
    "label": "C5",
    "mapId": "tomb-world-6",
-   "featureIndex": 20,
+   "featureIndex": 21,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -3419,7 +3429,7 @@
   {
    "label": "C1",
    "mapId": "tomb-world-6",
-   "featureIndex": 19,
+   "featureIndex": 20,
    "iou": 1.0,
    "rotDeg": 90,
    "flip": false,
@@ -3479,7 +3489,7 @@
   {
    "label": "C2",
    "mapId": "tomb-world-6",
-   "featureIndex": 18,
+   "featureIndex": 19,
    "iou": 0.9615,
    "rotDeg": 90,
    "flip": false,
@@ -3539,7 +3549,7 @@
   {
    "label": "C4",
    "mapId": "tomb-world-6",
-   "featureIndex": 16,
+   "featureIndex": 17,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -3629,7 +3639,7 @@
   {
    "label": "T",
    "mapId": "tomb-world-6",
-   "featureIndex": 17,
+   "featureIndex": 18,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,
@@ -3639,7 +3649,7 @@
   {
    "label": "T",
    "mapId": "tomb-world-6",
-   "featureIndex": 21,
+   "featureIndex": 22,
    "iou": 1.0,
    "rotDeg": 0,
    "flip": false,

@@ -101,6 +101,162 @@ function fillFor(part: TerrainPart): string {
 
 const pts = (poly: readonly Vec2[]): string => poly.map((p) => `${p.x.toFixed(3)},${p.y.toFixed(3)}`).join(' ');
 
+/** The close-quarters wall family: one continuous structure, drawn with one outline. */
+const WALL_SILHOUETTE_ROLES = new Set(['wall', 'connector', 'wallEnd']);
+
+/**
+ * Doors, hatchways and breach points, drawn as doors.
+ *
+ * They used to be drawn with `fillFor`, which reads the terrain TYPES — and a closed hatchway
+ * is `Heavy, Wall`, exactly like the wall it is cut into, while a Volkus doorway is
+ * `Accessible, Heavy` and lost to the same green. So on Gallowdark and Tomb World every one of
+ * the sixteen hatchways on the board was invisible, and the only way to find one was to open
+ * the Operate Hatch list and read part ids.
+ *
+ * The vocabulary is deliberately small and shared by all three: a CLOSED access point is a
+ * panel with a lock, an OPEN one is a gap between two jambs with a dashed threshold, and the
+ * accent hue says whether opening it is a 1AP Operate Hatch (amber) or a 2AP Breach (red).
+ * Every fill clears 3:1 against the board floor, and the closed/open difference is carried by
+ * SHAPE as well as by value, so it survives a greyscale screen.
+ */
+const DOOR = {
+  hatch: { frame: '#e0a94a', panel: '#96601c', mark: '#1a1206' },
+  breach: { frame: '#e08159', panel: '#963a24', mark: '#1a0805' },
+  door: { frame: '#c9b48a', panel: '#6b5c3c', mark: '#14110a' },
+} as const;
+
+interface DoorBox {
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+  /** Along the wall. */
+  long: number;
+  /** Across the wall. */
+  thick: number;
+  horiz: boolean;
+  cx: number;
+  cy: number;
+}
+
+function doorBox(poly: readonly Vec2[]): DoorBox {
+  let x0 = Infinity;
+  let y0 = Infinity;
+  let x1 = -Infinity;
+  let y1 = -Infinity;
+  for (const p of poly) {
+    if (p.x < x0) x0 = p.x;
+    if (p.y < y0) y0 = p.y;
+    if (p.x > x1) x1 = p.x;
+    if (p.y > y1) y1 = p.y;
+  }
+  const w = x1 - x0;
+  const h = y1 - y0;
+  const horiz = w >= h;
+  return { x0, y0, x1, y1, horiz, long: horiz ? w : h, thick: horiz ? h : w,
+           cx: (x0 + x1) / 2, cy: (y0 + y1) / 2 };
+}
+
+/** Which door vocabulary a part speaks, or null if it is not a door at all. */
+function doorKindOf(part: TerrainPart): keyof typeof DOOR | null {
+  if (part.role === 'accessPoint') return part.opensAs === 'breachWall' ? 'breach' : 'hatch';
+  if (part.role === 'door') return 'door';
+  return null;
+}
+
+function DoorPart({ part, kind }: { part: TerrainPart; kind: keyof typeof DOOR }) {
+  const c = DOOR[kind];
+  const b = doorBox(part.poly);
+  // A Volkus doorway has no `state`: it is a permanent opening in the ruin, so it is drawn
+  // open. A close-quarters access point carries one.
+  const open = part.state !== 'closed';
+  // Jambs: a short block of the wall's own thickness at each end, so the opening still reads
+  // as part of the wall run rather than as a hole someone forgot to fill.
+  const jamb = Math.min(0.28, b.long * 0.18);
+  const jambs = b.horiz
+    ? [
+        [b.x0, b.y0, jamb, b.thick],
+        [b.x1 - jamb, b.y0, jamb, b.thick],
+      ]
+    : [
+        [b.x0, b.y0, b.thick, jamb],
+        [b.x0, b.y1 - jamb, b.thick, jamb],
+      ];
+  const inset = Math.min(0.05, b.thick * 0.16);
+  return (
+    <g class={`door door-${kind}${open ? ' is-open' : ''}`}>
+      {open ? (
+        <>
+          {/* The opening itself: floor, not wall — this is the thing you can walk through. */}
+          <rect
+            x={b.x0}
+            y={b.y0}
+            width={b.x1 - b.x0}
+            height={b.y1 - b.y0}
+            fill={BOARD_FLOOR}
+          />
+          {/* Threshold: a dashed line ACROSS the gap, along the wall's line. */}
+          <line
+            x1={b.horiz ? b.x0 : b.cx}
+            y1={b.horiz ? b.cy : b.y0}
+            x2={b.horiz ? b.x1 : b.cx}
+            y2={b.horiz ? b.cy : b.y1}
+            stroke={c.frame}
+            stroke-width={0.06}
+            stroke-dasharray="0.18 0.14"
+            opacity={0.9}
+          />
+        </>
+      ) : (
+        <>
+          <rect
+            x={b.x0}
+            y={b.y0}
+            width={b.x1 - b.x0}
+            height={b.y1 - b.y0}
+            fill={c.frame}
+          />
+          {/* The panel: inset so the frame reads as the wall the hatch is set into. */}
+          <rect
+            x={b.x0 + inset}
+            y={b.y0 + inset}
+            width={Math.max(0, b.x1 - b.x0 - inset * 2)}
+            height={Math.max(0, b.y1 - b.y0 - inset * 2)}
+            fill={c.panel}
+          />
+          {/* The lock. A hatchway takes a wheel; a breach point takes a charge, so it is
+              marked with a burst instead — you cannot simply open one. */}
+          {kind === 'breach' ? (
+            <g stroke={c.frame} stroke-width={0.055} stroke-linecap="round">
+              {[-1, 0, 1].map((k) => (
+                <line
+                  key={k}
+                  x1={b.cx + (b.horiz ? k * 0.34 : 0) - (b.horiz ? 0.11 : b.thick * 0.34)}
+                  y1={b.cy + (b.horiz ? 0 : k * 0.34) - (b.horiz ? b.thick * 0.34 : 0.11)}
+                  x2={b.cx + (b.horiz ? k * 0.34 : 0) + (b.horiz ? 0.11 : b.thick * 0.34)}
+                  y2={b.cy + (b.horiz ? 0 : k * 0.34) + (b.horiz ? b.thick * 0.34 : 0.11)}
+                />
+              ))}
+            </g>
+          ) : (
+            <circle
+              cx={b.cx}
+              cy={b.cy}
+              r={Math.min(0.16, b.thick * 0.34)}
+              fill="none"
+              stroke={c.frame}
+              stroke-width={0.055}
+            />
+          )}
+        </>
+      )}
+      {jambs.map(([x, y, w, h], i) => (
+        <rect key={i} x={x} y={y} width={w} height={h} fill={c.frame} opacity={open ? 1 : 0.85} />
+      ))}
+    </g>
+  );
+}
+
 /** A 32 mm round base is the fallback when no context is available to look one up. */
 const DEFAULT_BASE: BaseShape = { shape: 'round', mm: 32 };
 
@@ -130,6 +286,14 @@ export interface ArmedState {
   commit?: (world: Vec2) => void;
   /** Operative-picking: a tap on an operative resolves here instead of as a point. */
   onOperative?: (op: OperativeState) => void;
+  /**
+   * Terrain-picking: a tap on a hatchway or breach point resolves here.
+   *
+   * Operate Hatch and Breach are the only actions in the game aimed at a piece of terrain, and
+   * before this the only way to aim one was a list of raw part ids in the sheet. A door is a
+   * thing on the board; you point at it.
+   */
+  onPart?: (partId: string) => void;
 }
 
 export interface BoardProps {
@@ -159,6 +323,8 @@ export interface BoardProps {
   selectedId?: string | undefined;
   /** Operatives to draw as available targets — a pulsing ring, so they read as tappable. */
   targetIds?: readonly string[];
+  /** Terrain parts the current step invites a tap on: hatchways and breach points. */
+  partIds?: readonly string[];
   /**
    * Which side the zoom cluster floats on. Drop zones run up the LEFT and RIGHT edges of
    * every killzone, so a fixed corner would sit on top of the very inches the player is
@@ -187,6 +353,7 @@ export function Board({
   onBoardClick,
   selectedId,
   targetIds,
+  partIds,
   controlsSide = 'right',
   showGrid = true,
   showZones,
@@ -567,6 +734,30 @@ export function Board({
   const inPerPx = vp.w / Math.max(1, pane.w);
   const baseOf = (op: OperativeState): BaseShape => (ctx ? card(ctx, op).base : DEFAULT_BASE);
   const targets = new Set(targetIds ?? []);
+  const liveParts = new Set(partIds ?? []);
+  /**
+   * How far a door's tap disc may reach, per door.
+   *
+   * A door is a 2" x 0.37" slot, so it needs the same 44px minimum a base gets — but at fit
+   * zoom on a 390px phone that is a 3.1" disc, and the two closest access points in the
+   * shipped data are 2.5" apart. Overlapping discs let SVG paint order decide which hatchway a
+   * tap opens, and Operate Hatch costs 1AP with no confirm step. Each disc is capped at half
+   * the distance to its nearest neighbour, so two of them can never overlap.
+   */
+  const doorReach = new Map<string, number>();
+  {
+    const centres = parts
+      .filter((p) => doorKindOf(p) !== null)
+      .map((p) => ({ id: p.id, b: doorBox(p.poly) }));
+    for (const { id, b } of centres) {
+      let nearest = Infinity;
+      for (const other of centres) {
+        if (other.id === id) continue;
+        nearest = Math.min(nearest, Math.hypot(other.b.cx - b.cx, other.b.cy - b.cy));
+      }
+      doorReach.set(id, Number.isFinite(nearest) ? Math.max(0.2, nearest / 2 - 0.02) : Infinity);
+    }
+  }
 
   const svgEl = (
     <svg
@@ -630,21 +821,89 @@ export function Board({
           </polygon>
         ))}
 
+        {/* One silhouette, not thirty-five outlined bricks.
+            A close-quarters wall run is many abutting pieces — three or four wall bars plus a
+            connector post at every joint — and stroking each polygon separately drew a dark
+            seam wherever two of them met, so a continuous wall read as a row of blocks with
+            gaps in it and a square corner read as a cross. Stroking the whole family first
+            and then filling it leaves only the outer edge dark: neighbours paint over each
+            other's internal strokes, which is exactly what the printed map card looks like. */}
+        {map.closeQuarters && (
+          <g class="terrain-silhouette" stroke="#0b0d10" stroke-width={0.16} stroke-linejoin="round">
+            {parts
+              .filter((p) => WALL_SILHOUETTE_ROLES.has(p.role ?? ''))
+              .map((part) => (
+                <polygon key={`sil-${part.id}`} points={pts(part.poly)} fill="#0b0d10" />
+              ))}
+          </g>
+        )}
+
         <g class="terrain">
-          {parts.map((part) => (
-            <polygon
-              key={part.id}
-              points={pts(part.poly)}
-              fill={fillFor(part)}
-              stroke="#0b0d10"
-              // Height reads from the outline weight, not from fading the fill into the
-              // floor: a taller piece is more strongly drawn, and stays legible either way.
-              stroke-width={0.03 + Math.min(0.06, part.z1 * 0.012)}
-              opacity={0.92}
-            >
-              <title>{`${part.feature.label ?? part.feature.kind} — ${part.types.join(', ')} (z ${part.z0}–${part.z1}")`}</title>
-            </polygon>
-          ))}
+          {parts.map((part) => {
+            const door = doorKindOf(part);
+            if (door) {
+              const b = doorBox(part.poly);
+              const live = liveParts.has(part.id);
+              // The tap target is a disc at least MIN_TAP_PX across, exactly as an operative
+              // gets: a hatchway is 2" x 0.37" and would otherwise be a hairline on a phone.
+              const hitR = Math.max(
+                b.long / 2,
+                Math.min((MIN_TAP_PX / 2) * inPerPx, doorReach.get(part.id) ?? Infinity),
+              );
+              return (
+                <g
+                  key={part.id}
+                  class={`terrain-door${live ? ' is-live' : ''}`}
+                  onClick={(e: MouseEvent) => {
+                    const arm = armedRef.current;
+                    if (!arm?.onPart) return;
+                    e.stopPropagation();
+                    if (gestureConsumedClick()) return;
+                    arm.onPart(part.id);
+                  }}
+                  style={{ cursor: armed?.onPart ? 'pointer' : 'default' }}
+                >
+                  <DoorPart part={part} kind={door} />
+                  {live && (
+                    <circle
+                      class="door-ring"
+                      cx={b.cx}
+                      cy={b.cy}
+                      r={hitR}
+                      fill="none"
+                      stroke={DOOR[door].frame}
+                      stroke-width={0.07}
+                      opacity={0.9}
+                    />
+                  )}
+                  {armed?.onPart && <circle cx={b.cx} cy={b.cy} r={hitR} fill="transparent" />}
+                  <title>
+                    {`${door === 'door' ? 'Doorway' : door === 'breach' ? 'Breach point' : 'Hatchway'}`}
+                    {part.feature.label ? ` in wall ${part.feature.label}` : ''}
+                    {part.role === 'accessPoint' ? ` — ${part.state === 'open' ? 'open' : 'closed'}` : ''}
+                  </title>
+                </g>
+              );
+            }
+            const silhouetted = map.closeQuarters && WALL_SILHOUETTE_ROLES.has(part.role ?? '');
+            return (
+              <polygon
+                key={part.id}
+                points={pts(part.poly)}
+                fill={fillFor(part)}
+                stroke={silhouetted ? 'none' : '#0b0d10'}
+                // Height reads from the outline weight, not from fading the fill into the
+                // floor: a taller piece is more strongly drawn, and stays legible either way.
+                stroke-width={0.03 + Math.min(0.06, part.z1 * 0.012)}
+                // The wall family is drawn opaque. Its parts overlap by design — a connector
+                // post covers the end of the bar it caps — and two 0.92-alpha fills composite
+                // to 0.994, so a translucent wall showed a lighter patch at every joint.
+                opacity={silhouetted ? 1 : 0.92}
+              >
+                <title>{`${part.feature.label ?? part.feature.kind} — ${part.types.join(', ')} (z ${part.z0}–${part.z1}")`}</title>
+              </polygon>
+            );
+          })}
         </g>
 
         {/* Legality shading, reachability, planned paths — under the pieces, over terrain. */}

@@ -56,6 +56,7 @@ PALETTE = {
     'edge_pillar_a': (159, 110, 85),   # board-edge pillar over P1 tint
     'edge_pillar_b': (115, 116, 119),  # board-edge pillar over P2 tint
     'black':        (0, 0, 0),
+    'wall_end_cq':  (171, 171, 171),   # the "WALL END" cross knocked out of a block, keys/TW3.jpg
     'white':        (255, 255, 255),
 }
 
@@ -76,6 +77,16 @@ CQ_NX, CQ_NY = 7, 6
 CQ_BORDER_X = 0.46875
 CQ_BORDER_Y = 0.5
 BOARD_CQ = (CQ_BORDER_X * 2 + CQ_NX * CQ_SQUARE, CQ_BORDER_Y * 2 + CQ_NY * CQ_SQUARE)
+
+# A close-quarters wall run is drawn as a 9px bar, and every point where a physical wall PIECE
+# ends carries a square block three times that wide: the connector post the walls slot into.
+# Measured on all twelve Close Quarters cards, every one of the 200+ blocks is exactly 27px and
+# every bar exactly 9px at the 94px lattice step, so both are exact fractions of a square.
+CQ_BLOCK_PX = 27
+CQ_BAR_PX = 9
+CQ_LATTICE_PX = 94
+CQ_BLOCK = CQ_BLOCK_PX / CQ_LATTICE_PX * CQ_SQUARE        # 1.09508"
+CQ_BAR = CQ_BAR_PX / CQ_LATTICE_PX * CQ_SQUARE            # 0.36503"
 
 
 def load(path: str) -> np.ndarray:

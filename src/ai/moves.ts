@@ -52,6 +52,17 @@ type Cell = ReachCell;
 const FIELD_CACHE = new Map<string, Map<number, Map<string, Cell>>>();
 const FIELD_CACHE_MAX = 512;
 
+/** Every runtime terrain override that can change where an operative may go. */
+function terrainKey(state: GameState): string {
+  const ids = Object.keys(state.terrainState).sort();
+  let out = '';
+  for (const id of ids) {
+    const st = state.terrainState[id]!;
+    out += `${id}:${st.state ?? ''}${st.removed ? 'x' : ''};`;
+  }
+  return out;
+}
+
 function opKey(state: GameState, op: OperativeState, step: number): string {
   return [
     state.map.id,
@@ -60,7 +71,12 @@ function opKey(state: GameState, op: OperativeState, step: number): string {
     state.map.features.length,
     state.map.board.w,
     state.map.board.h,
-    Object.keys(state.terrainState).length,
+    // The VALUES, not the count. `Operate Hatch` writes `state.terrainState[part.id]` on both
+    // open AND close, so once a hatchway has been opened the key exists and the count never
+    // changes again: closing it returned the cached field computed while it was open, and the
+    // AI then proposed a move through a shut door, which the reducer refuses into
+    // `state.rejected` — the one thing the soak suites assert is empty.
+    terrainKey(state),
     state.placedFeatures.length,
     op.datacardId,
     op.pos.x.toFixed(2),

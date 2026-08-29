@@ -965,7 +965,7 @@
  "source": {
   "card": "docs/context-pack/research/approved-ops/maps/Bheta-Decima2025-4.png",
   "pxPerInch": 24.0,
-  "extractedAt": "2026-08-23",
+  "extractedAt": "2026-08-29",
   "tool": "tools/maps/extract_cards.py",
   "qa": {
    "pxPerInch": 24.0,

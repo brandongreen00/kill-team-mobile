@@ -27,6 +27,7 @@ import { findProfile,
 import { effectiveRules, startShoot, advanceShoot, canSelectWeapon } from './sequences/shoot.ts';
 import { startFight, advanceFight } from './sequences/fight.ts';
 import { baseDistanceToPart, hasType, pointDistanceToPart } from './terrain.ts';
+import type { IndexedPart } from './terrain.ts';
 import { counteractMoveLeft } from './phases.ts';
 import type { ActionParams } from './intents.ts';
 import type { GameState, MarkerState, OperativeState, PlayerId, Vec2 } from './types.ts';
@@ -505,8 +506,7 @@ registerAction({
     if (!target || target.removed || target.player === op.player)
       return { ok: false, reason: 'select an enemy operative across the hatchway' };
     const centre = { x: (ap.bounds.min.x + ap.bounds.max.x) / 2, y: (ap.bounds.min.y + ap.bounds.max.y) / 2 };
-    const tc = card(ctx, target);
-    if (baseGap(target.pos, tc.base, target.rot, centre, { shape: 'round', mm: 20 }, 0) > 2 + 1e-6)
+    if (accessPointGap(ctx, target, ap) > 2 + 1e-6)
       return { ok: false, reason: 'the enemy operative is more than 2" from the access point' };
     const side = acrossFrom(ap, centre);
     if (side(target.pos) === side(op.pos))
@@ -591,14 +591,32 @@ registerAction({
   },
 });
 
+/**
+ * Base-to-access-point gap, in inches.
+ *
+ * Control range is "visible to and within 1\"" of the THING, and an access point is a
+ * hatchway roughly 2" wide set into a wall. Every one of these checks used to measure to a
+ * synthetic 20mm marker at the access point's bounding-box centre, which is up to 1" further
+ * away than the hatchway itself: an operative standing at the edge of a doorway, plainly
+ * within control range of it, was refused. Measure to the polygon.
+ */
+export function accessPointGap(ctx: GameContext, op: OperativeState, part: IndexedPart): number {
+  return baseDistanceToPart(op.pos, card(ctx, op).base, op.rot, part);
+}
+
+/**
+ * "…an open hatchway's access point the active operative is TOUCHING."
+ *
+ * Touching is base contact with the access point, so it is measured to its polygon. The
+ * tolerance is the width of a printed card pixel: a base placed against a doorway lands a
+ * few thousandths off it, and an operative half an inch away from a doorway is not touching
+ * it, which is what a 0.6" reach from the opening's centre used to accept.
+ */
+const TOUCHING_IN = 0.05;
+
 function touchingOpenAccessPoint(ctx: GameContext, state: GameState, op: OperativeState) {
-  const index = terrain(ctx, state);
-  const c = card(ctx, op);
-  return index.parts.find(
-    (p) =>
-      p.role === 'accessPoint' &&
-      p.state === 'open' &&
-      baseGap(op.pos, c.base, op.rot, { x: (p.bounds.min.x + p.bounds.max.x) / 2, y: (p.bounds.min.y + p.bounds.max.y) / 2 }, { shape: 'round', mm: 20 }, 0) <= 0.6,
+  return terrain(ctx, state).parts.find(
+    (p) => p.role === 'accessPoint' && p.state === 'open' && accessPointGap(ctx, op, p) <= TOUCHING_IN,
   );
 }
 
@@ -616,15 +634,18 @@ registerAction({
     const index = terrain(ctx, state);
     const part = params.partId ? index.byId.get(params.partId) : undefined;
     if (!part || part.role !== 'accessPoint') return { ok: false, reason: 'no hatchway access point selected' };
-    const c = card(ctx, op);
-    const centre = { x: (part.bounds.min.x + part.bounds.max.x) / 2, y: (part.bounds.min.y + part.bounds.max.y) / 2 };
-    if (baseGap(op.pos, c.base, op.rot, centre, { shape: 'round', mm: 20 }, 0) > 1 + 1e-6)
+    // "Open or close a HATCHWAY that's access point is…". A Tomb World breach point is an
+    // access point too and has to be blown open with the 2AP Breach action; this check never
+    // read `opensAs`, so the aim list offered every breach point on the board as a 1AP
+    // Operate Hatch and the reducer opened it.
+    if (part.opensAs === 'breachWall')
+      return { ok: false, reason: 'that access point is a breach point, not a hatchway' };
+    if (accessPointGap(ctx, op, part) > 1 + 1e-6)
       return { ok: false, reason: 'the access point is not within control range' };
     if (part.state === 'open') {
-      const enemyNear = aliveOperatives(state, otherPlayer(op.player)).some((e) => {
-        const ec = card(ctx, e);
-        return baseGap(e.pos, ec.base, e.rot, centre, { shape: 'round', mm: 20 }, 0) <= 1 + 1e-6;
-      });
+      const enemyNear = aliveOperatives(state, otherPlayer(op.player)).some(
+        (e) => accessPointGap(ctx, e, part) <= 1 + 1e-6,
+      );
       if (enemyNear) return { ok: false, reason: 'the open access point is within an enemy operative’s control range' };
     }
     return { ok: true };
@@ -662,9 +683,7 @@ registerAction({
     if (part.opensAs !== 'breachWall') return { ok: false, reason: 'that access point is a hatchway, not a breach point' };
     if (part.state === 'open') return { ok: false, reason: 'that breach point is already open' };
     // "Open a closed breach point that's access point is WITHIN THE OPERATIVE'S CONTROL RANGE."
-    const bc = card(ctx, op);
-    const bCentre = { x: (part.bounds.min.x + part.bounds.max.x) / 2, y: (part.bounds.min.y + part.bounds.max.y) / 2 };
-    if (baseGap(op.pos, bc.base, op.rot, bCentre, { shape: 'round', mm: 20 }, 0) > 1 + 1e-6)
+    if (accessPointGap(ctx, op, part) > 1 + 1e-6)
       return { ok: false, reason: 'the breach point is not within control range' };
     // "It cannot perform this action for less than 2AP during an activation/counteraction in
     // which it performed the Charge or Shoot action (or vice versa)."
@@ -683,8 +702,9 @@ registerAction({
     for (const other of aliveOperatives(state)) {
       if (other.id === op.id) continue;
       if (side(other.pos) === mySide) continue;
-      const oc = card(ctx, other);
-      if (baseGap(other.pos, oc.base, other.rot, centre, { shape: 'round', mm: 20 }, 0) > 1 + 1e-6) continue;
+      // Measured to the access point, exactly as `check` measures the breacher's own control
+      // range: the two halves of one rule must agree about where the breach point is.
+      if (accessPointGap(ctx, other, part) > 1 + 1e-6) continue;
       const roll = ctx.rng.d6();
       recordRoll(state, 'breach', [roll], op.player, `concussion vs ${other.letter}`);
       if (roll >= 4) {
@@ -745,6 +765,10 @@ const NEEDS_TARGET: Record<string, ActionTargetKind> = {
   Shoot: 'operative',
   Fight: 'operative',
   'Hatchway Fight': 'operative',
+  // Door Fight takes the same `targetId` as Hatchway Fight and was missing from this map, so
+  // the sheet dispatched it bare and `check` refused it for want of a target — the row was a
+  // permanently disabled button on every Volkus map.
+  'Door Fight': 'operative',
   'Operate Hatch': 'part',
   Breach: 'part',
   'Pick Up Marker': 'marker',
@@ -770,10 +794,41 @@ const NEEDS_TARGET: Record<string, ActionTargetKind> = {
   'Move Orb': 'markerChoice',
 };
 
+/**
+ * What kind of target this action must be aimed at, or undefined if it takes none.
+ *
+ * Exported because the UI has to know that Operate Hatch and Breach are aimed at TERRAIN
+ * rather than at a marker — that decides whether the board is armed for a tap on a door — and
+ * CLAUDE.md forbids the UI keeping its own copy of the list.
+ */
+export const actionTargetKind = (actionId: string): ActionTargetKind | undefined => NEEDS_TARGET[actionId];
+
 /** A marker as the player sees it named. */
 function markerLabel(m: MarkerState): string {
   const owner = m.owner ? ` (${m.owner})` : '';
   return m.kind === 'objective' ? `objective ${m.id}${owner}` : `${m.kind} ${m.id}${owner}`;
+}
+
+/**
+ * An access point as the player sees it named.
+ *
+ * The list used to read `access point gallowdark-1.A3-1.access`, which tells a player nothing
+ * about WHICH of the sixteen hatchways on the board it is. A hatchway is identified on the map
+ * card by the wall piece it is cut into, so that is what is named, along with the state it is
+ * in and how far away it is — the three things that decide whether this is the one you meant.
+ */
+export function accessPointLabel(op: OperativeState, part: IndexedPart): string {
+  const what = part.opensAs === 'breachWall' ? 'breach point' : 'hatchway';
+  const where = part.feature.label ? ` in wall ${part.feature.label}` : '';
+  const gap = pointDistanceToPart(op.pos, part);
+  return `${part.state === 'open' ? 'open ' : ''}${what}${where} — ${gap.toFixed(1)}" away`;
+}
+
+/** Every access point on the board, nearest first. The UI draws and aims at these. */
+export function accessPoints(ctx: GameContext, state: GameState, from?: OperativeState): IndexedPart[] {
+  const parts = terrain(ctx, state).parts.filter((p) => p.role === 'accessPoint');
+  if (!from) return parts;
+  return parts.sort((a, b) => pointDistanceToPart(from.pos, a) - pointDistanceToPart(from.pos, b));
 }
 
 export interface ActionTargetOption {
@@ -817,11 +872,10 @@ export function actionTargetOptions(
       return out;
     }
     case 'part':
-      return terrain(ctx, state)
-        .parts.filter((part) => part.role === 'accessPoint')
+      return accessPoints(ctx, state, op)
         .map((part) => ({
           id: part.id,
-          label: `access point ${part.id}`,
+          label: accessPointLabel(op, part),
           params: { partId: part.id } as ActionParams,
         }))
         .filter((o) => def.check(ctx, state, op, o.params).ok);

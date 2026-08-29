@@ -1,7 +1,7 @@
 {
  "killzone": "bheta-decima",
  "generatedBy": "tools/maps/extract_cards.py",
- "generatedAt": "2026-08-23",
+ "generatedAt": "2026-08-29",
  "heights": {
   "bheta.gantry.deck": {
    "inches": 3.0,

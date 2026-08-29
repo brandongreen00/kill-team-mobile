@@ -31,6 +31,8 @@ ROLE_COLOUR = {
     'ledge':       (255, 160, 200),
     'accessPoint': (255, 240, 60),
     'teleportPad': (0, 255, 200),
+    'connector':   (150, 190, 255),
+    'wallEnd':     (255, 120, 255),
     None:          (255, 255, 255),
 }
 
@@ -110,7 +112,11 @@ def _draw(d, m, to, alpha=255, width=2):
             if len(pts) >= 3:
                 d.polygon(pts, outline=col, width=width)
         px, py = to(f['placement']['x'], f['placement']['y'])
-        d.text((px - 4, py - 6), f.get('label') or '?', fill=(255, 255, 255, alpha))
+        # A connector post has no printed letter; '?' is reserved for a piece that should have
+        # one and lost it, so the connector is left unlabelled rather than reported as a gap.
+        text = f.get('label') or ('' if f['kind'].endswith('.connector') else '?')
+        if text:
+            d.text((px - 4, py - 6), text, fill=(255, 255, 255, alpha))
     for s in (m['centreLine'],):
         d.line([to(s['a']['x'], s['a']['y']), to(s['b']['x'], s['b']['y'])],
                fill=(255, 255, 255, alpha), width=2)

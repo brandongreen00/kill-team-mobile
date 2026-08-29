@@ -2,6 +2,54 @@
 
 Newest entry at the top. Each entry: date, phase, what landed, what is next.
 
+## 2026-08-29 — Square corners, and doors you can see and use (D-108, D-109)
+
+Two owner reports off a live phone session, both about the Close Quarters killzones.
+
+**"I expect their corners to be square just like in the original maps."** They were not, and the
+cards say why. Gallowdark and Tomb World do not draw a wall run as one stroke: they draw a 9px
+bar along it and a **27px square block wherever a physical wall PIECE ends** — the connector post
+the sections slot into. All 211 blocks on the twelve cards measure 27px and every bar 9px, so
+both are exact fractions of a lattice square (1.09508" and 0.36503").
+The extractor emitted only the bars, node centre to node centre, so two bars meeting at a right
+angle covered only half of the square where their centrelines cross: **a 0.183" × 0.183"
+quarter-block of Wall terrain missing at 30 L-corners across the twelve maps.** That is a hole in
+a sealed room, not a drawing artefact.
+
+`cq_features` is rewritten to read the blocks and not the lattice, and three more bugs fell out of
+it. The block set is an independent measurement of where the pieces end, and it disagreed with the
+lattice tiling on exactly the two cards already known bad — so **every wall piece on all twelve
+cards now carries exactly one printed letter, no letter is left over, and every card's multiset is
+inside the printed killzone inventory**; `tomb-world-1`'s unreadable `B?` wall and the one
+`IOU_ALLOW` entry ever granted to the CQ tiler are both gone. Two pieces turn out to be printed
+**off** the lattice by exactly half a square (`tomb-world-1` A2, `tomb-world-6` B4) and were being
+snapped onto a line 1.9" away. And the thirteen grey ✕ glyphs the Tomb World key calls **WALL END**
+were invisible to the old detector, because the cross punches an 84px hole in the wall colour at
+the node.
+
+**"Tomb world and gallowdark don't have clearly outlined doors / hatches to use."** Two problems in
+one coat. A closed access point is rewritten to `['Heavy','Wall']` — byte-identical to the wall it
+is cut into — and `fillFor` keys only on types, so all sixteen hatchways on a board were invisible;
+so was every Volkus doorway. The board now draws them: a closed access point is a panel with a
+lock, an open one a gap between two jambs, amber for a 1AP Operate Hatch and red for a 2AP Breach.
+The close-quarters wall family is stroked once as a silhouette and then filled, so a run stops
+reading as a row of bricks with gaps between them. And the actions were reachable but unusable —
+the aim list read `access point gallowdark-1.A3-1.access`. It names the wall now, and `ArmedState`
+gained `onPart`, so you point at the door.
+
+Four rules bugs surfaced while wiring that up. `Operate Hatch` never read `opensAs`, so on Tomb
+World every **breach point** was on offer as a 1AP hatch (and through the two team actions that
+delegate to it). Control range was measured to a 20mm disc at the access point's bbox centre, so an
+operative at the edge of a 2"-wide doorway measured 1.2" away and was refused; all seven sites
+measure to the polygon now, including `Breach.perform`'s concussion roll, which had disagreed with
+its own `check`. `DOOR FIGHT` had no `NEEDS_TARGET` entry and was a permanently disabled button on
+every Volkus map. And `src/ai/moves.ts` keyed its reachability cache on the **count** of
+`state.terrainState` entries, so closing a hatchway returned the field computed while it was open —
+latent until this change made hatchways usable, and a direct route to a rejected intent.
+
+**Next:** HATCHWAY FIGHT and DOOR FIGHT are aimable now but still take the operative's first melee
+weapon with no profile choice, unlike a normal Fight. W-41, the jump edge, is unchanged.
+
 ## 2026-08-28 — Climbing, and the Deathwatch second counteract (D-106, D-107)
 
 Two owner reports from a live game, both real, both fixed.

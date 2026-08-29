@@ -264,11 +264,162 @@ def test_solid_outline_is_not_dashed():
     check('a solid outline is not reported', got == [], 'got %s' % (got,))
 
 
+
+
+# ---------------------------------------------------------------------------
+# Close quarters: connector blocks, wall ends and the piece tiling
+# ---------------------------------------------------------------------------
+#
+# The real Gallowdark / Tomb World cards are 702 x 608 px with a 94 px lattice step, a 9 px
+# wall bar and a 27 px square block wherever a wall PIECE ends. These synthetic cards draw
+# exactly that, and go straight at `_cq_blocks` / `_cq_lines` / `_cq_tile` with a hand-built
+# `Frame` rather than through `calibrate()`, so they pin the wall detectors without also
+# having to reproduce the printed lattice hairline the calibrator looks for.
+
+CQ_STEP = 94
+CQ_BAR = C.CQ_BAR_PX
+CQ_BLOCK = C.CQ_BLOCK_PX
+WALL_INK = C.PALETTE['wall_cq']
+CROSS = C.PALETTE['wall_end_cq']
+CQ_CHIP = C.PALETTE['label_cq']
+
+
+def cq_card():
+    """A blank close-quarters card, and the frame that reads it."""
+    img = np.zeros((608, 702, 3), np.uint8)
+    img[:, :] = (233, 204, 186)                    # p1 territory tint
+    lx = [21.0 + i * CQ_STEP for i in range(C.CQ_NX + 1)]
+    ly = [21.0 + j * CQ_STEP for j in range(C.CQ_NY + 1)]
+    frame = C.Frame(x0=9.4, y0=8.6, ppi_x=CQ_STEP / C.CQ_SQUARE, ppi_y=CQ_STEP / C.CQ_SQUARE,
+                    board_w=C.BOARD_CQ[0], board_h=C.BOARD_CQ[1], close_quarters=True,
+                    lattice_x=lx, lattice_y=ly)
+    return img, frame, lx, ly
+
+
+def cq_bar(img, a, b):
+    """A wall bar between two node centres."""
+    (ax, ay), (bx, by) = a, b
+    h = CQ_BAR // 2
+    if ay == by:
+        img[int(ay) - h:int(ay) + h + 1, int(min(ax, bx)):int(max(ax, bx)) + 1] = WALL_INK
+    else:
+        img[int(min(ay, by)):int(max(ay, by)) + 1, int(ax) - h:int(ax) + h + 1] = WALL_INK
+
+
+def cq_block(img, c, end=False):
+    """A connector post, or a wall end with the key's cross knocked out of it."""
+    x, y = int(c[0]), int(c[1])
+    h = CQ_BLOCK // 2
+    img[y - h:y + h + 1, x - h:x + h + 1] = WALL_INK
+    if not end:
+        return
+    for d in range(-11, 12):
+        for t in (-1, 0, 1):
+            img[y + d, x + d + t] = CROSS
+            img[y + d, x - d + t] = CROSS
+
+
+def cq_chip(img, cx, cy):
+    img[int(cy) - 9:int(cy) + 9, int(cx) - 12:int(cx) + 12] = CQ_CHIP
+
+
+def _tile(img, frame, chips):
+    solid, blocks = E._cq_blocks(img, C.mask_exact(img, WALL_INK, 6), frame)
+    lines = E._cq_lines(solid, blocks, CQ_STEP)
+    return blocks, E._cq_tile(lines, chips, CQ_STEP)
+
+
+def test_cq_blocks_are_found_and_wall_ends_told_apart():
+    """A post is a post; a post with the key's cross in it is a WALL END."""
+    img, frame, lx, ly = cq_card()
+    a, b, c = (lx[1], ly[1]), (lx[3], ly[1]), (lx[3], ly[3])
+    cq_bar(img, a, b)
+    cq_bar(img, b, c)
+    cq_block(img, a)
+    cq_block(img, b)
+    cq_block(img, c, end=True)
+    # The dashed centre line is drawn in the same grey as the cross and must not be mistaken
+    # for one: it is one pixel wide, and the cards really do print it across a card.
+    img[40:560, 351] = CROSS
+    solid, blocks = E._cq_blocks(img, C.mask_exact(img, WALL_INK, 6), frame)
+    check('three blocks found', len(blocks) == 3, 'got %d' % len(blocks))
+    kinds = sorted(bl['kind'] for bl in blocks)
+    check('exactly one of them is a wall end', kinds == ['connector', 'connector', 'wallEnd'],
+          'got %s' % (kinds,))
+    ends = [bl for bl in blocks if bl['kind'] == 'wallEnd']
+    if ends:
+        off = max(abs(ends[0]['x'] - c[0]), abs(ends[0]['y'] - c[1]))
+        check('the wall end sits on its node', off <= 1.0, 'off by %.1f px' % off)
+
+
+def test_cq_pieces_are_tiled_by_their_printed_letters():
+    """A block in the MIDDLE of a long wall belongs to the run that crosses there, not to it.
+
+    This is the case that defeats cutting at every block: a two-square A-piece crossed by
+    another run has a post at its own midpoint. Only the printed letter says whether the run
+    is one A or two Bs, so the tiler is scored on consuming every letter exactly once.
+    """
+    img, frame, lx, ly = cq_card()
+    # A horizontal A-piece from node 1 to node 3, crossed at node 2 by a vertical B-piece.
+    cq_bar(img, (lx[1], ly[2]), (lx[3], ly[2]))
+    cq_bar(img, (lx[2], ly[2]), (lx[2], ly[3]))
+    for n in ((lx[1], ly[2]), (lx[2], ly[2]), (lx[3], ly[2]), (lx[2], ly[3])):
+        cq_block(img, n)
+    chips = [('A1', lx[2], ly[2] - 22), ('B1', lx[2] - 22, (ly[2] + ly[3]) / 2)]
+    _blocks, segs = _tile(img, frame, chips)
+    got = sorted((s['label'], s['span']) for s in segs)
+    check('the long wall stays one A piece', got == [('A1', 2), ('B1', 1)], 'got %s' % (got,))
+
+
+def test_cq_half_square_offset_piece_is_placed_where_it_is_printed():
+    """Two pieces on the real cards are printed offset by half a square, not on a lattice line.
+
+    `tomb-world-1`'s A2 and `tomb-world-6`'s B4. Snapping them to the nearest lattice line
+    moved them ~1.9" and re-sized them; the blocks say exactly where they are.
+    """
+    img, frame, lx, ly = cq_card()
+    a = (lx[2] + CQ_STEP / 2, ly[4])
+    b = (lx[4] + CQ_STEP / 2, ly[4])
+    cq_bar(img, a, b)
+    cq_block(img, a)
+    cq_block(img, b)
+    chips = [('A2', (a[0] + b[0]) / 2, ly[4] - 22)]
+    _blocks, segs = _tile(img, frame, chips)
+    if len(segs) != 1:
+        check('the offset piece is one two-square wall', False, 'got %d pieces' % len(segs))
+        return
+    seg = segs[0]
+    off = max(abs(seg['a'][0] - a[0]), abs(seg['b'][0] - b[0]))
+    check('the offset piece is one two-square wall',
+          seg['span'] == 2 and seg['label'] == 'A2' and off <= 1.0,
+          'got span=%s label=%s off=%.1f px' % (seg['span'], seg['label'], off))
+
+
+def test_cq_run_that_butts_into_another_wall_still_ends_there():
+    """A piece can end against the SIDE of another run, where the card prints no post."""
+    img, frame, lx, ly = cq_card()
+    cq_bar(img, (lx[1], ly[3]), (lx[5], ly[3]))       # a long horizontal run
+    for n in ((lx[1], ly[3]), (lx[3], ly[3]), (lx[5], ly[3])):
+        cq_block(img, n)
+    cq_bar(img, (lx[2], ly[2]), (lx[2], ly[3]))       # butts into its side at node 2
+    cq_block(img, (lx[2], ly[2]))
+    chips = [('A1', lx[2], ly[3] - 22), ('A2', lx[4], ly[3] - 22),
+             ('B1', lx[2] - 22, (ly[2] + ly[3]) / 2)]
+    _blocks, segs = _tile(img, frame, chips)
+    got = sorted((s['label'], s['span']) for s in segs)
+    check('the butting piece is found and is one square',
+          got == [('A1', 2), ('A2', 2), ('B1', 1)], 'got %s' % (got,))
+
+
 def main():
     for fn in (test_recall_across_scale, test_pill_on_the_outline,
                test_objective_marker_on_the_outline, test_two_rectangles_side_by_side,
                test_doors_are_not_rectangles, test_open_and_partial_shapes_are_rejected,
-               test_too_small_is_rejected, test_solid_outline_is_not_dashed):
+               test_too_small_is_rejected, test_solid_outline_is_not_dashed,
+               test_cq_blocks_are_found_and_wall_ends_told_apart,
+               test_cq_pieces_are_tiled_by_their_printed_letters,
+               test_cq_half_square_offset_piece_is_placed_where_it_is_printed,
+               test_cq_run_that_butts_into_another_wall_still_ends_there):
         print('\n== %s' % fn.__name__)
         fn()
     print('\n%d failure(s)' % len(FAILURES))

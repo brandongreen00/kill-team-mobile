@@ -200,6 +200,7 @@ export function App() {
         overlays={<SequenceOverlay state={state} decision={decision} />}
         selectedId={plan.selectedId ?? ui.inspect?.from}
         targetIds={plan.targetIds}
+        partIds={plan.partIds}
         onOperativeClick={(op) => {
           // Unarmed, tapping two operatives opens the targeting-line inspector — the
           // "why can't I see him?" question, answered without spending an action.

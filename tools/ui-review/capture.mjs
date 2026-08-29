@@ -50,6 +50,8 @@ const SHOTS = [
   ['02-sheet-half'],
   ['03-sheet-full'],
   ['04-menu'],
+  ['04b-killzone-gallowdark'],
+  ['04c-killzone-tomb-world'],
   ['05-initiative'],
   ['06-drop-zone'],
   ['07-handover'],
@@ -250,6 +252,25 @@ const HANDLERS = {
     await c.page.getByRole('button', { name: 'Menu' }).click();
     await c.page.waitForTimeout(200);
     await c.snap('04-menu');
+
+    // The two Close Quarters killzones, on the main board rather than as thumbnails: they are
+    // the only place hatchways, breach points and the connector posts that square a corner
+    // appear, and the review battle is played on Bheta-Decima, which has none of them. The
+    // killzone is put back before the roll-off so the rest of the capture is unchanged.
+    for (const [shot, name] of [
+      ['04b-killzone-gallowdark', 'Gallowdark 1'],
+      ['04c-killzone-tomb-world', 'Tomb World 2'],
+      [null, 'Bheta-Decima 1'],
+    ]) {
+      if (!(await click(c.page.getByRole('button', { name: /^Killzone — / }), c.page))) break;
+      await click(c.page.locator('button.thumb', { hasText: name }), c.page);
+      await c.page.waitForTimeout(250);
+      if (shot) {
+        await c.snap(shot);
+        await c.page.getByRole('button', { name: 'Menu' }).click();
+        await c.page.waitForTimeout(200);
+      }
+    }
     await click(c.page.getByRole('button', { name: 'Back' }), c.page);
 
     await click(action(c.page, 'roll'), c.page);

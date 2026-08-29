@@ -75,6 +75,7 @@ gives the board 405×281 instead of 405×88.
 | …counteracting | `firefight.counteracting` | as above | one free 1AP action, no Guard, 2" cap |
 | a move armed | `firefight.move` | reach field, path, ghost | live distance, Confirm / Cancel |
 | a shot armed | `firefight.shoot` | targets ringed | per-target cover / obscured / distance |
+| a hatchway aimed | `firefight.aim` | **hatchways / breach points ringed and tappable** | the same list, named by the wall each is cut into |
 | `opState.guardOffer` | `firefight.guardInterrupt` | eligible ringed | interrupt or decline |
 | `pending[0]` | `decision.<kind>` | dimmed, dice still on it | the prompt, options, rule text |
 | …not the holder's | `decision.handover` | dimmed | "Hand the device to Player N" |
@@ -195,6 +196,39 @@ only that reads as a bug: `4.2" — costs 5 of 6"`.
 
 The shaded field is advisory. The authoritative answer is `validateMove` at the ghost position,
 which also enforces the end-position rules the flood fill does not evaluate.
+
+### Doors are drawn as doors
+
+Terrain fill is decided by TYPE, which is right for everything except the one part of the board
+that is a *mechanism*. A closed Close Quarters access point is `Heavy, Wall` — byte-identical to
+the wall it is cut into — and a Volkus doorway is `Accessible, Heavy`, which lands on the same
+green as Heavy rubble. So every hatchway and every doorway was invisible, and the only way to
+find one was to open the Operate Hatch list and read part ids.
+
+`DoorPart` gives all three one small shared vocabulary, so a player learns it once:
+
+- **closed** — a panel inset in a frame, with a lock. A hatchway's lock is a wheel; a breach
+  point's is a burst, because you cannot simply open one.
+- **open** — the killzone floor between two jambs, with a dashed threshold across it. Open
+  reads by SHAPE, not by value, so it survives a greyscale screen.
+- **hue** says what it costs: amber for a 1AP Operate Hatch, red for a 2AP Breach, bone for a
+  Volkus doorway, which is a permanent opening and has no action at all.
+
+Two things the board does around them:
+
+- The close-quarters wall family — bars, connector posts, wall ends — is **stroked once as a
+  silhouette and then filled**, rather than each part being outlined. Those parts abut by
+  design, so per-part strokes drew a dark seam at every joint and a continuous wall read as a
+  row of bricks; the two-pass draw leaves only the outer edge, which is what the printed card
+  looks like and what makes a corner read as square.
+- A door's tap disc is capped at half the distance to its nearest neighbour. The 44px thumb
+  minimum is 3.1" of board at fit zoom on a 390px phone and the two closest access points in
+  the shipped data are 2.5" apart, so uncapped discs overlap and paint order silently decides
+  which door a tap opens — for 1AP, with no confirm step.
+
+`ArmedState.onPart` is the third flavour of arm, alongside a point and an operative: Operate
+Hatch and Breach are the only actions in the game aimed at a piece of terrain, and a door is a
+thing you point at. The option list stays as the keyboard-reachable fallback.
 
 ## What the UI may read from the core
 

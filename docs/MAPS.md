@@ -30,8 +30,8 @@ the card on the left, on its own on the right).
    card, 19–23 per Tomb World card.
 5. **Terrain** by colour mask → 0.07" morphological close → drop < 0.20 sq in →
    `find_contours` → Douglas-Peucker at 0.07" → CCW in board space. Volkus ink is
-   decomposed into axis-aligned wall bars; close-quarters walls are tested per
-   lattice edge and tiled with the labelled pieces.
+   decomposed into axis-aligned wall bars; close-quarters walls are read off the
+   printed **connector blocks** (§5a), not off the lattice.
 6. **Templates**: for each card letter the medoid instance becomes the template
    and every instance is fitted to it (90°-multiple rotation + optional mirror);
    the fit IoU is the QA number below and the template footprint is written to
@@ -92,18 +92,18 @@ layouts are deliberately asymmetric (Killzones › SETTING UP KILLZONES:
 | `bheta-decima-4` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (27.042, 12.75) | (2.75, 9) | (20.5, 11) z=3 on&nbsp;D | 9: A B C D | 0.94 / 0.97 | 0.27 |  |
 | `bheta-decima-5` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (27.75, 12.75) | (7.542, 11) z=3 on&nbsp;D | (15, 9) | 9: A B C D | 0.94 / 1.00 | 0.20 |  |
 | `bheta-decima-6` | (0, 22)–(30, 22) | long-edge (P1 top) | P1 3" / P2 3" | (25.75, 12.75) | (4, 9) z=3 on&nbsp;D | (16.5, 11.042) z=3 on&nbsp;A2 | 9: A B C D | 0.40 / 0.98 | 0.33 |  |
-| `gallowdark-1` | (0.063, 23.875)–(27.643, 23.875) | long-edge (P1 top) | P1 4.3125" / P2 4.3125" | (6.248, 15.73) | (23.364, 8.105) | (15.739, 11.917) | 15: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.34 |  |
-| `gallowdark-2` | (0.063, 23.875)–(27.643, 23.875) | long-edge (P1 top) | P1 4.3125" / P2 4.3125" | (21.498, 15.73) | (15.739, 8.064) | (6.289, 11.917) | 15: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.46 |  |
-| `gallowdark-3` | (0.063, 23.875)–(27.643, 23.875) | long-edge (P1 top) | P1 4.3125" / P2 4.3125" | (13.711, 15.73) | (4.302, 8.105) | (23.364, 12.039) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.42 |  |
-| `gallowdark-4` | (27.625, 23.781)–(27.625, 0.013) | short-edge (P1 right) | P1 4.2812" / P2 4.2812" | (15.739, 19.542) | (11.927, 4.292) | (13.873, 11.917) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.51 |  |
-| `gallowdark-5` | (27.625, 23.781)–(27.625, 0.013) | short-edge (P1 right) | P1 4.2812" / P2 4.2812" | (15.739, 4.292) | (11.927, 19.542) | (13.873, 11.917) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.58 |  |
-| `gallowdark-6` | (27.625, 23.781)–(27.625, 0.013) | short-edge (P1 right) | P1 4.2812" / P2 4.2812" | (15.739, 11.917) | (11.927, 19.542) | (13.873, 4.292) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.28 |  |
-| `tomb-world-1` | (0, 23.781)–(0, 0.013) | short-edge (P1 left) | P1 4.2812" / P2 4.2812" | (10.223, 21.327) | (17.564, 17.514) | (13.792, 8.105) | 20: A1 A2 A3 A4 B1 B2 B3 B4 B? C1 C2 C3 C4 C5 T | 0.50 / 1.00 | 0.18 |  |
-| `tomb-world-2` | (0, 23.781)–(0, 0.013) | short-edge (P1 left) | P1 4.2812" / P2 4.2812" | (11.927, 21.448) | (15.739, 2.67) | (13.792, 11.917) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 1.00 / 1.00 | 0.41 |  |
-| `tomb-world-3` | (0, 23.781)–(0, 0.013) | short-edge (P1 left) | P1 4.2812" / P2 4.2812" | (10.629, 4.292) | (17.037, 19.542) | (13.792, 11.917) | 21: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 1.00 / 1.00 | 0.40 |  |
-| `tomb-world-4` | (0.063, 0)–(27.643, 0) | long-edge (P1 bottom) | P1 4.3125" / P2 4.3125" | (21.417, 8.105) | (5.883, 15.73) | (13.833, 11.958) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 0.99 / 1.00 | 0.57 |  |
-| `tomb-world-5` | (0.063, 0)–(27.643, 0) | long-edge (P1 bottom) | P1 4.3125" / P2 4.3125" | (23.364, 8.105) | (5.802, 15.73) | (15.05, 11.917) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 0.91 / 1.00 | 0.15 |  |
-| `tomb-world-6` | (0.063, 0)–(27.643, 0) | long-edge (P1 bottom) | P1 4.3125" / P2 4.3125" | (15.496, 8.064) | (19.552, 15.73) | (3.206, 11.917) | 22: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 0.96 / 1.00 | 0.14 |  |
+| `gallowdark-1` | (0.063, 23.875)–(27.643, 23.875) | long-edge (P1 top) | P1 4.3125" / P2 4.3125" | (6.248, 15.73) | (23.364, 8.105) | (15.739, 11.917) | 15: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.43 |  |
+| `gallowdark-2` | (0.063, 23.875)–(27.643, 23.875) | long-edge (P1 top) | P1 4.3125" / P2 4.3125" | (21.498, 15.73) | (15.739, 8.064) | (6.289, 11.917) | 15: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.51 |  |
+| `gallowdark-3` | (0.063, 23.875)–(27.643, 23.875) | long-edge (P1 top) | P1 4.3125" / P2 4.3125" | (13.711, 15.73) | (4.302, 8.105) | (23.364, 12.039) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.46 |  |
+| `gallowdark-4` | (27.625, 23.781)–(27.625, 0.013) | short-edge (P1 right) | P1 4.2812" / P2 4.2812" | (15.739, 19.542) | (11.927, 4.292) | (13.873, 11.917) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.48 |  |
+| `gallowdark-5` | (27.625, 23.781)–(27.625, 0.013) | short-edge (P1 right) | P1 4.2812" / P2 4.2812" | (15.739, 4.292) | (11.927, 19.542) | (13.873, 11.917) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.53 |  |
+| `gallowdark-6` | (27.625, 23.781)–(27.625, 0.013) | short-edge (P1 right) | P1 4.2812" / P2 4.2812" | (15.739, 11.917) | (11.927, 19.542) | (13.873, 4.292) | 16: A1 A2 A3 A4 B1 B2 B3 | 1.00 / 1.00 | 0.34 |  |
+| `tomb-world-1` | (0, 23.781)–(0, 0.013) | short-edge (P1 left) | P1 4.2812" / P2 4.2812" | (10.223, 21.327) | (17.564, 17.514) | (13.792, 8.105) | 20: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 1.00 / 1.00 | 0.18 |  |
+| `tomb-world-2` | (0, 23.781)–(0, 0.013) | short-edge (P1 left) | P1 4.2812" / P2 4.2812" | (11.927, 21.448) | (15.739, 2.67) | (13.792, 11.917) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 1.00 / 1.00 | 0.46 |  |
+| `tomb-world-3` | (0, 23.781)–(0, 0.013) | short-edge (P1 left) | P1 4.2812" / P2 4.2812" | (10.629, 4.292) | (17.037, 19.542) | (13.792, 11.917) | 21: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 1.00 / 1.00 | 0.47 |  |
+| `tomb-world-4` | (0.063, 0)–(27.643, 0) | long-edge (P1 bottom) | P1 4.3125" / P2 4.3125" | (21.417, 8.105) | (5.883, 15.73) | (13.833, 11.958) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 0.99 / 1.00 | 0.56 |  |
+| `tomb-world-5` | (0.063, 0)–(27.643, 0) | long-edge (P1 bottom) | P1 4.3125" / P2 4.3125" | (23.364, 8.105) | (5.802, 15.73) | (15.05, 11.917) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 0.91 / 1.00 | 0.21 |  |
+| `tomb-world-6` | (0.063, 0)–(27.643, 0) | long-edge (P1 bottom) | P1 4.3125" / P2 4.3125" | (15.496, 8.064) | (19.552, 15.73) | (3.206, 11.917) | 23: A1 A2 A3 A4 B1 B2 B3 B4 C1 C2 C3 C4 C5 T | 0.96 / 1.00 | 0.15 |  |
 | `volkus-1` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 6" / P2 6" | (18.188, 3.771) | (11.771, 10.188) | (14.979, 16.021) | 14: A B C D E F G H I J K L M N | 0.71 / 1.00 | 0.23 |  |
 | `volkus-2` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 6" / P2 6" | (18.771, 12.771) | (11.229, 17.229) | (14.979, 3.771) | 14: A B C D E F G H I J K L M N | 0.79 / 1.00 | 0.32 |  |
 | `volkus-3` | (30, 22)–(30, 0) | short-edge (P1 right) | P1 6" / P2 6" | (19.021, 3.812) on&nbsp;D | (11.229, 19.271) | (14.979, 11.021) | 14: A B C D E F G H I J K L M N | 0.36 / 1.00 | 0.30 |  |
@@ -224,11 +224,11 @@ at most one friendly operative — carried as `maxOperatives: 1`.
 | G1 | px/inch asserted per card | 24.0000 on all 12 open cards; 94.000 px/lattice square on all 12 CQ cards |
 | G2 | no polygon off-board, none degenerate | pass on all 24 |
 | G3 | piece counts within the printed killzone inventory | pass on all 24 |
-| G4 | every feature labelled | 1 exception: `tomb-world-1.B?-1` |
+| G4 | every numbered feature labelled | pass on all 24 — the last exception, `tomb-world-1.B?-1`, is gone (§5a) |
 | G5 | exactly 3 objectives (p1/p2/centre) | pass on all 24 |
 | G6 | drop-zone depth is a printed value | pass — Volkus 6"/3", Bheta-Decima 6"/4"/3", CQ 4.3125" (long-edge) / 4.28125" (short-edge) |
 | G7 | fitted-template IoU: ≥ 0.92 is reported, **< 0.85 fails the build** | median 0.97–1.00 on every map; 20 features below 0.92, of which 13 are below 0.85 and carry an explicit allow-list entry with a reason (`IOU_ALLOW` in `validate_maps.py`) — see §6 |
-| G8 | CQ wall centrelines within 0.1" of the lattice | worst 0.0003" |
+| G8 | CQ wall centrelines within 0.1" of a **half** lattice step | worst 0.0003"; the half step is there because two pieces really are printed offset by half a square (§5a) |
 | G9 | 180° rotational symmetry | reported, not gated (0.09–0.58; the layouts are asymmetric by design) |
 
 Objective-marker accuracy: the neutral marker sits within **0.02"–0.10"** of the
@@ -237,6 +237,56 @@ genuinely printed 2.0" into P2 territory, so the check is a report, not a gate.
 
 Territory-seam check (`centreSeamErrIn`, the printed tint boundary against the
 derived centre line): **≤ 0.041" on all 24 maps**.
+
+### 5a. Close-quarters wall joints — the connector blocks
+
+The Gallowdark and Tomb World cards do not draw a wall run as one stroke. They draw a **9 px
+bar** along the run and a **27 px square block** wherever a physical wall PIECE ends: the
+connector post the wall sections slot into. Measured over the twelve Close Quarters cards,
+all 211 blocks measure 27 px (one, on `Gallowdark1`, 27.5 from anti-aliasing) and every bar
+exactly 9 px, at the 94 px lattice square — so both are exact fractions of a square:
+**1.09508"** and **0.36503"**.
+
+The extractor used to emit only the bars, running node centre to node centre. Three things
+came of that, and all three are fixed by reading the blocks instead:
+
+* **Corners were notched.** Two bars meeting at a right angle cover only half of the square
+  where their centrelines cross, so a 0.183" × 0.183" quarter-block of Wall terrain was
+  missing at every L-corner — **30** of them across the twelve maps — and every other joint
+  was drawn 0.365" wide where the card draws 1.095". That is a real hole in a sealed room,
+  not a drawing artefact, and it is what the board rendered.
+* **The tiling was guessed.** A run was tiled by fitting the printed letters onto lattice
+  edges. The blocks give the piece boundaries exactly, which repairs `tomb-world-1` (its A2
+  was tiled at the wrong length — the only entry ever allow-listed for the CQ tiler, now
+  deleted) and its unreadable `B?` wall. **Every wall piece on all twelve cards now carries
+  exactly one printed letter, no letter is left over, and every card's multiset is inside the
+  printed killzone inventory.**
+* **Two pieces are printed off the lattice** — `tomb-world-1`'s A2 and `tomb-world-6`'s B4 sit
+  offset by exactly half a square. Snapping them to a lattice line moved them 1.9". Block
+  centres are snapped to the nearest **half** step, which absorbs the 2–3 px by which the
+  cards shift a block on the board perimeter (the border strip is drawn compressed) without
+  touching a genuine half-square offset.
+
+A block with a grey **✕** knocked out of it is a **WALL END** rather than a connector
+(`keys/TW3.jpg`: "WALL END" — the Necron sarcophagus slab that caps a run instead of joining
+two). There are 13, on Gallowdark 5 and 6 and on every Tomb World card. The cross punches an
+84 px hole in the wall colour, so it is healed back into the mask before blocks are found;
+the same grey also draws the one-pixel dashed centre line, which is rejected on size.
+
+| Killzone | connector posts | wall ends |
+| --- | --- | --- |
+| Gallowdark | 108 | 4 |
+| Tomb World | 90 | 9 |
+
+Both are `Heavy, Wall`, `z 0–2.362"`, and both are emitted as **parts of the wall piece whose
+end lands on the block**, not as features of their own — see D-108. A post on the board
+perimeter is centred 0.469" from the edge and is 0.548" of half-width, so 0.079" of it would
+hang off the board; the card draws it clipped and so does the extraction, which is why a
+handful of blocks are not square.
+
+Two `tomb-world-3` objective markers are printed close enough to a post to overlap it as 40mm
+discs (`obj.p1` by 0.057", `obj.p2` by 0.016"). That is what the card prints; the markers stay
+where they are.
 
 ### Access points (`pnpm maps:extract`)
 
@@ -260,7 +310,7 @@ side of it. It is a gap in the wall, which is what a doorway is.
 | Killzone | hatchways | breach points | before |
 | --- | --- | --- | --- |
 | Gallowdark | 59 | 0 | 6 access points across all six maps |
-| Tomb World | 36 | 22 | **0** |
+| Tomb World | 36 | 23 | **0** |
 
 `tests/rules-review.test.ts` pins both halves on the shipped data: no wall part may overlap an
 access point of its own feature, and with every hatchway open an operative must reach across
@@ -350,8 +400,8 @@ than 6.562–9.771). Their entries are deleted from `IOU_ALLOW` and from the `PE
   the fire steps and small ramparts (Vantage/Insignificant/Exposed), the gap on
   Stronghold B's lower Vantage level (Accessible), the large ruin's door
   viewpoint (Blocking) and unbroken windows (Barred + Heavy), the Bheta-Decima
-  gantry pillars (Heavy), and the Gallowdark/Tomb World board-edge pillars and
-  pillar caps.
+  gantry pillars (Heavy). The Gallowdark / Tomb World wall posts are **no longer**
+  in this list: the cards do draw them, and §5a extracts them.
 * **Board-frame nuance**: the close-quarters lattice square is taken as exactly
   3.8125"; GW's published tile is 9.7 cm = 3.8189", a difference of 0.045" over
   the full 7 squares. The board dimensions used (27.625" × 23.875") are the

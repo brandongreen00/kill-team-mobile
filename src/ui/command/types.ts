@@ -97,6 +97,8 @@ export interface CommandPlan {
   highlights?: preact.ComponentChildren;
   /** Operatives the current step invites a tap on. */
   targetIds?: string[];
+  /** Terrain parts the current step invites a tap on — hatchways and breach points. */
+  partIds?: string[];
   selectedId?: string | undefined;
   /** A pending decision blocks everything: dim the board, do not allow `rest`. */
   modal?: boolean;

@@ -149,11 +149,23 @@ Per killzone:
   separated along their printed outline; decks that were one blob before that cut
   are touching, i.e. *"treated as the same terrain"*, and share a `groupId`. A
   chipless blob wholly inside another is the condenser's inner ledge.
-* **Gallowdark / Tomb World** — walls are tested per lattice *edge* (17 samples,
-  80% coverage), maximal straight runs are formed, and each run is tiled with the
-  labelled pieces (`A*` = 2 squares, `B*` = 1) centred on their chips. Wall stroke
-  thickness is measured perpendicular to occupied edges, away from the nodes
-  (where the printed pillar blocks are 2–3× wider). Access points (hatchway or
+* **Gallowdark / Tomb World** — walls are read off the printed **connector
+  blocks**, not off the lattice. The cards draw a run as a 9px bar and a 27px
+  square block wherever a wall PIECE ends (the post the sections slot into);
+  both figures hold on all 211 blocks and every bar across the twelve CQ
+  cards. `_cq_blocks` erodes the wall mask by more than a bar width, so only the
+  blocks survive, and snaps each centre to the nearest **half** lattice step —
+  half, because two pieces (`tomb-world-1` A2, `tomb-world-6` B4) really are
+  printed offset by half a square, while a block on the board perimeter is
+  shifted 2–3px inwards by the compressed border strip. `_cq_lines` chains
+  collinear blocks joined by a bar and extends a chain that ends by butting into
+  the SIDE of another run, where the card prints no post. `_cq_tile` then picks,
+  per run, the tiling whose pieces consume every printed letter exactly once
+  (`A*` = 2 squares, `B*` = 1): cutting at every block over-segments, because a
+  block is a piece end for at least one of the runs that meet there, not for
+  both. A block with a grey ✕ knocked out of it is a **WALL END**
+  (`keys/TW3.jpg`) rather than a connector; the ✕ punches a hole in the wall
+  colour, so it is healed back into the mask first. Access points (hatchway or
   breach point, per the piece) come from the printed dark pill —
   `keys/TW3.jpg`: *"ACCESS POINT POSITION ON WALL"*. Teleport pads, the
   sarcophagus and debris come from the black label chips.
@@ -224,8 +236,8 @@ rubble piece must be a 4-vertex rectangle at its template size.
   `data/terrain/*.json` `notes`: the Volkus stronghold's vent, barrel
   containers, fire steps and small ramparts; the large ruin's door viewpoint and
   unbroken windows; the gap on Stronghold B's lower Vantage level; the
-  Bheta-Decima gantry pillars; the Gallowdark/Tomb World board-edge pillars and
-  pillar caps.
+  Bheta-Decima gantry pillars. The Gallowdark/Tomb World wall posts used to be on
+  this list and are not any more — the cards do draw them, and §5 extracts them.
 * The green ticks along some Tomb World walls indicate the **Necron-Warrior
   modelled side** of the wall (`keys/TW1.jpg`), not a breach point, and are
   deliberately ignored.

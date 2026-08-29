@@ -1525,18 +1525,24 @@ describe('bot-vs-bot mirror soak', () => {
   // ring in tests/teams/soak.test.ts covers the batch; this mirror exercises the Tunnel gambit,
   // the Burrow action and the two extra STRATEGIC GAMBITs on both an open and a Close Quarters
   // killzone.
-  for (const mapId of ['volkus-1', 'gallowdark-1']) {
+  // gallowdark-1 is re-seeded from 5150 to 5151 (D-108). The Close Quarters walls gained the
+  // connector post the cards print at every wall-piece end, so the geometry moved and the
+  // seeded game plays out differently: the bar — zero rejected intents, no exception, the
+  // battle reaching `battleEnd` — holds on every seed tried, but on 5150 nobody happens to
+  // Burrow any more, which makes that assertion vacuous rather than wrong. The seed is a
+  // property of the game, not of the rule under test (the same call as D-102's Fellgor soak).
+  for (const [mapId, seed] of [['volkus-1', 5150], ['gallowdark-1', 5151]] as const) {
     it(`plays a full battle on ${mapId} with no rejected intents`, () => {
       clearDeployCache();
       clearMoveCache();
-      const ctx = teamContext([raveners], { seed: 5150 });
+      const ctx = teamContext([raveners], { seed });
       const map = mapById(mapId);
       ctx.maps.set(map.id, map);
       const roster = () => defaultRoster(DATA).map((p) => ({ datacardId: p.datacardId }));
       const result = playGame({
         ctx,
         map,
-        seed: 5150,
+        seed,
         rosters: {
           p1: { teamId: 'raveners', operatives: roster(), equipment: [EQ.chromatospore, EQ.acidBlood] },
           p2: { teamId: 'raveners', operatives: roster(), equipment: [EQ.metamorphicFlesh, EQ.heightenedSenses] },

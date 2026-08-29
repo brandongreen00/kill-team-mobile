@@ -9,7 +9,7 @@
  *
  * Rare weapon rule: `Dimensional Banishment` (Canoptek Tomb Crawler's transdimensional isolator).
  */
-import { getAction, type ActionDef } from '../../core/actions.ts';
+import { accessPointGap, getAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { countCrits, piercingValue } from '../../core/dice.ts';
 import { baseGap, baseRadius, baseWhollyWithin, basesOverlap, dist, distancePointToSegment, mmToInches, pointInPoly, segmentCrossesPoly, segmentsIntersect } from '../../core/geometry.ts';
@@ -27,7 +27,7 @@ import {
   moveOf,
   recordRoll,
 } from '../../core/state.ts';
-import { baseBlockedByTerrain, baseTouchesHazardous, surfaceAt } from '../../core/terrain.ts';
+import { baseBlockedByTerrain, baseDistanceToPart, baseTouchesHazardous, surfaceAt } from '../../core/terrain.ts';
 import { coverAndObscured, isVisible, withinControlRange, type Body } from '../../core/visibility.ts';
 import type { ActionParams } from '../../core/intents.ts';
 import type { FightSequence, ShootSequence } from '../../core/sequences/types.ts';
@@ -1841,18 +1841,18 @@ function nodeOperateHatch(): ActionDef {
       const index = terrain(ctx, state);
       const part = params.partId ? index.byId.get(params.partId) : undefined;
       if (!part || part.role !== 'accessPoint') return { ok: false, reason: 'no hatchway access point selected' };
-      const centre = { x: (part.bounds.min.x + part.bounds.max.x) / 2, y: (part.bounds.min.y + part.bounds.max.y) / 2 };
+      // "…you must still fulfil the OPERATE HATCH action's conditions", and Operate Hatch is a
+      // hatchway action: a Tomb World breach point has to be blown open with Breach.
+      if (part.opensAs === 'breachWall')
+        return { ok: false, reason: 'that access point is a breach point, not a hatchway' };
       const nodes = matrixNodes(state, op.player);
-      const near = nodes.some(
-        (n) => baseGap(n, { shape: 'round', mm: MARKER_MM }, 0, centre, { shape: 'round', mm: 20 }, 0) <= 1 + EPS,
-      );
+      // Measured to the access point itself, as every other access-point rule now is.
+      const near = nodes.some((n) => baseDistanceToPart(n, { shape: 'round', mm: MARKER_MM }, 0, part) <= 1 + EPS);
       if (!near) return { ok: false, reason: 'no Obelisk Node marker within 1" of that access point' };
-      // "…you must still fulfil the Operate Hatch action's conditions."
       if (part.state === 'open') {
-        const enemyNear = aliveOperatives(state, otherPlayer(op.player)).some((e) => {
-          const ec = ctx.datacards.get(e.datacardId);
-          return ec && baseGap(e.pos, ec.base, e.rot, centre, { shape: 'round', mm: 20 }, 0) <= 1 + EPS;
-        });
+        const enemyNear = aliveOperatives(state, otherPlayer(op.player)).some(
+          (e) => accessPointGap(ctx, e, part) <= 1 + EPS,
+        );
         if (enemyNear) return { ok: false, reason: 'the open access point is within an enemy operative’s control range' };
       }
       return { ok: true };

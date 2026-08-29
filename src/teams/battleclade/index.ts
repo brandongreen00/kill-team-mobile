@@ -20,7 +20,7 @@
  *
  * No rare weapon rules are printed on this team.
  */
-import { getAction, registerAction, type ActionDef } from '../../core/actions.ts';
+import { accessPointGap, getAction, registerAction, type ActionDef } from '../../core/actions.ts';
 import { terrain, type GameContext } from '../../core/context.ts';
 import { supportDistance } from '../../core/equipment/index.ts';
 import { baseGap, baseRadius, baseWhollyWithin, dist, distancePointToSegment } from '../../core/geometry.ts';
@@ -1499,17 +1499,17 @@ function remoteOperateHatch(): ActionDef {
       const index = terrain(ctx, state);
       const part = params.partId ? index.byId.get(params.partId) : undefined;
       if (!part || part.role !== 'accessPoint') return { ok: false, reason: 'no hatchway access point selected' };
-      const c = ctx.datacards.get(op.datacardId);
-      const centre = { x: (part.bounds.min.x + part.bounds.max.x) / 2, y: (part.bounds.min.y + part.bounds.max.y) / 2 };
-      if (baseGap(op.pos, c?.base ?? DEFAULT_BASE, op.rot, centre, { shape: 'round', mm: MARKER_MM }, 0) > 4 + EPS)
+      // "That access point must be within 4\" of it" — measured to the access point itself,
+      // exactly as the universal Operate Hatch measures its 1", so the two agree about where
+      // the hatchway is.
+      if (part.opensAs === 'breachWall')
+        return { ok: false, reason: 'that access point is a breach point, not a hatchway' };
+      if (accessPointGap(ctx, op, part) > 4 + EPS)
         return { ok: false, reason: 'the access point is not within 4"' };
       if (part.state === 'open') {
-        const enemyNear = aliveOperatives(state, otherPlayer(op.player)).some((e) => {
-          const ec = ctx.datacards.get(e.datacardId);
-          return (
-            baseGap(e.pos, ec?.base ?? DEFAULT_BASE, e.rot, centre, { shape: 'round', mm: MARKER_MM }, 0) <= 1 + EPS
-          );
-        });
+        const enemyNear = aliveOperatives(state, otherPlayer(op.player)).some(
+          (e) => accessPointGap(ctx, e, part) <= 1 + EPS,
+        );
         if (enemyNear) return { ok: false, reason: 'the open access point is within an enemy operative’s control range' };
       }
       return { ok: true };

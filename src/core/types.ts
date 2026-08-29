@@ -73,6 +73,9 @@ export type PartRole =
   | 'hatch'
   | 'accessPoint'
   | 'breachWall'
+  /** Close quarters: the square post a wall piece's end slots into, and the piece that caps a run. */
+  | 'connector'
+  | 'wallEnd'
   | 'teleportPad'
   | 'ledge'
   | 'stairs'
@@ -99,6 +102,13 @@ export interface TerrainPart {
    * no map file — neither action could be performed on any map.
    */
   opensAs?: 'hatch' | 'breachWall';
+  /**
+   * For an `accessPoint` part: the terrain types it takes once it is open. The extractor has
+   * always written this from the killzone's own rules text and the core has always ignored it,
+   * hard-coding the same list — which is exactly the "rules as data" rule this repo is built
+   * on, broken in the one place where the data was already there.
+   */
+  openTypes?: TerrainType[];
   /** Doors, hatches and breach points toggle at runtime. */
   state?: 'open' | 'closed';
   /**

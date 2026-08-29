@@ -1167,6 +1167,11 @@ textarea {
 .op.is-target .target-ring {
   animation: target-pulse 1.6s ease-in-out infinite;
 }
+/* A hatchway or breach point the current action can be aimed at: the same "tap me" ring an
+   operative target gets, so the two read as one affordance. */
+.terrain-door.is-live .door-ring {
+  animation: target-pulse 1.6s ease-in-out infinite;
+}
 @keyframes target-pulse {
   0%,
   100% {
